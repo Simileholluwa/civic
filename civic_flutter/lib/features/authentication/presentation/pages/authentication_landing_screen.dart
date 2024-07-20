@@ -98,7 +98,7 @@ class AuthLandingScreen extends GetView<AuthController> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 70,
+                height: 60,
                 child: FilledButton(
                   onPressed: controller.checkEmailIfNewUser,
                   child: const Text(

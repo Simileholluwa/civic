@@ -35,7 +35,7 @@ class UsernameForm extends GetView<AuthController> {
             height: TSizes.spaceBtwSections,
           ),
           SizedBox(
-            height: 70,
+            height: 60,
             width: double.maxFinite,
             child: FilledButton(
               onPressed: controller.navigateToSignUp,

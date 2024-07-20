@@ -38,7 +38,7 @@ class PoliticalStatusOptions extends GetView<AuthController> {
             children: [
               SizedBox(
                 height: 24,
-                width: 15,
+                width: 18,
                 child: Radio<PoliticalStatus>(
                   value: politicalStatusCardEntity.politicalStatus,
                   groupValue: controller.state.selectedPoliticalStatus.value,

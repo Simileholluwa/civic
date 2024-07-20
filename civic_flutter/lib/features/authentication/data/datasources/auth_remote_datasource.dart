@@ -267,7 +267,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           );
       if (result == null) {
         throw const ServerException(
-          message: 'Account cretion failed',
+          message: 'Incorrect verification code',
         );
       }
 
