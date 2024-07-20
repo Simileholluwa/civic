@@ -1,0 +1,10 @@
+example:
+  - hello:
+userNin:
+  - findNinDetails:
+userRecord:
+  - me:
+  - checkIfNewUser:
+  - setVerifiedEmail:
+  - checkVerifiedEmail:
+  - fetchAllUsernames:

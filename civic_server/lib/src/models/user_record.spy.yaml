@@ -1,0 +1,19 @@
+
+class: UserRecord
+table: user_record
+fields:
+  bio: String?
+  nin: String?
+  phoneNumber: String?
+  userInfo: module:auth:UserInfo?, relation
+  verifiedAccount: bool?
+  verifiedEmail: bool?
+  following: List<String>?
+  followers: List<String>?
+  posts: List<String>?
+  politicalStatus: PoliticalStatus?
+
+indexes:
+  user_info_id_unique_idx:
+    fields: userInfoId
+    unique: true

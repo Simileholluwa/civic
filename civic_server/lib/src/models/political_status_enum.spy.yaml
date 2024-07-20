@@ -1,0 +1,7 @@
+enum: PoliticalStatus
+values:
+  - current
+  - former
+  - aspiring
+  - none
+    
