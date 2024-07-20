@@ -12,7 +12,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/example_endpoint.dart' as _i2;
 import '../endpoints/user_nin_endpoint.dart' as _i3;
 import '../endpoints/user_record_endpoint.dart' as _i4;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i5;
+import 'package:civic_server/src/generated/user_record.dart' as _i5;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -89,6 +90,25 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'userRecord',
       endpoint: endpoints['userRecord']!,
       methodConnectors: {
+        'saveUserRecord': _i1.MethodConnector(
+          name: 'saveUserRecord',
+          params: {
+            'userRecord': _i1.ParameterDescription(
+              name: 'userRecord',
+              type: _i1.getType<_i5.UserRecord>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i4.UserRecordEndpoint)
+                  .saveUserRecord(
+            session,
+            params['userRecord'],
+          ),
+        ),
         'me': _i1.MethodConnector(
           name: 'me',
           params: {},
@@ -117,44 +137,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['email'],
           ),
         ),
-        'setVerifiedEmail': _i1.MethodConnector(
-          name: 'setVerifiedEmail',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['userRecord'] as _i4.UserRecordEndpoint)
-                  .setVerifiedEmail(
-            session,
-            params['id'],
-          ),
-        ),
-        'checkVerifiedEmail': _i1.MethodConnector(
-          name: 'checkVerifiedEmail',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['userRecord'] as _i4.UserRecordEndpoint)
-                  .checkVerifiedEmail(
-            session,
-            params['id'],
-          ),
-        ),
         'fetchAllUsernames': _i1.MethodConnector(
           name: 'fetchAllUsernames',
           params: {},
@@ -167,6 +149,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i5.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i6.Endpoints()..initializeEndpoints(server);
   }
 }

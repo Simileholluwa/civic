@@ -128,6 +128,10 @@ class AuthController extends GetxController {
     _logoutUseCase(NoParams());
   }
 
+  void navigateToPoliticalStatus() {
+    Get.toNamed(AppRoutes.politicalStatus);
+  }
+
   void navigateToResetPassword() {
     Get.toNamed<dynamic>(
       AppRoutes.resetPassword,
@@ -196,12 +200,7 @@ class AuthController extends GetxController {
       NoParams(),
     );
     result.fold(
-      (l) {
-        TToastMessages.errorToast(
-          'Unable to fetch data from database',
-        );
-        return;
-      },
+      (l) => null,
       (r) => state.usernames.assignAll(
         r.map(
           (e) => e.toLowerCase(),
@@ -287,6 +286,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     if (!isValid) return;
     if (state.acceptTerms.isFalse) {
@@ -323,6 +323,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     if (!isValid) return;
     state.isLoadingSignIn.value = true;
@@ -382,6 +383,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     state.isLoadingResetPassword.value = true;
     final result = await _resetPasswordUseCase(
@@ -420,6 +422,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     state.isLoadingCheckUser.value = true;
     if (state.usernames.isEmpty) {
@@ -436,7 +439,7 @@ class AuthController extends GetxController {
         state.userName.value = r;
         navigateToLogin();
       } else {
-        navigateToChooseUsername();
+        navigateToPoliticalStatus();
       }
     });
   }
@@ -449,20 +452,25 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
-    state.isLoadingVerifyEmail.value = true;
+    state.isLoadingVerifyEmailCode.value = true;
     final result = await _validateCreateAccount(
       ValidateCreateAccountParams(
         code: state.emailPinController.text.trim(),
         email: state.emailController.text.trim().toLowerCase(),
+        politicalStatus: state.selectedPoliticalStatus.value,
       ),
     );
-    state.isLoadingVerifyEmail.value = false;
+    state.isLoadingVerifyEmailCode.value = false;
     result.fold((l) {
       TToastMessages.errorToast(
         l.message,
       );
     }, (r) {
+      TToastMessages.successToast(
+        'Great! Your account has been created',
+      );
       navigateToVerifyAccountScreen();
     });
   }
@@ -477,6 +485,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     state.isLoadingResetPassword.value = true;
     final result = await _initiatePasswordReset(
@@ -508,6 +517,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     state.isLoadingSearchNin.value = true;
     final result = await _ninUseCase(
@@ -586,6 +596,7 @@ class AuthController extends GetxController {
       TToastMessages.infoToast(
         'No internet connection',
       );
+      return;
     }
     state.isLoadingUploadImage.value = true;
     final result = await _profileImageUseCase(

@@ -10,6 +10,7 @@ class AppRoutes {
   static const verifyEmail = '/verifyEmail';
   static const authentication = '/authentication';
   static const checkIfNewUser = '/authentication/checkIfNewUser';
+  static const politicalStatus = '/authentication/politicalStatus';
   static const chooseUsername = '/authentication/chooseUsername';
   static const resetPassword = '/authentication/resetPassword';
   static const verifyResetPasswordCode = '/authentication/resetPassword/verifyCode';

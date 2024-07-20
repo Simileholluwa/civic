@@ -28,8 +28,8 @@ abstract class UserNinRecord extends _i1.TableRow
     this.residenceTown,
     this.residenceState,
     this.residenceLga,
-    required this.userInfoId,
-    this.userInfo,
+    required this.ownerId,
+    this.owner,
   }) : super(id);
 
   factory UserNinRecord({
@@ -47,8 +47,8 @@ abstract class UserNinRecord extends _i1.TableRow
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    required int userInfoId,
-    _i2.UserInfo? userInfo,
+    required int ownerId,
+    _i2.UserInfo? owner,
   }) = _UserNinRecordImpl;
 
   factory UserNinRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -68,11 +68,11 @@ abstract class UserNinRecord extends _i1.TableRow
       residenceTown: jsonSerialization['residenceTown'] as String?,
       residenceState: jsonSerialization['residenceState'] as String?,
       residenceLga: jsonSerialization['residenceLga'] as String?,
-      userInfoId: jsonSerialization['userInfoId'] as int,
-      userInfo: jsonSerialization['userInfo'] == null
+      ownerId: jsonSerialization['ownerId'] as int,
+      owner: jsonSerialization['owner'] == null
           ? null
           : _i2.UserInfo.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+              (jsonSerialization['owner'] as Map<String, dynamic>)),
     );
   }
 
@@ -106,9 +106,9 @@ abstract class UserNinRecord extends _i1.TableRow
 
   String? residenceLga;
 
-  int userInfoId;
+  int ownerId;
 
-  _i2.UserInfo? userInfo;
+  _i2.UserInfo? owner;
 
   @override
   _i1.Table get table => t;
@@ -128,8 +128,8 @@ abstract class UserNinRecord extends _i1.TableRow
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    int? userInfoId,
-    _i2.UserInfo? userInfo,
+    int? ownerId,
+    _i2.UserInfo? owner,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -149,8 +149,8 @@ abstract class UserNinRecord extends _i1.TableRow
       if (residenceTown != null) 'residenceTown': residenceTown,
       if (residenceState != null) 'residenceState': residenceState,
       if (residenceLga != null) 'residenceLga': residenceLga,
-      'userInfoId': userInfoId,
-      if (userInfo != null) 'userInfo': userInfo?.toJson(),
+      'ownerId': ownerId,
+      if (owner != null) 'owner': owner?.toJson(),
     };
   }
 
@@ -172,13 +172,13 @@ abstract class UserNinRecord extends _i1.TableRow
       if (residenceTown != null) 'residenceTown': residenceTown,
       if (residenceState != null) 'residenceState': residenceState,
       if (residenceLga != null) 'residenceLga': residenceLga,
-      'userInfoId': userInfoId,
-      if (userInfo != null) 'userInfo': userInfo?.toJsonForProtocol(),
+      'ownerId': ownerId,
+      if (owner != null) 'owner': owner?.toJsonForProtocol(),
     };
   }
 
-  static UserNinRecordInclude include({_i2.UserInfoInclude? userInfo}) {
-    return UserNinRecordInclude._(userInfo: userInfo);
+  static UserNinRecordInclude include({_i2.UserInfoInclude? owner}) {
+    return UserNinRecordInclude._(owner: owner);
   }
 
   static UserNinRecordIncludeList includeList({
@@ -225,8 +225,8 @@ class _UserNinRecordImpl extends UserNinRecord {
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    required int userInfoId,
-    _i2.UserInfo? userInfo,
+    required int ownerId,
+    _i2.UserInfo? owner,
   }) : super._(
           id: id,
           firstName: firstName,
@@ -242,8 +242,8 @@ class _UserNinRecordImpl extends UserNinRecord {
           residenceTown: residenceTown,
           residenceState: residenceState,
           residenceLga: residenceLga,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
+          ownerId: ownerId,
+          owner: owner,
         );
 
   @override
@@ -262,8 +262,8 @@ class _UserNinRecordImpl extends UserNinRecord {
     Object? residenceTown = _Undefined,
     Object? residenceState = _Undefined,
     Object? residenceLga = _Undefined,
-    int? userInfoId,
-    Object? userInfo = _Undefined,
+    int? ownerId,
+    Object? owner = _Undefined,
   }) {
     return UserNinRecord(
       id: id is int? ? id : this.id,
@@ -285,9 +285,8 @@ class _UserNinRecordImpl extends UserNinRecord {
       residenceState:
           residenceState is String? ? residenceState : this.residenceState,
       residenceLga: residenceLga is String? ? residenceLga : this.residenceLga,
-      userInfoId: userInfoId ?? this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
+      ownerId: ownerId ?? this.ownerId,
+      owner: owner is _i2.UserInfo? ? owner : this.owner?.copyWith(),
     );
   }
 }
@@ -347,8 +346,8 @@ class UserNinRecordTable extends _i1.Table {
       'residenceLga',
       this,
     );
-    userInfoId = _i1.ColumnInt(
-      'userInfoId',
+    ownerId = _i1.ColumnInt(
+      'ownerId',
       this,
     );
   }
@@ -379,21 +378,21 @@ class UserNinRecordTable extends _i1.Table {
 
   late final _i1.ColumnString residenceLga;
 
-  late final _i1.ColumnInt userInfoId;
+  late final _i1.ColumnInt ownerId;
 
-  _i2.UserInfoTable? _userInfo;
+  _i2.UserInfoTable? _owner;
 
-  _i2.UserInfoTable get userInfo {
-    if (_userInfo != null) return _userInfo!;
-    _userInfo = _i1.createRelationTable(
-      relationFieldName: 'userInfo',
-      field: UserNinRecord.t.userInfoId,
+  _i2.UserInfoTable get owner {
+    if (_owner != null) return _owner!;
+    _owner = _i1.createRelationTable(
+      relationFieldName: 'owner',
+      field: UserNinRecord.t.ownerId,
       foreignField: _i2.UserInfo.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.UserInfoTable(tableRelation: foreignTableRelation),
     );
-    return _userInfo!;
+    return _owner!;
   }
 
   @override
@@ -412,27 +411,27 @@ class UserNinRecordTable extends _i1.Table {
         residenceTown,
         residenceState,
         residenceLga,
-        userInfoId,
+        ownerId,
       ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
-    if (relationField == 'userInfo') {
-      return userInfo;
+    if (relationField == 'owner') {
+      return owner;
     }
     return null;
   }
 }
 
 class UserNinRecordInclude extends _i1.IncludeObject {
-  UserNinRecordInclude._({_i2.UserInfoInclude? userInfo}) {
-    _userInfo = userInfo;
+  UserNinRecordInclude._({_i2.UserInfoInclude? owner}) {
+    _owner = owner;
   }
 
-  _i2.UserInfoInclude? _userInfo;
+  _i2.UserInfoInclude? _owner;
 
   @override
-  Map<String, _i1.Include?> get includes => {'userInfo': _userInfo};
+  Map<String, _i1.Include?> get includes => {'owner': _owner};
 
   @override
   _i1.Table get table => UserNinRecord.t;
@@ -618,22 +617,22 @@ class UserNinRecordRepository {
 class UserNinRecordAttachRowRepository {
   const UserNinRecordAttachRowRepository._();
 
-  Future<void> userInfo(
+  Future<void> owner(
     _i1.Session session,
     UserNinRecord userNinRecord,
-    _i2.UserInfo userInfo,
+    _i2.UserInfo owner,
   ) async {
     if (userNinRecord.id == null) {
       throw ArgumentError.notNull('userNinRecord.id');
     }
-    if (userInfo.id == null) {
-      throw ArgumentError.notNull('userInfo.id');
+    if (owner.id == null) {
+      throw ArgumentError.notNull('owner.id');
     }
 
-    var $userNinRecord = userNinRecord.copyWith(userInfoId: userInfo.id);
+    var $userNinRecord = userNinRecord.copyWith(ownerId: owner.id);
     await session.db.updateRow<UserNinRecord>(
       $userNinRecord,
-      columns: [UserNinRecord.t.userInfoId],
+      columns: [UserNinRecord.t.ownerId],
     );
   }
 }

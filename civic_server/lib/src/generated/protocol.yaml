@@ -3,8 +3,7 @@ example:
 userNin:
   - findNinDetails:
 userRecord:
+  - saveUserRecord:
   - me:
   - checkIfNewUser:
-  - setVerifiedEmail:
-  - checkVerifiedEmail:
   - fetchAllUsernames:

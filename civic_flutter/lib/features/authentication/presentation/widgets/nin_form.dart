@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class NinForm extends GetView<AuthController> {
@@ -25,6 +26,7 @@ class NinForm extends GetView<AuthController> {
             hintText: 'National Identification Number',
             validator: TValidator.validateNin,
             textInputType: TextInputType.number,
+            prefixIcon: FontAwesomeIcons.idCardClip,
             iconSize: 22,
           ),
           const SizedBox(

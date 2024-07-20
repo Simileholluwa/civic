@@ -32,21 +32,6 @@ void run(List<String> args) async {
         print(validationCode);
         return true;
       },
-      onUserCreated: (session, userInfo) async {
-        if (userInfo.id != null) {
-          final userRecord = UserRecord(
-            userInfoId: userInfo.id!,
-            bio: 'A Nigerian Citizen',
-            userInfo: userInfo,
-            verifiedAccount: false,
-            verifiedEmail: false,
-          );
-          await UserRecord.db.insertRow(
-            session,
-            userRecord,
-          );
-        }
-      }
     ),
   );
 

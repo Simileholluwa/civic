@@ -7,6 +7,7 @@ import 'package:civic_flutter/features/authentication/presentation/pages/choose_
 import 'package:civic_flutter/features/authentication/presentation/pages/confirm_nin_details.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/email_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/email_verification_screen.dart';
+import 'package:civic_flutter/features/authentication/presentation/pages/political_status_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/signup_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/verify_identity_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/verify_nin_email_otp_screen.dart';
@@ -61,6 +62,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.checkIfNewUser,
       page: () => const EmailScreen(),
+      binding: AuthBindings(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.politicalStatus,
+      page: () => const PoliticalStatusScreen(),
       binding: AuthBindings(),
       transition: Transition.fadeIn,
     ),

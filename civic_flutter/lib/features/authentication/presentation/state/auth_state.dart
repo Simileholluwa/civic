@@ -65,6 +65,7 @@ class AuthState {
   final time = '00.00'.obs;
   RxInt numberOfTries = 0.obs;
   RxString displayName = ''.obs;
+  Rx<PoliticalStatus> selectedPoliticalStatus = PoliticalStatus.current.obs;
   RxList<File> profileImage = <File>[].obs;
   RxList<String> usernames = <String>[].obs;
 }

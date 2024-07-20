@@ -13,6 +13,7 @@ abstract class AuthRepository {
   Future<Either<Failure, UserInfo>> validateCreateAccount({
     required String email,
     required String code,
+    required PoliticalStatus politicalStatus,
   });
 
   Future<Either<Failure, UserRecord?>> signInWithEmailAndPassword({

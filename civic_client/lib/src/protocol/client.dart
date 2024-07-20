@@ -51,6 +51,13 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
+  _i2.Future<void> saveUserRecord(_i4.UserRecord userRecord) =>
+      caller.callServerEndpoint<void>(
+        'userRecord',
+        'saveUserRecord',
+        {'userRecord': userRecord},
+      );
+
   _i2.Future<_i4.UserRecord?> me() =>
       caller.callServerEndpoint<_i4.UserRecord?>(
         'userRecord',
@@ -63,19 +70,6 @@ class EndpointUserRecord extends _i1.EndpointRef {
         'userRecord',
         'checkIfNewUser',
         {'email': email},
-      );
-
-  _i2.Future<void> setVerifiedEmail(int id) => caller.callServerEndpoint<void>(
-        'userRecord',
-        'setVerifiedEmail',
-        {'id': id},
-      );
-
-  _i2.Future<bool> checkVerifiedEmail(int id) =>
-      caller.callServerEndpoint<bool>(
-        'userRecord',
-        'checkVerifiedEmail',
-        {'id': id},
       );
 
   _i2.Future<List<String>> fetchAllUsernames() =>

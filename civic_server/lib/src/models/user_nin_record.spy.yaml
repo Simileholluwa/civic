@@ -14,9 +14,9 @@ fields:
   residenceTown: String?
   residenceState: String?
   residenceLga: String?
-  userInfo: module:auth:UserInfo?, relation
+  owner: module:auth:UserInfo?, relation
 
 indexes:
-  user_record_id_unique_idx:
-    fields: userInfoId
+  owner_id_unique_idx:
+    fields: ownerId
     unique: true

@@ -7,11 +7,9 @@ fields:
   phoneNumber: String?
   userInfo: module:auth:UserInfo?, relation
   verifiedAccount: bool?
-  verifiedEmail: bool?
   following: List<String>?
   followers: List<String>?
-  posts: List<String>?
-  politicalStatus: PoliticalStatus?
+  politicalStatus: String?
 
 indexes:
   user_info_id_unique_idx:

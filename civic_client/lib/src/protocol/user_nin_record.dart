@@ -27,8 +27,8 @@ abstract class UserNinRecord implements _i1.SerializableModel {
     this.residenceTown,
     this.residenceState,
     this.residenceLga,
-    required this.userInfoId,
-    this.userInfo,
+    required this.ownerId,
+    this.owner,
   });
 
   factory UserNinRecord({
@@ -46,8 +46,8 @@ abstract class UserNinRecord implements _i1.SerializableModel {
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    required int userInfoId,
-    _i2.UserInfo? userInfo,
+    required int ownerId,
+    _i2.UserInfo? owner,
   }) = _UserNinRecordImpl;
 
   factory UserNinRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -67,11 +67,11 @@ abstract class UserNinRecord implements _i1.SerializableModel {
       residenceTown: jsonSerialization['residenceTown'] as String?,
       residenceState: jsonSerialization['residenceState'] as String?,
       residenceLga: jsonSerialization['residenceLga'] as String?,
-      userInfoId: jsonSerialization['userInfoId'] as int,
-      userInfo: jsonSerialization['userInfo'] == null
+      ownerId: jsonSerialization['ownerId'] as int,
+      owner: jsonSerialization['owner'] == null
           ? null
           : _i2.UserInfo.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+              (jsonSerialization['owner'] as Map<String, dynamic>)),
     );
   }
 
@@ -106,9 +106,9 @@ abstract class UserNinRecord implements _i1.SerializableModel {
 
   String? residenceLga;
 
-  int userInfoId;
+  int ownerId;
 
-  _i2.UserInfo? userInfo;
+  _i2.UserInfo? owner;
 
   UserNinRecord copyWith({
     int? id,
@@ -125,8 +125,8 @@ abstract class UserNinRecord implements _i1.SerializableModel {
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    int? userInfoId,
-    _i2.UserInfo? userInfo,
+    int? ownerId,
+    _i2.UserInfo? owner,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -146,8 +146,8 @@ abstract class UserNinRecord implements _i1.SerializableModel {
       if (residenceTown != null) 'residenceTown': residenceTown,
       if (residenceState != null) 'residenceState': residenceState,
       if (residenceLga != null) 'residenceLga': residenceLga,
-      'userInfoId': userInfoId,
-      if (userInfo != null) 'userInfo': userInfo?.toJson(),
+      'ownerId': ownerId,
+      if (owner != null) 'owner': owner?.toJson(),
     };
   }
 
@@ -175,8 +175,8 @@ class _UserNinRecordImpl extends UserNinRecord {
     String? residenceTown,
     String? residenceState,
     String? residenceLga,
-    required int userInfoId,
-    _i2.UserInfo? userInfo,
+    required int ownerId,
+    _i2.UserInfo? owner,
   }) : super._(
           id: id,
           firstName: firstName,
@@ -192,8 +192,8 @@ class _UserNinRecordImpl extends UserNinRecord {
           residenceTown: residenceTown,
           residenceState: residenceState,
           residenceLga: residenceLga,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
+          ownerId: ownerId,
+          owner: owner,
         );
 
   @override
@@ -212,8 +212,8 @@ class _UserNinRecordImpl extends UserNinRecord {
     Object? residenceTown = _Undefined,
     Object? residenceState = _Undefined,
     Object? residenceLga = _Undefined,
-    int? userInfoId,
-    Object? userInfo = _Undefined,
+    int? ownerId,
+    Object? owner = _Undefined,
   }) {
     return UserNinRecord(
       id: id is int? ? id : this.id,
@@ -235,9 +235,8 @@ class _UserNinRecordImpl extends UserNinRecord {
       residenceState:
           residenceState is String? ? residenceState : this.residenceState,
       residenceLga: residenceLga is String? ? residenceLga : this.residenceLga,
-      userInfoId: userInfoId ?? this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
+      ownerId: ownerId ?? this.ownerId,
+      owner: owner is _i2.UserInfo? ? owner : this.owner?.copyWith(),
     );
   }
 }

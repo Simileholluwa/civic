@@ -121,7 +121,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'userInfoId',
+          name: 'ownerId',
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int',
@@ -130,7 +130,7 @@ class Protocol extends _i1.SerializationManagerServer {
       foreignKeys: [
         _i2.ForeignKeyDefinition(
           constraintName: 'user_nin_record_fk_0',
-          columns: ['userInfoId'],
+          columns: ['ownerId'],
           referenceTable: 'serverpod_user_info',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
@@ -154,12 +154,12 @@ class Protocol extends _i1.SerializationManagerServer {
           isPrimary: true,
         ),
         _i2.IndexDefinition(
-          indexName: 'user_record_id_unique_idx',
+          indexName: 'owner_id_unique_idx',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
-              definition: 'userInfoId',
+              definition: 'ownerId',
             )
           ],
           type: 'btree',
@@ -213,12 +213,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'bool?',
         ),
         _i2.ColumnDefinition(
-          name: 'verifiedEmail',
-          columnType: _i2.ColumnType.boolean,
-          isNullable: true,
-          dartType: 'bool?',
-        ),
-        _i2.ColumnDefinition(
           name: 'following',
           columnType: _i2.ColumnType.json,
           isNullable: true,
@@ -231,16 +225,10 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
-          name: 'posts',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'politicalStatus',
-          columnType: _i2.ColumnType.bigint,
+          columnType: _i2.ColumnType.text,
           isNullable: true,
-          dartType: 'protocol:PoliticalStatus?',
+          dartType: 'String?',
         ),
       ],
       foreignKeys: [
@@ -318,11 +306,6 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == _i1.getType<_i7.UserRecord?>()) {
       return (data != null ? _i7.UserRecord.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null

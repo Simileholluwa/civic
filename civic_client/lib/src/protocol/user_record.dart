@@ -10,7 +10,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i2;
-import 'protocol.dart' as _i3;
 
 abstract class UserRecord implements _i1.SerializableModel {
   UserRecord._({
@@ -21,10 +20,8 @@ abstract class UserRecord implements _i1.SerializableModel {
     required this.userInfoId,
     this.userInfo,
     this.verifiedAccount,
-    this.verifiedEmail,
     this.following,
     this.followers,
-    this.posts,
     this.politicalStatus,
   });
 
@@ -36,11 +33,9 @@ abstract class UserRecord implements _i1.SerializableModel {
     required int userInfoId,
     _i2.UserInfo? userInfo,
     bool? verifiedAccount,
-    bool? verifiedEmail,
     List<String>? following,
     List<String>? followers,
-    List<String>? posts,
-    _i3.PoliticalStatus? politicalStatus,
+    String? politicalStatus,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -55,20 +50,13 @@ abstract class UserRecord implements _i1.SerializableModel {
           : _i2.UserInfo.fromJson(
               (jsonSerialization['userInfo'] as Map<String, dynamic>)),
       verifiedAccount: jsonSerialization['verifiedAccount'] as bool?,
-      verifiedEmail: jsonSerialization['verifiedEmail'] as bool?,
       following: (jsonSerialization['following'] as List?)
           ?.map((e) => e as String)
           .toList(),
       followers: (jsonSerialization['followers'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      posts: (jsonSerialization['posts'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
-      politicalStatus: jsonSerialization['politicalStatus'] == null
-          ? null
-          : _i3.PoliticalStatus.fromJson(
-              (jsonSerialization['politicalStatus'] as int)),
+      politicalStatus: jsonSerialization['politicalStatus'] as String?,
     );
   }
 
@@ -89,15 +77,11 @@ abstract class UserRecord implements _i1.SerializableModel {
 
   bool? verifiedAccount;
 
-  bool? verifiedEmail;
-
   List<String>? following;
 
   List<String>? followers;
 
-  List<String>? posts;
-
-  _i3.PoliticalStatus? politicalStatus;
+  String? politicalStatus;
 
   UserRecord copyWith({
     int? id,
@@ -107,11 +91,9 @@ abstract class UserRecord implements _i1.SerializableModel {
     int? userInfoId,
     _i2.UserInfo? userInfo,
     bool? verifiedAccount,
-    bool? verifiedEmail,
     List<String>? following,
     List<String>? followers,
-    List<String>? posts,
-    _i3.PoliticalStatus? politicalStatus,
+    String? politicalStatus,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -123,11 +105,9 @@ abstract class UserRecord implements _i1.SerializableModel {
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJson(),
       if (verifiedAccount != null) 'verifiedAccount': verifiedAccount,
-      if (verifiedEmail != null) 'verifiedEmail': verifiedEmail,
       if (following != null) 'following': following?.toJson(),
       if (followers != null) 'followers': followers?.toJson(),
-      if (posts != null) 'posts': posts?.toJson(),
-      if (politicalStatus != null) 'politicalStatus': politicalStatus?.toJson(),
+      if (politicalStatus != null) 'politicalStatus': politicalStatus,
     };
   }
 
@@ -148,11 +128,9 @@ class _UserRecordImpl extends UserRecord {
     required int userInfoId,
     _i2.UserInfo? userInfo,
     bool? verifiedAccount,
-    bool? verifiedEmail,
     List<String>? following,
     List<String>? followers,
-    List<String>? posts,
-    _i3.PoliticalStatus? politicalStatus,
+    String? politicalStatus,
   }) : super._(
           id: id,
           bio: bio,
@@ -161,10 +139,8 @@ class _UserRecordImpl extends UserRecord {
           userInfoId: userInfoId,
           userInfo: userInfo,
           verifiedAccount: verifiedAccount,
-          verifiedEmail: verifiedEmail,
           following: following,
           followers: followers,
-          posts: posts,
           politicalStatus: politicalStatus,
         );
 
@@ -177,10 +153,8 @@ class _UserRecordImpl extends UserRecord {
     int? userInfoId,
     Object? userInfo = _Undefined,
     Object? verifiedAccount = _Undefined,
-    Object? verifiedEmail = _Undefined,
     Object? following = _Undefined,
     Object? followers = _Undefined,
-    Object? posts = _Undefined,
     Object? politicalStatus = _Undefined,
   }) {
     return UserRecord(
@@ -193,16 +167,12 @@ class _UserRecordImpl extends UserRecord {
           userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
       verifiedAccount:
           verifiedAccount is bool? ? verifiedAccount : this.verifiedAccount,
-      verifiedEmail:
-          verifiedEmail is bool? ? verifiedEmail : this.verifiedEmail,
       following:
           following is List<String>? ? following : this.following?.clone(),
       followers:
           followers is List<String>? ? followers : this.followers?.clone(),
-      posts: posts is List<String>? ? posts : this.posts?.clone(),
-      politicalStatus: politicalStatus is _i3.PoliticalStatus?
-          ? politicalStatus
-          : this.politicalStatus,
+      politicalStatus:
+          politicalStatus is String? ? politicalStatus : this.politicalStatus,
     );
   }
 }

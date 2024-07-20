@@ -39,6 +39,9 @@ class SelectVerificationMethod extends GetView<AuthController> {
               },
             ),
           ),
+          onTap: () {
+            controller.state.selectionVerificationMethod.value = value;
+          },
           title: Text(
             title,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(

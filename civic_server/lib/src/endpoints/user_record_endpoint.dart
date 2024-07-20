@@ -3,6 +3,13 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class UserRecordEndpoint extends Endpoint {
+  Future<void> saveUserRecord(Session session, UserRecord userRecord) async {
+    await UserRecord.db.insertRow(
+      session,
+      userRecord,
+    );
+  }
+
   Future<UserRecord?> me(
     Session session,
   ) async {
@@ -29,33 +36,6 @@ class UserRecordEndpoint extends Endpoint {
       ),
     );
     return userRecord?.userInfo?.userName;
-  }
-
-  Future<void> setVerifiedEmail(Session session, int id) async {
-    var userRecord = await UserRecord.db.findById(
-      session,
-      id,
-    );
-    if (userRecord != null) {
-      userRecord.verifiedEmail = true;
-      await UserRecord.db.updateRow(
-        session,
-        userRecord,
-      );
-    }
-  }
-
-  Future<bool> checkVerifiedEmail(Session session, int id) async {
-    var userRecord = await UserRecord.db.findById(
-      session,
-      id,
-    );
-    if (userRecord != null) {
-      if (userRecord.verifiedEmail!) {
-        return true;
-      }
-    }
-    return false;
   }
 
   Future<List<String>> fetchAllUsernames(Session session) async {

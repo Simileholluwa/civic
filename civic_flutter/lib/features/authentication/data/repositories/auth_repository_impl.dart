@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
@@ -20,10 +21,22 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await _remoteDatabase.checkIfNewUser(email: email);
       return Right(result);
-    } catch (e) {
+    } on TimeoutException catch (e) {
       return Left(
         Failure(
-          message: e.toString(),
+          message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
         ),
       );
     }
@@ -46,6 +59,12 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(
         Failure(
           message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
         ),
       );
     } on ServerException catch (e) {
@@ -72,6 +91,12 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(
         Failure(
           message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
         ),
       );
     } on ServerException catch (e) {
@@ -102,6 +127,12 @@ class AuthRepositoryImpl implements AuthRepository {
           message: e.message ?? 'Request timed out',
         ),
       );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
     } on ServerException catch (e) {
       return Left(
         Failure(
@@ -115,17 +146,25 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserInfo>> validateCreateAccount({
     required String email,
     required String code,
+    required PoliticalStatus politicalStatus,
   }) async {
     try {
       final result = await _remoteDatabase.validateCreateAccount(
         email: email,
         code: code,
+        politicalStatus: politicalStatus,
       );
       return Right(result);
     } on TimeoutException catch (e) {
       return Left(
         Failure(
           message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
         ),
       );
     } on ServerException catch (e) {
@@ -166,6 +205,12 @@ class AuthRepositoryImpl implements AuthRepository {
           message: e.message ?? 'Request timed out',
         ),
       );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
     } on ServerException catch (e) {
       return Left(
         Failure(
@@ -204,6 +249,12 @@ class AuthRepositoryImpl implements AuthRepository {
           message: e.message ?? 'Request timed out',
         ),
       );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
     } on ServerException catch (e) {
       return Left(
         Failure(
@@ -226,6 +277,12 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(
         Failure(
           message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
         ),
       );
     } on ServerException catch (e) {
