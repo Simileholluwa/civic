@@ -14,7 +14,7 @@ import 'package:civic_flutter/features/authentication/presentation/pages/verify_
 import 'package:civic_flutter/features/authentication/presentation/pages/verify_nin_otp_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/login_wrapper.dart';
 import 'package:civic_flutter/features/civic/presentation/bindings/civic_binding.dart';
-import 'package:civic_flutter/features/civic/presentation/widgets/navigation_menu.dart';
+import 'package:civic_flutter/features/civic/presentation/pages/civic_wrapper.dart';
 import 'package:civic_flutter/features/onboarding/presentation/bindings/on_boarding_binding.dart';
 import 'package:civic_flutter/features/onboarding/presentation/middlewares/onboarding_middleware.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/initial_on_boarding.dart';
@@ -127,7 +127,7 @@ class AppPages {
     // Main app routes
     GetPage(
       name: AppRoutes.civic,
-      page: () => const CivicNavigationBar(),
+      page: () => const CivicWrapper(),
       binding: CivicBindings(),
       transition: Transition.fadeIn,
     ),

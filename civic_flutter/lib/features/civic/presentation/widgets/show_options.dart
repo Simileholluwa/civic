@@ -1,124 +1,76 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/features/civic/domain/entity/post_options.dart';
+import 'package:civic_flutter/features/civic/presentation/controller/civic_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-Future<Widget?> showOptions() {
-  return Get.bottomSheet<Widget>(
-    enableDrag: false,
-    isDismissible: false,
-    barrierColor: Theme.of(Get.context!).scaffoldBackgroundColor.withAlpha(
-          1,
+class ShowOptions extends GetView<CivicController> {
+  const ShowOptions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300,),
+      opacity: controller.state.isExpanded.isTrue ? 1 : 0,
+      child: Container(
+        margin: const EdgeInsets.only(
+          left: TSizes.md,
+          right: TSizes.sm,
+          bottom: TSizes.sm,
         ),
-    Stack(
-      children: [
-        Positioned(
-          bottom: Get.bottomBarHeight + 3,
-          left: Get.width / 2 + 5,
-          child: AnimatedContainer(
-            duration: const Duration(
-              milliseconds: 500,
-            ),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(Get.context!).scaffoldBackgroundColor,
-            ),
-            child: Center(
-              child: IconButton(
-                icon: const Icon(
-                  Iconsax.close_square5,
-                  size: 40,
-                ),
-                onPressed: Get.back<dynamic>,
-              ),
-            ),
+        width: 75,
+        decoration: BoxDecoration(
+          color: Theme.of(Get.context!).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(
+            100,
+          ),
+          border: Border.all(
+            color: Theme.of(Get.context!).hintColor.withOpacity(.2),
+            width: 0.5,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(
-            left: TSizes.sm,
-            right: TSizes.sm,
-            bottom: TSizes.spaceBtwSections * 2,
-          ),
-          height: 447,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-              TSizes.lg,
-            ),
-            child: Material(
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  TSizes.lg,
-                ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 20,
               ),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                margin: const EdgeInsets.symmetric(
-                  horizontal: TSizes.md,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(Get.context!).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(
-                    TSizes.borderRadiusLg + 20,
-                  ),
-                  border: Border.all(
-                    color: Theme.of(Get.context!).hintColor.withOpacity(.2),
-                    width: 0.5,
-                  ),
-                ),
-                child: Column(
+              physics: const ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                final addPost = moreOptions[index];
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 15,
-                      ),
-                      physics: const ClampingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final addPost = moreOptions[index];
-                        return ListTile(
-                          leading: Icon(
-                            addPost.icon,
+                    Icon(addPost.icon),
+                    const SizedBox(
+                      height: TSizes.sm,
+                    ),
+                    Text(
+                      addPost.text,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
                           ),
-                          title: Text(
-                            addPost.text,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          trailing: const Icon(
-                            Iconsax.arrow_right_3,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                          ),
-                          onTap: addPost.onTap,
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider(
-                          thickness: .5,
-                          indent: 20,
-                          endIndent: 23,
-                        );
-                      },
-                      itemCount: moreOptions.length,
                     ),
                   ],
-                ),
-              ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  thickness: .5,
+                  indent: 10,
+                  endIndent: 13,
+                );
+              },
+              itemCount: 6,
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }

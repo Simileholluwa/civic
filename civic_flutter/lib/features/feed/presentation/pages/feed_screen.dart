@@ -3,7 +3,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/features/civic/presentation/controller/civic_controller.dart';
-import 'package:civic_flutter/features/civic/presentation/widgets/civic_app_bar.dart';
+import 'package:civic_flutter/core/widgets/civic_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';

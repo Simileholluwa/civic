@@ -1,13 +1,12 @@
 import 'package:civic_flutter/core/api/api_client.dart';
 import 'package:civic_flutter/features/civic/presentation/state/civic_state.dart';
-import 'package:civic_flutter/features/civic/presentation/widgets/show_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 
 class CivicController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+    with GetTickerProviderStateMixin {
   static CivicController get instance => Get.find();
 
   CivicController({required ApiClient client}) : _client = client;
@@ -22,8 +21,12 @@ class CivicController extends GetxController
     state.animationController = AnimationController(
       vsync: this,
       duration: const Duration(
-        milliseconds: 500,
+        milliseconds: 300,
       ),
+    );
+    state.fabAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
     );
     myScroll();
   }
@@ -32,6 +35,7 @@ class CivicController extends GetxController
   void onClose() {
     state.scrollBottomBarController.removeListener(() {});
     state.animationController.dispose();
+    state.fabAnimationController.dispose();
     super.onClose();
   }
 
@@ -50,13 +54,7 @@ class CivicController extends GetxController
   }
 
   void updateIndex(int index) {
-    final currentIndex = state.index.value;
-    if (index == 2) {
-      state.index.value = currentIndex;
-      showOptions();
-    } else {
-      state.index.value = index;
-    }
+    state.index.value = index;
   }
 
   Future<void> myScroll() async {

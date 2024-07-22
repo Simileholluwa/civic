@@ -1,7 +1,7 @@
 
 import 'package:civic_flutter/features/civic/presentation/controller/civic_controller.dart';
-import 'package:civic_flutter/features/civic/presentation/widgets/civic_app_bar.dart';
-import 'package:civic_flutter/features/civic/presentation/widgets/projects_search_bar.dart';
+import 'package:civic_flutter/core/widgets/civic_app_bar.dart';
+import 'package:civic_flutter/features/projects/presentation/widgets/projects_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -54,6 +54,7 @@ dependencies:
   pinput:
   font_awesome_flutter:
   serverpod_auth_client: 2.0.2
+  flutter_portal:
   go_router:
 
 dev_dependencies:

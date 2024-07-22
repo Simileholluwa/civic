@@ -1,6 +1,7 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/features/civic/domain/entity/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -68,17 +69,3 @@ class CustomBottomNavigationBar extends StatelessWidget {
   }
 }
 
-class CustomBottomNavigationBarItem {
-  CustomBottomNavigationBarItem({
-    required this.activeIcon,
-    required this.inactiveIcon,
-    this.text,
-    this.iconSize = 30,
-    this.activeIconSize = 32,
-  });
-  final IconData activeIcon;
-  final IconData inactiveIcon;
-  final double iconSize;
-  final double activeIconSize;
-  final String? text;
-}

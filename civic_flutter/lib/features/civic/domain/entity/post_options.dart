@@ -42,6 +42,6 @@ List<MoreOptionsModel> moreOptions = [
     MoreOptionsModel(
       onTap: () {},
       icon: Iconsax.video_octagon5,
-      text: 'Live stream',
+      text: 'Go Live',
     ),
   ];
