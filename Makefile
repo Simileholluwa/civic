@@ -11,8 +11,11 @@ migrate:
 	cd civic_server && serverpod create-migration
 
 connect_adb:
-	adb connect 192.168.58.134
+	adb connect 192.168.72.54
 
 run_app:
 	cd civic_flutter && flutter run
+
+build:
+	cd civic_flutter && dart run build_runner watch --delete-conflicting-outputs
 

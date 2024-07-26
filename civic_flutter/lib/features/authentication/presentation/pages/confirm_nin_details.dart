@@ -1,4 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_client/civic_client.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
@@ -6,19 +12,20 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/choose_verification_method.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/user_nin_details.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-class ConfirmNinDetails extends GetView<AuthController> {
-  const ConfirmNinDetails({super.key});
+class ConfirmNinDetails extends StatelessWidget {
+  const ConfirmNinDetails({super.key, 
+    required this.ninRecord,
+  });
+  final String ninRecord;
+
+ 
 
   @override
   Widget build(BuildContext context) {
-    final userNinEntity = controller.state.userNinEntity?.value;
+    final userNinRecord = jsonDecode(ninRecord,) as UserNinRecord;
     final isDark = THelperFunctions.isDarkMode(context);
     return AndroidBottomNav(
       child: Scaffold(
@@ -77,7 +84,7 @@ class ConfirmNinDetails extends GetView<AuthController> {
                                 children: [
                                   UserNinDetails(
                                     value: 'GENDER',
-                                    detail: userNinEntity!.gender!,
+                                    detail: userNinRecord.gender!,
                                   ),
                                   const SizedBox(
                                     height: 40,
@@ -88,7 +95,7 @@ class ConfirmNinDetails extends GetView<AuthController> {
                                   ),
                                   UserNinDetails(
                                     value: 'BIRTHDATE',
-                                    detail: userNinEntity.birthdate!,
+                                    detail: userNinRecord.birthdate!,
                                   ),
                                 ],
                               ),
@@ -101,15 +108,15 @@ class ConfirmNinDetails extends GetView<AuthController> {
                         UserNinDetails(
                           value: 'NAME',
                           detail:
-                              '${userNinEntity.firstName!} ${userNinEntity.surname}',
+                              '${userNinRecord.firstName!} ${userNinRecord.surname}',
                         ),
                         const SizedBox(
                           height: TSizes.spaceBtwItems,
                         ),
                         UserNinDetails(
                           value: 'EMAIL',
-                          detail: controller.redactEmail(
-                            userNinEntity.email!,
+                          detail: THelperFunctions.redactEmail(
+                            userNinRecord.email!,
                           ),
                         ),
                         const SizedBox(
@@ -117,8 +124,8 @@ class ConfirmNinDetails extends GetView<AuthController> {
                         ),
                         UserNinDetails(
                           value: 'PHONE NUMBER',
-                          detail: controller.redactString(
-                            userNinEntity.telephone!,
+                          detail: THelperFunctions.redactString(
+                            userNinRecord.telephone!,
                             3,
                             start: 6,
                           ),
@@ -150,7 +157,7 @@ class ConfirmNinDetails extends GetView<AuthController> {
                           20,
                         ),
                         child: CachedNetworkImage(
-                          imageUrl: userNinEntity.photoUrl!,
+                          imageUrl: userNinRecord.photoUrl!,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -162,11 +169,11 @@ class ConfirmNinDetails extends GetView<AuthController> {
                 height: TSizes.spaceBtwSections,
               ),
               SizedBox(
-                height: 70,
+                height: 60,
                 child: FilledButton(
                   onPressed: () => chooseVerificationMethod(
                     context,
-                    userNinEntity,
+                    userNinRecord,
                   ),
                   child: const Center(
                     child: Text(

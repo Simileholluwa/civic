@@ -46,4 +46,6 @@ abstract class AuthRepository {
   Future<Either<Failure, UserNinRecord?>> searchNinDetails({
     required String ninNumber,
   });
+
+  Future<Either<Failure, UserRecord?>> currentUser();
 }

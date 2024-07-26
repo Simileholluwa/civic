@@ -9,36 +9,32 @@ class PoliticalStatusCardEntity {
   final String title;
   final String subTitle;
   final PoliticalStatus politicalStatus;
+ 
+}
 
-  PoliticalStatusCardEntity.first()
-      : this(
-          title: 'Aspiring',
-          subTitle: 'Building support, gaining experiences, and developing '
-          'a clear agenda to address key societal issues.',
-          politicalStatus: PoliticalStatus.aspiring,
-        );
-
-  PoliticalStatusCardEntity.second()
-      : this(
+ List<PoliticalStatusCardEntity> allStatus = [
+    PoliticalStatusCardEntity(
           title: 'Current',
-          subTitle: 'Actively holding an office, and implementing policies ' 
-           'to govern and guide your community or nation.',
+          subTitle: 'Actively holding an office, and implementing policies '
+              'to govern and guide your community or nation.',
           politicalStatus: PoliticalStatus.current,
-        );
-
-  PoliticalStatusCardEntity.third()
-      : this(
+        ),
+    PoliticalStatusCardEntity(
           title: 'Former',
           subTitle: 'Previously held an office contributing to governance '
-          'and policy-making in your community or nation.',
+              'and policy-making in your community or nation.',
           politicalStatus: PoliticalStatus.former,
-        );
-
-  PoliticalStatusCardEntity.fourth()
-      : this(
+        ),
+    PoliticalStatusCardEntity(
+          title: 'Aspiring',
+          subTitle: 'Building support, gaining experiences, and developing '
+              'a clear agenda to address key societal issues.',
+          politicalStatus: PoliticalStatus.aspiring,
+        ),
+    PoliticalStatusCardEntity(
           title: 'None',
           subTitle: 'Never held an office but passionate about redefining the '
-          'Nigerian political landscape.',
+              'Nigerian political landscape.',
           politicalStatus: PoliticalStatus.none,
-        );
-}
+        ),
+  ];

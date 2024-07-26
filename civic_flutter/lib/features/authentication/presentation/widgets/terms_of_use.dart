@@ -1,14 +1,16 @@
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TermsAndConditions extends GetView<AuthController> {
+class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({
-    super.key,
+    super.key, required this.acceptTerms, required this.onChanged,
   });
+
+  final bool acceptTerms;
+  final void Function(bool?) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,8 @@ class TermsAndConditions extends GetView<AuthController> {
           height: 24,
           child: Obx(
             () => Checkbox(
-              value: controller.state.acceptTerms.value,
-              onChanged: (value) {
-                controller.state.acceptTerms.value =
-                    value!;
-              },
+              value: acceptTerms,
+              onChanged: onChanged,
             ),
           ),
         ),

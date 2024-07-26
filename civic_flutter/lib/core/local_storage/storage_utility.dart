@@ -11,6 +11,7 @@ class AppLocalStorage extends GetxService {
   }
 
   Future<bool> setString(String key, String value) async {
+     _prefs = await SharedPreferences.getInstance();
     return _prefs.setString(key, value);
   }
 

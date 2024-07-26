@@ -15,7 +15,7 @@ class ApiClientImpl extends ApiClient {
   @override
   Future<void> init() async {
     client = Client(
-      'http://192.168.58.235:8080/',
+      'http://192.168.72.235:8080/',
       authenticationKeyManager: FlutterAuthenticationKeyManager(),
     )..connectivityMonitor = FlutterConnectivityMonitor();
 

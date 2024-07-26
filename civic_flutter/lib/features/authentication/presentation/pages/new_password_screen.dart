@@ -1,15 +1,22 @@
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/new_password_form.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class NewPasswordScreen extends GetView<AuthController> {
-  const NewPasswordScreen({super.key});
+import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth_header.dart';
+import 'package:civic_flutter/features/authentication/presentation/widgets/new_password_form.dart';
+
+class NewPasswordScreen extends StatelessWidget {
+  const NewPasswordScreen({super.key, 
+    required this.code,
+    required this.email,
+  });
+
+  final String code;
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +42,9 @@ class NewPasswordScreen extends GetView<AuthController> {
                   authSubTitle: 'Use a combination of alphabets, '
                       'numbers, and symbols',
                 ),
-                Form(
-                  key: controller.state.formKeyNewPassword,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: const NewPasswordForm(),
+                NewPasswordForm(
+                  code: code,
+                  email: email,
                 ),
               ],
             ),

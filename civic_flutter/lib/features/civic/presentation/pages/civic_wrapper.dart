@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CivicWrapper extends StatelessWidget {
@@ -18,7 +19,7 @@ class CivicWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(
       CivicController(
-        client: Get.find<ApiClient>(),
+        client: GetIt.instance.get<ApiClient>(),
       ),
     );
     return AndroidBottomNav(

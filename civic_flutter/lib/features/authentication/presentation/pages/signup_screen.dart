@@ -1,25 +1,36 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/signup_form.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({
+    super.key,
+    required this.email,
+    required this.username,
+    required this.politicalStatus,
+  });
 
-class SignUpScreen extends GetView<AuthController> {
-  const SignUpScreen({super.key});
+  final String email;
+  final String username;
+  final int politicalStatus;
 
   @override
   Widget build(BuildContext context) {
     return AndroidBottomNav(
       child: Scaffold(
-        appBar: const AuthAppBar(icon: Iconsax.arrow_left_2,),
+        appBar: const AuthAppBar(
+          icon: Iconsax.arrow_left_2,
+        ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(TSizes.defaultSpace,),
+          padding: const EdgeInsets.all(
+            TSizes.defaultSpace,
+          ),
           child: Column(
             children: [
               const AuthHeader(
@@ -27,11 +38,7 @@ class SignUpScreen extends GetView<AuthController> {
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols',
               ),
-              Form(
-                key: controller.state.formKeySignUp,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: const SignUpForm(),
-              ),
+              SignUpForm(email: email, politicalStatus: politicalStatus, username: username,),
             ],
           ),
         ),

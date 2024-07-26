@@ -9,7 +9,7 @@ class AppRoutes {
   static const authLandingScreen = '/authLandingScreen';
   static const verifyEmail = '/verifyEmail';
   static const authentication = '/authentication';
-  static const checkIfNewUser = '/authentication/checkIfNewUser';
+  static const checkIfNewUser = '/authentication/check';
   static const politicalStatus = '/authentication/politicalStatus';
   static const chooseUsername = '/authentication/chooseUsername';
   static const resetPassword = '/authentication/resetPassword';

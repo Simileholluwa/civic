@@ -2,12 +2,9 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class ResendLink extends GetView<AuthController> {
+class ResendLink extends StatelessWidget {
   const ResendLink({
     required this.onTap,
     super.key,
@@ -33,14 +30,7 @@ class ResendLink extends GetView<AuthController> {
         const SizedBox(
           width: TSizes.xs,
         ),
-        Obx(
-          () => controller.state.canRetry.isTrue
-              ? controller.state.isLoadingVerifyEmail.isTrue
-                  ? LoadingAnimationWidget.discreteCircle(
-                      color: TColors.primary,
-                      size: 15,
-                    )
-                  : GestureDetector(
+        GestureDetector(
                       onTap: onTap,
                       child: Text(
                         TTexts.resendEmail,
@@ -50,15 +40,7 @@ class ResendLink extends GetView<AuthController> {
                                   fontSize: 17,
                                 ),
                       ),
-                    )
-              : Text(
-                  'Resend in ${controller.state.time.value}.',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).hintColor,
-                        fontSize: 17,
-                      ),
-                ),
-        ),
+                    ),
       ],
     );
   }

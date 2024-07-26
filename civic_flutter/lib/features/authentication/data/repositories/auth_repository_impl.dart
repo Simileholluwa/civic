@@ -293,4 +293,30 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     }
   }
+  
+  @override
+  Future<Either<Failure, UserRecord?>> currentUser() async {
+    try {
+      final result = await _remoteDatabase.currentUser();
+      return Right(result);
+    } on TimeoutException catch (e) {
+      return Left(
+        Failure(
+          message: e.message ?? 'Request timed out',
+        ),
+      );
+    } on SocketException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

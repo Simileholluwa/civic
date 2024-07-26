@@ -1,17 +1,17 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/select_verification_method.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 Future<Widget?> chooseVerificationMethod(
   BuildContext context,
-  UserNinRecord userNinEntity,
+  UserNinRecord userNinRecord,
 ) {
-  final controller = AuthController.instance;
+  //final controller = AuthController.instance;
   return showModalBottomSheet<Widget>(
       context: context,
       enableDrag: false,
@@ -24,12 +24,12 @@ Future<Widget?> chooseVerificationMethod(
             TSizes.md,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(Get.context!).scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(
               TSizes.borderRadiusLg + 20,
             ),
             border: Border.all(
-              color: Theme.of(Get.context!).hintColor.withOpacity(.2),
+              color: Theme.of(context).hintColor.withOpacity(.2),
               width: 0.5,
             ),
           ),
@@ -53,8 +53,7 @@ Future<Widget?> chooseVerificationMethod(
                     ),
                     IconButton(
                       onPressed: () {
-                        Get.back<dynamic>();
-                        controller.state.isLoadingSendNinCode.value = false;
+                        context.pop;
                       },
                       icon: const Icon(
                         Icons.clear,
@@ -71,8 +70,8 @@ Future<Widget?> chooseVerificationMethod(
                 value: 1,
                 title: 'Phone verification',
                 subTitle: 'An SMS containing your OTP will be '
-                    'sent to ${controller.redactString(
-                  userNinEntity.telephone!,
+                    'sent to ${THelperFunctions.redactString(
+                  userNinRecord.telephone!,
                   3,
                   start: 6,
                 )} to verify your identity.',
@@ -84,8 +83,8 @@ Future<Widget?> chooseVerificationMethod(
                 value: 2,
                 title: 'Email verification',
                 subTitle: 'An email containing your OTP will be '
-                    'sent to ${controller.redactEmail(
-                  userNinEntity.email!,
+                    'sent to ${THelperFunctions.redactEmail(
+                  userNinRecord.email!,
                 )} to verify your identity.',
               ),
               const SizedBox(
@@ -95,19 +94,14 @@ Future<Widget?> chooseVerificationMethod(
                 padding: const EdgeInsets.symmetric(
                   horizontal: TSizes.defaultSpace,
                 ),
-                child: Obx(
-                  () => FilledButton(
+                child:FilledButton(
                     onPressed: () {},
                     child: const Text(
                       'Send OTP',
                     ),
                   ).withLoading(
-                    loading:
-                        controller.state.selectionVerificationMethod.value == 1
-                            ? controller.state.isLoadingSendNinCode.value
-                            : controller.state.isLoadingVerifyEmail.value,
+                    loading: false,
                   ),
-                ),
               ),
               const SizedBox(
                 height: TSizes.sm,

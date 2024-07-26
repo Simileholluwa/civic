@@ -143,4 +143,29 @@ class THelperFunctions {
     return (file.lengthSync() / (1024 * 1024)).toStringAsFixed(1);
   }
 
+  static String redactString(String original, int redactLength, {int start = 3}) {
+    final length = original.length;
+    final redactedPart = original.substring(start, length - redactLength);
+    return original.replaceRange(
+      start,
+      length - redactLength,
+      '*' * redactedPart.length,
+    );
+  }
+
+  static String redactEmail(String email) {
+    if (email.length <= 3) {
+      return email;
+    }
+
+    final atIndex = email.indexOf('@');
+    var redactedPart = '';
+    for (var i = 0; i < atIndex - 3 && i < 5; i++) {
+      // ignore: use_string_buffers
+      redactedPart += '*';
+    }
+
+    return email.substring(0, 3) + redactedPart + email.substring(atIndex);
+  }
+
 }

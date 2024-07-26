@@ -1,45 +1,63 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
-import 'package:civic_flutter/features/onboarding/presentation/controller/onboarding_controller.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/next_button.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/onboarding_page_indicator.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/onboarding_page_view.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-class OnBoardingScreen extends GetView<OnBoardingController> {
-  const OnBoardingScreen({super.key});
+class OnBoardingScreen extends ConsumerStatefulWidget {
+  const OnBoardingScreen({
+    super.key,
+    required this.isPolitical,
+  });
+  final String isPolitical;
+
+  @override
+  ConsumerState<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
+  var _currentPage = 0;
+  final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    final isPolitical = Get.arguments as bool;
+    final isPolitical = widget.isPolitical == 'true' ? true : false;
     return AndroidBottomNav(
       child: Scaffold(
         floatingActionButton: const OnBoardingNextButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: controller.goBack,
+            onPressed: context.pop,
             icon: const Icon(
               Iconsax.arrow_left_2,
             ),
           ),
-          actions: const [
+          actions: [
             Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 right: TSizes.md + 4,
               ),
-              child: OnBoardingPageIndicator(),
+              child: OnBoardingPageIndicator(
+                pageController: _pageController,
+              ),
             ),
           ],
         ),
         body: PageView(
-          controller: controller.state.pageController,
-          onPageChanged: (int index) =>
-              controller.state.currentPage.value = index,
+          controller: _pageController,
+          onPageChanged: (int index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
           physics: const ClampingScrollPhysics(),
           children: [
             OnBoardingPageView(

@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/api/api_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:serverpod_auth_client/serverpod_auth_client.dart';
+import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
+import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 
 abstract interface class AuthRemoteDatabase {
   Future<bool> createAccountRequest({
@@ -45,19 +46,27 @@ abstract interface class AuthRemoteDatabase {
   Future<bool> uploadProfileImage({required String imagePath});
 
   Future<UserNinRecord?> searchNinDetails({required String ninNumber});
+
+  Future<UserRecord?> currentUser();
 }
 
 class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   AuthRemoteDatabaseImpl({
-    required ApiClient client,
-  }) : _client = client;
+    required Client client,
+    required SessionManager sessionManager,
+    required EmailAuthController auth,
+  })  : _client = client,
+        _auth = auth,
+        _sessionManager = sessionManager;
 
-  final ApiClient _client;
+  final Client _client;
+  final SessionManager _sessionManager;
+  final EmailAuthController _auth;
 
   @override
   Future<String?> checkIfNewUser({required String email}) async {
     try {
-      final result = await _client.client.userRecord
+      final result = await _client.userRecord
           .checkIfNewUser(
             email,
           )
@@ -89,7 +98,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String newPassword,
   }) async {
     try {
-      final result = await _client.auth
+      final result = await _auth
           .resetPassword(
             email,
             verificationCode,
@@ -125,7 +134,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String password,
   }) async {
     try {
-      final result = await _client.client.modules.auth.email
+      final result = await _client.modules.auth.email
           .authenticate(
             email,
             password,
@@ -175,15 +184,15 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
             message: 'Authententication keys not found');
       }
 
-      await _client.sessionManager.registerSignedInUser(
+      await _sessionManager.registerSignedInUser(
         result.userInfo!,
         result.keyId!,
         result.key!,
       );
 
-      await _client.sessionManager.refreshSession();
+      await _sessionManager.refreshSession();
 
-      return await _client.client.userRecord.me();
+      return await _client.userRecord.me();
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
@@ -204,7 +213,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String userName,
   }) async {
     try {
-      final result = await _client.auth
+      final result = await _auth
           .createAccountRequest(
             userName,
             email,
@@ -217,7 +226,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           );
 
       if (!result) {
-        await _client.auth
+        await _auth
             .createAccountRequest(
               userName,
               email,
@@ -255,7 +264,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     try {
       var bio = 'A Nigerian Citizen';
       final selectedPoliticalStatus = politicalStatus.name;
-      final result = await _client.auth
+      final result = await _auth
           .validateAccount(
             email,
             code,
@@ -289,7 +298,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         bio: bio,
       );
 
-      await _client.client.userRecord.saveUserRecord(userRecord);
+      await _client.userRecord.saveUserRecord(userRecord);
 
       return result;
     } on TimeoutException catch (_) {
@@ -308,7 +317,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<void> logout() async {
     try {
-      final result = await _client.sessionManager.signOut();
+      final result = await _sessionManager.signOut();
       if (!result) {
         throw const ServerException(
           message: 'Failed to sign out',
@@ -326,7 +335,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<UserNinRecord?> searchNinDetails({required String ninNumber}) async {
     try {
-      final result = await _client.client.userNin.findNinDetails(ninNumber);
+      final result = await _client.userNin.findNinDetails(ninNumber);
       if (result == null) {
         return null;
       }
@@ -343,7 +352,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<List<String>> fetchAllUsernames() async {
     try {
-      return await _client.client.userRecord.fetchAllUsernames();
+      return await _client.userRecord.fetchAllUsernames();
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -357,12 +366,11 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final file = File(imagePath);
       final List<int> fileBytes = await file.readAsBytes();
       final byteData = ByteData.view(Uint8List.fromList(fileBytes).buffer);
-      final result =
-          await _client.sessionManager.uploadUserImage(byteData).timeout(
-                const Duration(
-                  seconds: 60,
-                ),
-              );
+      final result = await _sessionManager.uploadUserImage(byteData).timeout(
+            const Duration(
+              seconds: 60,
+            ),
+          );
       if (!result) {
         throw const ServerException(
           message: 'Failed to upload image',
@@ -387,7 +395,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String email,
   }) async {
     try {
-      final result = await _client.auth
+      final result = await _auth
           .initiatePasswordReset(
             email,
           )
@@ -403,6 +411,27 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       }
 
       return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out.');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<UserRecord?> currentUser() async {
+    try {
+    final result = await _client.userRecord.me().timeout(
+            const Duration(
+              seconds: 60,
+            ),);
+    return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {

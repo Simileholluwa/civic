@@ -3,12 +3,10 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class DualButton extends GetView<AuthController> {
+class DualButton extends StatelessWidget {
   const DualButton({
     required this.onTapSkipButton,
     required this.activeButtonText,
@@ -21,8 +19,8 @@ class DualButton extends GetView<AuthController> {
   final VoidCallback onTapSkipButton;
   final String activeButtonText;
   final VoidCallback onTapActiveButton;
-  final RxBool activeButtonLoading;
-  final RxBool skipButtonLoading;
+  final bool activeButtonLoading;
+  final bool skipButtonLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +35,8 @@ class DualButton extends GetView<AuthController> {
       child: Row(
         children: [
           Expanded(
-            child: Obx(
-              () => GestureDetector(
-                onTap: skipButtonLoading.isTrue ? null : onTapSkipButton,
+            child: GestureDetector(
+                onTap: skipButtonLoading == true ? null : onTapSkipButton,
                 child: Container(
                   height: 70,
                   decoration: BoxDecoration(
@@ -50,7 +47,7 @@ class DualButton extends GetView<AuthController> {
                       padding: const EdgeInsets.only(
                         left: TSizes.md,
                       ),
-                      child: skipButtonLoading.isTrue
+                      child: skipButtonLoading == true
                           ? LoadingAnimationWidget.prograssiveDots(
                               color: TColors.primary,
                               size: 50,
@@ -70,20 +67,19 @@ class DualButton extends GetView<AuthController> {
                   ),
                 ),
               ),
-            ),
+          
           ),
           Expanded(
             flex: 2,
-            child: Obx(
-              () => FilledButton(
+            child:FilledButton(
                 onPressed: onTapActiveButton,
                 child: Text(
                   activeButtonText,
                 ),
               ).withLoading(
-                loading: activeButtonLoading.value,
+                loading: activeButtonLoading,
               ),
-            ),
+            
           ),
         ],
       ),

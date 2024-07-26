@@ -1,17 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
 import 'package:civic_flutter/core/widgets/resend_link.dart';
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/email_verification_form.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-class EmailVerificationScreen extends GetView<AuthController> {
-  const EmailVerificationScreen({super.key});
+class EmailVerificationScreen extends StatelessWidget {
+  const EmailVerificationScreen({
+    super.key,
+    required this.email,
+    required this.password,
+    required this.politicalStatus,
+    required this.username,
+  });
+
+  final String email;
+  final String password;
+  final int politicalStatus;
+  final String username;
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +47,17 @@ class EmailVerificationScreen extends GetView<AuthController> {
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
-                Form(
-                  key: controller.state.formKeyVerifyEmail,
-                  child: const EmailVerificationForm(),
+                EmailVerificationForm(
+                  email: email,
+                  password: password,
+                  politicalStatus: politicalStatus,
+                  username: username,
                 ),
                 const SizedBox(
                   height: TSizes.spaceBtwItems,
                 ),
                 ResendLink(
-                  onTap: () => controller.validateCreateAccount(
-                    shouldNavigate: false,
-                  ),
+                  onTap: () {},
                 ),
               ],
             ),

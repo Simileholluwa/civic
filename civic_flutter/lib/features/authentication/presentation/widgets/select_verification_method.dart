@@ -1,9 +1,8 @@
-import 'package:civic_flutter/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SelectVerificationMethod extends GetView<AuthController> {
+class SelectVerificationMethod extends StatefulWidget {
   const SelectVerificationMethod({
     required this.value,
     required this.title,
@@ -14,6 +13,13 @@ class SelectVerificationMethod extends GetView<AuthController> {
   final String title;
   final String subTitle;
 
+  @override
+  State<SelectVerificationMethod> createState() =>
+      _SelectVerificationMethodState();
+}
+
+class _SelectVerificationMethodState extends State<SelectVerificationMethod> {
+  var _verificationMethod = 0;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,24 +38,26 @@ class SelectVerificationMethod extends GetView<AuthController> {
         child: ListTile(
           leading: Obx(
             () => Radio<int>(
-              value: value,
-              groupValue: controller.state.selectionVerificationMethod.value,
+              value: widget.value,
+              groupValue: _verificationMethod,
               onChanged: (value) {
-                controller.state.selectionVerificationMethod.value = value!;
+                setState(() {
+                  _verificationMethod = value!;
+                });
               },
             ),
           ),
           onTap: () {
-            controller.state.selectionVerificationMethod.value = value;
+            _verificationMethod = widget.value;
           },
           title: Text(
-            title,
+            widget.title,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
           subtitle: Text(
-            subTitle,
+            widget.subTitle,
           ),
         ),
       ),
