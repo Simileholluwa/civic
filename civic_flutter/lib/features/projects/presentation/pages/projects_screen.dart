@@ -1,11 +1,9 @@
 
-import 'package:civic_flutter/features/civic/presentation/controller/civic_controller.dart';
-import 'package:civic_flutter/core/widgets/civic_app_bar.dart';
 import 'package:civic_flutter/features/projects/presentation/widgets/projects_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProjectsScreen extends GetView<CivicController> {
+class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key});
 
   @override
@@ -14,12 +12,12 @@ class ProjectsScreen extends GetView<CivicController> {
 
     return Obx(
       () => Scaffold(
-        appBar: ScrollToHideAppBar(
-          controller: controller.state.animationController,
-          visible: controller.state.showAppbar.value,
+        appBar: AppBar(
           title: const ProjectsSearchBar(),
         ),
-        body: const Center(child: Text('Projects screen'),),
+        body: const Center(
+          child: Text('Projects screen'),
+        ),
       ),
     );
   }

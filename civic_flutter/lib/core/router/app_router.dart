@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/choose_username_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/email_screen.dart';
@@ -11,8 +10,13 @@ import 'package:civic_flutter/features/authentication/presentation/pages/signup_
 import 'package:civic_flutter/features/authentication/presentation/pages/verify_identity_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/verify_password_reset_code_screen.dart';
 import 'package:civic_flutter/features/civic/presentation/pages/civic_wrapper.dart';
+import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
+import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
+import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/initial_on_boarding.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_screen.dart';
+import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
+import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
@@ -25,14 +29,14 @@ GoRouter router(RouterRef ref) {
       // Initial
       GoRoute(
         path: AppRoutes.initial,
-        builder: (context, state) => const InitialOnBoardingScreen(),  
+        builder: (context, state) => const InitialOnBoardingScreen(),
       ),
 
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => OnBoardingScreen(
           isPolitical: state.pathParameters['isPolitical'] ?? '',
-        ),  
+        ),
       ),
 
       // Authentication
@@ -99,11 +103,6 @@ GoRouter router(RouterRef ref) {
       ),
 
       GoRoute(
-        path: AppRoutes.civic,
-        builder: (context, state) => const CivicWrapper(),
-      ),
-
-      GoRoute(
         path: AppRoutes.resetPassword,
         builder: (context, state) => ResetPasswordScreen(
           email: state.pathParameters['email'] ?? '',
@@ -123,6 +122,21 @@ GoRouter router(RouterRef ref) {
           code: state.pathParameters['code'] ?? '',
           email: state.pathParameters['email'] ?? '',
         ),
+      ),
+
+      StatefulShellRoute.indexedStack(
+        branches: [
+          FeedRoutes.branch,
+          ProjectsRoutes.branch,
+          DiscoverRoutes.branch,
+          NotificationsRoutes.branch,
+          ProfileRoutes.branch,
+        ],
+        builder: (context, state, navigationShell) {
+          return CivicWrapper(
+            navigatorShell: navigationShell,
+          );
+        },
       ),
     ],
   );

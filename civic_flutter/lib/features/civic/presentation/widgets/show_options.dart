@@ -1,17 +1,24 @@
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/features/civic/domain/entity/post_options.dart';
-import 'package:civic_flutter/features/civic/presentation/controller/civic_controller.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ShowOptions extends GetView<CivicController> {
-  const ShowOptions({super.key});
+import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/features/civic/domain/entity/post_options.dart';
+
+class ShowOptions extends StatelessWidget {
+  const ShowOptions({
+    super.key,
+    required this.isExpanded,
+  });
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300,),
-      opacity: controller.state.isExpanded.isTrue ? 1 : 0,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      opacity: isExpanded == true ? 1 : 0,
       child: Container(
         margin: const EdgeInsets.only(
           left: TSizes.md,
