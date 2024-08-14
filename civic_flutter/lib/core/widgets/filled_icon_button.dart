@@ -1,42 +1,45 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FilledIconButton extends StatelessWidget {
   const FilledIconButton({
-    required this.isDark,
+    required this.color,
     required this.icon,
     required this.onPressed,
+    required this.backgroundColor,
+    this.size = 42,
     super.key,
   });
 
-  final bool isDark;
+  final Color color;
   final IconData icon;
   final VoidCallback onPressed;
+  final double size;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return IconButton.filled(
       style: ButtonStyle(
-        maximumSize: const WidgetStatePropertyAll(
+        maximumSize: WidgetStatePropertyAll(
           Size(
-            42,
-            42,
+            size,
+            size,
           ),
         ),
-        fixedSize: const WidgetStatePropertyAll(
+        fixedSize: WidgetStatePropertyAll(
           Size(
-            42,
-            42,
+            size,
+            size,
           ),
         ),
         backgroundColor: WidgetStatePropertyAll(
-          isDark ? TColors.dark : TColors.textWhite,
+          backgroundColor,
         ),
       ),
       onPressed: onPressed,
       icon: Icon(
         icon,
-        color: isDark ? TColors.textWhite : TColors.dark,
+        color: color,
       ),
     );
   }

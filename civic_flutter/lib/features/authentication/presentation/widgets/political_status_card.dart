@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,11 +37,11 @@ class _PoliticalStatusOptionsState
       (_, next) {
         switch (next) {
           case AuthStateUsername():
-            context.goNamed(
+            context.pushNamed(
               AppRoutes.chooseUsername,
-              pathParameters: {
+              extra: {
                 'email': next.email,
-                'politicalStatus': next.politicalStatus.toString(),
+                'politicalStatus': next.politicalStatus,
               },
             );
           default:
@@ -52,9 +51,14 @@ class _PoliticalStatusOptionsState
     );
     return Column(
       children: [
-        ListView.builder(
+        ListView.separated(
           itemCount: PoliticalStatus.values.length,
           shrinkWrap: true,
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: TSizes.md,
+            );
+          },
           itemBuilder: (context, index) {
             final status = allStatus[index];
             return Container(
@@ -74,29 +78,22 @@ class _PoliticalStatusOptionsState
                     _currentPoliticalStatus = status.politicalStatus;
                   });
                 },
-                title: Row(
-                  children: [
-                    SizedBox(
-                      height: 24,
-                      width: 18,
-                      child: Radio<PoliticalStatus>(
-                        value: status.politicalStatus,
-                        groupValue: PoliticalStatus.values[index],
-                        onChanged: (value) {
-                          PoliticalStatus.values[index] = value!;
-                        },
+                leading: SizedBox(
+                  height: 24,
+                  width: 18,
+                  child: Radio<PoliticalStatus>(
+                    value: _currentPoliticalStatus,
+                    groupValue: PoliticalStatus.values[index],
+                    onChanged: (value) {
+                      PoliticalStatus.values[index] = value!;
+                    },
+                  ),
+                ),
+                title: Text(
+                  status.title,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.md,
-                    ),
-                    Text(
-                      status.title,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
                 ),
                 subtitle: Text(
                   status.subTitle,

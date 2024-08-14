@@ -6,7 +6,7 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 final clientProvider = Provider<Client>((ref) {
   return Client(
-    'http://192.168.72.235:8080/',
+    'http://192.168.50.235:8080/',
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();
 });

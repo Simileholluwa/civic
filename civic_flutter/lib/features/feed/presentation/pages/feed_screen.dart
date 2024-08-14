@@ -1,62 +1,142 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class FeedScreen extends StatelessWidget{
+class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({super.key});
 
   @override
+  ConsumerState<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends ConsumerState<FeedScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 8, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-        
-          title: Text(
-            'civic',
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 35,
-                  color: TColors.primary,
-                ),
-          ),
-          leading: Padding(
+    final isDark = THelperFunctions.isDarkMode(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'CIVIC',
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: TColors.primary,
+                fontSize: 30,
+                fontWeight: FontWeight.w900,
+              ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: TabBar(
+            controller: _tabController,
+            tabAlignment: TabAlignment.start,
+            isScrollable: true,
+            labelColor: isDark ? TColors.textWhite : TColors.dark,
+            unselectedLabelColor:
+                isDark ? TColors.darkerGrey : TColors.darkGrey,
             padding: const EdgeInsets.only(
-              right: TSizes.sm,
+              left: TSizes.xs - 1,
             ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Iconsax.user,
-              ),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(
-                right: TSizes.sm - 2,
-              ),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Iconsax.search_normal,
+            unselectedLabelStyle:
+                Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+            labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
+            indicatorColor: isDark ? TColors.textWhite : TColors.dark,
+            indicatorWeight: 4,
+            tabs: const [
+              Tab(
+                text: 'ALL',
               ),
-            ),
-          ],
-        ),
-        body: Center(
-          child: TextButton(
-            onPressed: () {
-              Get.offAllNamed<dynamic>(AppRoutes.authLandingScreen);
-            },
-            child: const Text(
-              'Logout',
-            ),
+              Tab(
+                text: 'POLLS',
+              ),
+              Tab(
+                text: 'TOWNHALLS',
+              ),
+              Tab(
+                text: 'ARTICLES',
+              ),
+              Tab(
+                text: 'LIVE',
+              ),
+              Tab(
+                text: 'TRENDING',
+              ),
+              Tab(
+                text: 'RECENT',
+              ),
+              Tab(
+                text: 'VIDEOS',
+              ),
+            ],
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Iconsax.search_normal,
+              size: 30,
+            ),
+          ),
+          const SizedBox(
+            width: TSizes.md,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              right: TSizes.md,
+            ),
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: isDark ? TColors.dark : TColors.light,
+              child: CachedNetworkImage(
+                imageUrl: '',
+                errorWidget: (context, url, child) {
+                  return const Icon(
+                    CupertinoIcons.person_alt_circle_fill,
+                    size: 37,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+        ],
       ),
     );
   }

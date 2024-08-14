@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
@@ -24,10 +22,8 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
       canPop: false,
       child: AndroidBottomNav(
         child: Scaffold(
-          appBar: AuthAppBar(
+          appBar: const AuthAppBar(
             icon: Iconsax.arrow_left_2,
-            canGoBack: false,
-            goBack: context.pop,
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(
@@ -44,7 +40,9 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
-               PasswordResetVerificationForm(email: email,),
+                PasswordResetVerificationForm(
+                  email: email,
+                ),
                 const SizedBox(
                   height: TSizes.spaceBtwItems,
                 ),

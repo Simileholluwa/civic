@@ -28,25 +28,21 @@ class UserRecordEndpoint extends Endpoint {
   }
 
   Future<String?> checkIfNewUser(Session session, String email) async {
-    var userRecord = await UserRecord.db.findFirstRow(
+    var userInfo = await UserInfo.db.findFirstRow(
       session,
-      where: (user) => user.userInfo.email.equals(email),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
+      where: (user) => user.email.equals(email),
     );
-    return userRecord?.userInfo?.userName;
+
+    if (userInfo == null) return null;
+
+    return userInfo.userName;
   }
 
   Future<List<String>> fetchAllUsernames(Session session) async {
-    var userRecords = await UserRecord.db.find(
+    var userInfos = await UserInfo.db.find(
       session,
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
     );
-    var usernames =
-        userRecords.map((user) => user.userInfo!.userName!).toList();
+    var usernames = userInfos.map((user) => user.userName!).toList();
     return usernames;
   }
 }

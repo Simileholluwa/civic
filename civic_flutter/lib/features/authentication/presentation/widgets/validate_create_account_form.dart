@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 import 'package:civic_flutter/core/constants/app_colors.dart';
@@ -13,11 +10,10 @@ import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
 import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 
-class EmailVerificationForm extends ConsumerStatefulWidget {
-  const EmailVerificationForm({
+class ValidateCreateAccountForm extends ConsumerStatefulWidget {
+  const ValidateCreateAccountForm({
     super.key,
     required this.email,
     required this.password,
@@ -31,14 +27,14 @@ class EmailVerificationForm extends ConsumerStatefulWidget {
   final String username;
 
   @override
-  ConsumerState<EmailVerificationForm> createState() =>
+  ConsumerState<ValidateCreateAccountForm> createState() =>
       _EmailVerificationFormState();
 }
 
-class _EmailVerificationFormState extends ConsumerState<EmailVerificationForm> {
+class _EmailVerificationFormState
+    extends ConsumerState<ValidateCreateAccountForm> {
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
-  var _isLoading = false;
 
   @override
   void dispose() {
@@ -48,29 +44,6 @@ class _EmailVerificationFormState extends ConsumerState<EmailVerificationForm> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(authProvider.notifier);
-    ref.listen(
-      authProvider,
-      (_, next) {
-        switch (next) {
-          case AuthStateLoading():
-            _isLoading = true;
-          case AuthStateNotLoading():
-            _isLoading = false;
-          case AuthStateError():
-            TToastMessages.errorToast(next.error);
-          case AuthStateSuccessfulRequest():
-            TToastMessages.successToast(next.successMessage);
-          case AuthStateVerifyAccount():
-            context.pushReplacementNamed(
-              AppRoutes.verifyAccount,
-            );
-          default:
-            return;
-        }
-      },
-    );
-
     final isDark = THelperFunctions.isDarkMode(context);
     return Form(
       key: _formKey,
@@ -105,19 +78,19 @@ class _EmailVerificationFormState extends ConsumerState<EmailVerificationForm> {
           const SizedBox(
             height: TSizes.spaceBtwSections,
           ),
-          Obx(
-            () => FilledButton(
-              onPressed: () => controller.validateCreateAccount(
-                code: _codeController.text,
-                email: widget.email,
-                politicalStatus: widget.politicalStatus,
-              ),
-              child: const Text(
-                TTexts.tContinue,
-              ),
-            ).withLoading(
-              loading: _isLoading,
+          FilledButton(
+            onPressed: () =>
+                ref.read(authProvider.notifier).validateCreateAccount(
+                      code: _codeController.text,
+                      email: widget.email,
+                      politicalStatus: widget.politicalStatus,
+                      context: context,
+                    ),
+            child: const Text(
+              TTexts.tContinue,
             ),
+          ).withLoading(
+            loading: ref.watch(validatCreateAccountLoadingProvider),
           ),
         ],
       ),

@@ -8,13 +8,6 @@ sealed class OnboardingState {
 
 class OnboardingStateAuth extends OnboardingState {}
 
-class OnboardingStateError extends OnboardingState {
-  final String error;
-  const OnboardingStateError({
-    required this.error,
-  });
-}
-
 class OnboardingStateUserType extends OnboardingState {
   final bool isPolitical;
   const OnboardingStateUserType({

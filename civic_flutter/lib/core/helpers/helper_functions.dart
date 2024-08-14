@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
+  THelperFunctions._();
 
   static const colorizeColors = [
     TColors.primary,
@@ -39,11 +40,23 @@ class THelperFunctions {
     );
   }
 
-  static bool shouldExitApp() {
+  static double getWidth(BuildContext context) {
+    final window = View.of(context);
+    final pixelRatio = window.devicePixelRatio;
+    return (window.physicalSize / pixelRatio).width;
+  }
+
+  static double getHeight(BuildContext context) {
+    final window = View.of(context);
+    final pixelRatio = window.devicePixelRatio;
+    return (window.physicalSize / pixelRatio).height;
+  }
+
+  static bool shouldExitApp(BuildContext context) {
     var lastExitTime = DateTime.now();
     if (DateTime.now().difference(lastExitTime) >= const Duration(seconds: 2)) {
       lastExitTime = DateTime.now();
-      TToastMessages.infoToast('Press the back button again to exit');
+      TToastMessages.infoToast('Press the back button again to exit', context);
       return false;
     } else {
       return true;
@@ -55,11 +68,6 @@ class THelperFunctions {
       SnackBar(content: Text(message)),
     );
   }
-
-  static void goBack() {
-    Get.back<void>();
-  }
-
 
   static String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
@@ -77,12 +85,12 @@ class THelperFunctions {
     return MediaQuery.of(Get.context!).size;
   }
 
-  static double screenHeight() {
-    return MediaQuery.of(Get.context!).size.height;
+  static double screenHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
   }
 
-  static double screenWidth() {
-    return MediaQuery.of(Get.context!).size.width;
+  static double screenWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
   }
 
   static String getFormattedDate(
@@ -108,7 +116,30 @@ class THelperFunctions {
     return wrappedList;
   }
 
-  static Future<String> getLocation(RxBool isLoading) async {
+  static bool? _isEmpty(dynamic value) {
+    if (value is String) {
+      return value.toString().trim().isEmpty;
+    }
+    if (value is Iterable || value is Map) {
+      return value.isEmpty as bool?;
+    }
+    return false;
+  }
+
+  static bool isNull(dynamic value) => value == null;
+
+  static bool? isBlank(dynamic value) {
+    return _isEmpty(value);
+  }
+
+  static String? capitalizeFirst(String s) {
+    if (isNull(s)) return null;
+    if (isBlank(s)!) return s;
+    return s[0].toUpperCase() + s.substring(1).toLowerCase();
+  }
+
+  static Future<String> getLocation(
+      RxBool isLoading, BuildContext context) async {
     var location = '';
     try {
       isLoading.value = true;
@@ -116,7 +147,9 @@ class THelperFunctions {
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         await Geolocator.requestPermission();
-        await getLocation(isLoading);
+        if (context.mounted) {
+          await getLocation(isLoading, context);
+        }
         isLoading.value = false;
         return location;
       } else {
@@ -126,24 +159,27 @@ class THelperFunctions {
           position.longitude,
         );
         final placeMark = placeMarks[0];
-        location =
-            '${placeMark.subAdministrativeArea}, '
+        location = '${placeMark.subAdministrativeArea}, '
             '${placeMark.administrativeArea} state, '
             '${placeMark.country}.';
         isLoading.value = false;
       }
     } catch (_) {
-      TToastMessages.infoToast('Unable to get current location data',);
+      if (context.mounted) {
+        TToastMessages.infoToast(
+            'Unable to get current location data', context);
+      }
       isLoading.value = false;
     }
     return location;
   }
 
-  static String getFileSize(File file){
+  static String getFileSize(File file) {
     return (file.lengthSync() / (1024 * 1024)).toStringAsFixed(1);
   }
 
-  static String redactString(String original, int redactLength, {int start = 3}) {
+  static String redactString(String original, int redactLength,
+      {int start = 3}) {
     final length = original.length;
     final redactedPart = original.substring(start, length - redactLength);
     return original.replaceRange(
@@ -167,5 +203,4 @@ class THelperFunctions {
 
     return email.substring(0, 3) + redactedPart + email.substring(atIndex);
   }
-
 }

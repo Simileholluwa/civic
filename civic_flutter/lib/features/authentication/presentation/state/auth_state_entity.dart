@@ -10,9 +10,7 @@ sealed class AuthState {
 
 class AuthStateBooting extends AuthState {}
 
-class AuthStateLoading extends AuthState {}
-
-class AuthStateCheckIfNewUser extends AuthState {}
+class AuthStateFirstTimeUser extends AuthState {}
 
 class AuthStateMenu extends AuthState {}
 
@@ -100,8 +98,6 @@ class AuthStateSuccessfulRequest extends AuthState {
     required this.successMessage,
   });
 }
-
-class AuthStateNotLoading extends AuthState {}
 
 class AuthStateSignUp extends AuthState {}
 

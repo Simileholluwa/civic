@@ -23,6 +23,7 @@ class TTexts {
   static const String onBoardingTitle8 = 'YOU TRACK';
   static const String onBoardingTitle9 = 'YOU VERIFY';
   static const String onBoardingTitle10 = 'YOU LEARN';
+  static const String onBoardingTitle11 = 'BE ENGAGING';
 
   static const String onBoardingSubTitle2 =
       'Decision-makers and policy-shapers, including those aspiring or with past experience in such roles for a nation or community.';
@@ -43,7 +44,7 @@ class TTexts {
   static const String onBoardingSubTitle10 =
       'Access videos and materials that educates you about your civic rights and duties.';
   static const String onBoardingSubTitle11 =
-      'Build a network of followers, engage and connect with leaders.';
+      'Build a network of followers, engage and connect with political leaders.';
 
   // -- Authentication Forms
   static const String firstName = 'First Name';

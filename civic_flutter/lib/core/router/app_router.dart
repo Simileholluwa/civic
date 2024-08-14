@@ -1,22 +1,17 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/choose_username_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/email_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/email_verification_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/login_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/new_password_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/political_status_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/reset_password_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/signup_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/verify_identity_screen.dart';
-import 'package:civic_flutter/features/authentication/presentation/pages/verify_password_reset_code_screen.dart';
-import 'package:civic_flutter/features/civic/presentation/pages/civic_wrapper.dart';
+import 'package:civic_flutter/core/widgets/civic_wrapper.dart';
+import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
-import 'package:civic_flutter/features/onboarding/presentation/pages/initial_on_boarding.dart';
-import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_screen.dart';
+import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
@@ -26,102 +21,185 @@ GoRouter router(RouterRef ref) {
   return GoRouter(
     initialLocation: AppRoutes.initial,
     routes: [
-      // Initial
+      // Onboarding routes
       GoRoute(
         path: AppRoutes.initial,
         builder: (context, state) => const InitialOnBoardingScreen(),
+        redirect: (context, state) async {
+          final firstTimer = AppLocalStorage.to.getBool('first_timer') ?? true;
+          try {
+            if (firstTimer) {
+              FlutterNativeSplash.remove();
+              return AppRoutes.initial;
+            } else {
+              final currentUser =
+                  await ref.read(clientProvider).userRecord.me();
+              if (currentUser == null) {
+                FlutterNativeSplash.remove();
+                return AppRoutes.auth;
+              } else {
+                ref.read(authUserProvider.notifier).setValue(true);
+                if (currentUser.verifiedAccount! == true) {
+                  ref.read(verifiedUserProvider.notifier).setValue(true);
+                }
+                FlutterNativeSplash.remove();
+                return FeedRoutes.namespace;
+              }
+            }
+          } catch (_) {
+            if (firstTimer) {
+              FlutterNativeSplash.remove();
+              return AppRoutes.initial;
+            } else {
+              FlutterNativeSplash.remove();
+              return AppRoutes.auth;
+            }
+          }
+        },
+        routes: [
+          GoRoute(
+              path: AppRoutes.onboarding,
+              name: AppRoutes.onboarding,
+              builder: (context, state) {
+                final data = state.extra as Map<String, bool>;
+                return OnBoardingScreen(
+                  isPolitical: data['isPolitical'] ?? true,
+                );
+              }),
+        ],
       ),
 
+      // Login, Sign up, password reset and account verification routes
       GoRoute(
-        path: AppRoutes.onboarding,
-        builder: (context, state) => OnBoardingScreen(
-          isPolitical: state.pathParameters['isPolitical'] ?? '',
-        ),
-      ),
+        path: AppRoutes.auth,
+        name: AppRoutes.auth,
+        builder: (context, state) => const AuthLandingScreen(),
+        routes: [
+          GoRoute(
+            path: AppRoutes.checkIfNewUser,
+            name: AppRoutes.checkIfNewUser,
+            builder: (context, state) => const EmailScreen(),
+          ),
 
-      // Authentication
+          // Login
+          GoRoute(
+            path: AppRoutes.login,
+            name: AppRoutes.login,
+            builder: (context, state) {
+              final data = state.extra as Map<String, String>;
+              return LoginScreen(
+                email: data['email'] ?? '',
+                username: data['username'] ?? '',
+              );
+            },
+            routes: [
+              // Password reset
+              GoRoute(
+                path: AppRoutes.resetPassword,
+                name: AppRoutes.resetPassword,
+                builder: (context, state) {
+                  final data = state.extra as Map<String, String>;
+                  return ResetPasswordScreen(
+                    email: data['email'] ?? '',
+                  );
+                },
+                routes: [
+                  GoRoute(
+                      path: AppRoutes.verifyResetPasswordCode,
+                      name: AppRoutes.verifyResetPasswordCode,
+                      builder: (context, state) {
+                        final data = state.extra as Map<String, String>;
+                        return VerifyPasswordResetCodeScreen(
+                          email: data['email'] ?? '',
+                        );
+                      }),
+                  GoRoute(
+                      path: AppRoutes.createNewPassword,
+                      name: AppRoutes.createNewPassword,
+                      builder: (context, state) {
+                        final data = state.extra as Map<String, String>;
+                        return NewPasswordScreen(
+                          code: data['code'] ?? '',
+                          email: data['email'] ?? '',
+                        );
+                      }),
+                ],
+              ),
+            ],
+          ),
 
-      GoRoute(
-        path: AppRoutes.checkIfNewUser,
-        builder: (context, state) => const EmailScreen(),
-      ),
+          // Sign up
+          GoRoute(
+              path: AppRoutes.politicalStatus,
+              name: AppRoutes.politicalStatus,
+              builder: (context, state) {
+                final data = state.extra as Map<String, String>;
+                return PoliticalStatusScreen(
+                  email: data['email'] ?? '',
+                );
+              }),
+          GoRoute(
+              path: AppRoutes.chooseUsername,
+              name: AppRoutes.chooseUsername,
+              builder: (context, state) {
+                final data = state.extra as Map<String, dynamic>;
+                return UsernameScreen(
+                  email: data['email'] ?? '',
+                  politicalStatus: data['politicalStatus'] ?? 3,
+                );
+              }),
+          GoRoute(
+              path: AppRoutes.createAccountRequest,
+              name: AppRoutes.createAccountRequest,
+              builder: (context, state) {
+                final data = state.extra as Map<String, dynamic>;
+                return CreateAccountRequestScreen(
+                  email: data['email'] ?? '',
+                  politicalStatus: data['politicalStatus'] ?? 3,
+                  username: data['username'] ?? '',
+                );
+              }),
+          GoRoute(
+              path: AppRoutes.validateCreateAccount,
+              name: AppRoutes.validateCreateAccount,
+              builder: (context, state) {
+                final data = state.extra as Map<String, dynamic>;
+                return ValidateCreateAccountScreen(
+                  email: data['email'] ?? '',
+                  politicalStatus: data['politicalStatus'] ?? 3,
+                  username: data['username'] ?? '',
+                  password: data['password'] ?? '',
+                );
+              }),
 
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (context, state) => LoginScreen(
-          email: state.pathParameters['email'] ?? '',
-          username: state.pathParameters['username'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.politicalStatus,
-        builder: (context, state) => PoliticalStatusScreen(
-          email: state.pathParameters['email'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.chooseUsername,
-        builder: (context, state) => UsernameScreen(
-          email: state.pathParameters['email'] ?? '',
-          politicalStatus: int.tryParse(
-                state.pathParameters['politicalStatus'] ?? '0',
-              ) ??
-              0,
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.signUp,
-        builder: (context, state) => SignUpScreen(
-          email: state.pathParameters['email'] ?? '',
-          politicalStatus: int.tryParse(
-                state.pathParameters['politicalStatus'] ?? '0',
-              ) ??
-              0,
-          username: state.pathParameters['username'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.verifyEmail,
-        builder: (context, state) => EmailVerificationScreen(
-          email: state.pathParameters['email'] ?? '',
-          politicalStatus: int.tryParse(
-                state.pathParameters['politicalStatus'] ?? '0',
-              ) ??
-              0,
-          username: state.pathParameters['username'] ?? '',
-          password: state.pathParameters['password'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.verifyAccount,
-        builder: (context, state) => const VerifyIdentityScreen(),
-      ),
-
-      GoRoute(
-        path: AppRoutes.resetPassword,
-        builder: (context, state) => ResetPasswordScreen(
-          email: state.pathParameters['email'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.verifyResetPasswordCode,
-        builder: (context, state) => VerifyPasswordResetCodeScreen(
-          email: state.pathParameters['email'] ?? '',
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.createNewPassword,
-        builder: (context, state) => NewPasswordScreen(
-          code: state.pathParameters['code'] ?? '',
-          email: state.pathParameters['email'] ?? '',
-        ),
+          // Account verification
+          GoRoute(
+            path: AppRoutes.verifyAccount,
+            name: AppRoutes.verifyAccount,
+            builder: (context, state) => const VerifyIdentityScreen(),
+            routes: [
+              GoRoute(
+                path: AppRoutes.confirmNinDetails,
+                name: AppRoutes.confirmNinDetails,
+                builder: (context, state) => const ConfirmNinDetails(
+                  ninRecord: '',
+                ),
+              ),
+              GoRoute(
+                path: AppRoutes.verifyNinPhoneOTP,
+                name: AppRoutes.verifyNinPhoneOTP,
+                builder: (context, state) => const VerifyNinPhoneOTPScreen(
+                  verificationId: '',
+                ),
+              ),
+              GoRoute(
+                path: AppRoutes.verifyNinEmailOTP,
+                name: AppRoutes.verifyNinEmailOTP,
+                builder: (context, state) => const VerifyNinEmailOTPScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
 
       StatefulShellRoute.indexedStack(

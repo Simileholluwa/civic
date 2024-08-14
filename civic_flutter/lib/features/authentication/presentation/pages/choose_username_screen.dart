@@ -1,7 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';

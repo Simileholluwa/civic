@@ -111,11 +111,16 @@ class TDeviceUtils {
     return Platform.isAndroid;
   }
 
-  static Future<void> launchUrl(String url) async {
+  static Future<void> launchUrl(String url, BuildContext context) async {
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      TToastMessages.errorToast('Unable to launch url');
+      if (context.mounted) {
+        TToastMessages.errorToast(
+          'Unable to launch url',
+          context,
+        );
+      }
     }
   }
 }

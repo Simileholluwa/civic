@@ -9,32 +9,27 @@ class PoliticalStatusCardEntity {
   final String title;
   final String subTitle;
   final PoliticalStatus politicalStatus;
- 
 }
 
- List<PoliticalStatusCardEntity> allStatus = [
-    PoliticalStatusCardEntity(
-          title: 'Current',
-          subTitle: 'Actively holding an office, and implementing policies '
-              'to govern and guide your community or nation.',
-          politicalStatus: PoliticalStatus.current,
-        ),
-    PoliticalStatusCardEntity(
-          title: 'Former',
-          subTitle: 'Previously held an office contributing to governance '
-              'and policy-making in your community or nation.',
-          politicalStatus: PoliticalStatus.former,
-        ),
-    PoliticalStatusCardEntity(
-          title: 'Aspiring',
-          subTitle: 'Building support, gaining experiences, and developing '
-              'a clear agenda to address key societal issues.',
-          politicalStatus: PoliticalStatus.aspiring,
-        ),
-    PoliticalStatusCardEntity(
-          title: 'None',
-          subTitle: 'Never held an office but passionate about redefining the '
-              'Nigerian political landscape.',
-          politicalStatus: PoliticalStatus.none,
-        ),
-  ];
+List<PoliticalStatusCardEntity> allStatus = [
+  PoliticalStatusCardEntity(
+    title: 'Current',
+    subTitle: 'I am currently holding a political position.',
+    politicalStatus: PoliticalStatus.current,
+  ),
+  PoliticalStatusCardEntity(
+    title: 'Former',
+    subTitle: 'I have previously held a political position.',
+    politicalStatus: PoliticalStatus.former,
+  ),
+  PoliticalStatusCardEntity(
+    title: 'Aspiring',
+    subTitle: 'I have aspirations of holding a political position.',
+    politicalStatus: PoliticalStatus.aspiring,
+  ),
+  PoliticalStatusCardEntity(
+    title: 'None',
+    subTitle: 'I do not have interest in holding a political position.',
+    politicalStatus: PoliticalStatus.none,
+  ),
+];

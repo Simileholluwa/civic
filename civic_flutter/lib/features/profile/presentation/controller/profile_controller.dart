@@ -1,5 +1,4 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/profile/domain/usecases/me_use_case.dart';
 
@@ -14,7 +13,7 @@ class ProfileController {
       NoParams(),
     );
     result.fold(
-      (l) => TToastMessages.errorToast(l.message),
+      (l) => null,
       (r) => userRecord = r,
     );
     return userRecord;

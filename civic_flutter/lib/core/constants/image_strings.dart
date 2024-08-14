@@ -4,7 +4,6 @@ class TImageTexts {
   static const _baseImage = 'assets/images';
   static const _baseLogo = 'assets/logo';
 
-
   // Image files
   static const underConstructionImage = '$_baseImage/UnderConstruction.png';
   static const initialOnBoardImage = '$_baseImage/welcome.png';
@@ -16,9 +15,9 @@ class TImageTexts {
   static const onBoardingImage5 = '$_baseImage/accountable.png';
   static const onBoardingImage9 = '$_baseImage/verify_projects.png';
   static const verifyProjects = '$_baseImage/verify_projects.png';
+  static const checkList = '$_baseImage/checklist.png';
 
   // Logo files
   static const appLogo = '$_baseLogo/logo.png';
   static const appLogo2 = '$_baseLogo/logo2.png';
-
 }

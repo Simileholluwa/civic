@@ -4,7 +4,6 @@ import 'package:civic_flutter/core/theme/text_theme.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
-
 class TAppTheme {
   TAppTheme._();
 

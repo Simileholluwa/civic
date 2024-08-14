@@ -7,7 +7,7 @@ class AppPasswordTextField extends StatelessWidget {
     required this.textController,
     required this.validator,
     required this.onSuffixPressed,
-    this.showPassword = false,
+    this.obscurePassword = true,
     this.prefixIcon = Iconsax.password_check,
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
@@ -23,7 +23,7 @@ class AppPasswordTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final String? Function(String?)? validator;
   final double iconSize;
-  final bool showPassword;
+  final bool obscurePassword;
   final VoidCallback onSuffixPressed;
 
   @override
@@ -42,7 +42,7 @@ class AppPasswordTextField extends StatelessWidget {
           ),
           child: IconButton(
             onPressed: onSuffixPressed,
-            icon: showPassword == true
+            icon: obscurePassword == true
                 ? const Icon(
                     Icons.visibility,
                   )
@@ -57,7 +57,7 @@ class AppPasswordTextField extends StatelessWidget {
             ),
         errorMaxLines: 2,
       ),
-      obscureText: showPassword,
+      obscureText: obscurePassword,
       textInputAction: textInputAction,
       keyboardType: textInputType,
     );

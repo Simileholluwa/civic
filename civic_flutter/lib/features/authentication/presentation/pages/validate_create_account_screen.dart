@@ -8,10 +8,10 @@ import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
 import 'package:civic_flutter/core/widgets/resend_link.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/email_verification_form.dart';
+import 'package:civic_flutter/features/authentication/presentation/widgets/validate_create_account_form.dart';
 
-class EmailVerificationScreen extends StatelessWidget {
-  const EmailVerificationScreen({
+class ValidateCreateAccountScreen extends StatelessWidget {
+  const ValidateCreateAccountScreen({
     super.key,
     required this.email,
     required this.password,
@@ -47,7 +47,7 @@ class EmailVerificationScreen extends StatelessWidget {
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
-                EmailVerificationForm(
+                ValidateCreateAccountForm(
                   email: email,
                   password: password,
                   politicalStatus: politicalStatus,

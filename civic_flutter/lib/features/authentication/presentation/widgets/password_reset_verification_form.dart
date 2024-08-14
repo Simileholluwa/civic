@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +14,8 @@ import 'package:civic_flutter/features/authentication/presentation/state/auth_st
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 
 class PasswordResetVerificationForm extends ConsumerStatefulWidget {
-  const PasswordResetVerificationForm({super.key, 
+  const PasswordResetVerificationForm({
+    super.key,
     required this.email,
   });
 
@@ -33,7 +33,6 @@ class _PasswordResetVerificationFormState
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    final controller = ref.watch(authProvider.notifier);
     ref.listen(authProvider, (_, next) {
       switch (next) {
         case AuthStateNewPassword():
@@ -82,10 +81,12 @@ class _PasswordResetVerificationFormState
             height: TSizes.spaceBtwSections,
           ),
           FilledButton(
-            onPressed: () => controller.navigateToCreateNewPassword(
-              _codeController.text,
-              widget.email,
-            ),
+            onPressed: () =>
+                ref.watch(authProvider.notifier).navigateToCreateNewPassword(
+                      _codeController.text,
+                      widget.email,
+                      context,
+                    ),
             child: const Text(
               TTexts.tContinue,
             ),

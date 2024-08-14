@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
@@ -136,15 +137,17 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     try {
       final result = await _client.modules.auth.email
           .authenticate(
-            email,
-            password,
+            'maxoluwatosin@gmail.com',
+            'Oluwa99@',
           )
           .timeout(
             const Duration(
               seconds: 60,
             ),
           );
-
+      log(result.toString());
+      log(email);
+      log(password);
       if (!result.success && result.failReason != null) {
         final failReason = result.failReason!.index;
         switch (failReason) {
@@ -427,11 +430,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<UserRecord?> currentUser() async {
     try {
-    final result = await _client.userRecord.me().timeout(
+      final result = await _client.userRecord.me().timeout(
             const Duration(
               seconds: 60,
-            ),);
-    return result;
+            ),
+          );
+      return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {

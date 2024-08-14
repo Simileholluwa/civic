@@ -6,10 +6,10 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/signup_form.dart';
+import 'package:civic_flutter/features/authentication/presentation/widgets/create_account_request_form.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({
+class CreateAccountRequestScreen extends StatelessWidget {
+  const CreateAccountRequestScreen({
     super.key,
     required this.email,
     required this.username,
@@ -38,7 +38,11 @@ class SignUpScreen extends StatelessWidget {
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols',
               ),
-              SignUpForm(email: email, politicalStatus: politicalStatus, username: username,),
+              CreateAccountRequestForm(
+                email: email,
+                politicalStatus: politicalStatus,
+                username: username,
+              ),
             ],
           ),
         ),

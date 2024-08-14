@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
-class VerifyNinOTP extends ConsumerStatefulWidget {
-  const VerifyNinOTP({
+class VerifyNinPhoneOTPForm extends ConsumerStatefulWidget {
+  const VerifyNinPhoneOTPForm({
     required this.verificationId,
     super.key,
   });
@@ -17,10 +17,10 @@ class VerifyNinOTP extends ConsumerStatefulWidget {
   final String verificationId;
 
   @override
-  ConsumerState<VerifyNinOTP> createState() => _VerifyNinOTPState();
+  ConsumerState<VerifyNinPhoneOTPForm> createState() => _VerifyNinOTPState();
 }
 
-class _VerifyNinOTPState extends ConsumerState<VerifyNinOTP> {
+class _VerifyNinOTPState extends ConsumerState<VerifyNinPhoneOTPForm> {
   final _codeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override

@@ -5,7 +5,6 @@ import 'package:civic_flutter/features/authentication/presentation/widgets/reset
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
@@ -15,30 +14,26 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: AndroidBottomNav(
-        child: Scaffold(
-          appBar: AuthAppBar(
-            icon: Iconsax.arrow_left_2,
-            canGoBack: false,
-            goBack: context.pop,
+    return AndroidBottomNav(
+      child: Scaffold(
+        appBar: const AuthAppBar(
+          icon: Iconsax.arrow_left_2,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(
+            TSizes.defaultSpace,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(
-              TSizes.defaultSpace,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AuthHeader(
-                  authTitle: TTexts.forgetPassword,
-                  authSubTitle: TTexts.forgetPasswordSubTitle,
-                ),
-                ResetPasswordForm(email: email,),
-                
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AuthHeader(
+                authTitle: TTexts.forgetPassword,
+                authSubTitle: TTexts.forgetPasswordSubTitle,
+              ),
+              ResetPasswordForm(
+                email: email,
+              ),
+            ],
           ),
         ),
       ),

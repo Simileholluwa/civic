@@ -1,8 +1,7 @@
-import 'package:get/get.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 
 class TValidator {
-  static RxString errorString = ''.obs;
-
+  TValidator._();
   static String? validateEmptyText(String fieldName, String? value) {
     if (value == null || value.isEmpty) {
       return '$fieldName is required';
@@ -20,9 +19,12 @@ class TValidator {
       return 'Input 3 to 15 characters';
     }
 
-    if (usernames.contains(value.trim())) {
-      return '${value.capitalizeFirst} already exists. Please choose a '
-          'different username.';
+    if (usernames.contains(
+      THelperFunctions.capitalizeFirst(
+        value.trim(),
+      ),
+    )) {
+      return 'Username already exists. Please choose a different username.';
     }
 
     return null;

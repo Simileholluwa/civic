@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -12,7 +11,7 @@ class ShouldExit extends StatelessWidget {
       canPop: false,
       onPopInvoked: (bool didPop) {
         if (didPop) {
-          THelperFunctions.shouldExitApp();
+          THelperFunctions.shouldExitApp(context);
         }
       },
       child: child,

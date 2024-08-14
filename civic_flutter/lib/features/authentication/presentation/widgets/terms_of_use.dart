@@ -1,16 +1,14 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({
-    super.key, required this.acceptTerms, required this.onChanged,
+    super.key,
   });
-
-  final bool acceptTerms;
-  final void Function(bool?) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +17,18 @@ class TermsAndConditions extends StatelessWidget {
         SizedBox(
           width: 24,
           height: 24,
-          child: Obx(
-            () => Checkbox(
-              value: acceptTerms,
-              onChanged: onChanged,
-            ),
-          ),
+          child: Consumer(builder: (context, ref, _) {
+            return Checkbox(
+              value: ref.watch(acceptTermsProvider),
+              onChanged: (value) {
+                if (ref.watch(acceptTermsProvider)) {
+                  ref.watch(acceptTermsProvider.notifier).setValue(false);
+                } else {
+                  ref.watch(acceptTermsProvider.notifier).setValue(true);
+                }
+              },
+            );
+          }),
         ),
         const SizedBox(
           width: TSizes.sm,

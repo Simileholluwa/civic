@@ -1,58 +1,18 @@
 import 'package:civic_flutter/core/constants/text_strings.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/router/app_router.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/theme/theme.dart';
-import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
-import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:toastification/toastification.dart';
 
-class Home extends ConsumerStatefulWidget {
+class Home extends ConsumerWidget {
   const Home({super.key});
 
   @override
-  ConsumerState<Home> createState() => _HomeState();
-}
-
-class _HomeState extends ConsumerState<Home> {
-  @override
-  void initState() {
-    super.initState();
-    ref.watch(authProvider.notifier).init();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    final firstTimer = AppLocalStorage.to.getBool('first_timer') ?? true;
-    ref.listen(
-      authProvider,
-      (_, next) {
-        switch (next) {
-          case AuthStateError() || AuthStateGuest():
-            if (!firstTimer) {
-              router.pushNamed(
-                AppRoutes.authLandingScreen,
-              );
-            } else {
-              router.pushNamed(
-                AppRoutes.initial,
-              );
-            }
-          case AuthStateSuccess():
-            router.pushNamed(
-              AppRoutes.civic,
-            );
-          default:
-            return;
-        }
-      },
-    );
-
     return Portal(
       child: ToastificationWrapper(
         child: MaterialApp.router(

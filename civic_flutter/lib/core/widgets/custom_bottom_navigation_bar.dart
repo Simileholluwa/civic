@@ -1,9 +1,8 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/features/civic/domain/entity/custom_bottom_navigation_bar.dart';
+import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({
@@ -40,6 +39,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           return _buildNavItem(
             item,
             idx,
+            context,
           );
         }).toList(),
       ),
@@ -49,9 +49,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget _buildNavItem(
     CustomBottomNavigationBarItem item,
     int index,
+    BuildContext context,
   ) {
     final isSelected = currentIndex == index;
-    final isDark = THelperFunctions.isDarkMode(Get.context!);
+    final isDark = THelperFunctions.isDarkMode(context);
     return IconButton(
       onPressed: () => onItemTapped(index),
       icon: Icon(
@@ -68,4 +69,3 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 }
-

@@ -1,17 +1,13 @@
-import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/widgets/app_button.dart';
 import 'package:civic_flutter/core/widgets/app_password_field.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
-import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({
@@ -28,8 +24,6 @@ class LoginForm extends ConsumerStatefulWidget {
 class _LoginFormState extends ConsumerState<LoginForm> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var _isLoading = false;
-  var _showPassword = false;
 
   @override
   void dispose() {
@@ -40,32 +34,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(authProvider.notifier);
-    ref.listen(authProvider, (_, next) {
-      switch (next) {
-        case AuthStateLoading():
-          _isLoading = true;
-        case AuthStateNotLoading():
-          _isLoading = false;
-        case AuthStateError():
-          TToastMessages.errorToast(
-            next.error,
-          );
-        case AuthStateSuccess():
-          context.pushReplacementNamed(
-            AppRoutes.civic,
-          );
-        case AuthStateVerifyAccount():
-          context.pushReplacementNamed(
-            AppRoutes.verifyAccount,
-          );
-        case AuthStateInitiatePasswordReset():
-          context.goNamed(
-            AppRoutes.resetPassword,
-          );
-        default:
-          return;
-      }
-    });
 
     return Form(
       key: _formKey,
@@ -81,12 +49,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 'Password',
                 value,
               ),
-              showPassword: _showPassword,
+              obscurePassword: ref.watch(showPasswordProvider),
               hintText: 'Enter your password',
               onSuffixPressed: () {
-                setState(() {
-                  _showPassword = !_showPassword;
-                });
+                if (ref.watch(showPasswordProvider)) {
+                  ref.watch(showPasswordProvider.notifier).setValue(false);
+                } else {
+                  ref.watch(showPasswordProvider.notifier).setValue(true);
+                }
               },
             ),
             const SizedBox(
@@ -96,7 +66,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => controller.navigateToResetPassword(widget.email,),
+                  onTap: () => controller.navigateToResetPassword(
+                    widget.email,
+                    context,
+                  ),
                   child: Text(
                     'Forgot password?',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -109,19 +82,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
-            Obx(
-              () => FilledButton(
-                onPressed: () => controller.signInWithEmailAndPassword(
-                  email: widget.email,
-                  password: _passwordController.text,
-                  formKey: _formKey,
-                ),
-                child: const Text(
-                  TTexts.signIn,
-                ),
-              ).withLoading(
-                loading: _isLoading,
+            FilledButton(
+              onPressed: () => controller.signInWithEmailAndPassword(
+                email: widget.email,
+                password: _passwordController.text,
+                formKey: _formKey,
+                context: context,
               ),
+              child: const Text(
+                TTexts.signIn,
+              ),
+            ).withLoading(
+              loading: ref.watch(signInLoadingProvider),
             ),
           ],
         ),

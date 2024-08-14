@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+// ignore_for_file: avoid_build_context_in_providers
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
+import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/search_user_nin_use_case.dart';
@@ -13,8 +16,9 @@ import 'package:civic_flutter/features/authentication/domain/usecases/reset_user
 import 'package:civic_flutter/features/authentication/domain/usecases/user_sign_in_use_case.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/validate_create_account_use_case.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_service_provider.dart';
+import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
@@ -23,57 +27,17 @@ part 'auth_provider.g.dart';
 class Auth extends _$Auth {
   @override
   AuthState build() {
-    init();
     return AuthStateBooting();
   }
 
-  Future<void> init() async {
-    final sessionManager = ref.read(sessionProvider);
-    await sessionManager.initialize();
-    await currentUser();
-    FlutterNativeSplash.remove();
-  }
-
-  void setUser(UserRecord userRecord) {
-    state = AuthStateSuccess(
-      userRecord: userRecord,
-    );
-  }
-
-  void logOutUser() {
-    state = AuthStateGuest();
-  }
-
-  Future<void> currentUser() async {
-    final currentUser = ref.read(currentUserProvider);
-    final result = await currentUser(
-      NoParams(),
-    );
-    result.fold((error) {
-      state = AuthStateError(
-        error: error.message,
-      );
-    }, (userRecord) {
-      if (userRecord == null) {
-        state = AuthStateGuest();
-      } else {
-        state = AuthStateSuccess(
-          userRecord: userRecord,
-        );
-      }
-    });
-  }
-
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     final logOutUseCase = ref.read(logOutProvider);
     final result = await logOutUseCase(
       NoParams(),
     );
-    result.fold(
-        (error) => state = const AuthStateError(
-              error: 'Something went wrong',
-            ), (r) {
-      logOutUser();
+    result.fold((error) => null, (r) {
+      ref.read(authUserProvider.notifier).setValue(false);
+      context.pushNamed(AppRoutes.auth);
     });
   }
 
@@ -81,29 +45,44 @@ class Auth extends _$Auth {
     required String email,
     required String password,
     required GlobalKey<FormState> formKey,
+    required BuildContext context,
   }) async {
-    final signInUseCase = ref.read(userSignInProvider);
     final isValid = formKey.currentState!.validate();
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(error: 'No internet connection');
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
     if (!isValid) return;
-    state = AuthStateLoading();
+    final signInUseCase = ref.read(userSignInProvider);
+
+    ref.read(signInLoadingProvider.notifier).setValue(true);
     final result = await signInUseCase(
       UserSignInParams(
         email,
         password,
       ),
     );
-    state = AuthStateNotLoading();
-    result.fold((error) => state = AuthStateError(error: error.message),
-        (userRecord) {
+    ref.read(signInLoadingProvider.notifier).setValue(false);
+    result.fold((error) {
+      TToastMessages.errorToast(error.message, context);
+      return;
+    }, (userRecord) {
+      ref.read(authUserProvider.notifier).setValue(true);
       if (userRecord != null && userRecord.verifiedAccount!) {
-        state = AuthStateSuccess(userRecord: userRecord);
+        ref.read(verifiedUserProvider.notifier).setValue(true);
+        context.goNamed(
+          FeedRoutes.namespace,
+        );
+        return;
       } else if (userRecord != null && !userRecord.verifiedAccount!) {
-        state = AuthStateVerifyAccount();
+        context.goNamed(
+          AppRoutes.verifyAccount,
+        );
+        return;
       }
     });
   }
@@ -111,32 +90,43 @@ class Auth extends _$Auth {
   Future<void> checkIfNewUser({
     required String email,
     required GlobalKey<FormState> formKey,
+    required BuildContext context,
   }) async {
-    final newUserUseCase = ref.read(checkIfNewUserProvider);
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(error: 'No internet connection');
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
-    state = AuthStateLoading();
+    final newUserUseCase = ref.read(checkIfNewUserProvider);
+    ref.read(checkEmailLoadingProvider.notifier).setValue(true);
     final result = await newUserUseCase(
       CheckIfNewUserParams(
         email,
       ),
     );
-    state = AuthStateNotLoading();
-    result.fold((error) => state = AuthStateError(error: error.message),
-        (username) {
+    ref.read(checkEmailLoadingProvider.notifier).setValue(false);
+    result.fold((error) {
+      TToastMessages.errorToast(error.message, context);
+    }, (username) {
       if (username != null) {
-        state = AuthStateLogin(
-          username: username,
-          email: email,
+        context.pushNamed(
+          AppRoutes.login,
+          extra: {
+            'email': email,
+            'username': username,
+          },
         );
       } else {
-        state = AuthStatePoliticalStatus(
-          email: email,
+        context.pushNamed(
+          AppRoutes.politicalStatus,
+          extra: {
+            'email': email,
+          },
         );
       }
     });
@@ -147,38 +137,43 @@ class Auth extends _$Auth {
     final result = await usernameUseCase(
       NoParams(),
     );
-    final usernames = <String>[];
+    var usernames = <String>[];
     result.fold(
       (l) => null,
-      (usernames) => usernames = usernames,
+      (allUsernames) {
+        usernames = allUsernames;
+      },
     );
     return usernames;
   }
 
   Future<void> createAccountRequest({
     required GlobalKey<FormState> formKey,
-    required bool acceptTerms,
     required String password,
     required String email,
     required String username,
     required int politicalStatus,
+    required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
     final createAccountRequest = ref.read(createAccountRequestProvider);
     if (!isValid) return;
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(error: 'No internet connection');
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
 
-    if (!acceptTerms) {
-      state = const AuthStateError(
-        error: 'Please read and accept privacy policy and terms of use',
-      );
+    if (!ref.watch(acceptTermsProvider)) {
+      if (context.mounted) {
+        TToastMessages.errorToast('Please read and accept terms', context);
+      }
       return;
     }
-    state = AuthStateLoading();
+    ref.read(createAccountLoadingProvider.notifier).setValue(true);
     final result = await createAccountRequest(
       CreateAccountRequestParams(
         password,
@@ -186,20 +181,22 @@ class Auth extends _$Auth {
         username,
       ),
     );
-    state = AuthStateNotLoading();
-    result.fold((l) {
-      state = AuthStateError(
-        error: l.message,
-      );
+    ref.read(createAccountLoadingProvider.notifier).setValue(false);
+    result.fold((error) {
+      TToastMessages.errorToast(error.message, context);
     }, (r) {
-      state = const AuthStateSuccessfulRequest(
-        successMessage: 'A verification code has been sent to your email',
+      TToastMessages.successToast(
+        'A verification code has been sent to your email',
+        context,
       );
-      state = AuthStateVerificationCode(
-        email: email,
-        password: password,
-        username: username,
-        politicalStatus: politicalStatus,
+      context.pushNamed(
+        AppRoutes.validateCreateAccount,
+        extra: {
+          'email': email,
+          'politicalStatus': politicalStatus,
+          'username': username,
+          'password': password,
+        },
       );
     });
   }
@@ -211,26 +208,26 @@ class Auth extends _$Auth {
     state = AuthStateUsername(email: email, politicalStatus: politicalStatus);
   }
 
-  void navigateToCheckIfNewUser() {
-    state = AuthStateCheckIfNewUser();
-  }
-
-  void navigateToMenu() {
-    state = AuthStateMenu();
+  void navigateToMenu(BuildContext context) {
+    context.go(FeedRoutes.namespace);
   }
 
   void navigateToCreateAccount(
     String email,
     int politicalStatus,
-    String username, {
+    String username,
+    BuildContext context, {
     required GlobalKey<FormState> formKey,
   }) {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
-    state = AuthStateCreateAccount(
-      email: email,
-      politicalStatus: politicalStatus,
-      username: username,
+    context.pushNamed(
+      AppRoutes.createAccountRequest,
+      extra: {
+        'email': email,
+        'politicalStatus': politicalStatus,
+        'username': username,
+      },
     );
   }
 
@@ -238,84 +235,99 @@ class Auth extends _$Auth {
     required String code,
     required String email,
     required int politicalStatus,
+    required BuildContext context,
   }) async {
     final isConnected = await TDeviceUtils.hasInternetConnection();
     final validateAccount = ref.read(validateCreateAccountProvider);
     if (!isConnected) {
-      TToastMessages.infoToast(
-        'No internet connection',
-      );
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
-    state = AuthStateLoading();
+    ref.read(validatCreateAccountLoadingProvider.notifier).setValue(true);
     final result = await validateAccount(
       ValidateCreateAccountParams(
         code: code,
         email: email,
-        politicalStatus: PoliticalStatus.fromJson(0),
+        politicalStatus: PoliticalStatus.fromJson(politicalStatus),
       ),
     );
-    state = AuthStateNotLoading();
+    ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      state = AuthStateError(
-        error: error.message,
-      );
+      TToastMessages.errorToast(error.message, context);
     }, (r) {
-      state = const AuthStateSuccessfulRequest(
-        successMessage: 'Your account has been verified',
+      TToastMessages.successToast('Your account has been created', context);
+      context.pushNamed(
+        AppRoutes.verifyAccount,
       );
-      state = AuthStateVerifyAccount();
     });
   }
 
   Future<void> initiatePasswordRequest({
     required String email,
     required GlobalKey<FormState> formKey,
+    required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(error: 'No internet connection');
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    state = AuthStateLoading();
+    ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(true);
     final result = await initiatePasswordReset(
       InitiatePasswordResetParams(
         email,
       ),
     );
-    state = AuthStateNotLoading();
+    ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      state = AuthStateError(
-        error: error.message,
-      );
+      TToastMessages.errorToast(error.message, context);
+      return;
     }, (r) {
-      state = const AuthStateSuccessfulRequest(
-        successMessage: 'Verification code has been sent to your email',
+      TToastMessages.successToast(
+        'Password reset code has been sent to your email',
+        context,
       );
-      state = AuthStateVerifyPasswordReset(
-        email: email,
+      context.goNamed(
+        AppRoutes.verifyResetPasswordCode,
+        extra: {
+          'email': email,
+        },
       );
     });
   }
 
   void navigateToResetPassword(
     String email,
+    BuildContext context,
   ) {
-    state = AuthStateInitiatePasswordReset(
-      email: email,
+    context.pushNamed(
+      AppRoutes.resetPassword,
+      extra: {
+        'email': email,
+      },
     );
   }
 
   navigateToCreateNewPassword(
     String code,
-    email,
+    String email,
+    BuildContext context,
   ) {
-    state = AuthStateNewPassword(
-      code: code,
-      email: email,
+    context.goNamed(
+      AppRoutes.createNewPassword,
+      extra: {
+        'code': code,
+        'email': email,
+      },
     );
   }
 
@@ -324,18 +336,20 @@ class Auth extends _$Auth {
     required String email,
     required String newPassword,
     required String code,
+    required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(
-        error: 'No internet connection',
-      );
+      if (context.mounted) {
+        TToastMessages.errorToast(
+            'No internet connection. Reconnect and try again.', context);
+      }
       return;
     }
     final resetPasswordUseCase = ref.read(resetUserPasswordProvider);
-    state = AuthStateLoading();
+    ref.read(resetPasswordLoadingProvider.notifier).setValue(true);
     final result = await resetPasswordUseCase(
       ResetUserPasswordParams(
         email,
@@ -343,14 +357,13 @@ class Auth extends _$Auth {
         code,
       ),
     );
-    state = AuthStateNotLoading();
+    ref.read(resetPasswordLoadingProvider.notifier).setValue(false);
     result.fold(
-      (error) => state = AuthStateError(error: error.message),
+      (error) {
+        TToastMessages.errorToast(error.message, context);
+      },
       (r) {
-        state = const AuthStateSuccessfulRequest(
-          successMessage: 'Your password has been reset.',
-        );
-        logOutUser();
+        context.goNamed(AppRoutes.auth);
       },
     );
   }
@@ -358,32 +371,37 @@ class Auth extends _$Auth {
   Future<void> searchNinRecord({
     required String ninNumber,
     required GlobalKey<FormState> formKey,
+    required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     final isConnected = await TDeviceUtils.hasInternetConnection();
     if (!isConnected) {
-      state = const AuthStateError(
-        error: 'No internet connection',
-      );
+      if (context.mounted) {
+        TToastMessages.errorToast(
+          'No internet connection. Reconnect and try again.',
+          context,
+        );
+      }
       return;
     }
     final ninUseCase = ref.read(searchUserNinProvider);
-    state = AuthStateLoading();
+    ref.read(searchNinLoadingProvider.notifier).setValue(true);
     final result = await ninUseCase(
       NinUseCaseParams(ninNumber),
     );
-    state = AuthStateNotLoading();
-    result.fold(
-        (error) => state = AuthStateError(
-              error: error.message,
-            ), (r) {
+    ref.read(searchNinLoadingProvider.notifier).setValue(false);
+    result.fold((error) => TToastMessages.errorToast(error.message, context),
+        (r) {
       if (r != null) {
-        state = AuthStateNin(ninRecord: r.toString(),);
-      } else {
-        state = const AuthStateError(
-          error: 'Nin already in use',
+        context.goNamed(
+          AppRoutes.confirmNinDetails,
+          extra: {
+            'ninRecord': r,
+          },
         );
+      } else {
+        TToastMessages.errorToast('NIN already exists', context);
       }
     });
   }

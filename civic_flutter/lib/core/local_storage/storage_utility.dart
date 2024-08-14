@@ -1,8 +1,8 @@
-import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppLocalStorage extends GetxService {
-  static AppLocalStorage get to => Get.find();
+class AppLocalStorage {
+  static AppLocalStorage get to => GetIt.instance.get();
   late final SharedPreferences _prefs;
 
   Future<AppLocalStorage> init() async {
@@ -11,7 +11,7 @@ class AppLocalStorage extends GetxService {
   }
 
   Future<bool> setString(String key, String value) async {
-     _prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
     return _prefs.setString(key, value);
   }
 

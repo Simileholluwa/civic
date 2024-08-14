@@ -1,15 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/app_text_field.dart';
-import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 
 class UsernameForm extends ConsumerStatefulWidget {
@@ -43,22 +40,6 @@ class _UsernameFormState extends ConsumerState<UsernameForm> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(authProvider.notifier);
-    ref.listen(authProvider, (_, next) {
-      switch (next) {
-        case AuthStateCreateAccount():
-          context.goNamed(
-            AppRoutes.signUp,
-            pathParameters: {
-              'email': next.email,
-              'politicalStatus': next.politicalStatus.toString(),
-              'username': next.username,
-            },
-          );
-        default:
-          return;
-      }
-    });
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -74,7 +55,7 @@ class _UsernameFormState extends ConsumerState<UsernameForm> {
               prefixIcon: Iconsax.user,
               hintText: 'Enter a unique username',
               validator: (value) => TValidator.validateUsername(
-                value!.toLowerCase(),
+                value!,
                 _usernames,
               ),
             ),
@@ -85,12 +66,16 @@ class _UsernameFormState extends ConsumerState<UsernameForm> {
               height: 60,
               width: double.maxFinite,
               child: FilledButton(
-                onPressed: () => controller.navigateToCreateAccount(
-                  widget.email,
-                  widget.politicalStatus,
-                  _usernameController.text.trim(),
-                  formKey: _formKey,
-                ),
+                onPressed: () =>
+                    ref.read(authProvider.notifier).navigateToCreateAccount(
+                          widget.email,
+                          widget.politicalStatus,
+                          THelperFunctions.capitalizeFirst(
+                            _usernameController.text.trim(),
+                          )!,
+                          context,
+                          formKey: _formKey,
+                        ),
                 child: const Text(
                   TTexts.tContinue,
                 ),

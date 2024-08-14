@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -30,7 +29,7 @@ class PoliticalStatusCard extends StatelessWidget {
         padding: const EdgeInsets.only(
           bottom: TSizes.sm - 2,
         ),
-        width: THelperFunctions.screenWidth() * 0.9,
+        width: THelperFunctions.screenWidth(context) * 0.9,
         decoration: BoxDecoration(
           color: THelperFunctions.isDarkMode(context)
               ? TColors.darkContainer
@@ -54,7 +53,7 @@ class PoliticalStatusCard extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: Container(
                   height: TSizes.sm - 2,
-                  width: THelperFunctions.screenWidth() * 0.9,
+                  width: THelperFunctions.screenWidth(context) * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(

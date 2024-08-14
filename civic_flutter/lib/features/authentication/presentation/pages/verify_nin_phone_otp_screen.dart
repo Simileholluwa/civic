@@ -5,12 +5,12 @@ import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
 import 'package:civic_flutter/core/widgets/auth_header.dart';
 import 'package:civic_flutter/core/widgets/resend_link.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/verify_nin_otp.dart';
+import 'package:civic_flutter/features/authentication/presentation/widgets/verify_nin_phone_otp_form.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class VerifyNinOTPScreen extends StatelessWidget {
-  const VerifyNinOTPScreen({
+class VerifyNinPhoneOTPScreen extends StatelessWidget {
+  const VerifyNinPhoneOTPScreen({
     super.key,
     required this.verificationId,
   });
@@ -38,9 +38,9 @@ class VerifyNinOTPScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              VerifyNinOTP(
-                  verificationId: verificationId,
-                ),             
+              VerifyNinPhoneOTPForm(
+                verificationId: verificationId,
+              ),
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),

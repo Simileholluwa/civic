@@ -1,7 +1,5 @@
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
-import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/cai_widget.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/image_strings.dart';
@@ -9,24 +7,14 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class AuthLandingScreen extends ConsumerWidget {
+class AuthLandingScreen extends StatelessWidget {
   const AuthLandingScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(authProvider.notifier);
+  Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    ref.listen(authProvider, (_, next) {
-      switch (next) {
-        case AuthStateCheckIfNewUser():
-          context.goNamed(AppRoutes.onboarding,);
-        default:
-          return;
-      }
-    });
     return AndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
@@ -43,7 +31,9 @@ class AuthLandingScreen extends ConsumerWidget {
                 TImageTexts.appLogo,
                 height: 100,
               ),
-              const SizedBox(height: TSizes.md,),
+              const SizedBox(
+                height: TSizes.md,
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: TSizes.md,
@@ -112,7 +102,9 @@ class AuthLandingScreen extends ConsumerWidget {
                 width: double.infinity,
                 height: 60,
                 child: FilledButton(
-                  onPressed: controller.navigateToCheckIfNewUser,
+                  onPressed: () => context.pushNamed(
+                    AppRoutes.checkIfNewUser,
+                  ),
                   child: const Text(
                     TTexts.getStarted,
                   ),
@@ -125,5 +117,3 @@ class AuthLandingScreen extends ConsumerWidget {
     );
   }
 }
-
-

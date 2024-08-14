@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
@@ -10,7 +8,8 @@ import 'package:civic_flutter/core/widgets/auth_header.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/new_password_form.dart';
 
 class NewPasswordScreen extends StatelessWidget {
-  const NewPasswordScreen({super.key, 
+  const NewPasswordScreen({
+    super.key,
     required this.code,
     required this.email,
   });
@@ -24,12 +23,8 @@ class NewPasswordScreen extends StatelessWidget {
       canPop: false,
       child: AndroidBottomNav(
         child: Scaffold(
-          appBar: AuthAppBar(
+          appBar: const AuthAppBar(
             icon: Iconsax.arrow_left_2,
-            canGoBack: false,
-            goBack: () => Get.back(
-              id: 1,
-            ),
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(
