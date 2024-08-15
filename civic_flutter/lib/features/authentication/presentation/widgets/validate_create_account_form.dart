@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,6 +84,7 @@ class _EmailVerificationFormState
                       email: widget.email,
                       politicalStatus: widget.politicalStatus,
                       context: context,
+                      password: widget.password,
                     ),
             child: const Text(
               TTexts.tContinue,

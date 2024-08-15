@@ -1,4 +1,3 @@
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/failure.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
@@ -22,9 +21,9 @@ class UserSignInUseCase implements UseCase<UserRecord?, UserSignInParams> {
 
 class UserSignInParams {
   UserSignInParams(
-      this.password,
-      this.email,
-      );
+    this.email,
+    this.password,
+  );
   final String password;
   final String email;
 }

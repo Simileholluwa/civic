@@ -22,9 +22,8 @@ class UsernameScreen extends StatelessWidget {
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           padding: EdgeInsets.only(
             left: TSizes.defaultSpace,
             right: TSizes.defaultSpace,
@@ -32,17 +31,19 @@ class UsernameScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          children: [
-            const AuthHeader(
-              authTitle: 'Choose a username',
-              authSubTitle:
-                  'Enter a username that uniquely identifies you on civic.',
-            ),
-            UsernameForm(
-              email: email,
-              politicalStatus: politicalStatus,
-            ),
-          ],
+          child: Column(
+            children: [
+              const AuthHeader(
+                authTitle: 'Choose a username',
+                authSubTitle:
+                    'Enter a username that uniquely identifies you on civic.',
+              ),
+              UsernameForm(
+                email: email,
+                politicalStatus: politicalStatus,
+              ),
+            ],
+          ),
         ),
       ),
     );

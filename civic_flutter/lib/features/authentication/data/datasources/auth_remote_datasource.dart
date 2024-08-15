@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
@@ -30,6 +31,7 @@ abstract interface class AuthRemoteDatabase {
     required String email,
     required String code,
     required PoliticalStatus politicalStatus,
+    required String password,
   });
 
   Future<bool> initiatePasswordReset({
@@ -67,6 +69,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<String?> checkIfNewUser({required String email}) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _client.userRecord
           .checkIfNewUser(
             email,
@@ -85,6 +93,8 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -99,6 +109,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String newPassword,
   }) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _auth
           .resetPassword(
             email,
@@ -135,10 +151,16 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String password,
   }) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _client.modules.auth.email
           .authenticate(
-            'maxoluwatosin@gmail.com',
-            'Oluwa99@',
+            email,
+            password,
           )
           .timeout(
             const Duration(
@@ -216,6 +238,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String userName,
   }) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _auth
           .createAccountRequest(
             userName,
@@ -263,8 +291,15 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String email,
     required String code,
     required PoliticalStatus politicalStatus,
+    required String password,
   }) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       var bio = 'A Nigerian Citizen';
       final selectedPoliticalStatus = politicalStatus.name;
       final result = await _auth
@@ -303,6 +338,11 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
 
       await _client.userRecord.saveUserRecord(userRecord);
 
+      await signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
       return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
@@ -338,6 +378,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<UserNinRecord?> searchNinDetails({required String ninNumber}) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _client.userNin.findNinDetails(ninNumber);
       if (result == null) {
         return null;
@@ -366,6 +412,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<bool> uploadProfileImage({required String imagePath}) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final file = File(imagePath);
       final List<int> fileBytes = await file.readAsBytes();
       final byteData = ByteData.view(Uint8List.fromList(fileBytes).buffer);
@@ -398,6 +450,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String email,
   }) async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _auth
           .initiatePasswordReset(
             email,
@@ -430,6 +488,12 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<UserRecord?> currentUser() async {
     try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
       final result = await _client.userRecord.me().timeout(
             const Duration(
               seconds: 60,

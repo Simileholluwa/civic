@@ -147,12 +147,14 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String code,
     required PoliticalStatus politicalStatus,
+    required String password,
   }) async {
     try {
       final result = await _remoteDatabase.validateCreateAccount(
         email: email,
         code: code,
         politicalStatus: politicalStatus,
+        password: password,
       );
       return Right(result);
     } on TimeoutException catch (e) {
@@ -293,7 +295,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     }
   }
-  
+
   @override
   Future<Either<Failure, UserRecord?>> currentUser() async {
     try {

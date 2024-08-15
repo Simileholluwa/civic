@@ -18,39 +18,41 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: AndroidBottomNav(
-        child: Scaffold(
-          appBar: const AuthAppBar(
-            icon: Iconsax.arrow_left_2,
+    return AndroidBottomNav(
+      child: Scaffold(
+        appBar: const AuthAppBar(
+          icon: Iconsax.arrow_left_2,
+        ),
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          padding: EdgeInsets.only(
+            left: TSizes.defaultSpace,
+            right: TSizes.defaultSpace,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
+            top: TSizes.defaultSpace,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(
-              TSizes.defaultSpace,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AuthHeader(
-                  authTitle: 'Authenticate request',
-                  authSubTitle: 'Enter the 6-digit code sent to the e-mail '
-                      'address you provided.',
-                ),
-                const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
-                PasswordResetVerificationForm(
-                  email: email,
-                ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                ),
-                ResendLink(
-                  onTap: () {},
-                ),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AuthHeader(
+                authTitle: 'Authenticate request',
+                authSubTitle: 'Enter the 6-digit code sent to the e-mail '
+                    'address you provided.',
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
+              PasswordResetVerificationForm(
+                email: email,
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwItems,
+              ),
+              ResendLink(
+                onTap: () {},
+              ),
+            ],
           ),
         ),
       ),

@@ -27,40 +27,41 @@ class ValidateCreateAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidBottomNav(
-      child: PopScope(
-        canPop: false,
-        child: Scaffold(
-          appBar: const AuthAppBar(
-            icon: Iconsax.arrow_left_2,
+      child: Scaffold(
+        appBar: const AuthAppBar(
+          icon: Iconsax.arrow_left_2,
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            left: TSizes.defaultSpace,
+            right: TSizes.defaultSpace,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
+            top: TSizes.defaultSpace,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(
-              TSizes.defaultSpace,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AuthHeader(
-                  authTitle: TTexts.confirmEmail,
-                  authSubTitle: TTexts.confirmEmailSubTitle,
-                ),
-                const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
-                ValidateCreateAccountForm(
-                  email: email,
-                  password: password,
-                  politicalStatus: politicalStatus,
-                  username: username,
-                ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                ),
-                ResendLink(
-                  onTap: () {},
-                ),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AuthHeader(
+                authTitle: TTexts.confirmEmail,
+                authSubTitle: TTexts.confirmEmailSubTitle,
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
+              ValidateCreateAccountForm(
+                email: email,
+                password: password,
+                politicalStatus: politicalStatus,
+                username: username,
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwItems,
+              ),
+              ResendLink(
+                onTap: () {},
+              ),
+            ],
           ),
         ),
       ),

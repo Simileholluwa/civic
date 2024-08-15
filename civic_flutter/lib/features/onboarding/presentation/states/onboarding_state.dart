@@ -6,13 +6,4 @@ sealed class OnboardingState {
   const OnboardingState();
 }
 
-class OnboardingStateAuth extends OnboardingState {}
-
-class OnboardingStateUserType extends OnboardingState {
-  final bool isPolitical;
-  const OnboardingStateUserType({
-    required this.isPolitical,
-  });
-}
-
 class OnboardingStateInitial extends OnboardingState {}

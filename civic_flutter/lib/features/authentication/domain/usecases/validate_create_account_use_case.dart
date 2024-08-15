@@ -18,6 +18,7 @@ class ValidateCreateAccountUseCase
       email: params.email,
       code: params.code,
       politicalStatus: params.politicalStatus,
+      password: params.password,
     );
     return result;
   }
@@ -28,8 +29,10 @@ class ValidateCreateAccountParams {
     required this.code,
     required this.email,
     required this.politicalStatus,
+    required this.password,
   });
   final String code;
   final String email;
   final PoliticalStatus politicalStatus;
+  final String password;
 }

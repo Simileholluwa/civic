@@ -19,30 +19,32 @@ class NewPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: AndroidBottomNav(
-        child: Scaffold(
-          appBar: const AuthAppBar(
-            icon: Iconsax.arrow_left_2,
+    return AndroidBottomNav(
+      child: Scaffold(
+        appBar: const AuthAppBar(
+          icon: Iconsax.arrow_left_2,
+        ),
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          padding: EdgeInsets.only(
+            left: TSizes.defaultSpace,
+            right: TSizes.defaultSpace,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
+            top: TSizes.defaultSpace,
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(
-              TSizes.defaultSpace,
-            ),
-            child: Column(
-              children: [
-                const AuthHeader(
-                  authTitle: 'Create new password',
-                  authSubTitle: 'Use a combination of alphabets, '
-                      'numbers, and symbols',
-                ),
-                NewPasswordForm(
-                  code: code,
-                  email: email,
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              const AuthHeader(
+                authTitle: 'Create new password',
+                authSubTitle: 'Use a combination of alphabets, '
+                    'numbers, and symbols',
+              ),
+              NewPasswordForm(
+                code: code,
+                email: email,
+              ),
+            ],
           ),
         ),
       ),

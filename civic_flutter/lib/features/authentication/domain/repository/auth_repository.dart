@@ -14,6 +14,7 @@ abstract class AuthRepository {
     required String email,
     required String code,
     required PoliticalStatus politicalStatus,
+    required String password,
   });
 
   Future<Either<Failure, UserRecord?>> signInWithEmailAndPassword({

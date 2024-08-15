@@ -25,18 +25,23 @@ class LoginScreen extends StatelessWidget {
           icon: Iconsax.arrow_left_2,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(
-            TSizes.defaultSpace,
+          physics: const ClampingScrollPhysics(),
+          padding: EdgeInsets.only(
+            left: TSizes.defaultSpace,
+            right: TSizes.defaultSpace,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
+            top: TSizes.defaultSpace,
           ),
           child: Column(
             children: [
               AuthHeader(
-                authTitle: 'Hi $username',
+                authTitle: username == '' ? 'Hi there' : 'Hi $username',
                 authSubTitle: 'Provide the password to your account.',
               ),
               LoginForm(
-                  email: email,
-                ),
+                email: email,
+              ),
             ],
           ),
         ),

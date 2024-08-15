@@ -34,7 +34,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(authProvider.notifier);
-
     return Form(
       key: _formKey,
       child: Padding(
@@ -49,15 +48,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 'Password',
                 value,
               ),
-              obscurePassword: ref.watch(showPasswordProvider),
               hintText: 'Enter your password',
-              onSuffixPressed: () {
-                if (ref.watch(showPasswordProvider)) {
-                  ref.watch(showPasswordProvider.notifier).setValue(false);
-                } else {
-                  ref.watch(showPasswordProvider.notifier).setValue(true);
-                }
-              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwInputFields,

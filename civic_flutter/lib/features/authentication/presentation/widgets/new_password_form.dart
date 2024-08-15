@@ -47,14 +47,6 @@ class _NewPasswordFormState extends ConsumerState<NewPasswordForm> {
             AppPasswordTextField(
               textController: _newPasswordController,
               validator: TValidator.validatePassword,
-              obscurePassword: ref.watch(showPasswordProvider),
-              onSuffixPressed: () {
-                if (ref.watch(showPasswordProvider)) {
-                  ref.watch(showPasswordProvider.notifier).setValue(false);
-                } else {
-                  ref.watch(showPasswordProvider.notifier).setValue(true);
-                }
-              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwSections,

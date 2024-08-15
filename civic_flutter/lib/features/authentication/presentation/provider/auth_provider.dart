@@ -2,7 +2,6 @@
 // ignore_for_file: avoid_build_context_in_providers
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
@@ -48,14 +47,7 @@ class Auth extends _$Auth {
     required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
+
     if (!isValid) return;
     final signInUseCase = ref.read(userSignInProvider);
 
@@ -94,14 +86,7 @@ class Auth extends _$Auth {
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
+
     final newUserUseCase = ref.read(checkIfNewUserProvider);
     ref.read(checkEmailLoadingProvider.notifier).setValue(true);
     final result = await newUserUseCase(
@@ -158,18 +143,13 @@ class Auth extends _$Auth {
     final isValid = formKey.currentState!.validate();
     final createAccountRequest = ref.read(createAccountRequestProvider);
     if (!isValid) return;
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
 
     if (!ref.watch(acceptTermsProvider)) {
       if (context.mounted) {
-        TToastMessages.errorToast('Please read and accept terms', context);
+        TToastMessages.errorToast(
+          'Read and accept privacy policy and terms of use.',
+          context,
+        );
       }
       return;
     }
@@ -236,29 +216,27 @@ class Auth extends _$Auth {
     required String email,
     required int politicalStatus,
     required BuildContext context,
+    required String password,
   }) async {
-    final isConnected = await TDeviceUtils.hasInternetConnection();
     final validateAccount = ref.read(validateCreateAccountProvider);
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
+
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(true);
     final result = await validateAccount(
       ValidateCreateAccountParams(
         code: code,
         email: email,
         politicalStatus: PoliticalStatus.fromJson(politicalStatus),
+        password: password,
       ),
     );
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
     result.fold((error) {
       TToastMessages.errorToast(error.message, context);
     }, (r) {
-      TToastMessages.successToast('Your account has been created', context);
+      TToastMessages.successToast(
+        'Great! Your account has been created.',
+        context,
+      );
       context.pushNamed(
         AppRoutes.verifyAccount,
       );
@@ -272,14 +250,7 @@ class Auth extends _$Auth {
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
+
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
     ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(true);
     final result = await initiatePasswordReset(
@@ -340,14 +311,7 @@ class Auth extends _$Auth {
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-            'No internet connection. Reconnect and try again.', context);
-      }
-      return;
-    }
+
     final resetPasswordUseCase = ref.read(resetUserPasswordProvider);
     ref.read(resetPasswordLoadingProvider.notifier).setValue(true);
     final result = await resetPasswordUseCase(
@@ -375,16 +339,6 @@ class Auth extends _$Auth {
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
-    final isConnected = await TDeviceUtils.hasInternetConnection();
-    if (!isConnected) {
-      if (context.mounted) {
-        TToastMessages.errorToast(
-          'No internet connection. Reconnect and try again.',
-          context,
-        );
-      }
-      return;
-    }
     final ninUseCase = ref.read(searchUserNinProvider);
     ref.read(searchNinLoadingProvider.notifier).setValue(true);
     final result = await ninUseCase(

@@ -29,7 +29,6 @@ class CreateAccountRequestForm extends ConsumerStatefulWidget {
 class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
-  var _showPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +44,6 @@ class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
             AppPasswordTextField(
               textController: _passwordController,
               validator: TValidator.validatePassword,
-              obscurePassword: _showPassword,
-              onSuffixPressed: () {
-                setState(() {
-                  _showPassword = !_showPassword;
-                });
-              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwInputFields,

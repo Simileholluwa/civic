@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
@@ -17,9 +16,8 @@ class EmailScreen extends StatelessWidget {
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           padding: EdgeInsets.only(
             left: TSizes.defaultSpace,
             right: TSizes.defaultSpace,
@@ -27,13 +25,15 @@ class EmailScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          children: const [
-            AuthHeader(
-              authTitle: 'E-mail address',
-              authSubTitle: 'Enter your e-mail address below to get started.',
-            ),
-            EmailForm(),
-          ],
+          child: const Column(
+            children: [
+              AuthHeader(
+                authTitle: 'E-mail address',
+                authSubTitle: 'Enter your e-mail address below to get started.',
+              ),
+              EmailForm(),
+            ],
+          ),
         ),
       ),
     );

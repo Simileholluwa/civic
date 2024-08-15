@@ -17,27 +17,26 @@ class PoliticalStatusScreen extends StatelessWidget {
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.only(
-            left: TSizes.defaultSpace,
-            right: TSizes.defaultSpace,
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
-            top: TSizes.defaultSpace,
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.all(
+            TSizes.defaultSpace,
           ),
-          children: [
-            const AuthHeader(
-              authTitle: 'Political status',
-              authSubTitle:
-                  'Civic will be configured based on your political status',
-            ),
-            const SizedBox(
-              height: TSizes.spaceBtwSections,
-            ),
-            PoliticalStatusOptions(email: email,),
-          ],
+          child: Column(
+            children: [
+              const AuthHeader(
+                authTitle: 'Political status',
+                authSubTitle:
+                    'Civic will be configured based on your political status',
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
+              PoliticalStatusOptions(
+                email: email,
+              ),
+            ],
+          ),
         ),
       ),
     );

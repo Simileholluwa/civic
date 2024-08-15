@@ -54,6 +54,7 @@ class _PoliticalStatusOptionsState
         ListView.separated(
           itemCount: PoliticalStatus.values.length,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (context, index) {
             return const SizedBox(
               height: TSizes.md,

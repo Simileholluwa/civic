@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+
 import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
@@ -24,7 +25,9 @@ GoRouter router(RouterRef ref) {
       // Onboarding routes
       GoRoute(
         path: AppRoutes.initial,
-        builder: (context, state) => const InitialOnBoardingScreen(),
+        builder: (context, state) {
+          return const InitialOnBoardingScreen();
+        },
         redirect: (context, state) async {
           final firstTimer = AppLocalStorage.to.getBool('first_timer') ?? true;
           try {
@@ -56,17 +59,18 @@ GoRouter router(RouterRef ref) {
             }
           }
         },
-        routes: [
-          GoRoute(
-              path: AppRoutes.onboarding,
-              name: AppRoutes.onboarding,
-              builder: (context, state) {
-                final data = state.extra as Map<String, bool>;
-                return OnBoardingScreen(
-                  isPolitical: data['isPolitical'] ?? true,
-                );
-              }),
-        ],
+      ),
+
+      // Onboarding
+      GoRoute(
+        path: AppRoutes.onboarding,
+        name: AppRoutes.onboarding,
+        builder: (context, state) {
+          final data = state.extra as Map<String, bool>;
+          return OnBoardingScreen(
+            isPolitical: data['isPolitical'] ?? true,
+          );
+        },
       ),
 
       // Login, Sign up, password reset and account verification routes

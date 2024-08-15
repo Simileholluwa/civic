@@ -71,116 +71,121 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
+        floatingActionButton: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                isFabExpanded
-                    ? AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        height: isFabExpanded
-                            ? MediaQuery.of(context).size.height * 0.57
-                            : 0.0,
-                        curve: Curves.easeInOut,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            100,
-                          ),
+            isFabExpanded
+                ? AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    height: isFabExpanded
+                        ? MediaQuery.of(context).size.height * 0.57
+                        : 0.0,
+                    curve: Curves.easeInOut,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        100,
+                      ),
+                    ),
+                    child: Material(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          100,
                         ),
-                        child: Material(
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              100,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 35,
+                            backgroundColor: TColors.primary,
+                            child: Text(
+                              'CREATE',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: TColors.textWhite,
+                                  ),
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircleAvatar(
-                                radius: 35,
-                                backgroundColor: TColors.primary,
-                                child: Text(
-                                  'CREATE',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: TColors.textWhite,
-                                      ),
+                          Expanded(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+                                const SizedBox(
+                                  height: TSizes.lg,
                                 ),
-                              ),
-                              const Spacer(),
-                              ListView(
-                                shrinkWrap: true,
-                                children: [
-                                  const SizedBox(
-                                    height: TSizes.lg,
-                                  ),
-                                  ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: 6,
-                                    separatorBuilder: (context, index) {
-                                      return const Divider(
-                                        thickness: TSizes.xs - 3,
-                                        color: TColors.primary,
-                                        height: TSizes.md + 6,
-                                      );
-                                    },
-                                    itemBuilder: (context, index) {
-                                      final options = moreOptions[index];
-                                      return Column(
-                                        children: [
-                                          Icon(
-                                            options.icon,
-                                          ),
-                                          Text(
-                                            options.text,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge!
-                                                .copyWith(
-                                                  fontSize: 12,
-                                                ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              const SizedBox(
-                                height: TSizes.spaceBtwSections + 55,
-                              ),
-                            ],
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: 6,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  separatorBuilder: (context, index) {
+                                    return const Divider(
+                                      thickness: TSizes.xs - 3,
+                                      color: TColors.primary,
+                                      height: TSizes.md + 6,
+                                    );
+                                  },
+                                  itemBuilder: (context, index) {
+                                    final options = moreOptions[index];
+                                    return Column(
+                                      children: [
+                                        Icon(
+                                          options.icon,
+                                        ),
+                                        Text(
+                                          options.text,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge!
+                                              .copyWith(
+                                                fontSize: 12,
+                                              ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: TSizes.lg,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                InkWell(
-                  onTap: toggleFab,
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: TColors.primary,
+                          Container(
+                            height: 70,
+                            width: 70,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: TColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Icon(
-                      isFabExpanded ? Icons.close : Icons.apps,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-                  ),
+                  )
+                : const SizedBox.shrink(),
+            InkWell(
+              onTap: toggleFab,
+              child: Container(
+                height: 70,
+                width: 70,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: TColors.primary,
                 ),
-              ],
+                child: Icon(
+                  isFabExpanded ? Icons.close : Icons.apps,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
             ),
           ],
         ),

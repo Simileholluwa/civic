@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
@@ -11,25 +10,30 @@ class VerifyIdentityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AndroidBottomNav(
+    return AndroidBottomNav(
       child: PopScope(
         canPop: false,
         child: Scaffold(
-          appBar: AuthAppBar(
+          appBar: const AuthAppBar(
             showLeading: false,
           ),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(
-              TSizes.defaultSpace,
+            physics: const ClampingScrollPhysics(),
+            padding: EdgeInsets.only(
+              left: TSizes.defaultSpace,
+              right: TSizes.defaultSpace,
+              bottom: MediaQuery.of(context).viewInsets.bottom +
+                  TSizes.defaultSpace,
+              top: TSizes.defaultSpace,
             ),
-            child: Column(
+            child: const Column(
               children: [
                 AuthHeader(
                   authTitle: 'Verify your identity',
                   authSubTitle: 'Access more possibilities on CIVIC by '
                       "verifying your identity. It's easy!",
                 ),
-                NinForm(),             
+                NinForm(),
               ],
             ),
           ),

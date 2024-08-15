@@ -24,8 +24,12 @@ class VerifyNinPhoneOTPScreen extends StatelessWidget {
           icon: Iconsax.arrow_left_2,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(
-            TSizes.defaultSpace,
+          padding: EdgeInsets.only(
+            left: TSizes.defaultSpace,
+            right: TSizes.defaultSpace,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
+            top: TSizes.defaultSpace,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

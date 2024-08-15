@@ -1,11 +1,8 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 // ignore_for_file: avoid_build_context_in_providers
-import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/onboarding/presentation/states/onboarding_state.dart';
 import 'package:civic_flutter/features/onboarding/presentation/providers/onboarding_state_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'onboarding_provider.g.dart';
 
@@ -14,22 +11,6 @@ class Onboarding extends _$Onboarding {
   @override
   OnboardingState build() {
     return OnboardingStateInitial();
-  }
-
-  void navigateToAuthentication() {
-    state = OnboardingStateAuth();
-  }
-
-  void navigateToOnBoarding({
-    required bool isPolitical,
-    required BuildContext context,
-  }) {
-    context.pushNamed(
-      AppRoutes.onboarding,
-      extra: {
-        'isPolitical': isPolitical,
-      },
-    );
   }
 
   Future<void> cacheFirstTimer() async {
