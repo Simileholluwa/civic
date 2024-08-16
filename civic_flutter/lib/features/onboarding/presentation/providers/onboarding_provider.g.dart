@@ -6,7 +6,7 @@ part of 'onboarding_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$onboardingHash() => r'f020c575788a3fa91229e188dcb46d8bd57fefe3';
+String _$onboardingHash() => r'adeb770408f262f673fc7e81b67e639f458ce744';
 
 /// See also [Onboarding].
 @ProviderFor(Onboarding)

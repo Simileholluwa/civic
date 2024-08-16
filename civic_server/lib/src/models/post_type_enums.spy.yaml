@@ -1,0 +1,8 @@
+enum: PostType
+values:
+    - textOnly
+    - videoOnly
+    - textWithVideo
+    - textWithImages
+    - images
+    - video

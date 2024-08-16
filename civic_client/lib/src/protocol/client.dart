@@ -10,10 +10,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:civic_client/src/protocol/user_nin_record.dart' as _i3;
-import 'package:civic_client/src/protocol/user_record.dart' as _i4;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:civic_client/src/protocol/create_post.dart' as _i3;
+import 'package:civic_client/src/protocol/user_nin_record.dart' as _i4;
+import 'package:civic_client/src/protocol/user_record.dart' as _i5;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i6;
+import 'protocol.dart' as _i7;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -30,14 +31,29 @@ class EndpointExample extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointPost extends _i1.EndpointRef {
+  EndpointPost(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'post';
+
+  _i2.Future<_i3.Post?> save(_i3.Post post) =>
+      caller.callServerEndpoint<_i3.Post?>(
+        'post',
+        'save',
+        {'post': post},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointUserNin extends _i1.EndpointRef {
   EndpointUserNin(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i3.UserNinRecord?> findNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i3.UserNinRecord?>(
+  _i2.Future<_i4.UserNinRecord?> findNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i4.UserNinRecord?>(
         'userNin',
         'findNinDetails',
         {'ninNumber': ninNumber},
@@ -51,15 +67,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i4.UserRecord userRecord) =>
+  _i2.Future<void> saveUserRecord(_i5.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUserRecord',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i4.UserRecord?> me() =>
-      caller.callServerEndpoint<_i4.UserRecord?>(
+  _i2.Future<_i5.UserRecord?> me() =>
+      caller.callServerEndpoint<_i5.UserRecord?>(
         'userRecord',
         'me',
         {},
@@ -82,10 +98,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i5.Caller(client);
+    auth = _i6.Caller(client);
   }
 
-  late final _i5.Caller auth;
+  late final _i6.Caller auth;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -103,7 +119,7 @@ class Client extends _i1.ServerpodClient {
     Function(_i1.MethodCallContext)? onSucceededCall,
   }) : super(
           host,
-          _i6.Protocol(),
+          _i7.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -112,12 +128,15 @@ class Client extends _i1.ServerpodClient {
           onSucceededCall: onSucceededCall,
         ) {
     example = EndpointExample(this);
+    post = EndpointPost(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
     modules = _Modules(this);
   }
 
   late final EndpointExample example;
+
+  late final EndpointPost post;
 
   late final EndpointUserNin userNin;
 
@@ -128,6 +147,7 @@ class Client extends _i1.ServerpodClient {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'example': example,
+        'post': post,
         'userNin': userNin,
         'userRecord': userRecord,
       };

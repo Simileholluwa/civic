@@ -1,7 +1,6 @@
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/features/authentication/data/datasources/auth_remote_datasource.dart';
 import 'package:civic_flutter/features/authentication/data/repositories/auth_repository_impl.dart';
-import 'package:civic_flutter/features/authentication/domain/repository/auth_repository.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/check_if_new_user_use_case.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/current_user_use_case.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/fetch_all_usernames_use_case.dart';
@@ -15,84 +14,101 @@ import 'package:civic_flutter/features/authentication/domain/usecases/create_acc
 import 'package:civic_flutter/features/authentication/domain/usecases/validate_create_account_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final remoteDatabaseProvider = Provider((ref) {
+part 'auth_service_provider.g.dart';
+
+@riverpod
+AuthRemoteDatabaseImpl authRemoteDatabase(AuthRemoteDatabaseRef ref) {
   return AuthRemoteDatabaseImpl(
     client: ref.read(clientProvider),
     sessionManager: ref.read(sessionProvider),
     auth: ref.read(authEmailProvider),
   );
-});
+}
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
+@riverpod
+AuthRepositoryImpl authRepository(AuthRepositoryRef ref) {
   return AuthRepositoryImpl(
     remoteDatabase: ref.read(
-      remoteDatabaseProvider,
+      authRemoteDatabaseProvider,
     ),
   );
-});
+}
 
-final createAccountRequestProvider = Provider((ref) {
+@riverpod
+CreateAccountRequestUseCase createAccountRequest(CreateAccountRequestRef ref) {
   return CreateAccountRequestUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final userSignInProvider = Provider((ref) {
+@riverpod
+UserSignInUseCase userSignIn(UserSignInRef ref) {
   return UserSignInUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final initiatePasswordResetProvider = Provider((ref) {
+@riverpod
+InitiatePasswordResetUseCase initiatePasswordReset(
+    InitiatePasswordResetRef ref) {
   return InitiatePasswordResetUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final checkIfNewUserProvider = Provider((ref) {
+@riverpod
+CheckIfNewUserUseCase checkIfNewUser(CheckIfNewUserRef ref) {
   return CheckIfNewUserUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final logOutProvider = Provider((ref) {
+@riverpod
+LogoutUseCase logOut(LogOutRef ref) {
   return LogoutUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final validateCreateAccountProvider = Provider((ref) {
+@riverpod
+ValidateCreateAccountUseCase validateCreateAccount(
+    ValidateCreateAccountRef ref) {
   return ValidateCreateAccountUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final searchUserNinProvider = Provider((ref) {
+@riverpod
+SearchUserNinUseCase searchUserNin(SearchUserNinRef ref) {
   return SearchUserNinUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final fetchAllUsernamesProvider = Provider((ref) {
+@riverpod
+FetchAllUsernamesUseCase fetchAllUsernames(FetchAllUsernamesRef ref) {
   return FetchAllUsernamesUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final uploadProfileImageProvider = Provider((ref) {
+@riverpod
+UploadProfileImageUseCase uploadProfileImage(UploadProfileImageRef ref) {
   return UploadProfileImageUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final resetUserPasswordProvider = Provider((ref) {
+@riverpod
+ResetUserPasswordUseCase resetUserPassword(ResetUserPasswordRef ref) {
   return ResetUserPasswordUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}
 
-final currentUserProvider = Provider((ref) {
+@riverpod
+CurrentUserUseCase currentUser(CurrentUserRef ref) {
   return CurrentUserUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
-});
+}

@@ -1,0 +1,11 @@
+class: Post
+table: post
+fields:
+    owner: UserRecord?, relation
+    postType: PostType
+    text: String?
+    imageUrls: String?
+    videoUrl: String?
+    taggedUsers: List<String>?
+    latitude: double?
+    longitude: double?

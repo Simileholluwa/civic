@@ -12,12 +12,16 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'example.dart' as _i4;
-import 'political_status_enum.dart' as _i5;
-import 'user_nin_record.dart' as _i6;
-import 'user_record.dart' as _i7;
+import 'create_post.dart' as _i4;
+import 'example.dart' as _i5;
+import 'political_status_enum.dart' as _i6;
+import 'post_type_enums.dart' as _i7;
+import 'user_nin_record.dart' as _i8;
+import 'user_record.dart' as _i9;
+export 'create_post.dart';
 export 'example.dart';
 export 'political_status_enum.dart';
+export 'post_type_enums.dart';
 export 'user_nin_record.dart';
 export 'user_record.dart';
 
@@ -29,6 +33,97 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
+    _i2.TableDefinition(
+      name: 'post',
+      dartName: 'Post',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'post_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'ownerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'postType',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'protocol:PostType',
+        ),
+        _i2.ColumnDefinition(
+          name: 'text',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'imageUrls',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'videoUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'taggedUsers',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'latitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'longitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_fk_0',
+          columns: ['ownerId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        )
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'post_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'user_nin_record',
       dartName: 'UserNinRecord',
@@ -283,29 +378,46 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i4.Example) {
-      return _i4.Example.fromJson(data) as T;
+    if (t == _i4.Post) {
+      return _i4.Post.fromJson(data) as T;
     }
-    if (t == _i5.PoliticalStatus) {
-      return _i5.PoliticalStatus.fromJson(data) as T;
+    if (t == _i5.Example) {
+      return _i5.Example.fromJson(data) as T;
     }
-    if (t == _i6.UserNinRecord) {
-      return _i6.UserNinRecord.fromJson(data) as T;
+    if (t == _i6.PoliticalStatus) {
+      return _i6.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i7.UserRecord) {
-      return _i7.UserRecord.fromJson(data) as T;
+    if (t == _i7.PostType) {
+      return _i7.PostType.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Example?>()) {
-      return (data != null ? _i4.Example.fromJson(data) : null) as T;
+    if (t == _i8.UserNinRecord) {
+      return _i8.UserNinRecord.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.PoliticalStatus?>()) {
-      return (data != null ? _i5.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i9.UserRecord) {
+      return _i9.UserRecord.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i6.UserNinRecord?>()) {
-      return (data != null ? _i6.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.Post?>()) {
+      return (data != null ? _i4.Post.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.UserRecord?>()) {
-      return (data != null ? _i7.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Example?>()) {
+      return (data != null ? _i5.Example.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i6.PoliticalStatus?>()) {
+      return (data != null ? _i6.PoliticalStatus.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i7.PostType?>()) {
+      return (data != null ? _i7.PostType.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i8.UserNinRecord?>()) {
+      return (data != null ? _i8.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i9.UserRecord?>()) {
+      return (data != null ? _i9.UserRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null
@@ -337,16 +449,22 @@ class Protocol extends _i1.SerializationManagerServer {
     if (className != null) {
       return 'serverpod_auth.$className';
     }
-    if (data is _i4.Example) {
+    if (data is _i4.Post) {
+      return 'Post';
+    }
+    if (data is _i5.Example) {
       return 'Example';
     }
-    if (data is _i5.PoliticalStatus) {
+    if (data is _i6.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i6.UserNinRecord) {
+    if (data is _i7.PostType) {
+      return 'PostType';
+    }
+    if (data is _i8.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i7.UserRecord) {
+    if (data is _i9.UserRecord) {
       return 'UserRecord';
     }
     return super.getClassNameForObject(data);
@@ -358,17 +476,23 @@ class Protocol extends _i1.SerializationManagerServer {
       data['className'] = data['className'].substring(15);
       return _i3.Protocol().deserializeByClassName(data);
     }
+    if (data['className'] == 'Post') {
+      return deserialize<_i4.Post>(data['data']);
+    }
     if (data['className'] == 'Example') {
-      return deserialize<_i4.Example>(data['data']);
+      return deserialize<_i5.Example>(data['data']);
     }
     if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i5.PoliticalStatus>(data['data']);
+      return deserialize<_i6.PoliticalStatus>(data['data']);
+    }
+    if (data['className'] == 'PostType') {
+      return deserialize<_i7.PostType>(data['data']);
     }
     if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i6.UserNinRecord>(data['data']);
+      return deserialize<_i8.UserNinRecord>(data['data']);
     }
     if (data['className'] == 'UserRecord') {
-      return deserialize<_i7.UserRecord>(data['data']);
+      return deserialize<_i9.UserRecord>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -388,10 +512,12 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i6.UserNinRecord:
-        return _i6.UserNinRecord.t;
-      case _i7.UserRecord:
-        return _i7.UserRecord.t;
+      case _i4.Post:
+        return _i4.Post.t;
+      case _i8.UserNinRecord:
+        return _i8.UserNinRecord.t;
+      case _i9.UserRecord:
+        return _i9.UserRecord.t;
     }
     return null;
   }

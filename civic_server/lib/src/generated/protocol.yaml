@@ -1,5 +1,7 @@
 example:
   - hello:
+post:
+  - save:
 userNin:
   - findNinDetails:
 userRecord:
