@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/features/authentication/presentation/widgets/dual_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class THelperFunctions {
   THelperFunctions._();
@@ -38,6 +40,34 @@ class THelperFunctions {
         ),
       ],
     );
+  }
+
+  static Future<Widget?> buildPostDialog(BuildContext context) {
+    return postDialog(
+      context,
+      "Can't find all media?",
+      'Tap "Open settings" below and select "Always allow all" '
+          'in your app permission settings.',
+      DualButton(
+        onTapActiveButton: () async {
+          Get.back<dynamic>();
+          await openAppSettings();
+        },
+        activeButtonText: 'Open settings',
+        activeButtonLoading: false,
+        onTapSkipButton: () {},
+        skipButtonLoading: false,
+      ),
+    );
+  }
+
+  static Future<Widget?> postDialog(
+    BuildContext buildContext,
+    String s,
+    String t,
+    postDualButton,
+  ) async {
+    return null;
   }
 
   static double getWidth(BuildContext context) {

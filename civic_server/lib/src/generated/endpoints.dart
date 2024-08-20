@@ -91,7 +91,31 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['post'],
           ),
-        )
+        ),
+        'listPost': _i1.MethodConnector(
+          name: 'listPost',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i3.PostEndpoint).listPost(
+            session,
+            limit: params['limit'],
+            page: params['page'],
+          ),
+        ),
       },
     );
     connectors['userNin'] = _i1.EndpointConnector(

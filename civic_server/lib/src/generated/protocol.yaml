@@ -2,6 +2,7 @@ example:
   - hello:
 post:
   - save:
+  - listPost:
 userNin:
   - findNinDetails:
 userRecord:

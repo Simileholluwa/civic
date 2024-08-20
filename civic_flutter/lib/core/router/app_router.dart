@@ -4,16 +4,20 @@ import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/views/media_picker.dart';
 import 'package:civic_flutter/core/widgets/civic_wrapper.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
+import 'package:civic_flutter/features/post/presentation/pages/post_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
@@ -217,6 +221,31 @@ GoRouter router(RouterRef ref) {
         builder: (context, state, navigationShell) {
           return CivicWrapper(
             navigatorShell: navigationShell,
+          );
+        },
+      ),
+
+      GoRoute(
+          path: AppRoutes.post,
+          name: AppRoutes.post,
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            return PostScreen(
+              pickedAssets: data['pickedAssets'] ?? <XFile>[],
+              canAddImages: data['canAddImages'] ?? true,
+            );
+          }),
+
+      GoRoute(
+        path: AppRoutes.pickMedia,
+        name: AppRoutes.pickMedia,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return MediaPicker(
+            pickedAssets: data['pickedAssets'] ?? <XFile>[],
+            requestType: data['requestType'] ?? RequestType.common,
+            maxCount: data['maxCount'] ?? 1,
+            isAddMedia: data['isAddMedia'] ?? true,
           );
         },
       ),

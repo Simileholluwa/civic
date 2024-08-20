@@ -1,6 +1,7 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
 import 'package:civic_flutter/core/entity/post_options.dart';
+import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/custom_bottom_navigation_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CivicWrapper extends ConsumerStatefulWidget {
   const CivicWrapper({
@@ -27,6 +29,17 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
     setState(() {
       isFabExpanded = !isFabExpanded;
     });
+  }
+
+  void navigate(int index) {
+    switch (index) {
+      case 1:
+        context.pushNamed(AppRoutes.post, extra: {
+          'pickedAssets': <XFile>[],
+          'canAddImage': true,
+        });
+        break;
+    }
   }
 
   @override
@@ -134,21 +147,24 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
                                   },
                                   itemBuilder: (context, index) {
                                     final options = moreOptions[index];
-                                    return Column(
-                                      children: [
-                                        Icon(
-                                          options.icon,
-                                        ),
-                                        Text(
-                                          options.text,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge!
-                                              .copyWith(
-                                                fontSize: 12,
-                                              ),
-                                        ),
-                                      ],
+                                    return GestureDetector(
+                                      onTap: () => navigate(index),
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            options.icon,
+                                          ),
+                                          Text(
+                                            options.text,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge!
+                                                .copyWith(
+                                                  fontSize: 12,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     );
                                   },
                                 ),

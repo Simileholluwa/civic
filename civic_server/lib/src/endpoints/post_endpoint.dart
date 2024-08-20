@@ -23,4 +23,28 @@ class PostEndpoint extends Endpoint {
       );
     }
   }
+
+  Future<PostList> listPost(
+    Session session, {
+    int limit = 10,
+    int page = 1,
+  }) async {
+    final count = await Post.db.count(session);
+    final results = await Post.db.find(
+      session,
+      limit: limit,
+      offset: (page * limit) - limit,
+      include: Post.include(
+        owner: UserRecord.include(),
+      ),
+    );
+
+    return PostList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+    );
+  }
 }

@@ -11,10 +11,11 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:civic_client/src/protocol/create_post.dart' as _i3;
-import 'package:civic_client/src/protocol/user_nin_record.dart' as _i4;
-import 'package:civic_client/src/protocol/user_record.dart' as _i5;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i6;
-import 'protocol.dart' as _i7;
+import 'package:civic_client/src/protocol/post_list.dart' as _i4;
+import 'package:civic_client/src/protocol/user_nin_record.dart' as _i5;
+import 'package:civic_client/src/protocol/user_record.dart' as _i6;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
+import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -43,6 +44,19 @@ class EndpointPost extends _i1.EndpointRef {
         'save',
         {'post': post},
       );
+
+  _i2.Future<_i4.PostList> listPost({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i4.PostList>(
+        'post',
+        'listPost',
+        {
+          'limit': limit,
+          'page': page,
+        },
+      );
 }
 
 /// {@category Endpoint}
@@ -52,8 +66,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i4.UserNinRecord?> findNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i4.UserNinRecord?>(
+  _i2.Future<_i5.UserNinRecord?> findNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i5.UserNinRecord?>(
         'userNin',
         'findNinDetails',
         {'ninNumber': ninNumber},
@@ -67,15 +81,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i5.UserRecord userRecord) =>
+  _i2.Future<void> saveUserRecord(_i6.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUserRecord',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i5.UserRecord?> me() =>
-      caller.callServerEndpoint<_i5.UserRecord?>(
+  _i2.Future<_i6.UserRecord?> me() =>
+      caller.callServerEndpoint<_i6.UserRecord?>(
         'userRecord',
         'me',
         {},
@@ -98,10 +112,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i6.Caller(client);
+    auth = _i7.Caller(client);
   }
 
-  late final _i6.Caller auth;
+  late final _i7.Caller auth;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -119,7 +133,7 @@ class Client extends _i1.ServerpodClient {
     Function(_i1.MethodCallContext)? onSucceededCall,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i8.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

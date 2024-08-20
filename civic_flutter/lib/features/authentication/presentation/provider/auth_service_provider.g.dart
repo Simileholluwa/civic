@@ -71,7 +71,7 @@ final userSignInProvider = AutoDisposeProvider<UserSignInUseCase>.internal(
 
 typedef UserSignInRef = AutoDisposeProviderRef<UserSignInUseCase>;
 String _$initiatePasswordResetHash() =>
-    r'b15f8a5321a764898914b3d5b0d63874871bbdc8';
+    r'05f1e9a9f8470153ea8c60827345a0082c1b4e0e';
 
 /// See also [initiatePasswordReset].
 @ProviderFor(initiatePasswordReset)
@@ -104,7 +104,7 @@ final checkIfNewUserProvider =
 );
 
 typedef CheckIfNewUserRef = AutoDisposeProviderRef<CheckIfNewUserUseCase>;
-String _$logOutHash() => r'2368d0e2369f4b160d64c1e029ad8c3cec617f39';
+String _$logOutHash() => r'04b8d55230906f058c32461d13413d059e04a53d';
 
 /// See also [logOut].
 @ProviderFor(logOut)
@@ -169,7 +169,7 @@ final fetchAllUsernamesProvider =
 
 typedef FetchAllUsernamesRef = AutoDisposeProviderRef<FetchAllUsernamesUseCase>;
 String _$uploadProfileImageHash() =>
-    r'02473717fb756ed4738db74d3be36dcab2515780';
+    r'b2057ca8c288a0d6a128ccabdb2eb014f01c0f2d';
 
 /// See also [uploadProfileImage].
 @ProviderFor(uploadProfileImage)

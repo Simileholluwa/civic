@@ -1,0 +1,8 @@
+class: PostList
+
+fields:
+    results: List<Post>
+    count: int
+    page: int
+    numPages: int
+    limit: int

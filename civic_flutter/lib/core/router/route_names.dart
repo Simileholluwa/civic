@@ -21,4 +21,10 @@ class AppRoutes {
 
   // Main application
   static const civic = '/civic';
+
+  // Content creation
+  static const post = '/post';
+
+  // Media picker
+  static const  pickMedia = '/pick_media';
 }

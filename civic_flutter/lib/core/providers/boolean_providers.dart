@@ -55,3 +55,7 @@ final authUserProvider = StateNotifierProvider<BooleanNotifier, bool>(
 final verifiedUserProvider = StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),
 );
+
+final showGalleryProvider = StateNotifierProvider<BooleanNotifier, bool>(
+  (ref) => BooleanNotifier(),
+);

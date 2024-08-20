@@ -13,13 +13,16 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'create_post.dart' as _i2;
 import 'example.dart' as _i3;
 import 'political_status_enum.dart' as _i4;
-import 'post_type_enums.dart' as _i5;
-import 'user_nin_record.dart' as _i6;
-import 'user_record.dart' as _i7;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i8;
+import 'post_list.dart' as _i5;
+import 'post_type_enums.dart' as _i6;
+import 'user_nin_record.dart' as _i7;
+import 'user_record.dart' as _i8;
+import 'protocol.dart' as _i9;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i10;
 export 'create_post.dart';
 export 'example.dart';
 export 'political_status_enum.dart';
+export 'post_list.dart';
 export 'post_type_enums.dart';
 export 'user_nin_record.dart';
 export 'user_record.dart';
@@ -47,14 +50,17 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i4.PoliticalStatus) {
       return _i4.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i5.PostType) {
-      return _i5.PostType.fromJson(data) as T;
+    if (t == _i5.PostList) {
+      return _i5.PostList.fromJson(data) as T;
     }
-    if (t == _i6.UserNinRecord) {
-      return _i6.UserNinRecord.fromJson(data) as T;
+    if (t == _i6.PostType) {
+      return _i6.PostType.fromJson(data) as T;
     }
-    if (t == _i7.UserRecord) {
-      return _i7.UserRecord.fromJson(data) as T;
+    if (t == _i7.UserNinRecord) {
+      return _i7.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i8.UserRecord) {
+      return _i8.UserRecord.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Post?>()) {
       return (data != null ? _i2.Post.fromJson(data) : null) as T;
@@ -65,19 +71,26 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i4.PoliticalStatus?>()) {
       return (data != null ? _i4.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.PostType?>()) {
-      return (data != null ? _i5.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.PostList?>()) {
+      return (data != null ? _i5.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.UserNinRecord?>()) {
-      return (data != null ? _i6.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.PostType?>()) {
+      return (data != null ? _i6.PostType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.UserRecord?>()) {
-      return (data != null ? _i7.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.UserNinRecord?>()) {
+      return (data != null ? _i7.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i8.UserRecord?>()) {
+      return (data != null ? _i8.UserRecord.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
+    }
+    if (t == List<_i9.Post>) {
+      return (data as List).map((e) => deserialize<_i9.Post>(e)).toList()
+          as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null
@@ -94,7 +107,7 @@ class Protocol extends _i1.SerializationManager {
           as dynamic;
     }
     try {
-      return _i8.Protocol().deserialize<T>(data, t);
+      return _i10.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -102,7 +115,7 @@ class Protocol extends _i1.SerializationManager {
   @override
   String? getClassNameForObject(Object data) {
     String? className;
-    className = _i8.Protocol().getClassNameForObject(data);
+    className = _i10.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -115,13 +128,16 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i4.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i5.PostType) {
+    if (data is _i5.PostList) {
+      return 'PostList';
+    }
+    if (data is _i6.PostType) {
       return 'PostType';
     }
-    if (data is _i6.UserNinRecord) {
+    if (data is _i7.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i7.UserRecord) {
+    if (data is _i8.UserRecord) {
       return 'UserRecord';
     }
     return super.getClassNameForObject(data);
@@ -131,7 +147,7 @@ class Protocol extends _i1.SerializationManager {
   dynamic deserializeByClassName(Map<String, dynamic> data) {
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i8.Protocol().deserializeByClassName(data);
+      return _i10.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'Post') {
       return deserialize<_i2.Post>(data['data']);
@@ -142,14 +158,17 @@ class Protocol extends _i1.SerializationManager {
     if (data['className'] == 'PoliticalStatus') {
       return deserialize<_i4.PoliticalStatus>(data['data']);
     }
+    if (data['className'] == 'PostList') {
+      return deserialize<_i5.PostList>(data['data']);
+    }
     if (data['className'] == 'PostType') {
-      return deserialize<_i5.PostType>(data['data']);
+      return deserialize<_i6.PostType>(data['data']);
     }
     if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i6.UserNinRecord>(data['data']);
+      return deserialize<_i7.UserNinRecord>(data['data']);
     }
     if (data['className'] == 'UserRecord') {
-      return deserialize<_i7.UserRecord>(data['data']);
+      return deserialize<_i8.UserRecord>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
