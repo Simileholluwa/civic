@@ -8,13 +8,14 @@ abstract interface class OnboardingLocalDatabase {
 }
 
 class OnboardingLocalDatabaseImpl implements OnboardingLocalDatabase {
-
   @override
   Future<void> cacheFirstTimer() async {
     try {
       await AppLocalStorage.to.setBool('first_timer', false);
     } catch (e) {
-      throw CacheExceptions(message: e.toString(),);
+      throw CacheException(
+        message: e.toString(),
+      );
     }
   }
 }

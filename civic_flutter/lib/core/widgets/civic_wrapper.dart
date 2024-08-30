@@ -1,6 +1,7 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
 import 'package:civic_flutter/core/entity/post_options.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/custom_bottom_navigation_bar.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CivicWrapper extends ConsumerStatefulWidget {
   const CivicWrapper({
@@ -33,11 +33,16 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
 
   void navigate(int index) {
     switch (index) {
-      case 1:
-        context.pushNamed(AppRoutes.post, extra: {
-          'pickedAssets': <XFile>[],
-          'canAddImage': true,
-        });
+      case 0:
+        toggleFab();
+        context.push(
+          AppRoutes.createPost,
+          extra: {
+            'id': 0,
+            'isDraft': false,
+            'draftPost': null,
+          },
+        );
         break;
     }
   }
@@ -91,7 +96,7 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
                 ? AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
                     height: isFabExpanded
-                        ? MediaQuery.of(context).size.height * 0.57
+                        ? MediaQuery.of(context).size.height * 0.49
                         : 0.0,
                     curve: Curves.easeInOut,
                     width: 70,
@@ -132,11 +137,11 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
                               physics: const BouncingScrollPhysics(),
                               children: [
                                 const SizedBox(
-                                  height: TSizes.lg,
+                                  height: TSizes.md,
                                 ),
                                 ListView.separated(
                                   shrinkWrap: true,
-                                  itemCount: 6,
+                                  itemCount: moreOptions.length,
                                   physics: const NeverScrollableScrollPhysics(),
                                   separatorBuilder: (context, index) {
                                     return const Divider(
@@ -169,7 +174,7 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: TSizes.lg,
+                                  height: TSizes.sm,
                                 ),
                               ],
                             ),
@@ -205,7 +210,17 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
             ),
           ],
         ),
-        body: widget.navigatorShell,
+        body: Stack(
+          children: [
+            widget.navigatorShell,
+            Visibility(
+              visible: ref.watch(sendPostLoadingProvider),
+              child: const LinearProgressIndicator(
+                color: TColors.primary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

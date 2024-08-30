@@ -1,0 +1,11 @@
+class: DraftPost
+fields:
+    draftId: int
+    postType: PostType
+    text: String
+    imageUrls: List<String>
+    videoUrl: String
+    taggedUsers: List<String>
+    latitude: double
+    longitude: double
+    createdAt: DateTime

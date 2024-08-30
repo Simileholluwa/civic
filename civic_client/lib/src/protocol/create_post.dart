@@ -16,26 +16,26 @@ abstract class Post implements _i1.SerializableModel {
     this.id,
     required this.ownerId,
     this.owner,
-    required this.postType,
-    this.text,
-    this.imageUrls,
-    this.videoUrl,
-    this.taggedUsers,
-    this.latitude,
-    this.longitude,
+    this.postType,
+    required this.text,
+    required this.imageUrls,
+    required this.videoUrl,
+    required this.taggedUsers,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory Post({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required _i2.PostType postType,
-    String? text,
-    String? imageUrls,
-    String? videoUrl,
-    List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    _i2.PostType? postType,
+    required String text,
+    required List<String> imageUrls,
+    required String videoUrl,
+    required List<String> taggedUsers,
+    required double latitude,
+    required double longitude,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -46,15 +46,19 @@ abstract class Post implements _i1.SerializableModel {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      postType: _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
-      text: jsonSerialization['text'] as String?,
-      imageUrls: jsonSerialization['imageUrls'] as String?,
-      videoUrl: jsonSerialization['videoUrl'] as String?,
-      taggedUsers: (jsonSerialization['taggedUsers'] as List?)
-          ?.map((e) => e as String)
+      postType: jsonSerialization['postType'] == null
+          ? null
+          : _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
+      text: jsonSerialization['text'] as String,
+      imageUrls: (jsonSerialization['imageUrls'] as List)
+          .map((e) => e as String)
           .toList(),
-      latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
-      longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
+      videoUrl: jsonSerialization['videoUrl'] as String,
+      taggedUsers: (jsonSerialization['taggedUsers'] as List)
+          .map((e) => e as String)
+          .toList(),
+      latitude: (jsonSerialization['latitude'] as num).toDouble(),
+      longitude: (jsonSerialization['longitude'] as num).toDouble(),
     );
   }
 
@@ -67,19 +71,19 @@ abstract class Post implements _i1.SerializableModel {
 
   _i2.UserRecord? owner;
 
-  _i2.PostType postType;
+  _i2.PostType? postType;
 
-  String? text;
+  String text;
 
-  String? imageUrls;
+  List<String> imageUrls;
 
-  String? videoUrl;
+  String videoUrl;
 
-  List<String>? taggedUsers;
+  List<String> taggedUsers;
 
-  double? latitude;
+  double latitude;
 
-  double? longitude;
+  double longitude;
 
   Post copyWith({
     int? id,
@@ -87,7 +91,7 @@ abstract class Post implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     _i2.PostType? postType,
     String? text,
-    String? imageUrls,
+    List<String>? imageUrls,
     String? videoUrl,
     List<String>? taggedUsers,
     double? latitude,
@@ -99,13 +103,13 @@ abstract class Post implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      'postType': postType.toJson(),
-      if (text != null) 'text': text,
-      if (imageUrls != null) 'imageUrls': imageUrls,
-      if (videoUrl != null) 'videoUrl': videoUrl,
-      if (taggedUsers != null) 'taggedUsers': taggedUsers?.toJson(),
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      if (postType != null) 'postType': postType?.toJson(),
+      'text': text,
+      'imageUrls': imageUrls.toJson(),
+      'videoUrl': videoUrl,
+      'taggedUsers': taggedUsers.toJson(),
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -122,13 +126,13 @@ class _PostImpl extends Post {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required _i2.PostType postType,
-    String? text,
-    String? imageUrls,
-    String? videoUrl,
-    List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    _i2.PostType? postType,
+    required String text,
+    required List<String> imageUrls,
+    required String videoUrl,
+    required List<String> taggedUsers,
+    required double latitude,
+    required double longitude,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -147,27 +151,25 @@ class _PostImpl extends Post {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    _i2.PostType? postType,
-    Object? text = _Undefined,
-    Object? imageUrls = _Undefined,
-    Object? videoUrl = _Undefined,
-    Object? taggedUsers = _Undefined,
-    Object? latitude = _Undefined,
-    Object? longitude = _Undefined,
+    Object? postType = _Undefined,
+    String? text,
+    List<String>? imageUrls,
+    String? videoUrl,
+    List<String>? taggedUsers,
+    double? latitude,
+    double? longitude,
   }) {
     return Post(
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      postType: postType ?? this.postType,
-      text: text is String? ? text : this.text,
-      imageUrls: imageUrls is String? ? imageUrls : this.imageUrls,
-      videoUrl: videoUrl is String? ? videoUrl : this.videoUrl,
-      taggedUsers: taggedUsers is List<String>?
-          ? taggedUsers
-          : this.taggedUsers?.clone(),
-      latitude: latitude is double? ? latitude : this.latitude,
-      longitude: longitude is double? ? longitude : this.longitude,
+      postType: postType is _i2.PostType? ? postType : this.postType,
+      text: text ?? this.text,
+      imageUrls: imageUrls ?? this.imageUrls.clone(),
+      videoUrl: videoUrl ?? this.videoUrl,
+      taggedUsers: taggedUsers ?? this.taggedUsers.clone(),
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }

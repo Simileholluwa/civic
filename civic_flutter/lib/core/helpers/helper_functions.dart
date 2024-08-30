@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/dual_button.dart';
@@ -70,6 +71,68 @@ class THelperFunctions {
     return null;
   }
 
+  static bool isImage(String filePath) {
+    final ext = filePath.toLowerCase();
+
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
+        ext.endsWith(".bmp");
+  }
+
+  static bool isVideo(String filePath) {
+    var ext = filePath.toLowerCase();
+
+    return ext.endsWith(".mp4") ||
+        ext.endsWith(".avi") ||
+        ext.endsWith(".wmv") ||
+        ext.endsWith(".rmvb") ||
+        ext.endsWith(".mpg") ||
+        ext.endsWith(".mpeg") ||
+        ext.endsWith(".3gp");
+  }
+
+  static PostType determinePostType({
+    required String text,
+    required List<String> pickedImages,
+    required String pickedVideo,
+  }) {
+    if (pickedVideo.isNotEmpty && text.isNotEmpty) {
+      return PostType.textWithVideo;
+    } else if (pickedVideo.isNotEmpty) {
+      return PostType.video;
+    } else if (pickedImages.isNotEmpty &&
+        pickedImages.length > 1 &&
+        text.isNotEmpty) {
+      return PostType.textWithImages;
+    } else if (pickedImages.isNotEmpty && pickedImages.length > 1) {
+      return PostType.images;
+    } else if (pickedImages.isNotEmpty &&
+        pickedImages.length == 1 &&
+        text.isNotEmpty) {
+      return PostType.textWithImage;
+    } else if (pickedImages.isNotEmpty && pickedImages.length == 1) {
+      return PostType.image;
+    } else if (text.isNotEmpty) {
+      return PostType.text;
+    } else {
+      return PostType.none;
+    }
+  }
+
+  static String humanizeNumber(int number) {
+    if (number >= 1000000000) {
+      return '${(number / 1000000000).toStringAsFixed(1)}B';
+    } else if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
+    } else {
+      return number.toString();
+    }
+  }
+
   static double getWidth(BuildContext context) {
     final window = View.of(context);
     final pixelRatio = window.devicePixelRatio;
@@ -86,7 +149,9 @@ class THelperFunctions {
     var lastExitTime = DateTime.now();
     if (DateTime.now().difference(lastExitTime) >= const Duration(seconds: 2)) {
       lastExitTime = DateTime.now();
-      TToastMessages.infoToast('Press the back button again to exit', context);
+      TToastMessages.infoToast(
+        'Press the back button again to exit',
+      );
       return false;
     } else {
       return true;
@@ -197,7 +262,8 @@ class THelperFunctions {
     } catch (_) {
       if (context.mounted) {
         TToastMessages.infoToast(
-            'Unable to get current location data', context);
+          'Unable to get current location data',
+        );
       }
       isLoading.value = false;
     }

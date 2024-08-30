@@ -16,13 +16,26 @@ class UserRecordEndpoint extends Endpoint {
     final authInfo = await session.authenticated;
     if (authInfo == null) return null;
 
-    final userRecord = UserRecord.db.findFirstRow(
-      session,
-      where: (row) => row.userInfoId.equals(authInfo.userId),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
+    var cacheKey = 'UserData-${authInfo.userId}';
+
+    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
+
+    if (userRecord == null) {
+      userRecord = await UserRecord.db.findFirstRow(
+        session,
+        where: (row) => row.userInfoId.equals(authInfo.userId),
+        include: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      );
+      await session.caches.local.put(
+        cacheKey,
+        userRecord!,
+        lifetime: Duration(
+          days: 1,
+        ),
+      );
+    }
 
     return userRecord;
   }

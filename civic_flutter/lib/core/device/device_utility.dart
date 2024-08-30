@@ -118,7 +118,6 @@ class TDeviceUtils {
       if (context.mounted) {
         TToastMessages.errorToast(
           'Unable to launch url',
-          context,
         );
       }
     }

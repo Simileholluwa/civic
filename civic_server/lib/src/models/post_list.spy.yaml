@@ -6,3 +6,4 @@ fields:
     page: int
     numPages: int
     limit: int
+    canLoadMore: bool

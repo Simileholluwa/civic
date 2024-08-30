@@ -59,3 +59,7 @@ final verifiedUserProvider = StateNotifierProvider<BooleanNotifier, bool>(
 final showGalleryProvider = StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),
 );
+
+final sendPostLoadingProvider = StateNotifierProvider<BooleanNotifier, bool>(
+  (ref) => BooleanNotifier(),
+);

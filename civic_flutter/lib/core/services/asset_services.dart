@@ -1,0 +1,47 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:civic_client/civic_client.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:image_picker/image_picker.dart';
+
+class AssetService {
+  final Client client;
+
+  AssetService({required this.client});
+  Future<Either<String, List<String>>> uploadMediaAssets(
+    List<String> media,
+    String folderName,
+    String subFolderName,
+  ) async {
+    try {
+      var mediaUrls = <String>[];
+      for (final mediaPath in media) {
+        final file = XFile(mediaPath);
+        final path = '$folderName/$subFolderName/${file.name}';
+        final uploadDescription =
+            await client.assets.getUploadDescription(path);
+        if (uploadDescription == null) {
+          return left('Unable to initiate asset upload');
+        }
+        log(uploadDescription.toString());
+        final uploader = FileUploader(uploadDescription);
+        final stream = file.openRead();
+        final length = (await file.readAsBytes()).length;
+        await uploader.upload(stream, length);
+        final success = await client.assets.verifyUpload(path);
+        if (!success) return left('Could not complete upload');
+        final decodedDescription =
+            jsonDecode(uploadDescription) as Map<String, dynamic>;
+        if (!decodedDescription.containsKey('url')) {
+          return left('Could not get URL of uploaded file');
+        }
+        mediaUrls.add('${decodedDescription['url']}/$path');
+      }
+      log(mediaUrls.toString());
+      return right(mediaUrls);
+    } catch (e) {
+      log(e.toString());
+      return left(e.toString());
+    }
+  }
+}

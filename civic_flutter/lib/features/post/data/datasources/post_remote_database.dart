@@ -8,6 +8,13 @@ import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart
 
 abstract class PostRemoteDatabase {
   Future<Post?> save({required Post post});
+  Future<PostList> listPost({
+    required int page,
+    required int limit,
+  });
+  Future<Post?> retrieve({
+    required int id,
+  });
 }
 
 class PostRemoteDatabaseImpl implements PostRemoteDatabase {
@@ -28,11 +35,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      if (!_sessionManager.isSignedIn) {
-        throw const ServerException(
-          message: 'You must be signed in to continue.',
-        );
-      }
       final result = await _client.post
           .save(
             post,
@@ -46,6 +48,67 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       if (result == null) {
         return null;
       }
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostList> listPost({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      if (!_sessionManager.isSignedIn) {
+        throw const ServerException(
+          message: 'You must be signed in to continue.',
+        );
+      }
+      final result = _client.post.listPost(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Post?> retrieve({required int id}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = _client.post.retrieve(
+        id,
+      );
       return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out');

@@ -21,8 +21,8 @@ class AppLoadingWidget extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                height: 120,
-                width: 120,
+                height: 100,
+                width: 100,
                 child: CircularProgressIndicator(
                   color: TColors.primary,
                   backgroundColor: backgroundColor,
@@ -36,8 +36,8 @@ class AppLoadingWidget extends StatelessWidget {
                   ),
                   child: Image.asset(
                     TImageTexts.appLogo2,
-                    width: 80,
-                    height: 80,
+                    width: 60,
+                    height: 60,
                   ),
                 ),
               ),

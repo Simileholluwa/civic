@@ -13,14 +13,16 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'create_post.dart' as _i4;
-import 'example.dart' as _i5;
-import 'political_status_enum.dart' as _i6;
-import 'post_list.dart' as _i7;
-import 'post_type_enums.dart' as _i8;
-import 'user_nin_record.dart' as _i9;
-import 'user_record.dart' as _i10;
-import 'protocol.dart' as _i11;
+import 'draft_post.dart' as _i5;
+import 'example.dart' as _i6;
+import 'political_status_enum.dart' as _i7;
+import 'post_list.dart' as _i8;
+import 'post_type_enums.dart' as _i9;
+import 'user_nin_record.dart' as _i10;
+import 'user_record.dart' as _i11;
+import 'protocol.dart' as _i12;
 export 'create_post.dart';
+export 'draft_post.dart';
 export 'example.dart';
 export 'political_status_enum.dart';
 export 'post_list.dart';
@@ -58,44 +60,44 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'postType',
           columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'protocol:PostType',
+          isNullable: true,
+          dartType: 'protocol:PostType?',
         ),
         _i2.ColumnDefinition(
           name: 'text',
           columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
+          isNullable: false,
+          dartType: 'String',
         ),
         _i2.ColumnDefinition(
           name: 'imageUrls',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'List<String>',
         ),
         _i2.ColumnDefinition(
           name: 'videoUrl',
           columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
+          isNullable: false,
+          dartType: 'String',
         ),
         _i2.ColumnDefinition(
           name: 'taggedUsers',
           columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
+          isNullable: false,
+          dartType: 'List<String>',
         ),
         _i2.ColumnDefinition(
           name: 'latitude',
           columnType: _i2.ColumnType.doublePrecision,
-          isNullable: true,
-          dartType: 'double?',
+          isNullable: false,
+          dartType: 'double',
         ),
         _i2.ColumnDefinition(
           name: 'longitude',
           columnType: _i2.ColumnType.doublePrecision,
-          isNullable: true,
-          dartType: 'double?',
+          isNullable: false,
+          dartType: 'double',
         ),
       ],
       foreignKeys: [
@@ -384,52 +386,57 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.Post) {
       return _i4.Post.fromJson(data) as T;
     }
-    if (t == _i5.Example) {
-      return _i5.Example.fromJson(data) as T;
+    if (t == _i5.DraftPost) {
+      return _i5.DraftPost.fromJson(data) as T;
     }
-    if (t == _i6.PoliticalStatus) {
-      return _i6.PoliticalStatus.fromJson(data) as T;
+    if (t == _i6.Example) {
+      return _i6.Example.fromJson(data) as T;
     }
-    if (t == _i7.PostList) {
-      return _i7.PostList.fromJson(data) as T;
+    if (t == _i7.PoliticalStatus) {
+      return _i7.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i8.PostType) {
-      return _i8.PostType.fromJson(data) as T;
+    if (t == _i8.PostList) {
+      return _i8.PostList.fromJson(data) as T;
     }
-    if (t == _i9.UserNinRecord) {
-      return _i9.UserNinRecord.fromJson(data) as T;
+    if (t == _i9.PostType) {
+      return _i9.PostType.fromJson(data) as T;
     }
-    if (t == _i10.UserRecord) {
-      return _i10.UserRecord.fromJson(data) as T;
+    if (t == _i10.UserNinRecord) {
+      return _i10.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i11.UserRecord) {
+      return _i11.UserRecord.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Post?>()) {
       return (data != null ? _i4.Post.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.Example?>()) {
-      return (data != null ? _i5.Example.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.DraftPost?>()) {
+      return (data != null ? _i5.DraftPost.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.PoliticalStatus?>()) {
-      return (data != null ? _i6.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Example?>()) {
+      return (data != null ? _i6.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.PostList?>()) {
-      return (data != null ? _i7.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.PoliticalStatus?>()) {
+      return (data != null ? _i7.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.PostType?>()) {
-      return (data != null ? _i8.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.PostList?>()) {
+      return (data != null ? _i8.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.UserNinRecord?>()) {
-      return (data != null ? _i9.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.PostType?>()) {
+      return (data != null ? _i9.PostType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.UserRecord?>()) {
-      return (data != null ? _i10.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.UserNinRecord?>()) {
+      return (data != null ? _i10.UserNinRecord.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as dynamic;
+    if (t == _i1.getType<_i11.UserRecord?>()) {
+      return (data != null ? _i11.UserRecord.fromJson(data) : null) as T;
     }
-    if (t == List<_i11.Post>) {
-      return (data as List).map((e) => deserialize<_i11.Post>(e)).toList()
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i12.Post>) {
+      return (data as List).map((e) => deserialize<_i12.Post>(e)).toList()
           as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -465,22 +472,25 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.Post) {
       return 'Post';
     }
-    if (data is _i5.Example) {
+    if (data is _i5.DraftPost) {
+      return 'DraftPost';
+    }
+    if (data is _i6.Example) {
       return 'Example';
     }
-    if (data is _i6.PoliticalStatus) {
+    if (data is _i7.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i7.PostList) {
+    if (data is _i8.PostList) {
       return 'PostList';
     }
-    if (data is _i8.PostType) {
+    if (data is _i9.PostType) {
       return 'PostType';
     }
-    if (data is _i9.UserNinRecord) {
+    if (data is _i10.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i10.UserRecord) {
+    if (data is _i11.UserRecord) {
       return 'UserRecord';
     }
     return super.getClassNameForObject(data);
@@ -495,23 +505,26 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'Post') {
       return deserialize<_i4.Post>(data['data']);
     }
+    if (data['className'] == 'DraftPost') {
+      return deserialize<_i5.DraftPost>(data['data']);
+    }
     if (data['className'] == 'Example') {
-      return deserialize<_i5.Example>(data['data']);
+      return deserialize<_i6.Example>(data['data']);
     }
     if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i6.PoliticalStatus>(data['data']);
+      return deserialize<_i7.PoliticalStatus>(data['data']);
     }
     if (data['className'] == 'PostList') {
-      return deserialize<_i7.PostList>(data['data']);
+      return deserialize<_i8.PostList>(data['data']);
     }
     if (data['className'] == 'PostType') {
-      return deserialize<_i8.PostType>(data['data']);
+      return deserialize<_i9.PostType>(data['data']);
     }
     if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i9.UserNinRecord>(data['data']);
+      return deserialize<_i10.UserNinRecord>(data['data']);
     }
     if (data['className'] == 'UserRecord') {
-      return deserialize<_i10.UserRecord>(data['data']);
+      return deserialize<_i11.UserRecord>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -533,10 +546,10 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i4.Post:
         return _i4.Post.t;
-      case _i9.UserNinRecord:
-        return _i9.UserNinRecord.t;
-      case _i10.UserRecord:
-        return _i10.UserRecord.t;
+      case _i10.UserNinRecord:
+        return _i10.UserNinRecord.t;
+      case _i11.UserRecord:
+        return _i11.UserRecord.t;
     }
     return null;
   }

@@ -6,7 +6,7 @@ part of 'post_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postListHash() => r'404ec62345037b48cfc89879b3f006b4d1246ba6';
+String _$postListHash() => r'e14ac6a52bb30cf984a98a6107ddaef117509192';
 
 /// See also [PostList].
 @ProviderFor(PostList)

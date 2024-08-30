@@ -20,6 +20,7 @@ abstract class PostList
     required this.page,
     required this.numPages,
     required this.limit,
+    required this.canLoadMore,
   });
 
   factory PostList({
@@ -28,6 +29,7 @@ abstract class PostList
     required int page,
     required int numPages,
     required int limit,
+    required bool canLoadMore,
   }) = _PostListImpl;
 
   factory PostList.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -39,6 +41,7 @@ abstract class PostList
       page: jsonSerialization['page'] as int,
       numPages: jsonSerialization['numPages'] as int,
       limit: jsonSerialization['limit'] as int,
+      canLoadMore: jsonSerialization['canLoadMore'] as bool,
     );
   }
 
@@ -52,12 +55,15 @@ abstract class PostList
 
   int limit;
 
+  bool canLoadMore;
+
   PostList copyWith({
     List<_i2.Post>? results,
     int? count,
     int? page,
     int? numPages,
     int? limit,
+    bool? canLoadMore,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -67,6 +73,7 @@ abstract class PostList
       'page': page,
       'numPages': numPages,
       'limit': limit,
+      'canLoadMore': canLoadMore,
     };
   }
 
@@ -78,6 +85,7 @@ abstract class PostList
       'page': page,
       'numPages': numPages,
       'limit': limit,
+      'canLoadMore': canLoadMore,
     };
   }
 
@@ -94,12 +102,14 @@ class _PostListImpl extends PostList {
     required int page,
     required int numPages,
     required int limit,
+    required bool canLoadMore,
   }) : super._(
           results: results,
           count: count,
           page: page,
           numPages: numPages,
           limit: limit,
+          canLoadMore: canLoadMore,
         );
 
   @override
@@ -109,6 +119,7 @@ class _PostListImpl extends PostList {
     int? page,
     int? numPages,
     int? limit,
+    bool? canLoadMore,
   }) {
     return PostList(
       results: results ?? this.results.clone(),
@@ -116,6 +127,7 @@ class _PostListImpl extends PostList {
       page: page ?? this.page,
       numPages: numPages ?? this.numPages,
       limit: limit ?? this.limit,
+      canLoadMore: canLoadMore ?? this.canLoadMore,
     );
   }
 }

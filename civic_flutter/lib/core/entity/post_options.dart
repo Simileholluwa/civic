@@ -13,10 +13,6 @@ class MoreOptionsModel {
 
 List<MoreOptionsModel> moreOptions = [
   MoreOptionsModel(
-    icon: Icons.ballot_rounded,
-    text: 'Project',
-  ),
-  MoreOptionsModel(
     icon: Iconsax.airdrop5,
     text: 'Post',
   ),

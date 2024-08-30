@@ -1,31 +1,35 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
-class StepTitle extends StatelessWidget {
-  const StepTitle({
+class MediaOptions extends StatelessWidget {
+  const MediaOptions({
     super.key,
     required this.text,
+    required this.onTap,
   });
 
   final String text;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 2,
-        left: 6,
+    return ListTile(
+      trailing: const Icon(
+        Iconsax.arrow_right_2,
+        size: 20,
       ),
-      child: Text(
+      title: Text(
         text,
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.bold,
-              color: isDark ? TColors.textWhite : TColors.dark,
+              color: THelperFunctions.isDarkMode(context)
+                  ? TColors.textWhite
+                  : TColors.dark,
             ),
-        maxLines: 1,
       ),
+      onTap: onTap,
     );
   }
 }

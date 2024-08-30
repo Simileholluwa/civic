@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -13,6 +12,7 @@ class DualButton extends StatelessWidget {
     required this.onTapActiveButton,
     required this.activeButtonLoading,
     required this.skipButtonLoading,
+    this.skipText = 'Skip',
     super.key,
   });
 
@@ -21,6 +21,7 @@ class DualButton extends StatelessWidget {
   final VoidCallback onTapActiveButton;
   final bool activeButtonLoading;
   final bool skipButtonLoading;
+  final String skipText;
 
   @override
   Widget build(BuildContext context) {
@@ -36,50 +37,46 @@ class DualButton extends StatelessWidget {
         children: [
           Expanded(
             child: GestureDetector(
-                onTap: skipButtonLoading == true ? null : onTapSkipButton,
-                child: Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: TSizes.md,
-                      ),
-                      child: skipButtonLoading == true
-                          ? LoadingAnimationWidget.prograssiveDots(
-                              color: TColors.primary,
-                              size: 50,
-                            )
-                          : Text(
-                              'Skip',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: THelperFunctions.isDarkMode(context)
-                                    ? TColors.textWhite
-                                    : TColors.dark,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+              onTap: skipButtonLoading == true ? null : onTapSkipButton,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: TSizes.md,
                     ),
+                    child: skipButtonLoading == true
+                        ? LoadingAnimationWidget.prograssiveDots(
+                            color: TColors.primary,
+                            size: 50,
+                          )
+                        : Text(
+                            skipText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: THelperFunctions.isDarkMode(context)
+                                  ? TColors.textWhite
+                                  : TColors.dark,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),
-          
+            ),
           ),
           Expanded(
-            flex: 2,
-            child:FilledButton(
-                onPressed: onTapActiveButton,
-                child: Text(
-                  activeButtonText,
-                ),
-              ).withLoading(
-                loading: activeButtonLoading,
+            child: FilledButton(
+              onPressed: onTapActiveButton,
+              child: Text(
+                activeButtonText,
               ),
-            
+            ).withLoading(
+              loading: activeButtonLoading,
+            ),
           ),
         ],
       ),

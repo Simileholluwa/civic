@@ -11,7 +11,8 @@ import 'package:civic_flutter/features/discover/presentation/routes/discover_rou
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
-import 'package:civic_flutter/features/post/presentation/pages/post_screen.dart';
+import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
+import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -226,15 +227,25 @@ GoRouter router(RouterRef ref) {
       ),
 
       GoRoute(
-          path: AppRoutes.post,
-          name: AppRoutes.post,
-          builder: (context, state) {
-            final data = state.extra as Map<String, dynamic>;
-            return PostScreen(
-              pickedAssets: data['pickedAssets'] ?? <XFile>[],
-              canAddImages: data['canAddImages'] ?? true,
-            );
-          }),
+        path: AppRoutes.createPost,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return CreatePostScreen(
+            id: data['id'],
+            isDraft: data['isDraft'],
+            draftPost: data['draftPost'],
+          );
+        },
+        routes: [
+          GoRoute(
+            path: AppRoutes.postDrafts,
+            name: AppRoutes.postDrafts,
+            builder: (context, state) {
+              return const DraftsScreen();
+            },
+          ),
+        ],
+      ),
 
       GoRoute(
         path: AppRoutes.pickMedia,

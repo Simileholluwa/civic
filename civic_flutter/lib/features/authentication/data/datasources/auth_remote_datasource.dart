@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
@@ -167,9 +166,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
               seconds: 60,
             ),
           );
-      log(result.toString());
-      log(email);
-      log(password);
       if (!result.success && result.failReason != null) {
         final failReason = result.failReason!.index;
         switch (failReason) {

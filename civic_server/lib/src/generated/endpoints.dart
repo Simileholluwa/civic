@@ -9,43 +9,92 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../endpoints/example_endpoint.dart' as _i2;
-import '../endpoints/post_endpoint.dart' as _i3;
-import '../endpoints/user_nin_endpoint.dart' as _i4;
-import '../endpoints/user_record_endpoint.dart' as _i5;
-import 'package:civic_server/src/generated/create_post.dart' as _i6;
-import 'package:civic_server/src/generated/user_record.dart' as _i7;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i8;
+import '../endpoints/assets_endpoint.dart' as _i2;
+import '../endpoints/example_endpoint.dart' as _i3;
+import '../endpoints/post_endpoint.dart' as _i4;
+import '../endpoints/user_nin_endpoint.dart' as _i5;
+import '../endpoints/user_record_endpoint.dart' as _i6;
+import 'package:civic_server/src/generated/create_post.dart' as _i7;
+import 'package:civic_server/src/generated/user_record.dart' as _i8;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i9;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
   void initializeEndpoints(_i1.Server server) {
     var endpoints = <String, _i1.Endpoint>{
-      'example': _i2.ExampleEndpoint()
+      'assets': _i2.AssetsEndpoint()
+        ..initialize(
+          server,
+          'assets',
+          null,
+        ),
+      'example': _i3.ExampleEndpoint()
         ..initialize(
           server,
           'example',
           null,
         ),
-      'post': _i3.PostEndpoint()
+      'post': _i4.PostEndpoint()
         ..initialize(
           server,
           'post',
           null,
         ),
-      'userNin': _i4.UserNinEndpoint()
+      'userNin': _i5.UserNinEndpoint()
         ..initialize(
           server,
           'userNin',
           null,
         ),
-      'userRecord': _i5.UserRecordEndpoint()
+      'userRecord': _i6.UserRecordEndpoint()
         ..initialize(
           server,
           'userRecord',
           null,
         ),
     };
+    connectors['assets'] = _i1.EndpointConnector(
+      name: 'assets',
+      endpoint: endpoints['assets']!,
+      methodConnectors: {
+        'getUploadDescription': _i1.MethodConnector(
+          name: 'getUploadDescription',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['assets'] as _i2.AssetsEndpoint).getUploadDescription(
+            session,
+            params['path'],
+          ),
+        ),
+        'verifyUpload': _i1.MethodConnector(
+          name: 'verifyUpload',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['assets'] as _i2.AssetsEndpoint).verifyUpload(
+            session,
+            params['path'],
+          ),
+        ),
+      },
+    );
     connectors['example'] = _i1.EndpointConnector(
       name: 'example',
       endpoint: endpoints['example']!,
@@ -63,7 +112,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['example'] as _i2.ExampleEndpoint).hello(
+              (endpoints['example'] as _i3.ExampleEndpoint).hello(
             session,
             params['name'],
           ),
@@ -79,7 +128,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i6.Post>(),
+              type: _i1.getType<_i7.Post>(),
               nullable: false,
             )
           },
@@ -87,9 +136,27 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i3.PostEndpoint).save(
+              (endpoints['post'] as _i4.PostEndpoint).save(
             session,
             params['post'],
+          ),
+        ),
+        'retrieve': _i1.MethodConnector(
+          name: 'retrieve',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i4.PostEndpoint).retrieve(
+            session,
+            params['id'],
           ),
         ),
         'listPost': _i1.MethodConnector(
@@ -110,7 +177,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i3.PostEndpoint).listPost(
+              (endpoints['post'] as _i4.PostEndpoint).listPost(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -135,7 +202,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userNin'] as _i4.UserNinEndpoint).findNinDetails(
+              (endpoints['userNin'] as _i5.UserNinEndpoint).findNinDetails(
             session,
             params['ninNumber'],
           ),
@@ -151,7 +218,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i7.UserRecord>(),
+              type: _i1.getType<_i8.UserRecord>(),
               nullable: false,
             )
           },
@@ -159,7 +226,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
                   .saveUserRecord(
             session,
             params['userRecord'],
@@ -172,7 +239,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i5.UserRecordEndpoint).me(session),
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint).me(session),
         ),
         'checkIfNewUser': _i1.MethodConnector(
           name: 'checkIfNewUser',
@@ -187,7 +254,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
                   .checkIfNewUser(
             session,
             params['email'],
@@ -200,11 +267,11 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
                   .fetchAllUsernames(session),
         ),
       },
     );
-    modules['serverpod_auth'] = _i8.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i9.Endpoints()..initializeEndpoints(server);
   }
 }

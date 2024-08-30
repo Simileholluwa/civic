@@ -17,7 +17,7 @@ class ImageHelper {
   final ImagePicker _imagePicker;
   final ImageCropper _imageCropper;
 
-  Future<List<XFile?>?> pickImage({
+  Future<List<XFile>?> pickImage({
     ImageSource source = ImageSource.gallery,
     int imageQuality = 100,
     int limit = 5,

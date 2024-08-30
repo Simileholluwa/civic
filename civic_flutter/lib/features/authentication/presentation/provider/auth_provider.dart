@@ -60,7 +60,7 @@ class Auth extends _$Auth {
     );
     ref.read(signInLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      TToastMessages.errorToast(error.message, context);
+      TToastMessages.errorToast(error.message);
       return;
     }, (userRecord) {
       ref.read(authUserProvider.notifier).setValue(true);
@@ -96,7 +96,7 @@ class Auth extends _$Auth {
     );
     ref.read(checkEmailLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      TToastMessages.errorToast(error.message, context);
+      TToastMessages.errorToast(error.message);
     }, (username) {
       if (username != null) {
         context.pushNamed(
@@ -148,7 +148,6 @@ class Auth extends _$Auth {
       if (context.mounted) {
         TToastMessages.errorToast(
           'Read and accept privacy policy and terms of use.',
-          context,
         );
       }
       return;
@@ -163,11 +162,10 @@ class Auth extends _$Auth {
     );
     ref.read(createAccountLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      TToastMessages.errorToast(error.message, context);
+      TToastMessages.errorToast(error.message);
     }, (r) {
       TToastMessages.successToast(
         'A verification code has been sent to your email',
-        context,
       );
       context.pushNamed(
         AppRoutes.validateCreateAccount,
@@ -231,11 +229,10 @@ class Auth extends _$Auth {
     );
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      TToastMessages.errorToast(error.message, context);
+      TToastMessages.errorToast(error.message);
     }, (r) {
       TToastMessages.successToast(
         'Great! Your account has been created.',
-        context,
       );
       context.pushNamed(
         AppRoutes.verifyAccount,
@@ -260,12 +257,11 @@ class Auth extends _$Auth {
     );
     ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(false);
     result.fold((error) {
-      TToastMessages.errorToast(error.message, context);
+      TToastMessages.errorToast(error.message);
       return;
     }, (r) {
       TToastMessages.successToast(
         'Password reset code has been sent to your email',
-        context,
       );
       context.goNamed(
         AppRoutes.verifyResetPasswordCode,
@@ -324,7 +320,7 @@ class Auth extends _$Auth {
     ref.read(resetPasswordLoadingProvider.notifier).setValue(false);
     result.fold(
       (error) {
-        TToastMessages.errorToast(error.message, context);
+        TToastMessages.errorToast(error.message);
       },
       (r) {
         context.goNamed(AppRoutes.auth);
@@ -345,8 +341,7 @@ class Auth extends _$Auth {
       NinUseCaseParams(ninNumber),
     );
     ref.read(searchNinLoadingProvider.notifier).setValue(false);
-    result.fold((error) => TToastMessages.errorToast(error.message, context),
-        (r) {
+    result.fold((error) => TToastMessages.errorToast(error.message), (r) {
       if (r != null) {
         context.goNamed(
           AppRoutes.confirmNinDetails,
@@ -355,7 +350,7 @@ class Auth extends _$Auth {
           },
         );
       } else {
-        TToastMessages.errorToast('NIN already exists', context);
+        TToastMessages.errorToast('NIN already exists');
       }
     });
   }

@@ -1,8 +1,10 @@
 enum: PostType
 values:
-    - textOnly
-    - videoOnly
+    - text
+    - video
     - textWithVideo
     - textWithImages
     - images
-    - video
+    - image
+    - textWithImage
+    - none

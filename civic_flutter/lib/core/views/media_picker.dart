@@ -227,7 +227,7 @@ class _MediaPickerState extends ConsumerState<MediaPicker> {
                   });
                   if (context.mounted) {
                     context.goNamed(
-                      AppRoutes.post,
+                      AppRoutes.createPost,
                       extra: {
                         'pickedAssets': widget.pickedAssets,
                         'canAddImages': canAddImages,
@@ -503,7 +503,6 @@ class _MediaPickerState extends ConsumerState<MediaPicker> {
       if (assetEntity.type == AssetType.video && selectedAssetList.isNotEmpty) {
         TToastMessages.infoToast(
           'Only multiple images can be selected',
-          context,
         );
       } else if (assetEntity.type == AssetType.video &&
           selectedAssetList.isEmpty) {
@@ -519,7 +518,6 @@ class _MediaPickerState extends ConsumerState<MediaPicker> {
         } else {
           TToastMessages.infoToast(
             'Only multiple images can be selected',
-            context,
           );
         }
       } else {
@@ -533,7 +531,6 @@ class _MediaPickerState extends ConsumerState<MediaPicker> {
         isAddMedia == true
             ? 'Only $maxCount more $images can be added'
             : 'Maximum number of selections reached',
-        context,
       );
     }
   }

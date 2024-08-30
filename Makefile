@@ -8,7 +8,7 @@ compose:
 	cd civic_server && docker compose up --build --detach
 
 migrate:
-	cd civic_server && serverpod create-migration
+	cd civic_server && serverpod create-migration --force
 
 connect_adb:
 	adb connect 192.168.210.212

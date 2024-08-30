@@ -3,48 +3,47 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLocalStorage {
   static AppLocalStorage get to => GetIt.instance.get();
-  late final SharedPreferences _prefs;
+  late final SharedPreferences _sharedPrefs;
 
   Future<AppLocalStorage> init() async {
-    _prefs = await SharedPreferences.getInstance();
+    _sharedPrefs = await SharedPreferences.getInstance();
     return this;
   }
 
   Future<bool> setString(String key, String value) async {
-    _prefs = await SharedPreferences.getInstance();
-    return _prefs.setString(key, value);
+    return _sharedPrefs.setString(key, value);
   }
 
   Future<bool> setInt(String key, int value) async {
-    return _prefs.setInt(key, value);
+    return _sharedPrefs.setInt(key, value);
   }
 
   // ignore: avoid_positional_boolean_parameters
   Future<bool> setBool(String key, bool value) async {
-    return _prefs.setBool(key, value);
+    return _sharedPrefs.setBool(key, value);
   }
 
   Future<bool> setList(String key, List<String> value) async {
-    return _prefs.setStringList(key, value);
+    return _sharedPrefs.setStringList(key, value);
   }
 
   String? getString(String key) {
-    return _prefs.getString(key);
+    return _sharedPrefs.getString(key);
   }
 
   int? getInt(String key) {
-    return _prefs.getInt(key);
+    return _sharedPrefs.getInt(key);
   }
 
   bool? getBool(String key) {
-    return _prefs.getBool(key);
+    return _sharedPrefs.getBool(key);
   }
 
   List<String>? getList(String key) {
-    return _prefs.getStringList(key);
+    return _sharedPrefs.getStringList(key);
   }
 
   Future<bool> remove(String key) async {
-    return _prefs.remove(key);
+    return _sharedPrefs.remove(key);
   }
 }

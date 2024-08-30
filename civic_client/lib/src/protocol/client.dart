@@ -18,6 +18,27 @@ import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
 import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
+class EndpointAssets extends _i1.EndpointRef {
+  EndpointAssets(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'assets';
+
+  _i2.Future<String?> getUploadDescription(String path) =>
+      caller.callServerEndpoint<String?>(
+        'assets',
+        'getUploadDescription',
+        {'path': path},
+      );
+
+  _i2.Future<bool> verifyUpload(String path) => caller.callServerEndpoint<bool>(
+        'assets',
+        'verifyUpload',
+        {'path': path},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
   EndpointExample(_i1.EndpointCaller caller) : super(caller);
 
@@ -43,6 +64,13 @@ class EndpointPost extends _i1.EndpointRef {
         'post',
         'save',
         {'post': post},
+      );
+
+  _i2.Future<_i3.Post?> retrieve(int id) =>
+      caller.callServerEndpoint<_i3.Post?>(
+        'post',
+        'retrieve',
+        {'id': id},
       );
 
   _i2.Future<_i4.PostList> listPost({
@@ -141,12 +169,15 @@ class Client extends _i1.ServerpodClient {
           onFailedCall: onFailedCall,
           onSucceededCall: onSucceededCall,
         ) {
+    assets = EndpointAssets(this);
     example = EndpointExample(this);
     post = EndpointPost(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
     modules = _Modules(this);
   }
+
+  late final EndpointAssets assets;
 
   late final EndpointExample example;
 
@@ -160,6 +191,7 @@ class Client extends _i1.ServerpodClient {
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'assets': assets,
         'example': example,
         'post': post,
         'userNin': userNin,

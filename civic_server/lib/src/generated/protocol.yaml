@@ -1,7 +1,11 @@
+assets:
+  - getUploadDescription:
+  - verifyUpload:
 example:
   - hello:
 post:
   - save:
+  - retrieve:
   - listPost:
 userNin:
   - findNinDetails:

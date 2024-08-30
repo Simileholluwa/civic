@@ -1,17 +1,28 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/providers/integer_provider.dart';
+import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/core/widgets/custom_tooltip_shape.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
+import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/core/widgets/text_counter.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'media_options.dart';
 
 class CreatePostBottomNavigation extends ConsumerStatefulWidget {
   const CreatePostBottomNavigation({
     super.key,
+    required this.postText,
   });
+
+  final String postText;
 
   @override
   ConsumerState<CreatePostBottomNavigation> createState() =>
@@ -30,7 +41,7 @@ class _CreatePostBottomNavigationState
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
     );
 
     _scaleAnimation = CurvedAnimation(
@@ -58,7 +69,9 @@ class _CreatePostBottomNavigationState
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.read(postProvider.notifier);
+    final controller = ref.watch(mediaProvider.notifier);
+    final canSaveDraft = ref.watch(mediaProvider).isNotEmpty ||
+        ref.watch(textLengthProvider) > 0;
     return SizedBox(
       height: 105,
       child: Column(
@@ -139,9 +152,21 @@ class _CreatePostBottomNavigationState
                       width: TSizes.xs,
                     ),
                     IconButton(
+                      onPressed:
+                          !canSaveDraft ? null : () => saveDraftDialog(context),
+                      icon: Icon(
+                        Iconsax.folder_add5,
+                        size: 27,
+                        color: !canSaveDraft ? null : TColors.primary,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: TSizes.xs,
+                    ),
+                    IconButton(
                       onPressed: () {},
                       icon: const Icon(
-                        Iconsax.folder_add5,
+                        Icons.timer,
                         size: 27,
                         color: TColors.primary,
                       ),
@@ -172,24 +197,36 @@ class _CreatePostBottomNavigationState
                                       shrinkWrap: true,
                                       children: [
                                         MediaOptions(
-                                          onTap: () => controller.pickPicture(
-                                            true,
-                                          ),
+                                          onTap: () {
+                                            controller.pickPicture(
+                                              context,
+                                            );
+                                            _toggleTooltip();
+                                          },
                                           text: 'Gallery image',
                                         ),
                                         const Divider(),
                                         MediaOptions(
-                                          onTap: controller.pickVideo,
+                                          onTap: () {
+                                            controller.pickVideo(context);
+                                            _toggleTooltip();
+                                          },
                                           text: 'Gallery video',
                                         ),
                                         const Divider(),
                                         MediaOptions(
-                                          onTap: controller.takePicture,
+                                          onTap: () {
+                                            controller.takePicture();
+                                            _toggleTooltip();
+                                          },
                                           text: 'Live image',
                                         ),
                                         const Divider(),
                                         MediaOptions(
-                                          onTap: controller.takeVideo,
+                                          onTap: () {
+                                            controller.takeVideo();
+                                            _toggleTooltip();
+                                          },
                                           text: 'Live video',
                                         ),
                                       ],
@@ -210,15 +247,16 @@ class _CreatePostBottomNavigationState
                     ),
                   ],
                 ),
-                TextButton(
-                  child: Text(
-                    'DRAFTS',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: TColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: TSizes.sm,
                   ),
-                  onPressed: () {},
+                  child: Consumer(builder: (context, ref, child) {
+                    return TextCounter(
+                      currentTextLength: ref.watch(textLengthProvider),
+                      maxLength: 2500,
+                    );
+                  }),
                 ),
               ],
             ),
@@ -227,35 +265,48 @@ class _CreatePostBottomNavigationState
       ),
     );
   }
-}
 
-class MediaOptions extends StatelessWidget {
-  const MediaOptions({
-    super.key,
-    required this.text,
-    required this.onTap,
-  });
-
-  final String text;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      trailing: const Icon(
-        Iconsax.arrow_right_2,
-        size: 20,
-      ),
-      title: Text(
-        text,
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-              color: THelperFunctions.isDarkMode(context)
-                  ? TColors.textWhite
-                  : TColors.dark,
-            ),
-      ),
-      onTap: onTap,
+  Future<Widget?> saveDraftDialog(BuildContext context) {
+    return postDialog(
+      context: context,
+      title: 'Save post as draft?',
+      description: 'Draft post will be saved in drafts for '
+          'a maximum of 10 days.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Save draft',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      onTapActiveButton: () {
+        final media = ref.watch(mediaProvider);
+        final videoUrl = media.isEmpty
+            ? ''
+            : THelperFunctions.isVideo(media.first)
+                ? media.first
+                : '';
+        final imageUrls = media.isEmpty
+            ? <String>[]
+            : THelperFunctions.isImage(media.first)
+                ? media
+                : <String>[];
+        ref.read(postDraftsProvider.notifier).saveDraftPost(
+              context,
+              DraftPost(
+                draftId: DateTime.now().millisecondsSinceEpoch,
+                postType: THelperFunctions.determinePostType(
+                  text: widget.postText,
+                  pickedImages: imageUrls,
+                  pickedVideo: videoUrl,
+                ),
+                text: widget.postText,
+                imageUrls: imageUrls,
+                videoUrl: videoUrl,
+                taggedUsers: [],
+                latitude: 0,
+                longitude: 0,
+                createdAt: DateTime.now(),
+              ),
+            );
+      },
     );
   }
 }

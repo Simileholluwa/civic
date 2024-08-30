@@ -112,14 +112,30 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
             child: CircleAvatar(
               radius: 18,
               backgroundColor: isDark ? TColors.dark : TColors.light,
-              child: CachedNetworkImage(
-                imageUrl: '',
-                errorWidget: (context, url, child) {
-                  return const Icon(
-                    CupertinoIcons.person_alt_circle_fill,
-                    size: 37,
-                  );
-                },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
+                  fit: BoxFit.cover,
+                  height: 36,
+                  width: 36,
+                  errorWidget: (context, url, child) {
+                    return const Icon(
+                      CupertinoIcons.person_alt_circle_fill,
+                      size: 37,
+                    );
+                  },
+                  progressIndicatorBuilder: (context, url, progress) {
+                    return const Center(
+                      child: Icon(
+                        CupertinoIcons.person_alt_circle_fill,
+                        size: 37,
+                        color: TColors.textWhite,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
