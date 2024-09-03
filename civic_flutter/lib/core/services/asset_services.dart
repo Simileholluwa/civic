@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,6 +41,12 @@ class AssetService {
       }
       log(mediaUrls.toString());
       return right(mediaUrls);
+    } on SocketException catch (_) {
+      return left('Failed to connect to server');
+    } on TimeoutException catch (_) {
+      return left('The request timed out.');
+    } on ServerpodClientException catch (e) {
+      return left(e.message);
     } catch (e) {
       log(e.toString());
       return left(e.toString());

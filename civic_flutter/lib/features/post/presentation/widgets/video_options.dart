@@ -42,7 +42,7 @@ class VideoOptions extends ConsumerWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  videoControl.dispose();
+                  videoControl?.dispose();
                   controller.clearMedia();
                 },
                 icon: const Icon(
@@ -57,7 +57,7 @@ class VideoOptions extends ConsumerWidget {
             IconButton(
               onPressed: videoController.pausePlay,
               icon: Icon(
-                videoControl.value.isPlaying ? Iconsax.pause : Iconsax.play,
+                videoControl!.value.isPlaying ? Iconsax.pause : Iconsax.play,
               ),
             ),
             IconButton(

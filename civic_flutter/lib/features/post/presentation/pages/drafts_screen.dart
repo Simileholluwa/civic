@@ -1,6 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/providers/media_provider.dart';
 // import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
@@ -28,7 +29,10 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: context.pop,
+          onPressed: () {
+            context.pop();
+            ref.watch(mediaVideoPlayerProvider.notifier).dispose();
+          },
           icon: const Icon(
             Iconsax.arrow_left_2,
           ),
@@ -81,6 +85,7 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
                 index: index,
               );
             case PostType.video:
+              ref.watch(mediaProvider.notifier).setVideo(data[index].videoUrl);
               return PostWidget(
                 post: data[index],
                 hasVideo: true,
@@ -107,20 +112,24 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
     );
   }
 
-  Future<Widget?> deleteDraftsDialog(BuildContext context) {
+  Future<bool?> deleteDraftsDialog(BuildContext context) {
     return postDialog(
-      context: context,
-      title: 'Delete all drafts?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete all',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      onTapActiveButton: () =>
-          ref.read(postDraftsProvider.notifier).deleteAllDrafts(
-                context,
-              ),
-    );
+        context: context,
+        title: 'Delete all drafts?',
+        description: 'Proceed with caution as this action is '
+            'irreversible.',
+        onTapSkipButton: context.pop,
+        activeButtonText: 'Delete all',
+        activeButtonLoading: false,
+        skipButtonLoading: false,
+        skipText: 'Cancel',
+        onTapActiveButton: () async {
+          context.pop();
+          final result =
+              await ref.read(postDraftsProvider.notifier).deleteAllDrafts();
+          if (result) {
+            if (context.mounted) context.pop();
+          }
+        });
   }
 }

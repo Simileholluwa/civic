@@ -4,9 +4,13 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
+import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/image_post.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
 import 'package:expandable_text/expandable_text.dart';
 //import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +65,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,6 +104,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                 children: [
                   IconButton(
                     onPressed: () {
+                      ref.read(mediaProvider.notifier).clearMedia();
+                      ref.read(postTextProvider.notifier).reset();
                       if (widget.hasVideo) {
                         ref.read(mediaProvider.notifier).setVideo(
                               widget.post.videoUrl,
@@ -109,6 +116,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                               widget.post.imageUrls,
                             );
                       }
+                      if (widget.hasText) {
+                        ref.read(postTextProvider.notifier).setText(
+                              widget.post.text,
+                            );
+                      }
+                      context.pop();
                       context.pushReplacement(
                         AppRoutes.createPost,
                         extra: {
@@ -129,7 +142,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go(
+                        FeedRoutes.namespace,
+                        extra: sendPost,
+                      );
+                      ref.read(mediaVideoPlayerProvider.notifier).dispose();
+                    },
                     icon: const Icon(
                       Iconsax.send_1,
                     ),
@@ -164,32 +183,73 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               padding: 0,
             ),
           if (widget.hasVideo)
-            Text(
-              widget.post.videoUrl.toString(),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                const VideoPost(
+                  showVideoOptions: false,
+                  height: 350,
+                  margin: 0,
+                ),
+                Container(
+                  height: 60,
+                  width: 60,
+                  decoration: const BoxDecoration(
+                    color: TColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    onPressed:
+                        ref.watch(mediaVideoPlayerProvider.notifier).pausePlay,
+                    icon: Icon(
+                      ref.watch(mediaVideoPlayerProvider)!.value.isPlaying
+                          ? Iconsax.pause
+                          : Iconsax.play,
+                    ),
+                  ),
+                ),
+              ],
             ),
         ],
       ),
     );
   }
 
-  Future<Widget?> deleteDraftDialog(
+  void sendPost() async {
+    await ref.read(postDraftsProvider.notifier).sendDraftPost(
+          widget.post,
+          widget.index,
+        );
+  }
+
+  Future<bool?> deleteDraftDialog(
     BuildContext context,
   ) {
     return postDialog(
-      context: context,
-      title: 'Delete draft ${widget.index + 1}?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete draft',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      onTapActiveButton: () =>
-          ref.read(postDraftsProvider.notifier).deleteDraftById(
-                context,
-                widget.post.draftId,
-                widget.index,
-              ),
-    );
+        context: context,
+        title: 'Delete draft ${widget.index + 1}?',
+        description: 'Proceed with caution as this action is '
+            'irreversible.',
+        onTapSkipButton: context.pop,
+        activeButtonText: 'Delete draft',
+        activeButtonLoading: false,
+        skipButtonLoading: false,
+        skipText: 'Cancel',
+        onTapActiveButton: () async {
+          final result =
+              await ref.read(postDraftsProvider.notifier).deleteDraftById(
+                    widget.post,
+                    widget.index,
+                  );
+          if (result) {
+            TToastMessages.successToast(
+              'Your draft has been deleted.',
+            );
+          }
+          if (context.mounted) context.pop();
+          if (ref.read(postDraftsProvider).isEmpty) {
+            if (context.mounted) context.pop();
+          }
+        });
   }
 }

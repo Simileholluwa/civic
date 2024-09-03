@@ -21,6 +21,9 @@ class TToastMessages {
       type: ToastificationType.error,
       style: ToastificationStyle.flat,
       alignment: Alignment.bottomCenter,
+      borderSide: const BorderSide(
+        color: Colors.red,
+      ),
     );
   }
 
@@ -39,9 +42,11 @@ class TToastMessages {
         seconds: 5,
       ),
       type: ToastificationType.info,
-      style: ToastificationStyle.minimal,
+      style: ToastificationStyle.flat,
       alignment: Alignment.bottomCenter,
-      borderSide: BorderSide.none,
+      borderSide: const BorderSide(
+        color: Colors.blue,
+      ),
     );
   }
 
@@ -60,9 +65,11 @@ class TToastMessages {
         seconds: 5,
       ),
       type: ToastificationType.success,
-      style: ToastificationStyle.minimal,
+      style: ToastificationStyle.flat,
       alignment: Alignment.bottomCenter,
-      borderSide: BorderSide.none,
+      borderSide: const BorderSide(
+        color: Colors.green,
+      ),
     );
   }
 

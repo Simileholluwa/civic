@@ -28,7 +28,7 @@ class UserRecordEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       );
-      await session.caches.local.put(
+      await session.caches.localPrio.put(
         cacheKey,
         userRecord!,
         lifetime: Duration(

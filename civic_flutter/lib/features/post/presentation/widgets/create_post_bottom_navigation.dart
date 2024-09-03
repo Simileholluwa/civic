@@ -1,17 +1,13 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/integer_provider.dart';
-import 'package:civic_flutter/core/widgets/content_dialog.dart';
+import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/custom_tooltip_shape.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/widgets/text_counter.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'media_options.dart';
@@ -19,10 +15,7 @@ import 'media_options.dart';
 class CreatePostBottomNavigation extends ConsumerStatefulWidget {
   const CreatePostBottomNavigation({
     super.key,
-    required this.postText,
   });
-
-  final String postText;
 
   @override
   ConsumerState<CreatePostBottomNavigation> createState() =>
@@ -70,8 +63,6 @@ class _CreatePostBottomNavigationState
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(mediaProvider.notifier);
-    final canSaveDraft = ref.watch(mediaProvider).isNotEmpty ||
-        ref.watch(textLengthProvider) > 0;
     return SizedBox(
       height: 105,
       child: Column(
@@ -152,19 +143,9 @@ class _CreatePostBottomNavigationState
                       width: TSizes.xs,
                     ),
                     IconButton(
-                      onPressed:
-                          !canSaveDraft ? null : () => saveDraftDialog(context),
-                      icon: Icon(
-                        Iconsax.folder_add5,
-                        size: 27,
-                        color: !canSaveDraft ? null : TColors.primary,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.xs,
-                    ),
-                    IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        TToastMessages.successToast('Hi');
+                      },
                       icon: const Icon(
                         Icons.timer,
                         size: 27,
@@ -253,7 +234,8 @@ class _CreatePostBottomNavigationState
                   ),
                   child: Consumer(builder: (context, ref, child) {
                     return TextCounter(
-                      currentTextLength: ref.watch(textLengthProvider),
+                      currentTextLength:
+                          ref.watch(postTextProvider.notifier).getLength(),
                       maxLength: 2500,
                     );
                   }),
@@ -263,50 +245,6 @@ class _CreatePostBottomNavigationState
           ),
         ],
       ),
-    );
-  }
-
-  Future<Widget?> saveDraftDialog(BuildContext context) {
-    return postDialog(
-      context: context,
-      title: 'Save post as draft?',
-      description: 'Draft post will be saved in drafts for '
-          'a maximum of 10 days.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Save draft',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      onTapActiveButton: () {
-        final media = ref.watch(mediaProvider);
-        final videoUrl = media.isEmpty
-            ? ''
-            : THelperFunctions.isVideo(media.first)
-                ? media.first
-                : '';
-        final imageUrls = media.isEmpty
-            ? <String>[]
-            : THelperFunctions.isImage(media.first)
-                ? media
-                : <String>[];
-        ref.read(postDraftsProvider.notifier).saveDraftPost(
-              context,
-              DraftPost(
-                draftId: DateTime.now().millisecondsSinceEpoch,
-                postType: THelperFunctions.determinePostType(
-                  text: widget.postText,
-                  pickedImages: imageUrls,
-                  pickedVideo: videoUrl,
-                ),
-                text: widget.postText,
-                imageUrls: imageUrls,
-                videoUrl: videoUrl,
-                taggedUsers: [],
-                latitude: 0,
-                longitude: 0,
-                createdAt: DateTime.now(),
-              ),
-            );
-      },
     );
   }
 }

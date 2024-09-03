@@ -55,10 +55,7 @@ class Media extends _$Media {
           return;
         }
       }
-      state = [video.path];
-      ref.read(mediaVideoPlayerProvider)
-        ..setVolume(0)
-        ..play();
+      setVideo(video.path);
     }
   }
 
@@ -148,40 +145,52 @@ class Media extends _$Media {
 @riverpod
 class MediaVideoPlayer extends _$MediaVideoPlayer {
   @override
-  Raw<VideoPlayerController> build() {
-    final videoFile = File(
-      ref.watch(mediaProvider).first,
-    );
+  Raw<VideoPlayerController?> build() {
+    if (ref.watch(mediaProvider).isNotEmpty &&
+        THelperFunctions.isVideo(ref.watch(mediaProvider).first)) {
+      final videoFile = File(
+        ref.watch(mediaProvider).first,
+      );
 
-    final player = VideoPlayerController?.file(videoFile)
-      ..initialize().then((_) {
-        state.setVolume(0);
-        state.play();
-        ref.notifyListeners();
-      });
+      final player = VideoPlayerController?.file(videoFile)
+        ..initialize().then((_) {
+          state?.setVolume(0);
+          state?.play();
+          ref.notifyListeners();
+        });
 
-    return player;
+      return player;
+    } else {
+      return null;
+    }
   }
 
   void pausePlay() {
-    if (state.value.isPlaying) {
-      state.pause();
-    } else {
-      state.play();
+    if (state != null) {
+      if (state!.value.isPlaying) {
+        state!.pause();
+      } else {
+        state!.play();
+      }
+      ref.notifyListeners();
     }
-    ref.notifyListeners();
   }
 
   void muteUnmute() {
-    if (state.value.volume > 0) {
-      state.setVolume(0);
-    } else {
-      state.setVolume(1);
+    if (state != null) {
+      if (state!.value.volume > 0) {
+        state!.setVolume(0);
+      } else {
+        state!.setVolume(1);
+      }
+      ref.notifyListeners();
     }
-    ref.notifyListeners();
   }
 
   void dispose() {
-    state.dispose();
+    if (state != null) {
+      state!.dispose();
+      ref.notifyListeners();
+    }
   }
 }

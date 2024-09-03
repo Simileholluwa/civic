@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/widgets/decorating_dot.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/image_post.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,11 +16,9 @@ class CreatePostWidget extends ConsumerStatefulWidget {
   const CreatePostWidget({
     super.key,
     required this.post,
-    required this.textController,
   });
 
   final Post post;
-  final TextEditingController textController;
 
   @override
   ConsumerState<CreatePostWidget> createState() => _CreatePostWidgetState();
@@ -27,17 +26,12 @@ class CreatePostWidget extends ConsumerStatefulWidget {
 
 class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
   late Post post;
-  late TextEditingController _textController;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       post = widget.post;
-      _textController = widget.textController;
-      if (widget.post.text.isNotEmpty) {
-        _textController.text = widget.post.text;
-      }
     });
   }
 
@@ -159,7 +153,7 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
             ),
           ),
           TextFormField(
-            controller: _textController,
+            controller: ref.watch(postTextProvider),
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   //color: Colors.transparent,
                   fontSize: 17,

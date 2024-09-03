@@ -9,7 +9,7 @@ part 'api_client_provider.g.dart';
 @riverpod
 Client client(ClientRef ref) {
   return Client(
-    'http://192.168.210.235:8080/',
+    'http://192.168.1.235:8080/',
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();
 }
@@ -27,22 +27,3 @@ EmailAuthController authEmail(AuthEmailRef ref) {
     ref.read(clientProvider).modules.auth,
   );
 }
-
-// final clientProvider = Provider<Client>((ref) {
-//   return Client(
-//     'http://192.168.210.235:8080/',
-//     authenticationKeyManager: FlutterAuthenticationKeyManager(),
-//   )..connectivityMonitor = FlutterConnectivityMonitor();
-// });
-
-// final sessionProvider = Provider<SessionManager>((ref) {
-//   return SessionManager(
-//     caller: ref.read(clientProvider).modules.auth,
-//   );
-// });
-
-// final authEmailProvider = Provider<EmailAuthController>((ref) {
-//   return EmailAuthController(
-//     ref.read(clientProvider).modules.auth,
-//   );
-// });

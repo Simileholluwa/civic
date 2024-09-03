@@ -70,6 +70,8 @@ dependencies:
   flutter_zoom_drawer:
   dotted_border:
   uuid:
+  path_provider:
+  path:
   expandable_text: ^2.3.0
 
 dev_dependencies:

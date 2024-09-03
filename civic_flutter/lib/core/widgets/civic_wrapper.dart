@@ -211,6 +211,7 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
           ],
         ),
         body: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
             widget.navigatorShell,
             Visibility(

@@ -10,13 +10,3 @@ class PageChanged extends _$PageChanged {
     state = index;
   }
 }
-
-@riverpod
-class TextLength extends _$TextLength {
-  @override
-  int build() => 0;
-
-  void getTextLength(int length) {
-    state = length;
-  }
-}

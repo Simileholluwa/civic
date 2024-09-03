@@ -11,7 +11,7 @@ migrate:
 	cd civic_server && serverpod create-migration --force
 
 connect_adb:
-	adb connect 192.168.210.212
+	adb connect 192.168.1.245
 
 run_app:
 	cd civic_flutter && flutter run

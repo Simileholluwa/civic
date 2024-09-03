@@ -8,7 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
-  const FeedScreen({super.key});
+  const FeedScreen({
+    required this.sendPost,
+    super.key,
+  });
+  final VoidCallback? sendPost;
 
   @override
   ConsumerState<FeedScreen> createState() => _FeedScreenState();
@@ -33,6 +37,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    if (widget.sendPost != null) {
+      Future.delayed(
+        Duration.zero,
+        () => widget.sendPost!(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -111,7 +121,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
             ),
             child: CircleAvatar(
               radius: 18,
-              backgroundColor: isDark ? TColors.dark : TColors.light,
+              backgroundColor: TColors.primary,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: CachedNetworkImage(

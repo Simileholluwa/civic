@@ -14,7 +14,12 @@ class FeedRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (_, __) => const FeedScreen(),
+        builder: (_, state) {
+          final sendPost = state.extra as VoidCallback?;
+          return FeedScreen(
+            sendPost: sendPost,
+          );
+        },
       ),
       GoRoute(
         path: PostDetailScreen.route(),

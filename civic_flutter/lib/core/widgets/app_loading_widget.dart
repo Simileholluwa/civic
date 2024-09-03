@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class AppLoadingWidget extends StatelessWidget {
   const AppLoadingWidget({
     required this.backgroundColor,
+    this.size = 100,
     super.key,
   });
 
   final Color backgroundColor;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class AppLoadingWidget extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                height: 100,
-                width: 100,
+                height: size,
+                width: size,
                 child: CircularProgressIndicator(
                   color: TColors.primary,
                   backgroundColor: backgroundColor,
@@ -36,8 +38,8 @@ class AppLoadingWidget extends StatelessWidget {
                   ),
                   child: Image.asset(
                     TImageTexts.appLogo2,
-                    width: 60,
-                    height: 60,
+                    width: size - 30,
+                    height: size - 30,
                   ),
                 ),
               ),
