@@ -13,57 +13,58 @@ import 'protocol.dart' as _i2;
 
 abstract class DraftPost implements _i1.SerializableModel {
   DraftPost._({
-    required this.draftId,
+    this.draftId,
     required this.postType,
     required this.text,
-    required this.imageUrls,
-    required this.videoUrl,
+    required this.imagesPath,
+    required this.videoPath,
     required this.taggedUsers,
     required this.latitude,
     required this.longitude,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory DraftPost({
-    required int draftId,
+    int? draftId,
     required _i2.PostType postType,
     required String text,
-    required List<String> imageUrls,
-    required String videoUrl,
+    required List<String> imagesPath,
+    required String videoPath,
     required List<String> taggedUsers,
     required double latitude,
     required double longitude,
-    required DateTime createdAt,
+    DateTime? createdAt,
   }) = _DraftPostImpl;
 
   factory DraftPost.fromJson(Map<String, dynamic> jsonSerialization) {
     return DraftPost(
-      draftId: jsonSerialization['draftId'] as int,
+      draftId: jsonSerialization['draftId'] as int?,
       postType: _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
       text: jsonSerialization['text'] as String,
-      imageUrls: (jsonSerialization['imageUrls'] as List)
+      imagesPath: (jsonSerialization['imagesPath'] as List)
           .map((e) => e as String)
           .toList(),
-      videoUrl: jsonSerialization['videoUrl'] as String,
+      videoPath: jsonSerialization['videoPath'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
           .map((e) => e as String)
           .toList(),
       latitude: (jsonSerialization['latitude'] as num).toDouble(),
       longitude: (jsonSerialization['longitude'] as num).toDouble(),
-      createdAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      createdAt: jsonSerialization['createdAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
   }
 
-  int draftId;
+  int? draftId;
 
   _i2.PostType postType;
 
   String text;
 
-  List<String> imageUrls;
+  List<String> imagesPath;
 
-  String videoUrl;
+  String videoPath;
 
   List<String> taggedUsers;
 
@@ -71,14 +72,14 @@ abstract class DraftPost implements _i1.SerializableModel {
 
   double longitude;
 
-  DateTime createdAt;
+  DateTime? createdAt;
 
   DraftPost copyWith({
     int? draftId,
     _i2.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<String>? imagesPath,
+    String? videoPath,
     List<String>? taggedUsers,
     double? latitude,
     double? longitude,
@@ -87,15 +88,15 @@ abstract class DraftPost implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'draftId': draftId,
+      if (draftId != null) 'draftId': draftId,
       'postType': postType.toJson(),
       'text': text,
-      'imageUrls': imageUrls.toJson(),
-      'videoUrl': videoUrl,
+      'imagesPath': imagesPath.toJson(),
+      'videoPath': videoPath,
       'taggedUsers': taggedUsers.toJson(),
       'latitude': latitude,
       'longitude': longitude,
-      'createdAt': createdAt.toJson(),
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -105,23 +106,25 @@ abstract class DraftPost implements _i1.SerializableModel {
   }
 }
 
+class _Undefined {}
+
 class _DraftPostImpl extends DraftPost {
   _DraftPostImpl({
-    required int draftId,
+    int? draftId,
     required _i2.PostType postType,
     required String text,
-    required List<String> imageUrls,
-    required String videoUrl,
+    required List<String> imagesPath,
+    required String videoPath,
     required List<String> taggedUsers,
     required double latitude,
     required double longitude,
-    required DateTime createdAt,
+    DateTime? createdAt,
   }) : super._(
           draftId: draftId,
           postType: postType,
           text: text,
-          imageUrls: imageUrls,
-          videoUrl: videoUrl,
+          imagesPath: imagesPath,
+          videoPath: videoPath,
           taggedUsers: taggedUsers,
           latitude: latitude,
           longitude: longitude,
@@ -130,26 +133,26 @@ class _DraftPostImpl extends DraftPost {
 
   @override
   DraftPost copyWith({
-    int? draftId,
+    Object? draftId = _Undefined,
     _i2.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<String>? imagesPath,
+    String? videoPath,
     List<String>? taggedUsers,
     double? latitude,
     double? longitude,
-    DateTime? createdAt,
+    Object? createdAt = _Undefined,
   }) {
     return DraftPost(
-      draftId: draftId ?? this.draftId,
+      draftId: draftId is int? ? draftId : this.draftId,
       postType: postType ?? this.postType,
       text: text ?? this.text,
-      imageUrls: imageUrls ?? this.imageUrls.clone(),
-      videoUrl: videoUrl ?? this.videoUrl,
+      imagesPath: imagesPath ?? this.imagesPath.clone(),
+      videoPath: videoPath ?? this.videoPath,
       taggedUsers: taggedUsers ?? this.taggedUsers.clone(),
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      createdAt: createdAt ?? this.createdAt,
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
     );
   }
 }

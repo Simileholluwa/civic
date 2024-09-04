@@ -85,7 +85,7 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
                 index: index,
               );
             case PostType.video:
-              ref.watch(mediaProvider.notifier).setVideo(data[index].videoUrl);
+              ref.watch(mediaProvider.notifier).setVideo(data[index].videoPath);
               return PostWidget(
                 post: data[index],
                 hasVideo: true,

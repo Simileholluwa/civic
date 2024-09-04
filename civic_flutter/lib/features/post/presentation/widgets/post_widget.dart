@@ -48,7 +48,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         .difference(
           DateTime.fromMillisecondsSinceEpoch(
             int.parse(
-              widget.post.createdAt.millisecondsSinceEpoch.toString(),
+              widget.post.createdAt!.millisecondsSinceEpoch.toString(),
             ),
           ),
         )
@@ -108,12 +108,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       ref.read(postTextProvider.notifier).reset();
                       if (widget.hasVideo) {
                         ref.read(mediaProvider.notifier).setVideo(
-                              widget.post.videoUrl,
+                              widget.post.videoPath,
                             );
                       }
                       if (widget.hasImage) {
                         ref.read(mediaProvider.notifier).setDraftImage(
-                              widget.post.imageUrls,
+                              widget.post.imagesPath,
                             );
                       }
                       if (widget.hasText) {
@@ -178,7 +178,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           if (widget.hasImage)
             ImagePost(
               showImageOptions: false,
-              images: widget.post.imageUrls,
+              images: widget.post.imagesPath,
               height: 350,
               padding: 0,
             ),

@@ -60,8 +60,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'postType',
           columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'protocol:PostType?',
+          isNullable: false,
+          dartType: 'protocol:PostType',
         ),
         _i2.ColumnDefinition(
           name: 'text',

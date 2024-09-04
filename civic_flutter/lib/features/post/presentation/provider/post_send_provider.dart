@@ -25,19 +25,17 @@ class SendPost extends _$SendPost {
   ) async {
     final savePost = ref.read(savePostProvider);
     final draftPost = DraftPost(
-      draftId: DateTime.now().millisecondsSinceEpoch,
       postType: THelperFunctions.determinePostType(
         text: post.text,
         pickedImages: post.imageUrls,
         pickedVideo: post.videoUrl,
       ),
       text: post.text,
-      imageUrls: post.imageUrls,
-      videoUrl: post.videoUrl,
+      imagesPath: post.imageUrls,
+      videoPath: post.videoUrl,
       taggedUsers: post.taggedUsers,
       latitude: post.latitude,
       longitude: post.latitude,
-      createdAt: DateTime.now(),
     );
     final saveResult = await savePost(
       SavePostParams(
@@ -79,19 +77,17 @@ class SendPost extends _$SendPost {
           isVideo ? 'videos' : 'images',
         );
     final draftPost = DraftPost(
-      draftId: DateTime.now().millisecondsSinceEpoch,
       postType: THelperFunctions.determinePostType(
         text: text,
         pickedImages: imagePath,
         pickedVideo: videoPath,
       ),
       text: text,
-      imageUrls: imagePath,
-      videoUrl: videoPath,
+      imagesPath: imagePath,
+      videoPath: videoPath,
       taggedUsers: taggedUsers,
       latitude: latitude,
       longitude: latitude,
-      createdAt: DateTime.now(),
     );
     return result.fold((error) async {
       log(error);
@@ -147,7 +143,6 @@ class SendPost extends _$SendPost {
       }
       final postToSend = Post(
         ownerId: currentUser.userInfo!.id!,
-        owner: currentUser,
         text: text,
         postType: postType,
         imageUrls: isVideo ? [] : result,
@@ -164,7 +159,6 @@ class SendPost extends _$SendPost {
     } else {
       final postToSend = Post(
         ownerId: currentUser.userInfo!.id!,
-        owner: currentUser,
         text: text,
         postType: postType,
         imageUrls: [],

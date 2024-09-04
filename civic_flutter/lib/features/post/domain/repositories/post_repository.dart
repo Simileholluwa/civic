@@ -13,6 +13,6 @@ abstract class PostRepository {
   Future<Either<String, Post?>> retrieve({required int id});
   Future<Either<Failure, List<DraftPost>>> removeAllDraftPost();
   Future<Either<Failure, void>> deleteDraftPost({
-    required int draftId,
+    required DraftPost draftPost,
   });
 }

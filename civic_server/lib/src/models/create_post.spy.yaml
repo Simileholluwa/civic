@@ -2,7 +2,7 @@ class: Post
 table: post
 fields:
     owner: UserRecord?, relation
-    postType: PostType?
+    postType: PostType
     text: String
     imageUrls: List<String>
     videoUrl: String

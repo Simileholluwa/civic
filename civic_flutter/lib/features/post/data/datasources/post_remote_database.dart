@@ -35,6 +35,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
+
       final result = await _client.post
           .save(
             post,

@@ -1,3 +1,4 @@
+import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:serverpod/serverpod.dart';
 
 import 'package:civic_server/src/web/routes/root.dart';
@@ -21,8 +22,8 @@ void run(List<String> args) async {
     authenticationHandler: auth.authenticationHandler,
   );
 
-  // If you are using any future calls, they need to be registered here.
-  // pod.registerFutureCall(ExampleFutureCall(), 'exampleFutureCall');
+  // Future calls
+  pod.registerFutureCall(SendPostFutureCall(), 'sendPostFutureCall');
 
   // Auth
   auth.AuthConfig.set(

@@ -1,10 +1,9 @@
 assets:
   - getUploadDescription:
   - verifyUpload:
-example:
-  - hello:
 post:
   - save:
+  - sendInFuture:
   - retrieve:
   - listPost:
 userNin:

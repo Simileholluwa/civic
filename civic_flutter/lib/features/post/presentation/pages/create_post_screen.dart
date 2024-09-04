@@ -146,7 +146,13 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           ),
           bottomNavigationBar: (data.isLoading || data.hasError)
               ? const SizedBox()
-              : const CreatePostBottomNavigation(),
+              : AnimatedOpacity(
+                  opacity: (data.isLoading || data.hasError) ? 0 : 1,
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  child: const CreatePostBottomNavigation(),
+                ),
           body: data.when(
             data: (post) {
               if (post == null) {
@@ -154,8 +160,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: Text('Post not found'),
                 );
               }
-              return CreatePostWidget(
-                post: post,
+              return AnimatedOpacity(
+                opacity: data.isLoading ? 0 : 1,
+                duration: const Duration(
+                  milliseconds: 300,
+                ),
+                child: CreatePostWidget(
+                  post: post,
+                ),
               );
             },
             error: (error, st) {
@@ -251,8 +263,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                         pickedVideo: videoUrl,
                       ),
                       text: ref.watch(postTextProvider).text,
-                      imageUrls: imageUrls,
-                      videoUrl: videoUrl,
+                      imagesPath: imageUrls,
+                      videoPath: videoUrl,
                       taggedUsers: [],
                       latitude: 0,
                       longitude: 0,

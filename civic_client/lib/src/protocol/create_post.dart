@@ -16,7 +16,7 @@ abstract class Post implements _i1.SerializableModel {
     this.id,
     required this.ownerId,
     this.owner,
-    this.postType,
+    required this.postType,
     required this.text,
     required this.imageUrls,
     required this.videoUrl,
@@ -29,7 +29,7 @@ abstract class Post implements _i1.SerializableModel {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    required _i2.PostType postType,
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
@@ -46,9 +46,7 @@ abstract class Post implements _i1.SerializableModel {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      postType: jsonSerialization['postType'] == null
-          ? null
-          : _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
+      postType: _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
       text: jsonSerialization['text'] as String,
       imageUrls: (jsonSerialization['imageUrls'] as List)
           .map((e) => e as String)
@@ -71,7 +69,7 @@ abstract class Post implements _i1.SerializableModel {
 
   _i2.UserRecord? owner;
 
-  _i2.PostType? postType;
+  _i2.PostType postType;
 
   String text;
 
@@ -103,7 +101,7 @@ abstract class Post implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      if (postType != null) 'postType': postType?.toJson(),
+      'postType': postType.toJson(),
       'text': text,
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
@@ -126,7 +124,7 @@ class _PostImpl extends Post {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    required _i2.PostType postType,
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
@@ -151,7 +149,7 @@ class _PostImpl extends Post {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    Object? postType = _Undefined,
+    _i2.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
@@ -163,7 +161,7 @@ class _PostImpl extends Post {
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      postType: postType is _i2.PostType? ? postType : this.postType,
+      postType: postType ?? this.postType,
       text: text ?? this.text,
       imageUrls: imageUrls ?? this.imageUrls.clone(),
       videoUrl: videoUrl ?? this.videoUrl,

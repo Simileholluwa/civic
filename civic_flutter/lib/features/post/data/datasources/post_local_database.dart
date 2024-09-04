@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 abstract class PostLocalDatabase {
   Future<void> saveDraft({
@@ -11,7 +14,7 @@ abstract class PostLocalDatabase {
   List<DraftPost> retrieveDrafts();
   Future<List<DraftPost>> removeAllDraftPost();
   Future<void> deleteDraftPost({
-    required int draftId,
+    required DraftPost draftPost,
   });
 }
 
@@ -45,9 +48,43 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   }) async {
     try {
       final drafts = await clearExpiredDrafts();
+      var savedImagesPath = <String>[];
+      var savedVideoPath = '';
+      final appDir = await getApplicationDocumentsDirectory();
+      final directory = Directory('${appDir.path}/drafts');
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (draftPost.imagesPath.isNotEmpty) {
+        for (var i = 0; i < draftPost.imagesPath.length; i++) {
+          final ext = path.extension(draftPost.imagesPath[i]);
+          final fileName = '${draftPost.draftId}$i$ext';
+          final savedFile = File(
+            path.join(directory.path, fileName),
+          );
+          final copy = await File(draftPost.imagesPath[i]).copy(savedFile.path);
+          savedImagesPath.add(copy.path);
+        }
+      }
+      if (draftPost.videoPath.isNotEmpty) {
+        final ext = path.extension(draftPost.videoPath);
+        final fileName = '${draftPost.draftId}$ext';
+        final savedFile = File(
+          path.join(directory.path, fileName),
+        );
+        final copy = await File(draftPost.videoPath).copy(savedFile.path);
+        savedVideoPath = copy.path;
+      }
 
       if (drafts.length < 10) {
-        drafts.add(draftPost);
+        drafts.add(
+          draftPost.copyWith(
+            draftId: DateTime.now().millisecondsSinceEpoch,
+            createdAt: DateTime.now(),
+            imagesPath: savedImagesPath,
+            videoPath: savedVideoPath,
+          ),
+        );
         final jsonString = jsonEncode(
           drafts.map((draft) => draft.toJson()).toList(),
         );
@@ -68,7 +105,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
                 .difference(
                   DateTime.fromMillisecondsSinceEpoch(
                     int.parse(
-                      draft.createdAt.millisecondsSinceEpoch.toString(),
+                      draft.createdAt!.millisecondsSinceEpoch.toString(),
                     ),
                   ),
                 )
@@ -83,17 +120,34 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
 
   @override
   Future<void> deleteDraftPost({
-    required int draftId,
+    required DraftPost draftPost,
   }) async {
     try {
       final drafts = retrieveDrafts();
 
-      drafts.removeWhere((draft) => draft.draftId == draftId);
+      drafts.removeWhere((draft) => draft.draftId == draftPost.draftId);
 
       final draftsJson = jsonEncode(
         drafts.map((draft) => draft.toJson()).toList(),
       );
+
       await _prefs.setString('postsDraft', draftsJson);
+
+      if (draftPost.videoPath.isNotEmpty) {
+        final videoFile = File(draftPost.videoPath);
+        if (videoFile.existsSync()) {
+          videoFile.deleteSync();
+        }
+      }
+
+      if (draftPost.imagesPath.isNotEmpty) {
+        for (final imgPath in draftPost.imagesPath) {
+          final imageFile = File(imgPath);
+          if (imageFile.existsSync()) {
+            imageFile.deleteSync();
+          }
+        }
+      }
     } catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
@@ -103,6 +157,11 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   Future<List<DraftPost>> removeAllDraftPost() async {
     try {
       await _prefs.remove('postsDraft');
+      final appDir = await getApplicationDocumentsDirectory();
+      final directory = Directory('${appDir.path}/drafts');
+      if (!await directory.exists()) {
+        await directory.delete(recursive: true);
+      }
 
       final drafts = retrieveDrafts();
       return drafts;

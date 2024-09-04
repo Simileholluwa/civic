@@ -129,10 +129,10 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, void>> deleteDraftPost({
-    required int draftId,
+    required DraftPost draftPost,
   }) async {
     try {
-      final result = await _localDatabase.deleteDraftPost(draftId: draftId);
+      final result = await _localDatabase.deleteDraftPost(draftPost: draftPost);
       return Right(result);
     } on CacheException catch (e) {
       return Left(

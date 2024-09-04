@@ -1,11 +1,11 @@
 class: DraftPost
 fields:
-    draftId: int
+    draftId: int?
     postType: PostType
     text: String
-    imageUrls: List<String>
-    videoUrl: String
+    imagesPath: List<String>
+    videoPath: String
     taggedUsers: List<String>
     latitude: double
     longitude: double
-    createdAt: DateTime
+    createdAt: DateTime?

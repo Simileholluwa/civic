@@ -28,6 +28,18 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  Future<void> sendInFuture(
+    Session session,
+    Post post,
+    DateTime dateTime,
+  ) async {
+    await session.serverpod.futureCallAtTime(
+      'sendPostFutureCall',
+      post,
+      dateTime,
+    );
+  }
+
   Future<Post?> retrieve(
     Session session,
     int id,

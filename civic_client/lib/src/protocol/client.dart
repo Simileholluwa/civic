@@ -39,20 +39,6 @@ class EndpointAssets extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
-class EndpointExample extends _i1.EndpointRef {
-  EndpointExample(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'example';
-
-  _i2.Future<String> hello(String name) => caller.callServerEndpoint<String>(
-        'example',
-        'hello',
-        {'name': name},
-      );
-}
-
-/// {@category Endpoint}
 class EndpointPost extends _i1.EndpointRef {
   EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
@@ -64,6 +50,19 @@ class EndpointPost extends _i1.EndpointRef {
         'post',
         'save',
         {'post': post},
+      );
+
+  _i2.Future<void> sendInFuture(
+    _i3.Post post,
+    DateTime dateTime,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'sendInFuture',
+        {
+          'post': post,
+          'dateTime': dateTime,
+        },
       );
 
   _i2.Future<_i3.Post?> retrieve(int id) =>
@@ -170,7 +169,6 @@ class Client extends _i1.ServerpodClient {
           onSucceededCall: onSucceededCall,
         ) {
     assets = EndpointAssets(this);
-    example = EndpointExample(this);
     post = EndpointPost(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
@@ -178,8 +176,6 @@ class Client extends _i1.ServerpodClient {
   }
 
   late final EndpointAssets assets;
-
-  late final EndpointExample example;
 
   late final EndpointPost post;
 
@@ -192,7 +188,6 @@ class Client extends _i1.ServerpodClient {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'assets': assets,
-        'example': example,
         'post': post,
         'userNin': userNin,
         'userRecord': userRecord,

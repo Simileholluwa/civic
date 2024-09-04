@@ -10,13 +10,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/assets_endpoint.dart' as _i2;
-import '../endpoints/example_endpoint.dart' as _i3;
-import '../endpoints/post_endpoint.dart' as _i4;
-import '../endpoints/user_nin_endpoint.dart' as _i5;
-import '../endpoints/user_record_endpoint.dart' as _i6;
-import 'package:civic_server/src/generated/create_post.dart' as _i7;
-import 'package:civic_server/src/generated/user_record.dart' as _i8;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i9;
+import '../endpoints/post_endpoint.dart' as _i3;
+import '../endpoints/user_nin_endpoint.dart' as _i4;
+import '../endpoints/user_record_endpoint.dart' as _i5;
+import 'package:civic_server/src/generated/create_post.dart' as _i6;
+import 'package:civic_server/src/generated/user_record.dart' as _i7;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i8;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -28,25 +27,19 @@ class Endpoints extends _i1.EndpointDispatch {
           'assets',
           null,
         ),
-      'example': _i3.ExampleEndpoint()
-        ..initialize(
-          server,
-          'example',
-          null,
-        ),
-      'post': _i4.PostEndpoint()
+      'post': _i3.PostEndpoint()
         ..initialize(
           server,
           'post',
           null,
         ),
-      'userNin': _i5.UserNinEndpoint()
+      'userNin': _i4.UserNinEndpoint()
         ..initialize(
           server,
           'userNin',
           null,
         ),
-      'userRecord': _i6.UserRecordEndpoint()
+      'userRecord': _i5.UserRecordEndpoint()
         ..initialize(
           server,
           'userRecord',
@@ -95,30 +88,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    connectors['example'] = _i1.EndpointConnector(
-      name: 'example',
-      endpoint: endpoints['example']!,
-      methodConnectors: {
-        'hello': _i1.MethodConnector(
-          name: 'hello',
-          params: {
-            'name': _i1.ParameterDescription(
-              name: 'name',
-              type: _i1.getType<String>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['example'] as _i3.ExampleEndpoint).hello(
-            session,
-            params['name'],
-          ),
-        )
-      },
-    );
     connectors['post'] = _i1.EndpointConnector(
       name: 'post',
       endpoint: endpoints['post']!,
@@ -128,7 +97,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i7.Post>(),
+              type: _i1.getType<_i6.Post>(),
               nullable: false,
             )
           },
@@ -136,9 +105,33 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i4.PostEndpoint).save(
+              (endpoints['post'] as _i3.PostEndpoint).save(
             session,
             params['post'],
+          ),
+        ),
+        'sendInFuture': _i1.MethodConnector(
+          name: 'sendInFuture',
+          params: {
+            'post': _i1.ParameterDescription(
+              name: 'post',
+              type: _i1.getType<_i6.Post>(),
+              nullable: false,
+            ),
+            'dateTime': _i1.ParameterDescription(
+              name: 'dateTime',
+              type: _i1.getType<DateTime>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i3.PostEndpoint).sendInFuture(
+            session,
+            params['post'],
+            params['dateTime'],
           ),
         ),
         'retrieve': _i1.MethodConnector(
@@ -154,7 +147,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i4.PostEndpoint).retrieve(
+              (endpoints['post'] as _i3.PostEndpoint).retrieve(
             session,
             params['id'],
           ),
@@ -177,7 +170,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i4.PostEndpoint).listPost(
+              (endpoints['post'] as _i3.PostEndpoint).listPost(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -202,7 +195,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userNin'] as _i5.UserNinEndpoint).findNinDetails(
+              (endpoints['userNin'] as _i4.UserNinEndpoint).findNinDetails(
             session,
             params['ninNumber'],
           ),
@@ -218,7 +211,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i8.UserRecord>(),
+              type: _i1.getType<_i7.UserRecord>(),
               nullable: false,
             )
           },
@@ -226,7 +219,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
                   .saveUserRecord(
             session,
             params['userRecord'],
@@ -239,7 +232,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i6.UserRecordEndpoint).me(session),
+              (endpoints['userRecord'] as _i5.UserRecordEndpoint).me(session),
         ),
         'checkIfNewUser': _i1.MethodConnector(
           name: 'checkIfNewUser',
@@ -254,7 +247,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
                   .checkIfNewUser(
             session,
             params['email'],
@@ -267,11 +260,11 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i6.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i5.UserRecordEndpoint)
                   .fetchAllUsernames(session),
         ),
       },
     );
-    modules['serverpod_auth'] = _i9.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i8.Endpoints()..initializeEndpoints(server);
   }
 }
