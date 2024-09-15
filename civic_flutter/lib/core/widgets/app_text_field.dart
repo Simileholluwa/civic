@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +17,7 @@ class AppTextField extends StatelessWidget {
     this.enabled = true,
     this.suffixIcon,
     this.autoFocus = false,
+    this.onTap,
     this.onSave,
     super.key,
   });
@@ -37,6 +37,7 @@ class AppTextField extends StatelessWidget {
   final IconButton? suffixIcon;
   final bool autoFocus;
   final void Function(String?)? onSave;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +66,7 @@ class AppTextField extends StatelessWidget {
           enabled: enabled,
           readOnly: readOnly,
           onSaved: onSave,
+          onTap: onTap,
           textCapitalization: TextCapitalization.sentences,
           decoration: InputDecoration(
             prefixIcon: showPrefixIcon

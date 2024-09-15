@@ -1,43 +1,56 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/retrieve_post_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
+import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_detail_provider.g.dart';
 
 @riverpod
 Future<Post?> postDetail(
-    PostDetailRef ref, int id, bool isDraft, DraftPost? draftPost) async {
+  PostDetailRef ref,
+  int id,
+  bool isDraft,
+  DraftPost? draftPost,
+) async {
   if (id == 0) {
-    final currentUser = await ref.read(clientProvider).userRecord.me();
-    if (currentUser == null ||
-        currentUser.userInfo == null ||
-        currentUser.userInfo?.id == null) return null;
+    final me = ref.read(meUseCaseProvider);
+    final result = await me(NoParams());
+    return result.fold((error) {
+      return null;
+    }, (currentUser) async {
+      await AppLocalStorage.to.setInt(
+        'userId',
+        currentUser.userInfo!.id!,
+      );
 
-    if (isDraft && draftPost != null) {
+      if (isDraft && draftPost != null) {
+        return Post(
+          ownerId: currentUser.userInfo!.id!,
+          postType: draftPost.postType,
+          owner: currentUser,
+          text: draftPost.text,
+          imageUrls: draftPost.imagesPath,
+          videoUrl: draftPost.videoPath,
+          taggedUsers: draftPost.taggedUsers,
+          latitude: draftPost.latitude,
+          longitude: draftPost.longitude,
+        );
+      }
       return Post(
         ownerId: currentUser.userInfo!.id!,
-        postType: draftPost.postType,
+        postType: PostType.none,
         owner: currentUser,
-        text: draftPost.text,
-        imageUrls: draftPost.imagesPath,
-        videoUrl: draftPost.videoPath,
-        taggedUsers: draftPost.taggedUsers,
-        latitude: draftPost.latitude,
-        longitude: draftPost.longitude,
+        text: '',
+        imageUrls: [],
+        videoUrl: '',
+        taggedUsers: [],
+        latitude: 0.0,
+        longitude: 0.0,
       );
-    }
-    return Post(
-      ownerId: currentUser.userInfo!.id!,
-      postType: PostType.none,
-      owner: currentUser,
-      text: '',
-      imageUrls: [],
-      videoUrl: '',
-      taggedUsers: [],
-      latitude: 0.0,
-      longitude: 0.0,
-    );
+    });
   } else {
     final retrievePost = ref.read(retrievePostProvider);
     final result = await retrievePost(

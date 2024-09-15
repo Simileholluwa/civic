@@ -1,6 +1,7 @@
 class: DraftPost
 fields:
     draftId: int?
+    ownerId: int? 
     postType: PostType
     text: String
     imagesPath: List<String>

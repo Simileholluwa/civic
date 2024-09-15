@@ -2,7 +2,6 @@
 
 import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/views/media_picker.dart';
 import 'package:civic_flutter/core/widgets/civic_wrapper.dart';
@@ -12,7 +11,6 @@ import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
-import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -46,10 +44,6 @@ GoRouter router(RouterRef ref) {
                 FlutterNativeSplash.remove();
                 return AppRoutes.auth;
               } else {
-                ref.read(authUserProvider.notifier).setValue(true);
-                if (currentUser.verifiedAccount! == true) {
-                  ref.read(verifiedUserProvider.notifier).setValue(true);
-                }
                 FlutterNativeSplash.remove();
                 return FeedRoutes.namespace;
               }
@@ -236,15 +230,6 @@ GoRouter router(RouterRef ref) {
             draftPost: data['draftPost'],
           );
         },
-        routes: [
-          GoRoute(
-            path: AppRoutes.postDrafts,
-            name: AppRoutes.postDrafts,
-            builder: (context, state) {
-              return const DraftsScreen();
-            },
-          ),
-        ],
       ),
 
       GoRoute(

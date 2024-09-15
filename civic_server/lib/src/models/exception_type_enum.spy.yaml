@@ -1,0 +1,4 @@
+enum: ExceptionTypes
+values:
+    - error
+    - info

@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class TDeviceUtils {
   static void hideKeyboard(BuildContext context) {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).unfocus();
   }
 
   static Future<void> setStatusBarColor(Color color) async {

@@ -328,8 +328,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final userRecord = UserRecord(
         userInfoId: result.id!,
         verifiedAccount: false,
-        politicalStatus: politicalStatus.name,
+        politicalStatus: politicalStatus,
         bio: bio,
+        followers: [],
+        following: [],
       );
 
       await _client.userRecord.saveUserRecord(userRecord);

@@ -1,14 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/widgets/decorating_dot.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/image_post.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/user_info_widget.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,7 +34,6 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     final controller = ref.watch(mediaProvider.notifier);
     final media = ref.watch(mediaProvider);
     return SingleChildScrollView(
@@ -50,107 +46,15 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
           const SizedBox(
             height: TSizes.md,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: TSizes.md,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: TColors.primary,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
-                      fit: BoxFit.cover,
-                      height: 50,
-                      width: 50,
-                      errorWidget: (context, url, child) {
-                        return const Center(
-                          child: Icon(
-                            CupertinoIcons.person_alt_circle_fill,
-                            size: 47,
-                            color: TColors.textWhite,
-                          ),
-                        );
-                      },
-                      progressIndicatorBuilder: (context, url, progress) {
-                        return const Center(
-                          child: Icon(
-                            CupertinoIcons.person_alt_circle_fill,
-                            size: 47,
-                            color: TColors.textWhite,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: TSizes.md,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        post.owner!.userInfo!.fullName ??
-                            post.owner!.userInfo!.userName!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(
-                              fontSize: 20,
-                              color: isDark ? TColors.textWhite : TColors.dark,
-                            ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${THelperFunctions.humanizeNumber(post.owner!.followers!.length)} followers',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                  fontSize: 13,
-                                ),
-                          ),
-                          const SizedBox(
-                            width: TSizes.sm,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: TSizes.sm,
-                            ),
-                            child: DecoratingDot(
-                              color: Theme.of(context).hintColor,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: TSizes.sm,
-                          ),
-                          Text(
-                            '${THelperFunctions.humanizeNumber(post.owner!.following!.length)} following',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                  fontSize: 13,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+          UserInfoWidget(
+            imageUrl:
+                'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
+            fullName: post.owner!.userInfo!.fullName,
+            userName: post.owner!.userInfo!.userName!,
+            followers: post.owner!.followers.length,
+            following: post.owner!.following.length,
+            onTap: () {},
+            isVerified: post.owner!.verifiedAccount,
           ),
           TextFormField(
             controller: ref.watch(postTextProvider),

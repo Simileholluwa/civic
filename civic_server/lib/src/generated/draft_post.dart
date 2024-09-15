@@ -16,6 +16,7 @@ abstract class DraftPost
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
   DraftPost._({
     this.draftId,
+    this.ownerId,
     required this.postType,
     required this.text,
     required this.imagesPath,
@@ -28,6 +29,7 @@ abstract class DraftPost
 
   factory DraftPost({
     int? draftId,
+    int? ownerId,
     required _i2.PostType postType,
     required String text,
     required List<String> imagesPath,
@@ -41,6 +43,7 @@ abstract class DraftPost
   factory DraftPost.fromJson(Map<String, dynamic> jsonSerialization) {
     return DraftPost(
       draftId: jsonSerialization['draftId'] as int?,
+      ownerId: jsonSerialization['ownerId'] as int?,
       postType: _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
       text: jsonSerialization['text'] as String,
       imagesPath: (jsonSerialization['imagesPath'] as List)
@@ -60,6 +63,8 @@ abstract class DraftPost
 
   int? draftId;
 
+  int? ownerId;
+
   _i2.PostType postType;
 
   String text;
@@ -78,6 +83,7 @@ abstract class DraftPost
 
   DraftPost copyWith({
     int? draftId,
+    int? ownerId,
     _i2.PostType? postType,
     String? text,
     List<String>? imagesPath,
@@ -91,6 +97,7 @@ abstract class DraftPost
   Map<String, dynamic> toJson() {
     return {
       if (draftId != null) 'draftId': draftId,
+      if (ownerId != null) 'ownerId': ownerId,
       'postType': postType.toJson(),
       'text': text,
       'imagesPath': imagesPath.toJson(),
@@ -106,6 +113,7 @@ abstract class DraftPost
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (draftId != null) 'draftId': draftId,
+      if (ownerId != null) 'ownerId': ownerId,
       'postType': postType.toJson(),
       'text': text,
       'imagesPath': imagesPath.toJson(),
@@ -128,6 +136,7 @@ class _Undefined {}
 class _DraftPostImpl extends DraftPost {
   _DraftPostImpl({
     int? draftId,
+    int? ownerId,
     required _i2.PostType postType,
     required String text,
     required List<String> imagesPath,
@@ -138,6 +147,7 @@ class _DraftPostImpl extends DraftPost {
     DateTime? createdAt,
   }) : super._(
           draftId: draftId,
+          ownerId: ownerId,
           postType: postType,
           text: text,
           imagesPath: imagesPath,
@@ -151,6 +161,7 @@ class _DraftPostImpl extends DraftPost {
   @override
   DraftPost copyWith({
     Object? draftId = _Undefined,
+    Object? ownerId = _Undefined,
     _i2.PostType? postType,
     String? text,
     List<String>? imagesPath,
@@ -162,6 +173,7 @@ class _DraftPostImpl extends DraftPost {
   }) {
     return DraftPost(
       draftId: draftId is int? ? draftId : this.draftId,
+      ownerId: ownerId is int? ? ownerId : this.ownerId,
       postType: postType ?? this.postType,
       text: text ?? this.text,
       imagesPath: imagesPath ?? this.imagesPath.clone(),

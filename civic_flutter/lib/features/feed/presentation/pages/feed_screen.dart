@@ -5,7 +5,6 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({
@@ -105,22 +104,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Iconsax.search_normal,
-              size: 30,
-            ),
-          ),
-          const SizedBox(
-            width: TSizes.md,
-          ),
           Padding(
             padding: const EdgeInsets.only(
               right: TSizes.md,
             ),
             child: CircleAvatar(
-              radius: 18,
+              radius: 16,
               backgroundColor: TColors.primary,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
@@ -128,8 +117,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                   imageUrl:
                       'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
                   fit: BoxFit.cover,
-                  height: 36,
-                  width: 36,
+                  height: 32,
+                  width: 32,
                   errorWidget: (context, url, child) {
                     return const Icon(
                       CupertinoIcons.person_alt_circle_fill,

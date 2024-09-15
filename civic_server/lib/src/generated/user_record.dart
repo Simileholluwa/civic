@@ -10,40 +10,41 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
+import 'protocol.dart' as _i3;
 import 'package:serverpod_serialization/serverpod_serialization.dart';
 
 abstract class UserRecord extends _i1.TableRow
     implements _i1.ProtocolSerialization {
   UserRecord._({
     int? id,
-    this.bio,
+    required this.bio,
     this.nin,
     this.phoneNumber,
     required this.userInfoId,
     this.userInfo,
-    this.verifiedAccount,
-    this.following,
-    this.followers,
-    this.politicalStatus,
+    required this.verifiedAccount,
+    required this.following,
+    required this.followers,
+    required this.politicalStatus,
   }) : super(id);
 
   factory UserRecord({
     int? id,
-    String? bio,
+    required String bio,
     String? nin,
     String? phoneNumber,
     required int userInfoId,
     _i2.UserInfo? userInfo,
-    bool? verifiedAccount,
-    List<String>? following,
-    List<String>? followers,
-    String? politicalStatus,
+    required bool verifiedAccount,
+    required List<int> following,
+    required List<int> followers,
+    required _i3.PoliticalStatus politicalStatus,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
     return UserRecord(
       id: jsonSerialization['id'] as int?,
-      bio: jsonSerialization['bio'] as String?,
+      bio: jsonSerialization['bio'] as String,
       nin: jsonSerialization['nin'] as String?,
       phoneNumber: jsonSerialization['phoneNumber'] as String?,
       userInfoId: jsonSerialization['userInfoId'] as int,
@@ -51,14 +52,15 @@ abstract class UserRecord extends _i1.TableRow
           ? null
           : _i2.UserInfo.fromJson(
               (jsonSerialization['userInfo'] as Map<String, dynamic>)),
-      verifiedAccount: jsonSerialization['verifiedAccount'] as bool?,
-      following: (jsonSerialization['following'] as List?)
-          ?.map((e) => e as String)
+      verifiedAccount: jsonSerialization['verifiedAccount'] as bool,
+      following: (jsonSerialization['following'] as List)
+          .map((e) => e as int)
           .toList(),
-      followers: (jsonSerialization['followers'] as List?)
-          ?.map((e) => e as String)
+      followers: (jsonSerialization['followers'] as List)
+          .map((e) => e as int)
           .toList(),
-      politicalStatus: jsonSerialization['politicalStatus'] as String?,
+      politicalStatus: _i3.PoliticalStatus.fromJson(
+          (jsonSerialization['politicalStatus'] as int)),
     );
   }
 
@@ -66,7 +68,7 @@ abstract class UserRecord extends _i1.TableRow
 
   static const db = UserRecordRepository._();
 
-  String? bio;
+  String bio;
 
   String? nin;
 
@@ -76,13 +78,13 @@ abstract class UserRecord extends _i1.TableRow
 
   _i2.UserInfo? userInfo;
 
-  bool? verifiedAccount;
+  bool verifiedAccount;
 
-  List<String>? following;
+  List<int> following;
 
-  List<String>? followers;
+  List<int> followers;
 
-  String? politicalStatus;
+  _i3.PoliticalStatus politicalStatus;
 
   @override
   _i1.Table get table => t;
@@ -95,23 +97,23 @@ abstract class UserRecord extends _i1.TableRow
     int? userInfoId,
     _i2.UserInfo? userInfo,
     bool? verifiedAccount,
-    List<String>? following,
-    List<String>? followers,
-    String? politicalStatus,
+    List<int>? following,
+    List<int>? followers,
+    _i3.PoliticalStatus? politicalStatus,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      if (bio != null) 'bio': bio,
+      'bio': bio,
       if (nin != null) 'nin': nin,
       if (phoneNumber != null) 'phoneNumber': phoneNumber,
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJson(),
-      if (verifiedAccount != null) 'verifiedAccount': verifiedAccount,
-      if (following != null) 'following': following?.toJson(),
-      if (followers != null) 'followers': followers?.toJson(),
-      if (politicalStatus != null) 'politicalStatus': politicalStatus,
+      'verifiedAccount': verifiedAccount,
+      'following': following.toJson(),
+      'followers': followers.toJson(),
+      'politicalStatus': politicalStatus.toJson(),
     };
   }
 
@@ -119,15 +121,15 @@ abstract class UserRecord extends _i1.TableRow
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      if (bio != null) 'bio': bio,
+      'bio': bio,
       if (nin != null) 'nin': nin,
       if (phoneNumber != null) 'phoneNumber': phoneNumber,
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJsonForProtocol(),
-      if (verifiedAccount != null) 'verifiedAccount': verifiedAccount,
-      if (following != null) 'following': following?.toJson(),
-      if (followers != null) 'followers': followers?.toJson(),
-      if (politicalStatus != null) 'politicalStatus': politicalStatus,
+      'verifiedAccount': verifiedAccount,
+      'following': following.toJson(),
+      'followers': followers.toJson(),
+      'politicalStatus': politicalStatus.toJson(),
     };
   }
 
@@ -166,15 +168,15 @@ class _Undefined {}
 class _UserRecordImpl extends UserRecord {
   _UserRecordImpl({
     int? id,
-    String? bio,
+    required String bio,
     String? nin,
     String? phoneNumber,
     required int userInfoId,
     _i2.UserInfo? userInfo,
-    bool? verifiedAccount,
-    List<String>? following,
-    List<String>? followers,
-    String? politicalStatus,
+    required bool verifiedAccount,
+    required List<int> following,
+    required List<int> followers,
+    required _i3.PoliticalStatus politicalStatus,
   }) : super._(
           id: id,
           bio: bio,
@@ -191,32 +193,28 @@ class _UserRecordImpl extends UserRecord {
   @override
   UserRecord copyWith({
     Object? id = _Undefined,
-    Object? bio = _Undefined,
+    String? bio,
     Object? nin = _Undefined,
     Object? phoneNumber = _Undefined,
     int? userInfoId,
     Object? userInfo = _Undefined,
-    Object? verifiedAccount = _Undefined,
-    Object? following = _Undefined,
-    Object? followers = _Undefined,
-    Object? politicalStatus = _Undefined,
+    bool? verifiedAccount,
+    List<int>? following,
+    List<int>? followers,
+    _i3.PoliticalStatus? politicalStatus,
   }) {
     return UserRecord(
       id: id is int? ? id : this.id,
-      bio: bio is String? ? bio : this.bio,
+      bio: bio ?? this.bio,
       nin: nin is String? ? nin : this.nin,
       phoneNumber: phoneNumber is String? ? phoneNumber : this.phoneNumber,
       userInfoId: userInfoId ?? this.userInfoId,
       userInfo:
           userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
-      verifiedAccount:
-          verifiedAccount is bool? ? verifiedAccount : this.verifiedAccount,
-      following:
-          following is List<String>? ? following : this.following?.clone(),
-      followers:
-          followers is List<String>? ? followers : this.followers?.clone(),
-      politicalStatus:
-          politicalStatus is String? ? politicalStatus : this.politicalStatus,
+      verifiedAccount: verifiedAccount ?? this.verifiedAccount,
+      following: following ?? this.following.clone(),
+      followers: followers ?? this.followers.clone(),
+      politicalStatus: politicalStatus ?? this.politicalStatus,
     );
   }
 }
@@ -251,9 +249,10 @@ class UserRecordTable extends _i1.Table {
       'followers',
       this,
     );
-    politicalStatus = _i1.ColumnString(
+    politicalStatus = _i1.ColumnEnum(
       'politicalStatus',
       this,
+      _i1.EnumSerialization.byIndex,
     );
   }
 
@@ -273,7 +272,7 @@ class UserRecordTable extends _i1.Table {
 
   late final _i1.ColumnSerializable followers;
 
-  late final _i1.ColumnString politicalStatus;
+  late final _i1.ColumnEnum<_i3.PoliticalStatus> politicalStatus;
 
   _i2.UserInfoTable get userInfo {
     if (_userInfo != null) return _userInfo!;

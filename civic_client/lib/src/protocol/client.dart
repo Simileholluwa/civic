@@ -11,9 +11,9 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:civic_client/src/protocol/create_post.dart' as _i3;
-import 'package:civic_client/src/protocol/post_list.dart' as _i4;
-import 'package:civic_client/src/protocol/user_nin_record.dart' as _i5;
-import 'package:civic_client/src/protocol/user_record.dart' as _i6;
+import 'package:civic_client/src/protocol/user_record.dart' as _i4;
+import 'package:civic_client/src/protocol/post_list.dart' as _i5;
+import 'package:civic_client/src/protocol/user_nin_record.dart' as _i6;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
 import 'protocol.dart' as _i8;
 
@@ -52,6 +52,20 @@ class EndpointPost extends _i1.EndpointRef {
         {'post': post},
       );
 
+  _i2.Future<List<_i4.UserRecord>> tagUsers() =>
+      caller.callServerEndpoint<List<_i4.UserRecord>>(
+        'post',
+        'tagUsers',
+        {},
+      );
+
+  _i2.Future<List<_i4.UserRecord>> searchUsers(String query) =>
+      caller.callServerEndpoint<List<_i4.UserRecord>>(
+        'post',
+        'searchUsers',
+        {'query': query},
+      );
+
   _i2.Future<void> sendInFuture(
     _i3.Post post,
     DateTime dateTime,
@@ -72,11 +86,11 @@ class EndpointPost extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<_i4.PostList> listPost({
+  _i2.Future<_i5.PostList> listPost({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i4.PostList>(
+      caller.callServerEndpoint<_i5.PostList>(
         'post',
         'listPost',
         {
@@ -93,8 +107,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i5.UserNinRecord?> findNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i5.UserNinRecord?>(
+  _i2.Future<_i6.UserNinRecord?> findNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i6.UserNinRecord?>(
         'userNin',
         'findNinDetails',
         {'ninNumber': ninNumber},
@@ -108,15 +122,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i6.UserRecord userRecord) =>
+  _i2.Future<void> saveUserRecord(_i4.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUserRecord',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i6.UserRecord?> me() =>
-      caller.callServerEndpoint<_i6.UserRecord?>(
+  _i2.Future<_i4.UserRecord?> me() =>
+      caller.callServerEndpoint<_i4.UserRecord?>(
         'userRecord',
         'me',
         {},

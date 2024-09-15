@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
@@ -27,6 +28,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   List<DraftPost> retrieveDrafts() {
     try {
       final postsDraft = _prefs.getString('postsDraft');
+      final ownerId = _prefs.getInt('userId');
       if (postsDraft != null) {
         final draftList = jsonDecode(postsDraft) as List<dynamic>;
         return draftList
@@ -34,6 +36,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
               (postDraft) =>
                   DraftPost.fromJson(postDraft as Map<String, dynamic>),
             )
+            .where((draft) => draft.ownerId == ownerId)
             .toList();
       }
       return <DraftPost>[];
@@ -48,6 +51,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   }) async {
     try {
       final drafts = await clearExpiredDrafts();
+      final ownerId = _prefs.getInt('userId');
       var savedImagesPath = <String>[];
       var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
@@ -80,6 +84,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
         drafts.add(
           draftPost.copyWith(
             draftId: DateTime.now().millisecondsSinceEpoch,
+            ownerId: ownerId,
             createdAt: DateTime.now(),
             imagesPath: savedImagesPath,
             videoPath: savedVideoPath,

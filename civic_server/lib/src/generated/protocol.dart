@@ -15,18 +15,25 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'create_post.dart' as _i4;
 import 'draft_post.dart' as _i5;
 import 'example.dart' as _i6;
-import 'political_status_enum.dart' as _i7;
-import 'post_list.dart' as _i8;
-import 'post_type_enums.dart' as _i9;
-import 'user_nin_record.dart' as _i10;
-import 'user_record.dart' as _i11;
-import 'protocol.dart' as _i12;
+import 'exception_type_enum.dart' as _i7;
+import 'political_status_enum.dart' as _i8;
+import 'post_exception.dart' as _i9;
+import 'post_list.dart' as _i10;
+import 'post_type_enums.dart' as _i11;
+import 'user_exception.dart' as _i12;
+import 'user_nin_record.dart' as _i13;
+import 'user_record.dart' as _i14;
+import 'protocol.dart' as _i15;
+import 'package:civic_server/src/generated/user_record.dart' as _i16;
 export 'create_post.dart';
 export 'draft_post.dart';
 export 'example.dart';
+export 'exception_type_enum.dart';
 export 'political_status_enum.dart';
+export 'post_exception.dart';
 export 'post_list.dart';
 export 'post_type_enums.dart';
+export 'user_exception.dart';
 export 'user_nin_record.dart';
 export 'user_record.dart';
 
@@ -285,8 +292,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'bio',
           columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
+          isNullable: false,
+          dartType: 'String',
         ),
         _i2.ColumnDefinition(
           name: 'nin',
@@ -309,26 +316,26 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'verifiedAccount',
           columnType: _i2.ColumnType.boolean,
-          isNullable: true,
-          dartType: 'bool?',
+          isNullable: false,
+          dartType: 'bool',
         ),
         _i2.ColumnDefinition(
           name: 'following',
           columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
+          isNullable: false,
+          dartType: 'List<int>',
         ),
         _i2.ColumnDefinition(
           name: 'followers',
           columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
+          isNullable: false,
+          dartType: 'List<int>',
         ),
         _i2.ColumnDefinition(
           name: 'politicalStatus',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'protocol:PoliticalStatus',
         ),
       ],
       foreignKeys: [
@@ -392,20 +399,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i6.Example) {
       return _i6.Example.fromJson(data) as T;
     }
-    if (t == _i7.PoliticalStatus) {
-      return _i7.PoliticalStatus.fromJson(data) as T;
+    if (t == _i7.ExceptionTypes) {
+      return _i7.ExceptionTypes.fromJson(data) as T;
     }
-    if (t == _i8.PostList) {
-      return _i8.PostList.fromJson(data) as T;
+    if (t == _i8.PoliticalStatus) {
+      return _i8.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i9.PostType) {
-      return _i9.PostType.fromJson(data) as T;
+    if (t == _i9.PostException) {
+      return _i9.PostException.fromJson(data) as T;
     }
-    if (t == _i10.UserNinRecord) {
-      return _i10.UserNinRecord.fromJson(data) as T;
+    if (t == _i10.PostList) {
+      return _i10.PostList.fromJson(data) as T;
     }
-    if (t == _i11.UserRecord) {
-      return _i11.UserRecord.fromJson(data) as T;
+    if (t == _i11.PostType) {
+      return _i11.PostType.fromJson(data) as T;
+    }
+    if (t == _i12.UserException) {
+      return _i12.UserException.fromJson(data) as T;
+    }
+    if (t == _i13.UserNinRecord) {
+      return _i13.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i14.UserRecord) {
+      return _i14.UserRecord.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Post?>()) {
       return (data != null ? _i4.Post.fromJson(data) : null) as T;
@@ -416,38 +432,44 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i6.Example?>()) {
       return (data != null ? _i6.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.PoliticalStatus?>()) {
-      return (data != null ? _i7.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.ExceptionTypes?>()) {
+      return (data != null ? _i7.ExceptionTypes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.PostList?>()) {
-      return (data != null ? _i8.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.PoliticalStatus?>()) {
+      return (data != null ? _i8.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.PostType?>()) {
-      return (data != null ? _i9.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.PostException?>()) {
+      return (data != null ? _i9.PostException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.UserNinRecord?>()) {
-      return (data != null ? _i10.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.PostList?>()) {
+      return (data != null ? _i10.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.UserRecord?>()) {
-      return (data != null ? _i11.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.PostType?>()) {
+      return (data != null ? _i11.PostType.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i12.UserException?>()) {
+      return (data != null ? _i12.UserException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i13.UserNinRecord?>()) {
+      return (data != null ? _i13.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i14.UserRecord?>()) {
+      return (data != null ? _i14.UserRecord.fromJson(data) : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i12.Post>) {
-      return (data as List).map((e) => deserialize<_i12.Post>(e)).toList()
+    if (t == List<_i15.Post>) {
+      return (data as List).map((e) => deserialize<_i15.Post>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as dynamic;
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as dynamic;
+    if (t == List<_i16.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i16.UserRecord>(e)).toList()
+          as dynamic;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
@@ -478,19 +500,28 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i6.Example) {
       return 'Example';
     }
-    if (data is _i7.PoliticalStatus) {
+    if (data is _i7.ExceptionTypes) {
+      return 'ExceptionTypes';
+    }
+    if (data is _i8.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i8.PostList) {
+    if (data is _i9.PostException) {
+      return 'PostException';
+    }
+    if (data is _i10.PostList) {
       return 'PostList';
     }
-    if (data is _i9.PostType) {
+    if (data is _i11.PostType) {
       return 'PostType';
     }
-    if (data is _i10.UserNinRecord) {
+    if (data is _i12.UserException) {
+      return 'UserException';
+    }
+    if (data is _i13.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i11.UserRecord) {
+    if (data is _i14.UserRecord) {
       return 'UserRecord';
     }
     return super.getClassNameForObject(data);
@@ -511,20 +542,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'Example') {
       return deserialize<_i6.Example>(data['data']);
     }
+    if (data['className'] == 'ExceptionTypes') {
+      return deserialize<_i7.ExceptionTypes>(data['data']);
+    }
     if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i7.PoliticalStatus>(data['data']);
+      return deserialize<_i8.PoliticalStatus>(data['data']);
+    }
+    if (data['className'] == 'PostException') {
+      return deserialize<_i9.PostException>(data['data']);
     }
     if (data['className'] == 'PostList') {
-      return deserialize<_i8.PostList>(data['data']);
+      return deserialize<_i10.PostList>(data['data']);
     }
     if (data['className'] == 'PostType') {
-      return deserialize<_i9.PostType>(data['data']);
+      return deserialize<_i11.PostType>(data['data']);
+    }
+    if (data['className'] == 'UserException') {
+      return deserialize<_i12.UserException>(data['data']);
     }
     if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i10.UserNinRecord>(data['data']);
+      return deserialize<_i13.UserNinRecord>(data['data']);
     }
     if (data['className'] == 'UserRecord') {
-      return deserialize<_i11.UserRecord>(data['data']);
+      return deserialize<_i14.UserRecord>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -546,10 +586,10 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i4.Post:
         return _i4.Post.t;
-      case _i10.UserNinRecord:
-        return _i10.UserNinRecord.t;
-      case _i11.UserRecord:
-        return _i11.UserRecord.t;
+      case _i13.UserNinRecord:
+        return _i13.UserNinRecord.t;
+      case _i14.UserRecord:
+        return _i14.UserRecord.t;
     }
     return null;
   }

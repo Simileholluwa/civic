@@ -3,14 +3,17 @@ import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/providers/assets_service_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/usecases/usecase.dart';
+import 'package:civic_flutter/features/post/domain/usecases/save_in_future_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/scheduled_datetime_provider.dart';
+import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_send_provider.g.dart';
@@ -18,25 +21,46 @@ part 'post_send_provider.g.dart';
 @riverpod
 class SendPost extends _$SendPost {
   @override
-  Post? build() => null;
+  void build() {}
+
+  Future<void> saveFailedPostAsDraft(
+    List<String> imagePath,
+    String videoPath,
+    String text,
+    double latitude,
+    double longitude,
+    List<String> taggedUsers,
+    String errorMessage,
+  ) async {
+    final draftPost = DraftPost(
+      postType: THelperFunctions.determinePostType(
+        text: text,
+        pickedImages: imagePath,
+        pickedVideo: videoPath,
+      ),
+      text: text,
+      imagesPath: imagePath,
+      videoPath: videoPath,
+      taggedUsers: taggedUsers,
+      latitude: latitude,
+      longitude: latitude,
+    );
+    final draftPostProvider = ref.read(postDraftsProvider.notifier);
+    final result = await draftPostProvider.saveDraftPost(
+      draftPost,
+    );
+    if (result) {
+      TToastMessages.errorToast(
+        '$errorMessage. Your post was saved to drafts.',
+      );
+    }
+  }
 
   Future<Post?> sendPostWithMedia(
     Post post,
   ) async {
     final savePost = ref.read(savePostProvider);
-    final draftPost = DraftPost(
-      postType: THelperFunctions.determinePostType(
-        text: post.text,
-        pickedImages: post.imageUrls,
-        pickedVideo: post.videoUrl,
-      ),
-      text: post.text,
-      imagesPath: post.imageUrls,
-      videoPath: post.videoUrl,
-      taggedUsers: post.taggedUsers,
-      latitude: post.latitude,
-      longitude: post.latitude,
-    );
+
     final saveResult = await savePost(
       SavePostParams(
         post,
@@ -44,15 +68,8 @@ class SendPost extends _$SendPost {
     );
     return saveResult.fold((error) async {
       log(error.message);
-
-      final result = await ref.read(postDraftsProvider.notifier).saveDraftPost(
-            draftPost,
-          );
-      if (result) {
-        TToastMessages.errorToast(
-          '${error.message}. Your post was saved to drafts.',
-        );
-      }
+      await saveFailedPostAsDraft(post.imageUrls, post.videoUrl, post.text,
+          post.latitude, post.latitude, post.taggedUsers, error.message);
       return null;
     }, (post) {
       TToastMessages.successToast(
@@ -76,34 +93,54 @@ class SendPost extends _$SendPost {
           'posts',
           isVideo ? 'videos' : 'images',
         );
-    final draftPost = DraftPost(
-      postType: THelperFunctions.determinePostType(
-        text: text,
-        pickedImages: imagePath,
-        pickedVideo: videoPath,
-      ),
-      text: text,
-      imagesPath: imagePath,
-      videoPath: videoPath,
-      taggedUsers: taggedUsers,
-      latitude: latitude,
-      longitude: latitude,
-    );
+
     return result.fold((error) async {
       log(error);
+      await saveFailedPostAsDraft(
+        imagePath,
+        videoPath,
+        text,
+        latitude,
+        latitude,
+        taggedUsers,
+        error,
+      );
 
-      final result = await ref.read(postDraftsProvider.notifier).saveDraftPost(
-            draftPost,
-          );
-      if (result) {
-        TToastMessages.errorToast(
-          '$error. Your post was saved as draft.',
-        );
-      }
       return null;
     }, (mediaUrls) {
       return mediaUrls;
     });
+  }
+
+  Future<void> saveInFuture(
+    Post post,
+    DateTime dateTime,
+  ) async {
+    final saveInFuture = ref.read(saveInFutureProvider);
+    final scheduledDateTimeProvider = ref.read(
+      postScheduledDateTimeProvider.notifier,
+    );
+    final result = await saveInFuture(
+      SaveInFutureParams(post, dateTime),
+    );
+    return result.fold(
+      (error) async {
+        await saveFailedPostAsDraft(
+          post.imageUrls,
+          post.videoUrl,
+          post.text,
+          post.latitude,
+          post.latitude,
+          post.taggedUsers,
+          error.message,
+        );
+      },
+      (r) {
+        TToastMessages.successToast(
+          'Your post will be sent on ${scheduledDateTimeProvider.humanizeDateTimeForSend()}',
+        );
+      },
+    );
   }
 
   Future<bool> sendPost({
@@ -116,62 +153,99 @@ class SendPost extends _$SendPost {
     required List<String> taggedUsers,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
-    final currentUser = await ref.read(clientProvider).userRecord.me();
-    if (currentUser == null ||
-        currentUser.userInfo == null ||
-        currentUser.userInfo?.id == null) {
-      TToastMessages.errorToast(
-        'No user found. Please login to continue.',
-      );
-      return false;
-    }
-    if (imagePath.isNotEmpty || videoPath.isNotEmpty) {
-      final isVideo = videoPath.isNotEmpty;
-      final result = await sendMedia(
-        imagePath,
-        videoPath,
-        text,
-        latitude,
-        longitude,
-        taggedUsers,
-      );
-      if (result == null) {
-        state = null;
+    final me = ref.read(meUseCaseProvider);
+    final userRecord = await me(NoParams());
 
+    return userRecord.fold(
+      (error) async {
+        log(error.message);
+        TToastMessages.errorToast(
+          error.message,
+        );
+        await saveFailedPostAsDraft(
+          imagePath,
+          videoPath,
+          text,
+          latitude,
+          latitude,
+          taggedUsers,
+          error.message,
+        );
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         return false;
-      }
-      final postToSend = Post(
-        ownerId: currentUser.userInfo!.id!,
-        text: text,
-        postType: postType,
-        imageUrls: isVideo ? [] : result,
-        videoUrl: isVideo ? result.first : '',
-        taggedUsers: taggedUsers,
-        latitude: latitude,
-        longitude: longitude,
-      );
-      state = await sendPostWithMedia(
-        postToSend,
-      );
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      return true;
-    } else {
-      final postToSend = Post(
-        ownerId: currentUser.userInfo!.id!,
-        text: text,
-        postType: postType,
-        imageUrls: [],
-        videoUrl: '',
-        taggedUsers: taggedUsers,
-        latitude: latitude,
-        longitude: longitude,
-      );
-      state = await sendPostWithMedia(
-        postToSend,
-      );
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      return true;
-    }
+      },
+      (record) async {
+        final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
+        final scheduledDateTimeProvider = ref.read(
+          postScheduledDateTimeProvider.notifier,
+        );
+        if (imagePath.isNotEmpty || videoPath.isNotEmpty) {
+          final isVideo = videoPath.isNotEmpty;
+          final result = await sendMedia(
+            imagePath,
+            videoPath,
+            text,
+            latitude,
+            longitude,
+            taggedUsers,
+          );
+          if (result == null) {
+            state = null;
+
+            ref.read(sendPostLoadingProvider.notifier).setValue(false);
+            return false;
+          }
+          final postToSend = Post(
+            ownerId: record.id!,
+            text: text,
+            postType: postType,
+            imageUrls: isVideo ? [] : result,
+            videoUrl: isVideo ? result.first : '',
+            taggedUsers: taggedUsers,
+            latitude: latitude,
+            longitude: longitude,
+          );
+          scheduledDateTime == null
+              ? await sendPostWithMedia(
+                  postToSend,
+                )
+              : scheduledDateTimeProvider.canSendLater()
+                  ? await saveInFuture(
+                      postToSend,
+                      scheduledDateTime,
+                    )
+                  : await sendPostWithMedia(
+                      postToSend,
+                    );
+          ref.read(sendPostLoadingProvider.notifier).setValue(false);
+          return true;
+        } else {
+          final postToSend = Post(
+            ownerId: record.userInfo!.id!,
+            text: text,
+            postType: postType,
+            imageUrls: [],
+            videoUrl: '',
+            taggedUsers: taggedUsers,
+            latitude: latitude,
+            longitude: longitude,
+          );
+          scheduledDateTime == null
+              ? await sendPostWithMedia(
+                  postToSend,
+                )
+              : scheduledDateTimeProvider.canSendLater()
+                  ? await saveInFuture(
+                      postToSend,
+                      scheduledDateTime,
+                    )
+                  : await sendPostWithMedia(
+                      postToSend,
+                    );
+          ref.read(sendPostLoadingProvider.notifier).setValue(false);
+          return true;
+        }
+      },
+    );
   }
 }

@@ -4,6 +4,10 @@ import 'package:fpdart/fpdart.dart';
 
 abstract class PostRepository {
   Future<Either<Failure, Post?>> save({required Post post});
+  Future<Either<Failure, void>> saveInFuture({
+    required Post post,
+    required DateTime dateTime,
+  });
   Future<Either<Failure, void>> saveDraft({required DraftPost draftPost});
   Future<Either<Failure, PostList>> listPost({
     required int page,
@@ -14,5 +18,9 @@ abstract class PostRepository {
   Future<Either<Failure, List<DraftPost>>> removeAllDraftPost();
   Future<Either<Failure, void>> deleteDraftPost({
     required DraftPost draftPost,
+  });
+  Future<Either<Failure, List<UserRecord>>> tagUsers();
+  Future<Either<Failure, List<UserRecord>>> searchUsersToTag({
+    required String query,
   });
 }

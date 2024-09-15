@@ -28,13 +28,15 @@ class UserRecordEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       );
-      await session.caches.localPrio.put(
-        cacheKey,
-        userRecord!,
-        lifetime: Duration(
-          days: 1,
-        ),
-      );
+      if (userRecord != null) {
+        await session.caches.localPrio.put(
+          cacheKey,
+          userRecord,
+          lifetime: Duration(
+            days: 1,
+          ),
+        );
+      }
     }
 
     return userRecord;

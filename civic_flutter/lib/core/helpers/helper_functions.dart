@@ -4,7 +4,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/dual_button.dart';
+import 'package:civic_flutter/core/widgets/dual_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';

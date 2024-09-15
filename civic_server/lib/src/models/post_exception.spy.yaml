@@ -1,0 +1,3 @@
+exception: PostException
+fields:
+  message: String

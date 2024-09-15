@@ -64,13 +64,13 @@ class Auth extends _$Auth {
       return;
     }, (userRecord) {
       ref.read(authUserProvider.notifier).setValue(true);
-      if (userRecord != null && userRecord.verifiedAccount!) {
+      if (userRecord != null && userRecord.verifiedAccount) {
         ref.read(verifiedUserProvider.notifier).setValue(true);
         context.goNamed(
           FeedRoutes.namespace,
         );
         return;
-      } else if (userRecord != null && !userRecord.verifiedAccount!) {
+      } else if (userRecord != null && !userRecord.verifiedAccount) {
         context.goNamed(
           AppRoutes.verifyAccount,
         );

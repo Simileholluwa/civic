@@ -1,5 +1,4 @@
-
-import 'package:civic_flutter/features/authentication/presentation/widgets/dual_button.dart';
+import 'package:civic_flutter/core/widgets/dual_button.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -69,13 +68,13 @@ Future<Widget?> uploadProfileImage(
                           ? TColors.dark
                           : TColors.light,
                     ),
-                    child:const CircleAvatar(
-                            radius: 90,
-                            child: Icon(
-                              CupertinoIcons.person_alt_circle,
-                              size: 180,
-                            ),
-                          ),
+                    child: const CircleAvatar(
+                      radius: 90,
+                      child: Icon(
+                        CupertinoIcons.person_alt_circle,
+                        size: 180,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
@@ -106,7 +105,7 @@ Future<Widget?> uploadProfileImage(
                         Visibility(
                           visible: true,
                           child: IconButton(
-                            onPressed: (){},
+                            onPressed: () {},
                             icon: const Icon(
                               Iconsax.edit,
                               size: 27,

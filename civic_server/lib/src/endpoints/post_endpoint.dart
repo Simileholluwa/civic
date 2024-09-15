@@ -1,31 +1,104 @@
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class PostEndpoint extends Endpoint {
   Future<Post?> save(
     Session session,
     Post post,
   ) async {
+    try {
+      final authInfo = await session.authenticated;
+      if (authInfo == null) {
+        throw UserException(
+          message: 'You must be logged in',
+        );
+      }
+      final user = await UserRecord.db.findFirstRow(
+        session,
+        where: (row) => row.userInfoId.equals(authInfo.userId),
+      );
+      if (user == null) return null;
+      if (post.id != null) {
+        if (post.ownerId != user.userInfoId) {
+          throw PostException(
+            message: 'Unauthorised operation',
+          );
+        }
+        return await Post.db.updateRow(session, post);
+      } else {
+        return Post.db.insertRow(
+          session,
+          post.copyWith(
+            ownerId: user.id,
+            owner: user,
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<UserRecord>> tagUsers(
+    Session session,
+  ) async {
     final authInfo = await session.authenticated;
-    if (authInfo == null) return null;
-    final user = await UserRecord.db.findFirstRow(
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+
+    var currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
     );
-    if (user == null) return null;
-    if (post.id != null) {
-      if (post.ownerId != user.userInfoId) return null;
 
-      return await Post.db.updateRow(session, post);
-    } else {
-      return Post.db.insertRow(
+    if (currentUser == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+    var users = await UserRecord.db.find(
+      session,
+      where: (u) => u.userInfo.id.inSet(
+        currentUser.followers.toSet(),
+      ),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (users.length < 20) {
+      var additionalUsers = await UserRecord.db.find(
         session,
-        post.copyWith(
-          ownerId: user.id,
-          owner: user,
+        // limit: 20 - users.length,
+        include: UserRecord.include(
+          userInfo: UserInfo.include(),
         ),
       );
+      users.addAll(additionalUsers);
     }
+
+    print(users);
+
+    return users;
+  }
+
+  Future<List<UserRecord>> searchUsers(Session session, String query) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+    return await UserRecord.db.find(
+      session,
+      where: (u) => u.userInfo.userName.ilike('%$query%'),
+      limit: 20,
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
   }
 
   Future<void> sendInFuture(

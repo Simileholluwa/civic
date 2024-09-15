@@ -10,7 +10,10 @@ import 'package:civic_flutter/features/post/domain/usecases/list_post_use_case.d
 import 'package:civic_flutter/features/post/domain/usecases/retrieve_drafts_post_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/retrieve_post_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_draft_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/save_in_future_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/search_users_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/tag_users_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'post_service_provider.g.dart';
@@ -87,6 +90,27 @@ DeleteAllDraftPostUseCase deleteAllDraftPost(DeleteAllDraftPostRef ref) {
 @riverpod
 DeleteDraftPostUseCase deleteDraftPost(DeleteDraftPostRef ref) {
   return DeleteDraftPostUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+TagUsersUseCase tagUsers(TagUsersRef ref) {
+  return TagUsersUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+SearchUsersToTagUseCase searchUsersToTag(SearchUsersToTagRef ref) {
+  return SearchUsersToTagUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+SaveInFutureUseCase saveInFuture(SaveInFutureRef ref) {
+  return SaveInFutureUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }

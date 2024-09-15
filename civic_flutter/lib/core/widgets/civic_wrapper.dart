@@ -3,6 +3,7 @@ import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
 import 'package:civic_flutter/core/entity/post_options.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/features/post/presentation/provider/scheduled_datetime_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +35,7 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
   void navigate(int index) {
     switch (index) {
       case 0:
+        ref.watch(postScheduledDateTimeProvider.notifier).clearDateTime();
         toggleFab();
         context.push(
           AppRoutes.createPost,

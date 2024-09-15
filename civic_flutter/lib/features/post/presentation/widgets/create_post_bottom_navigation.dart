@@ -1,13 +1,18 @@
+import 'dart:developer';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/custom_tooltip_shape.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/widgets/text_counter.dart';
+import 'package:civic_flutter/features/post/presentation/pages/tag_users_screen.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
+import 'package:civic_flutter/features/post/presentation/provider/scheduled_datetime_provider.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/pick_date_and_time.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/schedule_post_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'media_options.dart';
@@ -63,10 +68,76 @@ class _CreatePostBottomNavigationState
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(mediaProvider.notifier);
+    final scheduledDateTimeProvider =
+        ref.watch(postScheduledDateTimeProvider.notifier);
+    final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
+    log(scheduledDateTimeState.toString());
     return SizedBox(
-      height: 105,
+      height: scheduledDateTimeState == null ? 105 : 155,
       child: Column(
         children: [
+          scheduledDateTimeState == null
+              ? const SizedBox.shrink()
+              : InkWell(
+                  onTap: () async {
+                    await showScheduleBottomSheet(
+                      context,
+                      scheduledDateTimeProvider,
+                    );
+                  },
+                  child: Ink(
+                    padding: const EdgeInsets.only(
+                      left: TSizes.md - 2,
+                      right: TSizes.md,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                    ),
+                    height: 50,
+                    width: double.maxFinite,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.timer,
+                              size: 20,
+                              color: TColors.primary,
+                            ),
+                            const SizedBox(
+                              width: TSizes.sm,
+                            ),
+                            Text(
+                              scheduledDateTimeProvider.humanizeDateTime(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color: TColors.primary,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            scheduledDateTimeProvider.clearDateTime();
+                          },
+                          child: const Icon(
+                            Icons.clear,
+                            size: 20,
+                            color: TColors.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
           InkWell(
             onTap: () {},
             child: Ink(
@@ -121,7 +192,15 @@ class _CreatePostBottomNavigationState
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return const TagUsersScreen();
+                          },
+                        );
+                      },
                       icon: const Icon(
                         Iconsax.tag_user5,
                         size: 27,
@@ -144,7 +223,10 @@ class _CreatePostBottomNavigationState
                     ),
                     IconButton(
                       onPressed: () {
-                        TToastMessages.successToast('Hi');
+                        showScheduleBottomSheet(
+                          context,
+                          scheduledDateTimeProvider,
+                        );
                       },
                       icon: const Icon(
                         Icons.timer,
@@ -232,19 +314,36 @@ class _CreatePostBottomNavigationState
                   padding: const EdgeInsets.only(
                     right: TSizes.sm,
                   ),
-                  child: Consumer(builder: (context, ref, child) {
-                    return TextCounter(
-                      currentTextLength:
-                          ref.watch(postTextProvider.notifier).getLength(),
-                      maxLength: 2500,
-                    );
-                  }),
+                  child: TextCounter(
+                    currentTextLength: ref.watch(postTextProvider).text.length,
+                    maxLength: 2500,
+                  ),
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Future<bool?> showScheduleBottomSheet(
+    BuildContext context,
+    PostScheduledDateTime scheduledDateTimeProvider,
+  ) {
+    return schedulePostSheet(
+      context: context,
+      title: 'Schedule post',
+      description: 'Scheduled post will be sent at the'
+          ' selected date and time.',
+      textController: scheduledDateTimeProvider.textController(),
+      onTextFieldTapped: () async {
+        context.pop();
+        scheduledDateTimeProvider.setDateTime(
+          await pickDateAndTime(context),
+        );
+      },
+      onTapActiveButton: null,
     );
   }
 }

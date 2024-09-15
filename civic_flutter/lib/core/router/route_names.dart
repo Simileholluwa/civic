@@ -25,6 +25,7 @@ class AppRoutes {
   // Content creation
   static const createPost = '/create_post';
   static const postDrafts = 'drafts';
+  static const tagUsers = 'tag_users';
 
   // Media picker
   static const  pickMedia = '/pick_media';

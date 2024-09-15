@@ -37,7 +37,7 @@ class TextCounter extends ConsumerWidget {
                 '${maxLength - currentTextLength}',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: TColors.secondary,
-                      fontSize: 13,
+                      fontSize: 12,
                     ),
               )
             : const SizedBox(),

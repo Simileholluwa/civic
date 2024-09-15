@@ -1,5 +1,4 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
 import 'package:civic_flutter/core/widgets/app_button.dart';
@@ -58,7 +57,7 @@ class _EmailFormState extends ConsumerState<EmailForm> {
                 context: context,
               ),
               child: const Text(
-                TTexts.tContinue,
+                'Get started',
               ),
             ).withLoading(
               loading: ref.watch(checkEmailLoadingProvider),

@@ -3,6 +3,8 @@ assets:
   - verifyUpload:
 post:
   - save:
+  - tagUsers:
+  - searchUsers:
   - sendInFuture:
   - retrieve:
   - listPost:

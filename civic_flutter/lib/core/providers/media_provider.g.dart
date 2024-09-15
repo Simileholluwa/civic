@@ -20,7 +20,7 @@ final mediaProvider = AutoDisposeNotifierProvider<Media, List<String>>.internal(
 );
 
 typedef _$Media = AutoDisposeNotifier<List<String>>;
-String _$mediaVideoPlayerHash() => r'edda2eb12299524ad3d5d46399919286dae274aa';
+String _$mediaVideoPlayerHash() => r'36f612133cda42b00d4245daf3ec7b5a35805608';
 
 /// See also [MediaVideoPlayer].
 @ProviderFor(MediaVideoPlayer)

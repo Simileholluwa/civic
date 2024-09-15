@@ -164,5 +164,49 @@ final deleteDraftPostProvider =
 );
 
 typedef DeleteDraftPostRef = AutoDisposeProviderRef<DeleteDraftPostUseCase>;
+String _$tagUsersHash() => r'6407199a94c75d283fd1be38eb6fdd074b8bcb00';
+
+/// See also [tagUsers].
+@ProviderFor(tagUsers)
+final tagUsersProvider = AutoDisposeProvider<TagUsersUseCase>.internal(
+  tagUsers,
+  name: r'tagUsersProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$tagUsersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TagUsersRef = AutoDisposeProviderRef<TagUsersUseCase>;
+String _$searchUsersToTagHash() => r'5171b0c1002b8072f7250264e0299c2f9499b819';
+
+/// See also [searchUsersToTag].
+@ProviderFor(searchUsersToTag)
+final searchUsersToTagProvider =
+    AutoDisposeProvider<SearchUsersToTagUseCase>.internal(
+  searchUsersToTag,
+  name: r'searchUsersToTagProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$searchUsersToTagHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SearchUsersToTagRef = AutoDisposeProviderRef<SearchUsersToTagUseCase>;
+String _$saveInFutureHash() => r'975e3577929f4bd6bc1c6bcba703df57836eb5f2';
+
+/// See also [saveInFuture].
+@ProviderFor(saveInFuture)
+final saveInFutureProvider = AutoDisposeProvider<SaveInFutureUseCase>.internal(
+  saveInFuture,
+  name: r'saveInFutureProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$saveInFutureHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SaveInFutureRef = AutoDisposeProviderRef<SaveInFutureUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

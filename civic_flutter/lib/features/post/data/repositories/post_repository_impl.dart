@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:civic_flutter/core/errors/failure.dart';
@@ -22,18 +20,6 @@ class PostRepositoryImpl implements PostRepository {
     try {
       final result = await _remoteDatabase.save(post: post);
       return Right(result);
-    } on TimeoutException catch (e) {
-      return Left(
-        Failure(
-          message: e.message ?? 'Request timed out',
-        ),
-      );
-    } on SocketException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
     } on ServerException catch (e) {
       return Left(
         Failure(
@@ -54,18 +40,6 @@ class PostRepositoryImpl implements PostRepository {
         limit: limit,
       );
       return Right(result);
-    } on TimeoutException catch (e) {
-      return Left(
-        Failure(
-          message: e.message ?? 'Request timed out',
-        ),
-      );
-    } on SocketException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
     } on ServerException catch (e) {
       return Left(
         Failure(
@@ -82,14 +56,6 @@ class PostRepositoryImpl implements PostRepository {
         id: id,
       );
       return Right(result);
-    } on TimeoutException catch (e) {
-      return Left(
-        e.message ?? 'Request timed out',
-      );
-    } on SocketException catch (e) {
-      return Left(
-        e.message,
-      );
     } on ServerException catch (e) {
       return Left(
         e.message,
@@ -149,6 +115,58 @@ class PostRepositoryImpl implements PostRepository {
       final result = await _localDatabase.removeAllDraftPost();
       return Right(result);
     } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserRecord>>> tagUsers() async {
+    try {
+      final result = await _remoteDatabase.tagUsers();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserRecord>>> searchUsersToTag({
+    required String query,
+  }) async {
+    try {
+      final result = await _remoteDatabase.searchUsersToTag(
+        query: query,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveInFuture({
+    required Post post,
+    required DateTime dateTime,
+  }) async {
+    try {
+      final result = await _remoteDatabase.saveInFuture(
+        post: post,
+        dateTime: dateTime,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
       return Left(
         Failure(
           message: e.message,

@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/pulsing_circle.dart';
-import 'package:civic_flutter/features/authentication/presentation/widgets/dual_button.dart';
+import 'package:civic_flutter/core/widgets/dual_button.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> postDialog({
@@ -16,82 +14,82 @@ Future<bool?> postDialog({
   required VoidCallback onTapActiveButton,
   required String skipText,
 }) {
-  return showDialog<bool>(
+  return showModalBottomSheet<bool>(
       barrierColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(
-            10,
+            30,
           ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       context: context,
       builder: (context) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Align(
+        return SizedBox(
+          height: 420,
+          child: Center(
             child: Material(
               elevation: 4,
               type: MaterialType.transparency,
               child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
-                ),
                 width: double.maxFinite,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: TSizes.md,
+                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(
-                    TSizes.lg,
-                  ),
-                  border: Border.all(
-                    color: Theme.of(context).dividerColor,
-                  ),
+                  borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(TSizes.lg,),
+                topLeft: Radius.circular(TSizes.lg,),
+              ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(
-                      height: 110,
-                      child: Center(
-                        child: PulsingCircle(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(
+                        height: TSizes.sm + 2,
                       ),
-                    ),
-                    const SizedBox(
-                      height: TSizes.sm + 2,
-                    ),
-                    const Divider(),
-                    const SizedBox(
-                      height: TSizes.sm,
-                    ),
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                    ),
-                    const SizedBox(
-                      height: TSizes.sm,
-                    ),
-                    Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: TSizes.spaceBtwSections,
-                    ),
-                    DualButton(
-                      onTapActiveButton: onTapActiveButton,
-                      activeButtonText: activeButtonText,
-                      activeButtonLoading: activeButtonLoading,
-                      onTapSkipButton: onTapSkipButton,
-                      skipButtonLoading: skipButtonLoading,
-                      skipText: skipText,
-                    ),
-                    const SizedBox(
-                      height: TSizes.sm + 2,
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 110,
+                        child: Center(
+                          child: PulsingCircle(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: TSizes.sm + 2,
+                      ),
+                      const Divider(
+                        indent: TSizes.md,
+                        endIndent: TSizes.md + 4,
+                      ),
+                      const SizedBox(
+                        height: TSizes.sm,
+                      ),
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                      ),
+                      const SizedBox(
+                        height: TSizes.sm,
+                      ),
+                      Text(
+                        description,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: TSizes.spaceBtwSections,
+                      ),
+                      DualButton(
+                        onTapActiveButton: onTapActiveButton,
+                        activeButtonText: activeButtonText,
+                        activeButtonLoading: activeButtonLoading,
+                        onTapSkipButton: onTapSkipButton,
+                        skipButtonLoading: skipButtonLoading,
+                        skipText: skipText,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -3,12 +3,12 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
+import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_detail_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
@@ -47,6 +47,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         widget.draftPost,
       ),
     );
+
     final draftsData = ref.watch(postDraftsProvider);
     final canSendPost = ref.watch(mediaProvider).isNotEmpty ||
         ref.watch(postTextProvider).text.isNotEmpty;
@@ -94,9 +95,15 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   Visibility(
                     visible: draftsData.isNotEmpty,
                     child: TextButton(
-                      onPressed: () => context.push(
-                        '${AppRoutes.createPost}/${AppRoutes.postDrafts}',
-                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return const DraftsScreen();
+                          },
+                        );
+                      },
                       child: Text(
                         'DRAFTS',
                         style:
@@ -144,15 +151,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ),
             ),
           ),
-          bottomNavigationBar: (data.isLoading || data.hasError)
-              ? const SizedBox()
-              : AnimatedOpacity(
-                  opacity: (data.isLoading || data.hasError) ? 0 : 1,
-                  duration: const Duration(
-                    milliseconds: 300,
-                  ),
-                  child: const CreatePostBottomNavigation(),
-                ),
+          bottomNavigationBar:
+              (data.isLoading || data.hasError || data.value == null)
+                  ? const SizedBox()
+                  : const CreatePostBottomNavigation(),
           body: data.when(
             data: (post) {
               if (post == null) {
@@ -160,14 +162,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: Text('Post not found'),
                 );
               }
-              return AnimatedOpacity(
-                opacity: data.isLoading ? 0 : 1,
-                duration: const Duration(
-                  milliseconds: 300,
-                ),
-                child: CreatePostWidget(
-                  post: post,
-                ),
+              return CreatePostWidget(
+                post: post,
               );
             },
             error: (error, st) {
@@ -230,7 +226,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           );
           ref.read(mediaVideoPlayerProvider.notifier).dispose();
         },
-        activeButtonText: 'Save draft',
+        activeButtonText: 'Save as draft',
         activeButtonLoading: false,
         skipButtonLoading: false,
         skipText: "Don't save",
