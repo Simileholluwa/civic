@@ -35,8 +35,7 @@ Future<Post?> postDetail(
           imageUrls: draftPost.imagesPath,
           videoUrl: draftPost.videoPath,
           taggedUsers: draftPost.taggedUsers,
-          latitude: draftPost.latitude,
-          longitude: draftPost.longitude,
+          locations: draftPost.locations,
         );
       }
       return Post(
@@ -47,8 +46,7 @@ Future<Post?> postDetail(
         imageUrls: [],
         videoUrl: '',
         taggedUsers: [],
-        latitude: 0.0,
-        longitude: 0.0,
+        locations: [],
       );
     });
   } else {

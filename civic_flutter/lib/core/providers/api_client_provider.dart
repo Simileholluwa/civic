@@ -9,9 +9,9 @@ part 'api_client_provider.g.dart';
 @riverpod
 Client client(ClientRef ref) {
   return Client(
-    'http://192.168.1.235:8080/',
+    'http://192.168.1.142:8080/',
     connectionTimeout: const Duration(
-      seconds: 60,
+      seconds: 120,
     ),
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();

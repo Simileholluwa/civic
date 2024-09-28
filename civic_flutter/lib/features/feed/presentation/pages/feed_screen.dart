@@ -122,14 +122,14 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                   errorWidget: (context, url, child) {
                     return const Icon(
                       CupertinoIcons.person_alt_circle_fill,
-                      size: 37,
+                      size: 34,
                     );
                   },
                   progressIndicatorBuilder: (context, url, progress) {
                     return const Center(
                       child: Icon(
                         CupertinoIcons.person_alt_circle_fill,
-                        size: 37,
+                        size: 34,
                         color: TColors.textWhite,
                       ),
                     );

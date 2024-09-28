@@ -1,0 +1,5 @@
+class: AWSPlaces
+fields:
+    place: String
+    latitude: double
+    longitude: double

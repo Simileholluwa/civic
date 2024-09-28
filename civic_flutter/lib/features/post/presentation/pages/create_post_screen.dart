@@ -2,6 +2,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
@@ -28,15 +29,104 @@ class CreatePostScreen extends ConsumerStatefulWidget {
     this.draftPost,
   });
 
+  final DraftPost? draftPost;
   final int id;
   final bool isDraft;
-  final DraftPost? draftPost;
 
   @override
   ConsumerState<CreatePostScreen> createState() => _CreatePostScreenState();
 }
 
 class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
+  void sendPost() async {
+    final media = ref.watch(mediaProvider);
+    final videoUrl = media.isEmpty
+        ? ''
+        : THelperFunctions.isVideo(media.first)
+            ? media.first
+            : '';
+    final imageUrls = media.isEmpty
+        ? <String>[]
+        : THelperFunctions.isImage(media.first)
+            ? media
+            : <String>[];
+    await ref.read(sendPostProvider.notifier).sendPost(
+          text: ref.watch(postTextProvider).text,
+          imagePath: imageUrls,
+          videoPath: videoUrl,
+          taggedUsers: [],
+          locations: ref.watch(selectLocationsProvider),
+          postType: THelperFunctions.determinePostType(
+            text: ref.watch(postTextProvider).text,
+            pickedImages: imageUrls,
+            pickedVideo: videoUrl,
+          ),
+        );
+  }
+
+  Future<bool?> saveDraftDialog(
+    BuildContext context,
+  ) =>
+      postDialog(
+        context: context,
+        title: 'Save post as draft?',
+        description: 'Draft post will be saved in drafts for '
+            'a maximum of 10 days.',
+        onTapSkipButton: () {
+          context.go(
+            FeedRoutes.namespace,
+            extra: null,
+          );
+          ref.read(mediaVideoPlayerProvider.notifier).dispose();
+        },
+        activeButtonText: 'Save as draft',
+        activeButtonLoading: false,
+        skipButtonLoading: false,
+        skipText: "Don't save",
+        onTapActiveButton: () async {
+          if (context.mounted) {
+            context.go(
+              FeedRoutes.namespace,
+              extra: null,
+            );
+          }
+          ref.read(mediaVideoPlayerProvider.notifier).dispose();
+          final media = ref.watch(mediaProvider);
+          final videoUrl = media.isEmpty
+              ? ''
+              : THelperFunctions.isVideo(media.first)
+                  ? media.first
+                  : '';
+          final imageUrls = media.isEmpty
+              ? <String>[]
+              : THelperFunctions.isImage(media.first)
+                  ? media
+                  : <String>[];
+          final result =
+              await ref.read(postDraftsProvider.notifier).saveDraftPost(
+                    DraftPost(
+                      draftId: DateTime.now().millisecondsSinceEpoch,
+                      postType: THelperFunctions.determinePostType(
+                        text: ref.watch(postTextProvider).text,
+                        pickedImages: imageUrls,
+                        pickedVideo: videoUrl,
+                      ),
+                      text: ref.watch(postTextProvider).text,
+                      imagesPath: imageUrls,
+                      videoPath: videoUrl,
+                      taggedUsers: [],
+                      locations: ref.watch(selectLocationsProvider),
+                      createdAt: DateTime.now(),
+                    ),
+                  );
+          if (result) {
+            TToastMessages.successToast(
+              'Your post has been saved as draft.',
+            );
+          }
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
@@ -53,6 +143,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         ref.watch(postTextProvider).text.isNotEmpty;
     return PopScope(
       canPop: false,
+      // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop =
@@ -183,95 +274,4 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       ),
     );
   }
-
-  void sendPost() async {
-    final media = ref.watch(mediaProvider);
-    final videoUrl = media.isEmpty
-        ? ''
-        : THelperFunctions.isVideo(media.first)
-            ? media.first
-            : '';
-    final imageUrls = media.isEmpty
-        ? <String>[]
-        : THelperFunctions.isImage(media.first)
-            ? media
-            : <String>[];
-    await ref.read(sendPostProvider.notifier).sendPost(
-          text: ref.watch(postTextProvider).text,
-          imagePath: imageUrls,
-          videoPath: videoUrl,
-          taggedUsers: [],
-          latitude: 0.0,
-          longitude: 0.0,
-          postType: THelperFunctions.determinePostType(
-            text: ref.watch(postTextProvider).text,
-            pickedImages: imageUrls,
-            pickedVideo: videoUrl,
-          ),
-        );
-  }
-
-  Future<bool?> saveDraftDialog(
-    BuildContext context,
-  ) =>
-      postDialog(
-        context: context,
-        title: 'Save post as draft?',
-        description: 'Draft post will be saved in drafts for '
-            'a maximum of 10 days.',
-        onTapSkipButton: () {
-          context.go(
-            FeedRoutes.namespace,
-            extra: null,
-          );
-          ref.read(mediaVideoPlayerProvider.notifier).dispose();
-        },
-        activeButtonText: 'Save as draft',
-        activeButtonLoading: false,
-        skipButtonLoading: false,
-        skipText: "Don't save",
-        onTapActiveButton: () async {
-          if (context.mounted) {
-            context.go(
-              FeedRoutes.namespace,
-              extra: null,
-            );
-          }
-          ref.read(mediaVideoPlayerProvider.notifier).dispose();
-          final media = ref.watch(mediaProvider);
-          final videoUrl = media.isEmpty
-              ? ''
-              : THelperFunctions.isVideo(media.first)
-                  ? media.first
-                  : '';
-          final imageUrls = media.isEmpty
-              ? <String>[]
-              : THelperFunctions.isImage(media.first)
-                  ? media
-                  : <String>[];
-          final result =
-              await ref.read(postDraftsProvider.notifier).saveDraftPost(
-                    DraftPost(
-                      draftId: DateTime.now().millisecondsSinceEpoch,
-                      postType: THelperFunctions.determinePostType(
-                        text: ref.watch(postTextProvider).text,
-                        pickedImages: imageUrls,
-                        pickedVideo: videoUrl,
-                      ),
-                      text: ref.watch(postTextProvider).text,
-                      imagesPath: imageUrls,
-                      videoPath: videoUrl,
-                      taggedUsers: [],
-                      latitude: 0,
-                      longitude: 0,
-                      createdAt: DateTime.now(),
-                    ),
-                  );
-          if (result) {
-            TToastMessages.successToast(
-              'Your post has been saved as draft.',
-            );
-          }
-        },
-      );
 }

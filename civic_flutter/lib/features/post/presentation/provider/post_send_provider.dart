@@ -5,6 +5,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/assets_service_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
+import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_in_future_use_case.dart';
@@ -12,7 +13,6 @@ import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.d
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/scheduled_datetime_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,8 +27,7 @@ class SendPost extends _$SendPost {
     List<String> imagePath,
     String videoPath,
     String text,
-    double latitude,
-    double longitude,
+    List<AWSPlaces> locations,
     List<String> taggedUsers,
     String errorMessage,
   ) async {
@@ -42,8 +41,7 @@ class SendPost extends _$SendPost {
       imagesPath: imagePath,
       videoPath: videoPath,
       taggedUsers: taggedUsers,
-      latitude: latitude,
-      longitude: latitude,
+      locations: locations,
     );
     final draftPostProvider = ref.read(postDraftsProvider.notifier);
     final result = await draftPostProvider.saveDraftPost(
@@ -69,7 +67,7 @@ class SendPost extends _$SendPost {
     return saveResult.fold((error) async {
       log(error.message);
       await saveFailedPostAsDraft(post.imageUrls, post.videoUrl, post.text,
-          post.latitude, post.latitude, post.taggedUsers, error.message);
+          post.locations, post.taggedUsers, error.message);
       return null;
     }, (post) {
       TToastMessages.successToast(
@@ -83,8 +81,7 @@ class SendPost extends _$SendPost {
     List<String> imagePath,
     String videoPath,
     String text,
-    double latitude,
-    double longitude,
+    List<AWSPlaces> locations,
     List<String> taggedUsers,
   ) async {
     final isVideo = videoPath.isNotEmpty;
@@ -100,8 +97,7 @@ class SendPost extends _$SendPost {
         imagePath,
         videoPath,
         text,
-        latitude,
-        latitude,
+        locations,
         taggedUsers,
         error,
       );
@@ -129,8 +125,7 @@ class SendPost extends _$SendPost {
           post.imageUrls,
           post.videoUrl,
           post.text,
-          post.latitude,
-          post.latitude,
+          post.locations,
           post.taggedUsers,
           error.message,
         );
@@ -148,8 +143,7 @@ class SendPost extends _$SendPost {
     required List<String> imagePath,
     required String videoPath,
     required PostType postType,
-    required double latitude,
-    required double longitude,
+    required List<AWSPlaces> locations,
     required List<String> taggedUsers,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
@@ -166,8 +160,7 @@ class SendPost extends _$SendPost {
           imagePath,
           videoPath,
           text,
-          latitude,
-          latitude,
+          locations,
           taggedUsers,
           error.message,
         );
@@ -185,8 +178,7 @@ class SendPost extends _$SendPost {
             imagePath,
             videoPath,
             text,
-            latitude,
-            longitude,
+            locations,
             taggedUsers,
           );
           if (result == null) {
@@ -202,8 +194,7 @@ class SendPost extends _$SendPost {
             imageUrls: isVideo ? [] : result,
             videoUrl: isVideo ? result.first : '',
             taggedUsers: taggedUsers,
-            latitude: latitude,
-            longitude: longitude,
+            locations: locations,
           );
           scheduledDateTime == null
               ? await sendPostWithMedia(
@@ -227,8 +218,7 @@ class SendPost extends _$SendPost {
             imageUrls: [],
             videoUrl: '',
             taggedUsers: taggedUsers,
-            latitude: latitude,
-            longitude: longitude,
+            locations: locations,
           );
           scheduledDateTime == null
               ? await sendPostWithMedia(

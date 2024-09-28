@@ -7,5 +7,4 @@ fields:
     imageUrls: List<String>
     videoUrl: String
     taggedUsers: List<String>
-    latitude: double
-    longitude: double
+    locations: List<AWSPlaces>

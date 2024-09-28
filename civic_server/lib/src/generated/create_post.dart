@@ -1,16 +1,16 @@
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
 /*   To generate run: "serverpod generate"    */
 
-// ignore_for_file: library_private_types_in_public_api
-// ignore_for_file: public_member_api_docs
 // ignore_for_file: implementation_imports
-// ignore_for_file: use_super_parameters
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
-import 'package:serverpod_serialization/serverpod_serialization.dart';
 
 abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
   Post._({
@@ -22,8 +22,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
     required this.imageUrls,
     required this.videoUrl,
     required this.taggedUsers,
-    required this.latitude,
-    required this.longitude,
+    required this.locations,
   }) : super(id);
 
   factory Post({
@@ -35,8 +34,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
     required List<String> imageUrls,
     required String videoUrl,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -56,8 +54,9 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
           .map((e) => e as String)
           .toList(),
-      latitude: (jsonSerialization['latitude'] as num).toDouble(),
-      longitude: (jsonSerialization['longitude'] as num).toDouble(),
+      locations: (jsonSerialization['locations'] as List)
+          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -79,9 +78,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
 
   List<String> taggedUsers;
 
-  double latitude;
-
-  double longitude;
+  List<_i2.AWSPlaces> locations;
 
   @override
   _i1.Table get table => t;
@@ -95,8 +92,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
     List<String>? imageUrls,
     String? videoUrl,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -109,8 +105,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
       'taggedUsers': taggedUsers.toJson(),
-      'latitude': latitude,
-      'longitude': longitude,
+      'locations': locations.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -125,8 +120,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
       'taggedUsers': taggedUsers.toJson(),
-      'latitude': latitude,
-      'longitude': longitude,
+      'locations': locations.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
@@ -172,8 +166,7 @@ class _PostImpl extends Post {
     required List<String> imageUrls,
     required String videoUrl,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -183,8 +176,7 @@ class _PostImpl extends Post {
           imageUrls: imageUrls,
           videoUrl: videoUrl,
           taggedUsers: taggedUsers,
-          latitude: latitude,
-          longitude: longitude,
+          locations: locations,
         );
 
   @override
@@ -197,8 +189,7 @@ class _PostImpl extends Post {
     List<String>? imageUrls,
     String? videoUrl,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -206,11 +197,11 @@ class _PostImpl extends Post {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postType: postType ?? this.postType,
       text: text ?? this.text,
-      imageUrls: imageUrls ?? this.imageUrls.clone(),
+      imageUrls: imageUrls ?? this.imageUrls.map((e0) => e0).toList(),
       videoUrl: videoUrl ?? this.videoUrl,
-      taggedUsers: taggedUsers ?? this.taggedUsers.clone(),
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      taggedUsers: taggedUsers ?? this.taggedUsers.map((e0) => e0).toList(),
+      locations:
+          locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -242,12 +233,8 @@ class PostTable extends _i1.Table {
       'taggedUsers',
       this,
     );
-    latitude = _i1.ColumnDouble(
-      'latitude',
-      this,
-    );
-    longitude = _i1.ColumnDouble(
-      'longitude',
+    locations = _i1.ColumnSerializable(
+      'locations',
       this,
     );
   }
@@ -266,9 +253,7 @@ class PostTable extends _i1.Table {
 
   late final _i1.ColumnSerializable taggedUsers;
 
-  late final _i1.ColumnDouble latitude;
-
-  late final _i1.ColumnDouble longitude;
+  late final _i1.ColumnSerializable locations;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -292,8 +277,7 @@ class PostTable extends _i1.Table {
         imageUrls,
         videoUrl,
         taggedUsers,
-        latitude,
-        longitude,
+        locations,
       ];
 
   @override
@@ -345,7 +329,7 @@ class PostRepository {
   final attachRow = const PostAttachRowRepository._();
 
   Future<List<Post>> find(
-    _i1.Session session, {
+    _i1.DatabaseAccessor databaseAccessor, {
     _i1.WhereExpressionBuilder<PostTable>? where,
     int? limit,
     int? offset,
@@ -355,20 +339,20 @@ class PostRepository {
     _i1.Transaction? transaction,
     PostInclude? include,
   }) async {
-    return session.db.find<Post>(
+    return databaseAccessor.db.find<Post>(
       where: where?.call(Post.t),
       orderBy: orderBy?.call(Post.t),
       orderByList: orderByList?.call(Post.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
       include: include,
     );
   }
 
   Future<Post?> findFirstRow(
-    _i1.Session session, {
+    _i1.DatabaseAccessor databaseAccessor, {
     _i1.WhereExpressionBuilder<PostTable>? where,
     int? offset,
     _i1.OrderByBuilder<PostTable>? orderBy,
@@ -377,121 +361,121 @@ class PostRepository {
     _i1.Transaction? transaction,
     PostInclude? include,
   }) async {
-    return session.db.findFirstRow<Post>(
+    return databaseAccessor.db.findFirstRow<Post>(
       where: where?.call(Post.t),
       orderBy: orderBy?.call(Post.t),
       orderByList: orderByList?.call(Post.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
       include: include,
     );
   }
 
   Future<Post?> findById(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     int id, {
     _i1.Transaction? transaction,
     PostInclude? include,
   }) async {
-    return session.db.findById<Post>(
+    return databaseAccessor.db.findById<Post>(
       id,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
       include: include,
     );
   }
 
   Future<List<Post>> insert(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     List<Post> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insert<Post>(
+    return databaseAccessor.db.insert<Post>(
       rows,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<Post> insertRow(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     Post row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insertRow<Post>(
+    return databaseAccessor.db.insertRow<Post>(
       row,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<List<Post>> update(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     List<Post> rows, {
     _i1.ColumnSelections<PostTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.update<Post>(
+    return databaseAccessor.db.update<Post>(
       rows,
       columns: columns?.call(Post.t),
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<Post> updateRow(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     Post row, {
     _i1.ColumnSelections<PostTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.updateRow<Post>(
+    return databaseAccessor.db.updateRow<Post>(
       row,
       columns: columns?.call(Post.t),
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<List<Post>> delete(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     List<Post> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<Post>(
+    return databaseAccessor.db.delete<Post>(
       rows,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<Post> deleteRow(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     Post row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteRow<Post>(
+    return databaseAccessor.db.deleteRow<Post>(
       row,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<List<Post>> deleteWhere(
-    _i1.Session session, {
+    _i1.DatabaseAccessor databaseAccessor, {
     required _i1.WhereExpressionBuilder<PostTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteWhere<Post>(
+    return databaseAccessor.db.deleteWhere<Post>(
       where: where(Post.t),
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 
   Future<int> count(
-    _i1.Session session, {
+    _i1.DatabaseAccessor databaseAccessor, {
     _i1.WhereExpressionBuilder<PostTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<Post>(
+    return databaseAccessor.db.count<Post>(
       where: where?.call(Post.t),
       limit: limit,
-      transaction: transaction,
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 }
@@ -500,10 +484,11 @@ class PostAttachRowRepository {
   const PostAttachRowRepository._();
 
   Future<void> owner(
-    _i1.Session session,
+    _i1.DatabaseAccessor databaseAccessor,
     Post post,
-    _i2.UserRecord owner,
-  ) async {
+    _i2.UserRecord owner, {
+    _i1.Transaction? transaction,
+  }) async {
     if (post.id == null) {
       throw ArgumentError.notNull('post.id');
     }
@@ -512,9 +497,10 @@ class PostAttachRowRepository {
     }
 
     var $post = post.copyWith(ownerId: owner.id);
-    await session.db.updateRow<Post>(
+    await databaseAccessor.db.updateRow<Post>(
       $post,
       columns: [Post.t.ownerId],
+      transaction: transaction ?? databaseAccessor.transaction,
     );
   }
 }

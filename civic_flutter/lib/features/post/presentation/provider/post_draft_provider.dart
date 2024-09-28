@@ -102,8 +102,7 @@ class PostDrafts extends _$PostDrafts {
           imagePath: draftPost.imagesPath,
           videoPath: draftPost.videoPath,
           postType: draftPost.postType,
-          latitude: draftPost.latitude,
-          longitude: draftPost.longitude,
+          locations: draftPost.locations,
           taggedUsers: draftPost.taggedUsers,
         );
 

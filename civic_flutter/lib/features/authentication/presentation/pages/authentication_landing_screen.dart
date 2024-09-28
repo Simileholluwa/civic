@@ -25,9 +25,6 @@ class AuthLandingScreen extends StatelessWidget {
                 TImageTexts.appLogo,
                 height: 100,
               ),
-              const SizedBox(
-                height: TSizes.md,
-              ),
               const EmailForm(),
             ],
           ),

@@ -1,0 +1,3 @@
+exception: LocationException
+fields:
+  message: String

@@ -77,7 +77,6 @@ class ImageHelper {
     final isDark = THelperFunctions.isDarkMode(Get.context!);
     return _imageCropper.cropImage(
       sourcePath: file.path,
-      cropStyle: cropStyle,
       uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
           toolbarColor: Theme.of(Get.context!).scaffoldBackgroundColor,

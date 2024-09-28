@@ -24,11 +24,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: 2.0.2
+  serverpod_flutter: 2.1.2
   civic_client:
     path: ../civic_client
-  serverpod_auth_shared_flutter: 2.0.2
-  serverpod_auth_email_flutter: 2.0.2
+  serverpod_auth_shared_flutter: 2.1.2
+  serverpod_auth_email_flutter: 2.1.2
 
 
   cupertino_icons: ^1.0.5
@@ -49,19 +49,18 @@ dependencies:
   photo_manager_image_provider:
   permission_handler:
   animated_text_kit:
-  geocoding:
   geolocator:
   intl:
   video_player:
   ionicons:
   toastification:
   photo_manager:
-  image_cropper: ^5.0.1
+  image_cropper:
   image_picker: ^1.1.2
   url_launcher: ^6.3.0
   pinput:
   font_awesome_flutter:
-  serverpod_auth_client: 2.0.2
+  serverpod_auth_client: 2.1.2
   flutter_portal:
   go_router:
   flutter_riverpod:
@@ -110,14 +109,4 @@ flutter:
           weight: 600
         - asset: assets/fonts/Montserrat-Thin.ttf
           weight: 100
-    - family: Ubuntu
-      fonts:
-        - asset: assets/fonts/Ubuntu-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Ubuntu-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Ubuntu-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Ubuntu-Regular.ttf
-          weight: 400
 

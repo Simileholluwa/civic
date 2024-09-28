@@ -1,21 +1,23 @@
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
 /*   To generate run: "serverpod generate"    */
 
-// ignore_for_file: library_private_types_in_public_api
-// ignore_for_file: public_member_api_docs
 // ignore_for_file: implementation_imports
-// ignore_for_file: use_super_parameters
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:civic_client/src/protocol/create_post.dart' as _i3;
-import 'package:civic_client/src/protocol/user_record.dart' as _i4;
-import 'package:civic_client/src/protocol/post_list.dart' as _i5;
-import 'package:civic_client/src/protocol/user_nin_record.dart' as _i6;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i7;
-import 'protocol.dart' as _i8;
+import 'package:civic_client/src/protocol/aws_places.dart' as _i3;
+import 'package:civic_client/src/protocol/create_post.dart' as _i4;
+import 'package:civic_client/src/protocol/user_record.dart' as _i5;
+import 'package:civic_client/src/protocol/post_list.dart' as _i6;
+import 'package:civic_client/src/protocol/user_nin_record.dart' as _i7;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i8;
+import 'protocol.dart' as _i9;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -39,35 +41,57 @@ class EndpointAssets extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointLocation extends _i1.EndpointRef {
+  EndpointLocation(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'location';
+
+  _i2.Future<List<_i3.AWSPlaces>> searchLocation(String query) =>
+      caller.callServerEndpoint<List<_i3.AWSPlaces>>(
+        'location',
+        'searchLocation',
+        {'query': query},
+      );
+
+  _i2.Future<List<_i3.AWSPlaces>> searchNearbyPlaces(List<double> position) =>
+      caller.callServerEndpoint<List<_i3.AWSPlaces>>(
+        'location',
+        'searchNearbyPlaces',
+        {'position': position},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointPost extends _i1.EndpointRef {
   EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'post';
 
-  _i2.Future<_i3.Post?> save(_i3.Post post) =>
-      caller.callServerEndpoint<_i3.Post?>(
+  _i2.Future<_i4.Post?> save(_i4.Post post) =>
+      caller.callServerEndpoint<_i4.Post?>(
         'post',
         'save',
         {'post': post},
       );
 
-  _i2.Future<List<_i4.UserRecord>> tagUsers() =>
-      caller.callServerEndpoint<List<_i4.UserRecord>>(
+  _i2.Future<List<_i5.UserRecord>> tagUsers() =>
+      caller.callServerEndpoint<List<_i5.UserRecord>>(
         'post',
         'tagUsers',
         {},
       );
 
-  _i2.Future<List<_i4.UserRecord>> searchUsers(String query) =>
-      caller.callServerEndpoint<List<_i4.UserRecord>>(
+  _i2.Future<List<_i5.UserRecord>> searchUsers(String query) =>
+      caller.callServerEndpoint<List<_i5.UserRecord>>(
         'post',
         'searchUsers',
         {'query': query},
       );
 
   _i2.Future<void> sendInFuture(
-    _i3.Post post,
+    _i4.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -79,18 +103,18 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i3.Post?> retrieve(int id) =>
-      caller.callServerEndpoint<_i3.Post?>(
+  _i2.Future<_i4.Post?> retrieve(int id) =>
+      caller.callServerEndpoint<_i4.Post?>(
         'post',
         'retrieve',
         {'id': id},
       );
 
-  _i2.Future<_i5.PostList> listPost({
+  _i2.Future<_i6.PostList> listPost({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'listPost',
         {
@@ -107,8 +131,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i6.UserNinRecord?> findNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i6.UserNinRecord?>(
+  _i2.Future<_i7.UserNinRecord?> findNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i7.UserNinRecord?>(
         'userNin',
         'findNinDetails',
         {'ninNumber': ninNumber},
@@ -122,15 +146,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i4.UserRecord userRecord) =>
+  _i2.Future<void> saveUserRecord(_i5.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUserRecord',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i4.UserRecord?> me() =>
-      caller.callServerEndpoint<_i4.UserRecord?>(
+  _i2.Future<_i5.UserRecord?> me() =>
+      caller.callServerEndpoint<_i5.UserRecord?>(
         'userRecord',
         'me',
         {},
@@ -153,13 +177,13 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i7.Caller(client);
+    auth = _i8.Caller(client);
   }
 
-  late final _i7.Caller auth;
+  late final _i8.Caller auth;
 }
 
-class Client extends _i1.ServerpodClient {
+class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
     dynamic securityContext,
@@ -172,17 +196,21 @@ class Client extends _i1.ServerpodClient {
       StackTrace,
     )? onFailedCall,
     Function(_i1.MethodCallContext)? onSucceededCall,
+    bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i8.Protocol(),
+          _i9.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
           connectionTimeout: connectionTimeout,
           onFailedCall: onFailedCall,
           onSucceededCall: onSucceededCall,
+          disconnectStreamsOnLostInternetConnection:
+              disconnectStreamsOnLostInternetConnection,
         ) {
     assets = EndpointAssets(this);
+    location = EndpointLocation(this);
     post = EndpointPost(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
@@ -190,6 +218,8 @@ class Client extends _i1.ServerpodClient {
   }
 
   late final EndpointAssets assets;
+
+  late final EndpointLocation location;
 
   late final EndpointPost post;
 
@@ -202,6 +232,7 @@ class Client extends _i1.ServerpodClient {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'assets': assets,
+        'location': location,
         'post': post,
         'userNin': userNin,
         'userRecord': userRecord,

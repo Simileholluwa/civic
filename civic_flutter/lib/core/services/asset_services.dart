@@ -25,7 +25,6 @@ class AssetService {
         if (uploadDescription == null) {
           return left('Unable to initiate asset upload');
         }
-        log(uploadDescription.toString());
         final uploader = FileUploader(uploadDescription);
         final stream = file.openRead();
         final length = (await file.readAsBytes()).length;
@@ -39,7 +38,6 @@ class AssetService {
         }
         mediaUrls.add('${decodedDescription['url']}/$path');
       }
-      log(mediaUrls.toString());
       return right(mediaUrls);
     } on SocketException catch (_) {
       return left('Failed to connect to server');

@@ -23,13 +23,14 @@ class MediaOptions extends StatelessWidget {
       title: Text(
         text,
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               color: THelperFunctions.isDarkMode(context)
                   ? TColors.textWhite
                   : TColors.dark,
             ),
       ),
       onTap: onTap,
+      contentPadding: EdgeInsets.zero,
     );
   }
 }

@@ -1,11 +1,12 @@
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
 /*   To generate run: "serverpod generate"    */
 
-// ignore_for_file: library_private_types_in_public_api
-// ignore_for_file: public_member_api_docs
 // ignore_for_file: implementation_imports
-// ignore_for_file: use_super_parameters
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -21,8 +22,7 @@ abstract class Post implements _i1.SerializableModel {
     required this.imageUrls,
     required this.videoUrl,
     required this.taggedUsers,
-    required this.latitude,
-    required this.longitude,
+    required this.locations,
   });
 
   factory Post({
@@ -34,8 +34,7 @@ abstract class Post implements _i1.SerializableModel {
     required List<String> imageUrls,
     required String videoUrl,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -55,8 +54,9 @@ abstract class Post implements _i1.SerializableModel {
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
           .map((e) => e as String)
           .toList(),
-      latitude: (jsonSerialization['latitude'] as num).toDouble(),
-      longitude: (jsonSerialization['longitude'] as num).toDouble(),
+      locations: (jsonSerialization['locations'] as List)
+          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -79,9 +79,7 @@ abstract class Post implements _i1.SerializableModel {
 
   List<String> taggedUsers;
 
-  double latitude;
-
-  double longitude;
+  List<_i2.AWSPlaces> locations;
 
   Post copyWith({
     int? id,
@@ -92,8 +90,7 @@ abstract class Post implements _i1.SerializableModel {
     List<String>? imageUrls,
     String? videoUrl,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -106,8 +103,7 @@ abstract class Post implements _i1.SerializableModel {
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
       'taggedUsers': taggedUsers.toJson(),
-      'latitude': latitude,
-      'longitude': longitude,
+      'locations': locations.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -129,8 +125,7 @@ class _PostImpl extends Post {
     required List<String> imageUrls,
     required String videoUrl,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -140,8 +135,7 @@ class _PostImpl extends Post {
           imageUrls: imageUrls,
           videoUrl: videoUrl,
           taggedUsers: taggedUsers,
-          latitude: latitude,
-          longitude: longitude,
+          locations: locations,
         );
 
   @override
@@ -154,8 +148,7 @@ class _PostImpl extends Post {
     List<String>? imageUrls,
     String? videoUrl,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -163,11 +156,11 @@ class _PostImpl extends Post {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postType: postType ?? this.postType,
       text: text ?? this.text,
-      imageUrls: imageUrls ?? this.imageUrls.clone(),
+      imageUrls: imageUrls ?? this.imageUrls.map((e0) => e0).toList(),
       videoUrl: videoUrl ?? this.videoUrl,
-      taggedUsers: taggedUsers ?? this.taggedUsers.clone(),
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      taggedUsers: taggedUsers ?? this.taggedUsers.map((e0) => e0).toList(),
+      locations:
+          locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

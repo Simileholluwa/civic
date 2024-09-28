@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-Future<bool?> schedulePostSheet({
+Future<bool?> schedulePostDialog({
   required BuildContext context,
   required String title,
   required String description,
@@ -15,48 +15,28 @@ Future<bool?> schedulePostSheet({
   required TextEditingController textController,
   required VoidCallback onTextFieldTapped,
 }) {
-  return showModalBottomSheet<bool>(
-      barrierColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(
-            50,
-          ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
+  return showDialog<bool>(
       context: context,
       builder: (context) {
-        return SizedBox(
-          height: 360,
-          child: Container(
-            width: double.maxFinite,
-            padding: const EdgeInsets.symmetric(
-              horizontal: TSizes.md,
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              TSizes.sm,
             ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(
-                  TSizes.lg,
-                ),
-                topLeft: Radius.circular(
-                  TSizes.lg,
-                ),
-              ),
-            ),
+          ),
+          elevation: 8,
+          content: SizedBox(
+            height: 361,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: TSizes.sm + 2,
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      'Schedule post',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
                           ),
                     ),
                     GestureDetector(
@@ -69,15 +49,20 @@ Future<bool?> schedulePostSheet({
                   ],
                 ),
                 const SizedBox(
-                  height: TSizes.sm,
+                  height: TSizes.md,
                 ),
-                const Divider(),
+                const Divider(
+                  height: 0,
+                ),
                 SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: TSizes.sm + 4,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(
-                        height: TSizes.sm,
+                        height: TSizes.md,
                       ),
                       Text(
                         description,

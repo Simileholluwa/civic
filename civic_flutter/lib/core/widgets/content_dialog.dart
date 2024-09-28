@@ -1,7 +1,8 @@
+import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/pulsing_circle.dart';
 import 'package:civic_flutter/core/widgets/dual_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 Future<bool?> postDialog({
   required BuildContext context,
@@ -14,68 +15,60 @@ Future<bool?> postDialog({
   required VoidCallback onTapActiveButton,
   required String skipText,
 }) {
-  return showModalBottomSheet<bool>(
-      barrierColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(
-            30,
-          ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  return showDialog<bool>(
       context: context,
       builder: (context) {
-        return SizedBox(
-          height: 420,
-          child: Center(
-            child: Material(
-              elevation: 4,
-              type: MaterialType.transparency,
-              child: Container(
-                width: double.maxFinite,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TSizes.md,
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              TSizes.sm,
+            ),
+          ),
+          elevation: 8,
+          content: SizedBox(
+            height: 283,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.left,
+                    ),
+                    GestureDetector(
+                      onTap: context.pop,
+                      child: const Icon(
+                        Icons.clear,
+                        color: TColors.secondary,
+                      ),
+                    ),
+                  ],
                 ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(TSizes.lg,),
-                topLeft: Radius.circular(TSizes.lg,),
-              ),
+                const SizedBox(
+                  height: TSizes.md,
                 ),
-                child: SingleChildScrollView(
+                const Divider(
+                  height: 0,
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: TSizes.sm + 4,
+                  ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(
-                        height: TSizes.sm + 2,
-                      ),
-                      const SizedBox(
-                        height: 110,
-                        child: Center(
-                          child: PulsingCircle(),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: TSizes.sm + 2,
-                      ),
-                      const Divider(
-                        indent: TSizes.md,
-                        endIndent: TSizes.md + 4,
-                      ),
-                      const SizedBox(
-                        height: TSizes.sm,
-                      ),
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                            ),
-                      ),
-                      const SizedBox(
-                        height: TSizes.sm,
+                        height: TSizes.md,
                       ),
                       Text(
                         description,
                         style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                       ),
                       const SizedBox(
                         height: TSizes.spaceBtwSections,
@@ -91,7 +84,7 @@ Future<bool?> postDialog({
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         );

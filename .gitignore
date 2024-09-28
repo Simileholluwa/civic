@@ -1,1 +1,2 @@
 .vscode/
+civic_server/lib/src/endpoints/location_endpoint.dart

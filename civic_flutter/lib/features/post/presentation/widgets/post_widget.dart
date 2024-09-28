@@ -2,6 +2,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
@@ -104,23 +105,50 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      ref.read(mediaProvider.notifier).clearMedia();
-                      ref.read(postTextProvider.notifier).reset();
+                      ref
+                          .read(
+                            mediaProvider.notifier,
+                          )
+                          .clearMedia();
+                      ref
+                          .read(
+                            postTextProvider.notifier,
+                          )
+                          .reset();
                       if (widget.hasVideo) {
-                        ref.read(mediaProvider.notifier).setVideo(
+                        ref
+                            .read(
+                              mediaProvider.notifier,
+                            )
+                            .setVideo(
                               widget.post.videoPath,
                             );
                       }
                       if (widget.hasImage) {
-                        ref.read(mediaProvider.notifier).setDraftImage(
+                        ref
+                            .read(
+                              mediaProvider.notifier,
+                            )
+                            .setDraftImage(
                               widget.post.imagesPath,
                             );
                       }
                       if (widget.hasText) {
-                        ref.read(postTextProvider.notifier).setText(
+                        ref
+                            .read(
+                              postTextProvider.notifier,
+                            )
+                            .setText(
                               widget.post.text,
                             );
                       }
+                      ref
+                          .read(
+                            selectLocationsProvider.notifier,
+                          )
+                          .setLocations(
+                            widget.post.locations,
+                          );
                       context.pop();
                       context.pushReplacement(
                         AppRoutes.createPost,

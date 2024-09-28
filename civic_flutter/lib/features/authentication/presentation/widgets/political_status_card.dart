@@ -52,8 +52,36 @@ class _PoliticalStatusOptionsState
             },
             itemBuilder: (context, index) {
               final status = allStatus[index];
+              final isSelected =
+                  _currentPoliticalStatus == status.politicalStatus;
               return Container(
                 decoration: BoxDecoration(
+                  border: index == 0
+                      ? Border(
+                          bottom: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        )
+                      : index == allStatus.length - 1
+                          ? Border(
+                              top: BorderSide(
+                                color: isSelected
+                                    ? TColors.primary.withAlpha(30)
+                                    : Theme.of(context).dividerColor,
+                              ),
+                            )
+                          : Border(
+                              top: BorderSide(
+                                color: isSelected
+                                    ? TColors.primary.withAlpha(30)
+                                    : Theme.of(context).dividerColor,
+                              ),
+                              bottom: BorderSide(
+                                color: isSelected
+                                    ? TColors.primary.withAlpha(30)
+                                    : Theme.of(context).dividerColor,
+                              ),
+                            ),
                   borderRadius: index == 0
                       ? const BorderRadius.only(
                           topRight: Radius.circular(
@@ -73,8 +101,8 @@ class _PoliticalStatusOptionsState
                               ),
                             )
                           : BorderRadius.zero,
-                  color: _currentPoliticalStatus == status.politicalStatus
-                      ? TColors.primary
+                  color: isSelected
+                      ? TColors.primary.withAlpha(30)
                       : Colors.transparent,
                 ),
                 child: ListTile(

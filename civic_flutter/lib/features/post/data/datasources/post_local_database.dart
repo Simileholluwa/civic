@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'dart:io';
 
@@ -41,6 +42,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
       }
       return <DraftPost>[];
     } catch (e) {
+      log(e.toString());
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -96,6 +98,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
         await _prefs.setString('postsDraft', jsonString);
       }
     } catch (e) {
+      
       throw const CacheException(message: 'Something went wrong');
     }
   }

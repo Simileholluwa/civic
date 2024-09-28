@@ -7,10 +7,13 @@ environment:
   sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
-  serverpod: 2.0.2
-  serverpod_auth_server: 2.0.2
-  serverpod_cloud_storage_s3: 2.0.2
-  serverpod_serialization: 2.0.2
+  dio: ^5.7.0
+  serverpod: 2.1.2
+  serverpod_auth_server: 2.1.2
+  serverpod_cloud_storage_s3: 2.1.2
+  serverpod_serialization: 2.1.2
+  aws_signature_v4:
+  aws_common:
 
 dev_dependencies:
   lints: '>=3.0.0 <5.0.0'

@@ -1,34 +1,40 @@
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
 /*   To generate run: "serverpod generate"    */
 
-// ignore_for_file: library_private_types_in_public_api
-// ignore_for_file: public_member_api_docs
 // ignore_for_file: implementation_imports
-// ignore_for_file: use_super_parameters
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
 
 library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixes
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'create_post.dart' as _i4;
-import 'draft_post.dart' as _i5;
-import 'example.dart' as _i6;
-import 'exception_type_enum.dart' as _i7;
-import 'political_status_enum.dart' as _i8;
-import 'post_exception.dart' as _i9;
-import 'post_list.dart' as _i10;
-import 'post_type_enums.dart' as _i11;
-import 'user_exception.dart' as _i12;
-import 'user_nin_record.dart' as _i13;
-import 'user_record.dart' as _i14;
-import 'protocol.dart' as _i15;
-import 'package:civic_server/src/generated/user_record.dart' as _i16;
+import 'aws_places.dart' as _i4;
+import 'create_post.dart' as _i5;
+import 'draft_post.dart' as _i6;
+import 'example.dart' as _i7;
+import 'exception_type_enum.dart' as _i8;
+import 'location_exception.dart' as _i9;
+import 'political_status_enum.dart' as _i10;
+import 'post_exception.dart' as _i11;
+import 'post_list.dart' as _i12;
+import 'post_type_enums.dart' as _i13;
+import 'user_exception.dart' as _i14;
+import 'user_nin_record.dart' as _i15;
+import 'user_record.dart' as _i16;
+import 'protocol.dart' as _i17;
+import 'package:civic_server/src/generated/aws_places.dart' as _i18;
+import 'package:civic_server/src/generated/user_record.dart' as _i19;
+export 'aws_places.dart';
 export 'create_post.dart';
 export 'draft_post.dart';
 export 'example.dart';
 export 'exception_type_enum.dart';
+export 'location_exception.dart';
 export 'political_status_enum.dart';
 export 'post_exception.dart';
 export 'post_list.dart';
@@ -95,16 +101,10 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>',
         ),
         _i2.ColumnDefinition(
-          name: 'latitude',
-          columnType: _i2.ColumnType.doublePrecision,
+          name: 'locations',
+          columnType: _i2.ColumnType.json,
           isNullable: false,
-          dartType: 'double',
-        ),
-        _i2.ColumnDefinition(
-          name: 'longitude',
-          columnType: _i2.ColumnType.doublePrecision,
-          isNullable: false,
-          dartType: 'double',
+          dartType: 'List<protocol:AWSPlaces>',
         ),
       ],
       foreignKeys: [
@@ -390,85 +390,109 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i4.Post) {
-      return _i4.Post.fromJson(data) as T;
+    if (t == _i4.AWSPlaces) {
+      return _i4.AWSPlaces.fromJson(data) as T;
     }
-    if (t == _i5.DraftPost) {
-      return _i5.DraftPost.fromJson(data) as T;
+    if (t == _i5.Post) {
+      return _i5.Post.fromJson(data) as T;
     }
-    if (t == _i6.Example) {
-      return _i6.Example.fromJson(data) as T;
+    if (t == _i6.DraftPost) {
+      return _i6.DraftPost.fromJson(data) as T;
     }
-    if (t == _i7.ExceptionTypes) {
-      return _i7.ExceptionTypes.fromJson(data) as T;
+    if (t == _i7.Example) {
+      return _i7.Example.fromJson(data) as T;
     }
-    if (t == _i8.PoliticalStatus) {
-      return _i8.PoliticalStatus.fromJson(data) as T;
+    if (t == _i8.ExceptionTypes) {
+      return _i8.ExceptionTypes.fromJson(data) as T;
     }
-    if (t == _i9.PostException) {
-      return _i9.PostException.fromJson(data) as T;
+    if (t == _i9.LocationException) {
+      return _i9.LocationException.fromJson(data) as T;
     }
-    if (t == _i10.PostList) {
-      return _i10.PostList.fromJson(data) as T;
+    if (t == _i10.PoliticalStatus) {
+      return _i10.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i11.PostType) {
-      return _i11.PostType.fromJson(data) as T;
+    if (t == _i11.PostException) {
+      return _i11.PostException.fromJson(data) as T;
     }
-    if (t == _i12.UserException) {
-      return _i12.UserException.fromJson(data) as T;
+    if (t == _i12.PostList) {
+      return _i12.PostList.fromJson(data) as T;
     }
-    if (t == _i13.UserNinRecord) {
-      return _i13.UserNinRecord.fromJson(data) as T;
+    if (t == _i13.PostType) {
+      return _i13.PostType.fromJson(data) as T;
     }
-    if (t == _i14.UserRecord) {
-      return _i14.UserRecord.fromJson(data) as T;
+    if (t == _i14.UserException) {
+      return _i14.UserException.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Post?>()) {
-      return (data != null ? _i4.Post.fromJson(data) : null) as T;
+    if (t == _i15.UserNinRecord) {
+      return _i15.UserNinRecord.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.DraftPost?>()) {
-      return (data != null ? _i5.DraftPost.fromJson(data) : null) as T;
+    if (t == _i16.UserRecord) {
+      return _i16.UserRecord.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i6.Example?>()) {
-      return (data != null ? _i6.Example.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.AWSPlaces?>()) {
+      return (data != null ? _i4.AWSPlaces.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.ExceptionTypes?>()) {
-      return (data != null ? _i7.ExceptionTypes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Post?>()) {
+      return (data != null ? _i5.Post.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.PoliticalStatus?>()) {
-      return (data != null ? _i8.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.DraftPost?>()) {
+      return (data != null ? _i6.DraftPost.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.PostException?>()) {
-      return (data != null ? _i9.PostException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.Example?>()) {
+      return (data != null ? _i7.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.PostList?>()) {
-      return (data != null ? _i10.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.ExceptionTypes?>()) {
+      return (data != null ? _i8.ExceptionTypes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.PostType?>()) {
-      return (data != null ? _i11.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.LocationException?>()) {
+      return (data != null ? _i9.LocationException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i12.UserException?>()) {
-      return (data != null ? _i12.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.PoliticalStatus?>()) {
+      return (data != null ? _i10.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i13.UserNinRecord?>()) {
-      return (data != null ? _i13.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.PostException?>()) {
+      return (data != null ? _i11.PostException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i14.UserRecord?>()) {
-      return (data != null ? _i14.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i12.PostList?>()) {
+      return (data != null ? _i12.PostList.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i13.PostType?>()) {
+      return (data != null ? _i13.PostType.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i14.UserException?>()) {
+      return (data != null ? _i14.UserException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i15.UserNinRecord?>()) {
+      return (data != null ? _i15.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i16.UserRecord?>()) {
+      return (data != null ? _i16.UserRecord.fromJson(data) : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i15.Post>) {
-      return (data as List).map((e) => deserialize<_i15.Post>(e)).toList()
+    if (t == List<_i17.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i17.AWSPlaces>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i17.Post>) {
+      return (data as List).map((e) => deserialize<_i17.Post>(e)).toList()
           as dynamic;
     }
     if (t == List<int>) {
       return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
-    if (t == List<_i16.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i16.UserRecord>(e)).toList()
+    if (t == List<_i18.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i18.AWSPlaces>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<double>) {
+      return (data as List).map((e) => deserialize<double>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i19.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i19.UserRecord>(e)).toList()
           as dynamic;
     }
     if (t == List<String>) {
@@ -485,86 +509,107 @@ class Protocol extends _i1.SerializationManagerServer {
   }
 
   @override
-  String? getClassNameForObject(Object data) {
-    String? className;
+  String? getClassNameForObject(Object? data) {
+    String? className = super.getClassNameForObject(data);
+    if (className != null) return className;
+    if (data is _i4.AWSPlaces) {
+      return 'AWSPlaces';
+    }
+    if (data is _i5.Post) {
+      return 'Post';
+    }
+    if (data is _i6.DraftPost) {
+      return 'DraftPost';
+    }
+    if (data is _i7.Example) {
+      return 'Example';
+    }
+    if (data is _i8.ExceptionTypes) {
+      return 'ExceptionTypes';
+    }
+    if (data is _i9.LocationException) {
+      return 'LocationException';
+    }
+    if (data is _i10.PoliticalStatus) {
+      return 'PoliticalStatus';
+    }
+    if (data is _i11.PostException) {
+      return 'PostException';
+    }
+    if (data is _i12.PostList) {
+      return 'PostList';
+    }
+    if (data is _i13.PostType) {
+      return 'PostType';
+    }
+    if (data is _i14.UserException) {
+      return 'UserException';
+    }
+    if (data is _i15.UserNinRecord) {
+      return 'UserNinRecord';
+    }
+    if (data is _i16.UserRecord) {
+      return 'UserRecord';
+    }
+    className = _i2.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod.$className';
+    }
     className = _i3.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
-    if (data is _i4.Post) {
-      return 'Post';
-    }
-    if (data is _i5.DraftPost) {
-      return 'DraftPost';
-    }
-    if (data is _i6.Example) {
-      return 'Example';
-    }
-    if (data is _i7.ExceptionTypes) {
-      return 'ExceptionTypes';
-    }
-    if (data is _i8.PoliticalStatus) {
-      return 'PoliticalStatus';
-    }
-    if (data is _i9.PostException) {
-      return 'PostException';
-    }
-    if (data is _i10.PostList) {
-      return 'PostList';
-    }
-    if (data is _i11.PostType) {
-      return 'PostType';
-    }
-    if (data is _i12.UserException) {
-      return 'UserException';
-    }
-    if (data is _i13.UserNinRecord) {
-      return 'UserNinRecord';
-    }
-    if (data is _i14.UserRecord) {
-      return 'UserRecord';
-    }
-    return super.getClassNameForObject(data);
+    return null;
   }
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
+    if (data['className'] == 'AWSPlaces') {
+      return deserialize<_i4.AWSPlaces>(data['data']);
+    }
+    if (data['className'] == 'Post') {
+      return deserialize<_i5.Post>(data['data']);
+    }
+    if (data['className'] == 'DraftPost') {
+      return deserialize<_i6.DraftPost>(data['data']);
+    }
+    if (data['className'] == 'Example') {
+      return deserialize<_i7.Example>(data['data']);
+    }
+    if (data['className'] == 'ExceptionTypes') {
+      return deserialize<_i8.ExceptionTypes>(data['data']);
+    }
+    if (data['className'] == 'LocationException') {
+      return deserialize<_i9.LocationException>(data['data']);
+    }
+    if (data['className'] == 'PoliticalStatus') {
+      return deserialize<_i10.PoliticalStatus>(data['data']);
+    }
+    if (data['className'] == 'PostException') {
+      return deserialize<_i11.PostException>(data['data']);
+    }
+    if (data['className'] == 'PostList') {
+      return deserialize<_i12.PostList>(data['data']);
+    }
+    if (data['className'] == 'PostType') {
+      return deserialize<_i13.PostType>(data['data']);
+    }
+    if (data['className'] == 'UserException') {
+      return deserialize<_i14.UserException>(data['data']);
+    }
+    if (data['className'] == 'UserNinRecord') {
+      return deserialize<_i15.UserNinRecord>(data['data']);
+    }
+    if (data['className'] == 'UserRecord') {
+      return deserialize<_i16.UserRecord>(data['data']);
+    }
+    if (data['className'].startsWith('serverpod.')) {
+      data['className'] = data['className'].substring(10);
+      return _i2.Protocol().deserializeByClassName(data);
+    }
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
       return _i3.Protocol().deserializeByClassName(data);
-    }
-    if (data['className'] == 'Post') {
-      return deserialize<_i4.Post>(data['data']);
-    }
-    if (data['className'] == 'DraftPost') {
-      return deserialize<_i5.DraftPost>(data['data']);
-    }
-    if (data['className'] == 'Example') {
-      return deserialize<_i6.Example>(data['data']);
-    }
-    if (data['className'] == 'ExceptionTypes') {
-      return deserialize<_i7.ExceptionTypes>(data['data']);
-    }
-    if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i8.PoliticalStatus>(data['data']);
-    }
-    if (data['className'] == 'PostException') {
-      return deserialize<_i9.PostException>(data['data']);
-    }
-    if (data['className'] == 'PostList') {
-      return deserialize<_i10.PostList>(data['data']);
-    }
-    if (data['className'] == 'PostType') {
-      return deserialize<_i11.PostType>(data['data']);
-    }
-    if (data['className'] == 'UserException') {
-      return deserialize<_i12.UserException>(data['data']);
-    }
-    if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i13.UserNinRecord>(data['data']);
-    }
-    if (data['className'] == 'UserRecord') {
-      return deserialize<_i14.UserRecord>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -584,12 +629,12 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i4.Post:
-        return _i4.Post.t;
-      case _i13.UserNinRecord:
-        return _i13.UserNinRecord.t;
-      case _i14.UserRecord:
-        return _i14.UserRecord.t;
+      case _i5.Post:
+        return _i5.Post.t;
+      case _i15.UserNinRecord:
+        return _i15.UserNinRecord.t;
+      case _i16.UserRecord:
+        return _i16.UserRecord.t;
     }
     return null;
   }

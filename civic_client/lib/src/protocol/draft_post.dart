@@ -1,11 +1,12 @@
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
 /*   To generate run: "serverpod generate"    */
 
-// ignore_for_file: library_private_types_in_public_api
-// ignore_for_file: public_member_api_docs
 // ignore_for_file: implementation_imports
-// ignore_for_file: use_super_parameters
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -20,8 +21,7 @@ abstract class DraftPost implements _i1.SerializableModel {
     required this.imagesPath,
     required this.videoPath,
     required this.taggedUsers,
-    required this.latitude,
-    required this.longitude,
+    required this.locations,
     this.createdAt,
   });
 
@@ -33,8 +33,7 @@ abstract class DraftPost implements _i1.SerializableModel {
     required List<String> imagesPath,
     required String videoPath,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) = _DraftPostImpl;
 
@@ -51,8 +50,9 @@ abstract class DraftPost implements _i1.SerializableModel {
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
           .map((e) => e as String)
           .toList(),
-      latitude: (jsonSerialization['latitude'] as num).toDouble(),
-      longitude: (jsonSerialization['longitude'] as num).toDouble(),
+      locations: (jsonSerialization['locations'] as List)
+          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .toList(),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -73,9 +73,7 @@ abstract class DraftPost implements _i1.SerializableModel {
 
   List<String> taggedUsers;
 
-  double latitude;
-
-  double longitude;
+  List<_i2.AWSPlaces> locations;
 
   DateTime? createdAt;
 
@@ -87,8 +85,7 @@ abstract class DraftPost implements _i1.SerializableModel {
     List<String>? imagesPath,
     String? videoPath,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
     DateTime? createdAt,
   });
   @override
@@ -101,8 +98,7 @@ abstract class DraftPost implements _i1.SerializableModel {
       'imagesPath': imagesPath.toJson(),
       'videoPath': videoPath,
       'taggedUsers': taggedUsers.toJson(),
-      'latitude': latitude,
-      'longitude': longitude,
+      'locations': locations.toJson(valueToJson: (v) => v.toJson()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
@@ -124,8 +120,7 @@ class _DraftPostImpl extends DraftPost {
     required List<String> imagesPath,
     required String videoPath,
     required List<String> taggedUsers,
-    required double latitude,
-    required double longitude,
+    required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) : super._(
           draftId: draftId,
@@ -135,8 +130,7 @@ class _DraftPostImpl extends DraftPost {
           imagesPath: imagesPath,
           videoPath: videoPath,
           taggedUsers: taggedUsers,
-          latitude: latitude,
-          longitude: longitude,
+          locations: locations,
           createdAt: createdAt,
         );
 
@@ -149,8 +143,7 @@ class _DraftPostImpl extends DraftPost {
     List<String>? imagesPath,
     String? videoPath,
     List<String>? taggedUsers,
-    double? latitude,
-    double? longitude,
+    List<_i2.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
   }) {
     return DraftPost(
@@ -158,11 +151,11 @@ class _DraftPostImpl extends DraftPost {
       ownerId: ownerId is int? ? ownerId : this.ownerId,
       postType: postType ?? this.postType,
       text: text ?? this.text,
-      imagesPath: imagesPath ?? this.imagesPath.clone(),
+      imagesPath: imagesPath ?? this.imagesPath.map((e0) => e0).toList(),
       videoPath: videoPath ?? this.videoPath,
-      taggedUsers: taggedUsers ?? this.taggedUsers.clone(),
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      taggedUsers: taggedUsers ?? this.taggedUsers.map((e0) => e0).toList(),
+      locations:
+          locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
     );
   }

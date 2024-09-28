@@ -1,6 +1,9 @@
 assets:
   - getUploadDescription:
   - verifyUpload:
+location:
+  - searchLocation:
+  - searchNearbyPlaces:
 post:
   - save:
   - tagUsers:

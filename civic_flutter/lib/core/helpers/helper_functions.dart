@@ -4,9 +4,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/widgets/choose_location_bottom_sheet.dart';
 import 'package:civic_flutter/core/widgets/dual_button.dart';
+import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -233,43 +234,6 @@ class THelperFunctions {
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 
-  static Future<String> getLocation(
-      RxBool isLoading, BuildContext context) async {
-    var location = '';
-    try {
-      isLoading.value = true;
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        await Geolocator.requestPermission();
-        if (context.mounted) {
-          await getLocation(isLoading, context);
-        }
-        isLoading.value = false;
-        return location;
-      } else {
-        final position = await Geolocator.getCurrentPosition();
-        final placeMarks = await placemarkFromCoordinates(
-          position.latitude,
-          position.longitude,
-        );
-        final placeMark = placeMarks[0];
-        location = '${placeMark.subAdministrativeArea}, '
-            '${placeMark.administrativeArea} state, '
-            '${placeMark.country}.';
-        isLoading.value = false;
-      }
-    } catch (_) {
-      if (context.mounted) {
-        TToastMessages.infoToast(
-          'Unable to get current location data',
-        );
-      }
-      isLoading.value = false;
-    }
-    return location;
-  }
-
   static String getFileSize(File file) {
     return (file.lengthSync() / (1024 * 1024)).toStringAsFixed(1);
   }
@@ -298,5 +262,36 @@ class THelperFunctions {
     }
 
     return email.substring(0, 3) + redactedPart + email.substring(atIndex);
+  }
+
+  static double getBottomNavigationBarHeight(
+      DateTime? scheduledDateTimeState, List<AWSPlaces> selectedLocations) {
+    return scheduledDateTimeState == null && selectedLocations.isEmpty
+        ? 105
+        : scheduledDateTimeState == null && selectedLocations.isNotEmpty
+            ? 155
+            : scheduledDateTimeState != null && selectedLocations.isNotEmpty
+                ? 205
+                : 155;
+  }
+
+  static Future<void> selectLocation(BuildContext context,) async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      TToastMessages.infoToast('Location services are disabled on your device');
+    }
+    await Geolocator.requestPermission();
+    final permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      if (context.mounted) {
+        await requestLocationPremissionDialog(context: context);
+      }
+    } else if (permission == LocationPermission.deniedForever) {
+      Geolocator.openLocationSettings();
+    } else {
+      if (context.mounted) {
+        selectLocationBottomSheet(context: context);
+      }
+    }
   }
 }

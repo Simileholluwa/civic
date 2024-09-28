@@ -7,6 +7,5 @@ fields:
     imagesPath: List<String>
     videoPath: String
     taggedUsers: List<String>
-    latitude: double
-    longitude: double
+    locations: List<AWSPlaces>
     createdAt: DateTime?
