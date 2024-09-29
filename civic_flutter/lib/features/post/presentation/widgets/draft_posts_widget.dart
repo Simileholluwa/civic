@@ -10,8 +10,8 @@ import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/image_post.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
+import 'package:civic_flutter/core/widgets/image_post.dart';
+import 'package:civic_flutter/core/widgets/video_post.dart';
 import 'package:expandable_text/expandable_text.dart';
 //import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +19,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class PostWidget extends ConsumerStatefulWidget {
-  const PostWidget({
+class DraftPostsWidget extends ConsumerStatefulWidget {
+  const DraftPostsWidget({
     super.key,
     this.hasImage = false,
     this.hasText = false,
@@ -41,7 +41,7 @@ class PostWidget extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends ConsumerState<PostWidget> {
+class _PostWidgetState extends ConsumerState<DraftPostsWidget> {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);

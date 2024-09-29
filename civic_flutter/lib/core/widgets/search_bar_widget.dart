@@ -9,10 +9,12 @@ class SearchBarWidget extends StatelessWidget {
     super.key,
     required this.onChanged,
     this.height = 50,
+    this.hintText = 'Search for places',
   });
 
   final void Function(String) onChanged;
   final double height;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class SearchBarWidget extends StatelessWidget {
       backgroundColor: WidgetStatePropertyAll(
         THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
       ),
-      hintText: 'Search for places',
+      hintText: hintText,
       leading: const Icon(
         Iconsax.search_normal,
       ),

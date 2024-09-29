@@ -6,7 +6,7 @@ import 'package:civic_flutter/core/providers/media_provider.dart';
 // import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_widget.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -74,19 +74,19 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
           final type = data[index].postType;
           switch (type) {
             case PostType.image || PostType.images:
-              return PostWidget(
+              return DraftPostsWidget(
                 post: data[index],
                 hasImage: true,
                 index: index,
               );
             case PostType.text:
-              return PostWidget(
+              return DraftPostsWidget(
                 post: data[index],
                 hasText: true,
                 index: index,
               );
             case PostType.textWithImage || PostType.textWithImages:
-              return PostWidget(
+              return DraftPostsWidget(
                 post: data[index],
                 hasText: true,
                 hasImage: true,
@@ -94,13 +94,13 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
               );
             case PostType.video:
               ref.watch(mediaProvider.notifier).setVideo(data[index].videoPath);
-              return PostWidget(
+              return DraftPostsWidget(
                 post: data[index],
                 hasVideo: true,
                 index: index,
               );
             case PostType.textWithVideo:
-              return PostWidget(
+              return DraftPostsWidget(
                 post: data[index],
                 hasText: true,
                 hasVideo: true,

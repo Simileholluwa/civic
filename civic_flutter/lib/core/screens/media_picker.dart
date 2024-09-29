@@ -107,11 +107,7 @@ class _MediaPickerState extends ConsumerState<MediaPicker> {
                 right: TSizes.sm,
               ),
               child: IconButton(
-                onPressed: () async {
-                  await THelperFunctions.buildPostDialog(
-                    context,
-                  );
-                },
+                onPressed: () async {},
                 icon: const Icon(
                   Iconsax.message_question,
                 ),

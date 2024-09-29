@@ -1,12 +1,12 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
+import 'package:civic_flutter/core/widgets/search_bar_widget.dart';
 import 'package:civic_flutter/features/post/presentation/provider/tag_selections_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/tag_users_provider.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/user_info_widget.dart';
+import 'package:civic_flutter/core/widgets/user_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,40 +26,46 @@ class TagUsersScreen extends ConsumerWidget {
     return AndroidBottomNav(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(
-            TDeviceUtils.getAppBarHeight() + 20,
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(
-              top: TSizes.md + 4,
+          preferredSize: const Size.fromHeight(
+          75,
+        ),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+              vertical: TSizes.sm - 2,
             ),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor),
-              ),
-            ),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                onPressed: context.pop,
-                icon: const Icon(
-                  Icons.clear,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Theme.of(context).dividerColor),
                 ),
               ),
-              titleSpacing: 0,
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: TSizes.sm,
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  onPressed: context.pop,
+                  icon: const Icon(
+                    Icons.clear,
                   ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.search,
+                ),
+                centerTitle: true,
+                title: SearchBarWidget(
+                onChanged: (text) {},
+                hintText: 'Search for users',
+              ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: TSizes.sm,
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.search,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -100,12 +106,7 @@ class TagUsersScreen extends ConsumerWidget {
                   final user = users[index];
                   final isSelected = tagState.contains(user);
                   return UserInfoWidget(
-                    imageUrl:
-                        'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
-                    fullName: user.userInfo!.fullName,
-                    userName: user.userInfo!.userName!,
-                    followers: user.followers.length,
-                    following: user.following.length,
+                    userRecord: user,
                     onTap: () {
                       if (isSelected) {
                         tagProvider.removeUser(user);
@@ -113,7 +114,6 @@ class TagUsersScreen extends ConsumerWidget {
                         tagProvider.addUser(user);
                       }
                     },
-                    isVerified: user.verifiedAccount,
                   );
                 },
               );

@@ -1,18 +1,15 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:flutter/material.dart';
 
 class MediaOptionWidget extends StatelessWidget {
   const MediaOptionWidget({
     super.key,
-    required this.controller,
     required this.mediaOptionsList,
     required this.mediaTile,
   });
 
-  final Media controller;
   final Widget mediaOptionsList;
   final String mediaTile;
 

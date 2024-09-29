@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -10,22 +11,12 @@ import 'package:flutter/material.dart';
 class UserInfoWidget extends StatelessWidget {
   const UserInfoWidget({
     super.key,
-    this.fullName,
-    required this.userName,
-    required this.followers,
-    required this.following,
-    required this.imageUrl,
     required this.onTap,
-    required this.isVerified,
+    required this.userRecord,
   });
 
-  final String? fullName;
-  final String userName;
-  final int followers;
-  final int following;
-  final String imageUrl;
   final VoidCallback onTap;
-  final bool isVerified;
+  final UserRecord userRecord;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +39,7 @@ class UserInfoWidget extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CachedNetworkImage(
-                      imageUrl: imageUrl,
+                      imageUrl: userRecord.userInfo!.imageUrl!,
                       fit: BoxFit.cover,
                       height: 50,
                       width: 50,
@@ -73,7 +64,7 @@ class UserInfoWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                isVerified
+                userRecord.verifiedAccount
                     ? const Icon(
                         Icons.verified_user_sharp,
                         color: TColors.primary,
@@ -92,7 +83,7 @@ class UserInfoWidget extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    fullName ?? userName,
+                    userRecord.userInfo!.fullName ?? userRecord.userInfo!.userName!,
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                           fontSize: 20,
                           color: isDark ? TColors.textWhite : TColors.dark,
@@ -101,7 +92,7 @@ class UserInfoWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${THelperFunctions.humanizeNumber(followers)} followers',
+                        '${THelperFunctions.humanizeNumber(userRecord.followers.length)} followers',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,
@@ -122,7 +113,7 @@ class UserInfoWidget extends StatelessWidget {
                         width: TSizes.sm,
                       ),
                       Text(
-                        '${THelperFunctions.humanizeNumber(following)} following',
+                        '${THelperFunctions.humanizeNumber(userRecord.following.length)} following',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,

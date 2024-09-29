@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
+import 'package:civic_flutter/core/screens/tag_users_screen.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/choose_location_bottom_sheet.dart';
-import 'package:civic_flutter/core/widgets/dual_button.dart';
 import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
+import 'package:civic_flutter/core/widgets/schedule_post_dialog.dart';
+import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class THelperFunctions {
   THelperFunctions._();
@@ -42,34 +43,6 @@ class THelperFunctions {
         ),
       ],
     );
-  }
-
-  static Future<Widget?> buildPostDialog(BuildContext context) {
-    return postDialog(
-      context,
-      "Can't find all media?",
-      'Tap "Open settings" below and select "Always allow all" '
-          'in your app permission settings.',
-      DualButton(
-        onTapActiveButton: () async {
-          Get.back<dynamic>();
-          await openAppSettings();
-        },
-        activeButtonText: 'Open settings',
-        activeButtonLoading: false,
-        onTapSkipButton: () {},
-        skipButtonLoading: false,
-      ),
-    );
-  }
-
-  static Future<Widget?> postDialog(
-    BuildContext buildContext,
-    String s,
-    String t,
-    postDualButton,
-  ) async {
-    return null;
   }
 
   static bool isImage(String filePath) {
@@ -275,7 +248,9 @@ class THelperFunctions {
                 : 155;
   }
 
-  static Future<void> selectLocation(BuildContext context,) async {
+  static Future<void> selectLocation(
+    BuildContext context,
+  ) async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       TToastMessages.infoToast('Location services are disabled on your device');
@@ -293,5 +268,45 @@ class THelperFunctions {
         selectLocationBottomSheet(context: context);
       }
     }
+  }
+
+  static Future<bool?> selectLocationBottomSheet({
+    required BuildContext context,
+  }) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return const ChooseLocationsScreen();
+      },
+    );
+  }
+
+  static Future<bool?> tagUsersBottomSheet(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) {
+        return const TagUsersScreen();
+      },
+    );
+  }
+
+  static Future<bool?> showScheduleDialog(
+    BuildContext context,
+  ) {
+    return schedulePostDialog(
+      context: context,
+    );
+  }
+
+  static Future<bool?> showSelectMediaDialog(
+    BuildContext context,
+  ) {
+    return showUploadMediaDialog(
+      context,
+    );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/image_options.dart';
+import 'package:civic_flutter/core/widgets/image_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';

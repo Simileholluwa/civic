@@ -3,7 +3,7 @@
 import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/views/media_picker.dart';
+import 'package:civic_flutter/core/screens/media_picker.dart';
 import 'package:civic_flutter/core/widgets/civic_wrapper.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';

@@ -1,6 +1,6 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
-import 'package:civic_flutter/core/widgets/choose_location_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -16,11 +16,7 @@ class SelectedLocationsWidget extends StatelessWidget {
       final selectLocations = ref.watch(selectLocationsProvider.notifier);
       final selectedLocations = ref.watch(selectLocationsProvider);
       return InkWell(
-        onTap: () async {
-          await selectLocationBottomSheet(
-            context: context,
-          );
-        },
+        onTap: () => THelperFunctions.selectLocationBottomSheet(context: context),
         child: Ink(
           height: 50,
           decoration: BoxDecoration(
@@ -76,9 +72,12 @@ class SelectedLocationsWidget extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (_, __) {
-                    return const VerticalDivider(
-                      indent: 12,
-                      endIndent: 12,
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0,),
+                      child: const VerticalDivider(
+                        indent: 17,
+                        endIndent: 17,
+                      ),
                     );
                   },
                   scrollDirection: Axis.horizontal,
