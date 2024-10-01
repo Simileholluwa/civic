@@ -5,7 +5,6 @@ import 'package:civic_flutter/core/providers/current_location_data_provider.dart
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/location_error_widget.dart';
 import 'package:civic_flutter/core/widgets/search_bar_widget.dart';
-import 'package:civic_flutter/core/widgets/selected_locations_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -154,7 +153,49 @@ class ChooseLocationsScreen extends ConsumerWidget {
               },
             ),
       bottomNavigationBar: selectedLocations.isNotEmpty
-          ? const SelectedLocationsWidget()
+          ? SizedBox(
+          height: 50,
+          child: ListView.separated(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.md,
+            ),
+            itemBuilder: (context, index) {
+              return Chip(
+                // avatar: UserProfileImage(
+                //   imageUrl: tagState[index].userInfo!.imageUrl!,
+                // ),
+                label: Text(
+                  selectedLocations[index].place,
+                  style: Theme.of(context).textTheme.labelMedium!,
+                ),
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    100,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                deleteIcon: const Icon(
+                  Icons.clear,
+                  color: TColors.secondary,
+                ),
+                onDeleted: () => selectLocations.removeLocation(
+                  selectedLocations[index],
+                ),
+              );
+            },
+            separatorBuilder: (_, __) {
+              return const SizedBox(
+                width: TSizes.sm,
+              );
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: selectedLocations.length,
+          ),
+        )
           : const SizedBox.shrink(),
     );
   }

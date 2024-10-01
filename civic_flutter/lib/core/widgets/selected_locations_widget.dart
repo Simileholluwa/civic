@@ -13,10 +13,11 @@ class SelectedLocationsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
-      final selectLocations = ref.watch(selectLocationsProvider.notifier);
-      final selectedLocations = ref.watch(selectLocationsProvider);
+      final locationsProvider = ref.watch(selectLocationsProvider.notifier);
+      final locationsState = ref.watch(selectLocationsProvider);
       return InkWell(
-        onTap: () => THelperFunctions.selectLocationBottomSheet(context: context),
+        onTap: () =>
+            THelperFunctions.selectLocationBottomSheet(context: context),
         child: Ink(
           height: 50,
           decoration: BoxDecoration(
@@ -40,57 +41,23 @@ class SelectedLocationsWidget extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Chip(
-                      label: Text(
-                        selectedLocations[index].place,
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  color: TColors.primary,
-                                ),
-                      ),
-                      elevation: 0,
-                      surfaceTintColor: Colors.transparent,
-                      side: BorderSide.none,
-                      labelPadding: EdgeInsets.zero,
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          100,
-                        ),
-                      ),
-                      backgroundColor: Colors.transparent,
-                      deleteIcon: const Icon(
-                        Icons.clear,
-                        color: TColors.secondary,
-                      ),
-                      onDeleted: () => selectLocations.removeLocation(
-                        selectedLocations[index],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (_, __) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0,),
-                      child: const VerticalDivider(
-                        indent: 17,
-                        endIndent: 17,
-                      ),
-                    );
-                  },
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  itemCount: selectedLocations.length,
+                  child: Text(
+                    'At ${locationsState.first.place} ${locationsState.length == 1 ? '' : 'and ${locationsState.length - 1 == 1 ? '1 other' : '${locationsState.length - 1} others'}'}',
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          color: TColors.primary,
+                        ),
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                   right: 16,
-                  left: 8,
+                  left: 14,
                 ),
                 child: GestureDetector(
-                  onTap: selectLocations.removeAllLocations,
+                  onTap: locationsProvider.removeAllLocations,
                   child: const Icon(
                     Iconsax.close_square5,
                     color: TColors.secondary,

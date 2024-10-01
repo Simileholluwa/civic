@@ -238,7 +238,7 @@ class THelperFunctions {
   }
 
   static double getBottomNavigationBarHeight(
-      DateTime? scheduledDateTimeState, List<AWSPlaces> selectedLocations) {
+      DateTime? scheduledDateTimeState, List<AWSPlaces> selectedLocations,) {
     return scheduledDateTimeState == null && selectedLocations.isEmpty
         ? 105
         : scheduledDateTimeState == null && selectedLocations.isNotEmpty

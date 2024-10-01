@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -143,7 +144,14 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Container(),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                ref.read(authProvider.notifier).logout(context);
+              },
+              child: const Text('Logout'),
+            ),
+          ),
           Container(),
           Container(),
           Container(),

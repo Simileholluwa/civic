@@ -161,33 +161,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['post'],
           ),
         ),
-        'tagUsers': _i1.MethodConnector(
-          name: 'tagUsers',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i4.PostEndpoint).tagUsers(session),
-        ),
-        'searchUsers': _i1.MethodConnector(
-          name: 'searchUsers',
-          params: {
-            'query': _i1.ParameterDescription(
-              name: 'query',
-              type: _i1.getType<String>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i4.PostEndpoint).searchUsers(
-            session,
-            params['query'],
-          ),
-        ),
         'sendInFuture': _i1.MethodConnector(
           name: 'sendInFuture',
           params: {
@@ -340,6 +313,36 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['userRecord'] as _i6.UserRecordEndpoint)
                   .fetchAllUsernames(session),
+        ),
+        'listUsers': _i1.MethodConnector(
+          name: 'listUsers',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint).listUsers(
+            session,
+            query: params['query'],
+            limit: params['limit'],
+            page: params['page'],
+          ),
         ),
       },
     );

@@ -10,7 +10,7 @@ part 'post_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PostList extends _$PostList {
-  static final PagingController<int, Post> pagingController =
+  final PagingController<int, Post> pagingController =
       PagingController(firstPageKey: 1);
 
   @override

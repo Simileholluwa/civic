@@ -28,7 +28,7 @@ class SendPost extends _$SendPost {
     String videoPath,
     String text,
     List<AWSPlaces> locations,
-    List<String> taggedUsers,
+    List<int> taggedUsers,
     String errorMessage,
   ) async {
     final draftPost = DraftPost(
@@ -82,7 +82,7 @@ class SendPost extends _$SendPost {
     String videoPath,
     String text,
     List<AWSPlaces> locations,
-    List<String> taggedUsers,
+    List<int> taggedUsers,
   ) async {
     final isVideo = videoPath.isNotEmpty;
     final result = await ref.read(assetServiceProvider).uploadMediaAssets(
@@ -144,7 +144,7 @@ class SendPost extends _$SendPost {
     required String videoPath,
     required PostType postType,
     required List<AWSPlaces> locations,
-    required List<String> taggedUsers,
+    required List<int> taggedUsers,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final me = ref.read(meUseCaseProvider);

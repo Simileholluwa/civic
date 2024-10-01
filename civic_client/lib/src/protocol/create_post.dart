@@ -33,7 +33,7 @@ abstract class Post implements _i1.SerializableModel {
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
-    required List<String> taggedUsers,
+    required List<int> taggedUsers,
     required List<_i2.AWSPlaces> locations,
   }) = _PostImpl;
 
@@ -52,7 +52,7 @@ abstract class Post implements _i1.SerializableModel {
           .toList(),
       videoUrl: jsonSerialization['videoUrl'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => e as String)
+          .map((e) => e as int)
           .toList(),
       locations: (jsonSerialization['locations'] as List)
           .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
@@ -77,7 +77,7 @@ abstract class Post implements _i1.SerializableModel {
 
   String videoUrl;
 
-  List<String> taggedUsers;
+  List<int> taggedUsers;
 
   List<_i2.AWSPlaces> locations;
 
@@ -89,7 +89,7 @@ abstract class Post implements _i1.SerializableModel {
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
-    List<String>? taggedUsers,
+    List<int>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
   });
   @override
@@ -124,7 +124,7 @@ class _PostImpl extends Post {
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
-    required List<String> taggedUsers,
+    required List<int> taggedUsers,
     required List<_i2.AWSPlaces> locations,
   }) : super._(
           id: id,
@@ -147,7 +147,7 @@ class _PostImpl extends Post {
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
-    List<String>? taggedUsers,
+    List<int>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
   }) {
     return Post(

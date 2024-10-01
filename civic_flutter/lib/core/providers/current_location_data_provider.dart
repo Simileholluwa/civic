@@ -84,7 +84,7 @@ class LocationSearchQuery extends _$LocationSearchQuery {
   }
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class SelectLocations extends _$SelectLocations {
   @override
   List<AWSPlaces> build() => <AWSPlaces>[];

@@ -7,7 +7,7 @@ part of 'scheduled_datetime_provider.dart';
 // **************************************************************************
 
 String _$postScheduledDateTimeHash() =>
-    r'a455099e0068f0deecdb3cc10ecc775a556b67f4';
+    r'46a85563a6104dd4d899f33b235a81708bb90e26';
 
 /// See also [PostScheduledDateTime].
 @ProviderFor(PostScheduledDateTime)

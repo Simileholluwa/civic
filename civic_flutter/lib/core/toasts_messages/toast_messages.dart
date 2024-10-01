@@ -19,7 +19,7 @@ class TToastMessages {
         seconds: 5,
       ),
       type: ToastificationType.error,
-      style: ToastificationStyle.flat,
+      style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: const BorderSide(
         color: Colors.red,
@@ -42,7 +42,7 @@ class TToastMessages {
         seconds: 5,
       ),
       type: ToastificationType.info,
-      style: ToastificationStyle.flat,
+      style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: const BorderSide(
         color: Colors.blue,
@@ -65,7 +65,7 @@ class TToastMessages {
         seconds: 5,
       ),
       type: ToastificationType.success,
-      style: ToastificationStyle.flat,
+      style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: const BorderSide(
         color: Colors.green,
@@ -85,7 +85,7 @@ class TToastMessages {
         ),
       ),
       type: ToastificationType.warning,
-      style: ToastificationStyle.minimal,
+      style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: BorderSide.none,
       autoCloseDuration: const Duration(

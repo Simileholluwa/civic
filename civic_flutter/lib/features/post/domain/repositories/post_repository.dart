@@ -19,8 +19,4 @@ abstract class PostRepository {
   Future<Either<Failure, void>> deleteDraftPost({
     required DraftPost draftPost,
   });
-  Future<Either<Failure, List<UserRecord>>> tagUsers();
-  Future<Either<Failure, List<UserRecord>>> searchUsersToTag({
-    required String query,
-  });
 }

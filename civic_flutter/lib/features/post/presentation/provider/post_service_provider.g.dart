@@ -23,7 +23,7 @@ final postLocalDatabaseProvider =
 
 typedef PostLocalDatabaseRef = AutoDisposeProviderRef<PostLocalDatabaseImpl>;
 String _$postRemoteDatabaseHash() =>
-    r'2fb5a720f59417343d1996821941f5b8a62eb734';
+    r'bbb5199fe64e5c8abe1519eeec0ee9f5e8b6ffc5';
 
 /// See also [postRemoteDatabase].
 @ProviderFor(postRemoteDatabase)
@@ -164,36 +164,6 @@ final deleteDraftPostProvider =
 );
 
 typedef DeleteDraftPostRef = AutoDisposeProviderRef<DeleteDraftPostUseCase>;
-String _$tagUsersHash() => r'6407199a94c75d283fd1be38eb6fdd074b8bcb00';
-
-/// See also [tagUsers].
-@ProviderFor(tagUsers)
-final tagUsersProvider = AutoDisposeProvider<TagUsersUseCase>.internal(
-  tagUsers,
-  name: r'tagUsersProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$tagUsersHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef TagUsersRef = AutoDisposeProviderRef<TagUsersUseCase>;
-String _$searchUsersToTagHash() => r'5171b0c1002b8072f7250264e0299c2f9499b819';
-
-/// See also [searchUsersToTag].
-@ProviderFor(searchUsersToTag)
-final searchUsersToTagProvider =
-    AutoDisposeProvider<SearchUsersToTagUseCase>.internal(
-  searchUsersToTag,
-  name: r'searchUsersToTagProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$searchUsersToTagHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef SearchUsersToTagRef = AutoDisposeProviderRef<SearchUsersToTagUseCase>;
 String _$saveInFutureHash() => r'975e3577929f4bd6bc1c6bcba703df57836eb5f2';
 
 /// See also [saveInFuture].

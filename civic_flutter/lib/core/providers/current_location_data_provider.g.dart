@@ -22,7 +22,7 @@ final searchNearbyPlacesProvider = FutureProvider<List<AWSPlaces>?>.internal(
 );
 
 typedef SearchNearbyPlacesRef = FutureProviderRef<List<AWSPlaces>?>;
-String _$searchPlacesHash() => r'93be17790ce7b538600c4abcd12b67fc7b293978';
+String _$searchPlacesHash() => r'9bb884eaa568e88e1f7dbf5e01e002c2a0b7374a';
 
 /// See also [searchPlaces].
 @ProviderFor(searchPlaces)
@@ -70,12 +70,12 @@ final locationSearchQueryProvider =
 );
 
 typedef _$LocationSearchQuery = Notifier<String>;
-String _$selectLocationsHash() => r'5d8101330e9a9ae0664d938cae2f84f03b4b1b08';
+String _$selectLocationsHash() => r'b5077f63ad1f9496466d513b22ea5413e3e45c00';
 
 /// See also [SelectLocations].
 @ProviderFor(SelectLocations)
 final selectLocationsProvider =
-    NotifierProvider<SelectLocations, List<AWSPlaces>>.internal(
+    AutoDisposeNotifierProvider<SelectLocations, List<AWSPlaces>>.internal(
   SelectLocations.new,
   name: r'selectLocationsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -85,6 +85,6 @@ final selectLocationsProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$SelectLocations = Notifier<List<AWSPlaces>>;
+typedef _$SelectLocations = AutoDisposeNotifier<List<AWSPlaces>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

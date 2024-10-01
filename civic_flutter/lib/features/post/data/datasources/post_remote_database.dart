@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 
 abstract class PostRemoteDatabase {
   Future<Post?> save({required Post post});
@@ -15,21 +14,14 @@ abstract class PostRemoteDatabase {
   Future<Post?> retrieve({
     required int id,
   });
-  Future<List<UserRecord>> tagUsers();
-  Future<List<UserRecord>> searchUsersToTag({
-    required String query,
-  });
 }
 
 class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   PostRemoteDatabaseImpl({
     required Client client,
-    required SessionManager sessionManager,
-  })  : _client = client,
-        _sessionManager = sessionManager;
+  })  : _client = client;
 
   final Client _client;
-  final SessionManager _sessionManager;
   @override
   Future<Post?> save({
     required Post post,
@@ -85,11 +77,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      if (!_sessionManager.isSignedIn) {
-        throw const ServerException(
-          message: 'You must be signed in to continue.',
-        );
-      }
       final result = _client.post.listPost(
         limit: limit,
         page: page,
@@ -121,64 +108,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         id,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
-    } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<List<UserRecord>> tagUsers() async {
-    try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-      final result = _client.post.tagUsers();
-      return result;
-    } on UserException catch (e) {
-      throw ServerException(
-        message: e.message,
-      );
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
-    } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<List<UserRecord>> searchUsersToTag({
-    required String query,
-  }) async {
-    try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-      final result = await _client.post.searchUsers(query);
-      return result;
-    } on UserException catch (e) {
-      throw ServerException(
-        message: e.message,
-      );
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {

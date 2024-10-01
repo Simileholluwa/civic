@@ -124,38 +124,6 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserRecord>>> tagUsers() async {
-    try {
-      final result = await _remoteDatabase.tagUsers();
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<UserRecord>>> searchUsersToTag({
-    required String query,
-  }) async {
-    try {
-      final result = await _remoteDatabase.searchUsersToTag(
-        query: query,
-      );
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
   Future<Either<Failure, void>> saveInFuture({
     required Post post,
     required DateTime dateTime,

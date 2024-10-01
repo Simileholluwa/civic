@@ -4,6 +4,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
@@ -50,11 +51,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         : THelperFunctions.isImage(media.first)
             ? media
             : <String>[];
+    final taggedUsers = ref.watch(tagSelectionsProvider.notifier);
     await ref.read(sendPostProvider.notifier).sendPost(
           text: ref.watch(postTextProvider).text,
           imagePath: imageUrls,
           videoPath: videoUrl,
-          taggedUsers: [],
+          taggedUsers: taggedUsers.getIdsFromTags(),
           locations: ref.watch(selectLocationsProvider),
           postType: THelperFunctions.determinePostType(
             text: ref.watch(postTextProvider).text,
@@ -90,6 +92,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               extra: null,
             );
           }
+          final taggedUsers = ref.watch(tagSelectionsProvider.notifier);
           ref.read(mediaVideoPlayerProvider.notifier).dispose();
           final media = ref.watch(mediaProvider);
           final videoUrl = media.isEmpty
@@ -114,7 +117,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       text: ref.watch(postTextProvider).text,
                       imagesPath: imageUrls,
                       videoPath: videoUrl,
-                      taggedUsers: [],
+                      taggedUsers: taggedUsers.getIdsFromTags(),
                       locations: ref.watch(selectLocationsProvider),
                       createdAt: DateTime.now(),
                     ),

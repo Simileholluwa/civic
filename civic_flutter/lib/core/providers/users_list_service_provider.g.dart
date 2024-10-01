@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tag_selections_provider.dart';
+part of 'users_list_service_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagSelectionsHash() => r'bdcac4f32a7b6b40438953508dc23fc1643cf930';
+String _$usersListServiceHash() => r'b6b011779c996337d9a7f0d8f48eb7919c68d3e1';
 
-/// See also [TagSelections].
-@ProviderFor(TagSelections)
-final tagSelectionsProvider =
-    AutoDisposeNotifierProvider<TagSelections, List<UserRecord>>.internal(
-  TagSelections.new,
-  name: r'tagSelectionsProvider',
+/// See also [usersListService].
+@ProviderFor(usersListService)
+final usersListServiceProvider = Provider<UsersListService>.internal(
+  usersListService,
+  name: r'usersListServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$tagSelectionsHash,
+      : _$usersListServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TagSelections = AutoDisposeNotifier<List<UserRecord>>;
+typedef UsersListServiceRef = ProviderRef<UsersListService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

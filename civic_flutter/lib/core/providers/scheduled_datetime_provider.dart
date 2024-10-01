@@ -38,7 +38,7 @@ class PostScheduledDateTime extends _$PostScheduledDateTime {
   }
 
   String humanizeDateTime() {
-    return "Send on ${formatDate()} at ${formatTime()}.";
+    return "Scheduled for ${formatDate()} at ${formatTime()}.";
   }
 
   String humanizeDateTimeForSend() {

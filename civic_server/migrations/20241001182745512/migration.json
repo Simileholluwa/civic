@@ -1,0 +1,119 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "post"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "post",
+        "dartName": "Post",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('post_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "ownerId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "postType",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "protocol:PostType"
+          },
+          {
+            "name": "text",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "imageUrls",
+            "columnType": 8,
+            "isNullable": false,
+            "dartType": "List<String>"
+          },
+          {
+            "name": "videoUrl",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "taggedUsers",
+            "columnType": 8,
+            "isNullable": false,
+            "dartType": "List<int>"
+          },
+          {
+            "name": "locations",
+            "columnType": 8,
+            "isNullable": false,
+            "dartType": "List<protocol:AWSPlaces>"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "post_fk_0",
+            "columns": [
+              "ownerId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "post_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column taggedUsers of table post is modified in a way that it must be deleted and recreated.",
+      "table": "post",
+      "columns": [
+        "taggedUsers"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"post\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "post",
+      "columns": [
+        "taggedUsers"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

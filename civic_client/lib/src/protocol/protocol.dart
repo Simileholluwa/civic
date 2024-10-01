@@ -24,9 +24,9 @@ import 'post_type_enums.dart' as _i11;
 import 'user_exception.dart' as _i12;
 import 'user_nin_record.dart' as _i13;
 import 'user_record.dart' as _i14;
-import 'protocol.dart' as _i15;
-import 'package:civic_client/src/protocol/aws_places.dart' as _i16;
-import 'package:civic_client/src/protocol/user_record.dart' as _i17;
+import 'users_list.dart' as _i15;
+import 'protocol.dart' as _i16;
+import 'package:civic_client/src/protocol/aws_places.dart' as _i17;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i18;
 export 'aws_places.dart';
 export 'create_post.dart';
@@ -41,6 +41,7 @@ export 'post_type_enums.dart';
 export 'user_exception.dart';
 export 'user_nin_record.dart';
 export 'user_record.dart';
+export 'users_list.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -95,6 +96,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i14.UserRecord) {
       return _i14.UserRecord.fromJson(data) as T;
     }
+    if (t == _i15.UsersList) {
+      return _i15.UsersList.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i2.AWSPlaces?>()) {
       return (data != null ? _i2.AWSPlaces.fromJson(data) : null) as T;
     }
@@ -134,16 +138,11 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i14.UserRecord?>()) {
       return (data != null ? _i14.UserRecord.fromJson(data) : null) as T;
     }
+    if (t == _i1.getType<_i15.UsersList?>()) {
+      return (data != null ? _i15.UsersList.fromJson(data) : null) as T;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
-          as dynamic;
-    }
-    if (t == List<_i15.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i15.AWSPlaces>(e)).toList()
-          as dynamic;
-    }
-    if (t == List<_i15.Post>) {
-      return (data as List).map((e) => deserialize<_i15.Post>(e)).toList()
           as dynamic;
     }
     if (t == List<int>) {
@@ -153,12 +152,20 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<_i16.AWSPlaces>(e)).toList()
           as dynamic;
     }
-    if (t == List<double>) {
-      return (data as List).map((e) => deserialize<double>(e)).toList()
+    if (t == List<_i16.Post>) {
+      return (data as List).map((e) => deserialize<_i16.Post>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i17.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i17.UserRecord>(e)).toList()
+    if (t == List<_i16.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i16.UserRecord>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i17.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i17.AWSPlaces>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<double>) {
+      return (data as List).map((e) => deserialize<double>(e)).toList()
           as dynamic;
     }
     if (t == List<String>) {
@@ -214,6 +221,9 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i14.UserRecord) {
       return 'UserRecord';
     }
+    if (data is _i15.UsersList) {
+      return 'UsersList';
+    }
     className = _i18.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
@@ -261,6 +271,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data['className'] == 'UserRecord') {
       return deserialize<_i14.UserRecord>(data['data']);
+    }
+    if (data['className'] == 'UsersList') {
+      return deserialize<_i15.UsersList>(data['data']);
     }
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);

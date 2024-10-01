@@ -1,11 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/decorating_dot.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:civic_flutter/core/widgets/user_profile_image.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 // import 'package:iconsax/iconsax.dart';
 
 class UserInfoWidget extends StatelessWidget {
@@ -30,47 +30,8 @@ class UserInfoWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: TColors.primary,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      imageUrl: userRecord.userInfo!.imageUrl!,
-                      fit: BoxFit.cover,
-                      height: 50,
-                      width: 50,
-                      errorWidget: (context, url, child) {
-                        return const Center(
-                          child: Icon(
-                            CupertinoIcons.person_alt_circle_fill,
-                            size: 47,
-                            color: TColors.textWhite,
-                          ),
-                        );
-                      },
-                      progressIndicatorBuilder: (context, url, progress) {
-                        return const Center(
-                          child: Icon(
-                            CupertinoIcons.person_alt_circle_fill,
-                            size: 47,
-                            color: TColors.textWhite,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                userRecord.verifiedAccount
-                    ? const Icon(
-                        Icons.verified_user_sharp,
-                        color: TColors.primary,
-                      )
-                    : const SizedBox.shrink(),
-              ],
+            UserProfileImage(
+              imageUrl: userRecord.userInfo!.imageUrl!,
             ),
             const SizedBox(
               width: TSizes.md,
@@ -82,12 +43,47 @@ class UserInfoWidget extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    userRecord.userInfo!.fullName ?? userRecord.userInfo!.userName!,
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 20,
-                          color: isDark ? TColors.textWhite : TColors.dark,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          userRecord.userInfo!.fullName ??
+                              userRecord.userInfo!.userName!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                fontSize: 20,
+                                color:
+                                    isDark ? TColors.textWhite : TColors.dark,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
+                      ),
+                      const SizedBox(
+                        width: TSizes.xs,
+                      ),
+                      userRecord.verifiedAccount
+                          ? const Icon(
+                              Iconsax.verify5,
+                              color: TColors.primary,
+                              size: 19,
+                            )
+                          : const Icon(
+                              Iconsax.verify,
+                              color: TColors.primary,
+                              size: 19,
+                            ),
+                      if (userRecord.politicalStatus.index == 0)
+                        const PLStatus(statusText: 'CL'),
+                      if (userRecord.politicalStatus.index == 1)
+                        const PLStatus(statusText: 'FL'),
+                      if (userRecord.politicalStatus.index == 2)
+                        const PLStatus(statusText: 'AL'),
+                      if (userRecord.politicalStatus.index == 3)
+                        const PLStatus(statusText: 'CC'),
+                    ],
                   ),
                   Row(
                     children: [
@@ -126,6 +122,42 @@ class UserInfoWidget extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PLStatus extends StatelessWidget {
+  const PLStatus({
+    super.key,
+    required this.statusText,
+  });
+
+  final String statusText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: TSizes.xs,
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          const Icon(
+            Iconsax.shield,
+            color: TColors.primary,
+            size: 18,
+          ),
+          Text(
+            statusText,
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: TColors.primary,
+                  fontSize: 6,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
       ),
     );
   }

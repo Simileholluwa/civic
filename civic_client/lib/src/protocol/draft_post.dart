@@ -32,7 +32,7 @@ abstract class DraftPost implements _i1.SerializableModel {
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<String> taggedUsers,
+    required List<int> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) = _DraftPostImpl;
@@ -48,7 +48,7 @@ abstract class DraftPost implements _i1.SerializableModel {
           .toList(),
       videoPath: jsonSerialization['videoPath'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => e as String)
+          .map((e) => e as int)
           .toList(),
       locations: (jsonSerialization['locations'] as List)
           .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
@@ -71,7 +71,7 @@ abstract class DraftPost implements _i1.SerializableModel {
 
   String videoPath;
 
-  List<String> taggedUsers;
+  List<int> taggedUsers;
 
   List<_i2.AWSPlaces> locations;
 
@@ -84,7 +84,7 @@ abstract class DraftPost implements _i1.SerializableModel {
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<String>? taggedUsers,
+    List<int>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     DateTime? createdAt,
   });
@@ -119,7 +119,7 @@ class _DraftPostImpl extends DraftPost {
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<String> taggedUsers,
+    required List<int> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) : super._(
@@ -142,7 +142,7 @@ class _DraftPostImpl extends DraftPost {
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<String>? taggedUsers,
+    List<int>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
   }) {

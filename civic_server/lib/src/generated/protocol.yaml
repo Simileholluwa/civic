@@ -6,8 +6,6 @@ location:
   - searchNearbyPlaces:
 post:
   - save:
-  - tagUsers:
-  - searchUsers:
   - sendInFuture:
   - retrieve:
   - listPost:
@@ -18,3 +16,4 @@ userRecord:
   - me:
   - checkIfNewUser:
   - fetchAllUsernames:
+  - listUsers:
