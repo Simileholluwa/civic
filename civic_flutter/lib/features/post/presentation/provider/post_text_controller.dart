@@ -16,6 +16,7 @@ class PostText extends _$PostText {
 
   void setText(String text) {
     state.text = text;
+    ref.notifyListeners();
   }
 
   int getLength() {

@@ -29,10 +29,14 @@ class CreatePostBottomNavigation extends ConsumerWidget {
       child: Column(
         children: [
           tagState.isNotEmpty
-              ? const SelectedTagsWidget()
+              ? SelectedTagsWidget(
+                tags: ref.watch(tagSelectionsProvider),
+              )
               : const SizedBox.shrink(),
           selectedLocations.isNotEmpty
-              ? const SelectedLocationsWidget()
+              ? SelectedLocationsWidget(
+                locations: ref.watch(selectLocationsProvider),
+              )
               : const SizedBox.shrink(),
           scheduledDateTimeState == null
               ? const SizedBox.shrink()

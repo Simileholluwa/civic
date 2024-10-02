@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -7,14 +8,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SelectedTagsWidget extends ConsumerWidget {
-  const SelectedTagsWidget({super.key});
+  const SelectedTagsWidget({super.key, required this.tags, this.showRemoveTags = true, this.height = 50,});
+
+  final List<UserRecord> tags;
+  final bool showRemoveTags;
+  final double height;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tagProvider = ref.watch(tagSelectionsProvider.notifier);
-    final tagState = ref.watch(tagSelectionsProvider);
     return InkWell(
-      onTap: () => THelperFunctions.tagUsersBottomSheet(context),
+      onTap: showRemoveTags ? () => THelperFunctions.tagUsersBottomSheet(context) : null,
       child: Ink(
         padding: const EdgeInsets.only(
           left: TSizes.md - 2,
@@ -27,7 +31,7 @@ class SelectedTagsWidget extends ConsumerWidget {
             ),
           ),
         ),
-        height: 50,
+        height: height,
         width: double.maxFinite,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,22 +48,23 @@ class SelectedTagsWidget extends ConsumerWidget {
                   width: TSizes.sm,
                 ),
                 Text(
-                  'With ${tagState.first.userInfo!.fullName ?? tagState.first.userInfo!.userName} ${tagState.length == 1 ? '' : 'and ${tagState.length - 1 == 1 ? '1 other' : '${tagState.length - 1} others'}'}',
+                  'With ${tags.first.userInfo!.fullName ?? tags.first.userInfo!.userName} ${tags.length == 1 ? '' : 'and ${tags.length - 1 == 1 ? '1 other' : '${tags.length - 1} others'}'}',
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
                         color: TColors.primary,
                       ),
                 ),
               ],
             ),
-            GestureDetector(
-              onTap: () {
-                tagProvider.clearSelections();
-              },
-              child: const Icon(
-                Iconsax.close_square5,
-                color: TColors.secondary,
+            if (showRemoveTags)
+              GestureDetector(
+                onTap: () {
+                  tagProvider.clearSelections();
+                },
+                child: const Icon(
+                  Iconsax.close_square5,
+                  color: TColors.secondary,
+                ),
               ),
-            ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
@@ -7,19 +8,22 @@ import 'package:iconsax/iconsax.dart';
 
 class SelectedLocationsWidget extends StatelessWidget {
   const SelectedLocationsWidget({
-    super.key,
+    super.key, required this.locations, this.showRemoveLocations = true, this.height = 50,
   });
+
+  final List<AWSPlaces> locations;
+  final bool showRemoveLocations;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
-      final locationsProvider = ref.watch(selectLocationsProvider.notifier);
-      final locationsState = ref.watch(selectLocationsProvider);
+      
       return InkWell(
-        onTap: () =>
-            THelperFunctions.selectLocationBottomSheet(context: context),
+        onTap: showRemoveLocations ? () =>
+            THelperFunctions.selectLocationBottomSheet(context: context) : null,
         child: Ink(
-          height: 50,
+          height: height,
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
@@ -44,26 +48,27 @@ class SelectedLocationsWidget extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    'At ${locationsState.first.place} ${locationsState.length == 1 ? '' : 'and ${locationsState.length - 1 == 1 ? '1 other' : '${locationsState.length - 1} others'}'}',
+                    'At ${locations.first.place} ${locations.length == 1 ? '' : 'and ${locations.length - 1 == 1 ? '1 other' : '${locations.length - 1} others'}'}',
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           color: TColors.primary,
                         ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 16,
-                  left: 14,
-                ),
-                child: GestureDetector(
-                  onTap: locationsProvider.removeAllLocations,
-                  child: const Icon(
-                    Iconsax.close_square5,
-                    color: TColors.secondary,
+              if (showRemoveLocations)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 16,
+                    left: 14,
+                  ),
+                  child: GestureDetector(
+                    onTap: ref.read(selectLocationsProvider.notifier).removeAllLocations,
+                    child: const Icon(
+                      Iconsax.close_square5,
+                      color: TColors.secondary,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

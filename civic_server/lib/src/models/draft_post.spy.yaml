@@ -6,6 +6,6 @@ fields:
     text: String
     imagesPath: List<String>
     videoPath: String
-    taggedUsers: List<int>
+    taggedUsers: List<UserRecord>
     locations: List<AWSPlaces>
     createdAt: DateTime?

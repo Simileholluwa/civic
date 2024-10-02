@@ -15,6 +15,7 @@ class ImagePost extends ConsumerWidget {
     this.height = 500,
     this.showBorder = true,
     this.padding = TSizes.md,
+    this.fullBorder = true,
   });
 
   final bool showImageOptions;
@@ -22,6 +23,7 @@ class ImagePost extends ConsumerWidget {
   final double height;
   final double padding;
   final bool showBorder;
+  final bool fullBorder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,9 +55,18 @@ class ImagePost extends ConsumerWidget {
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
+                borderRadius: fullBorder
+                    ? BorderRadius.circular(
+                        TSizes.md,
+                      )
+                    : const BorderRadius.only(
+                        bottomLeft: Radius.circular(
+                          TSizes.md,
+                        ),
+                        bottomRight: Radius.circular(
+                          TSizes.md,
+                        ),
+                      ),
                 child: CarouselSlider(
                   options: CarouselOptions(
                     scrollPhysics: const ClampingScrollPhysics(),
@@ -76,9 +87,18 @@ class ImagePost extends ConsumerWidget {
                           width: double.maxFinite,
                           decoration: BoxDecoration(
                             color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: BorderRadius.circular(
-                              TSizes.md,
-                            ),
+                            borderRadius: fullBorder
+                                ? BorderRadius.circular(
+                                    TSizes.md,
+                                  )
+                                : const BorderRadius.only(
+                                    bottomLeft: Radius.circular(
+                                      TSizes.md,
+                                    ),
+                                    bottomRight: Radius.circular(
+                                      TSizes.md,
+                                    ),
+                                  ),
                           ),
                           child: FadeInImage(
                             image: FileImage(

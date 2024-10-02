@@ -99,7 +99,7 @@ class Protocol extends _i1.SerializationManagerServer {
           name: 'taggedUsers',
           columnType: _i2.ColumnType.json,
           isNullable: false,
-          dartType: 'List<int>',
+          dartType: 'List<protocol:UserRecord>',
         ),
         _i2.ColumnDefinition(
           name: 'locations',
@@ -479,8 +479,9 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
+    if (t == List<_i18.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i18.UserRecord>(e)).toList()
+          as dynamic;
     }
     if (t == List<_i18.AWSPlaces>) {
       return (data as List).map((e) => deserialize<_i18.AWSPlaces>(e)).toList()
@@ -490,9 +491,8 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<_i18.Post>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i18.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i18.UserRecord>(e)).toList()
-          as dynamic;
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
     if (t == List<_i19.AWSPlaces>) {
       return (data as List).map((e) => deserialize<_i19.AWSPlaces>(e)).toList()

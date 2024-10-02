@@ -9,6 +9,7 @@ import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/schedule_post_dialog.dart';
 import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
+import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -290,6 +291,17 @@ class THelperFunctions {
       useSafeArea: true,
       builder: (context) {
         return const TagUsersScreen();
+      },
+    );
+  }
+
+  static Future<bool?> showPostDraftsScreen(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) {
+        return const DraftsScreen();
       },
     );
   }

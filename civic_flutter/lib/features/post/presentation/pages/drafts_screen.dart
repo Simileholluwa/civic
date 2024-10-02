@@ -26,11 +26,11 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
-          TDeviceUtils.getAppBarHeight() + 20,
+          TDeviceUtils.getAppBarHeight() + 10,
         ),
         child: Container(
-          margin: const EdgeInsets.only(
-            top: TSizes.md + 4,
+          margin: const EdgeInsets.symmetric(
+            vertical: TSizes.md,
           ),
           child: AppBar(
             automaticallyImplyLeading: false,
@@ -66,8 +66,8 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
         ),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(
-          vertical: TSizes.sm,
+        padding: const EdgeInsets.only(
+          bottom: TSizes.sm,
         ),
         shrinkWrap: true,
         itemBuilder: (context, index) {
@@ -93,7 +93,7 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
                 index: index,
               );
             case PostType.video:
-              ref.watch(mediaProvider.notifier).setVideo(data[index].videoPath);
+              
               return DraftPostsWidget(
                 post: data[index],
                 hasVideo: true,

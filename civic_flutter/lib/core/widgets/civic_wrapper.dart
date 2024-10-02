@@ -1,6 +1,7 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
 import 'package:civic_flutter/core/entity/post_options.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
@@ -218,8 +219,9 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
             widget.navigatorShell,
             Visibility(
               visible: ref.watch(sendPostLoadingProvider),
-              child: const LinearProgressIndicator(
+              child: LinearProgressIndicator(
                 color: TColors.primary,
+                backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
               ),
             ),
           ],

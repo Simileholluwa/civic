@@ -6,5 +6,5 @@ fields:
     text: String
     imageUrls: List<String>
     videoUrl: String
-    taggedUsers: List<int>
+    taggedUsers: List<UserRecord>
     locations: List<AWSPlaces>

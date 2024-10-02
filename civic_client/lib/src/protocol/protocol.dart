@@ -145,8 +145,9 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
+    if (t == List<_i16.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i16.UserRecord>(e)).toList()
+          as dynamic;
     }
     if (t == List<_i16.AWSPlaces>) {
       return (data as List).map((e) => deserialize<_i16.AWSPlaces>(e)).toList()
@@ -156,9 +157,8 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<_i16.Post>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i16.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i16.UserRecord>(e)).toList()
-          as dynamic;
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
     if (t == List<_i17.AWSPlaces>) {
       return (data as List).map((e) => deserialize<_i17.AWSPlaces>(e)).toList()

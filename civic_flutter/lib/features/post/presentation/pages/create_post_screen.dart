@@ -10,7 +10,6 @@ import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
-import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_detail_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
@@ -51,12 +50,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         : THelperFunctions.isImage(media.first)
             ? media
             : <String>[];
-    final taggedUsers = ref.watch(tagSelectionsProvider.notifier);
+    final taggedUsers = ref.watch(tagSelectionsProvider);
     await ref.read(sendPostProvider.notifier).sendPost(
           text: ref.watch(postTextProvider).text,
           imagePath: imageUrls,
           videoPath: videoUrl,
-          taggedUsers: taggedUsers.getIdsFromTags(),
+          taggedUsers: taggedUsers,
           locations: ref.watch(selectLocationsProvider),
           postType: THelperFunctions.determinePostType(
             text: ref.watch(postTextProvider).text,
@@ -92,7 +91,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               extra: null,
             );
           }
-          final taggedUsers = ref.watch(tagSelectionsProvider.notifier);
+          final taggedUsers = ref.watch(tagSelectionsProvider);
           ref.read(mediaVideoPlayerProvider.notifier).dispose();
           final media = ref.watch(mediaProvider);
           final videoUrl = media.isEmpty
@@ -117,7 +116,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       text: ref.watch(postTextProvider).text,
                       imagesPath: imageUrls,
                       videoPath: videoUrl,
-                      taggedUsers: taggedUsers.getIdsFromTags(),
+                      taggedUsers: taggedUsers,
                       locations: ref.watch(selectLocationsProvider),
                       createdAt: DateTime.now(),
                     ),
@@ -190,13 +189,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     visible: draftsData.isNotEmpty,
                     child: TextButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return const DraftsScreen();
-                          },
-                        );
+                        THelperFunctions.showPostDraftsScreen(context);
                       },
                       child: Text(
                         'DRAFTS',

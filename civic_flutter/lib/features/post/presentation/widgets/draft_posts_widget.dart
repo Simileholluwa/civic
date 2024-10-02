@@ -4,14 +4,16 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
+import 'package:civic_flutter/core/providers/video_thumbnail_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/content_dialog.dart';
+import 'package:civic_flutter/core/widgets/selected_locations_widget.dart';
+import 'package:civic_flutter/core/widgets/selected_tags_widget.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
 import 'package:civic_flutter/core/widgets/image_post.dart';
-import 'package:civic_flutter/core/widgets/video_post.dart';
 import 'package:expandable_text/expandable_text.dart';
 //import 'package:civic_flutter/features/post/presentation/widgets/video_post.dart';
 import 'package:flutter/material.dart';
@@ -142,22 +144,25 @@ class _PostWidgetState extends ConsumerState<DraftPostsWidget> {
                               widget.post.text,
                             );
                       }
-                      ref
-                          .read(
-                            selectLocationsProvider.notifier,
-                          )
-                          .setLocations(
-                            widget.post.locations,
-                          );
+                      if (widget.post.locations.isNotEmpty) {
+                        ref
+                            .read(
+                              selectLocationsProvider.notifier,
+                            )
+                            .setLocations(
+                              widget.post.locations,
+                            );
+                      }
+                      if (widget.post.taggedUsers.isNotEmpty) {
+                        ref
+                            .read(
+                              tagSelectionsProvider.notifier,
+                            )
+                            .setTags(
+                              widget.post.taggedUsers,
+                            );
+                      }
                       context.pop();
-                      context.pushReplacement(
-                        AppRoutes.createPost,
-                        extra: {
-                          'id': 0,
-                          'isDraft': true,
-                          'draftPost': widget.post,
-                        },
-                      );
                     },
                     icon: const Icon(
                       Iconsax.edit,
@@ -200,8 +205,30 @@ class _PostWidgetState extends ConsumerState<DraftPostsWidget> {
                 linkStyle: Theme.of(context).textTheme.labelLarge,
               ),
             ),
+          if (widget.post.locations.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(
+                right: TSizes.md,
+              ),
+              child: SelectedLocationsWidget(
+                locations: widget.post.locations,
+                showRemoveLocations: false,
+                height: 40,
+              ),
+            ),
+          if (widget.post.taggedUsers.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(
+                right: TSizes.md,
+              ),
+              child: SelectedTagsWidget(
+                showRemoveTags: false,
+                tags: widget.post.taggedUsers,
+                height: widget.post.locations.isEmpty ? 40 : 20,
+              ),
+            ),
           const SizedBox(
-            height: TSizes.md,
+            height: 16,
           ),
           if (widget.hasImage)
             ImagePost(
@@ -209,35 +236,40 @@ class _PostWidgetState extends ConsumerState<DraftPostsWidget> {
               images: widget.post.imagesPath,
               height: 350,
               padding: 0,
+              fullBorder: false,
             ),
           if (widget.hasVideo)
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                const VideoPost(
-                  showVideoOptions: false,
-                  height: 350,
-                  margin: 0,
-                ),
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: const BoxDecoration(
-                    color: TColors.primary,
-                    shape: BoxShape.circle,
+            ref.watch(videoThumbnailProvider(widget.post.videoPath)).when(
+                  data: (thumbnail) {
+                    if (thumbnail != null) {
+                      return ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(
+                            TSizes.md,
+                          ),
+                          bottomRight: Radius.circular(
+                            TSizes.md,
+                          ),
+                        ),
+                        child: Image.memory(
+                          thumbnail,
+                          fit: BoxFit.cover,
+                          height: 350,
+                          width: double.maxFinite,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                  child: IconButton(
-                    onPressed:
-                        ref.watch(mediaVideoPlayerProvider.notifier).pausePlay,
-                    icon: Icon(
-                      ref.watch(mediaVideoPlayerProvider)!.value.isPlaying
-                          ? Iconsax.pause
-                          : Iconsax.play,
+                  error: (error, _) => Center(
+                    child: Text(
+                      'Error: $error',
                     ),
                   ),
                 ),
-              ],
-            ),
         ],
       ),
     );

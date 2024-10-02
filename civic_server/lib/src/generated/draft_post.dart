@@ -33,7 +33,7 @@ abstract class DraftPost
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<int> taggedUsers,
+    required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) = _DraftPostImpl;
@@ -49,7 +49,7 @@ abstract class DraftPost
           .toList(),
       videoPath: jsonSerialization['videoPath'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => e as int)
+          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List)
           .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
@@ -72,7 +72,7 @@ abstract class DraftPost
 
   String videoPath;
 
-  List<int> taggedUsers;
+  List<_i2.UserRecord> taggedUsers;
 
   List<_i2.AWSPlaces> locations;
 
@@ -85,7 +85,7 @@ abstract class DraftPost
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<int>? taggedUsers,
+    List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     DateTime? createdAt,
   });
@@ -98,7 +98,7 @@ abstract class DraftPost
       'text': text,
       'imagesPath': imagesPath.toJson(),
       'videoPath': videoPath,
-      'taggedUsers': taggedUsers.toJson(),
+      'taggedUsers': taggedUsers.toJson(valueToJson: (v) => v.toJson()),
       'locations': locations.toJson(valueToJson: (v) => v.toJson()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
@@ -113,7 +113,8 @@ abstract class DraftPost
       'text': text,
       'imagesPath': imagesPath.toJson(),
       'videoPath': videoPath,
-      'taggedUsers': taggedUsers.toJson(),
+      'taggedUsers':
+          taggedUsers.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'locations': locations.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
@@ -135,7 +136,7 @@ class _DraftPostImpl extends DraftPost {
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<int> taggedUsers,
+    required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
   }) : super._(
@@ -158,7 +159,7 @@ class _DraftPostImpl extends DraftPost {
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<int>? taggedUsers,
+    List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
   }) {
@@ -169,7 +170,8 @@ class _DraftPostImpl extends DraftPost {
       text: text ?? this.text,
       imagesPath: imagesPath ?? this.imagesPath.map((e0) => e0).toList(),
       videoPath: videoPath ?? this.videoPath,
-      taggedUsers: taggedUsers ?? this.taggedUsers.map((e0) => e0).toList(),
+      taggedUsers:
+          taggedUsers ?? this.taggedUsers.map((e0) => e0.copyWith()).toList(),
       locations:
           locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,

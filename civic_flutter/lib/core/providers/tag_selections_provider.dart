@@ -34,4 +34,8 @@ class TagSelections extends _$TagSelections {
     }
   }
 
+  void setTags(List<UserRecord> tags) {
+    state = tags;
+  }
+
 }

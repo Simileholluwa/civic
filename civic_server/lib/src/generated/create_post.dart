@@ -33,7 +33,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
-    required List<int> taggedUsers,
+    required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
   }) = _PostImpl;
 
@@ -52,7 +52,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
           .toList(),
       videoUrl: jsonSerialization['videoUrl'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => e as int)
+          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List)
           .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
@@ -76,7 +76,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
 
   String videoUrl;
 
-  List<int> taggedUsers;
+  List<_i2.UserRecord> taggedUsers;
 
   List<_i2.AWSPlaces> locations;
 
@@ -91,7 +91,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
-    List<int>? taggedUsers,
+    List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
   });
   @override
@@ -104,7 +104,7 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
       'text': text,
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
-      'taggedUsers': taggedUsers.toJson(),
+      'taggedUsers': taggedUsers.toJson(valueToJson: (v) => v.toJson()),
       'locations': locations.toJson(valueToJson: (v) => v.toJson()),
     };
   }
@@ -119,7 +119,8 @@ abstract class Post extends _i1.TableRow implements _i1.ProtocolSerialization {
       'text': text,
       'imageUrls': imageUrls.toJson(),
       'videoUrl': videoUrl,
-      'taggedUsers': taggedUsers.toJson(),
+      'taggedUsers':
+          taggedUsers.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'locations': locations.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
@@ -165,7 +166,7 @@ class _PostImpl extends Post {
     required String text,
     required List<String> imageUrls,
     required String videoUrl,
-    required List<int> taggedUsers,
+    required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
   }) : super._(
           id: id,
@@ -188,7 +189,7 @@ class _PostImpl extends Post {
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
-    List<int>? taggedUsers,
+    List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
   }) {
     return Post(
@@ -199,7 +200,8 @@ class _PostImpl extends Post {
       text: text ?? this.text,
       imageUrls: imageUrls ?? this.imageUrls.map((e0) => e0).toList(),
       videoUrl: videoUrl ?? this.videoUrl,
-      taggedUsers: taggedUsers ?? this.taggedUsers.map((e0) => e0).toList(),
+      taggedUsers:
+          taggedUsers ?? this.taggedUsers.map((e0) => e0.copyWith()).toList(),
       locations:
           locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
     );

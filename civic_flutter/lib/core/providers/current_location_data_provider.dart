@@ -102,6 +102,6 @@ class SelectLocations extends _$SelectLocations {
   }
 
   void setLocations(List<AWSPlaces> locations) {
-    state = [...locations];
+    state = locations;
   }
 }

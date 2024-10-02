@@ -12,6 +12,7 @@ import 'package:civic_flutter/core/providers/users_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 // import 'package:iconsax/iconsax.dart';
 
 class TagUsersScreen extends ConsumerWidget {
@@ -46,12 +47,6 @@ class TagUsersScreen extends ConsumerWidget {
               ),
               child: AppBar(
                 automaticallyImplyLeading: false,
-                leading: IconButton(
-                  onPressed: context.pop,
-                  icon: const Icon(
-                    Icons.clear,
-                  ),
-                ),
                 centerTitle: true,
                 title: SearchBarWidget(
                   onChanged: (text) {
@@ -59,20 +54,21 @@ class TagUsersScreen extends ConsumerWidget {
                       text,
                     );
                   },
-                  hintText: 'Search for users',
-                ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: TSizes.sm,
+                  trailingWidget: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Iconsax.refresh,
+                      ),
                     ),
-                    child: GestureDetector(
+                    GestureDetector(
                       onTap: tagState.isEmpty ? null : context.pop,
                       child: Container(
                         height: 25,
                         width: 25,
                         margin: const EdgeInsets.only(
-                            right: TSizes.md, left: TSizes.sm),
+                          left: TSizes.sm,
+                        ),
                         decoration: BoxDecoration(
                           color: tagState.isEmpty
                               ? Theme.of(context).disabledColor
@@ -88,8 +84,9 @@ class TagUsersScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                  hintText: 'Search for users',
+                ),
               ),
             ),
           ),

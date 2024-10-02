@@ -28,7 +28,6 @@ class Media extends _$Media {
 
   void setVideo(String video) {
     state = [video];
-    ref.read(mediaVideoPlayerProvider);
   }
 
   Future<void> takeVideo() async {
