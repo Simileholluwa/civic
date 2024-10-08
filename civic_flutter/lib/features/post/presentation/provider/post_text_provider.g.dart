@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_text_controller.dart';
+part of 'post_text_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postTextHash() => r'2e529d0a3ed7dd223308703e704d0fc4f8a2f2b8';
+String _$postTextHash() => r'65010be75e2d72f7b05ffa984fc5148b92a8ca17';
 
 /// See also [PostText].
 @ProviderFor(PostText)
 final postTextProvider =
-    AutoDisposeNotifierProvider<PostText, Raw<TextEditingController>>.internal(
+    NotifierProvider<PostText, Raw<TextEditingController>>.internal(
   PostText.new,
   name: r'postTextProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final postTextProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$PostText = AutoDisposeNotifier<Raw<TextEditingController>>;
+typedef _$PostText = Notifier<Raw<TextEditingController>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -6,7 +6,7 @@ part of 'tag_selections_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagSelectionsHash() => r'9c7d3a7dc8f0b7026570bbd5844b5e611f23595d';
+String _$tagSelectionsHash() => r'1fa8d7a6a013ae800d138e00af4f88012a279cc8';
 
 /// See also [TagSelections].
 @ProviderFor(TagSelections)

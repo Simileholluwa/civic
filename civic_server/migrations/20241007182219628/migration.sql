@@ -3,6 +3,15 @@ BEGIN;
 --
 -- ACTION CREATE TABLE
 --
+CREATE TABLE "hashtag" (
+    "id" bigserial PRIMARY KEY,
+    "tag" text NOT NULL,
+    "usageCount" bigint NOT NULL
+);
+
+--
+-- ACTION CREATE TABLE
+--
 CREATE TABLE "post" (
     "id" bigserial PRIMARY KEY,
     "ownerId" bigint NOT NULL,
@@ -11,9 +20,22 @@ CREATE TABLE "post" (
     "imageUrls" json NOT NULL,
     "videoUrl" text NOT NULL,
     "taggedUsers" json NOT NULL,
-    "latitude" double precision NOT NULL,
-    "longitude" double precision NOT NULL
+    "locations" json NOT NULL,
+    "mentions" json NOT NULL,
+    "tags" json NOT NULL
 );
+
+--
+-- ACTION CREATE TABLE
+--
+CREATE TABLE "posthashtags" (
+    "id" bigserial PRIMARY KEY,
+    "postId" bigint NOT NULL,
+    "hashtagId" bigint NOT NULL
+);
+
+-- Indexes
+CREATE UNIQUE INDEX "posthashtags_index_idx" ON "posthashtags" USING btree ("postId", "hashtagId");
 
 --
 -- ACTION CREATE TABLE
@@ -70,6 +92,22 @@ ALTER TABLE ONLY "post"
 --
 -- ACTION CREATE FOREIGN KEY
 --
+ALTER TABLE ONLY "posthashtags"
+    ADD CONSTRAINT "posthashtags_fk_0"
+    FOREIGN KEY("postId")
+    REFERENCES "post"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "posthashtags"
+    ADD CONSTRAINT "posthashtags_fk_1"
+    FOREIGN KEY("hashtagId")
+    REFERENCES "hashtag"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
+-- ACTION CREATE FOREIGN KEY
+--
 ALTER TABLE ONLY "user_nin_record"
     ADD CONSTRAINT "user_nin_record_fk_0"
     FOREIGN KEY("ownerId")
@@ -92,9 +130,9 @@ ALTER TABLE ONLY "user_record"
 -- MIGRATION VERSION FOR civic
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('civic', '20240910121243659', now())
+    VALUES ('civic', '20241007182219628', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20240910121243659', "timestamp" = now();
+    DO UPDATE SET "version" = '20241007182219628', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

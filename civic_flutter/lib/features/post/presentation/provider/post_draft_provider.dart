@@ -104,6 +104,8 @@ class PostDrafts extends _$PostDrafts {
           postType: draftPost.postType,
           locations: draftPost.locations,
           taggedUsers: draftPost.taggedUsers,
+          mentions: draftPost.mentions,
+          tags: draftPost.tags,
         );
 
     if (result) {

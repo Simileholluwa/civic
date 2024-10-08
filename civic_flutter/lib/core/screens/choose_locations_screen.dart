@@ -1,7 +1,7 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
+import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/location_error_widget.dart';
 import 'package:civic_flutter/core/widgets/search_bar_widget.dart';

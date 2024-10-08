@@ -6,6 +6,7 @@ location:
   - searchNearbyPlaces:
 post:
   - save:
+  - sendHashTags:
   - sendInFuture:
   - retrieve:
   - listPost:
@@ -17,3 +18,5 @@ userRecord:
   - checkIfNewUser:
   - fetchAllUsernames:
   - listUsers:
+  - mentionUsers:
+  - fetchHashtags:

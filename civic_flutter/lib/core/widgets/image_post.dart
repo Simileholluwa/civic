@@ -34,90 +34,89 @@ class ImagePost extends ConsumerWidget {
       margin: EdgeInsets.symmetric(
         horizontal: padding,
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: 439,
-                maxHeight: height,
+          if (showImageOptions) const ImageOptions(),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 500,
+              maxHeight: height,
+            ),
+            decoration: BoxDecoration(
+              border: showBorder == true
+                  ? Border.all(
+                      color: Theme.of(context).dividerColor,
+                    )
+                  : null,
+              borderRadius: BorderRadius.circular(
+                TSizes.md,
               ),
-              decoration: BoxDecoration(
-                border: showBorder == true
-                    ? Border.all(
-                        color: Theme.of(context).dividerColor,
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: ClipRRect(
-                borderRadius: fullBorder
-                    ? BorderRadius.circular(
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            child: ClipRRect(
+              borderRadius: fullBorder
+                  ? BorderRadius.circular(
+                      TSizes.md,
+                    )
+                  : const BorderRadius.only(
+                      bottomLeft: Radius.circular(
                         TSizes.md,
-                      )
-                    : const BorderRadius.only(
-                        bottomLeft: Radius.circular(
-                          TSizes.md,
-                        ),
-                        bottomRight: Radius.circular(
-                          TSizes.md,
-                        ),
                       ),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    scrollPhysics: const ClampingScrollPhysics(),
-                    height: height - 2,
-                    enableInfiniteScroll: false,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) => ref
-                        .read(pageChangedProvider.notifier)
-                        .carouselPageChanged(
-                          index,
-                          reason,
-                        ),
-                  ),
-                  items: images.map((images) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: fullBorder
-                                ? BorderRadius.circular(
-                                    TSizes.md,
-                                  )
-                                : const BorderRadius.only(
-                                    bottomLeft: Radius.circular(
-                                      TSizes.md,
-                                    ),
-                                    bottomRight: Radius.circular(
-                                      TSizes.md,
-                                    ),
-                                  ),
-                          ),
-                          child: FadeInImage(
-                            image: FileImage(
-                              File(images),
-                            ),
-                            placeholder: MemoryImage(
-                              kTransparentImage,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
+                      bottomRight: Radius.circular(
+                        TSizes.md,
+                      ),
+                    ),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  scrollPhysics: const ClampingScrollPhysics(),
+                  height: height - 2,
+                  enableInfiniteScroll: false,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) => ref
+                      .read(pageChangedProvider.notifier)
+                      .carouselPageChanged(
+                        index,
+                        reason,
+                      ),
                 ),
+                items: images.map((images) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: fullBorder
+                              ? BorderRadius.circular(
+                                  TSizes.md,
+                                )
+                              : const BorderRadius.only(
+                                  bottomLeft: Radius.circular(
+                                    TSizes.md,
+                                  ),
+                                  bottomRight: Radius.circular(
+                                    TSizes.md,
+                                  ),
+                                ),
+                        ),
+                        child: FadeInImage(
+                          image: FileImage(
+                            File(images),
+                          ),
+                          placeholder: MemoryImage(
+                            kTransparentImage,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
               ),
             ),
           ),
-          if (showImageOptions) const ImageOptions(),
+          
         ],
       ),
     );

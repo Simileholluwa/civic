@@ -1,6 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/providers/users_list_service_provider.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/infinite_list.dart';
 import 'package:civic_flutter/core/widgets/search_bar_widget.dart';
@@ -8,7 +9,6 @@ import 'package:civic_flutter/core/widgets/user_profile_image.dart';
 // import 'package:civic_flutter/features/post/presentation/provider/post_list_provider.dart';
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/widgets/user_info_widget.dart';
-import 'package:civic_flutter/core/providers/users_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

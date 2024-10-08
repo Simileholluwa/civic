@@ -1,6 +1,15 @@
 BEGIN;
 
 --
+-- Class Hashtag as table hashtag
+--
+CREATE TABLE "hashtag" (
+    "id" bigserial PRIMARY KEY,
+    "tag" text NOT NULL,
+    "usageCount" bigint NOT NULL
+);
+
+--
 -- Class Post as table post
 --
 CREATE TABLE "post" (
@@ -11,8 +20,22 @@ CREATE TABLE "post" (
     "imageUrls" json NOT NULL,
     "videoUrl" text NOT NULL,
     "taggedUsers" json NOT NULL,
-    "locations" json NOT NULL
+    "locations" json NOT NULL,
+    "mentions" json NOT NULL,
+    "tags" json NOT NULL
 );
+
+--
+-- Class PostsHashtags as table posthashtags
+--
+CREATE TABLE "posthashtags" (
+    "id" bigserial PRIMARY KEY,
+    "postId" bigint NOT NULL,
+    "hashtagId" bigint NOT NULL
+);
+
+-- Indexes
+CREATE UNIQUE INDEX "posthashtags_index_idx" ON "posthashtags" USING btree ("postId", "hashtagId");
 
 --
 -- Class UserNinRecord as table user_nin_record
@@ -385,6 +408,22 @@ ALTER TABLE ONLY "post"
     ON UPDATE NO ACTION;
 
 --
+-- Foreign relations for "posthashtags" table
+--
+ALTER TABLE ONLY "posthashtags"
+    ADD CONSTRAINT "posthashtags_fk_0"
+    FOREIGN KEY("postId")
+    REFERENCES "post"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "posthashtags"
+    ADD CONSTRAINT "posthashtags_fk_1"
+    FOREIGN KEY("hashtagId")
+    REFERENCES "hashtag"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
 -- Foreign relations for "user_nin_record" table
 --
 ALTER TABLE ONLY "user_nin_record"
@@ -439,9 +478,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR civic
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('civic', '20241001182745512', now())
+    VALUES ('civic', '20241007182219628', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241001182745512', "timestamp" = now();
+    DO UPDATE SET "version" = '20241007182219628', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

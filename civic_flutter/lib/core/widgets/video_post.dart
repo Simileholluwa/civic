@@ -28,73 +28,68 @@ class VideoPost extends ConsumerWidget {
         horizontal: margin,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxHeight: height,
-                  ),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      TSizes.md,
-                    ),
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor,
-                    ),
-                  ),
-                  child: Builder(
-                    builder: (context) {
-                      final videoControl = ref.watch(mediaVideoPlayerProvider);
-                      final controller =
-                          ref.watch(mediaVideoPlayerProvider.notifier);
-                      return videoControl != null
-                          ? videoControl.value.isInitialized
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    TSizes.md,
-                                  ),
-                                  child: AspectRatio(
-                                    aspectRatio: videoControl.value.aspectRatio,
-                                    child: FittedBox(
-                                      fit: BoxFit.cover,
-                                      child: SizedBox(
-                                        width: videoControl.value.size.width,
-                                        height: videoControl.value.size.height,
-                                        child: GestureDetector(
-                                          onTap: controller.pausePlay,
-                                          child: VideoPlayer(
-                                            videoControl,
-                                          ),
-                                        ),
-                                      ),
+          if (showVideoOptions) const VideoOptions(),
+          Container(
+            constraints: BoxConstraints(
+              maxHeight: height,
+            ),
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                TSizes.md,
+              ),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+            child: Builder(
+              builder: (context) {
+                final videoControl = ref.watch(mediaVideoPlayerProvider);
+                final controller =
+                    ref.watch(mediaVideoPlayerProvider.notifier);
+                return videoControl != null
+                    ? videoControl.value.isInitialized
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              TSizes.md,
+                            ),
+                            child: AspectRatio(
+                              aspectRatio: videoControl.value.aspectRatio,
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: SizedBox(
+                                  width: videoControl.value.size.width,
+                                  height: videoControl.value.size.height,
+                                  child: GestureDetector(
+                                    onTap: controller.pausePlay,
+                                    child: VideoPlayer(
+                                      videoControl,
                                     ),
                                   ),
-                                )
-                              : const SizedBox(
-                                  height: 300,
-                                  width: 200,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                          : const SizedBox(
-                              height: 300,
-                              width: 200,
-                              child: Center(
-                                child: CircularProgressIndicator(),
+                                ),
                               ),
-                            );
-                    },
-                  ),
-                ),
-              ),
-              if (showVideoOptions) const VideoOptions(),
-            ],
+                            ),
+                          )
+                        : const SizedBox(
+                            height: 300,
+                            width: 200,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                    : const SizedBox(
+                        height: 300,
+                        width: 200,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+              },
+            ),
           ),
+          
         ],
       ),
     );

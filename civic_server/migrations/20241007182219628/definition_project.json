@@ -2,6 +2,49 @@
   "moduleName": "civic",
   "tables": [
     {
+      "name": "hashtag",
+      "dartName": "Hashtag",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('hashtag_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "tag",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "usageCount",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "hashtag_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
       "name": "post",
       "dartName": "Post",
       "module": "civic",
@@ -48,13 +91,25 @@
           "name": "taggedUsers",
           "columnType": 8,
           "isNullable": false,
-          "dartType": "List<int>"
+          "dartType": "List<protocol:UserRecord>"
         },
         {
           "name": "locations",
           "columnType": 8,
           "isNullable": false,
           "dartType": "List<protocol:AWSPlaces>"
+        },
+        {
+          "name": "mentions",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "List<protocol:UserRecord>"
+        },
+        {
+          "name": "tags",
+          "columnType": 8,
+          "isNullable": false,
+          "dartType": "List<String>"
         }
       ],
       "foreignKeys": [
@@ -84,6 +139,92 @@
           "type": "btree",
           "isUnique": true,
           "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "posthashtags",
+      "dartName": "PostsHashtags",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('posthashtags_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "hashtagId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "posthashtags_fk_0",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        },
+        {
+          "constraintName": "posthashtags_fk_1",
+          "columns": [
+            "hashtagId"
+          ],
+          "referenceTable": "hashtag",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "posthashtags_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "posthashtags_index_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "postId"
+            },
+            {
+              "type": 0,
+              "definition": "hashtagId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
         }
       ],
       "managed": true
@@ -346,7 +487,7 @@
     },
     {
       "module": "civic",
-      "version": "20240928190227350"
+      "version": "20240715070610333"
     }
   ],
   "migrationApiVersion": 1

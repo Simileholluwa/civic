@@ -9,3 +9,5 @@ fields:
     taggedUsers: List<UserRecord>
     locations: List<AWSPlaces>
     createdAt: DateTime?
+    mentions: List<UserRecord>
+    tags: List<String>

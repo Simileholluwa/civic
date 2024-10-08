@@ -1,6 +1,5 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SelectVerificationMethod extends StatefulWidget {
   const SelectVerificationMethod({
@@ -36,8 +35,7 @@ class _SelectVerificationMethodState extends State<SelectVerificationMethod> {
           ),
         ),
         child: ListTile(
-          leading: Obx(
-            () => Radio<int>(
+          leading: Radio<int>(
               value: widget.value,
               groupValue: _verificationMethod,
               onChanged: (value) {
@@ -46,7 +44,7 @@ class _SelectVerificationMethodState extends State<SelectVerificationMethod> {
                 });
               },
             ),
-          ),
+          
           onTap: () {
             _verificationMethod = widget.value;
           },

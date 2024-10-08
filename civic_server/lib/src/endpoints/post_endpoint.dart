@@ -24,19 +24,86 @@ class PostEndpoint extends Endpoint {
             message: 'Unauthorised operation',
           );
         }
-        return await Post.db.updateRow(session, post);
+        final sentPost = await Post.db.updateRow(
+          session,
+          post,
+        );
+        await sendHashTags(
+          session,
+          post.tags,
+          post.id!,
+        );
+        return sentPost;
       } else {
-        return Post.db.insertRow(
+        final sentPost = await Post.db.insertRow(
           session,
           post.copyWith(
             ownerId: user.id,
             owner: user,
           ),
         );
+        if (sentPost.id == null) {
+          throw Exception('Post ID is null after insert');
+        } else {
+          await sendHashTags(
+            session,
+            post.tags,
+            sentPost.id!,
+          );
+        }
+        return sentPost;
       }
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<void> sendHashTags(
+    Session session,
+    List<String> tags,
+    int postId,
+  ) async {
+    try {
+      for (var tag in tags) {
+        var existingHashtag = await Hashtag.db.findFirstRow(
+          session,
+          where: (t) => t.tag.equals(tag),
+        );
+
+        int hashtagId;
+
+        if (existingHashtag != null) {
+          existingHashtag.usageCount += 1;
+          await Hashtag.db.updateRow(
+            session,
+            existingHashtag,
+          );
+          hashtagId = existingHashtag.id!;
+        } else {
+          var newHashtag = Hashtag(
+            tag: tag,
+            usageCount: 1,
+          );
+          final sentHashtag = await Hashtag.db.insertRow(
+            session,
+            newHashtag,
+          );
+          
+          hashtagId = sentHashtag.id!;
+        }
+        var postHashtag = PostsHashtags(
+          postId: postId,
+          hashtagId: hashtagId,
+        );
+        await PostsHashtags.db.insertRow(
+          session,
+          postHashtag,
+        );
+      }
+    } catch (e) {
+      print(e);
+      return;
     }
   }
 
@@ -87,5 +154,4 @@ class PostEndpoint extends Endpoint {
       canLoadMore: page * limit < count,
     );
   }
-
 }

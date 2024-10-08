@@ -161,6 +161,30 @@ class Endpoints extends _i1.EndpointDispatch {
             params['post'],
           ),
         ),
+        'sendHashTags': _i1.MethodConnector(
+          name: 'sendHashTags',
+          params: {
+            'tags': _i1.ParameterDescription(
+              name: 'tags',
+              type: _i1.getType<List<String>>(),
+              nullable: false,
+            ),
+            'postId': _i1.ParameterDescription(
+              name: 'postId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i4.PostEndpoint).sendHashTags(
+            session,
+            params['tags'],
+            params['postId'],
+          ),
+        ),
         'sendInFuture': _i1.MethodConnector(
           name: 'sendInFuture',
           params: {
@@ -342,6 +366,54 @@ class Endpoints extends _i1.EndpointDispatch {
             query: params['query'],
             limit: params['limit'],
             page: params['page'],
+          ),
+        ),
+        'mentionUsers': _i1.MethodConnector(
+          name: 'mentionUsers',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint).mentionUsers(
+            session,
+            query: params['query'],
+            limit: params['limit'],
+          ),
+        ),
+        'fetchHashtags': _i1.MethodConnector(
+          name: 'fetchHashtags',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i6.UserRecordEndpoint).fetchHashtags(
+            session,
+            query: params['query'],
+            limit: params['limit'],
           ),
         ),
       },

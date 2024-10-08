@@ -19,18 +19,18 @@ class ImageOptions extends ConsumerWidget {
     final controller = ref.watch(mediaProvider.notifier);
     final pageIndex = ref.watch(pageChangedProvider) + 1;
     return Padding(
-      padding: const EdgeInsets.only(
-        left: TSizes.md,
-      ),
+      padding: const EdgeInsets.only(bottom: 16,),
       child: Container(
-        width: 45,
+        height: 45,
+        
         decoration: BoxDecoration(
           color: isDark ? TColors.dark : TColors.light,
           borderRadius: BorderRadius.circular(
             100,
           ),
         ),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 45,
@@ -51,7 +51,7 @@ class ImageOptions extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: TSizes.xs,
+              width: TSizes.xs,
             ),
             IconButton(
               onPressed: () {
@@ -77,7 +77,7 @@ class ImageOptions extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: TSizes.xs,
+              width: TSizes.xs,
             ),
             Container(
               height: 45,

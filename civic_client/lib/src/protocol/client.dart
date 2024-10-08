@@ -77,6 +77,19 @@ class EndpointPost extends _i1.EndpointRef {
         {'post': post},
       );
 
+  _i2.Future<void> sendHashTags(
+    List<String> tags,
+    int postId,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'sendHashTags',
+        {
+          'tags': tags,
+          'postId': postId,
+        },
+      );
+
   _i2.Future<void> sendInFuture(
     _i4.Post post,
     DateTime dateTime,
@@ -173,6 +186,32 @@ class EndpointUserRecord extends _i1.EndpointRef {
           'query': query,
           'limit': limit,
           'page': page,
+        },
+      );
+
+  _i2.Future<List<_i7.UserRecord>> mentionUsers({
+    required String query,
+    required int limit,
+  }) =>
+      caller.callServerEndpoint<List<_i7.UserRecord>>(
+        'userRecord',
+        'mentionUsers',
+        {
+          'query': query,
+          'limit': limit,
+        },
+      );
+
+  _i2.Future<List<String>> fetchHashtags({
+    required String query,
+    required int limit,
+  }) =>
+      caller.callServerEndpoint<List<String>>(
+        'userRecord',
+        'fetchHashtags',
+        {
+          'query': query,
+          'limit': limit,
         },
       );
 }

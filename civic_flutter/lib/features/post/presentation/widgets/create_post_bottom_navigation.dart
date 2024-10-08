@@ -1,5 +1,5 @@
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
+import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/widgets/create_post_options.dart';
 import 'package:civic_flutter/core/widgets/privacy_widget.dart';
 import 'package:civic_flutter/core/widgets/schedule_post_widget.dart';
@@ -24,27 +24,33 @@ class CreatePostBottomNavigation extends ConsumerWidget {
       scheduledDateTimeState,
       selectedLocations,
     );
-    return SizedBox(
-      height: tagState.isEmpty ? bottomHeight : bottomHeight + 50,
-      child: Column(
-        children: [
-          tagState.isNotEmpty
-              ? SelectedTagsWidget(
-                tags: ref.watch(tagSelectionsProvider),
-              )
-              : const SizedBox.shrink(),
-          selectedLocations.isNotEmpty
-              ? SelectedLocationsWidget(
-                locations: ref.watch(selectLocationsProvider),
-              )
-              : const SizedBox.shrink(),
-          scheduledDateTimeState == null
-              ? const SizedBox.shrink()
-              : const SchedulePostWidget(),
-          const PrivacyWidget(),
-          const CreatePostOptions(),
-        ],
-      ),
+    
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: tagState.isEmpty ? bottomHeight : bottomHeight + 50,
+          child: Column(
+            children: [
+              tagState.isNotEmpty
+                  ? SelectedTagsWidget(
+                    tags: ref.watch(tagSelectionsProvider),
+                  )
+                  : const SizedBox.shrink(),
+              selectedLocations.isNotEmpty
+                  ? SelectedLocationsWidget(
+                    locations: ref.watch(selectLocationsProvider),
+                  )
+                  : const SizedBox.shrink(),
+              scheduledDateTimeState == null
+                  ? const SizedBox.shrink()
+                  : const SchedulePostWidget(),
+              const PrivacyWidget(),
+              const CreatePostOptions(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

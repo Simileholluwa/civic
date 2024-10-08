@@ -1,0 +1,9 @@
+class: PostsHashtags
+table: posthashtags
+fields:
+    post: Post?, relation(name=posts_postshashtags)
+    hashtag: Hashtag?, relation(name=hashtags_postshashtags)
+indexes:
+  posthashtags_index_idx:
+    fields: postId, hashtagId
+    unique: true

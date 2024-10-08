@@ -12,7 +12,6 @@ import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
 import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
@@ -133,12 +132,6 @@ class THelperFunctions {
     }
   }
 
-  static void showSnackBar(String message) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
   static String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
       return text;
@@ -151,8 +144,8 @@ class THelperFunctions {
     return Theme.of(context).brightness == Brightness.dark;
   }
 
-  static Size screenSize() {
-    return MediaQuery.of(Get.context!).size;
+  static Size screenSize(BuildContext context) {
+    return MediaQuery.of(context).size;
   }
 
   static double screenHeight(BuildContext context) {

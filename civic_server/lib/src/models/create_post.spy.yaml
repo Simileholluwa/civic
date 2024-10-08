@@ -8,3 +8,6 @@ fields:
     videoUrl: String
     taggedUsers: List<UserRecord>
     locations: List<AWSPlaces>
+    mentions: List<UserRecord>
+    tags: List<String>
+    hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)

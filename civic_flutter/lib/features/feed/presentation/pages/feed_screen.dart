@@ -43,6 +43,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
         () => widget.sendPost!(),
       );
     }
+  
     return Scaffold(
       appBar: AppBar(
         title: Text(

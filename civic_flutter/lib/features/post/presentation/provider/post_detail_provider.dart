@@ -36,6 +36,8 @@ Future<Post?> postDetail(
           videoUrl: draftPost.videoPath,
           taggedUsers: draftPost.taggedUsers,
           locations: draftPost.locations,
+          mentions: draftPost.mentions,
+          tags: draftPost.tags,
         );
       }
       return Post(
@@ -47,6 +49,8 @@ Future<Post?> postDetail(
         videoUrl: '',
         taggedUsers: [],
         locations: [],
+        mentions: [],
+        tags: [],
       );
     });
   } else {

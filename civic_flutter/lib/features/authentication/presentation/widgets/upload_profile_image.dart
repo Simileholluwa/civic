@@ -5,7 +5,7 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 Future<Widget?> uploadProfileImage(
@@ -24,12 +24,12 @@ Future<Widget?> uploadProfileImage(
             TSizes.md,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(Get.context!).scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(
               TSizes.borderRadiusLg + 20,
             ),
             border: Border.all(
-              color: Theme.of(Get.context!).hintColor.withOpacity(.2),
+              color: Theme.of(context).hintColor.withOpacity(.2),
               width: 0.5,
             ),
           ),
@@ -169,7 +169,7 @@ Future<Widget?> uploadProfileImage(
                 child: DualButton(
                   onTapSkipButton: () {
                     // controller.sendEmailVerificationCode(shouldNavigate: true);
-                    Get.back();
+                    context.pop();
                   },
                   activeButtonText: 'Upload',
                   onTapActiveButton: () {},

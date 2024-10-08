@@ -5,7 +5,6 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class VerifyNinEmailOTP extends ConsumerStatefulWidget {
@@ -55,8 +54,7 @@ class _VerifyNinEmailOTPState extends ConsumerState<VerifyNinEmailOTP> {
           const SizedBox(
             height: TSizes.spaceBtwSections,
           ),
-          Obx(
-            () => FilledButton(
+          FilledButton(
               onPressed: () {},
               child: const Text(
                 'Confirm OTP',
@@ -64,7 +62,7 @@ class _VerifyNinEmailOTPState extends ConsumerState<VerifyNinEmailOTP> {
             ).withLoading(
               loading: false,
             ),
-          ),
+          
         ],
       ),
     );

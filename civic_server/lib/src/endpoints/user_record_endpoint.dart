@@ -122,4 +122,72 @@ class UserRecordEndpoint extends Endpoint {
       canLoadMore: page * limit < count,
     );
   }
+
+  Future<List<UserRecord>> mentionUsers(
+    Session session, {
+    required String query,
+    int limit = 20,
+  }) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+
+    var currentUser = await UserRecord.db.findFirstRow(
+      session,
+      where: (row) => row.userInfoId.equals(authInfo.userId),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (currentUser == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+
+    var users = await UserRecord.db.find(
+      session,
+      where: (u) =>
+          u.userInfo.id.inSet(
+            currentUser.followers.toSet(),
+          ) &
+          u.userInfo.userName.ilike('%${query.trim()}%'),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (users.length < limit) {
+      var additionalUsers = await UserRecord.db.find(
+        session,
+        limit: limit - users.length,
+        where: (u) =>
+            u.userInfo.userName.ilike('%${query.trim()}%') &
+            u.userInfo.id.notEquals(currentUser.userInfo!.id),
+        include: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      );
+      users.addAll(additionalUsers);
+    }
+
+    return users;
+  }
+
+  Future<List<String>> fetchHashtags(
+    Session session, {
+    required String query,
+    int limit = 20,
+  }) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+    final hashtags = await Hashtag.db.find(
+      session,
+      limit: limit,
+      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
+    );
+    return hashtags.map((hashtag) => '#${hashtag.tag}').toList();
+  }
 }

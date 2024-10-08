@@ -23,6 +23,9 @@ abstract class Post implements _i1.SerializableModel {
     required this.videoUrl,
     required this.taggedUsers,
     required this.locations,
+    required this.mentions,
+    required this.tags,
+    this.hashtags,
   });
 
   factory Post({
@@ -35,6 +38,9 @@ abstract class Post implements _i1.SerializableModel {
     required String videoUrl,
     required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
+    required List<_i2.UserRecord> mentions,
+    required List<String> tags,
+    List<_i2.PostsHashtags>? hashtags,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -56,6 +62,14 @@ abstract class Post implements _i1.SerializableModel {
           .toList(),
       locations: (jsonSerialization['locations'] as List)
           .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      mentions: (jsonSerialization['mentions'] as List)
+          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      tags:
+          (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
+      hashtags: (jsonSerialization['hashtags'] as List?)
+          ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -81,6 +95,12 @@ abstract class Post implements _i1.SerializableModel {
 
   List<_i2.AWSPlaces> locations;
 
+  List<_i2.UserRecord> mentions;
+
+  List<String> tags;
+
+  List<_i2.PostsHashtags>? hashtags;
+
   Post copyWith({
     int? id,
     int? ownerId,
@@ -91,6 +111,9 @@ abstract class Post implements _i1.SerializableModel {
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
+    List<_i2.UserRecord>? mentions,
+    List<String>? tags,
+    List<_i2.PostsHashtags>? hashtags,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -104,6 +127,10 @@ abstract class Post implements _i1.SerializableModel {
       'videoUrl': videoUrl,
       'taggedUsers': taggedUsers.toJson(valueToJson: (v) => v.toJson()),
       'locations': locations.toJson(valueToJson: (v) => v.toJson()),
+      'mentions': mentions.toJson(valueToJson: (v) => v.toJson()),
+      'tags': tags.toJson(),
+      if (hashtags != null)
+        'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -126,6 +153,9 @@ class _PostImpl extends Post {
     required String videoUrl,
     required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
+    required List<_i2.UserRecord> mentions,
+    required List<String> tags,
+    List<_i2.PostsHashtags>? hashtags,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -136,6 +166,9 @@ class _PostImpl extends Post {
           videoUrl: videoUrl,
           taggedUsers: taggedUsers,
           locations: locations,
+          mentions: mentions,
+          tags: tags,
+          hashtags: hashtags,
         );
 
   @override
@@ -149,6 +182,9 @@ class _PostImpl extends Post {
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
+    List<_i2.UserRecord>? mentions,
+    List<String>? tags,
+    Object? hashtags = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -162,6 +198,11 @@ class _PostImpl extends Post {
           taggedUsers ?? this.taggedUsers.map((e0) => e0.copyWith()).toList(),
       locations:
           locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
+      mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
+      tags: tags ?? this.tags.map((e0) => e0).toList(),
+      hashtags: hashtags is List<_i2.PostsHashtags>?
+          ? hashtags
+          : this.hashtags?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

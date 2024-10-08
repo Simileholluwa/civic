@@ -1,0 +1,6 @@
+class: Hashtag
+table: hashtag
+fields:
+    tag: String
+    usageCount: int
+    hashtags: List<PostsHashtags>?, relation(name=hashtags_postshashtags)

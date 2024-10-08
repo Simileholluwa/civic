@@ -49,7 +49,9 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
             userRecord: post.owner!,
             onTap: () {},
           ),
-          CreatePostTextFormField(userName: post.owner!.userInfo!.userName!,),
+          CreatePostTextFormField(
+            userName: post.owner!.userInfo!.userName!,
+          ),
           if (media.isNotEmpty && THelperFunctions.isImage(media.first))
             ImagePost(
               images: ref.watch(mediaProvider),

@@ -24,6 +24,8 @@ abstract class DraftPost
     required this.taggedUsers,
     required this.locations,
     this.createdAt,
+    required this.mentions,
+    required this.tags,
   });
 
   factory DraftPost({
@@ -36,6 +38,8 @@ abstract class DraftPost
     required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
+    required List<_i2.UserRecord> mentions,
+    required List<String> tags,
   }) = _DraftPostImpl;
 
   factory DraftPost.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -57,6 +61,11 @@ abstract class DraftPost
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      mentions: (jsonSerialization['mentions'] as List)
+          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      tags:
+          (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
     );
   }
 
@@ -78,6 +87,10 @@ abstract class DraftPost
 
   DateTime? createdAt;
 
+  List<_i2.UserRecord> mentions;
+
+  List<String> tags;
+
   DraftPost copyWith({
     int? draftId,
     int? ownerId,
@@ -88,6 +101,8 @@ abstract class DraftPost
     List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     DateTime? createdAt,
+    List<_i2.UserRecord>? mentions,
+    List<String>? tags,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -101,6 +116,8 @@ abstract class DraftPost
       'taggedUsers': taggedUsers.toJson(valueToJson: (v) => v.toJson()),
       'locations': locations.toJson(valueToJson: (v) => v.toJson()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      'mentions': mentions.toJson(valueToJson: (v) => v.toJson()),
+      'tags': tags.toJson(),
     };
   }
 
@@ -117,6 +134,8 @@ abstract class DraftPost
           taggedUsers.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'locations': locations.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      'mentions': mentions.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      'tags': tags.toJson(),
     };
   }
 
@@ -139,6 +158,8 @@ class _DraftPostImpl extends DraftPost {
     required List<_i2.UserRecord> taggedUsers,
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
+    required List<_i2.UserRecord> mentions,
+    required List<String> tags,
   }) : super._(
           draftId: draftId,
           ownerId: ownerId,
@@ -149,6 +170,8 @@ class _DraftPostImpl extends DraftPost {
           taggedUsers: taggedUsers,
           locations: locations,
           createdAt: createdAt,
+          mentions: mentions,
+          tags: tags,
         );
 
   @override
@@ -162,6 +185,8 @@ class _DraftPostImpl extends DraftPost {
     List<_i2.UserRecord>? taggedUsers,
     List<_i2.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
+    List<_i2.UserRecord>? mentions,
+    List<String>? tags,
   }) {
     return DraftPost(
       draftId: draftId is int? ? draftId : this.draftId,
@@ -175,6 +200,8 @@ class _DraftPostImpl extends DraftPost {
       locations:
           locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
+      mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
+      tags: tags ?? this.tags.map((e0) => e0).toList(),
     );
   }
 }

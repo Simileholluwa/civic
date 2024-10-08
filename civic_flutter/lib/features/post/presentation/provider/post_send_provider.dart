@@ -30,6 +30,8 @@ class SendPost extends _$SendPost {
     List<AWSPlaces> locations,
     List<UserRecord> taggedUsers,
     String errorMessage,
+    List<UserRecord> mentions,
+    List<String> tags,
   ) async {
     final draftPost = DraftPost(
       postType: THelperFunctions.determinePostType(
@@ -42,6 +44,8 @@ class SendPost extends _$SendPost {
       videoPath: videoPath,
       taggedUsers: taggedUsers,
       locations: locations,
+      mentions: mentions,
+      tags: tags,
     );
     final draftPostProvider = ref.read(postDraftsProvider.notifier);
     final result = await draftPostProvider.saveDraftPost(
@@ -66,10 +70,31 @@ class SendPost extends _$SendPost {
     );
     return saveResult.fold((error) async {
       log(error.message);
-      await saveFailedPostAsDraft(post.imageUrls, post.videoUrl, post.text,
-          post.locations, post.taggedUsers, error.message);
+      await saveFailedPostAsDraft(
+        post.imageUrls,
+        post.videoUrl,
+        post.text,
+        post.locations,
+        post.taggedUsers,
+        error.message,
+        post.mentions,
+        post.tags,
+      );
       return null;
-    }, (post) {
+    }, (data) async {
+      if (data == null) {
+        await saveFailedPostAsDraft(
+          post.imageUrls,
+          post.videoUrl,
+          post.text,
+          post.locations,
+          post.taggedUsers,
+          'Something went wrong.',
+          post.mentions,
+          post.tags,
+        );
+        return null;
+      }
       TToastMessages.successToast(
         'Your post was sent.',
       );
@@ -83,6 +108,8 @@ class SendPost extends _$SendPost {
     String text,
     List<AWSPlaces> locations,
     List<UserRecord> taggedUsers,
+    List<UserRecord> mentions,
+    List<String> tags,
   ) async {
     final isVideo = videoPath.isNotEmpty;
     final result = await ref.read(assetServiceProvider).uploadMediaAssets(
@@ -100,6 +127,8 @@ class SendPost extends _$SendPost {
         locations,
         taggedUsers,
         error,
+        mentions,
+        tags,
       );
 
       return null;
@@ -128,6 +157,8 @@ class SendPost extends _$SendPost {
           post.locations,
           post.taggedUsers,
           error.message,
+          post.mentions,
+          post.tags,
         );
       },
       (r) {
@@ -145,6 +176,8 @@ class SendPost extends _$SendPost {
     required PostType postType,
     required List<AWSPlaces> locations,
     required List<UserRecord> taggedUsers,
+    required List<UserRecord> mentions,
+    required List<String> tags,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final me = ref.read(meUseCaseProvider);
@@ -163,6 +196,8 @@ class SendPost extends _$SendPost {
           locations,
           taggedUsers,
           error.message,
+          mentions,
+          tags,
         );
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         return false;
@@ -180,6 +215,8 @@ class SendPost extends _$SendPost {
             text,
             locations,
             taggedUsers,
+            mentions,
+            tags,
           );
           if (result == null) {
             state = null;
@@ -195,6 +232,8 @@ class SendPost extends _$SendPost {
             videoUrl: isVideo ? result.first : '',
             taggedUsers: taggedUsers,
             locations: locations,
+            mentions: mentions,
+            tags: tags,
           );
           scheduledDateTime == null
               ? await sendPostWithMedia(
@@ -219,6 +258,8 @@ class SendPost extends _$SendPost {
             videoUrl: '',
             taggedUsers: taggedUsers,
             locations: locations,
+            mentions: mentions,
+            tags: tags,
           );
           scheduledDateTime == null
               ? await sendPostWithMedia(

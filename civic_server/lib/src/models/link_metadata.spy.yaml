@@ -1,0 +1,6 @@
+class: LinkMetadata
+fields: 
+    title: String
+    description: String
+    image: String
+    url: String

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -73,18 +72,19 @@ class ImageHelper {
   Future<CroppedFile?> crop({
     required File file,
     CropStyle cropStyle = CropStyle.rectangle,
+    required BuildContext context,
   }) async {
-    final isDark = THelperFunctions.isDarkMode(Get.context!);
+    final isDark = THelperFunctions.isDarkMode(context);
     return _imageCropper.cropImage(
       sourcePath: file.path,
       uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
-          toolbarColor: Theme.of(Get.context!).scaffoldBackgroundColor,
+          toolbarColor: Theme.of(context).scaffoldBackgroundColor,
           statusBarColor: TColors.dark,
-          toolbarWidgetColor: Theme.of(Get.context!).iconTheme.color,
+          toolbarWidgetColor: Theme.of(context).iconTheme.color,
           activeControlsWidgetColor: TColors.primary,
-          dimmedLayerColor: Theme.of(Get.context!).scaffoldBackgroundColor,
-          backgroundColor: Theme.of(Get.context!).scaffoldBackgroundColor,
+          dimmedLayerColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           cropFrameColor: isDark ? TColors.textWhite : TColors.black,
         ),
       ],

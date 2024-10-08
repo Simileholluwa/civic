@@ -2,8 +2,9 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/current_location_data_provider.dart';
+import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
@@ -13,8 +14,10 @@ import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart
 import 'package:civic_flutter/features/post/presentation/provider/post_detail_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_controller.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/create_post_widget.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/hastags_suggestions_widget.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/mentions_suggestions_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -62,6 +65,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             pickedImages: imageUrls,
             pickedVideo: videoUrl,
           ),
+          mentions: ref.watch(selectedMentionsProvider),
+          tags: ref.watch(hashtagsProvider),
         );
   }
 
@@ -119,6 +124,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       taggedUsers: taggedUsers,
                       locations: ref.watch(selectLocationsProvider),
                       createdAt: DateTime.now(),
+                      mentions: ref.watch(selectedMentionsProvider),
+                      tags: ref.watch(hashtagsProvider),
                     ),
                   );
           if (result) {
@@ -129,9 +136,50 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         },
       );
 
+  void _onSuggestionSelected(
+    String suggestion,
+  ) {
+    final text = ref.watch(postTextProvider).text;
+    final textController = ref.watch(postTextProvider);
+    final cursorIndex = textController.selection.baseOffset;
+
+    // Find the word to replace, ensuring it's the last mention/hashtag typed
+    final textBeforeCursor = text.substring(0, cursorIndex);
+    final textAfterCursor = text.substring(cursorIndex);
+
+    final lastWordMatch = RegExp(r'[@#][\w]*$').firstMatch(textBeforeCursor);
+    if (lastWordMatch != null) {
+      final start = lastWordMatch.start;
+      final end = lastWordMatch.end;
+
+      // Replace the mention/hashtag in the text
+      final newText = textBeforeCursor.replaceRange(start, end, suggestion) +
+          textAfterCursor;
+      textController.text = newText;
+
+      // Move the cursor to the end of the inserted suggestion
+      textController.selection = TextSelection.fromPosition(
+          TextPosition(offset: start + suggestion.length));
+
+      ref.read(postTextProvider).text = newText;
+      ref
+          .read(mentionSuggestionsProvider.notifier)
+          .setSuggestions(<UserRecord>[]);
+      ref
+          .read(
+        hashtagsSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <String>[],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    final suggestions = ref.watch(mentionSuggestionsProvider);
+    final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final data = ref.watch(
       postDetailProvider(
         widget.id,
@@ -238,6 +286,15 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ),
             ),
           ),
+          bottomSheet: suggestions.isNotEmpty
+              ? MentionsSuggestionsWidget(
+                  onSuggestionSelected: _onSuggestionSelected,
+                )
+              : hashtagsSuggestions.isNotEmpty
+                  ? HashtagSuggestionsWidget(
+                      onSuggestionSelected: _onSuggestionSelected,
+                    )
+                  : null,
           bottomNavigationBar:
               (data.isLoading || data.hasError || data.value == null)
                   ? const SizedBox()

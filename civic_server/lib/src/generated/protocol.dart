@@ -18,27 +18,34 @@ import 'create_post.dart' as _i5;
 import 'draft_post.dart' as _i6;
 import 'example.dart' as _i7;
 import 'exception_type_enum.dart' as _i8;
-import 'location_exception.dart' as _i9;
-import 'political_status_enum.dart' as _i10;
-import 'post_exception.dart' as _i11;
-import 'post_list.dart' as _i12;
-import 'post_type_enums.dart' as _i13;
-import 'user_exception.dart' as _i14;
-import 'user_nin_record.dart' as _i15;
-import 'user_record.dart' as _i16;
-import 'users_list.dart' as _i17;
-import 'protocol.dart' as _i18;
-import 'package:civic_server/src/generated/aws_places.dart' as _i19;
+import 'hashtags.dart' as _i9;
+import 'link_metadata.dart' as _i10;
+import 'location_exception.dart' as _i11;
+import 'political_status_enum.dart' as _i12;
+import 'post_exception.dart' as _i13;
+import 'post_list.dart' as _i14;
+import 'post_type_enums.dart' as _i15;
+import 'posts_hashtags.dart' as _i16;
+import 'user_exception.dart' as _i17;
+import 'user_nin_record.dart' as _i18;
+import 'user_record.dart' as _i19;
+import 'users_list.dart' as _i20;
+import 'protocol.dart' as _i21;
+import 'package:civic_server/src/generated/aws_places.dart' as _i22;
+import 'package:civic_server/src/generated/user_record.dart' as _i23;
 export 'aws_places.dart';
 export 'create_post.dart';
 export 'draft_post.dart';
 export 'example.dart';
 export 'exception_type_enum.dart';
+export 'hashtags.dart';
+export 'link_metadata.dart';
 export 'location_exception.dart';
 export 'political_status_enum.dart';
 export 'post_exception.dart';
 export 'post_list.dart';
 export 'post_type_enums.dart';
+export 'posts_hashtags.dart';
 export 'user_exception.dart';
 export 'user_nin_record.dart';
 export 'user_record.dart';
@@ -52,6 +59,50 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
+    _i2.TableDefinition(
+      name: 'hashtag',
+      dartName: 'Hashtag',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'hashtag_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'tag',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'usageCount',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'hashtag_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'post',
       dartName: 'Post',
@@ -107,6 +158,18 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'List<protocol:AWSPlaces>',
         ),
+        _i2.ColumnDefinition(
+          name: 'mentions',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'List<protocol:UserRecord>',
+        ),
+        _i2.ColumnDefinition(
+          name: 'tags',
+          columnType: _i2.ColumnType.json,
+          isNullable: false,
+          dartType: 'List<String>',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -134,6 +197,88 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: true,
           isPrimary: true,
         )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'posthashtags',
+      dartName: 'PostsHashtags',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'posthashtags_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'postId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'hashtagId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'posthashtags_fk_0',
+          columns: ['postId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'posthashtags_fk_1',
+          columns: ['hashtagId'],
+          referenceTable: 'hashtag',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'posthashtags_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'posthashtags_index_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'postId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'hashtagId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
       ],
       managed: true,
     ),
@@ -406,32 +551,41 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i8.ExceptionTypes) {
       return _i8.ExceptionTypes.fromJson(data) as T;
     }
-    if (t == _i9.LocationException) {
-      return _i9.LocationException.fromJson(data) as T;
+    if (t == _i9.Hashtag) {
+      return _i9.Hashtag.fromJson(data) as T;
     }
-    if (t == _i10.PoliticalStatus) {
-      return _i10.PoliticalStatus.fromJson(data) as T;
+    if (t == _i10.LinkMetadata) {
+      return _i10.LinkMetadata.fromJson(data) as T;
     }
-    if (t == _i11.PostException) {
-      return _i11.PostException.fromJson(data) as T;
+    if (t == _i11.LocationException) {
+      return _i11.LocationException.fromJson(data) as T;
     }
-    if (t == _i12.PostList) {
-      return _i12.PostList.fromJson(data) as T;
+    if (t == _i12.PoliticalStatus) {
+      return _i12.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i13.PostType) {
-      return _i13.PostType.fromJson(data) as T;
+    if (t == _i13.PostException) {
+      return _i13.PostException.fromJson(data) as T;
     }
-    if (t == _i14.UserException) {
-      return _i14.UserException.fromJson(data) as T;
+    if (t == _i14.PostList) {
+      return _i14.PostList.fromJson(data) as T;
     }
-    if (t == _i15.UserNinRecord) {
-      return _i15.UserNinRecord.fromJson(data) as T;
+    if (t == _i15.PostType) {
+      return _i15.PostType.fromJson(data) as T;
     }
-    if (t == _i16.UserRecord) {
-      return _i16.UserRecord.fromJson(data) as T;
+    if (t == _i16.PostsHashtags) {
+      return _i16.PostsHashtags.fromJson(data) as T;
     }
-    if (t == _i17.UsersList) {
-      return _i17.UsersList.fromJson(data) as T;
+    if (t == _i17.UserException) {
+      return _i17.UserException.fromJson(data) as T;
+    }
+    if (t == _i18.UserNinRecord) {
+      return _i18.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i19.UserRecord) {
+      return _i19.UserRecord.fromJson(data) as T;
+    }
+    if (t == _i20.UsersList) {
+      return _i20.UsersList.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.AWSPlaces?>()) {
       return (data != null ? _i4.AWSPlaces.fromJson(data) : null) as T;
@@ -448,54 +602,77 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i8.ExceptionTypes?>()) {
       return (data != null ? _i8.ExceptionTypes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.LocationException?>()) {
-      return (data != null ? _i9.LocationException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.Hashtag?>()) {
+      return (data != null ? _i9.Hashtag.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.PoliticalStatus?>()) {
-      return (data != null ? _i10.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.LinkMetadata?>()) {
+      return (data != null ? _i10.LinkMetadata.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.PostException?>()) {
-      return (data != null ? _i11.PostException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.LocationException?>()) {
+      return (data != null ? _i11.LocationException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i12.PostList?>()) {
-      return (data != null ? _i12.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i12.PoliticalStatus?>()) {
+      return (data != null ? _i12.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i13.PostType?>()) {
-      return (data != null ? _i13.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i13.PostException?>()) {
+      return (data != null ? _i13.PostException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i14.UserException?>()) {
-      return (data != null ? _i14.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i14.PostList?>()) {
+      return (data != null ? _i14.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i15.UserNinRecord?>()) {
-      return (data != null ? _i15.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i15.PostType?>()) {
+      return (data != null ? _i15.PostType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i16.UserRecord?>()) {
-      return (data != null ? _i16.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i16.PostsHashtags?>()) {
+      return (data != null ? _i16.PostsHashtags.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i17.UsersList?>()) {
-      return (data != null ? _i17.UsersList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i17.UserException?>()) {
+      return (data != null ? _i17.UserException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i18.UserNinRecord?>()) {
+      return (data != null ? _i18.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i19.UserRecord?>()) {
+      return (data != null ? _i19.UserRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i20.UsersList?>()) {
+      return (data != null ? _i20.UsersList.fromJson(data) : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i18.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i18.UserRecord>(e)).toList()
+    if (t == List<_i21.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i21.UserRecord>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i18.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i18.AWSPlaces>(e)).toList()
+    if (t == List<_i21.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i21.AWSPlaces>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i18.Post>) {
-      return (data as List).map((e) => deserialize<_i18.Post>(e)).toList()
+    if (t == _i1.getType<List<_i21.PostsHashtags>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i21.PostsHashtags>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i21.PostsHashtags>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i21.PostsHashtags>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == List<_i21.Post>) {
+      return (data as List).map((e) => deserialize<_i21.Post>(e)).toList()
           as dynamic;
     }
     if (t == List<int>) {
       return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
-    if (t == List<_i19.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i19.AWSPlaces>(e)).toList()
+    if (t == List<_i22.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i22.AWSPlaces>(e)).toList()
           as dynamic;
     }
     if (t == List<double>) {
@@ -504,6 +681,10 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i23.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i23.UserRecord>(e)).toList()
           as dynamic;
     }
     try {
@@ -534,31 +715,40 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i8.ExceptionTypes) {
       return 'ExceptionTypes';
     }
-    if (data is _i9.LocationException) {
+    if (data is _i9.Hashtag) {
+      return 'Hashtag';
+    }
+    if (data is _i10.LinkMetadata) {
+      return 'LinkMetadata';
+    }
+    if (data is _i11.LocationException) {
       return 'LocationException';
     }
-    if (data is _i10.PoliticalStatus) {
+    if (data is _i12.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i11.PostException) {
+    if (data is _i13.PostException) {
       return 'PostException';
     }
-    if (data is _i12.PostList) {
+    if (data is _i14.PostList) {
       return 'PostList';
     }
-    if (data is _i13.PostType) {
+    if (data is _i15.PostType) {
       return 'PostType';
     }
-    if (data is _i14.UserException) {
+    if (data is _i16.PostsHashtags) {
+      return 'PostsHashtags';
+    }
+    if (data is _i17.UserException) {
       return 'UserException';
     }
-    if (data is _i15.UserNinRecord) {
+    if (data is _i18.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i16.UserRecord) {
+    if (data is _i19.UserRecord) {
       return 'UserRecord';
     }
-    if (data is _i17.UsersList) {
+    if (data is _i20.UsersList) {
       return 'UsersList';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -589,32 +779,41 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data['className'] == 'ExceptionTypes') {
       return deserialize<_i8.ExceptionTypes>(data['data']);
     }
+    if (data['className'] == 'Hashtag') {
+      return deserialize<_i9.Hashtag>(data['data']);
+    }
+    if (data['className'] == 'LinkMetadata') {
+      return deserialize<_i10.LinkMetadata>(data['data']);
+    }
     if (data['className'] == 'LocationException') {
-      return deserialize<_i9.LocationException>(data['data']);
+      return deserialize<_i11.LocationException>(data['data']);
     }
     if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i10.PoliticalStatus>(data['data']);
+      return deserialize<_i12.PoliticalStatus>(data['data']);
     }
     if (data['className'] == 'PostException') {
-      return deserialize<_i11.PostException>(data['data']);
+      return deserialize<_i13.PostException>(data['data']);
     }
     if (data['className'] == 'PostList') {
-      return deserialize<_i12.PostList>(data['data']);
+      return deserialize<_i14.PostList>(data['data']);
     }
     if (data['className'] == 'PostType') {
-      return deserialize<_i13.PostType>(data['data']);
+      return deserialize<_i15.PostType>(data['data']);
+    }
+    if (data['className'] == 'PostsHashtags') {
+      return deserialize<_i16.PostsHashtags>(data['data']);
     }
     if (data['className'] == 'UserException') {
-      return deserialize<_i14.UserException>(data['data']);
+      return deserialize<_i17.UserException>(data['data']);
     }
     if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i15.UserNinRecord>(data['data']);
+      return deserialize<_i18.UserNinRecord>(data['data']);
     }
     if (data['className'] == 'UserRecord') {
-      return deserialize<_i16.UserRecord>(data['data']);
+      return deserialize<_i19.UserRecord>(data['data']);
     }
     if (data['className'] == 'UsersList') {
-      return deserialize<_i17.UsersList>(data['data']);
+      return deserialize<_i20.UsersList>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -644,10 +843,14 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i5.Post:
         return _i5.Post.t;
-      case _i15.UserNinRecord:
-        return _i15.UserNinRecord.t;
-      case _i16.UserRecord:
-        return _i16.UserRecord.t;
+      case _i9.Hashtag:
+        return _i9.Hashtag.t;
+      case _i16.PostsHashtags:
+        return _i16.PostsHashtags.t;
+      case _i18.UserNinRecord:
+        return _i18.UserNinRecord.t;
+      case _i19.UserRecord:
+        return _i19.UserRecord.t;
     }
     return null;
   }

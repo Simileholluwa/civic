@@ -32,7 +32,6 @@ dependencies:
 
 
   cupertino_icons: ^1.0.5
-  get: ^4.6.6
   fpdart: ^1.0.0
   flex_color_scheme: ^7.3.1
   responsive_framework: ^0.2.0 
@@ -56,8 +55,8 @@ dependencies:
   toastification:
   photo_manager:
   image_cropper:
-  image_picker: ^1.1.2
-  url_launcher: ^6.3.0
+  image_picker:
+  url_launcher:
   pinput:
   font_awesome_flutter:
   serverpod_auth_client: 2.1.2
@@ -71,8 +70,9 @@ dependencies:
   uuid:
   path_provider:
   path:
-  expandable_text: ^2.3.0
-  video_thumbnail: ^0.5.3
+  expandable_text:
+  video_thumbnail:
+  metadata_fetch:
 
 dev_dependencies:
   flutter_lints: '>=3.0.0 <5.0.0'

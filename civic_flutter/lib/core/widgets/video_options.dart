@@ -20,15 +20,16 @@ class VideoOptions extends ConsumerWidget {
     final isDark = THelperFunctions.isDarkMode(context);
     return Padding(
       padding: const EdgeInsets.only(
-        left: TSizes.md,
+        bottom: TSizes.md,
       ),
       child: Container(
-        width: 45,
+        height: 45,
         decoration: BoxDecoration(
           color: isDark ? TColors.dark : TColors.light,
           borderRadius: BorderRadius.circular(100),
         ),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               height: 45,
@@ -52,7 +53,7 @@ class VideoOptions extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: TSizes.xs,
+              width: TSizes.xs,
             ),
             IconButton(
               onPressed: videoController.pausePlay,
@@ -76,7 +77,7 @@ class VideoOptions extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: TSizes.xs,
+              width: TSizes.xs,
             ),
           ],
         ),
