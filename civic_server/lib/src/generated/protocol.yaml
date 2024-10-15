@@ -1,12 +1,19 @@
 assets:
   - getUploadDescription:
   - verifyUpload:
+hashtag:
+  - sendHashTags:
+  - sendPollHashtags:
 location:
   - searchLocation:
   - searchNearbyPlaces:
+poll:
+  - save:
+  - sendInFuture:
+  - retrieve:
+  - castVote:
 post:
   - save:
-  - sendHashTags:
   - sendInFuture:
   - retrieve:
   - listPost:
@@ -20,3 +27,4 @@ userRecord:
   - listUsers:
   - mentionUsers:
   - fetchHashtags:
+  - followUnfollowUser:

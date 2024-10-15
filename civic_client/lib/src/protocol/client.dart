@@ -11,14 +11,15 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:civic_client/src/protocol/aws_places.dart' as _i3;
-import 'package:civic_client/src/protocol/create_post.dart' as _i4;
-import 'package:civic_client/src/protocol/post_list.dart' as _i5;
-import 'package:civic_client/src/protocol/user_nin_record.dart' as _i6;
-import 'package:civic_client/src/protocol/user_record.dart' as _i7;
-import 'package:civic_client/src/protocol/users_list.dart' as _i8;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i9;
-import 'protocol.dart' as _i10;
+import 'package:civic_client/src/protocol/general/aws_places.dart' as _i3;
+import 'package:civic_client/src/protocol/poll/poll.dart' as _i4;
+import 'package:civic_client/src/protocol/post/post.dart' as _i5;
+import 'package:civic_client/src/protocol/post/post_list.dart' as _i6;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i7;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i8;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i9;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i10;
+import 'protocol.dart' as _i11;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -38,6 +39,40 @@ class EndpointAssets extends _i1.EndpointRef {
         'assets',
         'verifyUpload',
         {'path': path},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointHashtag extends _i1.EndpointRef {
+  EndpointHashtag(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'hashtag';
+
+  _i2.Future<void> sendHashTags(
+    List<String> tags,
+    int postId,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'hashtag',
+        'sendHashTags',
+        {
+          'tags': tags,
+          'postId': postId,
+        },
+      );
+
+  _i2.Future<void> sendPollHashtags(
+    List<String> tags,
+    int pollId,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'hashtag',
+        'sendPollHashtags',
+        {
+          'tags': tags,
+          'pollId': pollId,
+        },
       );
 }
 
@@ -64,34 +99,69 @@ class EndpointLocation extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointPoll extends _i1.EndpointRef {
+  EndpointPoll(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'poll';
+
+  _i2.Future<_i4.Poll?> save(_i4.Poll poll) =>
+      caller.callServerEndpoint<_i4.Poll?>(
+        'poll',
+        'save',
+        {'poll': poll},
+      );
+
+  _i2.Future<void> sendInFuture(
+    _i4.Poll poll,
+    DateTime dateTime,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'poll',
+        'sendInFuture',
+        {
+          'poll': poll,
+          'dateTime': dateTime,
+        },
+      );
+
+  _i2.Future<_i4.Poll?> retrieve(int pollId) =>
+      caller.callServerEndpoint<_i4.Poll?>(
+        'poll',
+        'retrieve',
+        {'pollId': pollId},
+      );
+
+  _i2.Future<void> castVote(
+    int pollId,
+    int optionId,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'poll',
+        'castVote',
+        {
+          'pollId': pollId,
+          'optionId': optionId,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointPost extends _i1.EndpointRef {
   EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'post';
 
-  _i2.Future<_i4.Post?> save(_i4.Post post) =>
-      caller.callServerEndpoint<_i4.Post?>(
+  _i2.Future<_i5.Post?> save(_i5.Post post) =>
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'save',
         {'post': post},
       );
 
-  _i2.Future<void> sendHashTags(
-    List<String> tags,
-    int postId,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'post',
-        'sendHashTags',
-        {
-          'tags': tags,
-          'postId': postId,
-        },
-      );
-
   _i2.Future<void> sendInFuture(
-    _i4.Post post,
+    _i5.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -103,18 +173,18 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Post?> retrieve(int id) =>
-      caller.callServerEndpoint<_i4.Post?>(
+  _i2.Future<_i5.Post?> retrieve(int id) =>
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'retrieve',
         {'id': id},
       );
 
-  _i2.Future<_i5.PostList> listPost({
+  _i2.Future<_i6.PostList> listPost({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'listPost',
         {
@@ -131,8 +201,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i6.UserNinRecord?> findNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i6.UserNinRecord?>(
+  _i2.Future<_i7.UserNinRecord?> findNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i7.UserNinRecord?>(
         'userNin',
         'findNinDetails',
         {'ninNumber': ninNumber},
@@ -146,15 +216,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i7.UserRecord userRecord) =>
+  _i2.Future<void> saveUserRecord(_i8.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUserRecord',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i7.UserRecord?> me() =>
-      caller.callServerEndpoint<_i7.UserRecord?>(
+  _i2.Future<_i8.UserRecord?> me() =>
+      caller.callServerEndpoint<_i8.UserRecord?>(
         'userRecord',
         'me',
         {},
@@ -174,12 +244,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i8.UsersList> listUsers({
+  _i2.Future<_i9.UsersList> listUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i8.UsersList>(
+      caller.callServerEndpoint<_i9.UsersList>(
         'userRecord',
         'listUsers',
         {
@@ -189,11 +259,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i7.UserRecord>> mentionUsers({
+  _i2.Future<List<_i8.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i7.UserRecord>>(
+      caller.callServerEndpoint<List<_i8.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {
@@ -214,14 +284,21 @@ class EndpointUserRecord extends _i1.EndpointRef {
           'limit': limit,
         },
       );
+
+  _i2.Future<void> followUnfollowUser(int followedUserId) =>
+      caller.callServerEndpoint<void>(
+        'userRecord',
+        'followUnfollowUser',
+        {'followedUserId': followedUserId},
+      );
 }
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i9.Caller(client);
+    auth = _i10.Caller(client);
   }
 
-  late final _i9.Caller auth;
+  late final _i10.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -240,7 +317,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i10.Protocol(),
+          _i11.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -251,7 +328,9 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     assets = EndpointAssets(this);
+    hashtag = EndpointHashtag(this);
     location = EndpointLocation(this);
+    poll = EndpointPoll(this);
     post = EndpointPost(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
@@ -260,7 +339,11 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointAssets assets;
 
+  late final EndpointHashtag hashtag;
+
   late final EndpointLocation location;
+
+  late final EndpointPoll poll;
 
   late final EndpointPost post;
 
@@ -273,7 +356,9 @@ class Client extends _i1.ServerpodClientShared {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'assets': assets,
+        'hashtag': hashtag,
         'location': location,
+        'poll': poll,
         'post': post,
         'userNin': userNin,
         'userRecord': userRecord,

@@ -10,6 +10,7 @@ import 'package:civic_flutter/features/discover/presentation/routes/discover_rou
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
+import 'package:civic_flutter/features/poll/presentation/pages/create_poll_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
@@ -228,6 +229,16 @@ GoRouter router(RouterRef ref) {
             id: data['id'],
             isDraft: data['isDraft'],
             draftPost: data['draftPost'],
+          );
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.createPoll,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return CreatePollScreen(
+            id: data['id'],
           );
         },
       ),

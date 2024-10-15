@@ -104,7 +104,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = _client.post.retrieve(
+      final result = await _client.post.retrieve(
         id,
       );
       return result;

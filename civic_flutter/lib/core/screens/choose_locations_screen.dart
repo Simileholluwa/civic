@@ -24,12 +24,12 @@ class ChooseLocationsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
-          75,
+          70,
         ),
         child: Center(
           child: Container(
-            margin: const EdgeInsets.symmetric(
-              vertical: TSizes.sm - 2,
+            margin: const EdgeInsets.only(
+              bottom: TSizes.sm - 2,
             ),
             decoration: BoxDecoration(
               border: Border(

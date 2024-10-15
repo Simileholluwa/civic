@@ -6,49 +6,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MentionsSuggestionsWidget extends ConsumerWidget {
-  const MentionsSuggestionsWidget({super.key, required this.onSuggestionSelected, });
+  const MentionsSuggestionsWidget({
+    super.key,
+    required this.onSuggestionSelected,
+  });
   final void Function(String) onSuggestionSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     return Container(
-                  constraints: BoxConstraints(
-                    maxHeight: THelperFunctions.getHeight(context) * 0.3,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: TSizes.sm,
-                    ),
-                    itemCount: suggestions.length,
-                    separatorBuilder: (context, index) {
-                      return const Divider(
-                        indent: 83,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return UserInfoWidget(
-                        onTap: () {
-                          onSuggestionSelected(
-                            '@${suggestions[index].userInfo!.fullName ??
-                                suggestions[index].userInfo!.userName!}',
-                          );
-                          ref
-                              .watch(
-                                selectedMentionsProvider.notifier,
-                              )
-                              .addMention(
-                                suggestions[index],
-                              );
-                        },
-                        userRecord: suggestions[index],
-                      );
-                    },
-                  ),
-                );
+      constraints: BoxConstraints(
+        maxHeight: THelperFunctions.getHeight(context) * 0.3,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(
+          vertical: TSizes.sm,
+        ),
+        itemCount: suggestions.length,
+        separatorBuilder: (context, index) {
+          return const Divider(
+            indent: 83,
+          );
+        },
+        itemBuilder: (context, index) {
+          return UserInfoWidget(
+            onTap: () {
+              onSuggestionSelected(
+                '@${suggestions[index].userInfo!.fullName ?? suggestions[index].userInfo!.userName!}',
+              );
+              ref
+                  .watch(
+                    selectedMentionsProvider.notifier,
+                  )
+                  .addMention(
+                    suggestions[index],
+                  );
+            },
+            userRecord: suggestions[index],
+          );
+        },
+      ),
+    );
   }
 }

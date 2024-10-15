@@ -8,7 +8,12 @@ import 'package:iconsax/iconsax.dart';
 class CreatePostOptions extends StatelessWidget {
   const CreatePostOptions({
     super.key,
+     this.showSelectMedia = true,
+     this.maxLength = 2500,
   });
+
+  final bool showSelectMedia;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -73,24 +78,25 @@ class CreatePostOptions extends StatelessWidget {
               const SizedBox(
                 width: TSizes.xs,
               ),
-              IconButton(
-                onPressed: () => THelperFunctions.showSelectMediaDialog(
-                  context,
+              if (showSelectMedia)
+                IconButton(
+                  onPressed: () => THelperFunctions.showSelectMediaDialog(
+                    context,
+                  ),
+                  icon: const Icon(
+                    Iconsax.gallery5,
+                    color: TColors.primary,
+                    size: 27,
+                  ),
                 ),
-                icon: const Icon(
-                  Iconsax.gallery5,
-                  color: TColors.primary,
-                  size: 27,
-                ),
-              ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(
+           Padding(
+            padding: const EdgeInsets.only(
               right: TSizes.sm,
             ),
             child: TextCounter(
-              maxLength: 2500,
+              maxLength: maxLength,
             ),
           ),
         ],

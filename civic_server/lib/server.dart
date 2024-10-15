@@ -1,3 +1,4 @@
+import 'package:civic_server/src/future_calls/poll_future_call.dart';
 import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -24,6 +25,7 @@ void run(List<String> args) async {
 
   // Future calls
   pod.registerFutureCall(SendPostFutureCall(), 'sendPostFutureCall');
+  pod.registerFutureCall(SendPollFutureCall(), 'sendPollFutureCall');
 
   // Auth
   auth.AuthConfig.set(

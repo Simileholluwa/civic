@@ -1,0 +1,11 @@
+class: PollVote
+table: poll_vote
+
+fields: 
+    poll: Poll?, relation
+    voterId: int
+
+indexes:
+  poll_vote_unique_idx:
+    fields: pollId
+    unique: true

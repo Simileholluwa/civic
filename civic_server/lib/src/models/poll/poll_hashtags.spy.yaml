@@ -1,0 +1,9 @@
+class: PollsHashtags
+table: pollshashtags
+fields:
+    poll: Poll?, relation(name=polls_pollshashtags)
+    hashtag: PollHashtag?, relation(name=pollhashtag_pollshashtags)
+indexes:
+  pollhashtags_index_idx:
+    fields: pollId, hashtagId
+    unique: true

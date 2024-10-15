@@ -1,21 +1,34 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/providers/location_service_provider.dart';
+import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
+import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
 import 'package:civic_flutter/core/screens/tag_users_screen.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/schedule_post_dialog.dart';
 import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
   THelperFunctions._();
+
+  static Timer? _debounce;
 
   static const colorizeColors = [
     TColors.primary,
@@ -232,7 +245,9 @@ class THelperFunctions {
   }
 
   static double getBottomNavigationBarHeight(
-      DateTime? scheduledDateTimeState, List<AWSPlaces> selectedLocations,) {
+    DateTime? scheduledDateTimeState,
+    List<AWSPlaces> selectedLocations,
+  ) {
     return scheduledDateTimeState == null && selectedLocations.isEmpty
         ? 105
         : scheduledDateTimeState == null && selectedLocations.isNotEmpty
@@ -271,6 +286,7 @@ class THelperFunctions {
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
+      showDragHandle: true,
       builder: (context) {
         return const ChooseLocationsScreen();
       },
@@ -282,6 +298,7 @@ class THelperFunctions {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      showDragHandle: true,
       builder: (context) {
         return const TagUsersScreen();
       },
@@ -313,5 +330,238 @@ class THelperFunctions {
     return showUploadMediaDialog(
       context,
     );
+  }
+
+  static void onSuggestionSelected(
+    WidgetRef ref,
+    String suggestion,
+  ) {
+    final text = ref.watch(postTextProvider).text;
+    final textController = ref.watch(postTextProvider);
+    final cursorIndex = textController.selection.baseOffset;
+
+    // Find the word to replace, ensuring it's the last mention/hashtag typed
+    final textBeforeCursor = text.substring(0, cursorIndex);
+    final textAfterCursor = text.substring(cursorIndex);
+
+    final lastWordMatch = RegExp(r'[@#][\w]*$').firstMatch(textBeforeCursor);
+    if (lastWordMatch != null) {
+      final start = lastWordMatch.start;
+      final end = lastWordMatch.end;
+
+      // Replace the mention/hashtag in the text
+      final newText = textBeforeCursor.replaceRange(start, end, suggestion) +
+          textAfterCursor;
+      textController.text = newText;
+
+      // Move the cursor to the end of the inserted suggestion
+      textController.selection = TextSelection.fromPosition(
+          TextPosition(offset: start + suggestion.length));
+
+      ref.read(postTextProvider).text = newText;
+      ref
+          .read(mentionSuggestionsProvider.notifier)
+          .setSuggestions(<UserRecord>[]);
+      ref
+          .read(
+        hashtagsSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <String>[],
+      );
+    }
+  }
+
+  static void sendPost(WidgetRef ref) async {
+    final media = ref.watch(mediaProvider);
+    final videoUrl = media.isEmpty
+        ? ''
+        : THelperFunctions.isVideo(media.first)
+            ? media.first
+            : '';
+    final imageUrls = media.isEmpty
+        ? <String>[]
+        : THelperFunctions.isImage(media.first)
+            ? media
+            : <String>[];
+    final taggedUsers = ref.watch(tagSelectionsProvider);
+    await ref.read(sendPostProvider.notifier).sendPost(
+          text: ref.watch(postTextProvider).text,
+          imagePath: imageUrls,
+          videoPath: videoUrl,
+          taggedUsers: taggedUsers,
+          locations: ref.watch(selectLocationsProvider),
+          postType: THelperFunctions.determinePostType(
+            text: ref.watch(postTextProvider).text,
+            pickedImages: imageUrls,
+            pickedVideo: videoUrl,
+          ),
+          mentions: ref.watch(selectedMentionsProvider),
+          tags: ref.watch(hashtagsProvider),
+        );
+  }
+
+  static void _handleMentions(WidgetRef ref) {
+    final selectedMentions = ref.watch(
+      selectedMentionsProvider,
+    );
+    List<String> currentMentions = ref.watch(
+      extractedMentionsProvider,
+    );
+
+    // Remove records of users whose mentions are no longer in the text
+    selectedMentions.removeWhere((
+      userRecord,
+    ) {
+      String userName =
+          userRecord.userInfo!.fullName ?? userRecord.userInfo!.userName!;
+      return !currentMentions.contains(
+        userName,
+      );
+    });
+  }
+
+  static String _getLastWord(WidgetRef ref, String text) {
+    final cursorIndex = ref
+        .watch(
+          postTextProvider,
+        )
+        .selection
+        .baseOffset;
+    final textBeforeCursor = text.substring(
+      0,
+      cursorIndex,
+    );
+    final lastWordMatch = RegExp(
+      r'[@#][\w]*$',
+    ).firstMatch(
+      textBeforeCursor,
+    );
+    return lastWordMatch?.group(
+          0,
+        ) ??
+        '';
+  }
+
+  static Future<void> _fetchMentionSuggestions(
+      WidgetRef ref, String query) async {
+    final results = await ref.watch(
+      fetchUsersToMentionProvider(
+        query.substring(1),
+      ).future,
+    );
+
+    if (results.isNotEmpty) {
+      return ref
+          .read(
+            mentionSuggestionsProvider.notifier,
+          )
+          .setSuggestions(
+            results,
+          );
+    } else {
+      return ref
+          .read(
+        mentionSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <UserRecord>[],
+      );
+    }
+  }
+
+  static Future<void> _fetchHashtags(WidgetRef ref, String query) async {
+    if (query.isEmpty) {
+      ref
+          .read(
+        hashtagsSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <String>[],
+      );
+      return;
+    }
+    final results = await ref.watch(
+      fetchHashtagsProvider(
+        query.substring(
+          1,
+        ),
+      ).future,
+    );
+
+    log(results.toString());
+
+    if (results.isNotEmpty) {
+      return ref
+          .read(
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions(
+            results,
+          );
+    } else {
+      return ref
+          .read(
+        hashtagsSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <String>[],
+      );
+    }
+  }
+
+  static void onTextChanged(
+    WidgetRef ref,
+    String text,
+  ) {
+    if (text.isEmpty) {
+      ref
+          .read(
+            mentionSuggestionsProvider.notifier,
+          )
+          .setSuggestions(
+            <UserRecord>[],
+          );
+      ref
+          .read(
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions(
+            <String>[],
+          );
+      return;
+    }
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
+      final lastWord = _getLastWord(ref, text);
+      if (lastWord.startsWith('@')) {
+        _fetchMentionSuggestions(ref, lastWord);
+      } else if (lastWord.startsWith('#')) {
+        _fetchHashtags(ref, lastWord);
+      } else {
+        ref
+            .read(mentionSuggestionsProvider.notifier)
+            .setSuggestions(<UserRecord>[]);
+      }
+    });
+    _handleMentions(ref);
+  }
+
+  static void sendPoll(
+    WidgetRef ref,
+  ) {
+    final pollState = ref.watch(pollsOptionsProvider);
+    final canSendPoll = pollState.question.isNotEmpty &&
+        pollState.optionText.every((text) => text.isNotEmpty);
+    if (canSendPoll) {
+      ref.read(sendPollProvider.notifier).sendPollNowOrFuture(
+            question: pollState.question,
+            locations: ref.watch(selectLocationsProvider),
+            taggedUsers: ref.watch(tagSelectionsProvider),
+            mentions: ref.watch(selectedMentionsProvider),
+            tags: ref.watch(hashtagsProvider),
+            pollDuration: pollState.duration,
+          );
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class UserRecordEndpoint extends Endpoint {
   Future<void> saveUserRecord(Session session, UserRecord userRecord) async {
+    // Save the user record to the database
     await UserRecord.db.insertRow(
       session,
       userRecord,
@@ -13,13 +14,17 @@ class UserRecordEndpoint extends Endpoint {
   Future<UserRecord?> me(
     Session session,
   ) async {
+    // Fetch the authenticated user
     final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, return null
     if (authInfo == null) return null;
 
+    // Fetch the user record from the local database
     var cacheKey = 'UserData-${authInfo.userId}';
-
     var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
 
+    // If the user record is not in the cache, fetch it from the database
     if (userRecord == null) {
       userRecord = await UserRecord.db.findFirstRow(
         session,
@@ -39,26 +44,32 @@ class UserRecordEndpoint extends Endpoint {
       }
     }
 
+    // Return the user record
     return userRecord;
   }
 
   Future<String?> checkIfNewUser(Session session, String email) async {
+    // Check if the user already exists in the database
     var userInfo = await UserInfo.db.findFirstRow(
       session,
       where: (user) => user.email.equals(email),
     );
 
+    // If the user does not exist, return null
     if (userInfo == null) return null;
 
+    // If the user already exists, return the username
     return userInfo.userName;
   }
 
   Future<List<String>> fetchAllUsernames(Session session) async {
+    // Fetch all user records from the database
     var userInfos = await UserInfo.db.find(
       session,
     );
-    var usernames = userInfos.map((user) => user.userName!).toList();
-    return usernames;
+
+    // Return a list of all usernames
+    return userInfos.map((user) => user.userName!).toList();
   }
 
   Future<UsersList> listUsers(
@@ -67,11 +78,15 @@ class UserRecordEndpoint extends Endpoint {
     int limit = 20,
     int page = 1,
   }) async {
+    // Fetch the authenticated user
     final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw UserException(message: 'You must be logged in');
     }
 
+    // Fetch the current user record
     var currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
@@ -80,10 +95,12 @@ class UserRecordEndpoint extends Endpoint {
       ),
     );
 
+    // If the current user does not exist, throw an exception
     if (currentUser == null) {
       throw UserException(message: 'You must be logged in');
     }
 
+    // Fetch users that the current user follows and whose usernames match the query
     var users = await UserRecord.db.find(
       session,
       where: (u) =>
@@ -96,6 +113,7 @@ class UserRecordEndpoint extends Endpoint {
       ),
     );
 
+    // If the number of users fetched is less than the limit, fetch additional users
     if (users.length < limit) {
       var additionalUsers = await UserRecord.db.find(
         session,
@@ -111,8 +129,10 @@ class UserRecordEndpoint extends Endpoint {
       users.addAll(additionalUsers);
     }
 
+    // Fetch the total number of users
     final count = await UserRecord.db.count(session);
 
+    // Return a list of users
     return UsersList(
       count: count,
       limit: limit,
@@ -128,11 +148,15 @@ class UserRecordEndpoint extends Endpoint {
     required String query,
     int limit = 20,
   }) async {
+    // Fetch the authenticated user
     final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw UserException(message: 'You must be logged in');
     }
 
+    // Fetch the current user record
     var currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
@@ -141,10 +165,12 @@ class UserRecordEndpoint extends Endpoint {
       ),
     );
 
+    // If the current user does not exist, throw an exception
     if (currentUser == null) {
       throw UserException(message: 'You must be logged in');
     }
 
+    // Fetch users that the current user follows and whose usernames match the query
     var users = await UserRecord.db.find(
       session,
       where: (u) =>
@@ -157,6 +183,7 @@ class UserRecordEndpoint extends Endpoint {
       ),
     );
 
+    // If the number of users fetched is less than the limit, fetch additional users
     if (users.length < limit) {
       var additionalUsers = await UserRecord.db.find(
         session,
@@ -171,6 +198,7 @@ class UserRecordEndpoint extends Endpoint {
       users.addAll(additionalUsers);
     }
 
+    // Return a list of users
     return users;
   }
 
@@ -179,15 +207,80 @@ class UserRecordEndpoint extends Endpoint {
     required String query,
     int limit = 20,
   }) async {
+    // Fetch the authenticated user
     final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw UserException(message: 'You must be logged in');
     }
+
+    // Fetch hashtags that match the query
     final hashtags = await Hashtag.db.find(
       session,
       limit: limit,
       where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
     );
-    return hashtags.map((hashtag) => '#${hashtag.tag}').toList();
+
+    // Fetch hashtags that match query from poll hashtag
+    final pollHashtags = await PollHashtag.db.find(
+      session,
+      limit: limit,
+      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
+    );
+
+    final pollTags = pollHashtags.map((hashtag) => '#${hashtag.tag}').toList();
+    final postTags = hashtags.map((hashtag) => '#${hashtag.tag}').toList();
+
+    print(postTags);
+    print(pollTags);
+
+    // Return a list of hashtag strings
+    return (pollTags + postTags);
+  }
+
+  Future<void> followUnfollowUser(
+    Session session,
+    int followedUserId,
+  ) async {
+    // Fetch the authenticated user
+    final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, throw an exception
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+
+    // Fetch current user and the user to be followed
+    final currentUser = await UserRecord.db.findById(
+      session,
+      authInfo.userId,
+    );
+    final followedUser = await UserRecord.db.findById(
+      session,
+      followedUserId,
+    );
+
+    // If either user does not exist, throw an exception
+    if (currentUser == null || followedUser == null) {
+      throw UserException(message: 'User not found');
+    }
+
+    // Check if the current user is already following the target user
+    if (currentUser.following.contains(followedUserId)) {
+      // Unfollow the user
+      currentUser.following.remove(followedUserId);
+      followedUser.followers.remove(authInfo.userId);
+      print('User ${authInfo.userId} has unfollowed $followedUserId');
+    } else {
+      // Follow the user
+      currentUser.following.add(followedUserId);
+      followedUser.followers.add(authInfo.userId);
+      print('User ${authInfo.userId} has followed $followedUserId');
+    }
+
+    // Save changes to both users
+    await UserRecord.db.updateRow(session, currentUser);
+    await UserRecord.db.updateRow(session, followedUser);
   }
 }

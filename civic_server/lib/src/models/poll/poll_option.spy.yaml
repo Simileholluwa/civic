@@ -1,0 +1,5 @@
+class: PollOption
+fields:
+    option: List<String>
+    votes: int
+    voters: List<UserRecord>

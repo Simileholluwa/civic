@@ -7,6 +7,7 @@ import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart'
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +43,7 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
     ref.invalidate(selectedMentionsProvider);
     ref.invalidate(hashtagsProvider);
     ref.invalidate(postTextProvider);
+  
   }
 
   void navigate(int index) {
@@ -55,6 +57,17 @@ class _CivicWrapperState extends ConsumerState<CivicWrapper> {
             'id': 0,
             'isDraft': false,
             'draftPost': null,
+          },
+        );
+        break;
+      case 1:
+        invalidateProviders();
+        ref.invalidate(pollsOptionsProvider);
+        toggleFab();
+        context.push(
+          AppRoutes.createPoll,
+          extra: {
+            'id': 0,
           },
         );
         break;

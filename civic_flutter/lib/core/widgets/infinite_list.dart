@@ -2,6 +2,7 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class InfiniteListWidget<T> extends StatelessWidget {
@@ -34,7 +35,26 @@ class InfiniteListWidget<T> extends StatelessWidget {
                   ? TColors.dark
                   : TColors.light,
             );
-          }
+          },
+          noItemsFoundIndicatorBuilder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Iconsax.search_normal,
+                    size: 100,
+                  ),
+                  Text(
+                    "We've searched far and wide, but we couldn't find any results.",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          },
         ),
 
       ),

@@ -13,7 +13,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CreatePostBottomNavigation extends ConsumerWidget {
   const CreatePostBottomNavigation({
     super.key,
+    this.showSelectMedia = true,
+    this.maxLength = 2500,
   });
+
+  final bool showSelectMedia;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +29,7 @@ class CreatePostBottomNavigation extends ConsumerWidget {
       scheduledDateTimeState,
       selectedLocations,
     );
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -34,19 +39,22 @@ class CreatePostBottomNavigation extends ConsumerWidget {
             children: [
               tagState.isNotEmpty
                   ? SelectedTagsWidget(
-                    tags: ref.watch(tagSelectionsProvider),
-                  )
+                      tags: ref.watch(tagSelectionsProvider),
+                    )
                   : const SizedBox.shrink(),
               selectedLocations.isNotEmpty
                   ? SelectedLocationsWidget(
-                    locations: ref.watch(selectLocationsProvider),
-                  )
+                      locations: ref.watch(selectLocationsProvider),
+                    )
                   : const SizedBox.shrink(),
               scheduledDateTimeState == null
                   ? const SizedBox.shrink()
                   : const SchedulePostWidget(),
               const PrivacyWidget(),
-              const CreatePostOptions(),
+              CreatePostOptions(
+                showSelectMedia: showSelectMedia,
+                maxLength: maxLength,
+              ),
             ],
           ),
         ),
