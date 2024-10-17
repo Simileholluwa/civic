@@ -1,0 +1,12 @@
+class: DraftPoll
+fields:
+    draftId: int?
+    ownerId: int? 
+    question: String
+    taggedUsers: List<UserRecord>
+    locations: List<AWSPlaces>
+    createdAt: DateTime?
+    mentions: List<UserRecord>
+    pollDuration: DateTime?
+    options: PollOption?
+    tags: List<String>

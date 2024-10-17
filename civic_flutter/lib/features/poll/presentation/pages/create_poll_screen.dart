@@ -4,8 +4,10 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
 import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
+import 'package:civic_flutter/core/widgets/save_poll_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_detail_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/create_poll_widget.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/hastags_suggestions_widget.dart';
@@ -30,6 +32,7 @@ class CreatePollScreen extends ConsumerWidget {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final pollState = ref.watch(pollsOptionsProvider);
+    final draftsData = ref.watch(pollDraftsProvider);
     final canSendPoll = pollState.question.isNotEmpty &&
         pollState.optionText.every((text) => text.isNotEmpty);
     final data = ref.watch(
@@ -39,18 +42,18 @@ class CreatePollScreen extends ConsumerWidget {
     );
 
     return PopScope(
-      canPop: true,
+      canPop: false,
       // ignore: deprecated_member_use
-      // onPopInvoked: (bool didPop) async {
-      //   if (didPop) return;
-      //   final bool? shouldPop =
-      //       canSendPoll ? await saveDraftDialog(context) : true;
-      //   if (shouldPop ?? false) {
-      //     if (context.mounted) {
-      //       context.pop();
-      //     }
-      //   }
-      // },
+      onPopInvoked: (bool didPop) async {
+        if (didPop) return;
+        final bool? shouldPop =
+            canSendPoll ? await savePollDraftDialog(ref, context) : true;
+        if (shouldPop ?? false) {
+          if (context.mounted) {
+            context.pop();
+          }
+        }
+      },
       child: AndroidBottomNav(
         child: Scaffold(
           appBar: PreferredSize(
@@ -67,15 +70,15 @@ class CreatePollScreen extends ConsumerWidget {
                 child: AppBar(
                   automaticallyImplyLeading: false,
                   leading: IconButton(
-                    onPressed: context.pop,
-                    // canSendPost
-                    //     ? () async {
-                    //         final shouldPop = await saveDraftDialog(context);
-                    //         if (shouldPop ?? false) {
-                    //           if (context.mounted) context.pop();
-                    //         }
-                    //       }
-                    //     : () => context.pop(),
+                    onPressed: canSendPoll
+                        ? () async {
+                            final shouldPop =
+                                await savePollDraftDialog(ref, context);
+                            if (shouldPop ?? false) {
+                              if (context.mounted) context.pop();
+                            }
+                          }
+                        : () => context.pop(),
                     icon: const Icon(
                       Iconsax.arrow_left_2,
                     ),
@@ -83,10 +86,10 @@ class CreatePollScreen extends ConsumerWidget {
                   titleSpacing: 0,
                   actions: [
                     Visibility(
-                      visible: false,
+                      visible: draftsData.isNotEmpty,
                       child: TextButton(
                         onPressed: () {
-                          // THelperFunctions.showPostDraftsScreen(context);
+                          THelperFunctions.showPollDraftsScreen(context);
                         },
                         child: Text(
                           'DRAFTS',

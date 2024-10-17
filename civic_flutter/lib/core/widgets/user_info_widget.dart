@@ -21,104 +21,107 @@ class UserInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: TSizes.md,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          UserProfileImage(
-            imageUrl: userRecord.userInfo!.imageUrl!,
-          ),
-          const SizedBox(
-            width: TSizes.md,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        userRecord.userInfo!.fullName ??
-                            userRecord.userInfo!.userName!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(
-                              fontSize: 20,
-                              color:
-                                  isDark ? TColors.textWhite : TColors.dark,
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.xs,
-                    ),
-                    userRecord.verifiedAccount
-                        ? const Icon(
-                            Iconsax.verify5,
-                            color: TColors.primary,
-                            size: 19,
-                          )
-                        : const Icon(
-                            Iconsax.verify,
-                            color: TColors.primary,
-                            size: 19,
-                          ),
-                    if (userRecord.politicalStatus.index == 0)
-                      const PLStatus(statusText: 'CL'),
-                    if (userRecord.politicalStatus.index == 1)
-                      const PLStatus(statusText: 'FL'),
-                    if (userRecord.politicalStatus.index == 2)
-                      const PLStatus(statusText: 'AL'),
-                    if (userRecord.politicalStatus.index == 3)
-                      const PLStatus(statusText: 'CC'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${THelperFunctions.humanizeNumber(userRecord.followers.length)} followers',
-                      style:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                fontSize: 13,
-                              ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.sm,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: TSizes.sm,
-                      ),
-                      child: DecoratingDot(
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.sm,
-                    ),
-                    Text(
-                      '${THelperFunctions.humanizeNumber(userRecord.following.length)} following',
-                      style:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                fontSize: 13,
-                              ),
-                    ),
-                  ],
-                ),
-              ],
+    return InkWell(
+      onTap: onTap,
+      child: Ink(
+        padding: const EdgeInsets.symmetric(
+          horizontal: TSizes.md,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            UserProfileImage(
+              imageUrl: userRecord.userInfo!.imageUrl!,
             ),
-          )
-        ],
+            const SizedBox(
+              width: TSizes.md,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          userRecord.userInfo!.fullName ??
+                              userRecord.userInfo!.userName!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                fontSize: 20,
+                                color:
+                                    isDark ? TColors.textWhite : TColors.dark,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: TSizes.xs,
+                      ),
+                      userRecord.verifiedAccount
+                          ? const Icon(
+                              Iconsax.verify5,
+                              color: TColors.primary,
+                              size: 19,
+                            )
+                          : const Icon(
+                              Iconsax.verify,
+                              color: TColors.primary,
+                              size: 19,
+                            ),
+                      if (userRecord.politicalStatus.index == 0)
+                        const PLStatus(statusText: 'CL'),
+                      if (userRecord.politicalStatus.index == 1)
+                        const PLStatus(statusText: 'FL'),
+                      if (userRecord.politicalStatus.index == 2)
+                        const PLStatus(statusText: 'AL'),
+                      if (userRecord.politicalStatus.index == 3)
+                        const PLStatus(statusText: 'CC'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${THelperFunctions.humanizeNumber(userRecord.followers.length)} followers',
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  fontSize: 13,
+                                ),
+                      ),
+                      const SizedBox(
+                        width: TSizes.sm,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: TSizes.sm,
+                        ),
+                        child: DecoratingDot(
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: TSizes.sm,
+                      ),
+                      Text(
+                        '${THelperFunctions.humanizeNumber(userRecord.following.length)} following',
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  fontSize: 13,
+                                ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

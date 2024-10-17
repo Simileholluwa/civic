@@ -1,24 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'poll_send_provider.dart';
+part of 'poll_draft_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendPollHash() => r'4e78a54d0a2e5074b4f971e04499ffbdf10517a3';
+String _$pollDraftsHash() => r'3082492b7d86ba69cdcb5e2ab63bcaece6188daf';
 
-/// See also [SendPoll].
-@ProviderFor(SendPoll)
-final sendPollProvider = AutoDisposeNotifierProvider<SendPoll, void>.internal(
-  SendPoll.new,
-  name: r'sendPollProvider',
+/// See also [PollDrafts].
+@ProviderFor(PollDrafts)
+final pollDraftsProvider =
+    AutoDisposeNotifierProvider<PollDrafts, List<DraftPoll>>.internal(
+  PollDrafts.new,
+  name: r'pollDraftsProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$sendPollHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$pollDraftsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SendPoll = AutoDisposeNotifier<void>;
+typedef _$PollDrafts = AutoDisposeNotifier<List<DraftPoll>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

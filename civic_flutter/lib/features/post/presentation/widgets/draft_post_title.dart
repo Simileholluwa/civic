@@ -1,4 +1,3 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -7,11 +6,11 @@ import 'package:flutter/material.dart';
 class DraftPostTitle extends StatelessWidget {
   const DraftPostTitle({
     super.key,
-    required this.post,
+    required this.createdAt,
     required this.index,
   });
 
-  final DraftPost post;
+  final DateTime createdAt;
   final int index;
 
   @override
@@ -20,7 +19,7 @@ class DraftPostTitle extends StatelessWidget {
         .difference(
           DateTime.fromMillisecondsSinceEpoch(
             int.parse(
-              post.createdAt!.millisecondsSinceEpoch.toString(),
+              createdAt.millisecondsSinceEpoch.toString(),
             ),
           ),
         )

@@ -52,7 +52,7 @@ class DraftPostsWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DraftPostTitle(
-                post: post,
+                createdAt: post.createdAt!,
                 index: index,
               ),
               DraftPostsIcons(

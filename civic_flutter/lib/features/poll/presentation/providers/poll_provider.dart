@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:civic_flutter/features/poll/presentation/state/poll_creation_state.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,12 +16,29 @@ class PollsOptions extends _$PollsOptions {
     state = state.copyWith(question: question);
   }
 
-  void addOption() {
+  void addControllers(int length) {
+    state = state.copyWith(
+      controllers: [
+        ...state.controllers,
+        ...List.generate(
+          length,
+          (i) {
+            return TextEditingController();
+          },
+        ),
+      ],
+    );
+  }
+
+  void addOption({required String text}) {
     final updatedControllers = [...state.controllers, TextEditingController()];
-    state = state.copyWith(optionText: [
-      ...state.optionText,
-      '',
-    ], controllers: updatedControllers,);
+    state = state.copyWith(
+      optionText: [
+        ...state.optionText,
+        text,
+      ],
+      controllers: updatedControllers,
+    );
   }
 
   void updateOption(int index, String option) {
@@ -28,10 +47,28 @@ class PollsOptions extends _$PollsOptions {
     state = state.copyWith(optionText: updatedOptions);
   }
 
+  void addDraftOption(String option) {
+    final updatedOptions = [...state.optionText, option];
+    log(updatedOptions.toString());
+    if (updatedOptions.length > 5) {
+      state = state.copyWith(
+        optionText: updatedOptions.sublist(
+          0,
+          5,
+        ),
+      );
+    } else {
+      state = state.copyWith(
+        optionText: updatedOptions,
+      );
+    }
+  }
+
   void removeOption(int index) {
     final updatedOptions = [...state.optionText]..removeAt(index);
     final updatedControllers = [...state.controllers]..removeAt(index);
-    state = state.copyWith(optionText: updatedOptions, controllers: updatedControllers);
+    state = state.copyWith(
+        optionText: updatedOptions, controllers: updatedControllers);
   }
 
   void setDuration(Duration duration) {

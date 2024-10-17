@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/poll_duration_dialog.dart';
 import 'package:civic_flutter/core/widgets/user_info_widget.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
@@ -71,7 +70,7 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: TextField(
+                      child: TextFormField(
                         textCapitalization: TextCapitalization.sentences,
                         maxLength: 80,
                         decoration: InputDecoration(
@@ -83,11 +82,38 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                           ),
                           suffix: Padding(
                             padding: const EdgeInsets.only(
-                              left: TSizes.xs,
+                              left: TSizes.sm + 4,
                             ),
-                            child: Text(
-                              '${80 - controller.text.length}',
-                              style: Theme.of(context).textTheme.labelMedium,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4,),
+                                  child: Text(
+                                    '${80 - controller.text.length}',
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ),
+                                if (pollState.controllers.length > 2)
+                                  const SizedBox(width: 4,),
+                                if (pollState.controllers.length > 2)
+                                  GestureDetector(
+                                    child: const Padding(
+                                      padding: EdgeInsets.only(
+                                        left: TSizes.sm,
+                                      ),
+                                      child: Icon(
+                                        Iconsax.trash,
+                                        color: TColors.secondary,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      pollNotifier.removeOption(index);
+                                    },
+                                  ),
+                              ],
                             ),
                           ),
                           counter: const SizedBox(),
@@ -101,14 +127,10 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                               color: Theme.of(context).dividerColor,
                             ),
                           ),
-                          hintStyle:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: THelperFunctions.isDarkMode(context)
-                                        ? TColors.textWhite.withOpacity(0.5)
-                                        : TColors.dark.withOpacity(0.5),
-                                  ),
                         ),
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 17,
+                            ),
                         onChanged: (value) {
                           pollNotifier.updateOption(index, value);
                         },
@@ -116,22 +138,6 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                       ),
                     ),
                   ),
-                  if (pollState.controllers.length > 2)
-                    GestureDetector(
-                      child: const Padding(
-                        padding: EdgeInsets.only(
-                          left: TSizes.sm,
-                          right: TSizes.xs,
-                        ),
-                        child: Icon(
-                          Iconsax.close_square5,
-                          color: TColors.secondary,
-                        ),
-                      ),
-                      onTap: () {
-                        pollNotifier.removeOption(index);
-                      },
-                    ),
                 ],
               ),
             );
@@ -162,7 +168,7 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                   children: [
                     InkWell(
                       onTap: pollState.controllers.length < 5
-                          ? () => pollNotifier.addOption()
+                          ? () => pollNotifier.addOption(text: 'Hello')
                           : null,
                       child: Padding(
                         padding: const EdgeInsets.only(

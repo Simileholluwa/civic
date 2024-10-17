@@ -12,17 +12,22 @@ import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
 import 'package:civic_flutter/core/screens/tag_users_screen.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/widgets/content_dialog.dart';
 import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/schedule_post_dialog.dart';
 import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
+import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
@@ -316,6 +321,18 @@ class THelperFunctions {
     );
   }
 
+  static Future<bool?> showPollDraftsScreen(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (context) {
+        return const PollDraftsScreen();
+      },
+    );
+  }
+
   static Future<bool?> showScheduleDialog(
     BuildContext context,
   ) {
@@ -517,18 +534,18 @@ class THelperFunctions {
     if (text.isEmpty) {
       ref
           .read(
-            mentionSuggestionsProvider.notifier,
-          )
+        mentionSuggestionsProvider.notifier,
+      )
           .setSuggestions(
-            <UserRecord>[],
-          );
+        <UserRecord>[],
+      );
       ref
           .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
+        hashtagsSuggestionsProvider.notifier,
+      )
           .setSuggestions(
-            <String>[],
-          );
+        <String>[],
+      );
       return;
     }
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -563,5 +580,49 @@ class THelperFunctions {
             pollDuration: pollState.duration,
           );
     }
+  }
+
+  static Future<bool?> deleteDraftsDialog(BuildContext context, WidgetRef ref) {
+    return postDialog(
+      context: context,
+      title: 'Delete all drafts?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        context.pop();
+        final result =
+            await ref.read(postDraftsProvider.notifier).deleteAllDrafts();
+        if (result) {
+          if (context.mounted) context.pop();
+        }
+      },
+    );
+  }
+
+  static Future<bool?> deletePollDraftsDialog(BuildContext context, WidgetRef ref) {
+    return postDialog(
+      context: context,
+      title: 'Delete all drafts?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        context.pop();
+        final result =
+            await ref.read(pollDraftsProvider.notifier).deleteAllDrafts();
+        if (result) {
+          if (context.mounted) context.pop();
+        }
+      },
+    );
   }
 }

@@ -6,6 +6,22 @@ part of 'poll_service_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$pollLocalDatabaseHash() => r'a3c2617d2dc25fcf15406336274ee81974c4acce';
+
+/// See also [pollLocalDatabase].
+@ProviderFor(pollLocalDatabase)
+final pollLocalDatabaseProvider =
+    AutoDisposeProvider<PollLocalDatabaseImpl>.internal(
+  pollLocalDatabase,
+  name: r'pollLocalDatabaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$pollLocalDatabaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef PollLocalDatabaseRef = AutoDisposeProviderRef<PollLocalDatabaseImpl>;
 String _$pollRemoteDatasourceHash() =>
     r'ce975844add50128841a1236613f485c09b45c32';
 
@@ -25,7 +41,7 @@ final pollRemoteDatasourceProvider =
 typedef PollRemoteDatasourceRef
     = AutoDisposeProviderRef<PollRemoteDatasourceImpl>;
 String _$pollRepositoryImplHash() =>
-    r'3560c30bfd736a6165bb477381e1de79f5a3f28c';
+    r'22d7bc64f4dfd0823aacc3aa5895ec1393daa133';
 
 /// See also [pollRepositoryImpl].
 @ProviderFor(pollRepositoryImpl)
@@ -99,5 +115,71 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
 );
 
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
+String _$saveDraftPollHash() => r'1c62af353842bbca0ef9f84ecff22683c0b6096a';
+
+/// See also [saveDraftPoll].
+@ProviderFor(saveDraftPoll)
+final saveDraftPollProvider =
+    AutoDisposeProvider<SaveDraftPollUseCase>.internal(
+  saveDraftPoll,
+  name: r'saveDraftPollProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$saveDraftPollHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SaveDraftPollRef = AutoDisposeProviderRef<SaveDraftPollUseCase>;
+String _$retrieveDraftPollHash() => r'750e4031249b0cc72f9cf657141be480c9d61dbc';
+
+/// See also [retrieveDraftPoll].
+@ProviderFor(retrieveDraftPoll)
+final retrieveDraftPollProvider =
+    AutoDisposeProvider<RetrieveDraftPollUseCase>.internal(
+  retrieveDraftPoll,
+  name: r'retrieveDraftPollProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$retrieveDraftPollHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RetrieveDraftPollRef = AutoDisposeProviderRef<RetrieveDraftPollUseCase>;
+String _$deleteAllDraftPollHash() =>
+    r'ac05a92e861f2dd206d08662bd87d6246cc9fe4b';
+
+/// See also [deleteAllDraftPoll].
+@ProviderFor(deleteAllDraftPoll)
+final deleteAllDraftPollProvider =
+    AutoDisposeProvider<DeleteAllDraftPollUseCase>.internal(
+  deleteAllDraftPoll,
+  name: r'deleteAllDraftPollProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteAllDraftPollHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DeleteAllDraftPollRef
+    = AutoDisposeProviderRef<DeleteAllDraftPollUseCase>;
+String _$deleteDraftPollHash() => r'4729084e9b90d36c8af88641c91840b403c63793';
+
+/// See also [deleteDraftPoll].
+@ProviderFor(deleteDraftPoll)
+final deleteDraftPollProvider =
+    AutoDisposeProvider<DeleteDraftPollUseCase>.internal(
+  deleteDraftPoll,
+  name: r'deleteDraftPollProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteDraftPollHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DeleteDraftPollRef = AutoDisposeProviderRef<DeleteDraftPollUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

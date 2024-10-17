@@ -8,28 +8,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SelectedTagsWidget extends ConsumerWidget {
-  const SelectedTagsWidget({super.key, required this.tags, this.showRemoveTags = true, this.height = 50,});
+  const SelectedTagsWidget({
+    super.key,
+    required this.tags,
+    this.showRemoveTags = true,
+    this.height = 50,
+    this.showTopBorder = true,
+  });
 
   final List<UserRecord> tags;
   final bool showRemoveTags;
   final double height;
+  final bool showTopBorder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tagProvider = ref.watch(tagSelectionsProvider.notifier);
     return InkWell(
-      onTap: showRemoveTags ? () => THelperFunctions.tagUsersBottomSheet(context) : null,
+      onTap: showRemoveTags
+          ? () => THelperFunctions.tagUsersBottomSheet(context)
+          : null,
       child: Ink(
         padding: const EdgeInsets.only(
           left: TSizes.md - 2,
           right: TSizes.md,
         ),
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
+          border: showTopBorder
+              ? Border(
+                  top: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                  ),
+                )
+              : null,
         ),
         height: height,
         width: double.maxFinite,

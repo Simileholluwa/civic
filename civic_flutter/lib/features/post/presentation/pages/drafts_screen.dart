@@ -3,24 +3,18 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-// import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/content_dialog.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class DraftsScreen extends ConsumerStatefulWidget {
+class DraftsScreen extends ConsumerWidget {
   const DraftsScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _DraftsScreenState();
-}
-
-class _DraftsScreenState extends ConsumerState<DraftsScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(postDraftsProvider);
     // final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
@@ -51,7 +45,7 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
                 ),
                 child: TextButton(
                   onPressed:
-                      data.isEmpty ? null : () => deleteDraftsDialog(context),
+                      data.isEmpty ? null : () => THelperFunctions.deleteDraftsDialog(context, ref,),
                   child: Text(
                     'DELETE ALL',
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
@@ -117,28 +111,6 @@ class _DraftsScreenState extends ConsumerState<DraftsScreen> {
         },
         itemCount: data.length,
       ),
-    );
-  }
-
-  Future<bool?> deleteDraftsDialog(BuildContext context) {
-    return postDialog(
-      context: context,
-      title: 'Delete all drafts?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete all',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: 'Cancel',
-      onTapActiveButton: () async {
-        context.pop();
-        final result =
-            await ref.read(postDraftsProvider.notifier).deleteAllDrafts();
-        if (result) {
-          if (context.mounted) context.pop();
-        }
-      },
     );
   }
 }

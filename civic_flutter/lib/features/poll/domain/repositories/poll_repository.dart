@@ -17,4 +17,12 @@ abstract class PollRepository {
     required int pollId,
     required int optionId,
   });
+  Future<Either<Failure, List<DraftPoll>>> removeAllDraftPoll();
+  Future<Either<Failure, void>> deleteDraftPoll({
+    required DraftPoll draftPoll,
+  });
+ Either<Failure, List<DraftPoll>?> retrieveDrafts();
+  Future<Either<Failure, void>> saveDraft({
+    required DraftPoll draftPoll,
+  });
 }

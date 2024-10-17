@@ -20,8 +20,8 @@ class PollQuestionTextFormField extends ConsumerWidget {
       children: [
         TextFormField(
           controller: ref.watch(postTextProvider),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.w500,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 17,
               ),
           textCapitalization: TextCapitalization.sentences,
           onChanged: (text){

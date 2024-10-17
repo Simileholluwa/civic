@@ -8,28 +8,33 @@ import 'package:iconsax/iconsax.dart';
 
 class SelectedLocationsWidget extends StatelessWidget {
   const SelectedLocationsWidget({
-    super.key, required this.locations, this.showRemoveLocations = true, this.height = 50,
+    super.key,
+    required this.locations,
+    this.showRemoveLocations = true,
+    this.height = 50,
+    this.showTopBorder = true,
   });
 
   final List<AWSPlaces> locations;
   final bool showRemoveLocations;
   final double height;
+  final bool showTopBorder;
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
-      
       return InkWell(
-        onTap: showRemoveLocations ? () =>
-            THelperFunctions.selectLocationBottomSheet(context: context) : null,
+        onTap: showRemoveLocations
+            ? () => THelperFunctions.selectLocationBottomSheet(context: context)
+            : null,
         child: Ink(
           height: height,
           decoration: BoxDecoration(
-            border: Border(
+            border: showTopBorder ? Border(
               top: BorderSide(
                 color: Theme.of(context).dividerColor,
               ),
-            ),
+            ) : null,
           ),
           child: Row(
             children: [
@@ -62,7 +67,9 @@ class SelectedLocationsWidget extends StatelessWidget {
                     left: 14,
                   ),
                   child: GestureDetector(
-                    onTap: ref.read(selectLocationsProvider.notifier).removeAllLocations,
+                    onTap: ref
+                        .read(selectLocationsProvider.notifier)
+                        .removeAllLocations,
                     child: const Icon(
                       Iconsax.close_square5,
                       color: TColors.secondary,
