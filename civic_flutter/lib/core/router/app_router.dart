@@ -4,7 +4,7 @@ import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/screens/media_picker.dart';
-import 'package:civic_flutter/core/widgets/civic_wrapper.dart';
+import 'package:civic_flutter/core/widgets/app/app_wrapper.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
@@ -215,7 +215,7 @@ GoRouter router(RouterRef ref) {
           ProfileRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
-          return CivicWrapper(
+          return AppWrapper(
             navigatorShell: navigationShell,
           );
         },
@@ -227,8 +227,6 @@ GoRouter router(RouterRef ref) {
           final data = state.extra as Map<String, dynamic>;
           return CreatePostScreen(
             id: data['id'],
-            isDraft: data['isDraft'],
-            draftPost: data['draftPost'],
           );
         },
       ),

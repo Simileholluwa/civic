@@ -100,11 +100,12 @@ class PollDrafts extends _$PollDrafts {
     final result =
         await ref.read(sendPollProvider.notifier).sendPollNowOrFuture(
               question: draftPoll.question,
-              pollDuration: Duration(days: draftPoll.pollDuration!.day),
+              pollDuration: Duration(days: draftPoll.pollDuration!),
               locations: draftPoll.locations,
               taggedUsers: draftPoll.taggedUsers,
               mentions: draftPoll.mentions,
               tags: draftPoll.tags,
+              option: draftPoll.options!.option,
             );
 
     if (result) {

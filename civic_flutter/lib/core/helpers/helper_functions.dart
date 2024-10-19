@@ -12,15 +12,15 @@ import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
 import 'package:civic_flutter/core/screens/tag_users_screen.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/content_dialog.dart';
-import 'package:civic_flutter/core/widgets/request_location_permission_dialog.dart';
-import 'package:civic_flutter/core/widgets/schedule_post_dialog.dart';
-import 'package:civic_flutter/core/widgets/select_media_dialog.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
+import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_select_media_dialog.dart';
 import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/pages/drafts_screen.dart';
+import 'package:civic_flutter/features/post/presentation/pages/post_drafts_screen.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
@@ -273,7 +273,7 @@ class THelperFunctions {
     final permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       if (context.mounted) {
-        await requestLocationPremissionDialog(context: context);
+        await appRequestLocationPremissionDialog(context: context);
       }
     } else if (permission == LocationPermission.deniedForever) {
       Geolocator.openLocationSettings();
@@ -315,8 +315,9 @@ class THelperFunctions {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      showDragHandle: true,
       builder: (context) {
-        return const DraftsScreen();
+        return const PostDraftsScreen();
       },
     );
   }
@@ -336,7 +337,7 @@ class THelperFunctions {
   static Future<bool?> showScheduleDialog(
     BuildContext context,
   ) {
-    return schedulePostDialog(
+    return createContentScheduleDialog(
       context: context,
     );
   }
@@ -344,7 +345,7 @@ class THelperFunctions {
   static Future<bool?> showSelectMediaDialog(
     BuildContext context,
   ) {
-    return showUploadMediaDialog(
+    return createContentSelectMediaDialog(
       context,
     );
   }
@@ -578,6 +579,7 @@ class THelperFunctions {
             mentions: ref.watch(selectedMentionsProvider),
             tags: ref.watch(hashtagsProvider),
             pollDuration: pollState.duration,
+            option: ref.watch(pollsOptionsProvider).optionText,
           );
     }
   }
@@ -600,6 +602,7 @@ class THelperFunctions {
         if (result) {
           if (context.mounted) context.pop();
         }
+        TToastMessages.successToast('All drafts was deleted');
       },
     );
   }
@@ -622,6 +625,7 @@ class THelperFunctions {
         if (result) {
           if (context.mounted) context.pop();
         }
+        TToastMessages.successToast('All drafts was deleted');
       },
     );
   }

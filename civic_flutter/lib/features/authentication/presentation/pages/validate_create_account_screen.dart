@@ -4,10 +4,10 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/core/widgets/resend_link.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_header.dart';
+import 'package:civic_flutter/core/widgets/app/app_resend_link.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/validate_create_account_form.dart';
 
 class ValidateCreateAccountScreen extends StatelessWidget {
@@ -26,7 +26,7 @@ class ValidateCreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
@@ -58,7 +58,7 @@ class ValidateCreateAccountScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
-              ResendLink(
+              AppResendLink(
                 onTap: () {},
               ),
             ],

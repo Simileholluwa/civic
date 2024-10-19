@@ -1,7 +1,7 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_header.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/nin_form.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class VerifyIdentityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: PopScope(
         canPop: false,
         child: Scaffold(

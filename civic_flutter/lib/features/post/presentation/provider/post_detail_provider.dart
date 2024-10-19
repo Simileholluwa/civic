@@ -12,8 +12,6 @@ part 'post_detail_provider.g.dart';
 Future<Post?> postDetail(
   PostDetailRef ref,
   int id,
-  bool isDraft,
-  DraftPost? draftPost,
 ) async {
   if (id == 0) {
     final me = ref.read(meUseCaseProvider);
@@ -25,21 +23,6 @@ Future<Post?> postDetail(
         'userId',
         currentUser.userInfo!.id!,
       );
-
-      if (isDraft && draftPost != null) {
-        return Post(
-          ownerId: currentUser.userInfo!.id!,
-          postType: draftPost.postType,
-          owner: currentUser,
-          text: draftPost.text,
-          imageUrls: draftPost.imagesPath,
-          videoUrl: draftPost.videoPath,
-          taggedUsers: draftPost.taggedUsers,
-          locations: draftPost.locations,
-          mentions: draftPost.mentions,
-          tags: draftPost.tags,
-        );
-      }
       return Post(
         ownerId: currentUser.userInfo!.id!,
         postType: PostType.none,

@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/core/widgets/app_text_field.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_text_field.dart';
 
 class ResetPasswordForm extends ConsumerStatefulWidget {
   const ResetPasswordForm({

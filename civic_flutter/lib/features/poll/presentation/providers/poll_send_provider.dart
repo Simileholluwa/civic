@@ -40,9 +40,7 @@ class SendPoll extends _$SendPoll {
       createdAt: DateTime.now(),
       mentions: ref.watch(selectedMentionsProvider),
       tags: ref.watch(hashtagsProvider),
-      pollDuration: DateTime.now().add(
-        ref.watch(pollsOptionsProvider).duration,
-      ),
+      pollDuration: ref.watch(pollsOptionsProvider).duration.inDays,
     );
     final draftPollProvider = ref.read(pollDraftsProvider.notifier);
     final result = await draftPollProvider.saveDraftPoll(
@@ -70,7 +68,9 @@ class SendPoll extends _$SendPoll {
     return send.fold((l) async {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(l.message,);
+      await saveFailedPostAsDraft(
+        l.message,
+      );
       return false;
     }, (r) {
       TToastMessages.successToast(
@@ -94,7 +94,9 @@ class SendPoll extends _$SendPoll {
     return send.fold((l) async {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(l.message,);
+      await saveFailedPostAsDraft(
+        l.message,
+      );
       return false;
     }, (r) async {
       TToastMessages.successToast('Your poll has been sent!');
@@ -111,6 +113,7 @@ class SendPoll extends _$SendPoll {
     required List<UserRecord> mentions,
     required List<String> tags,
     required Duration pollDuration,
+    required List<String> option,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final me = ref.read(meUseCaseProvider);
@@ -119,10 +122,11 @@ class SendPoll extends _$SendPoll {
     return userRecord.fold((error) async {
       log(error.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(error.message,);
+      await saveFailedPostAsDraft(
+        error.message,
+      );
       return false;
     }, (record) async {
-      final option = ref.watch(pollsOptionsProvider).optionText;
       final scheduledDatetime = ref.read(postScheduledDateTimeProvider);
       final pollToSend = Poll(
         ownerId: record.id!,

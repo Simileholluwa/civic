@@ -6,7 +6,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/app_text_field.dart';
+import 'package:civic_flutter/core/widgets/app/app_text_field.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 
 class UsernameForm extends ConsumerStatefulWidget {

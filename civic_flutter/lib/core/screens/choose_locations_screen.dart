@@ -2,9 +2,9 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/widgets/app_loading_widget.dart';
-import 'package:civic_flutter/core/widgets/location_error_widget.dart';
-import 'package:civic_flutter/core/widgets/search_bar_widget.dart';
+import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_location_error.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +40,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
               automaticallyImplyLeading: false,
               
               centerTitle: true,
-              title: SearchBarWidget(
+              title: CreateContentSearchBar(
                 onChanged: (text) {
                   searchQueryProvider.setSearchQuery(text);
                 },
@@ -91,7 +91,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
           : data.when(
               data: (data) {
                 if (data == null || data.isEmpty) {
-                  return const LocationErrorWidget();
+                  return const CreateContentLocationError();
                 }
                 return ListView.separated(
                   separatorBuilder: (context, index) {
@@ -137,7 +137,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
                 );
               },
               error: (error, st) {
-                return const LocationErrorWidget();
+                return const CreateContentLocationError();
               },
               loading: () {
                 return AppLoadingWidget(

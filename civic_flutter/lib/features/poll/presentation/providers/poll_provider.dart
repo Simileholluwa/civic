@@ -47,14 +47,14 @@ class PollsOptions extends _$PollsOptions {
     state = state.copyWith(optionText: updatedOptions);
   }
 
-  void addDraftOption(String option) {
+  void addDraftOption(String option, int optionsLength) {
     final updatedOptions = [...state.optionText, option];
     log(updatedOptions.toString());
-    if (updatedOptions.length > 5) {
+    if (updatedOptions.length > optionsLength) {
       state = state.copyWith(
         optionText: updatedOptions.sublist(
           0,
-          5,
+          optionsLength,
         ),
       );
     } else {

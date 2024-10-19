@@ -1,6 +1,6 @@
 
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/decorating_dot.dart';
+import 'package:civic_flutter/core/widgets/app/app_decoration_dot.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/vector_image_container.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class OnBoardingPageView extends StatelessWidget {
                 padding: EdgeInsets.only(
                   top: TSizes.md + 10,
                 ),
-                child: DecoratingDot(),
+                child: AppDecorationDot(),
               ),
             ],
           ),

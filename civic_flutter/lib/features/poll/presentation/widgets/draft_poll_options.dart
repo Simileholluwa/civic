@@ -5,7 +5,7 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/content_dialog.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
@@ -36,9 +36,6 @@ class DraftPollOptions extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: TSizes.sm,
       ),
-      margin: const EdgeInsets.only(
-        right: TSizes.md,
-      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           TSizes.sm,
@@ -53,7 +50,7 @@ class DraftPollOptions extends ConsumerWidget {
               postText.setText(poll.question);
               pollProvider.setQuestion(poll.question);
               pollProvider.setDuration(
-                Duration(days: poll.pollDuration!.hour),
+                Duration(days: poll.pollDuration!),
               );
               if (poll.locations.isNotEmpty) {
                 locationProvider.setLocations(poll.locations);
@@ -71,7 +68,8 @@ class DraftPollOptions extends ConsumerWidget {
                   pollState.optionText[i] = poll.options!.option[i];
                   pollProvider.updateOption(i, poll.options!.option[i]);
                 } else {
-                  if (pollState.controllers.length != 5) {
+                  if (pollState.controllers.length !=
+                      poll.options!.option.length) {
                     pollState.controllers.add(
                       TextEditingController(),
                     );
@@ -81,7 +79,10 @@ class DraftPollOptions extends ConsumerWidget {
                       pollState.controllers[i].text = poll.options!.option[i],
                     ],
                   );
-                  pollProvider.addDraftOption(poll.options!.option[i]);
+                  pollProvider.addDraftOption(
+                    poll.options!.option[i],
+                    poll.options!.option.length,
+                  );
                 }
               }
 

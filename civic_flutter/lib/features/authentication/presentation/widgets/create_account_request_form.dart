@@ -2,11 +2,11 @@ import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:civic_flutter/core//widgets/app_password_field.dart';
+import 'package:civic_flutter/core/widgets/app/app_password_field.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/terms_of_use.dart';
 
@@ -41,7 +41,7 @@ class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
         ),
         child: Column(
           children: [
-            AppPasswordTextField(
+            AppPasswordField(
               textController: _passwordController,
               validator: TValidator.validatePassword,
             ),

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/next_button.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/onboarding_page_indicator.dart';
@@ -19,7 +19,7 @@ class OnBoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         floatingActionButton: const OnBoardingNextButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

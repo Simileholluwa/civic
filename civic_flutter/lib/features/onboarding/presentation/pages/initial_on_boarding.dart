@@ -4,7 +4,7 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/political_stats_card.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/vector_image_container.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class InitialOnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,

@@ -7,6 +7,6 @@ fields:
     locations: List<AWSPlaces>
     createdAt: DateTime?
     mentions: List<UserRecord>
-    pollDuration: DateTime?
+    pollDuration: int?
     options: PollOption?
     tags: List<String>

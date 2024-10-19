@@ -2,13 +2,13 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/users_list_service_provider.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/infinite_list.dart';
-import 'package:civic_flutter/core/widgets/search_bar_widget.dart';
-import 'package:civic_flutter/core/widgets/user_profile_image.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/app/app_infinite_list.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
+import 'package:civic_flutter/core/widgets/app/app_user_profile_image.dart';
 // import 'package:civic_flutter/features/post/presentation/provider/post_list_provider.dart';
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
-import 'package:civic_flutter/core/widgets/user_info_widget.dart';
+import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +29,7 @@ class TagUsersScreen extends ConsumerWidget {
     final queryProvider = ref.watch(searchUsersListQueryProvider.notifier);
     final tagState = ref.watch(tagSelectionsProvider);
     final tagProvider = ref.watch(tagSelectionsProvider.notifier);
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(
@@ -48,7 +48,7 @@ class TagUsersScreen extends ConsumerWidget {
               child: AppBar(
                 automaticallyImplyLeading: false,
                 centerTitle: true,
-                title: SearchBarWidget(
+                title: CreateContentSearchBar(
                   onChanged: (text) {
                     queryProvider.setSearchQuery(
                       text,
@@ -100,7 +100,7 @@ class TagUsersScreen extends ConsumerWidget {
             ),
             itemBuilder: (context, index) {
               return Chip(
-                avatar: UserProfileImage(
+                avatar: AppUserProfileImage(
                   imageUrl: tagState[index].userInfo!.imageUrl!,
                 ),
                 label: Text(
@@ -135,7 +135,7 @@ class TagUsersScreen extends ConsumerWidget {
             itemCount: tagState.length,
           ),
         ),
-        body: InfiniteListWidget<UserRecord>(
+        body: AppInfiniteList<UserRecord>(
           key: Key('tag_users_screen_$query'),
           pagingController: pagingController.pagingController,
           itemBuilder: (context, user, index) {
@@ -154,7 +154,7 @@ class TagUsersScreen extends ConsumerWidget {
                           30,
                         )
                       : null,
-                  child: UserInfoWidget(
+                  child: AppUserInfoWidget(
                     userRecord: user,
                     onTap: () {
                       if (isSelected) {

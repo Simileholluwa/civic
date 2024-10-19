@@ -1,10 +1,10 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
-import 'package:civic_flutter/core/widgets/resend_link.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_header.dart';
+import 'package:civic_flutter/core/widgets/app/app_resend_link.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/verify_nin_phone_otp_form.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,7 +18,7 @@ class VerifyNinPhoneOTPScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
@@ -48,7 +48,7 @@ class VerifyNinPhoneOTPScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
-              ResendLink(
+              AppResendLink(
                 onTap: () {},
               ),
             ],

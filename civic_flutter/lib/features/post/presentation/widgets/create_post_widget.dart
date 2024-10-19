@@ -2,10 +2,10 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/widgets/create_post_text_form_field.dart';
-import 'package:civic_flutter/core/widgets/image_post.dart';
-import 'package:civic_flutter/core/widgets/user_info_widget.dart';
-import 'package:civic_flutter/core/widgets/video_post.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_post_text_field.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_image_post.dart';
+import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_video_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,11 +45,11 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
           const SizedBox(
             height: TSizes.md,
           ),
-          UserInfoWidget(
+          AppUserInfoWidget(
             userRecord: post.owner!,
             onTap: () {},
           ),
-          CreatePostTextFormField(
+          CreateContentPostTextField(
             userName: post.owner!.userInfo!.userName!,
           ),
           if (media.isNotEmpty && THelperFunctions.isImage(media.first))
@@ -57,7 +57,7 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
               images: ref.watch(mediaProvider),
             ),
           if (media.isNotEmpty && THelperFunctions.isVideo(media.first))
-            const VideoPost()
+            const CreateContentVideoPost()
         ],
       ),
     );

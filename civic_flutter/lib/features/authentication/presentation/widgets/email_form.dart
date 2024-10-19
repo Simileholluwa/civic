@@ -1,8 +1,8 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/validators/validation.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/core/widgets/app_text_field.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_text_field.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

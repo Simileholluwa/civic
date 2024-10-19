@@ -9,9 +9,9 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_header.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/choose_verification_method.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/user_nin_details.dart';
 
@@ -27,7 +27,7 @@ class ConfirmNinDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final userNinRecord = jsonDecode(ninRecord,) as UserNinRecord;
     final isDark = THelperFunctions.isDarkMode(context);
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,

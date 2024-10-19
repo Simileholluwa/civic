@@ -34,7 +34,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
     required List<_i2.UserRecord> mentions,
-    DateTime? pollDuration,
+    int? pollDuration,
     _i2.PollOption? options,
     required List<String> tags,
   }) = _DraftPollImpl;
@@ -56,10 +56,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
       mentions: (jsonSerialization['mentions'] as List)
           .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      pollDuration: jsonSerialization['pollDuration'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['pollDuration']),
+      pollDuration: jsonSerialization['pollDuration'] as int?,
       options: jsonSerialization['options'] == null
           ? null
           : _i2.PollOption.fromJson(
@@ -83,7 +80,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
 
   List<_i2.UserRecord> mentions;
 
-  DateTime? pollDuration;
+  int? pollDuration;
 
   _i2.PollOption? options;
 
@@ -97,7 +94,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? locations,
     DateTime? createdAt,
     List<_i2.UserRecord>? mentions,
-    DateTime? pollDuration,
+    int? pollDuration,
     _i2.PollOption? options,
     List<String>? tags,
   });
@@ -111,7 +108,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
       'locations': locations.toJson(valueToJson: (v) => v.toJson()),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       'mentions': mentions.toJson(valueToJson: (v) => v.toJson()),
-      if (pollDuration != null) 'pollDuration': pollDuration?.toJson(),
+      if (pollDuration != null) 'pollDuration': pollDuration,
       if (options != null) 'options': options?.toJson(),
       'tags': tags.toJson(),
     };
@@ -134,7 +131,7 @@ class _DraftPollImpl extends DraftPoll {
     required List<_i2.AWSPlaces> locations,
     DateTime? createdAt,
     required List<_i2.UserRecord> mentions,
-    DateTime? pollDuration,
+    int? pollDuration,
     _i2.PollOption? options,
     required List<String> tags,
   }) : super._(
@@ -173,8 +170,7 @@ class _DraftPollImpl extends DraftPoll {
           locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
-      pollDuration:
-          pollDuration is DateTime? ? pollDuration : this.pollDuration,
+      pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
       options: options is _i2.PollOption? ? options : this.options?.copyWith(),
       tags: tags ?? this.tags.map((e0) => e0).toList(),
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/auth_app_bar.dart';
-import 'package:civic_flutter/core/widgets/auth_header.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_app_bar.dart';
+import 'package:civic_flutter/core/widgets/auth/auth_header.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/username_form.dart';
 
 class UsernameScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class UsernameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,

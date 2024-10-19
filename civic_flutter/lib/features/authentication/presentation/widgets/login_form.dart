@@ -1,6 +1,6 @@
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
-import 'package:civic_flutter/core/widgets/app_password_field.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_password_field.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
@@ -42,7 +42,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         ),
         child: Column(
           children: [
-            AppPasswordTextField(
+            AppPasswordField(
               textController: _passwordController,
               validator: (value) => TValidator.validateEmptyText(
                 'Password',

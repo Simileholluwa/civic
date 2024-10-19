@@ -1,4 +1,4 @@
-import 'package:civic_flutter/core/widgets/dual_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_dual_button.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -166,7 +166,7 @@ Future<Widget?> uploadProfileImage(
                 padding: const EdgeInsets.symmetric(
                   horizontal: TSizes.defaultSpace,
                 ),
-                child: DualButton(
+                child: AppDualButton(
                   onTapSkipButton: () {
                     // controller.sendEmailVerificationCode(shouldNavigate: true);
                     context.pop();

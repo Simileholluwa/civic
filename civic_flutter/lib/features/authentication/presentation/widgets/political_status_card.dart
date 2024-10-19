@@ -6,7 +6,7 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/constants/text_strings.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
 import 'package:civic_flutter/features/authentication/domain/entities/political_status_card_entity.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:civic_flutter/core/widgets/android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/constants/image_strings.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/email_form.dart';
@@ -9,7 +9,7 @@ class AuthLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidBottomNav(
+    return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,

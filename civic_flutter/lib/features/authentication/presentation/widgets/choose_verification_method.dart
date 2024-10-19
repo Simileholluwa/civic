@@ -2,7 +2,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/app_button.dart';
+import 'package:civic_flutter/core/widgets/app/app_button.dart';
 import 'package:civic_flutter/features/authentication/presentation/widgets/select_verification_method.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

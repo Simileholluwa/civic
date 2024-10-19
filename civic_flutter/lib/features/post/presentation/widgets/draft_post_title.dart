@@ -26,7 +26,6 @@ class DraftPostTitle extends StatelessWidget {
         .inDays;
     return Padding(
       padding: const EdgeInsets.only(
-        left: TSizes.md,
         right: TSizes.sm,
         top: TSizes.md,
         bottom: TSizes.sm,
