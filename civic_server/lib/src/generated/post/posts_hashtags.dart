@@ -8,19 +8,21 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../protocol.dart' as _i2;
 
-abstract class PostsHashtags extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class PostsHashtags
+    implements _i1.TableRow, _i1.ProtocolSerialization {
   PostsHashtags._({
-    int? id,
+    this.id,
     required this.postId,
     this.post,
     required this.hashtagId,
     this.hashtag,
-  }) : super(id);
+  });
 
   factory PostsHashtags({
     int? id,
@@ -49,6 +51,9 @@ abstract class PostsHashtags extends _i1.TableRow
   static final t = PostsHashtagsTable();
 
   static const db = PostsHashtagsRepository._();
+
+  @override
+  int? id;
 
   int postId;
 
@@ -275,7 +280,7 @@ class PostsHashtagsRepository {
   final attachRow = const PostsHashtagsAttachRowRepository._();
 
   Future<List<PostsHashtags>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PostsHashtagsTable>? where,
     int? limit,
     int? offset,
@@ -285,20 +290,20 @@ class PostsHashtagsRepository {
     _i1.Transaction? transaction,
     PostsHashtagsInclude? include,
   }) async {
-    return databaseAccessor.db.find<PostsHashtags>(
+    return session.db.find<PostsHashtags>(
       where: where?.call(PostsHashtags.t),
       orderBy: orderBy?.call(PostsHashtags.t),
       orderByList: orderByList?.call(PostsHashtags.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<PostsHashtags?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PostsHashtagsTable>? where,
     int? offset,
     _i1.OrderByBuilder<PostsHashtagsTable>? orderBy,
@@ -307,121 +312,121 @@ class PostsHashtagsRepository {
     _i1.Transaction? transaction,
     PostsHashtagsInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<PostsHashtags>(
+    return session.db.findFirstRow<PostsHashtags>(
       where: where?.call(PostsHashtags.t),
       orderBy: orderBy?.call(PostsHashtags.t),
       orderByList: orderByList?.call(PostsHashtags.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<PostsHashtags?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     PostsHashtagsInclude? include,
   }) async {
-    return databaseAccessor.db.findById<PostsHashtags>(
+    return session.db.findById<PostsHashtags>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<PostsHashtags>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<PostsHashtags> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<PostsHashtags>(
+    return session.db.insert<PostsHashtags>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<PostsHashtags> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     PostsHashtags row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<PostsHashtags>(
+    return session.db.insertRow<PostsHashtags>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<PostsHashtags>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<PostsHashtags> rows, {
     _i1.ColumnSelections<PostsHashtagsTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<PostsHashtags>(
+    return session.db.update<PostsHashtags>(
       rows,
       columns: columns?.call(PostsHashtags.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<PostsHashtags> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     PostsHashtags row, {
     _i1.ColumnSelections<PostsHashtagsTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<PostsHashtags>(
+    return session.db.updateRow<PostsHashtags>(
       row,
       columns: columns?.call(PostsHashtags.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<PostsHashtags>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<PostsHashtags> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<PostsHashtags>(
+    return session.db.delete<PostsHashtags>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<PostsHashtags> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     PostsHashtags row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<PostsHashtags>(
+    return session.db.deleteRow<PostsHashtags>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<PostsHashtags>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<PostsHashtagsTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<PostsHashtags>(
+    return session.db.deleteWhere<PostsHashtags>(
       where: where(PostsHashtags.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PostsHashtagsTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<PostsHashtags>(
+    return session.db.count<PostsHashtags>(
       where: where?.call(PostsHashtags.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -430,7 +435,7 @@ class PostsHashtagsAttachRowRepository {
   const PostsHashtagsAttachRowRepository._();
 
   Future<void> post(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     PostsHashtags postsHashtags,
     _i2.Post post, {
     _i1.Transaction? transaction,
@@ -443,15 +448,15 @@ class PostsHashtagsAttachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(postId: post.id);
-    await databaseAccessor.db.updateRow<PostsHashtags>(
+    await session.db.updateRow<PostsHashtags>(
       $postsHashtags,
       columns: [PostsHashtags.t.postId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> hashtag(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     PostsHashtags postsHashtags,
     _i2.Hashtag hashtag, {
     _i1.Transaction? transaction,
@@ -464,10 +469,10 @@ class PostsHashtagsAttachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(hashtagId: hashtag.id);
-    await databaseAccessor.db.updateRow<PostsHashtags>(
+    await session.db.updateRow<PostsHashtags>(
       $postsHashtags,
       columns: [PostsHashtags.t.hashtagId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

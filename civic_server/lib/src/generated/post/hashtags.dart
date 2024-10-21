@@ -8,18 +8,19 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../protocol.dart' as _i2;
 
-abstract class Hashtag extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Hashtag implements _i1.TableRow, _i1.ProtocolSerialization {
   Hashtag._({
-    int? id,
+    this.id,
     required this.tag,
     required this.usageCount,
     this.hashtags,
-  }) : super(id);
+  });
 
   factory Hashtag({
     int? id,
@@ -42,6 +43,9 @@ abstract class Hashtag extends _i1.TableRow
   static final t = HashtagTable();
 
   static const db = HashtagRepository._();
+
+  @override
+  int? id;
 
   String tag;
 
@@ -256,7 +260,7 @@ class HashtagRepository {
   final detachRow = const HashtagDetachRowRepository._();
 
   Future<List<Hashtag>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<HashtagTable>? where,
     int? limit,
     int? offset,
@@ -266,20 +270,20 @@ class HashtagRepository {
     _i1.Transaction? transaction,
     HashtagInclude? include,
   }) async {
-    return databaseAccessor.db.find<Hashtag>(
+    return session.db.find<Hashtag>(
       where: where?.call(Hashtag.t),
       orderBy: orderBy?.call(Hashtag.t),
       orderByList: orderByList?.call(Hashtag.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Hashtag?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<HashtagTable>? where,
     int? offset,
     _i1.OrderByBuilder<HashtagTable>? orderBy,
@@ -288,121 +292,121 @@ class HashtagRepository {
     _i1.Transaction? transaction,
     HashtagInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Hashtag>(
+    return session.db.findFirstRow<Hashtag>(
       where: where?.call(Hashtag.t),
       orderBy: orderBy?.call(Hashtag.t),
       orderByList: orderByList?.call(Hashtag.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Hashtag?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     HashtagInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Hashtag>(
+    return session.db.findById<Hashtag>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Hashtag>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Hashtag> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Hashtag>(
+    return session.db.insert<Hashtag>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Hashtag> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Hashtag row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Hashtag>(
+    return session.db.insertRow<Hashtag>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Hashtag>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Hashtag> rows, {
     _i1.ColumnSelections<HashtagTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Hashtag>(
+    return session.db.update<Hashtag>(
       rows,
       columns: columns?.call(Hashtag.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Hashtag> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Hashtag row, {
     _i1.ColumnSelections<HashtagTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Hashtag>(
+    return session.db.updateRow<Hashtag>(
       row,
       columns: columns?.call(Hashtag.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Hashtag>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Hashtag> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Hashtag>(
+    return session.db.delete<Hashtag>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Hashtag> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Hashtag row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Hashtag>(
+    return session.db.deleteRow<Hashtag>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Hashtag>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<HashtagTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Hashtag>(
+    return session.db.deleteWhere<Hashtag>(
       where: where(Hashtag.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<HashtagTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Hashtag>(
+    return session.db.count<Hashtag>(
       where: where?.call(Hashtag.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -411,7 +415,7 @@ class HashtagAttachRepository {
   const HashtagAttachRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Hashtag hashtag,
     List<_i2.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
@@ -425,10 +429,10 @@ class HashtagAttachRepository {
 
     var $postsHashtags =
         postsHashtags.map((e) => e.copyWith(hashtagId: hashtag.id)).toList();
-    await databaseAccessor.db.update<_i2.PostsHashtags>(
+    await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -437,7 +441,7 @@ class HashtagAttachRowRepository {
   const HashtagAttachRowRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Hashtag hashtag,
     _i2.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
@@ -450,10 +454,10 @@ class HashtagAttachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(hashtagId: hashtag.id);
-    await databaseAccessor.db.updateRow<_i2.PostsHashtags>(
+    await session.db.updateRow<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -462,7 +466,7 @@ class HashtagDetachRepository {
   const HashtagDetachRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
@@ -472,10 +476,10 @@ class HashtagDetachRepository {
 
     var $postsHashtags =
         postsHashtags.map((e) => e.copyWith(hashtagId: null)).toList();
-    await databaseAccessor.db.update<_i2.PostsHashtags>(
+    await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -484,7 +488,7 @@ class HashtagDetachRowRepository {
   const HashtagDetachRowRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
@@ -493,10 +497,10 @@ class HashtagDetachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(hashtagId: null);
-    await databaseAccessor.db.updateRow<_i2.PostsHashtags>(
+    await session.db.updateRow<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

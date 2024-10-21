@@ -9,7 +9,7 @@ part 'api_client_provider.g.dart';
 @riverpod
 Client client(ClientRef ref) {
   return Client(
-    'http://192.168.1.142:8080/',
+    'http://192.168.156.142:8080/',
     connectionTimeout: const Duration(
       seconds: 120,
     ),

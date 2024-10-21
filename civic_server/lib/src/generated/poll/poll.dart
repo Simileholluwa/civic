@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../protocol.dart' as _i2;
 
-abstract class Poll extends _i1.TableRow implements _i1.ProtocolSerialization {
+abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
   Poll._({
-    int? id,
+    this.id,
     required this.ownerId,
     this.owner,
     required this.question,
@@ -25,7 +27,7 @@ abstract class Poll extends _i1.TableRow implements _i1.ProtocolSerialization {
     required this.tags,
     this.pollDuration,
     this.hashtags,
-  }) : super(id);
+  });
 
   factory Poll({
     int? id,
@@ -78,6 +80,9 @@ abstract class Poll extends _i1.TableRow implements _i1.ProtocolSerialization {
   static final t = PollTable();
 
   static const db = PollRepository._();
+
+  @override
+  int? id;
 
   int ownerId;
 
@@ -434,7 +439,7 @@ class PollRepository {
   final detachRow = const PollDetachRowRepository._();
 
   Future<List<Poll>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PollTable>? where,
     int? limit,
     int? offset,
@@ -444,20 +449,20 @@ class PollRepository {
     _i1.Transaction? transaction,
     PollInclude? include,
   }) async {
-    return databaseAccessor.db.find<Poll>(
+    return session.db.find<Poll>(
       where: where?.call(Poll.t),
       orderBy: orderBy?.call(Poll.t),
       orderByList: orderByList?.call(Poll.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Poll?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PollTable>? where,
     int? offset,
     _i1.OrderByBuilder<PollTable>? orderBy,
@@ -466,121 +471,121 @@ class PollRepository {
     _i1.Transaction? transaction,
     PollInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Poll>(
+    return session.db.findFirstRow<Poll>(
       where: where?.call(Poll.t),
       orderBy: orderBy?.call(Poll.t),
       orderByList: orderByList?.call(Poll.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Poll?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     PollInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Poll>(
+    return session.db.findById<Poll>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Poll>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Poll> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Poll>(
+    return session.db.insert<Poll>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Poll> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Poll>(
+    return session.db.insertRow<Poll>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Poll>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Poll> rows, {
     _i1.ColumnSelections<PollTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Poll>(
+    return session.db.update<Poll>(
       rows,
       columns: columns?.call(Poll.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Poll> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll row, {
     _i1.ColumnSelections<PollTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Poll>(
+    return session.db.updateRow<Poll>(
       row,
       columns: columns?.call(Poll.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Poll>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Poll> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Poll>(
+    return session.db.delete<Poll>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Poll> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Poll>(
+    return session.db.deleteRow<Poll>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Poll>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<PollTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Poll>(
+    return session.db.deleteWhere<Poll>(
       where: where(Poll.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PollTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Poll>(
+    return session.db.count<Poll>(
       where: where?.call(Poll.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -589,7 +594,7 @@ class PollAttachRepository {
   const PollAttachRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll poll,
     List<_i2.PollsHashtags> pollsHashtags, {
     _i1.Transaction? transaction,
@@ -603,10 +608,10 @@ class PollAttachRepository {
 
     var $pollsHashtags =
         pollsHashtags.map((e) => e.copyWith(pollId: poll.id)).toList();
-    await databaseAccessor.db.update<_i2.PollsHashtags>(
+    await session.db.update<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -615,7 +620,7 @@ class PollAttachRowRepository {
   const PollAttachRowRepository._();
 
   Future<void> owner(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll poll,
     _i2.UserRecord owner, {
     _i1.Transaction? transaction,
@@ -628,15 +633,15 @@ class PollAttachRowRepository {
     }
 
     var $poll = poll.copyWith(ownerId: owner.id);
-    await databaseAccessor.db.updateRow<Poll>(
+    await session.db.updateRow<Poll>(
       $poll,
       columns: [Poll.t.ownerId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Poll poll,
     _i2.PollsHashtags pollsHashtags, {
     _i1.Transaction? transaction,
@@ -649,10 +654,10 @@ class PollAttachRowRepository {
     }
 
     var $pollsHashtags = pollsHashtags.copyWith(pollId: poll.id);
-    await databaseAccessor.db.updateRow<_i2.PollsHashtags>(
+    await session.db.updateRow<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -661,7 +666,7 @@ class PollDetachRepository {
   const PollDetachRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.PollsHashtags> pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
@@ -671,10 +676,10 @@ class PollDetachRepository {
 
     var $pollsHashtags =
         pollsHashtags.map((e) => e.copyWith(pollId: null)).toList();
-    await databaseAccessor.db.update<_i2.PollsHashtags>(
+    await session.db.update<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -683,7 +688,7 @@ class PollDetachRowRepository {
   const PollDetachRowRepository._();
 
   Future<void> hashtags(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.PollsHashtags pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
@@ -692,10 +697,10 @@ class PollDetachRowRepository {
     }
 
     var $pollsHashtags = pollsHashtags.copyWith(pollId: null);
-    await databaseAccessor.db.updateRow<_i2.PollsHashtags>(
+    await session.db.updateRow<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

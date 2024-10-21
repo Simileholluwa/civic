@@ -1,2 +1,3 @@
 .vscode/
 civic_server/lib/src/endpoints/location_endpoint.dart
+civic_server/lib/src/endpoints/send_email_endpoint.dart

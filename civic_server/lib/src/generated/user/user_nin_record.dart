@@ -8,14 +8,16 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
 
-abstract class UserNinRecord extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class UserNinRecord
+    implements _i1.TableRow, _i1.ProtocolSerialization {
   UserNinRecord._({
-    int? id,
+    this.id,
     this.firstName,
     this.surname,
     this.telephone,
@@ -31,7 +33,7 @@ abstract class UserNinRecord extends _i1.TableRow
     this.residenceLga,
     required this.ownerId,
     this.owner,
-  }) : super(id);
+  });
 
   factory UserNinRecord({
     int? id,
@@ -80,6 +82,9 @@ abstract class UserNinRecord extends _i1.TableRow
   static final t = UserNinRecordTable();
 
   static const db = UserNinRecordRepository._();
+
+  @override
+  int? id;
 
   String? firstName;
 
@@ -464,7 +469,7 @@ class UserNinRecordRepository {
   final attachRow = const UserNinRecordAttachRowRepository._();
 
   Future<List<UserNinRecord>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<UserNinRecordTable>? where,
     int? limit,
     int? offset,
@@ -474,20 +479,20 @@ class UserNinRecordRepository {
     _i1.Transaction? transaction,
     UserNinRecordInclude? include,
   }) async {
-    return databaseAccessor.db.find<UserNinRecord>(
+    return session.db.find<UserNinRecord>(
       where: where?.call(UserNinRecord.t),
       orderBy: orderBy?.call(UserNinRecord.t),
       orderByList: orderByList?.call(UserNinRecord.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<UserNinRecord?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<UserNinRecordTable>? where,
     int? offset,
     _i1.OrderByBuilder<UserNinRecordTable>? orderBy,
@@ -496,121 +501,121 @@ class UserNinRecordRepository {
     _i1.Transaction? transaction,
     UserNinRecordInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<UserNinRecord>(
+    return session.db.findFirstRow<UserNinRecord>(
       where: where?.call(UserNinRecord.t),
       orderBy: orderBy?.call(UserNinRecord.t),
       orderByList: orderByList?.call(UserNinRecord.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<UserNinRecord?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     UserNinRecordInclude? include,
   }) async {
-    return databaseAccessor.db.findById<UserNinRecord>(
+    return session.db.findById<UserNinRecord>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<UserNinRecord>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<UserNinRecord> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<UserNinRecord>(
+    return session.db.insert<UserNinRecord>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<UserNinRecord> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     UserNinRecord row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<UserNinRecord>(
+    return session.db.insertRow<UserNinRecord>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<UserNinRecord>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<UserNinRecord> rows, {
     _i1.ColumnSelections<UserNinRecordTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<UserNinRecord>(
+    return session.db.update<UserNinRecord>(
       rows,
       columns: columns?.call(UserNinRecord.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<UserNinRecord> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     UserNinRecord row, {
     _i1.ColumnSelections<UserNinRecordTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<UserNinRecord>(
+    return session.db.updateRow<UserNinRecord>(
       row,
       columns: columns?.call(UserNinRecord.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<UserNinRecord>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<UserNinRecord> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<UserNinRecord>(
+    return session.db.delete<UserNinRecord>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<UserNinRecord> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     UserNinRecord row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<UserNinRecord>(
+    return session.db.deleteRow<UserNinRecord>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<UserNinRecord>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<UserNinRecordTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<UserNinRecord>(
+    return session.db.deleteWhere<UserNinRecord>(
       where: where(UserNinRecord.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<UserNinRecordTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<UserNinRecord>(
+    return session.db.count<UserNinRecord>(
       where: where?.call(UserNinRecord.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -619,7 +624,7 @@ class UserNinRecordAttachRowRepository {
   const UserNinRecordAttachRowRepository._();
 
   Future<void> owner(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     UserNinRecord userNinRecord,
     _i2.UserInfo owner, {
     _i1.Transaction? transaction,
@@ -632,10 +637,10 @@ class UserNinRecordAttachRowRepository {
     }
 
     var $userNinRecord = userNinRecord.copyWith(ownerId: owner.id);
-    await databaseAccessor.db.updateRow<UserNinRecord>(
+    await session.db.updateRow<UserNinRecord>(
       $userNinRecord,
       columns: [UserNinRecord.t.ownerId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

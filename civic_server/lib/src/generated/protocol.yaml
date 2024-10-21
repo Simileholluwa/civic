@@ -17,6 +17,8 @@ post:
   - sendInFuture:
   - retrieve:
   - listPost:
+sendEmail:
+  - sendEmail:
 userNin:
   - findNinDetails:
 userRecord:

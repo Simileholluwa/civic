@@ -195,6 +195,33 @@ class EndpointPost extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointSendEmail extends _i1.EndpointRef {
+  EndpointSendEmail(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'sendEmail';
+
+  _i2.Future<bool> sendEmail(
+    String email,
+    String code,
+    String text,
+    String? username,
+    bool isEmailVerification,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'sendEmail',
+        'sendEmail',
+        {
+          'email': email,
+          'code': code,
+          'text': text,
+          'username': username,
+          'isEmailVerification': isEmailVerification,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointUserNin extends _i1.EndpointRef {
   EndpointUserNin(_i1.EndpointCaller caller) : super(caller);
 
@@ -332,6 +359,7 @@ class Client extends _i1.ServerpodClientShared {
     location = EndpointLocation(this);
     poll = EndpointPoll(this);
     post = EndpointPost(this);
+    sendEmail = EndpointSendEmail(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
     modules = _Modules(this);
@@ -347,6 +375,8 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointPost post;
 
+  late final EndpointSendEmail sendEmail;
+
   late final EndpointUserNin userNin;
 
   late final EndpointUserRecord userRecord;
@@ -360,6 +390,7 @@ class Client extends _i1.ServerpodClientShared {
         'location': location,
         'poll': poll,
         'post': post,
+        'sendEmail': sendEmail,
         'userNin': userNin,
         'userRecord': userRecord,
       };

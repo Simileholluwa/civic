@@ -1,4 +1,6 @@
+import 'package:civic_flutter/features/authentication/presentation/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:civic_flutter/core/constants/sizes.dart';
@@ -49,8 +51,16 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
-              AppResendLink(
-                onTap: () {},
+              Consumer(
+                builder: (context, ref, _) {
+                  return AppResendLink(
+                    onTap: () {
+                      ref.watch(authProvider.notifier).resendPasswordResetCode(
+                        email: email,
+                      );
+                    },
+                  );
+                }
               ),
             ],
           ),

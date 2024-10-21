@@ -17,6 +17,11 @@ final initiatePasswordResetLoadingProvider =
   (ref) => BooleanNotifier(),
 );
 
+final initiateResendPasswordResetLoadingProvider =
+    StateNotifierProvider<BooleanNotifier, bool>(
+  (ref) => BooleanNotifier(),
+);
+
 final createAccountLoadingProvider =
     StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),

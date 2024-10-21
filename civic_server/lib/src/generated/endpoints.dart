@@ -15,12 +15,13 @@ import '../endpoints/hashtag_endpoint.dart' as _i3;
 import '../endpoints/location_endpoint.dart' as _i4;
 import '../endpoints/poll_endpoint.dart' as _i5;
 import '../endpoints/post_endpoint.dart' as _i6;
-import '../endpoints/user_nin_endpoint.dart' as _i7;
-import '../endpoints/user_record_endpoint.dart' as _i8;
-import 'package:civic_server/src/generated/poll/poll.dart' as _i9;
-import 'package:civic_server/src/generated/post/post.dart' as _i10;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i11;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i12;
+import '../endpoints/send_email_endpoint.dart' as _i7;
+import '../endpoints/user_nin_endpoint.dart' as _i8;
+import '../endpoints/user_record_endpoint.dart' as _i9;
+import 'package:civic_server/src/generated/poll/poll.dart' as _i10;
+import 'package:civic_server/src/generated/post/post.dart' as _i11;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i12;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i13;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -56,13 +57,19 @@ class Endpoints extends _i1.EndpointDispatch {
           'post',
           null,
         ),
-      'userNin': _i7.UserNinEndpoint()
+      'sendEmail': _i7.SendEmailEndpoint()
+        ..initialize(
+          server,
+          'sendEmail',
+          null,
+        ),
+      'userNin': _i8.UserNinEndpoint()
         ..initialize(
           server,
           'userNin',
           null,
         ),
-      'userRecord': _i8.UserRecordEndpoint()
+      'userRecord': _i9.UserRecordEndpoint()
         ..initialize(
           server,
           'userRecord',
@@ -217,7 +224,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'poll': _i1.ParameterDescription(
               name: 'poll',
-              type: _i1.getType<_i9.Poll>(),
+              type: _i1.getType<_i10.Poll>(),
               nullable: false,
             )
           },
@@ -235,7 +242,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'poll': _i1.ParameterDescription(
               name: 'poll',
-              type: _i1.getType<_i9.Poll>(),
+              type: _i1.getType<_i10.Poll>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -307,7 +314,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i11.Post>(),
               nullable: false,
             )
           },
@@ -325,7 +332,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i11.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -388,6 +395,54 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['sendEmail'] = _i1.EndpointConnector(
+      name: 'sendEmail',
+      endpoint: endpoints['sendEmail']!,
+      methodConnectors: {
+        'sendEmail': _i1.MethodConnector(
+          name: 'sendEmail',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'code': _i1.ParameterDescription(
+              name: 'code',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'text': _i1.ParameterDescription(
+              name: 'text',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'username': _i1.ParameterDescription(
+              name: 'username',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'isEmailVerification': _i1.ParameterDescription(
+              name: 'isEmailVerification',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['sendEmail'] as _i7.SendEmailEndpoint).sendEmail(
+            session,
+            params['email'],
+            params['code'],
+            params['text'],
+            params['username'],
+            params['isEmailVerification'],
+          ),
+        )
+      },
+    );
     connectors['userNin'] = _i1.EndpointConnector(
       name: 'userNin',
       endpoint: endpoints['userNin']!,
@@ -405,7 +460,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userNin'] as _i7.UserNinEndpoint).findNinDetails(
+              (endpoints['userNin'] as _i8.UserNinEndpoint).findNinDetails(
             session,
             params['ninNumber'],
           ),
@@ -421,7 +476,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i11.UserRecord>(),
+              type: _i1.getType<_i12.UserRecord>(),
               nullable: false,
             )
           },
@@ -429,7 +484,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .saveUserRecord(
             session,
             params['userRecord'],
@@ -442,7 +497,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint).me(session),
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).me(session),
         ),
         'checkIfNewUser': _i1.MethodConnector(
           name: 'checkIfNewUser',
@@ -457,7 +512,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .checkIfNewUser(
             session,
             params['email'],
@@ -470,7 +525,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .fetchAllUsernames(session),
         ),
         'listUsers': _i1.MethodConnector(
@@ -496,7 +551,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint).listUsers(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).listUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -521,7 +576,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint).mentionUsers(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).mentionUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -545,7 +600,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint).fetchHashtags(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).fetchHashtags(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -564,7 +619,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i8.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .followUnfollowUser(
             session,
             params['followedUserId'],
@@ -572,6 +627,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i12.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i13.Endpoints()..initializeEndpoints(server);
   }
 }

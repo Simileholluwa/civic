@@ -1,3 +1,4 @@
+import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
@@ -18,6 +19,7 @@ class TToastMessages {
       autoCloseDuration: const Duration(
         seconds: 5,
       ),
+      margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.error,
       style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
@@ -41,6 +43,7 @@ class TToastMessages {
       autoCloseDuration: const Duration(
         seconds: 5,
       ),
+      margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.info,
       style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
@@ -64,11 +67,12 @@ class TToastMessages {
       autoCloseDuration: const Duration(
         seconds: 5,
       ),
-      type: ToastificationType.success,
+      margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
+      type: ToastificationType.info,
       style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: const BorderSide(
-        color: Colors.green,
+        color: Colors.blue,
       ),
     );
   }
@@ -84,6 +88,7 @@ class TToastMessages {
           fontWeight: FontWeight.normal,
         ),
       ),
+      margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.warning,
       style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,

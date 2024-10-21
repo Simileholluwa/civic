@@ -1,3 +1,4 @@
+import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
 import 'package:civic_server/src/future_calls/poll_future_call.dart';
 import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:serverpod/serverpod.dart';
@@ -32,12 +33,27 @@ void run(List<String> args) async {
     auth.AuthConfig(
       validationCodeLength: 6,
       sendValidationEmail: (session, email, validationCode) async {
-        print(validationCode);
-        return true;
+        return await SendEmailEndpoint().sendEmail(
+          session,
+          email,
+          validationCode,
+          'Your email verification code is $validationCode',
+          null,
+          true,
+        );
       },
       sendPasswordResetEmail: (session, userInfo, validationCode) async {
-        print(validationCode);
-        return true;
+        if (userInfo.email == null) {
+          throw Exception('No email address for user');
+        }
+        return await SendEmailEndpoint().sendEmail(
+          session,
+          userInfo.email!,
+          validationCode,
+          'Your password reset verification code is $validationCode',
+          userInfo.userName,
+          false,
+        );
       },
     ),
   );

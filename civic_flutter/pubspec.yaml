@@ -24,11 +24,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: 2.1.2
+  serverpod_flutter: 2.1.5
   civic_client:
     path: ../civic_client
-  serverpod_auth_shared_flutter: 2.1.2
-  serverpod_auth_email_flutter: 2.1.2
+  serverpod_auth_shared_flutter: 2.1.5
+  serverpod_auth_email_flutter: 2.1.5
 
 
   cupertino_icons: ^1.0.5
@@ -59,7 +59,7 @@ dependencies:
   url_launcher:
   pinput:
   font_awesome_flutter:
-  serverpod_auth_client: 2.1.2
+  serverpod_auth_client: 2.1.5
   flutter_portal:
   go_router:
   flutter_riverpod:

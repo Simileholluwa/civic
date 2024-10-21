@@ -7,6 +7,7 @@ import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/search_user_nin_use_case.dart';
+import 'package:civic_flutter/features/authentication/presentation/provider/count_down_provider.dart';
 import 'package:civic_flutter/features/authentication/presentation/state/auth_state_entity.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/check_if_new_user_use_case.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/create_account_request_usecase.dart';
@@ -34,7 +35,7 @@ class Auth extends _$Auth {
     final result = await logOutUseCase(
       NoParams(),
     );
-    result.fold((error) => null, (r) {
+    result.fold((error) => TToastMessages.errorToast(error.message), (r) {
       ref.read(authUserProvider.notifier).setValue(false);
       context.pushNamed(AppRoutes.auth);
     });
@@ -269,6 +270,29 @@ class Auth extends _$Auth {
           'email': email,
         },
       );
+    });
+  }
+
+  Future<void> resendPasswordResetCode({
+    required String email,
+  }) async {
+    final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
+    ref.read(initiateResendPasswordResetLoadingProvider.notifier).setValue(true);
+    final result = await initiatePasswordReset(
+      InitiatePasswordResetParams(
+        email,
+      ),
+    );
+    ref.read(initiateResendPasswordResetLoadingProvider.notifier).setValue(false);
+    result.fold((error) {
+      TToastMessages.errorToast(error.message);
+      ref.read(countdownTimerProvider.notifier).resetTimer();
+      return;
+    }, (r) {
+      TToastMessages.successToast(
+        'Password reset code has been sent to your email',
+      );
+      ref.read(countdownTimerProvider.notifier).startCountdown();
     });
   }
 
