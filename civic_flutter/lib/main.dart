@@ -1,3 +1,4 @@
+import 'package:civic_flutter/core/config/env.dart';
 import 'package:civic_flutter/core/dependencies/initial_dependencies.dart';
 import 'package:civic_flutter/core/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Env.init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await initialDependencies();
   runApp(

@@ -1,0 +1,66 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter",
+            "type": "dart",
+            "request": "launch",
+            "program": "civic_flutter/lib/main.dart"
+        },
+        {
+            "name": "civic_client",
+            "cwd": "civic_client",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "civic_flutter",
+            "cwd": "civic_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "civic_flutter (profile mode)",
+            "cwd": "civic_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "civic_flutter (develop)",
+            "cwd": "civic_flutter",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "ENV=develop"
+            ]
+        },
+        {
+            "name": "civic_flutter (production)",
+            "cwd": "civic_flutter",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "ENV=production"
+            ]
+        },
+        {
+            "name": "civic_flutter (release mode)",
+            "cwd": "civic_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "civic_server",
+            "cwd": "civic_server",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

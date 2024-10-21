@@ -13,6 +13,7 @@ dependencies:
   serverpod_cloud_storage_s3: 2.1.5
   serverpod_serialization: 2.1.5
   mailer:
+  dotenv: ^4.2.0
 
 dev_dependencies:
   lints: '>=3.0.0 <5.0.0'

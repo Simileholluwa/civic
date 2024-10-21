@@ -1,4 +1,5 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/config/env.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
@@ -9,7 +10,7 @@ part 'api_client_provider.g.dart';
 @riverpod
 Client client(ClientRef ref) {
   return Client(
-    'http://192.168.156.142:8080/',
+    Env.apiBaseUrl,
     connectionTimeout: const Duration(
       seconds: 120,
     ),
