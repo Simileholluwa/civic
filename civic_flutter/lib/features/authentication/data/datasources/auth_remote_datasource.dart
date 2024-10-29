@@ -78,11 +78,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           .checkIfNewUser(
             email,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
 
       if (result == null) {
         return null;
@@ -120,11 +116,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
             verificationCode,
             newPassword,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
       if (!result) {
         throw const ServerException(
           message: 'Incorrect verification code.',
@@ -161,11 +153,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
             email,
             password,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
       if (!result.success && result.failReason != null) {
         final failReason = result.failReason!.index;
         switch (failReason) {
@@ -246,11 +234,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
             email,
             password,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
 
       if (!result) {
         await _auth
@@ -303,11 +287,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
             email,
             code,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
       if (result == null) {
         throw const ServerException(
           message: 'Incorrect verification code',
@@ -419,11 +399,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final file = File(imagePath);
       final List<int> fileBytes = await file.readAsBytes();
       final byteData = ByteData.view(Uint8List.fromList(fileBytes).buffer);
-      final result = await _sessionManager.uploadUserImage(byteData).timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+      final result = await _sessionManager.uploadUserImage(byteData);
       if (!result) {
         throw const ServerException(
           message: 'Failed to upload image',
@@ -458,11 +434,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           .initiatePasswordReset(
             email,
           )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+          ;
       if (!result) {
         throw const ServerException(
           message: 'Failed to send validation code',
@@ -492,11 +464,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.userRecord.me().timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
+      final result = await _client.userRecord.me();
       return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');

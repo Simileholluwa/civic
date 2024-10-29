@@ -25,7 +25,6 @@ class ImageHelper {
     if (multipleImages) {
       return _imagePicker.pickMultiImage(
         imageQuality: imageQuality,
-        limit: limit,
       );
     }
     final file = await _imagePicker.pickImage(

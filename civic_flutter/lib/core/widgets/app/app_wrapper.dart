@@ -58,6 +58,16 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
           },
         );
         break;
+      case 1:
+        invalidateProviders();
+        toggleFab();
+        context.push(
+          AppRoutes.createArticle,
+          extra: {
+            'id': 0,
+          },
+        );
+        break;
       case 2:
         invalidateProviders();
         ref.invalidate(pollsOptionsProvider);

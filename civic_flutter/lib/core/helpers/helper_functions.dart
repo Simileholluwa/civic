@@ -25,6 +25,7 @@ import 'package:civic_flutter/features/post/presentation/provider/post_draft_pro
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -607,7 +608,8 @@ class THelperFunctions {
     );
   }
 
-  static Future<bool?> deletePollDraftsDialog(BuildContext context, WidgetRef ref) {
+  static Future<bool?> deletePollDraftsDialog(
+      BuildContext context, WidgetRef ref) {
     return postDialog(
       context: context,
       title: 'Delete all drafts?',
@@ -628,5 +630,26 @@ class THelperFunctions {
         TToastMessages.successToast('All drafts was deleted');
       },
     );
+  }
+
+  List<String> getAllImagesFromEditor(QuillController controller) {
+    final List<String> imageUrls = [];
+
+    // Convert the document to JSON
+    final jsonDocument = controller.document.toDelta().toJson();
+
+    // Loop through the document's operations
+    for (var operation in jsonDocument) {
+      if (operation['insert'] is Map &&
+          operation['insert'].containsKey('image')) {
+        // Add the image URL to the list
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (!operation['insert']['image'].toString().startsWith(regex)) {
+          imageUrls.add(operation['insert']['image']);
+        }
+      }
+    }
+
+    return imageUrls;
   }
 }

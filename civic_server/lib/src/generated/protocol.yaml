@@ -1,3 +1,8 @@
+article:
+  - getArticles:
+  - getArticle:
+  - saveArticle:
+  - deleteArticle:
 assets:
   - getUploadDescription:
   - verifyUpload:

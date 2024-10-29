@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:metadata_fetch/metadata_fetch.dart';
 
 class MentionHashTagLinkServices {
   MentionHashTagLinkServices({required this.client});
@@ -49,14 +48,14 @@ class MentionHashTagLinkServices {
 
   Future<Either<String, LinkMetadata>> fetchLinkMetadata(String url) async {
     try {
-      var data = await MetadataFetch.extract(url);
+      // var data = {};
 
-      if (data == null) return left('No data received');
+      // if (data == null) return left('No data received');
 
       final result = LinkMetadata(
-        title: data.title ?? '',
-        description: data.description ?? '',
-        image: data.image ?? '',
+        title: '',
+        description: '',
+        image: '',
         url: url,
       );
       return right(result);

@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/screens/media_picker.dart';
 import 'package:civic_flutter/core/widgets/app/app_wrapper.dart';
+import 'package:civic_flutter/features/article/presentation/pages/create_article_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
@@ -236,6 +237,16 @@ GoRouter router(RouterRef ref) {
         builder: (context, state) {
           final data = state.extra as Map<String, dynamic>;
           return CreatePollScreen(
+            id: data['id'],
+          );
+        },
+      ),
+      
+      GoRoute(
+        path: AppRoutes.createArticle,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return CreateArticleScreen(
             id: data['id'],
           );
         },

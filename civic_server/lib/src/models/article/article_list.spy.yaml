@@ -1,0 +1,9 @@
+class: ArticleList
+
+fields:
+    results: List<Article>
+    count: int
+    page: int
+    numPages: int
+    limit: int
+    canLoadMore: bool
