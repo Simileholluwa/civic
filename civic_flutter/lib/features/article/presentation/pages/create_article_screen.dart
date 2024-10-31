@@ -1,16 +1,18 @@
+import 'dart:developer';
+
+import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
+import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_save_post_draft_dialog.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_text_editor.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_text_toolbar.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_privacy.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_save_article_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/create_post_bottom_navigation.dart';
 
 class CreateArticleScreen extends ConsumerStatefulWidget {
   const CreateArticleScreen({
@@ -26,34 +28,30 @@ class CreateArticleScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
-  late QuillController _controller;
-  late FocusNode _focusNode;
-  late ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = QuillController.basic();
-    _focusNode = FocusNode();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    // final isDark = THelperFunctions.isDarkMode(context);
+    final data = ref.watch(
+      articleDetailProvider(widget.id),
+    );
+    final articleWriter = ref.watch(
+      articleWriterProvider,
+    );
+    final draftsData = ref.watch(articleDraftsProvider);
+    final canSend = articleWriter.canSend;
+    log(canSend.toString());
     return PopScope(
-      canPop: true,
+      canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
+        final bool? shouldPop = true
+            ? await createContentSaveArticleDraftDialog(ref, context)
+            : true;
+        if (shouldPop ?? false) {
+          if (context.mounted) {
+            context.pop();
+          }
+        }
       },
       child: AppAndroidBottomNav(
         child: Scaffold(
@@ -62,18 +60,27 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
               60,
             ),
             child: CreateContentAppbar(
-              canSend: false,
-              draftData: const [],
+              canSend: true,
+              draftData: draftsData,
               sendPressed: () {
-                context.go(
-                  FeedRoutes.namespace,
-                  extra: () => THelperFunctions.sendPost(ref),
-                );
-                ref.read(mediaVideoPlayerProvider.notifier).dispose();
+                final contentPlainText =
+                    articleWriter.contentPlainText;
+
+                log(contentPlainText);
+                contentPlainText.isNotEmpty
+                    ? context.go(
+                        FeedRoutes.namespace,
+                        extra: () => THelperFunctions.sendArticle(
+                          ref,
+                        ),
+                      )
+                    : TToastMessages.infoToast(
+                        'Article content cannot be empty.',
+                      );
               },
               onCanSendPost: () async {
                 final shouldPop =
-                    await createContentSavePostDraftDialog(ref, context);
+                    await createContentSaveArticleDraftDialog(ref, context);
                 if (shouldPop ?? false) {
                   if (context.mounted) context.pop();
                 }
@@ -82,65 +89,32 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
                   THelperFunctions.showPostDraftsScreen(context),
             ),
           ),
-          bottomNavigationBar: const CreatePostBottomNavigation(
-            showSelectMedia: false,
-          ),
-          body: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                    ),
+          bottomNavigationBar: const CreateContentPrivacy(),
+          body: data.when(
+            data: (article) {
+              if (article == null) {
+                return const Center(
+                  child: Text(
+                    'Article not found',
                   ),
+                );
+              }
+              return CreateArticleWidget(article: article);
+            },
+            error: (error, st) {
+              return Center(
+                child: Text(
+                  error.toString(),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 4,
-                ),
-                child: ArticleTextToolbar(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                        textCapitalization: TextCapitalization.sentences,
-                        
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          hintText:
-                              'Give your article a title. Keep it short and sweet.',
-                          counter: SizedBox(),
-                          contentPadding: EdgeInsets.all(18,),
-                        ),
-                        maxLines: null,
-                        textInputAction: TextInputAction.done,
-                        maxLength: 100,
-                      ),
-                      ArticleTextEditor(
-                        controller: _controller,
-                        scrollController: _scrollController,
-                        focusNode: _focusNode,
-                        configurations: const QuillEditorConfigurations(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              );
+            },
+            loading: () {
+              return AppLoadingWidget(
+                backgroundColor: THelperFunctions.isDarkMode(context)
+                    ? TColors.dark
+                    : TColors.light,
+              );
+            },
           ),
         ),
       ),

@@ -6,6 +6,24 @@ part of 'article_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$articleLocalDatabaseHash() =>
+    r'aa27add16a897b2873949d0cb63a628ea08eb2f1';
+
+/// See also [articleLocalDatabase].
+@ProviderFor(articleLocalDatabase)
+final articleLocalDatabaseProvider =
+    AutoDisposeProvider<ArticleLocalDatabaseImpl>.internal(
+  articleLocalDatabase,
+  name: r'articleLocalDatabaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$articleLocalDatabaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ArticleLocalDatabaseRef
+    = AutoDisposeProviderRef<ArticleLocalDatabaseImpl>;
 String _$articleRemoteDatasourceHash() =>
     r'ee15902ce7498c3da930d41701ccd6fe14916846';
 
@@ -24,7 +42,7 @@ final articleRemoteDatasourceProvider =
 
 typedef ArticleRemoteDatasourceRef
     = AutoDisposeProviderRef<ArticleRemoteDatasourceImpl>;
-String _$articleRepositoryHash() => r'3a86360febef26696825c3cdc5731060588a079c';
+String _$articleRepositoryHash() => r'34c032cd2255592ffd0aeb69574943a8bea4de52';
 
 /// See also [articleRepository].
 @ProviderFor(articleRepository)
@@ -98,5 +116,75 @@ final getArticlesProvider = AutoDisposeProvider<GetArticlesUseCase>.internal(
 );
 
 typedef GetArticlesRef = AutoDisposeProviderRef<GetArticlesUseCase>;
+String _$deleteDraftArticleHash() =>
+    r'5ba8092fe4dd292b1e7f8eac3911e1714412d790';
+
+/// See also [deleteDraftArticle].
+@ProviderFor(deleteDraftArticle)
+final deleteDraftArticleProvider =
+    AutoDisposeProvider<DeleteDraftArticleUseCase>.internal(
+  deleteDraftArticle,
+  name: r'deleteDraftArticleProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteDraftArticleHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DeleteDraftArticleRef
+    = AutoDisposeProviderRef<DeleteDraftArticleUseCase>;
+String _$deleteDraftArticlesHash() =>
+    r'7b4ed9f454e0d7bfaa12dd44d21a9870400023e9';
+
+/// See also [deleteDraftArticles].
+@ProviderFor(deleteDraftArticles)
+final deleteDraftArticlesProvider =
+    AutoDisposeProvider<DeleteDraftArticlesUseCase>.internal(
+  deleteDraftArticles,
+  name: r'deleteDraftArticlesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteDraftArticlesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DeleteDraftArticlesRef
+    = AutoDisposeProviderRef<DeleteDraftArticlesUseCase>;
+String _$saveDraftArticleHash() => r'9701a621ede03bf1d055f736e837566c50c1e86d';
+
+/// See also [saveDraftArticle].
+@ProviderFor(saveDraftArticle)
+final saveDraftArticleProvider =
+    AutoDisposeProvider<SaveDraftArticleUseCase>.internal(
+  saveDraftArticle,
+  name: r'saveDraftArticleProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$saveDraftArticleHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SaveDraftArticleRef = AutoDisposeProviderRef<SaveDraftArticleUseCase>;
+String _$retrieveDraftArticlesHash() =>
+    r'd7cf98085bea8ed005f2a9486661df92c745311d';
+
+/// See also [retrieveDraftArticles].
+@ProviderFor(retrieveDraftArticles)
+final retrieveDraftArticlesProvider =
+    AutoDisposeProvider<RetrieveDraftArticlesUseCase>.internal(
+  retrieveDraftArticles,
+  name: r'retrieveDraftArticlesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$retrieveDraftArticlesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RetrieveDraftArticlesRef
+    = AutoDisposeProviderRef<RetrieveDraftArticlesUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

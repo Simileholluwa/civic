@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/helpers/image_helper.dart';
 import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
@@ -16,6 +17,8 @@ import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.
 import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_select_media_dialog.dart';
+import 'package:civic_flutter/features/article/presentation/providers/article_provider.dart';
+import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
@@ -26,6 +29,7 @@ import 'package:civic_flutter/features/post/presentation/provider/post_send_prov
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -585,6 +589,20 @@ class THelperFunctions {
     }
   }
 
+  static void sendArticle(
+    WidgetRef ref,
+  ) {
+    final articleState = ref.watch(
+      articleWriterProvider,
+    );
+
+    ref.read(sendArticleProvider.notifier).sendArticle(
+          banner: articleState.banner,
+          content: articleState.content,
+          title: articleState.title,
+        );
+  }
+
   static Future<bool?> deleteDraftsDialog(BuildContext context, WidgetRef ref) {
     return postDialog(
       context: context,
@@ -632,7 +650,7 @@ class THelperFunctions {
     );
   }
 
-  List<String> getAllImagesFromEditor(QuillController controller) {
+  static List<String> getAllImagesFromEditor(QuillController controller) {
     final List<String> imageUrls = [];
 
     // Convert the document to JSON
@@ -651,5 +669,77 @@ class THelperFunctions {
     }
 
     return imageUrls;
+  }
+
+  static Map<String, String> mapEmbededImages(
+    List<String> oldPath,
+    List<String> newPath,
+  ) {
+    return {for (int i = 0; i < oldPath.length; i++) oldPath[i]: newPath[i]};
+  }
+
+  static String modifyArticleContent(
+    QuillController controller,
+    Map<String, String> pathReplacements,
+  ) {
+    // Convert document to JSON
+    final documentJson = controller.document.toDelta().toJson();
+
+    // Update the JSON with new image paths
+    for (var block in documentJson) {
+      if (block.containsKey('insert')) {
+        final insert = block['insert'];
+
+        // Check if the block is an image
+        if (insert is Map<String, dynamic> && insert.containsKey('image')) {
+          final oldPath = insert['image'] as String;
+
+          // If the image path has a replacement, update it
+          if (pathReplacements.containsKey(oldPath)) {
+            insert['image'] = pathReplacements[oldPath];
+          }
+        }
+      }
+    }
+
+    // Update the controller's document with the modified JSON
+    final updatedDelta = Delta.fromJson(documentJson);
+    controller.document = Document.fromDelta(updatedDelta);
+    final content = controller.document.toDelta().toJson().toString();
+    return content;
+  }
+
+  static Future<void> pickBannerImage(
+    WidgetRef ref,
+    BuildContext context,
+  ) async {
+    final articleWriterNotifier = ref.read(articleWriterProvider.notifier);
+    final picker = ImageHelper();
+    final pickedFile = await picker.pickImage();
+    if (pickedFile != null) {
+      final croppedFile = await picker.crop(
+        file: File(pickedFile.first.path),
+        // ignore: use_build_context_synchronously
+        context: context,
+      );
+      articleWriterNotifier.setBannerImage(croppedFile!.path);
+    }
+  }
+
+  static Future<void> captureBannerImage(
+    WidgetRef ref,
+    BuildContext context,
+  ) async {
+    final articleWriterNotifier = ref.read(articleWriterProvider.notifier);
+    final picker = ImageHelper();
+    final pickedFile = await picker.takeImage();
+    if (pickedFile != null) {
+      final croppedFile = await picker.crop(
+        file: File(pickedFile.path),
+        // ignore: use_build_context_synchronously
+        context: context,
+      );
+      articleWriterNotifier.setBannerImage(croppedFile!.path);
+    }
   }
 }

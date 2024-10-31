@@ -1,15 +1,20 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/features/article/data/remote_datasource/article_remote_datasource.dart';
+import 'package:civic_flutter/features/article/data/datasources/local_datasource/article_local_datasource.dart';
+import 'package:civic_flutter/features/article/data/datasources/remote_datasourece/article_remote_datasource.dart';
 import 'package:civic_flutter/features/article/domain/repositries/article_repository.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fpdart/fpdart.dart';
 
 class ArticleRepositoryImpl extends ArticleRepository {
   ArticleRepositoryImpl({
     required ArticleRemoteDatasource remoteDatasource,
-  }) : _remoteDatasource = remoteDatasource;
+    required ArticleLocalDatabase localDatabase,
+  })  : _remoteDatasource = remoteDatasource,
+        _localDatabase = localDatabase;
   final ArticleRemoteDatasource _remoteDatasource;
+  final ArticleLocalDatabase _localDatabase;
   @override
   Future<Either<Failure, void>> deleteArticle({required int id}) async {
     try {
@@ -39,7 +44,10 @@ class ArticleRepositoryImpl extends ArticleRepository {
   }
 
   @override
-  Future<Either<Failure, ArticleList>> getArticles({required int page, required int limit,}) async {
+  Future<Either<Failure, ArticleList>> getArticles({
+    required int page,
+    required int limit,
+  }) async {
     try {
       final result = await _remoteDatasource.getArticles(
         page: page,
@@ -62,6 +70,74 @@ class ArticleRepositoryImpl extends ArticleRepository {
       final result = await _remoteDatasource.saveArticle(article: article);
       return Right(result);
     } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteDraftArticle({
+    required ArticleDraft articleDraft,
+    required QuillController controller,
+  }) async {
+    try {
+      final result = await _localDatabase.deleteDraftArticle(
+        articleDraft: articleDraft,
+        controller: controller,
+      );
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ArticleDraft>>> removeAllDraftArticles() async {
+    try {
+      final result = await _localDatabase.removeAllDraftArticles();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Either<Failure, List<ArticleDraft>?> retrieveDraftArticles() {
+    try {
+      final result = _localDatabase.retrieveDraftArticles();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveDraftArticle({
+    required ArticleDraft articleDraft,
+    required QuillController controller,
+  }) async {
+    try {
+      final result = await _localDatabase.saveDraftArticle(
+        articleDraft: articleDraft,
+        controller: controller,
+      );
+      return Right(result);
+    } on CacheException catch (e) {
       return Left(
         Failure(
           message: e.message,

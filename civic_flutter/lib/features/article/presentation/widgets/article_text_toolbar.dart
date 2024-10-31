@@ -114,6 +114,7 @@ class ArticleTextToolbar extends StatelessWidget {
         showClipboardCopy: false,
         showClipboardPaste: false,
         showClipboardCut: false,
+        
         fontSizesValues: const {
           '17': '17.0',
           '18': '18.0',
