@@ -35,7 +35,7 @@ class _CreateArticleWidgetState extends ConsumerState<CreateArticleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final articleWriter = ref.watch(articleWriterProvider); 
+    final articleWriter = ref.watch(articleWriterProvider(_article)); 
     return Column(
       children: [
         Container(

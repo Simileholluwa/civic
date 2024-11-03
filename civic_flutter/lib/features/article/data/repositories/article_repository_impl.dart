@@ -4,7 +4,6 @@ import 'package:civic_flutter/core/errors/failure.dart';
 import 'package:civic_flutter/features/article/data/datasources/local_datasource/article_local_datasource.dart';
 import 'package:civic_flutter/features/article/data/datasources/remote_datasourece/article_remote_datasource.dart';
 import 'package:civic_flutter/features/article/domain/repositries/article_repository.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fpdart/fpdart.dart';
 
 class ArticleRepositoryImpl extends ArticleRepository {
@@ -81,12 +80,10 @@ class ArticleRepositoryImpl extends ArticleRepository {
   @override
   Future<Either<Failure, void>> deleteDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   }) async {
     try {
       final result = await _localDatabase.deleteDraftArticle(
         articleDraft: articleDraft,
-        controller: controller,
       );
       return Right(result);
     } on CacheException catch (e) {
@@ -129,12 +126,10 @@ class ArticleRepositoryImpl extends ArticleRepository {
   @override
   Future<Either<Failure, void>> saveDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   }) async {
     try {
       final result = await _localDatabase.saveDraftArticle(
         articleDraft: articleDraft,
-        controller: controller,
       );
       return Right(result);
     } on CacheException catch (e) {

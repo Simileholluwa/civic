@@ -49,6 +49,7 @@ class AppDualButton extends StatelessWidget {
                   skipText,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: TColors.secondary
                   ),
                 ),
         ),

@@ -10,6 +10,9 @@ import 'package:go_router/go_router.dart';
 Future<bool?> createContentSaveArticleDraftDialog(
   WidgetRef ref,
   BuildContext context,
+  String title,
+    String content,
+    String banner,
 ) =>
     postDialog(
       context: context,
@@ -33,15 +36,13 @@ Future<bool?> createContentSaveArticleDraftDialog(
             extra: null,
           );
         }
-        final articleState = ref.watch(articleWriterProvider);
         final result =
             await ref.read(articleDraftsProvider.notifier).saveArticleDraft(
                   ArticleDraft(
-                    banner: articleState.banner,
-                    content: articleState.content,
-                    title: articleState.title,
+                    banner: banner,
+                    content: content,
+                    title: title,
                   ),
-                  articleState.controller!,
                 );
         if (result) {
           TToastMessages.successToast(

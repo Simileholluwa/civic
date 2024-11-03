@@ -14,11 +14,12 @@ class ArticleTitleField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final articleWriter = ref.watch(
-      articleWriterProvider,
+      articleWriterProvider(article),
     );
     final articleWriterNotifier = ref.watch(
-      articleWriterProvider.notifier,
+      articleWriterProvider(article).notifier,
     );
+
     return TextFormField(
       style: Theme.of(context).textTheme.headlineLarge!.copyWith(
             fontSize: 25,
@@ -30,11 +31,13 @@ class ArticleTitleField extends ConsumerWidget {
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
         errorBorder: InputBorder.none,
-        hintText:
-            'Give your article a title...',
+        hintText: 'Give your article a title...',
         counter: SizedBox(),
         contentPadding: EdgeInsets.fromLTRB(
-          16, 20, 16, 8,
+          16,
+          20,
+          16,
+          8,
         ),
       ),
       onChanged: (value) {

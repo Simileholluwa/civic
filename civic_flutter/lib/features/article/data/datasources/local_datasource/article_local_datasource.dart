@@ -1,26 +1,20 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'dart:io';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/local_storage/storage_utility.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 abstract class ArticleLocalDatabase {
   Future<void> saveDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   });
   List<ArticleDraft> retrieveDraftArticles();
   Future<List<ArticleDraft>> removeAllDraftArticles();
   Future<void> deleteDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   });
 }
 
@@ -46,7 +40,6 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
       }
       return <ArticleDraft>[];
     } catch (e) {
-      log(e.toString());
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -54,7 +47,6 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
   @override
   Future<void> saveDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   }) async {
     try {
       final drafts = await clearExpiredDrafts();
@@ -66,12 +58,12 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
-      final embededImages = THelperFunctions.getAllImagesFromEditor(controller);
+      final embededImages = THelperFunctions.getAllImagesFromEditor(content);
       final savedBanner = await saveBannerImage(articleDraft.banner, directory);
       if (embededImages.isNotEmpty) {
         for (var i = 0; i < embededImages.length; i++) {
           final ext = path.extension(embededImages[i]);
-          final fileName = '${DateTime.now()}$i$ext';
+          final fileName = '${DateTime.now().microsecondsSinceEpoch}$i$ext';
           final savedFile = File(
             path.join(directory.path, fileName),
           );
@@ -81,7 +73,7 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
         final pathReplacements =
             THelperFunctions.mapEmbededImages(embededImages, savedImagesPath);
         content = THelperFunctions.modifyArticleContent(
-          controller,
+          articleDraft.content,
           pathReplacements,
         );
       }
@@ -109,7 +101,7 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
   Future<String> saveBannerImage(
       String bannerImage, Directory directory) async {
     final ext = path.extension(bannerImage);
-    final fileName = '${DateTime.now()}$ext';
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
     final savedFile = File(
       path.join(directory.path, fileName),
     );
@@ -143,7 +135,6 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
   @override
   Future<void> deleteDraftArticle({
     required ArticleDraft articleDraft,
-    required QuillController controller,
   }) async {
     try {
       final drafts = retrieveDraftArticles();
@@ -153,9 +144,8 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
       final draftsJson = jsonEncode(
         drafts.map((draft) => draft.toJson()).toList(),
       );
-
-      await _prefs.setString('postsDraft', draftsJson);
-      final embededImages = THelperFunctions.getAllImagesFromEditor(controller);
+      await _prefs.setString('articlesDraft', draftsJson);
+      final embededImages = THelperFunctions.getAllImagesFromEditor(articleDraft.content);
       if (embededImages.isNotEmpty) {
         for (final imgPath in embededImages) {
           final imageFile = File(imgPath);
@@ -164,7 +154,7 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
           }
         }
       }
-    } catch (_) {
+    } catch (e) {
       throw const CacheException(message: 'Something went wrong');
     }
   }

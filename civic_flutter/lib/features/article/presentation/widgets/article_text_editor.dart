@@ -1,6 +1,7 @@
 import 'dart:io' as io show Directory, File;
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -42,43 +43,14 @@ class ArticleTextEditor extends StatelessWidget {
             useTextColorForDot: true,
           ),
         ),
-        customStyles: DefaultStyles(
-          h1: DefaultTextBlockStyle(
-            Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: 23,
-              height: 1.15,
-            ),
-            HorizontalSpacing.zero,
-            const VerticalSpacing(16, 0),
-            VerticalSpacing.zero,
-            null,
-          ),
-          paragraph: DefaultTextBlockStyle(
-            Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-            HorizontalSpacing.zero,
-            VerticalSpacing.zero,
-            VerticalSpacing.zero,
-            null,
-          ),
-          placeHolder: DefaultTextBlockStyle(
-            Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-              color: Theme.of(context).textTheme.bodySmall!.color!,
-            ),
-            HorizontalSpacing.zero,
-            VerticalSpacing.zero,
-            VerticalSpacing.zero,
-            null,
-          ),
-          sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
-          
+        customStyles: THelperFunctions.articleTextEditorStyles(
+          context,
+          defaultTextStyle,
         ),
         scrollable: true,
-        placeholder: 'Write the content of your article here. Use the toolbar to format ad apply all the styles you need.',
+        placeholder:
+            'Write the content of your article here. Use the toolbar to format ad apply all the styles you need.',
         padding: const EdgeInsets.all(16),
-        
         onImagePaste: (imageBytes) async {
           if (kIsWeb) {
             return null;
@@ -121,7 +93,6 @@ class ArticleTextEditor extends StatelessWidget {
                       );
                     },
                     imageProviderBuilder: (context, imageUrl) {
-                      
                       if (isAndroidApp || isIosApp || kIsWeb) {
                         if (isHttpBasedUrl(imageUrl)) {
                           return CachedNetworkImageProvider(

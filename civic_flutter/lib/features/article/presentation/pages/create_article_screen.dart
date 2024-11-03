@@ -1,10 +1,11 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
 
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_edit_article_dialog.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_privacy.dart';
@@ -18,9 +19,11 @@ class CreateArticleScreen extends ConsumerStatefulWidget {
   const CreateArticleScreen({
     super.key,
     required this.id,
+    required this.draft,
   });
 
   final int id;
+  final ArticleDraft? draft;
 
   @override
   ConsumerState<CreateArticleScreen> createState() =>
@@ -31,25 +34,44 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(
-      articleDetailProvider(widget.id),
+      articleDetailProvider(
+        widget.draft,
+        widget.id,
+      ),
     );
     final articleWriter = ref.watch(
-      articleWriterProvider,
+      articleWriterProvider(data.value),
     );
-    final draftsData = ref.watch(articleDraftsProvider);
-    final canSend = articleWriter.canSend;
-    log(canSend.toString());
+    final draftsData = widget.id == 0 ? ref.watch(articleDraftsProvider) : [];
+    final canSend = articleWriter.banner.isNotEmpty &&
+        articleWriter.title.isNotEmpty &&
+        !articleWriter.isEmptyContent;
+
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
-        final bool? shouldPop = true
-            ? await createContentSaveArticleDraftDialog(ref, context)
+        final bool? shouldPop = canSend
+            ? widget.id == 0
+                ? await createContentSaveArticleDraftDialog(
+                    ref,
+                    context,
+                    articleWriter.title,
+                    articleWriter.content,
+                    articleWriter.banner,
+                  )
+                : await createContentEditArticleDialog(
+                    ref,
+                    context,
+                  )
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
-            context.pop();
+            context.go(
+              FeedRoutes.namespace,
+              extra: null,
+            );
           }
         }
       },
@@ -60,33 +82,55 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
               60,
             ),
             child: CreateContentAppbar(
-              canSend: true,
+              canSend: canSend,
               draftData: draftsData,
               sendPressed: () {
-                final contentPlainText =
-                    articleWriter.contentPlainText;
-
-                log(contentPlainText);
-                contentPlainText.isNotEmpty
-                    ? context.go(
-                        FeedRoutes.namespace,
-                        extra: () => THelperFunctions.sendArticle(
-                          ref,
-                        ),
-                      )
-                    : TToastMessages.infoToast(
-                        'Article content cannot be empty.',
-                      );
+                context.go(
+                  FeedRoutes.namespace,
+                  extra: () => THelperFunctions.sendArticle(
+                    ref,
+                    widget.id != 0
+                        ? Article(
+                            id: data.value!.id,
+                            ownerId: data.value!.ownerId,
+                            title: articleWriter.title,
+                            content: articleWriter.content,
+                            banner: articleWriter.banner,
+                          )
+                        : Article(
+                            id: null,
+                            ownerId: 0,
+                            title: articleWriter.title,
+                            content: articleWriter.content,
+                            banner: articleWriter.banner,
+                          ),
+                  ),
+                );
               },
               onCanSendPost: () async {
-                final shouldPop =
-                    await createContentSaveArticleDraftDialog(ref, context);
+                final shouldPop = widget.id == 0
+                    ? await createContentSaveArticleDraftDialog(
+                        ref,
+                        context,
+                        articleWriter.title,
+                        articleWriter.content,
+                        articleWriter.banner,
+                      )
+                    : await createContentEditArticleDialog(
+                        ref,
+                        context,
+                      );
                 if (shouldPop ?? false) {
-                  if (context.mounted) context.pop();
+                  if (context.mounted) {
+                    context.go(
+                      FeedRoutes.namespace,
+                      extra: {'sendPost': null},
+                    );
+                  }
                 }
               },
               draftPressed: () =>
-                  THelperFunctions.showPostDraftsScreen(context),
+                  THelperFunctions.showArticleDraftsScreen(context),
             ),
           ),
           bottomNavigationBar: const CreateContentPrivacy(),

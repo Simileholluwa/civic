@@ -248,6 +248,7 @@ GoRouter router(RouterRef ref) {
           final data = state.extra as Map<String, dynamic>;
           return CreateArticleScreen(
             id: data['id'],
+            draft: data['draft'],
           );
         },
       ),

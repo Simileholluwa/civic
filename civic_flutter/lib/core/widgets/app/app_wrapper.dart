@@ -64,7 +64,8 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
         context.push(
           AppRoutes.createArticle,
           extra: {
-            'id': 0,
+            'id': 14,
+            'draft': null,
           },
         );
         break;

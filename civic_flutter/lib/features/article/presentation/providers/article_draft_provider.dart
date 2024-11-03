@@ -1,12 +1,9 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'article_draft_provider.g.dart';
 
@@ -25,7 +22,6 @@ class ArticleDrafts extends _$ArticleDrafts {
         if (articleDraft == null) {
           return state = <ArticleDraft>[];
         } else {
-          log(articleDraft.toString());
           return state = articleDraft;
         }
       },
@@ -51,12 +47,13 @@ class ArticleDrafts extends _$ArticleDrafts {
     );
   }
 
-  Future<bool> saveArticleDraft(ArticleDraft articleDraft, QuillController controller,) async {
+  Future<bool> saveArticleDraft(
+    ArticleDraft articleDraft,
+  ) async {
     final saveDraft = ref.read(saveDraftArticleProvider);
     final result = await saveDraft(
       SaveDraftArticleParams(
         articleDraft,
-        controller,
       ),
     );
 
@@ -72,14 +69,12 @@ class ArticleDrafts extends _$ArticleDrafts {
 
   Future<bool> deleteDraftArticle(
     ArticleDraft articleDraft,
-    QuillController controller,
     int index,
   ) async {
     final deleteDraft = ref.read(deleteDraftArticleProvider);
     final result = await deleteDraft(
       DeleteDraftArticleParams(
         articleDraft,
-        controller,
       ),
     );
 
@@ -97,21 +92,22 @@ class ArticleDrafts extends _$ArticleDrafts {
     });
   }
 
-  Future<void> sendDraftPost(
+  Future<void> sendArticleDraft(
     ArticleDraft articleDraft,
-    QuillController controller,
     int index,
   ) async {
     final result = await ref.read(sendArticleProvider.notifier).sendArticle(
-          banner: articleDraft.banner,
-          content: articleDraft.content,
-          title: articleDraft.title,
+          article: Article(
+            ownerId: 0,
+            title: articleDraft.title,
+            content: articleDraft.content,
+            banner: articleDraft.banner,
+          ),
         );
 
     if (result) {
       await deleteDraftArticle(
         articleDraft,
-        controller,
         index,
       );
     }

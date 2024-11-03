@@ -10,7 +10,7 @@ class ArticleState {
   final ScrollController? scrollController;
   final TextEditingController? titleController;
   final QuillController? controller;
-  final bool canSend;
+  final bool isEmptyContent;
   ArticleState({
     this.focusNode, 
     this.scrollController, 
@@ -20,7 +20,7 @@ class ArticleState {
     this.title = '',
     this.content = '',
     this.contentPlainText = '',
-    this.canSend = false,
+    this.isEmptyContent = true,
   });
 
   ArticleState copyWith({
@@ -32,7 +32,7 @@ class ArticleState {
     TextEditingController? titleController,
     QuillController? controller,
     String? contentPlainText,
-    bool? canSend,
+    bool? isEmptyContent,
   }) {
     return ArticleState(
       banner: banner ?? this.banner,
@@ -43,7 +43,7 @@ class ArticleState {
       titleController: titleController ?? this.titleController,
       controller: controller ?? this.controller,
       contentPlainText: contentPlainText ?? this.contentPlainText,
-      canSend: canSend ?? this.canSend,
+      isEmptyContent: isEmptyContent ?? this.isEmptyContent,
     );
   }
 }

@@ -7,7 +7,6 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ArticleBanner extends ConsumerWidget {
   const ArticleBanner({
@@ -20,12 +19,12 @@ class ArticleBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final articleWriter = ref.watch(
-      articleWriterProvider,
+      articleWriterProvider(article),
     );
     final articleWriterNotifier =
-        ref.read(articleWriterProvider.notifier);
+        ref.read(articleWriterProvider(article).notifier);
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final isUrlImage = regex.hasMatch(article.banner);
+    var isUrlImage = regex.hasMatch(articleWriter.banner);
     return Stack(
       children: [
         Container(
@@ -49,55 +48,52 @@ class ArticleBanner extends ConsumerWidget {
                 : null,
           ),
           child: articleWriter.banner.isEmpty
-              ? GestureDetector(
-                  onTap: () async {
-                    final picker = ImagePicker();
-                    final pickedFile =
-                        await picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      articleWriterNotifier.setBannerImage(pickedFile.path);
-                    }
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
                             icon: Icon(
                               Iconsax.gallery5,
                               size: 60,
                               color: Colors.grey[600],
                             ),
-                            onPressed: () => THelperFunctions.pickBannerImage(
-                              ref,
-                              context,
-                            ),
-                          ),
-                          IconButton(
+                            onPressed: () async {
+                              final banner =
+                                  await THelperFunctions.pickBannerImage(
+                                ref,
+                                context,
+                              );
+                              articleWriterNotifier.setBannerImage(banner);
+                              isUrlImage = false;
+                            }),
+                        IconButton(
                             icon: Icon(
                               Iconsax.camera5,
                               size: 60,
                               color: Colors.grey[600],
                             ),
-                            onPressed: () =>
-                                THelperFunctions.captureBannerImage(
-                              ref,
-                              context,
-                            ),
-                          ),
-                        ],
+                            onPressed: () async {
+                              final banner =
+                                  await THelperFunctions.captureBannerImage(
+                                ref,
+                                context,
+                              );
+                              articleWriterNotifier.setBannerImage(banner);
+                              isUrlImage = false;
+                            }),
+                      ],
+                    ),
+                    Text(
+                      'Add a Banner Image',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.grey[600],
                       ),
-                      Text(
-                        'Add a Banner Image',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 )
               : null,
         ),
@@ -113,9 +109,13 @@ class ArticleBanner extends ConsumerWidget {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.delete, color: TColors.textWhite,),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: TColors.textWhite,
+                    ),
                     onPressed: () {
                       articleWriterNotifier.clearBannerImage();
+                      isUrlImage = false;
                     },
                   ),
                   IconButton(
@@ -123,21 +123,29 @@ class ArticleBanner extends ConsumerWidget {
                       Iconsax.gallery5,
                       color: TColors.textWhite,
                     ),
-                    onPressed: () => THelperFunctions.pickBannerImage(
-                      ref,
-                      context,
-                    ),
+                    onPressed: () async {
+                      final banner = await THelperFunctions.pickBannerImage(
+                        ref,
+                        context,
+                      );
+                      articleWriterNotifier.setBannerImage(banner);
+                      isUrlImage = false;
+                    },
                   ),
                   IconButton(
-                    icon: const Icon(
-                      Iconsax.camera5,
-                      color: TColors.textWhite,
-                    ),
-                    onPressed: () => THelperFunctions.captureBannerImage(
-                      ref,
-                      context,
-                    ),
-                  ),
+                      icon: const Icon(
+                        Iconsax.camera5,
+                        color: TColors.textWhite,
+                      ),
+                      onPressed: () async {
+                        final banner =
+                            await THelperFunctions.captureBannerImage(
+                          ref,
+                          context,
+                        );
+                        articleWriterNotifier.setBannerImage(banner);
+                        isUrlImage = false;
+                      }),
                 ],
               ),
             ),

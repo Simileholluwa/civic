@@ -6,7 +6,7 @@ part of 'article_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$articleDetailHash() => r'd22eb7f9af082692a742278aa4dcf55ad2c50015';
+String _$articleDetailHash() => r'c54fdcb30e348856c5d0c7524ca3ad776ec253e3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,9 +40,11 @@ class ArticleDetailFamily extends Family<AsyncValue<Article?>> {
 
   /// See also [articleDetail].
   ArticleDetailProvider call(
+    ArticleDraft? articleDraft,
     int id,
   ) {
     return ArticleDetailProvider(
+      articleDraft,
       id,
     );
   }
@@ -52,6 +54,7 @@ class ArticleDetailFamily extends Family<AsyncValue<Article?>> {
     covariant ArticleDetailProvider provider,
   ) {
     return call(
+      provider.articleDraft,
       provider.id,
     );
   }
@@ -75,10 +78,12 @@ class ArticleDetailFamily extends Family<AsyncValue<Article?>> {
 class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
   /// See also [articleDetail].
   ArticleDetailProvider(
+    ArticleDraft? articleDraft,
     int id,
   ) : this._internal(
           (ref) => articleDetail(
             ref as ArticleDetailRef,
+            articleDraft,
             id,
           ),
           from: articleDetailProvider,
@@ -90,6 +95,7 @@ class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
           dependencies: ArticleDetailFamily._dependencies,
           allTransitiveDependencies:
               ArticleDetailFamily._allTransitiveDependencies,
+          articleDraft: articleDraft,
           id: id,
         );
 
@@ -100,9 +106,11 @@ class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
+    required this.articleDraft,
     required this.id,
   }) : super.internal();
 
+  final ArticleDraft? articleDraft;
   final int id;
 
   @override
@@ -118,6 +126,7 @@ class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
+        articleDraft: articleDraft,
         id: id,
       ),
     );
@@ -130,12 +139,15 @@ class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
 
   @override
   bool operator ==(Object other) {
-    return other is ArticleDetailProvider && other.id == id;
+    return other is ArticleDetailProvider &&
+        other.articleDraft == articleDraft &&
+        other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, articleDraft.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
@@ -143,6 +155,9 @@ class ArticleDetailProvider extends AutoDisposeFutureProvider<Article?> {
 }
 
 mixin ArticleDetailRef on AutoDisposeFutureProviderRef<Article?> {
+  /// The parameter `articleDraft` of this provider.
+  ArticleDraft? get articleDraft;
+
   /// The parameter `id` of this provider.
   int get id;
 }
@@ -151,6 +166,9 @@ class _ArticleDetailProviderElement
     extends AutoDisposeFutureProviderElement<Article?> with ArticleDetailRef {
   _ArticleDetailProviderElement(super.provider);
 
+  @override
+  ArticleDraft? get articleDraft =>
+      (origin as ArticleDetailProvider).articleDraft;
   @override
   int get id => (origin as ArticleDetailProvider).id;
 }

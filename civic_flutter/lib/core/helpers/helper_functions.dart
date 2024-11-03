@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -17,7 +18,8 @@ import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.
 import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_select_media_dialog.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_provider.dart';
+import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
+import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
@@ -29,7 +31,6 @@ import 'package:civic_flutter/features/post/presentation/provider/post_send_prov
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -339,6 +340,18 @@ class THelperFunctions {
     );
   }
 
+  static Future<bool?> showArticleDraftsScreen(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (context) {
+        return const DraftArticleScreen();
+      },
+    );
+  }
+
   static Future<bool?> showScheduleDialog(
     BuildContext context,
   ) {
@@ -591,15 +604,10 @@ class THelperFunctions {
 
   static void sendArticle(
     WidgetRef ref,
+    Article article,
   ) {
-    final articleState = ref.watch(
-      articleWriterProvider,
-    );
-
     ref.read(sendArticleProvider.notifier).sendArticle(
-          banner: articleState.banner,
-          content: articleState.content,
-          title: articleState.title,
+          article: article,
         );
   }
 
@@ -650,11 +658,36 @@ class THelperFunctions {
     );
   }
 
-  static List<String> getAllImagesFromEditor(QuillController controller) {
-    final List<String> imageUrls = [];
+  static Future<bool?> deleteArticleDraftsDialog(
+      BuildContext context, WidgetRef ref) {
+    return postDialog(
+      context: context,
+      title: 'Delete all drafts?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        context.pop();
+        final result =
+            await ref.read(articleDraftsProvider.notifier).deleteAllDrafts();
+        if (result) {
+          if (context.mounted) context.pop();
+        }
+        TToastMessages.successToast('All drafts was deleted');
+      },
+    );
+  }
 
+  static List<String> getAllImagesFromEditor(String content) {
+    final List<String> imageUrls = [];
     // Convert the document to JSON
-    final jsonDocument = controller.document.toDelta().toJson();
+    
+    final jsonDocument = jsonDecode(
+      content,);
 
     // Loop through the document's operations
     for (var operation in jsonDocument) {
@@ -679,11 +712,13 @@ class THelperFunctions {
   }
 
   static String modifyArticleContent(
-    QuillController controller,
+    String content,
     Map<String, String> pathReplacements,
   ) {
     // Convert document to JSON
-    final documentJson = controller.document.toDelta().toJson();
+    final documentJson = jsonDecode(
+      content,);
+    
 
     // Update the JSON with new image paths
     for (var block in documentJson) {
@@ -702,18 +737,13 @@ class THelperFunctions {
       }
     }
 
-    // Update the controller's document with the modified JSON
-    final updatedDelta = Delta.fromJson(documentJson);
-    controller.document = Document.fromDelta(updatedDelta);
-    final content = controller.document.toDelta().toJson().toString();
-    return content;
+    return jsonEncode(documentJson);
   }
 
-  static Future<void> pickBannerImage(
+  static Future<String> pickBannerImage(
     WidgetRef ref,
     BuildContext context,
   ) async {
-    final articleWriterNotifier = ref.read(articleWriterProvider.notifier);
     final picker = ImageHelper();
     final pickedFile = await picker.pickImage();
     if (pickedFile != null) {
@@ -722,15 +752,15 @@ class THelperFunctions {
         // ignore: use_build_context_synchronously
         context: context,
       );
-      articleWriterNotifier.setBannerImage(croppedFile!.path);
+      return croppedFile!.path;
     }
+    return '';
   }
 
-  static Future<void> captureBannerImage(
+  static Future<String> captureBannerImage(
     WidgetRef ref,
     BuildContext context,
   ) async {
-    final articleWriterNotifier = ref.read(articleWriterProvider.notifier);
     final picker = ImageHelper();
     final pickedFile = await picker.takeImage();
     if (pickedFile != null) {
@@ -739,7 +769,69 @@ class THelperFunctions {
         // ignore: use_build_context_synchronously
         context: context,
       );
-      articleWriterNotifier.setBannerImage(croppedFile!.path);
+      return croppedFile!.path;
     }
+    return '';
+  }
+
+  static DefaultStyles articleTextEditorStyles(
+    BuildContext context,
+    DefaultTextStyle defaultTextStyle,
+  ) {
+    return DefaultStyles(
+      h1: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: 23,
+              height: 1.15,
+            ),
+        HorizontalSpacing.zero,
+        const VerticalSpacing(16, 0),
+        VerticalSpacing.zero,
+        null,
+      ),
+      paragraph: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+      ),
+      placeHolder: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+              color: Theme.of(context).textTheme.bodySmall!.color!,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+      ),
+      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
+      lists: DefaultListBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        const VerticalSpacing(
+          0,
+          20,
+        ),
+        null,
+        null,
+      ),
+      leading: DefaultListBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+        null,
+      ),
+    );
   }
 }
