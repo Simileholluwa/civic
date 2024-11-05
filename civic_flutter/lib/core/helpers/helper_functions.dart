@@ -8,16 +8,15 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/image_helper.dart';
 import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
 import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
 import 'package:civic_flutter/core/screens/tag_users_screen.dart';
+import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_select_media_dialog.dart';
 import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
@@ -360,14 +359,6 @@ class THelperFunctions {
     );
   }
 
-  static Future<bool?> showSelectMediaDialog(
-    BuildContext context,
-  ) {
-    return createContentSelectMediaDialog(
-      context,
-    );
-  }
-
   static void onSuggestionSelected(
     WidgetRef ref,
     String suggestion,
@@ -408,32 +399,9 @@ class THelperFunctions {
     }
   }
 
-  static void sendPost(WidgetRef ref) async {
-    final media = ref.watch(mediaProvider);
-    final videoUrl = media.isEmpty
-        ? ''
-        : THelperFunctions.isVideo(media.first)
-            ? media.first
-            : '';
-    final imageUrls = media.isEmpty
-        ? <String>[]
-        : THelperFunctions.isImage(media.first)
-            ? media
-            : <String>[];
-    final taggedUsers = ref.watch(tagSelectionsProvider);
-    await ref.read(sendPostProvider.notifier).sendPost(
-          text: ref.watch(postTextProvider).text,
-          imagePath: imageUrls,
-          videoPath: videoUrl,
-          taggedUsers: taggedUsers,
-          locations: ref.watch(selectLocationsProvider),
-          postType: THelperFunctions.determinePostType(
-            text: ref.watch(postTextProvider).text,
-            pickedImages: imageUrls,
-            pickedVideo: videoUrl,
-          ),
-          mentions: ref.watch(selectedMentionsProvider),
-          tags: ref.watch(hashtagsProvider),
+  static void sendPost(WidgetRef ref, Post post) async {
+    await ref.read(sendPostProvider.notifier).send(
+          post: post,
         );
   }
 
@@ -457,13 +425,12 @@ class THelperFunctions {
     });
   }
 
-  static String _getLastWord(WidgetRef ref, String text) {
-    final cursorIndex = ref
-        .watch(
-          postTextProvider,
-        )
-        .selection
-        .baseOffset;
+  static String _getLastWord(
+    WidgetRef ref,
+    String text,
+    MentionHashtagLinkTextEditingController controller,
+  ) {
+    final cursorIndex = controller.selection.baseOffset;
     final textBeforeCursor = text.substring(
       0,
       cursorIndex,
@@ -549,6 +516,7 @@ class THelperFunctions {
   static void onTextChanged(
     WidgetRef ref,
     String text,
+    MentionHashtagLinkTextEditingController controller,
   ) {
     if (text.isEmpty) {
       ref
@@ -569,7 +537,7 @@ class THelperFunctions {
     }
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 1000), () {
-      final lastWord = _getLastWord(ref, text);
+      final lastWord = _getLastWord(ref, text, controller,);
       if (lastWord.startsWith('@')) {
         _fetchMentionSuggestions(ref, lastWord);
       } else if (lastWord.startsWith('#')) {
@@ -685,9 +653,10 @@ class THelperFunctions {
   static List<String> getAllImagesFromEditor(String content) {
     final List<String> imageUrls = [];
     // Convert the document to JSON
-    
+
     final jsonDocument = jsonDecode(
-      content,);
+      content,
+    );
 
     // Loop through the document's operations
     for (var operation in jsonDocument) {
@@ -717,8 +686,8 @@ class THelperFunctions {
   ) {
     // Convert document to JSON
     final documentJson = jsonDecode(
-      content,);
-    
+      content,
+    );
 
     // Update the JSON with new image paths
     for (var block in documentJson) {

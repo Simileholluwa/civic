@@ -24,7 +24,7 @@ class SendPoll extends _$SendPoll {
   @override
   void build() {}
 
-  Future<void> saveFailedPostAsDraft(
+  Future<void> saveFailedPollAsDraft(
     String errorMessage,
   ) async {
     final draftPoll = DraftPoll(
@@ -68,7 +68,7 @@ class SendPoll extends _$SendPoll {
     return send.fold((l) async {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(
+      await saveFailedPollAsDraft(
         l.message,
       );
       return false;
@@ -94,7 +94,7 @@ class SendPoll extends _$SendPoll {
     return send.fold((l) async {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(
+      await saveFailedPollAsDraft(
         l.message,
       );
       return false;
@@ -122,7 +122,7 @@ class SendPoll extends _$SendPoll {
     return userRecord.fold((error) async {
       log(error.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      await saveFailedPostAsDraft(
+      await saveFailedPollAsDraft(
         error.message,
       );
       return false;

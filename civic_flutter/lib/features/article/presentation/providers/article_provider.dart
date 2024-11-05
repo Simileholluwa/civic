@@ -63,18 +63,6 @@ class ArticleWriter extends _$ArticleWriter {
     state = state.copyWith(isEmptyContent: isEmpty);
   }
 
-  void setDraftContent(ArticleDraft articleDraft) {
-    state = state.copyWith(
-      title: articleDraft.title,
-      content: articleDraft.content,
-      banner: articleDraft.banner,
-    );
-    state.controller!.document = Document.fromJson(
-      jsonDecode(articleDraft.content),
-    );
-    state.titleController!.text = articleDraft.title;
-  }
-
   void setTitle(String title) {
     state = state.copyWith(title: title);
   }
@@ -83,12 +71,6 @@ class ArticleWriter extends _$ArticleWriter {
     state = state.copyWith(
       content: content,
       contentPlainText: state.controller!.document.toPlainText(),
-    );
-  }
-
-  void setEditorDocument(Document document) {
-    state.controller!.document = Document.fromJson(
-      jsonDecode(state.content),
     );
   }
 

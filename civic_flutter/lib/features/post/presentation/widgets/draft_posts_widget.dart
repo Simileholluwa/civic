@@ -1,8 +1,8 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_locations_and_tagged_users.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_image_post.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_darft_text.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/draft_image_post.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_post_title.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_icons.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_video_thumbnail.dart';
@@ -12,20 +12,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class DraftPostsWidget extends ConsumerWidget {
   const DraftPostsWidget({
     super.key,
-    this.hasImage = false,
-    this.hasText = false,
-    this.hasVideo = false,
-    this.shouldHavePostOptions = false,
-    required this.post,
     required this.index,
+    required this.draftPost,
   });
-
-  final bool hasImage;
-  final bool hasText;
-  final bool hasVideo;
-  final bool shouldHavePostOptions;
-  final DraftPost post;
   final int index;
+  final DraftPost draftPost;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,40 +37,38 @@ class DraftPostsWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DraftPostTitle(
-                createdAt: post.createdAt!,
+                createdAt: draftPost.createdAt!,
                 index: index,
               ),
               DraftPostsIcons(
-                hasText: hasText,
-                hasVideo: hasVideo,
-                hasImage: hasImage,
-                post: post,
+                post: draftPost,
                 index: index,
               ),
             ],
           ),
-          if (hasText)
+          if (draftPost.text.isNotEmpty)
             CreateContentDraftText(
-              text: post.text,
+              text: draftPost.text,
             ),
-          CreateContentLocationsAndTaggedUsers(
-            locations: post.locations,
-            taggedUsers: post.taggedUsers,
-          ),
-          if (hasImage || hasVideo)
+          if (draftPost.locations.isNotEmpty || draftPost.taggedUsers.isNotEmpty)
             const SizedBox(
               height: 16,
             ),
-          if (hasImage)
-            ImagePost(
-              showImageOptions: false,
-              images: post.imagesPath,
-              height: 350,
-              padding: 0,
+          CreateContentLocationsAndTaggedUsers(
+            locations: draftPost.locations,
+            taggedUsers: draftPost.taggedUsers,
+          ),
+          if (draftPost.imagesPath.isNotEmpty || draftPost.videoPath.isNotEmpty)
+            const SizedBox(
+              height: 16,
             ),
-          if (hasVideo)
+          if (draftPost.imagesPath.isNotEmpty)
+            DraftImagePost(
+              post: draftPost,
+            ),
+          if (draftPost.videoPath.isNotEmpty)
             DraftPostsVideoThumbnail(
-              post: post,
+              post: draftPost,
             ),
         ],
       ),

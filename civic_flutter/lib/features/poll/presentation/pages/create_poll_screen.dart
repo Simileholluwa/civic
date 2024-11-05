@@ -15,7 +15,6 @@ import 'package:civic_flutter/features/post/presentation/widgets/mentions_sugges
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/create_post_bottom_navigation.dart';
 
 class CreatePollScreen extends ConsumerWidget {
   const CreatePollScreen({
@@ -92,13 +91,13 @@ class CreatePollScreen extends ConsumerWidget {
                       ),
                     )
                   : null,
-          bottomNavigationBar:
-              (data.isLoading || data.hasError || data.value == null)
-                  ? const SizedBox()
-                  : const CreatePostBottomNavigation(
-                      showSelectMedia: false,
-                      maxLength: 300,
-                    ),
+          // bottomNavigationBar:
+          //     (data.isLoading || data.hasError || data.value == null)
+          //         ? const SizedBox()
+          //         : const PostBottomNavigation(
+          //             showSelectMedia: false,
+          //             maxLength: 300,
+          //           ),
           body: data.when(
             data: (poll) {
               if (poll == null) {

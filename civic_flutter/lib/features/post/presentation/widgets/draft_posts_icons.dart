@@ -2,15 +2,11 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
+import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,16 +16,10 @@ class DraftPostsIcons extends ConsumerWidget {
   const DraftPostsIcons({
     super.key,
     required this.post,
-    required this.hasImage,
-    required this.hasText,
-    required this.hasVideo,
     required this.index,
   });
 
   final DraftPost post;
-  final bool hasVideo;
-  final bool hasText;
-  final bool hasImage;
   final int index;
 
   @override
@@ -49,71 +39,14 @@ class DraftPostsIcons extends ConsumerWidget {
         children: [
           IconButton(
             onPressed: () {
-              ref
-                  .read(
-                    mediaProvider.notifier,
-                  )
-                  .clearMedia();
-              ref
-                  .read(
-                    postTextProvider.notifier,
-                  )
-                  .reset();
-              if (hasVideo) {
-                ref
-                    .read(
-                      mediaProvider.notifier,
-                    )
-                    .setVideo(
-                      post.videoPath,
-                    );
-              }
-              if (hasImage) {
-                ref
-                    .read(
-                      mediaProvider.notifier,
-                    )
-                    .setDraftImage(
-                      post.imagesPath,
-                    );
-              }
-              if (hasText) {
-                ref
-                    .read(
-                      postTextProvider.notifier,
-                    )
-                    .setText(
-                      post.text,
-                    );
-              }
-              if (post.locations.isNotEmpty) {
-                ref
-                    .read(
-                      selectLocationsProvider.notifier,
-                    )
-                    .setLocations(
-                      post.locations,
-                    );
-              }
-              if (post.taggedUsers.isNotEmpty) {
-                ref
-                    .read(
-                      tagSelectionsProvider.notifier,
-                    )
-                    .setTags(
-                      post.taggedUsers,
-                    );
-              }
-              if (post.mentions.isNotEmpty) {
-                ref
-                    .read(
-                      selectedMentionsProvider.notifier,
-                    )
-                    .setMentions(
-                      post.mentions,
-                    );
-              }
               context.pop();
+              context.replace(
+                AppRoutes.createPost,
+                extra: {
+                  'id': 0,
+                  'draft': post,
+                }
+              );
             },
             icon: const Icon(
               Iconsax.edit,
@@ -164,7 +97,6 @@ class DraftPostsIcons extends ConsumerWidget {
                       );
                 },
               );
-              ref.read(mediaVideoPlayerProvider.notifier).dispose();
             },
             icon: const Icon(
               Iconsax.send_1,

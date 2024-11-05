@@ -24,28 +24,22 @@ class SendPost extends _$SendPost {
   void build() {}
 
   Future<void> saveFailedPostAsDraft(
-    List<String> imagePath,
-    String videoPath,
-    String text,
-    List<AWSPlaces> locations,
-    List<UserRecord> taggedUsers,
+    Post post,
     String errorMessage,
-    List<UserRecord> mentions,
-    List<String> tags,
   ) async {
     final draftPost = DraftPost(
       postType: THelperFunctions.determinePostType(
-        text: text,
-        pickedImages: imagePath,
-        pickedVideo: videoPath,
+        text: post.text,
+        pickedImages: post.imageUrls,
+        pickedVideo: post.videoUrl,
       ),
-      text: text,
-      imagesPath: imagePath,
-      videoPath: videoPath,
-      taggedUsers: taggedUsers,
-      locations: locations,
-      mentions: mentions,
-      tags: tags,
+      text: post.text,
+      imagesPath: post.imageUrls,
+      videoPath: post.videoUrl,
+      taggedUsers: post.taggedUsers,
+      locations: post.locations,
+      mentions: post.mentions,
+      tags: post.tags,
     );
     final draftPostProvider = ref.read(postDraftsProvider.notifier);
     final result = await draftPostProvider.saveDraftPost(
@@ -58,7 +52,69 @@ class SendPost extends _$SendPost {
     }
   }
 
-  Future<Post?> sendPostWithMedia(
+  Future<List<String>> sendMediaImages(Post post) async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (post.imageUrls.isNotEmpty) {
+      for (final image in post.imageUrls) {
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (regex.hasMatch(image)) {
+          existingUpload.add(image);
+        } else {
+          newUpload.add(image);
+        }
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+            newUpload,
+            'posts',
+            'images',
+          );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        await saveFailedPostAsDraft(
+          post,
+          error,
+        );
+
+        return [];
+      }, (mediaUrls) {
+        return mediaUrls + existingUpload;
+      });
+    }
+    return [];
+  }
+
+  Future<String> sendMediaVideo(Post post) async {
+    if (post.videoUrl.isNotEmpty) {
+      final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+      if (regex.hasMatch(post.videoUrl)) {
+        return post.videoUrl;
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+        [post.videoUrl],
+        'posts',
+        'videos',
+      );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        await saveFailedPostAsDraft(
+          post,
+          error,
+        );
+
+        return '';
+      }, (videoUrl) {
+        return videoUrl.first;
+      });
+    }
+    return '';
+  }
+
+  Future<Post?> sendPost(
     Post post,
   ) async {
     final savePost = ref.read(savePostProvider);
@@ -71,27 +127,17 @@ class SendPost extends _$SendPost {
     return saveResult.fold((error) async {
       log(error.message);
       await saveFailedPostAsDraft(
-        post.imageUrls,
-        post.videoUrl,
-        post.text,
-        post.locations,
-        post.taggedUsers,
+        post,
         error.message,
-        post.mentions,
-        post.tags,
       );
+
       return null;
     }, (data) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
       if (data == null) {
         await saveFailedPostAsDraft(
-          post.imageUrls,
-          post.videoUrl,
-          post.text,
-          post.locations,
-          post.taggedUsers,
-          'Something went wrong.',
-          post.mentions,
-          post.tags,
+          post,
+          'Something went wrong',
         );
         return null;
       }
@@ -99,41 +145,6 @@ class SendPost extends _$SendPost {
         'Your post was sent.',
       );
       return post;
-    });
-  }
-
-  Future<List<String>?> sendMedia(
-    List<String> imagePath,
-    String videoPath,
-    String text,
-    List<AWSPlaces> locations,
-    List<UserRecord> taggedUsers,
-    List<UserRecord> mentions,
-    List<String> tags,
-  ) async {
-    final isVideo = videoPath.isNotEmpty;
-    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
-          isVideo ? [videoPath] : imagePath,
-          'posts',
-          isVideo ? 'videos' : 'images',
-        );
-
-    return result.fold((error) async {
-      log(error);
-      await saveFailedPostAsDraft(
-        imagePath,
-        videoPath,
-        text,
-        locations,
-        taggedUsers,
-        error,
-        mentions,
-        tags,
-      );
-
-      return null;
-    }, (mediaUrls) {
-      return mediaUrls;
     });
   }
 
@@ -150,18 +161,14 @@ class SendPost extends _$SendPost {
     );
     return result.fold(
       (error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
         await saveFailedPostAsDraft(
-          post.imageUrls,
-          post.videoUrl,
-          post.text,
-          post.locations,
-          post.taggedUsers,
+          post,
           error.message,
-          post.mentions,
-          post.tags,
         );
       },
       (r) {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
         TToastMessages.successToast(
           'Your post will be sent on ${scheduledDateTimeProvider.humanizeDateTimeForSend()}',
         );
@@ -169,15 +176,8 @@ class SendPost extends _$SendPost {
     );
   }
 
-  Future<bool> sendPost({
-    required String text,
-    required List<String> imagePath,
-    required String videoPath,
-    required PostType postType,
-    required List<AWSPlaces> locations,
-    required List<UserRecord> taggedUsers,
-    required List<UserRecord> mentions,
-    required List<String> tags,
+  Future<void> send({
+    required Post post,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final me = ref.read(meUseCaseProvider);
@@ -190,92 +190,41 @@ class SendPost extends _$SendPost {
           error.message,
         );
         await saveFailedPostAsDraft(
-          imagePath,
-          videoPath,
-          text,
-          locations,
-          taggedUsers,
+          post,
           error.message,
-          mentions,
-          tags,
         );
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
-        return false;
+        return;
       },
       (record) async {
         final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
         final scheduledDateTimeProvider = ref.read(
           postScheduledDateTimeProvider.notifier,
         );
-        if (imagePath.isNotEmpty || videoPath.isNotEmpty) {
-          final isVideo = videoPath.isNotEmpty;
-          final result = await sendMedia(
-            imagePath,
-            videoPath,
-            text,
-            locations,
-            taggedUsers,
-            mentions,
-            tags,
+        final uploadedImages = await sendMediaImages(post);
+        final uploadedVideo = await sendMediaVideo(post);
+        final postTosend = post.copyWith(
+          imageUrls: uploadedImages,
+          videoUrl: uploadedVideo,
+          owner: record,
+        );
+        if (scheduledDateTime == null) {
+          await sendPost(
+            postTosend,
           );
-          if (result == null) {
-            state = null;
-
-            ref.read(sendPostLoadingProvider.notifier).setValue(false);
-            return false;
-          }
-          final postToSend = Post(
-            ownerId: record.id!,
-            text: text,
-            postType: postType,
-            imageUrls: isVideo ? [] : result,
-            videoUrl: isVideo ? result.first : '',
-            taggedUsers: taggedUsers,
-            locations: locations,
-            mentions: mentions,
-            tags: tags,
-          );
-          scheduledDateTime == null
-              ? await sendPostWithMedia(
-                  postToSend,
-                )
-              : scheduledDateTimeProvider.canSendLater()
-                  ? await saveInFuture(
-                      postToSend,
-                      scheduledDateTime,
-                    )
-                  : await sendPostWithMedia(
-                      postToSend,
-                    );
-          ref.read(sendPostLoadingProvider.notifier).setValue(false);
-          return true;
         } else {
-          final postToSend = Post(
-            ownerId: record.userInfo!.id!,
-            text: text,
-            postType: postType,
-            imageUrls: [],
-            videoUrl: '',
-            taggedUsers: taggedUsers,
-            locations: locations,
-            mentions: mentions,
-            tags: tags,
-          );
-          scheduledDateTime == null
-              ? await sendPostWithMedia(
-                  postToSend,
-                )
-              : scheduledDateTimeProvider.canSendLater()
-                  ? await saveInFuture(
-                      postToSend,
-                      scheduledDateTime,
-                    )
-                  : await sendPostWithMedia(
-                      postToSend,
-                    );
-          ref.read(sendPostLoadingProvider.notifier).setValue(false);
-          return true;
+          if (scheduledDateTimeProvider.canSendLater()) {
+            await saveInFuture(
+              postTosend,
+              scheduledDateTime,
+            );
+          } else {
+            await sendPost(
+              postTosend,
+            );
+          }
         }
+        return;
       },
     );
   }

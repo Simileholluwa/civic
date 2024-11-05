@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/delete_draft_use_case.dart';
@@ -97,22 +98,31 @@ class PostDrafts extends _$PostDrafts {
     DraftPost draftPost,
     int index,
   ) async {
-    final result = await ref.read(sendPostProvider.notifier).sendPost(
-          text: draftPost.text,
-          imagePath: draftPost.imagesPath,
-          videoPath: draftPost.videoPath,
-          postType: draftPost.postType,
-          locations: draftPost.locations,
-          taggedUsers: draftPost.taggedUsers,
-          mentions: draftPost.mentions,
-          tags: draftPost.tags,
+    await ref
+        .read(
+          sendPostProvider.notifier,
+        )
+        .sendPost(
+          Post(
+            ownerId: 0,
+            postType: THelperFunctions.determinePostType(
+              text: draftPost.text,
+              pickedImages: draftPost.imagesPath,
+              pickedVideo: draftPost.videoPath,
+            ),
+            text: draftPost.text,
+            imageUrls: draftPost.imagesPath,
+            videoUrl: draftPost.videoPath,
+            taggedUsers: draftPost.taggedUsers,
+            locations: draftPost.locations,
+            mentions: draftPost.mentions,
+            tags: draftPost.tags,
+          ),
         );
 
-    if (result) {
-      await deleteDraftById(
-        draftPost,
-        index,
-      );
-    }
+    await deleteDraftById(
+      draftPost,
+      index,
+    );
   }
 }

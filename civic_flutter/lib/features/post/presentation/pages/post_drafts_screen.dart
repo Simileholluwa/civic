@@ -1,6 +1,4 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_drafts_appbar.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
@@ -29,7 +27,6 @@ class PostDraftsScreen extends ConsumerWidget {
           data: data,
           leadingPressed: () {
             context.pop();
-            ref.watch(mediaVideoPlayerProvider.notifier).dispose();
           },
         ),
       ),
@@ -39,43 +36,10 @@ class PostDraftsScreen extends ConsumerWidget {
         ),
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          final type = data[index].postType;
-          switch (type) {
-            case PostType.image || PostType.images:
-              return DraftPostsWidget(
-                post: data[index],
-                hasImage: true,
-                index: index,
-              );
-            case PostType.text:
-              return DraftPostsWidget(
-                post: data[index],
-                hasText: true,
-                index: index,
-              );
-            case PostType.textWithImage || PostType.textWithImages:
-              return DraftPostsWidget(
-                post: data[index],
-                hasText: true,
-                hasImage: true,
-                index: index,
-              );
-            case PostType.video:
-              return DraftPostsWidget(
-                post: data[index],
-                hasVideo: true,
-                index: index,
-              );
-            case PostType.textWithVideo:
-              return DraftPostsWidget(
-                post: data[index],
-                hasText: true,
-                hasVideo: true,
-                index: index,
-              );
-            case PostType.none:
-              return const Text('none');
-          }
+          return DraftPostsWidget(
+            draftPost: data[index],
+            index: index,
+          );
         },
         separatorBuilder: (context, index) {
           return const SizedBox(

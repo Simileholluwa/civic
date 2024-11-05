@@ -7,19 +7,26 @@ class SendPollFutureCall extends FutureCall<Poll> {
   Future<void> invoke(Session session, Poll? object) async {
     if (object != null) {
       try {
+        if (object.id != null) {
+          // Update the poll
+          await Poll.db.updateRow(
+            session,
+            object,
+          );
+        } else {
+          // Send the poll
+          final sentPoll = await Poll.db.insertRow(
+            session,
+            object,
+          );
 
-        // Send the poll
-        final sentPoll = await Poll.db.insertRow(
-          session,
-          object,
-        );
-
-        // Send the hashtags
-        await HashtagEndpoint().sendPollHashtags(
-          session,
-          sentPoll.tags,
-          sentPoll.id!,
-        );
+          // Send the hashtags
+          await HashtagEndpoint().sendPollHashtags(
+            session,
+            sentPoll.tags,
+            sentPoll.id!,
+          );
+        }
       } catch (e) {
         await session.serverpod.futureCallWithDelay(
           'sendPollFutureCall',

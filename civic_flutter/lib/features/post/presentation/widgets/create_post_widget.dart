@@ -1,8 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_post_text_field.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_text_field.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_image_post.dart';
 import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_video_post.dart';
@@ -34,7 +33,10 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final media = ref.watch(mediaProvider);
+    final postState = ref.watch(
+      regularPostProvider(post),
+    );
+
     return SingleChildScrollView(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + TSizes.md,
@@ -51,13 +53,17 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
           ),
           CreateContentPostTextField(
             userName: post.owner!.userInfo!.userName!,
+            controller: postState.controller,
+            post: post,
           ),
-          if (media.isNotEmpty && THelperFunctions.isImage(media.first))
+          if (postState.imageUrls.isNotEmpty)
             ImagePost(
-              images: ref.watch(mediaProvider),
+              post: post,
             ),
-          if (media.isNotEmpty && THelperFunctions.isVideo(media.first))
-            const CreateContentVideoPost()
+          if (postState.videoUrl.isNotEmpty)
+             CreateContentVideoPost(
+              post: post,
+             )
         ],
       ),
     );

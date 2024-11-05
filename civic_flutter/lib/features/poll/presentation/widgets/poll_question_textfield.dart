@@ -1,5 +1,6 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class PollQuestionTextFormField extends ConsumerWidget {
           textCapitalization: TextCapitalization.sentences,
           onChanged: (text){
             pollNotifier.setQuestion(text);
-            THelperFunctions.onTextChanged(ref, text,);
+            THelperFunctions.onTextChanged(ref, text, MentionHashtagLinkTextEditingController());
           },
           decoration: InputDecoration(
             border: InputBorder.none,

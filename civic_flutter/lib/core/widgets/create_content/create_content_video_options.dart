@@ -1,7 +1,9 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,13 +12,21 @@ import 'package:iconsax/iconsax.dart';
 class CreateContentVideoOptions extends ConsumerWidget {
   const CreateContentVideoOptions({
     super.key,
+    required this.post,
   });
+
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(mediaProvider.notifier);
-    final videoControl = ref.watch(mediaVideoPlayerProvider);
-    final videoController = ref.watch(mediaVideoPlayerProvider.notifier);
+    final postState = ref.watch(
+          regularPostProvider(post),
+        );
+    final postNotifier = ref.watch(
+          regularPostProvider(post).notifier,
+        );
+    final videoControl = ref.watch(mediaVideoPlayerProvider(postState.videoUrl,),);
+    final videoController = ref.watch(mediaVideoPlayerProvider(postState.videoUrl).notifier);
     final isDark = THelperFunctions.isDarkMode(context);
     return Padding(
       padding: const EdgeInsets.only(
@@ -44,7 +54,7 @@ class CreateContentVideoOptions extends ConsumerWidget {
               child: IconButton(
                 onPressed: () {
                   videoControl?.dispose();
-                  controller.clearMedia();
+                  postNotifier.clearMedia();
                 },
                 icon: const Icon(
                   CupertinoIcons.clear,

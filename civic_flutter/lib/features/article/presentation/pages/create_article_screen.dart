@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateArticleScreen extends ConsumerStatefulWidget {
+class CreateArticleScreen extends ConsumerWidget {
   const CreateArticleScreen({
     super.key,
     required this.id,
@@ -24,25 +24,18 @@ class CreateArticleScreen extends ConsumerStatefulWidget {
 
   final int id;
   final ArticleDraft? draft;
-
   @override
-  ConsumerState<CreateArticleScreen> createState() =>
-      _CreateArticleScreenState();
-}
-
-class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(
       articleDetailProvider(
-        widget.draft,
-        widget.id,
+        draft,
+        id,
       ),
     );
     final articleWriter = ref.watch(
       articleWriterProvider(data.value),
     );
-    final draftsData = widget.id == 0 ? ref.watch(articleDraftsProvider) : [];
+    final draftsData = id == 0 ? ref.watch(articleDraftsProvider) : [];
     final canSend = articleWriter.banner.isNotEmpty &&
         articleWriter.title.isNotEmpty &&
         !articleWriter.isEmptyContent;
@@ -53,7 +46,7 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop = canSend
-            ? widget.id == 0
+            ? id == 0
                 ? await createContentSaveArticleDraftDialog(
                     ref,
                     context,
@@ -68,10 +61,7 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
-            context.go(
-              FeedRoutes.namespace,
-              extra: null,
-            );
+            context.pop();
           }
         }
       },
@@ -89,7 +79,7 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
                   FeedRoutes.namespace,
                   extra: () => THelperFunctions.sendArticle(
                     ref,
-                    widget.id != 0
+                    id != 0
                         ? Article(
                             id: data.value!.id,
                             ownerId: data.value!.ownerId,
@@ -108,7 +98,7 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
                 );
               },
               onCanSendPost: () async {
-                final shouldPop = widget.id == 0
+                final shouldPop = id == 0
                     ? await createContentSaveArticleDraftDialog(
                         ref,
                         context,
@@ -122,10 +112,7 @@ class _CreateArticleScreenState extends ConsumerState<CreateArticleScreen> {
                       );
                 if (shouldPop ?? false) {
                   if (context.mounted) {
-                    context.go(
-                      FeedRoutes.namespace,
-                      extra: {'sendPost': null},
-                    );
+                    context.pop();
                   }
                 }
               },

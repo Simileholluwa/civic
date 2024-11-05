@@ -6,35 +6,170 @@ part of 'media_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mediaHash() => r'95057458a81c0f8e024da21abc5ab6977ced5874';
+String _$mediaVideoPlayerHash() => r'4563a8ed547de4f9f9256b784a17169ee063d297';
 
-/// See also [Media].
-@ProviderFor(Media)
-final mediaProvider = AutoDisposeNotifierProvider<Media, List<String>>.internal(
-  Media.new,
-  name: r'mediaProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$mediaHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
 
-typedef _$Media = AutoDisposeNotifier<List<String>>;
-String _$mediaVideoPlayerHash() => r'36f612133cda42b00d4245daf3ec7b5a35805608';
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+abstract class _$MediaVideoPlayer
+    extends BuildlessAutoDisposeNotifier<Raw<VideoPlayerController?>> {
+  late final String? videoUrl;
+
+  Raw<VideoPlayerController?> build(
+    String? videoUrl,
+  );
+}
 
 /// See also [MediaVideoPlayer].
 @ProviderFor(MediaVideoPlayer)
-final mediaVideoPlayerProvider = AutoDisposeNotifierProvider<MediaVideoPlayer,
-    Raw<VideoPlayerController?>>.internal(
-  MediaVideoPlayer.new,
-  name: r'mediaVideoPlayerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mediaVideoPlayerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const mediaVideoPlayerProvider = MediaVideoPlayerFamily();
 
-typedef _$MediaVideoPlayer = AutoDisposeNotifier<Raw<VideoPlayerController?>>;
+/// See also [MediaVideoPlayer].
+class MediaVideoPlayerFamily extends Family<Raw<VideoPlayerController?>> {
+  /// See also [MediaVideoPlayer].
+  const MediaVideoPlayerFamily();
+
+  /// See also [MediaVideoPlayer].
+  MediaVideoPlayerProvider call(
+    String? videoUrl,
+  ) {
+    return MediaVideoPlayerProvider(
+      videoUrl,
+    );
+  }
+
+  @override
+  MediaVideoPlayerProvider getProviderOverride(
+    covariant MediaVideoPlayerProvider provider,
+  ) {
+    return call(
+      provider.videoUrl,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'mediaVideoPlayerProvider';
+}
+
+/// See also [MediaVideoPlayer].
+class MediaVideoPlayerProvider extends AutoDisposeNotifierProviderImpl<
+    MediaVideoPlayer, Raw<VideoPlayerController?>> {
+  /// See also [MediaVideoPlayer].
+  MediaVideoPlayerProvider(
+    String? videoUrl,
+  ) : this._internal(
+          () => MediaVideoPlayer()..videoUrl = videoUrl,
+          from: mediaVideoPlayerProvider,
+          name: r'mediaVideoPlayerProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$mediaVideoPlayerHash,
+          dependencies: MediaVideoPlayerFamily._dependencies,
+          allTransitiveDependencies:
+              MediaVideoPlayerFamily._allTransitiveDependencies,
+          videoUrl: videoUrl,
+        );
+
+  MediaVideoPlayerProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.videoUrl,
+  }) : super.internal();
+
+  final String? videoUrl;
+
+  @override
+  Raw<VideoPlayerController?> runNotifierBuild(
+    covariant MediaVideoPlayer notifier,
+  ) {
+    return notifier.build(
+      videoUrl,
+    );
+  }
+
+  @override
+  Override overrideWith(MediaVideoPlayer Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: MediaVideoPlayerProvider._internal(
+        () => create()..videoUrl = videoUrl,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        videoUrl: videoUrl,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<MediaVideoPlayer,
+      Raw<VideoPlayerController?>> createElement() {
+    return _MediaVideoPlayerProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MediaVideoPlayerProvider && other.videoUrl == videoUrl;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, videoUrl.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin MediaVideoPlayerRef
+    on AutoDisposeNotifierProviderRef<Raw<VideoPlayerController?>> {
+  /// The parameter `videoUrl` of this provider.
+  String? get videoUrl;
+}
+
+class _MediaVideoPlayerProviderElement
+    extends AutoDisposeNotifierProviderElement<MediaVideoPlayer,
+        Raw<VideoPlayerController?>> with MediaVideoPlayerRef {
+  _MediaVideoPlayerProviderElement(super.provider);
+
+  @override
+  String? get videoUrl => (origin as MediaVideoPlayerProvider).videoUrl;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,8 +1,9 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,12 +12,20 @@ import 'package:iconsax/iconsax.dart';
 class CreateContentImageOptions extends ConsumerWidget {
   const CreateContentImageOptions({
     super.key,
+    required this.post,
   });
+
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = THelperFunctions.isDarkMode(context);
-    final controller = ref.watch(mediaProvider.notifier);
+    final postState = ref.watch(
+      regularPostProvider(post),
+    );
+    final postNotifier = ref.watch(
+      regularPostProvider(post).notifier,
+    );
     final pageIndex = ref.watch(pageChangedProvider) + 1;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16,),
@@ -43,7 +52,7 @@ class CreateContentImageOptions extends ConsumerWidget {
                 ),
               ),
               child: IconButton(
-                onPressed: controller.clearMedia,
+                onPressed: postNotifier.clearMedia,
                 icon: const Icon(
                   CupertinoIcons.clear,
                   size: 22,
@@ -55,7 +64,7 @@ class CreateContentImageOptions extends ConsumerWidget {
             ),
             IconButton(
               onPressed: () {
-                controller.removeImageAtIndex(
+                postNotifier.removeImageAtIndex(
                   pageIndex - 1,
                 );
               },
@@ -91,7 +100,7 @@ class CreateContentImageOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${ref.watch(mediaProvider).length}',
+                  '$pageIndex/${postState.imageUrls.length}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

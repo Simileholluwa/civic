@@ -1,5 +1,7 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -9,6 +11,7 @@ import 'create_content_video_options.dart';
 class CreateContentVideoPost extends ConsumerWidget {
   const CreateContentVideoPost({
     super.key,
+    required this.post,
     this.showVideoOptions = true,
     this.height = 500,
     this.margin = TSizes.md,
@@ -17,9 +20,13 @@ class CreateContentVideoPost extends ConsumerWidget {
   final bool showVideoOptions;
   final double height;
   final double margin;
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final postState = ref.watch(
+      regularPostProvider(post),
+    );
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 500,
@@ -30,7 +37,7 @@ class CreateContentVideoPost extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showVideoOptions) const CreateContentVideoOptions(),
+          if (showVideoOptions) CreateContentVideoOptions(post: post),
           Container(
             constraints: BoxConstraints(
               maxHeight: height,
@@ -46,9 +53,9 @@ class CreateContentVideoPost extends ConsumerWidget {
             ),
             child: Builder(
               builder: (context) {
-                final videoControl = ref.watch(mediaVideoPlayerProvider);
+                final videoControl = ref.watch(mediaVideoPlayerProvider(postState.videoUrl,),);
                 final controller =
-                    ref.watch(mediaVideoPlayerProvider.notifier);
+                    ref.watch(mediaVideoPlayerProvider(postState.videoUrl).notifier);
                 return videoControl != null
                     ? videoControl.value.isInitialized
                         ? ClipRRect(

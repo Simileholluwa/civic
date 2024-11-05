@@ -3,20 +3,16 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_text_counter.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateContentBottomOptions extends StatelessWidget {
-  const CreateContentBottomOptions({
+class PostBottomOptions extends StatelessWidget {
+  const PostBottomOptions({
     super.key,
-     this.showSelectMedia = true,
-     this.maxLength = 2500,
-     this.post,
+     required this.post,
   });
-
-  final bool showSelectMedia;
-  final int maxLength;
-  final Post? post;
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +36,9 @@ class CreateContentBottomOptions extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  THelperFunctions.tagUsersBottomSheet(
+                  PostHelperFunctions.tagUsersBottomSheet(
                     context,
+                    post,
                   );
                 },
                 icon: const Icon(
@@ -54,8 +51,9 @@ class CreateContentBottomOptions extends StatelessWidget {
                 width: TSizes.xs,
               ),
               IconButton(
-                onPressed: () => THelperFunctions.selectLocation(
+                onPressed: () => PostHelperFunctions.selectLocation(
                   context,
+                  post,
                 ),
                 icon: const Icon(
                   Iconsax.location5,
@@ -81,15 +79,25 @@ class CreateContentBottomOptions extends StatelessWidget {
               const SizedBox(
                 width: TSizes.xs,
               ),
-              
+                IconButton(
+                  onPressed: () => PostHelperFunctions.showSelectMediaDialog(
+                    context,
+                    post,
+                  ),
+                  icon: const Icon(
+                    Iconsax.gallery5,
+                    color: TColors.primary,
+                    size: 27,
+                  ),
+                ),
             ],
           ),
-           Padding(
-            padding: const EdgeInsets.only(
+           const Padding(
+            padding: EdgeInsets.only(
               right: TSizes.sm,
             ),
             child: CreatContentTextCounter(
-              maxLength: maxLength,
+              maxLength: 2500,
             ),
           ),
         ],

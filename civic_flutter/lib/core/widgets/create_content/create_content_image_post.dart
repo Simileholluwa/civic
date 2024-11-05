@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_image_options.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -10,71 +13,55 @@ import 'package:transparent_image/transparent_image.dart';
 class ImagePost extends ConsumerWidget {
   const ImagePost({
     super.key,
-    required this.images,
-    this.showImageOptions = true,
-    this.height = 500,
-    this.showBorder = true,
-    this.padding = TSizes.md,
-    this.fullBorder = true,
+    required this.post,
   });
 
-  final bool showImageOptions;
-  final List<String> images;
-  final double height;
-  final double padding;
-  final bool showBorder;
-  final bool fullBorder;
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
     int current = ref.watch(pageChangedProvider);
+    final postState = ref.watch(
+      regularPostProvider(post),
+    );  
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 500,
       ),
-      margin: EdgeInsets.symmetric(
-        horizontal: padding,
+      margin: const EdgeInsets.symmetric(
+        horizontal: TSizes.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showImageOptions) const CreateContentImageOptions(),
+          CreateContentImageOptions(post: post,),
           Stack(
             alignment: Alignment.bottomCenter,
             children: [
               Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxWidth: 500,
-                  maxHeight: height,
+                  maxHeight: 500,
                 ),
                 decoration: BoxDecoration(
-                  border: showBorder == true
-                      ? Border.all(
+                  border:  Border.all(
                           color: Theme.of(context).dividerColor,
-                        )
-                      : null,
+                        ),
                   borderRadius: BorderRadius.circular(
                     TSizes.md,
                   ),
                   color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 child: ClipRRect(
-                  borderRadius: fullBorder
-                      ? BorderRadius.circular(
+                  borderRadius: BorderRadius.circular(
                           TSizes.md,
                         )
-                      : const BorderRadius.only(
-                          bottomLeft: Radius.circular(
-                            TSizes.md,
-                          ),
-                          bottomRight: Radius.circular(
-                            TSizes.md,
-                          ),
-                        ),
+                      ,
                   child: CarouselSlider(
                     options: CarouselOptions(
                         scrollPhysics: const ClampingScrollPhysics(),
-                        height: height - 2,
+                        height: 498,
                         enableInfiniteScroll: false,
                         viewportFraction: 1,
                         onPageChanged: (index, reason) {
@@ -85,30 +72,23 @@ class ImagePost extends ConsumerWidget {
                                 reason,
                               );
                         }),
-                    items: images.map((images) {
+                    items: postState.imageUrls.map((image) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Container(
                             width: double.maxFinite,
                             decoration: BoxDecoration(
                               color: Theme.of(context).scaffoldBackgroundColor,
-                              borderRadius: fullBorder
-                                  ? BorderRadius.circular(
+                              borderRadius: BorderRadius.circular(
                                       TSizes.md,
-                                    )
-                                  : const BorderRadius.only(
-                                      bottomLeft: Radius.circular(
-                                        TSizes.md,
-                                      ),
-                                      bottomRight: Radius.circular(
-                                        TSizes.md,
-                                      ),
                                     ),
                             ),
                             child: FadeInImage(
-                              image: FileImage(
-                                File(images),
-                              ),
+                              image: regex.hasMatch(image)
+                                  ? CachedNetworkImageProvider(image)
+                                  : FileImage(
+                                      File(image),
+                                    ) as ImageProvider,
                               placeholder: MemoryImage(
                                 kTransparentImage,
                               ),
@@ -121,18 +101,24 @@ class ImagePost extends ConsumerWidget {
                   ),
                 ),
               ),
-              if (images.length > 1)
+              if (postState.imageUrls.length > 1)
                 Container(
-                  margin: const EdgeInsets.only(bottom: TSizes.md,),
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.sm,),
+                  margin: const EdgeInsets.only(
+                    bottom: TSizes.md,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TSizes.sm,
+                  ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100,),
+                    borderRadius: BorderRadius.circular(
+                      100,
+                    ),
                     color: Colors.black54,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: images.asMap().entries.map((entry) {
+                    children: postState.imageUrls.asMap().entries.map((entry) {
                       return Container(
                         width: 12.0,
                         height: 12.0,
@@ -140,9 +126,7 @@ class ImagePost extends ConsumerWidget {
                             vertical: 8.0, horizontal: 4.0),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: 
-                                Colors.white
-                              .withOpacity(
+                          color: Colors.white.withOpacity(
                             current == entry.key ? 0.9 : 0.4,
                           ),
                         ),
