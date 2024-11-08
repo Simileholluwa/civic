@@ -1,7 +1,9 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_selected_locations.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_selected_tags.dart';
+import 'package:civic_flutter/features/poll/presentation/widgets/poll_selected_locations.dart';
+import 'package:civic_flutter/features/poll/presentation/widgets/poll_selected_tags.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_selected_locations.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_selected_tags.dart';
 import 'package:flutter/material.dart';
 
 class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
@@ -9,10 +11,12 @@ class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
     super.key,
     required this.locations,
     required this.taggedUsers,
+    required this.isPost,
   });
 
   final List<AWSPlaces> locations;
   final List<UserRecord> taggedUsers;
+  final bool isPost;
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +36,21 @@ class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
               padding: const EdgeInsets.only(
                 right: TSizes.md,
               ),
-              child: CreateContentSelectedLocations(
-                locations: locations,
-                showRemoveLocations: false,
-                height: 40,
-                showTopBorder: false,
-              ),
+              child: isPost
+                  ? PostSelectedLocations(
+                      locations: locations,
+                      showRemoveLocations: false,
+                      height: 40,
+                      showTopBorder: false,
+                    )
+                  : PollSelectedLocations(
+                      locations: locations,
+                      showRemoveLocations: false,
+                      height: 40,
+                      showTopBorder: false,
+                    ),
             ),
-          if (locations.isNotEmpty &&
-              taggedUsers.isNotEmpty)
+          if (locations.isNotEmpty && taggedUsers.isNotEmpty)
             const Padding(
               padding: EdgeInsets.only(bottom: 8),
               child: Divider(
@@ -53,12 +63,19 @@ class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
                 right: TSizes.md,
                 bottom: locations.isNotEmpty ? TSizes.sm : 0,
               ),
-              child: CreateContentSelectedTags(
-                showRemoveTags: false,
-                tags: taggedUsers,
-                height: locations.isEmpty ? 40 : 20,
-                showTopBorder: false,
-              ),
+              child: isPost
+                  ? PostSelectedTags(
+                      tags: taggedUsers,
+                      showRemoveTags: false,
+                      height: locations.isEmpty ? 40 : 20,
+                      showTopBorder: false,
+                    )
+                  : PollSelectedTags(
+                      tags: taggedUsers,
+                      showRemoveTags: false,
+                      height: locations.isEmpty ? 40 : 20,
+                      showTopBorder: false,
+                    ),
             ),
         ],
       ),

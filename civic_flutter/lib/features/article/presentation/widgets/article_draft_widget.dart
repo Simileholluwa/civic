@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -95,7 +95,7 @@ class ArticleDraftWidget extends StatelessWidget {
                     useTextColorForDot: true,
                   ),
                 ),
-                customStyles: THelperFunctions.articleTextEditorStyles(
+                customStyles: ArticleHelperFunctions.articleTextEditorStyles(
                   context,
                   defaultTextStyle,
                 ),

@@ -2,18 +2,13 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
 import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/save_in_future_use_case.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/save_poll_use_case.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,22 +20,23 @@ class SendPoll extends _$SendPoll {
   void build() {}
 
   Future<void> saveFailedPollAsDraft(
+    Poll poll,
     String errorMessage,
   ) async {
     final draftPoll = DraftPoll(
       draftId: DateTime.now().millisecondsSinceEpoch,
       options: PollOption(
-        option: ref.watch(pollsOptionsProvider).optionText,
+        option: poll.options!.option,
         votes: 0,
         voters: [],
       ),
-      question: ref.watch(postTextProvider).text,
-      taggedUsers: ref.watch(tagSelectionsProvider),
-      locations: ref.watch(selectLocationsProvider),
+      question: poll.question,
+      taggedUsers: poll.taggedUsers,
+      locations: poll.locations,
       createdAt: DateTime.now(),
-      mentions: ref.watch(selectedMentionsProvider),
-      tags: ref.watch(hashtagsProvider),
-      pollDuration: ref.watch(pollsOptionsProvider).duration.inDays,
+      mentions: poll.mentions,
+      tags: poll.tags,
+      pollDuration: poll.pollDuration,
     );
     final draftPollProvider = ref.read(pollDraftsProvider.notifier);
     final result = await draftPollProvider.saveDraftPoll(
@@ -61,14 +57,17 @@ class SendPoll extends _$SendPoll {
     );
     final send = await sendPollInFuture(
       SavePollInFutureParams(
-        poll,
-        scheduledDatetime!,
+        poll.copyWith(
+          createdAt: scheduledDatetime!,
+        ),
+        scheduledDatetime,
       ),
     );
     return send.fold((l) async {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       await saveFailedPollAsDraft(
+        poll,
         l.message,
       );
       return false;
@@ -87,7 +86,9 @@ class SendPoll extends _$SendPoll {
     final savePoll = ref.read(savePollProvider);
     final send = await savePoll(
       SavePollParams(
-        poll,
+        poll.copyWith(
+          createdAt: DateTime.now(),
+        ),  
       ),
     );
 
@@ -95,6 +96,7 @@ class SendPoll extends _$SendPoll {
       log(l.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       await saveFailedPollAsDraft(
+        poll,
         l.message,
       );
       return false;
@@ -106,14 +108,8 @@ class SendPoll extends _$SendPoll {
     });
   }
 
-  Future<bool> sendPollNowOrFuture({
-    required String question,
-    required List<AWSPlaces> locations,
-    required List<UserRecord> taggedUsers,
-    required List<UserRecord> mentions,
-    required List<String> tags,
-    required Duration pollDuration,
-    required List<String> option,
+  Future<bool> send({
+    required Poll poll,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final me = ref.read(meUseCaseProvider);
@@ -123,27 +119,14 @@ class SendPoll extends _$SendPoll {
       log(error.message);
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       await saveFailedPollAsDraft(
+        poll,
         error.message,
       );
       return false;
     }, (record) async {
       final scheduledDatetime = ref.read(postScheduledDateTimeProvider);
-      final pollToSend = Poll(
-        ownerId: record.id!,
+      final pollToSend = poll.copyWith(
         owner: record,
-        question: question,
-        taggedUsers: taggedUsers,
-        locations: locations,
-        mentions: mentions,
-        options: PollOption(
-          option: option,
-          votes: 0,
-          voters: [],
-        ),
-        tags: tags,
-        pollDuration: DateTime.now().add(
-          pollDuration,
-        ),
       );
       if (scheduledDatetime == null) {
         return await sendPoll(

@@ -7,7 +7,7 @@ part of 'article_service_provider.dart';
 // **************************************************************************
 
 String _$articleLocalDatabaseHash() =>
-    r'aa27add16a897b2873949d0cb63a628ea08eb2f1';
+    r'7f80e4f62328bc14d1c3c2c327b2ef2c73a670a9';
 
 /// See also [articleLocalDatabase].
 @ProviderFor(articleLocalDatabase)

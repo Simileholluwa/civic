@@ -1,7 +1,7 @@
 import 'dart:io' as io show Directory, File;
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -43,7 +43,7 @@ class ArticleTextEditor extends StatelessWidget {
             useTextColorForDot: true,
           ),
         ),
-        customStyles: THelperFunctions.articleTextEditorStyles(
+        customStyles: ArticleHelperFunctions.articleTextEditorStyles(
           context,
           defaultTextStyle,
         ),

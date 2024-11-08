@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
@@ -5,15 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-Future<bool?> createContentpollDurationDialog({
+Future<bool?> pollDurationDialog({
   required BuildContext context,
+  required Poll poll,
 }) {
   return showDialog<bool>(
       context: context,
       builder: (context) {
         return Consumer(builder: (context, ref, _) {
-          final pollState = ref.watch(pollsOptionsProvider);
-          final pollNotifier = ref.read(pollsOptionsProvider.notifier);
+          final pollState = ref.watch(pollsOptionsProvider(poll));
+          final pollNotifier = ref.read(pollsOptionsProvider(poll).notifier);
           final durationText = [
             '1 Day',
             '2 Days',
@@ -30,7 +32,6 @@ Future<bool?> createContentpollDurationDialog({
                 TSizes.sm,
               ),
             ),
-            
             elevation: 8,
             content: SizedBox(
               height: 435,
@@ -72,24 +73,32 @@ Future<bool?> createContentpollDurationDialog({
                     },
                     itemBuilder: (context, index) {
                       final isSelected =
-                          durationInt[index] == pollState.duration.inDays;
+                          durationInt[index] == pollState.duration;
                       return ListTile(
                         title: Text(
                           durationText[index],
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: isSelected ? TColors.primary : Theme.of(context).iconTheme.color,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: isSelected
+                                        ? TColors.primary
+                                        : Theme.of(context).iconTheme.color,
+                                  ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 0,),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                        ),
                         onTap: () {
                           pollNotifier.setDuration(
-                            Duration(
-                              days: durationInt[index],
-                            ),
+                            durationInt[index],
                           );
                           context.pop();
                         },
-                        trailing: isSelected ? const Icon(Icons.check, color: TColors.primary,) : null,
+                        trailing: isSelected
+                            ? const Icon(
+                                Icons.check,
+                                color: TColors.primary,
+                              )
+                            : null,
                       );
                     },
                   ),

@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
@@ -10,15 +11,17 @@ class PollOptionsTextField extends ConsumerWidget {
     super.key,
     required this.index,
     required this.controller,
+    required this.poll,
   });
 
   final int index;
   final TextEditingController controller;
+  final Poll poll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pollState = ref.watch(pollsOptionsProvider);
-    final pollNotifier = ref.read(pollsOptionsProvider.notifier);
+    final pollState = ref.watch(pollsOptionsProvider(poll));
+    final pollNotifier = ref.read(pollsOptionsProvider(poll).notifier);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(

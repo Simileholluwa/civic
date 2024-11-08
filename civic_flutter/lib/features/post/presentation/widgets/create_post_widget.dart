@@ -2,9 +2,9 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/post_text_field.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_image_post.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_image_post.dart';
 import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_video_post.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_video_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,17 +51,17 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
             userRecord: post.owner!,
             onTap: () {},
           ),
-          CreateContentPostTextField(
+          PostTextField(
             userName: post.owner!.userInfo!.userName!,
             controller: postState.controller,
             post: post,
           ),
           if (postState.imageUrls.isNotEmpty)
-            ImagePost(
+            PostImagePost(
               post: post,
             ),
           if (postState.videoUrl.isNotEmpty)
-             CreateContentVideoPost(
+             PostVideoPost(
               post: post,
              )
         ],

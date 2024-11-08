@@ -1,8 +1,7 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,24 +9,27 @@ class PollQuestionTextFormField extends ConsumerWidget {
   const PollQuestionTextFormField({
     super.key,
     required this.userName,
+    required this.poll,
   });
 
   final String userName;
+  final Poll poll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref,) {
-    final pollNotifier = ref.read(pollsOptionsProvider.notifier);
+    final pollNotifier = ref.read(pollsOptionsProvider(poll).notifier);
+    final pollState = ref.read(pollsOptionsProvider(poll));
     return Column(
       children: [
         TextFormField(
-          controller: ref.watch(postTextProvider),
+          controller: pollState.questionController,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 17,
               ),
           textCapitalization: TextCapitalization.sentences,
           onChanged: (text){
             pollNotifier.setQuestion(text);
-            THelperFunctions.onTextChanged(ref, text, MentionHashtagLinkTextEditingController());
+            THelperFunctions.onTextChanged(ref, text, pollState.questionController);
           },
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -37,9 +39,11 @@ class PollQuestionTextFormField extends ConsumerWidget {
             hintMaxLines: 2,
             hintText: '$userName, ask a question. Tap here to start typing.',
             counter: const SizedBox(),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: TSizes.md + 2,
-              vertical: TSizes.md,
+            contentPadding: const EdgeInsets.fromLTRB(
+              TSizes.md + 2,
+              TSizes.md,
+              TSizes.md + 2,
+              0,
             ),
           ),
           keyboardType: TextInputType.multiline,

@@ -242,10 +242,16 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>',
         ),
         _i2.ColumnDefinition(
-          name: 'pollDuration',
+          name: 'createdAt',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'pollDuration',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
         ),
       ],
       foreignKeys: [

@@ -2,14 +2,12 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
+import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,11 +25,6 @@ class DraftPollOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pollProvider = ref.watch(pollsOptionsProvider.notifier);
-    final pollState = ref.watch(pollsOptionsProvider);
-    final locationProvider = ref.watch(selectLocationsProvider.notifier);
-    final tagggeUserProvider = ref.watch(tagSelectionsProvider.notifier);
-    final postText = ref.read(postTextProvider.notifier);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: TSizes.sm,
@@ -47,46 +40,15 @@ class DraftPollOptions extends ConsumerWidget {
         children: [
           IconButton(
             onPressed: () {
-              postText.setText(poll.question);
-              pollProvider.setQuestion(poll.question);
-              pollProvider.setDuration(
-                Duration(days: poll.pollDuration!),
-              );
-              if (poll.locations.isNotEmpty) {
-                locationProvider.setLocations(poll.locations);
-              }
-              if (poll.taggedUsers.isNotEmpty) {
-                tagggeUserProvider.setTags(poll.taggedUsers);
-              }
-              for (int i = 0; i < poll.options!.option.length; i++) {
-                if (i < 2) {
-                  pollState.copyWith(
-                    optionText: [
-                      pollState.controllers[i].text = poll.options!.option[i],
-                    ],
-                  );
-                  pollState.optionText[i] = poll.options!.option[i];
-                  pollProvider.updateOption(i, poll.options!.option[i]);
-                } else {
-                  if (pollState.controllers.length !=
-                      poll.options!.option.length) {
-                    pollState.controllers.add(
-                      TextEditingController(),
-                    );
-                  }
-                  pollState.copyWith(
-                    optionText: [
-                      pollState.controllers[i].text = poll.options!.option[i],
-                    ],
-                  );
-                  pollProvider.addDraftOption(
-                    poll.options!.option[i],
-                    poll.options!.option.length,
-                  );
-                }
-              }
-
               context.pop();
+              ref.invalidate(pollsOptionsProvider);
+              context.replace(
+                AppRoutes.createPoll,
+                extra: {
+                  'id': 0,
+                  'draft': poll,
+                },
+              );
             },
             icon: const Icon(
               Iconsax.edit,

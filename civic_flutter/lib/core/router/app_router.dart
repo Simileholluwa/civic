@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/initial_dependencies_provider.dart';
+import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/screens/media_picker.dart';
 import 'package:civic_flutter/core/widgets/app/app_wrapper.dart';
@@ -24,6 +24,7 @@ part 'app_router.g.dart';
 
 @riverpod
 GoRouter router(RouterRef ref) {
+  ref.read(bootStrapProvider);
   return GoRouter(
     initialLocation: AppRoutes.initial,
     routes: [
@@ -34,7 +35,8 @@ GoRouter router(RouterRef ref) {
           return const InitialOnBoardingScreen();
         },
         redirect: (context, state) async {
-          final firstTimer = AppLocalStorage.to.getBool('first_timer') ?? true;
+          final firstTimer =
+              ref.read(localStorageProvider).getBool('first_timer') ?? true;
           try {
             if (firstTimer) {
               FlutterNativeSplash.remove();
@@ -46,6 +48,10 @@ GoRouter router(RouterRef ref) {
                 FlutterNativeSplash.remove();
                 return AppRoutes.auth;
               } else {
+                ref.read(localStorageProvider).setInt(
+                      'userId',
+                      currentUser.userInfo!.id!,
+                    );
                 FlutterNativeSplash.remove();
                 return FeedRoutes.namespace;
               }
@@ -239,10 +245,11 @@ GoRouter router(RouterRef ref) {
           final data = state.extra as Map<String, dynamic>;
           return CreatePollScreen(
             id: data['id'],
+            draft: data['draft'],
           );
         },
       ),
-      
+
       GoRoute(
         path: AppRoutes.createArticle,
         builder: (context, state) {

@@ -3,10 +3,10 @@ import 'package:civic_flutter/features/onboarding/data/datasources/local_databas
 import 'package:civic_flutter/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class OnboardingRepositoryImpl implements OnboardingRepository {
-  const OnboardingRepositoryImpl({
-    required OnboardingLocalDatabaseImpl onboardingLocalDatabase,
-  }) : _localDatabase = onboardingLocalDatabase;
+class OnboardingRepositoryImpl extends OnboardingRepository {
+  OnboardingRepositoryImpl({
+    required OnboardingLocalDatabaseImpl localDatabase,
+  }) : _localDatabase = localDatabase;
   final OnboardingLocalDatabaseImpl _localDatabase;
   @override
   Future<Either<Failure, void>> cacheFirstTimer() async {

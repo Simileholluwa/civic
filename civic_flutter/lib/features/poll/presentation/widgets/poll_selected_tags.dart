@@ -1,32 +1,34 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateContentSelectedTags extends ConsumerWidget {
-  const CreateContentSelectedTags({
+class PollSelectedTags extends ConsumerWidget {
+  const PollSelectedTags({
     super.key,
     required this.tags,
     this.showRemoveTags = true,
     this.height = 50,
     this.showTopBorder = true,
+    this.poll,
   });
 
   final List<UserRecord> tags;
   final bool showRemoveTags;
   final double height;
   final bool showTopBorder;
+  final Poll? poll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tagProvider = ref.watch(tagSelectionsProvider.notifier);
+    final pollNotifier = ref.watch(pollsOptionsProvider(poll).notifier);
     return InkWell(
       onTap: showRemoveTags
-          ? () => THelperFunctions.tagUsersBottomSheet(context)
+          ? () => PollHelperFunctions.tagUsersBottomSheet(context, poll!,)
           : null,
       child: Ink(
         padding: const EdgeInsets.only(
@@ -69,7 +71,7 @@ class CreateContentSelectedTags extends ConsumerWidget {
             if (showRemoveTags)
               GestureDetector(
                 onTap: () {
-                  tagProvider.clearSelections();
+                  pollNotifier.clearSelections();
                 },
                 child: const Icon(
                   Iconsax.close_square5,

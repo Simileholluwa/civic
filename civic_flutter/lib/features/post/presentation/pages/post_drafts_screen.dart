@@ -1,6 +1,6 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_drafts_appbar.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +13,13 @@ class PostDraftsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(postDraftsProvider);
-    // final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
           50,
         ),
         child: CreateContentDraftsAppbar(
-          actionPressed: () => THelperFunctions.deleteDraftsDialog(
+          actionPressed: () => PostHelperFunctions.deletePostDraftsDialog(
             context,
             ref,
           ),

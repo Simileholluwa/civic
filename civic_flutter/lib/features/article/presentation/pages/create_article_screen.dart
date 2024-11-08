@@ -5,11 +5,12 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_edit_article_dialog.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
+import 'package:civic_flutter/features/article/presentation/widgets/edit_article_dialog.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_privacy.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_save_article_draft_dialog.dart';
+import 'package:civic_flutter/features/article/presentation/widgets/save_article_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,14 +48,14 @@ class CreateArticleScreen extends ConsumerWidget {
         if (didPop) return;
         final bool? shouldPop = canSend
             ? id == 0
-                ? await createContentSaveArticleDraftDialog(
+                ? await saveArticleDraftDialog(
                     ref,
                     context,
                     articleWriter.title,
                     articleWriter.content,
                     articleWriter.banner,
                   )
-                : await createContentEditArticleDialog(
+                : await editArticleDialog(
                     ref,
                     context,
                   )
@@ -77,7 +78,7 @@ class CreateArticleScreen extends ConsumerWidget {
               sendPressed: () {
                 context.go(
                   FeedRoutes.namespace,
-                  extra: () => THelperFunctions.sendArticle(
+                  extra: () => ArticleHelperFunctions.sendArticle(
                     ref,
                     id != 0
                         ? Article(
@@ -99,14 +100,14 @@ class CreateArticleScreen extends ConsumerWidget {
               },
               onCanSendPost: () async {
                 final shouldPop = id == 0
-                    ? await createContentSaveArticleDraftDialog(
+                    ? await saveArticleDraftDialog(
                         ref,
                         context,
                         articleWriter.title,
                         articleWriter.content,
                         articleWriter.banner,
                       )
-                    : await createContentEditArticleDialog(
+                    : await editArticleDialog(
                         ref,
                         context,
                       );

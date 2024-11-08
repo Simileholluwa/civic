@@ -1,7 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +28,7 @@ class PostSelectedTags extends ConsumerWidget {
     final postNotifier = ref.watch(regularPostProvider(post).notifier);
     return InkWell(
       onTap: showRemoveTags
-          ? () => THelperFunctions.tagUsersBottomSheet(context)
+          ? () => PostHelperFunctions.tagUsersBottomSheet(context, post!,)
           : null,
       child: Ink(
         padding: const EdgeInsets.only(

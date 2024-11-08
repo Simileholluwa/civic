@@ -25,6 +25,7 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.mentions,
     this.options,
     required this.tags,
+    this.createdAt,
     this.pollDuration,
     this.hashtags,
   });
@@ -39,7 +40,8 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     required List<_i2.UserRecord> mentions,
     _i2.PollOption? options,
     required List<String> tags,
-    DateTime? pollDuration,
+    DateTime? createdAt,
+    int? pollDuration,
     List<_i2.PollsHashtags>? hashtags,
   }) = _PollImpl;
 
@@ -67,10 +69,10 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
               (jsonSerialization['options'] as Map<String, dynamic>)),
       tags:
           (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
-      pollDuration: jsonSerialization['pollDuration'] == null
+      createdAt: jsonSerialization['createdAt'] == null
           ? null
-          : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['pollDuration']),
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      pollDuration: jsonSerialization['pollDuration'] as int?,
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i2.PollsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -100,7 +102,9 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<String> tags;
 
-  DateTime? pollDuration;
+  DateTime? createdAt;
+
+  int? pollDuration;
 
   List<_i2.PollsHashtags>? hashtags;
 
@@ -117,7 +121,8 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     List<_i2.UserRecord>? mentions,
     _i2.PollOption? options,
     List<String>? tags,
-    DateTime? pollDuration,
+    DateTime? createdAt,
+    int? pollDuration,
     List<_i2.PollsHashtags>? hashtags,
   });
   @override
@@ -132,7 +137,8 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
       'mentions': mentions.toJson(valueToJson: (v) => v.toJson()),
       if (options != null) 'options': options?.toJson(),
       'tags': tags.toJson(),
-      if (pollDuration != null) 'pollDuration': pollDuration?.toJson(),
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      if (pollDuration != null) 'pollDuration': pollDuration,
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -151,7 +157,8 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
       'mentions': mentions.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (options != null) 'options': options?.toJsonForProtocol(),
       'tags': tags.toJson(),
-      if (pollDuration != null) 'pollDuration': pollDuration?.toJson(),
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      if (pollDuration != null) 'pollDuration': pollDuration,
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
@@ -206,7 +213,8 @@ class _PollImpl extends Poll {
     required List<_i2.UserRecord> mentions,
     _i2.PollOption? options,
     required List<String> tags,
-    DateTime? pollDuration,
+    DateTime? createdAt,
+    int? pollDuration,
     List<_i2.PollsHashtags>? hashtags,
   }) : super._(
           id: id,
@@ -218,6 +226,7 @@ class _PollImpl extends Poll {
           mentions: mentions,
           options: options,
           tags: tags,
+          createdAt: createdAt,
           pollDuration: pollDuration,
           hashtags: hashtags,
         );
@@ -233,6 +242,7 @@ class _PollImpl extends Poll {
     List<_i2.UserRecord>? mentions,
     Object? options = _Undefined,
     List<String>? tags,
+    Object? createdAt = _Undefined,
     Object? pollDuration = _Undefined,
     Object? hashtags = _Undefined,
   }) {
@@ -248,8 +258,8 @@ class _PollImpl extends Poll {
       mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
       options: options is _i2.PollOption? ? options : this.options?.copyWith(),
       tags: tags ?? this.tags.map((e0) => e0).toList(),
-      pollDuration:
-          pollDuration is DateTime? ? pollDuration : this.pollDuration,
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
+      pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
       hashtags: hashtags is List<_i2.PollsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
@@ -287,7 +297,11 @@ class PollTable extends _i1.Table {
       'tags',
       this,
     );
-    pollDuration = _i1.ColumnDateTime(
+    createdAt = _i1.ColumnDateTime(
+      'createdAt',
+      this,
+    );
+    pollDuration = _i1.ColumnInt(
       'pollDuration',
       this,
     );
@@ -309,7 +323,9 @@ class PollTable extends _i1.Table {
 
   late final _i1.ColumnSerializable tags;
 
-  late final _i1.ColumnDateTime pollDuration;
+  late final _i1.ColumnDateTime createdAt;
+
+  late final _i1.ColumnInt pollDuration;
 
   _i2.PollsHashtagsTable? ___hashtags;
 
@@ -369,6 +385,7 @@ class PollTable extends _i1.Table {
         mentions,
         options,
         tags,
+        createdAt,
         pollDuration,
       ];
 

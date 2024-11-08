@@ -6,7 +6,7 @@ part of 'article_send_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendArticleHash() => r'a218936f1b66c05913a36b0cb71675afa910eed9';
+String _$sendArticleHash() => r'f1fc002f5badff695f60968f778b1bd70ea78b9d';
 
 /// See also [SendArticle].
 @ProviderFor(SendArticle)

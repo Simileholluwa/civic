@@ -1,5 +1,6 @@
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/features/article/data/datasources/local_datasource/article_local_datasource.dart';
 import 'package:civic_flutter/features/article/data/datasources/remote_datasourece/article_remote_datasource.dart';
 import 'package:civic_flutter/features/article/data/repositories/article_repository_impl.dart';
@@ -17,7 +18,7 @@ part 'article_service_provider.g.dart';
 @riverpod
 ArticleLocalDatabaseImpl articleLocalDatabase(ArticleLocalDatabaseRef ref) {
   return ArticleLocalDatabaseImpl(
-    prefs: AppLocalStorage.to,
+    prefs: ref.read(localStorageProvider),
   );
 }
 

@@ -1,12 +1,12 @@
 //ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/assets_service_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/article/domain/usecases/save_article_usecase.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_service_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
@@ -92,12 +92,12 @@ class SendArticle extends _$SendArticle {
 
       return null;
     }, (mediaUrls) {
-      final pathReplacements = THelperFunctions.mapEmbededImages(
+      final pathReplacements = ArticleHelperFunctions.mapEmbededImages(
         embeddedImages,
         mediaUrls,
       );
       final modifiedContent =
-          THelperFunctions.modifyArticleContent(content, pathReplacements);
+          ArticleHelperFunctions.modifyArticleContent(content, pathReplacements);
       return modifiedContent;
     });
   }
@@ -115,7 +115,7 @@ class SendArticle extends _$SendArticle {
     }, (user) async {
       final saveArticle = ref.read(saveArticleProvider);
       String? modifiedContent;
-      final embeddedImages = THelperFunctions.getAllImagesFromEditor(article.content);
+      final embeddedImages = ArticleHelperFunctions.getAllImagesFromEditor(article.content);
       if (embeddedImages.isNotEmpty) {
         modifiedContent = await sendMediaAndModifyContent(
           embeddedImages,

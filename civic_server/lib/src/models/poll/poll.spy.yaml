@@ -9,5 +9,6 @@ fields:
     mentions: List<UserRecord>
     options: PollOption?
     tags: List<String>
-    pollDuration: DateTime?
+    createdAt: DateTime?
+    pollDuration: int?
     hashtags: List<PollsHashtags>?, relation(name=polls_pollshashtags)

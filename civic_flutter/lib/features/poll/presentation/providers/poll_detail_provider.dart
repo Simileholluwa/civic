@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/retrieve_poll_use_case.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
@@ -11,26 +10,47 @@ part 'poll_detail_provider.g.dart';
 @riverpod
 Future<Poll?> pollDetail(
   PollDetailRef ref,
+  DraftPoll? draftPoll,
   int id,
 ) async {
-  if (id == 0) {
+  if (id == 0 && draftPoll == null) {
     final me = ref.read(meUseCaseProvider);
     final result = await me(NoParams());
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      await AppLocalStorage.to.setInt(
-        'userId',
-        currentUser.userInfo!.id!,
-      );
       return Poll(
-        ownerId: currentUser.userInfo!.id!,
+        ownerId: currentUser.userInfoId,
         owner: currentUser,
         question: '',
         taggedUsers: [],
         locations: [],
         mentions: [],
         tags: [],
+        pollDuration: 1,
+        options: PollOption(
+          option: ['', ''],
+          votes: 0,
+          voters: [],
+        ),
+      );
+    });
+  } else if (id == 0 && draftPoll != null) {
+    final me = ref.read(meUseCaseProvider);
+    final result = await me(NoParams());
+    return result.fold((error) {
+      return null;
+    }, (currentUser) async {
+      return Poll(
+        ownerId: currentUser.userInfo!.id!,
+        owner: currentUser,
+        question: draftPoll.question,
+        taggedUsers: draftPoll.taggedUsers,
+        locations: draftPoll.locations,
+        mentions: draftPoll.mentions,
+        tags: draftPoll.tags,
+        pollDuration: draftPoll.pollDuration,
+        options: draftPoll.options,
       );
     });
   } else {
@@ -43,8 +63,17 @@ Future<Poll?> pollDetail(
 
     return result.fold(
       (error) => null,
-      (poll) {
-        return poll;
+      (poll) async {
+        if (poll == null) {
+          return null;
+        }
+        final me = ref.read(meUseCaseProvider);
+        final userRecord = await me(NoParams());
+        final owner = userRecord.fold((error) => null, (user) => user);
+        if (owner == null) return null;
+        return poll.copyWith(
+          owner: owner,
+        );
       },
     );
   }

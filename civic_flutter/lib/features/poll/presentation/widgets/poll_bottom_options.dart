@@ -3,23 +3,22 @@ import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_text_counter.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateContentBottomOptions extends StatelessWidget {
-  const CreateContentBottomOptions({
+class PollBottomOptions extends ConsumerWidget {
+  const PollBottomOptions({
     super.key,
-     this.showSelectMedia = true,
-     this.maxLength = 2500,
-     this.post,
+     this.poll,
   });
-
-  final bool showSelectMedia;
-  final int maxLength;
-  final Post? post;
+  final Poll? poll;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pollState = ref.watch(pollsOptionsProvider(poll));
     return Container(
       height: 55,
       padding: const EdgeInsets.only(
@@ -40,8 +39,9 @@ class CreateContentBottomOptions extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  THelperFunctions.tagUsersBottomSheet(
+                  PollHelperFunctions.tagUsersBottomSheet(
                     context,
+                    poll!,
                   );
                 },
                 icon: const Icon(
@@ -54,8 +54,9 @@ class CreateContentBottomOptions extends StatelessWidget {
                 width: TSizes.xs,
               ),
               IconButton(
-                onPressed: () => THelperFunctions.selectLocation(
+                onPressed: () => PollHelperFunctions.selectLocation(
                   context,
+                  poll!,
                 ),
                 icon: const Icon(
                   Iconsax.location5,
@@ -84,12 +85,13 @@ class CreateContentBottomOptions extends StatelessWidget {
               
             ],
           ),
-           Padding(
+            Padding(
             padding: const EdgeInsets.only(
               right: TSizes.sm,
             ),
             child: CreatContentTextCounter(
-              maxLength: maxLength,
+              maxLength: 300,
+              currentTextLength: pollState.question.length,
             ),
           ),
         ],

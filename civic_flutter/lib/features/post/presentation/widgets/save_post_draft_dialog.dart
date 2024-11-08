@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-Future<bool?> createContentSavePostDraftDialog(
+Future<bool?> savePostDraftDialog(
   WidgetRef ref,
   BuildContext context,
   Post post,
@@ -64,7 +64,7 @@ Future<bool?> createContentSavePostDraftDialog(
               locations: postState.locations,
               createdAt: DateTime.now(),
               mentions: ref.watch(selectedMentionsProvider),
-              tags: ref.watch(hashtagsProvider),
+              tags: ref.watch(hashtagsProvider(postState.text)),
             ),
           );
       if (result) {

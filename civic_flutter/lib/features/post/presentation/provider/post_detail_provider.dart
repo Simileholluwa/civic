@@ -1,8 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/retrieve_post_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
@@ -22,10 +19,7 @@ Future<Post?> postDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      await AppLocalStorage.to.setInt(
-        'userId',
-        currentUser.userInfo!.id!,
-      );
+      
       return Post(
         ownerId: currentUser.userInfo!.id!,
         postType: PostType.none,
@@ -45,10 +39,7 @@ Future<Post?> postDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      await AppLocalStorage.to.setInt(
-        'userId',
-        currentUser.userInfo!.id!,
-      );
+      
       return Post(
         ownerId: currentUser.userInfo!.id!,
         postType: PostType.none,
@@ -80,7 +71,6 @@ Future<Post?> postDetail(
         final userRecord = await me(NoParams());
         final owner = userRecord.fold((error) => null, (user) => user);
         if (owner == null) return null;
-        log(post.toString());
         return post.copyWith(
           owner: owner,
         );

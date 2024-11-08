@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+import 'package:civic_flutter/core/services/local_storage.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
@@ -20,9 +20,9 @@ abstract class ArticleLocalDatabase {
 
 class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
   ArticleLocalDatabaseImpl({
-    required AppLocalStorage prefs,
+    required LocalStorage prefs,
   }) : _prefs = prefs;
-  final AppLocalStorage _prefs;
+  final LocalStorage _prefs;
   @override
   List<ArticleDraft> retrieveDraftArticles() {
     try {
@@ -58,7 +58,7 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
-      final embededImages = THelperFunctions.getAllImagesFromEditor(content);
+      final embededImages = ArticleHelperFunctions.getAllImagesFromEditor(content);
       final savedBanner = await saveBannerImage(articleDraft.banner, directory);
       if (embededImages.isNotEmpty) {
         for (var i = 0; i < embededImages.length; i++) {
@@ -71,8 +71,8 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
           savedImagesPath.add(copy.path);
         }
         final pathReplacements =
-            THelperFunctions.mapEmbededImages(embededImages, savedImagesPath);
-        content = THelperFunctions.modifyArticleContent(
+            ArticleHelperFunctions.mapEmbededImages(embededImages, savedImagesPath);
+        content = ArticleHelperFunctions.modifyArticleContent(
           articleDraft.content,
           pathReplacements,
         );
@@ -145,7 +145,7 @@ class ArticleLocalDatabaseImpl extends ArticleLocalDatabase {
         drafts.map((draft) => draft.toJson()).toList(),
       );
       await _prefs.setString('articlesDraft', draftsJson);
-      final embededImages = THelperFunctions.getAllImagesFromEditor(articleDraft.content);
+      final embededImages = ArticleHelperFunctions.getAllImagesFromEditor(articleDraft.content);
       if (embededImages.isNotEmpty) {
         for (final imgPath in embededImages) {
           final imageFile = File(imgPath);

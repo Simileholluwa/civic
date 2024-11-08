@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/features/poll/data/datasources/poll_local_datasource.dart';
 import 'package:civic_flutter/features/poll/data/datasources/poll_remote_datasource.dart';
 import 'package:civic_flutter/features/poll/data/repositories/poll_repository_impl.dart';
@@ -19,7 +19,7 @@ part 'poll_service_providers.g.dart';
 @riverpod
 PollLocalDatabaseImpl pollLocalDatabase(PollLocalDatabaseRef ref) {
   return PollLocalDatabaseImpl(
-    prefs: AppLocalStorage.to,
+    prefs: ref.read(localStorageProvider),
   );
 }
 

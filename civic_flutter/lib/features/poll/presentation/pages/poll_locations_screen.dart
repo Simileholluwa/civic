@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -5,21 +6,25 @@ import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_location_error.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ChooseLocationsScreen extends ConsumerWidget {
-  const ChooseLocationsScreen({
+class PollLocationsScreen extends ConsumerWidget {
+  const PollLocationsScreen({
     super.key,
+    required this.poll,
   });
+
+  final Poll poll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchQueryProvider = ref.watch(locationSearchQueryProvider.notifier);
-    final selectLocations = ref.watch(selectLocationsProvider.notifier);
-    final selectedLocations = ref.watch(selectLocationsProvider);
+    final pollState = ref.watch(pollsOptionsProvider(poll));
+    final pollNotifier = ref.watch(pollsOptionsProvider(poll).notifier);
     final data = ref.watch(searchPlacesProvider);
     return Scaffold(
       appBar: PreferredSize(
@@ -55,14 +60,14 @@ class ChooseLocationsScreen extends ConsumerWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: selectedLocations.isEmpty ? null : context.pop,
+                    onTap: pollState.locations.isEmpty ? null : context.pop,
                     child: Container(
                       height: 25,
                       width: 25,
                       margin: const EdgeInsets.only(
                             left: TSizes.sm,),
                       decoration: BoxDecoration(
-                        color: selectedLocations.isEmpty
+                        color: pollState.locations.isEmpty
                             ? Theme.of(context).disabledColor
                             : TColors.primary,
                         borderRadius: BorderRadius.circular(
@@ -103,15 +108,15 @@ class ChooseLocationsScreen extends ConsumerWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final place = data[index];
-                    final selectedIndex = selectedLocations.contains(place);
+                    final selectedIndex = pollState.locations.contains(place);
                     return InkWell(
                       onTap: () {
                         if (!selectedIndex) {
-                          selectLocations.addLocation(
-                            place,
+                          pollNotifier.addLocation(
+                            [place],
                           );
                         } else {
-                          selectLocations.removeLocation(
+                          pollNotifier.removeLocation(
                             place,
                           );
                         }
@@ -147,7 +152,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
                 );
               },
             ),
-      bottomNavigationBar: selectedLocations.isNotEmpty
+      bottomNavigationBar: pollState.locations.isNotEmpty
           ? SizedBox(
               height: 50,
               child: ListView.separated(
@@ -161,7 +166,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
                     //   imageUrl: tagState[index].userInfo!.imageUrl!,
                     // ),
                     label: Text(
-                      selectedLocations[index].place,
+                      pollState.locations[index].place,
                       style: Theme.of(context).textTheme.labelMedium!,
                     ),
                     elevation: 0,
@@ -177,8 +182,8 @@ class ChooseLocationsScreen extends ConsumerWidget {
                       Icons.clear,
                       color: TColors.secondary,
                     ),
-                    onDeleted: () => selectLocations.removeLocation(
-                      selectedLocations[index],
+                    onDeleted: () => pollNotifier.removeLocation(
+                      pollState.locations[index],
                     ),
                   );
                 },
@@ -188,7 +193,7 @@ class ChooseLocationsScreen extends ConsumerWidget {
                   );
                 },
                 scrollDirection: Axis.horizontal,
-                itemCount: selectedLocations.length,
+                itemCount: pollState.locations.length,
               ),
             )
           : const SizedBox.shrink(),

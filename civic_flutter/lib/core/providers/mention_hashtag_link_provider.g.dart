@@ -303,22 +303,136 @@ class _FetchHashtagsProviderElement
   String get query => (origin as FetchHashtagsProvider).query;
 }
 
-String _$fetchLinkMetadataHash() => r'6fb888b36332b7af540992b0dbd74c2cabd22935';
+String _$fetchLinkMetadataHash() => r'639d4c276fc46318e8bf4eb5ca69ce6a592a327a';
 
 /// See also [fetchLinkMetadata].
 @ProviderFor(fetchLinkMetadata)
-final fetchLinkMetadataProvider =
-    AutoDisposeFutureProvider<LinkMetadata?>.internal(
-  fetchLinkMetadata,
-  name: r'fetchLinkMetadataProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchLinkMetadataHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const fetchLinkMetadataProvider = FetchLinkMetadataFamily();
 
-typedef FetchLinkMetadataRef = AutoDisposeFutureProviderRef<LinkMetadata?>;
+/// See also [fetchLinkMetadata].
+class FetchLinkMetadataFamily extends Family<AsyncValue<LinkMetadata?>> {
+  /// See also [fetchLinkMetadata].
+  const FetchLinkMetadataFamily();
+
+  /// See also [fetchLinkMetadata].
+  FetchLinkMetadataProvider call(
+    String text,
+  ) {
+    return FetchLinkMetadataProvider(
+      text,
+    );
+  }
+
+  @override
+  FetchLinkMetadataProvider getProviderOverride(
+    covariant FetchLinkMetadataProvider provider,
+  ) {
+    return call(
+      provider.text,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchLinkMetadataProvider';
+}
+
+/// See also [fetchLinkMetadata].
+class FetchLinkMetadataProvider
+    extends AutoDisposeFutureProvider<LinkMetadata?> {
+  /// See also [fetchLinkMetadata].
+  FetchLinkMetadataProvider(
+    String text,
+  ) : this._internal(
+          (ref) => fetchLinkMetadata(
+            ref as FetchLinkMetadataRef,
+            text,
+          ),
+          from: fetchLinkMetadataProvider,
+          name: r'fetchLinkMetadataProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchLinkMetadataHash,
+          dependencies: FetchLinkMetadataFamily._dependencies,
+          allTransitiveDependencies:
+              FetchLinkMetadataFamily._allTransitiveDependencies,
+          text: text,
+        );
+
+  FetchLinkMetadataProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.text,
+  }) : super.internal();
+
+  final String text;
+
+  @override
+  Override overrideWith(
+    FutureOr<LinkMetadata?> Function(FetchLinkMetadataRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchLinkMetadataProvider._internal(
+        (ref) => create(ref as FetchLinkMetadataRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        text: text,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<LinkMetadata?> createElement() {
+    return _FetchLinkMetadataProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchLinkMetadataProvider && other.text == text;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchLinkMetadataRef on AutoDisposeFutureProviderRef<LinkMetadata?> {
+  /// The parameter `text` of this provider.
+  String get text;
+}
+
+class _FetchLinkMetadataProviderElement
+    extends AutoDisposeFutureProviderElement<LinkMetadata?>
+    with FetchLinkMetadataRef {
+  _FetchLinkMetadataProviderElement(super.provider);
+
+  @override
+  String get text => (origin as FetchLinkMetadataProvider).text;
+}
+
 String _$mentionSuggestionsHash() =>
     r'b067b344d82516a0f9358cca3431d2604def08f7';
 
@@ -352,29 +466,159 @@ final selectedMentionsProvider =
 );
 
 typedef _$SelectedMentions = Notifier<List<UserRecord>>;
-String _$extractedMentionsHash() => r'26a13e0bb6c500dbe1d306aeab8cfd2ac5cab6bb';
+String _$extractedMentionsHash() => r'8947c65dd6f562e0c3599ebe1ccc9e989ea118a3';
+
+abstract class _$ExtractedMentions
+    extends BuildlessAutoDisposeNotifier<List<String>> {
+  late final String text;
+
+  List<String> build(
+    String text,
+  );
+}
 
 /// See also [ExtractedMentions].
 @ProviderFor(ExtractedMentions)
-final extractedMentionsProvider =
-    AutoDisposeNotifierProvider<ExtractedMentions, List<String>>.internal(
-  ExtractedMentions.new,
-  name: r'extractedMentionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$extractedMentionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const extractedMentionsProvider = ExtractedMentionsFamily();
 
-typedef _$ExtractedMentions = AutoDisposeNotifier<List<String>>;
-String _$validMentionsHash() => r'd2b39d1bad0f53689c685354b70b7a9cf9d539ba';
+/// See also [ExtractedMentions].
+class ExtractedMentionsFamily extends Family<List<String>> {
+  /// See also [ExtractedMentions].
+  const ExtractedMentionsFamily();
+
+  /// See also [ExtractedMentions].
+  ExtractedMentionsProvider call(
+    String text,
+  ) {
+    return ExtractedMentionsProvider(
+      text,
+    );
+  }
+
+  @override
+  ExtractedMentionsProvider getProviderOverride(
+    covariant ExtractedMentionsProvider provider,
+  ) {
+    return call(
+      provider.text,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'extractedMentionsProvider';
+}
+
+/// See also [ExtractedMentions].
+class ExtractedMentionsProvider
+    extends AutoDisposeNotifierProviderImpl<ExtractedMentions, List<String>> {
+  /// See also [ExtractedMentions].
+  ExtractedMentionsProvider(
+    String text,
+  ) : this._internal(
+          () => ExtractedMentions()..text = text,
+          from: extractedMentionsProvider,
+          name: r'extractedMentionsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$extractedMentionsHash,
+          dependencies: ExtractedMentionsFamily._dependencies,
+          allTransitiveDependencies:
+              ExtractedMentionsFamily._allTransitiveDependencies,
+          text: text,
+        );
+
+  ExtractedMentionsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.text,
+  }) : super.internal();
+
+  final String text;
+
+  @override
+  List<String> runNotifierBuild(
+    covariant ExtractedMentions notifier,
+  ) {
+    return notifier.build(
+      text,
+    );
+  }
+
+  @override
+  Override overrideWith(ExtractedMentions Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: ExtractedMentionsProvider._internal(
+        () => create()..text = text,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        text: text,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<ExtractedMentions, List<String>>
+      createElement() {
+    return _ExtractedMentionsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExtractedMentionsProvider && other.text == text;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ExtractedMentionsRef on AutoDisposeNotifierProviderRef<List<String>> {
+  /// The parameter `text` of this provider.
+  String get text;
+}
+
+class _ExtractedMentionsProviderElement
+    extends AutoDisposeNotifierProviderElement<ExtractedMentions, List<String>>
+    with ExtractedMentionsRef {
+  _ExtractedMentionsProviderElement(super.provider);
+
+  @override
+  String get text => (origin as ExtractedMentionsProvider).text;
+}
+
+String _$validMentionsHash() => r'ac9e9b6d7a41c1d5cd184953bf925c931881d5c7';
 
 abstract class _$ValidMentions extends BuildlessAutoDisposeNotifier<bool> {
   late final String username;
+  late final String text;
 
   bool build(
     String username,
+    String text,
   );
 }
 
@@ -390,9 +634,11 @@ class ValidMentionsFamily extends Family<bool> {
   /// See also [ValidMentions].
   ValidMentionsProvider call(
     String username,
+    String text,
   ) {
     return ValidMentionsProvider(
       username,
+      text,
     );
   }
 
@@ -402,6 +648,7 @@ class ValidMentionsFamily extends Family<bool> {
   ) {
     return call(
       provider.username,
+      provider.text,
     );
   }
 
@@ -426,8 +673,11 @@ class ValidMentionsProvider
   /// See also [ValidMentions].
   ValidMentionsProvider(
     String username,
+    String text,
   ) : this._internal(
-          () => ValidMentions()..username = username,
+          () => ValidMentions()
+            ..username = username
+            ..text = text,
           from: validMentionsProvider,
           name: r'validMentionsProvider',
           debugGetCreateSourceHash:
@@ -438,6 +688,7 @@ class ValidMentionsProvider
           allTransitiveDependencies:
               ValidMentionsFamily._allTransitiveDependencies,
           username: username,
+          text: text,
         );
 
   ValidMentionsProvider._internal(
@@ -448,9 +699,11 @@ class ValidMentionsProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.username,
+    required this.text,
   }) : super.internal();
 
   final String username;
+  final String text;
 
   @override
   bool runNotifierBuild(
@@ -458,6 +711,7 @@ class ValidMentionsProvider
   ) {
     return notifier.build(
       username,
+      text,
     );
   }
 
@@ -466,13 +720,16 @@ class ValidMentionsProvider
     return ProviderOverride(
       origin: this,
       override: ValidMentionsProvider._internal(
-        () => create()..username = username,
+        () => create()
+          ..username = username
+          ..text = text,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         username: username,
+        text: text,
       ),
     );
   }
@@ -484,13 +741,16 @@ class ValidMentionsProvider
 
   @override
   bool operator ==(Object other) {
-    return other is ValidMentionsProvider && other.username == username;
+    return other is ValidMentionsProvider &&
+        other.username == username &&
+        other.text == text;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, username.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -499,6 +759,9 @@ class ValidMentionsProvider
 mixin ValidMentionsRef on AutoDisposeNotifierProviderRef<bool> {
   /// The parameter `username` of this provider.
   String get username;
+
+  /// The parameter `text` of this provider.
+  String get text;
 }
 
 class _ValidMentionsProviderElement
@@ -508,22 +771,149 @@ class _ValidMentionsProviderElement
 
   @override
   String get username => (origin as ValidMentionsProvider).username;
+  @override
+  String get text => (origin as ValidMentionsProvider).text;
 }
 
-String _$hashtagsHash() => r'4b65aab5513135bf17368493212a0e1b72e761b0';
+String _$hashtagsHash() => r'c25b066f71c1b9fe384e2ee2f6771510d2aeac0d';
+
+abstract class _$Hashtags extends BuildlessNotifier<List<String>> {
+  late final String text;
+
+  List<String> build(
+    String text,
+  );
+}
 
 /// See also [Hashtags].
 @ProviderFor(Hashtags)
-final hashtagsProvider = NotifierProvider<Hashtags, List<String>>.internal(
-  Hashtags.new,
-  name: r'hashtagsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$hashtagsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const hashtagsProvider = HashtagsFamily();
 
-typedef _$Hashtags = Notifier<List<String>>;
+/// See also [Hashtags].
+class HashtagsFamily extends Family<List<String>> {
+  /// See also [Hashtags].
+  const HashtagsFamily();
+
+  /// See also [Hashtags].
+  HashtagsProvider call(
+    String text,
+  ) {
+    return HashtagsProvider(
+      text,
+    );
+  }
+
+  @override
+  HashtagsProvider getProviderOverride(
+    covariant HashtagsProvider provider,
+  ) {
+    return call(
+      provider.text,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'hashtagsProvider';
+}
+
+/// See also [Hashtags].
+class HashtagsProvider extends NotifierProviderImpl<Hashtags, List<String>> {
+  /// See also [Hashtags].
+  HashtagsProvider(
+    String text,
+  ) : this._internal(
+          () => Hashtags()..text = text,
+          from: hashtagsProvider,
+          name: r'hashtagsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$hashtagsHash,
+          dependencies: HashtagsFamily._dependencies,
+          allTransitiveDependencies: HashtagsFamily._allTransitiveDependencies,
+          text: text,
+        );
+
+  HashtagsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.text,
+  }) : super.internal();
+
+  final String text;
+
+  @override
+  List<String> runNotifierBuild(
+    covariant Hashtags notifier,
+  ) {
+    return notifier.build(
+      text,
+    );
+  }
+
+  @override
+  Override overrideWith(Hashtags Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: HashtagsProvider._internal(
+        () => create()..text = text,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        text: text,
+      ),
+    );
+  }
+
+  @override
+  NotifierProviderElement<Hashtags, List<String>> createElement() {
+    return _HashtagsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is HashtagsProvider && other.text == text;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin HashtagsRef on NotifierProviderRef<List<String>> {
+  /// The parameter `text` of this provider.
+  String get text;
+}
+
+class _HashtagsProviderElement
+    extends NotifierProviderElement<Hashtags, List<String>> with HashtagsRef {
+  _HashtagsProviderElement(super.provider);
+
+  @override
+  String get text => (origin as HashtagsProvider).text;
+}
+
 String _$hashtagsSuggestionsHash() =>
     r'82a5c4e5c8f4565966d667a5e90788abb856ecf8';
 
@@ -541,20 +931,146 @@ final hashtagsSuggestionsProvider =
 );
 
 typedef _$HashtagsSuggestions = AutoDisposeNotifier<List<String>>;
-String _$extractLinkHash() => r'd4cb0cd40e0822d4b9d73c116b33c9f7f4fe151a';
+String _$extractLinkHash() => r'664de337998e9978c3e1051d849ff29f084e94c1';
+
+abstract class _$ExtractLink extends BuildlessAutoDisposeNotifier<String> {
+  late final String text;
+
+  String build(
+    String text,
+  );
+}
 
 /// See also [ExtractLink].
 @ProviderFor(ExtractLink)
-final extractLinkProvider =
-    AutoDisposeNotifierProvider<ExtractLink, String>.internal(
-  ExtractLink.new,
-  name: r'extractLinkProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$extractLinkHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const extractLinkProvider = ExtractLinkFamily();
 
-typedef _$ExtractLink = AutoDisposeNotifier<String>;
+/// See also [ExtractLink].
+class ExtractLinkFamily extends Family<String> {
+  /// See also [ExtractLink].
+  const ExtractLinkFamily();
+
+  /// See also [ExtractLink].
+  ExtractLinkProvider call(
+    String text,
+  ) {
+    return ExtractLinkProvider(
+      text,
+    );
+  }
+
+  @override
+  ExtractLinkProvider getProviderOverride(
+    covariant ExtractLinkProvider provider,
+  ) {
+    return call(
+      provider.text,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'extractLinkProvider';
+}
+
+/// See also [ExtractLink].
+class ExtractLinkProvider
+    extends AutoDisposeNotifierProviderImpl<ExtractLink, String> {
+  /// See also [ExtractLink].
+  ExtractLinkProvider(
+    String text,
+  ) : this._internal(
+          () => ExtractLink()..text = text,
+          from: extractLinkProvider,
+          name: r'extractLinkProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$extractLinkHash,
+          dependencies: ExtractLinkFamily._dependencies,
+          allTransitiveDependencies:
+              ExtractLinkFamily._allTransitiveDependencies,
+          text: text,
+        );
+
+  ExtractLinkProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.text,
+  }) : super.internal();
+
+  final String text;
+
+  @override
+  String runNotifierBuild(
+    covariant ExtractLink notifier,
+  ) {
+    return notifier.build(
+      text,
+    );
+  }
+
+  @override
+  Override overrideWith(ExtractLink Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: ExtractLinkProvider._internal(
+        () => create()..text = text,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        text: text,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<ExtractLink, String> createElement() {
+    return _ExtractLinkProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExtractLinkProvider && other.text == text;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ExtractLinkRef on AutoDisposeNotifierProviderRef<String> {
+  /// The parameter `text` of this provider.
+  String get text;
+}
+
+class _ExtractLinkProviderElement
+    extends AutoDisposeNotifierProviderElement<ExtractLink, String>
+    with ExtractLinkRef {
+  _ExtractLinkProviderElement(super.provider);
+
+  @override
+  String get text => (origin as ExtractLinkProvider).text;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

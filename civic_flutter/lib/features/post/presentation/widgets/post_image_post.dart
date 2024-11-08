@@ -4,14 +4,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_image_options.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/post_image_options.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class ImagePost extends ConsumerWidget {
-  const ImagePost({
+class PostImagePost extends ConsumerWidget {
+  const PostImagePost({
     super.key,
     required this.post,
   });
@@ -35,7 +35,7 @@ class ImagePost extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CreateContentImageOptions(post: post,),
+          PostImageOptions(post: post,),
           Stack(
             alignment: Alignment.bottomCenter,
             children: [

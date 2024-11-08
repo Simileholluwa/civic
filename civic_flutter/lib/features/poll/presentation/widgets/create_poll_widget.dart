@@ -33,7 +33,7 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final pollState = ref.watch(pollsOptionsProvider);
+    final pollState = ref.watch(pollsOptionsProvider(poll));
 
     return SingleChildScrollView(
       padding: EdgeInsets.only(
@@ -51,6 +51,7 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
           ),
           PollQuestionTextFormField(
             userName: poll.owner!.userInfo!.userName!,
+            poll: poll,
           ),
           ...pollState.controllers.asMap().entries.map((entry) {
             final index = entry.key;
@@ -61,18 +62,21 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
                 TSizes.md - 4,
                 0,
                 TSizes.md,
-                TSizes.sm,
+                0,
               ),
               child: PollOptionsTextField(
                 index: index,
                 controller: controller,
+                poll: poll,
               ),
             );
           }),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PollDurationAndAddOptions(),
+              PollDurationAndAddOptions(
+                poll: poll,
+              ),
             ],
           ),
         ],

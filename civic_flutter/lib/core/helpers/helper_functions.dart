@@ -1,38 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/image_helper.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
 import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
-import 'package:civic_flutter/core/screens/choose_locations_screen.dart';
-import 'package:civic_flutter/core/screens/tag_users_screen.dart';
 import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
-import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
 import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/pages/post_drafts_screen.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_text_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
@@ -254,90 +233,9 @@ class THelperFunctions {
     return email.substring(0, 3) + redactedPart + email.substring(atIndex);
   }
 
-  static double getBottomNavigationBarHeight(
-    DateTime? scheduledDateTimeState,
-    List<AWSPlaces> selectedLocations,
-  ) {
-    return scheduledDateTimeState == null && selectedLocations.isEmpty
-        ? 105
-        : scheduledDateTimeState == null && selectedLocations.isNotEmpty
-            ? 155
-            : scheduledDateTimeState != null && selectedLocations.isNotEmpty
-                ? 205
-                : 155;
-  }
 
-  static Future<void> selectLocation(
-    BuildContext context,
-  ) async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      TToastMessages.infoToast('Location services are disabled on your device');
-    }
-    await Geolocator.requestPermission();
-    final permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      if (context.mounted) {
-        await appRequestLocationPremissionDialog(context: context);
-      }
-    } else if (permission == LocationPermission.deniedForever) {
-      Geolocator.openLocationSettings();
-    } else {
-      if (context.mounted) {
-        selectLocationBottomSheet(context: context);
-      }
-    }
-  }
 
-  static Future<bool?> selectLocationBottomSheet({
-    required BuildContext context,
-  }) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) {
-        return const ChooseLocationsScreen();
-      },
-    );
-  }
 
-  static Future<bool?> tagUsersBottomSheet(BuildContext context) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) {
-        return const TagUsersScreen();
-      },
-    );
-  }
-
-  static Future<bool?> showPostDraftsScreen(BuildContext context) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) {
-        return const PostDraftsScreen();
-      },
-    );
-  }
-
-  static Future<bool?> showPollDraftsScreen(BuildContext context) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) {
-        return const PollDraftsScreen();
-      },
-    );
-  }
 
   static Future<bool?> showArticleDraftsScreen(BuildContext context) {
     return showModalBottomSheet<bool>(
@@ -362,9 +260,10 @@ class THelperFunctions {
   static void onSuggestionSelected(
     WidgetRef ref,
     String suggestion,
+    MentionHashtagLinkTextEditingController controller,
   ) {
-    final text = ref.watch(postTextProvider).text;
-    final textController = ref.watch(postTextProvider);
+    final text = controller.text;
+    final textController = controller;
     final cursorIndex = textController.selection.baseOffset;
 
     // Find the word to replace, ensuring it's the last mention/hashtag typed
@@ -385,7 +284,7 @@ class THelperFunctions {
       textController.selection = TextSelection.fromPosition(
           TextPosition(offset: start + suggestion.length));
 
-      ref.read(postTextProvider).text = newText;
+      controller.text = newText;
       ref
           .read(mentionSuggestionsProvider.notifier)
           .setSuggestions(<UserRecord>[]);
@@ -399,18 +298,14 @@ class THelperFunctions {
     }
   }
 
-  static void sendPost(WidgetRef ref, Post post) async {
-    await ref.read(sendPostProvider.notifier).send(
-          post: post,
-        );
-  }
 
-  static void _handleMentions(WidgetRef ref) {
+
+  static void _handleMentions(WidgetRef ref, String text) {
     final selectedMentions = ref.watch(
       selectedMentionsProvider,
     );
     List<String> currentMentions = ref.watch(
-      extractedMentionsProvider,
+      extractedMentionsProvider(text),
     );
 
     // Remove records of users whose mentions are no longer in the text
@@ -548,259 +443,10 @@ class THelperFunctions {
             .setSuggestions(<UserRecord>[]);
       }
     });
-    _handleMentions(ref);
+    _handleMentions(ref, text);
   }
 
-  static void sendPoll(
-    WidgetRef ref,
-  ) {
-    final pollState = ref.watch(pollsOptionsProvider);
-    final canSendPoll = pollState.question.isNotEmpty &&
-        pollState.optionText.every((text) => text.isNotEmpty);
-    if (canSendPoll) {
-      ref.read(sendPollProvider.notifier).sendPollNowOrFuture(
-            question: pollState.question,
-            locations: ref.watch(selectLocationsProvider),
-            taggedUsers: ref.watch(tagSelectionsProvider),
-            mentions: ref.watch(selectedMentionsProvider),
-            tags: ref.watch(hashtagsProvider),
-            pollDuration: pollState.duration,
-            option: ref.watch(pollsOptionsProvider).optionText,
-          );
-    }
-  }
+  
 
-  static void sendArticle(
-    WidgetRef ref,
-    Article article,
-  ) {
-    ref.read(sendArticleProvider.notifier).sendArticle(
-          article: article,
-        );
-  }
-
-  static Future<bool?> deleteDraftsDialog(BuildContext context, WidgetRef ref) {
-    return postDialog(
-      context: context,
-      title: 'Delete all drafts?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete all',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: 'Cancel',
-      onTapActiveButton: () async {
-        context.pop();
-        final result =
-            await ref.read(postDraftsProvider.notifier).deleteAllDrafts();
-        if (result) {
-          if (context.mounted) context.pop();
-        }
-        TToastMessages.successToast('All drafts was deleted');
-      },
-    );
-  }
-
-  static Future<bool?> deletePollDraftsDialog(
-      BuildContext context, WidgetRef ref) {
-    return postDialog(
-      context: context,
-      title: 'Delete all drafts?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete all',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: 'Cancel',
-      onTapActiveButton: () async {
-        context.pop();
-        final result =
-            await ref.read(pollDraftsProvider.notifier).deleteAllDrafts();
-        if (result) {
-          if (context.mounted) context.pop();
-        }
-        TToastMessages.successToast('All drafts was deleted');
-      },
-    );
-  }
-
-  static Future<bool?> deleteArticleDraftsDialog(
-      BuildContext context, WidgetRef ref) {
-    return postDialog(
-      context: context,
-      title: 'Delete all drafts?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Delete all',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: 'Cancel',
-      onTapActiveButton: () async {
-        context.pop();
-        final result =
-            await ref.read(articleDraftsProvider.notifier).deleteAllDrafts();
-        if (result) {
-          if (context.mounted) context.pop();
-        }
-        TToastMessages.successToast('All drafts was deleted');
-      },
-    );
-  }
-
-  static List<String> getAllImagesFromEditor(String content) {
-    final List<String> imageUrls = [];
-    // Convert the document to JSON
-
-    final jsonDocument = jsonDecode(
-      content,
-    );
-
-    // Loop through the document's operations
-    for (var operation in jsonDocument) {
-      if (operation['insert'] is Map &&
-          operation['insert'].containsKey('image')) {
-        // Add the image URL to the list
-        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-        if (!operation['insert']['image'].toString().startsWith(regex)) {
-          imageUrls.add(operation['insert']['image']);
-        }
-      }
-    }
-
-    return imageUrls;
-  }
-
-  static Map<String, String> mapEmbededImages(
-    List<String> oldPath,
-    List<String> newPath,
-  ) {
-    return {for (int i = 0; i < oldPath.length; i++) oldPath[i]: newPath[i]};
-  }
-
-  static String modifyArticleContent(
-    String content,
-    Map<String, String> pathReplacements,
-  ) {
-    // Convert document to JSON
-    final documentJson = jsonDecode(
-      content,
-    );
-
-    // Update the JSON with new image paths
-    for (var block in documentJson) {
-      if (block.containsKey('insert')) {
-        final insert = block['insert'];
-
-        // Check if the block is an image
-        if (insert is Map<String, dynamic> && insert.containsKey('image')) {
-          final oldPath = insert['image'] as String;
-
-          // If the image path has a replacement, update it
-          if (pathReplacements.containsKey(oldPath)) {
-            insert['image'] = pathReplacements[oldPath];
-          }
-        }
-      }
-    }
-
-    return jsonEncode(documentJson);
-  }
-
-  static Future<String> pickBannerImage(
-    WidgetRef ref,
-    BuildContext context,
-  ) async {
-    final picker = ImageHelper();
-    final pickedFile = await picker.pickImage();
-    if (pickedFile != null) {
-      final croppedFile = await picker.crop(
-        file: File(pickedFile.first.path),
-        // ignore: use_build_context_synchronously
-        context: context,
-      );
-      return croppedFile!.path;
-    }
-    return '';
-  }
-
-  static Future<String> captureBannerImage(
-    WidgetRef ref,
-    BuildContext context,
-  ) async {
-    final picker = ImageHelper();
-    final pickedFile = await picker.takeImage();
-    if (pickedFile != null) {
-      final croppedFile = await picker.crop(
-        file: File(pickedFile.path),
-        // ignore: use_build_context_synchronously
-        context: context,
-      );
-      return croppedFile!.path;
-    }
-    return '';
-  }
-
-  static DefaultStyles articleTextEditorStyles(
-    BuildContext context,
-    DefaultTextStyle defaultTextStyle,
-  ) {
-    return DefaultStyles(
-      h1: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: 23,
-              height: 1.15,
-            ),
-        HorizontalSpacing.zero,
-        const VerticalSpacing(16, 0),
-        VerticalSpacing.zero,
-        null,
-      ),
-      paragraph: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-      ),
-      placeHolder: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-              color: Theme.of(context).textTheme.bodySmall!.color!,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-      ),
-      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
-      lists: DefaultListBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        const VerticalSpacing(
-          0,
-          20,
-        ),
-        null,
-        null,
-      ),
-      leading: DefaultListBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-        null,
-      ),
-    );
-  }
+ 
 }

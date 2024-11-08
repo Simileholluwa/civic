@@ -6,7 +6,7 @@ part of 'poll_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pollDetailHash() => r'27a02e6edd63d54aca361749aa00311d737e6bb6';
+String _$pollDetailHash() => r'446009b32e43536d0e443fddfcb47834578b3612';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,9 +40,11 @@ class PollDetailFamily extends Family<AsyncValue<Poll?>> {
 
   /// See also [pollDetail].
   PollDetailProvider call(
+    DraftPoll? draftPoll,
     int id,
   ) {
     return PollDetailProvider(
+      draftPoll,
       id,
     );
   }
@@ -52,6 +54,7 @@ class PollDetailFamily extends Family<AsyncValue<Poll?>> {
     covariant PollDetailProvider provider,
   ) {
     return call(
+      provider.draftPoll,
       provider.id,
     );
   }
@@ -75,10 +78,12 @@ class PollDetailFamily extends Family<AsyncValue<Poll?>> {
 class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
   /// See also [pollDetail].
   PollDetailProvider(
+    DraftPoll? draftPoll,
     int id,
   ) : this._internal(
           (ref) => pollDetail(
             ref as PollDetailRef,
+            draftPoll,
             id,
           ),
           from: pollDetailProvider,
@@ -90,6 +95,7 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
           dependencies: PollDetailFamily._dependencies,
           allTransitiveDependencies:
               PollDetailFamily._allTransitiveDependencies,
+          draftPoll: draftPoll,
           id: id,
         );
 
@@ -100,9 +106,11 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
+    required this.draftPoll,
     required this.id,
   }) : super.internal();
 
+  final DraftPoll? draftPoll;
   final int id;
 
   @override
@@ -118,6 +126,7 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
+        draftPoll: draftPoll,
         id: id,
       ),
     );
@@ -130,12 +139,15 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
 
   @override
   bool operator ==(Object other) {
-    return other is PollDetailProvider && other.id == id;
+    return other is PollDetailProvider &&
+        other.draftPoll == draftPoll &&
+        other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, draftPoll.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
@@ -143,6 +155,9 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
 }
 
 mixin PollDetailRef on AutoDisposeFutureProviderRef<Poll?> {
+  /// The parameter `draftPoll` of this provider.
+  DraftPoll? get draftPoll;
+
   /// The parameter `id` of this provider.
   int get id;
 }
@@ -151,6 +166,8 @@ class _PollDetailProviderElement extends AutoDisposeFutureProviderElement<Poll?>
     with PollDetailRef {
   _PollDetailProviderElement(super.provider);
 
+  @override
+  DraftPoll? get draftPoll => (origin as PollDetailProvider).draftPoll;
   @override
   int get id => (origin as PollDetailProvider).id;
 }

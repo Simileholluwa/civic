@@ -1,11 +1,17 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_select_media_dialog.dart';
+import 'package:civic_flutter/features/post/presentation/pages/post_drafts_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/post_locations_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/post_tag_users_screen.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
+import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 
 class PostHelperFunctions {
   PostHelperFunctions._();
@@ -34,6 +40,47 @@ class PostHelperFunctions {
       showDragHandle: true,
       builder: (context) {
         return PostLocationsScreen(post: post,);
+      },
+    );
+  }
+
+    static Future<bool?> showPostDraftsScreen(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (context) {
+        return const PostDraftsScreen();
+      },
+    );
+  }
+
+    static void sendPost(WidgetRef ref, Post post) async {
+    await ref.read(sendPostProvider.notifier).send(
+          post: post,
+        );
+  }
+
+  static Future<bool?> deletePostDraftsDialog(BuildContext context, WidgetRef ref) {
+    return postDialog(
+      context: context,
+      title: 'Delete all drafts?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        context.pop();
+        final result =
+            await ref.read(postDraftsProvider.notifier).deleteAllDrafts();
+        if (result) {
+          if (context.mounted) context.pop();
+        }
+        TToastMessages.successToast('All drafts was deleted');
       },
     );
   }

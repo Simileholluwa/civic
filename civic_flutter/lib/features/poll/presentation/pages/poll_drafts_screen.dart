@@ -1,6 +1,6 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_locations_and_tagged_users.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/poll_draft_select_option.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/draft_poll_options.dart';
@@ -23,7 +23,7 @@ class PollDraftsScreen extends ConsumerWidget {
           50,
         ),
         child: CreateContentDraftsAppbar(
-          actionPressed: () => THelperFunctions.deletePollDraftsDialog(
+          actionPressed: () => PollHelperFunctions.deletePollDraftsDialog(
             context,
             ref,
           ),
@@ -41,6 +41,7 @@ class PollDraftsScreen extends ConsumerWidget {
         itemBuilder: (context, index) {
           final poll = data[index];
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,10 +67,11 @@ class PollDraftsScreen extends ConsumerWidget {
               CreateContentLocationsAndTaggedUsers(
                 locations: poll.locations,
                 taggedUsers: poll.taggedUsers,
+                isPost: false,
               ),
               if (poll.taggedUsers.isNotEmpty || poll.locations.isNotEmpty)
                 const SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
               ...poll.options!.option.asMap().entries.map(
                 (entry) {

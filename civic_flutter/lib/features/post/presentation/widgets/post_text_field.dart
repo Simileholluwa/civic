@@ -6,8 +6,8 @@ import 'package:civic_flutter/features/post/presentation/provider/post_provider.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CreateContentPostTextField extends ConsumerWidget {
-  const CreateContentPostTextField({
+class PostTextField extends ConsumerWidget {
+  const PostTextField({
     super.key,
     required this.userName,
     required this.controller,

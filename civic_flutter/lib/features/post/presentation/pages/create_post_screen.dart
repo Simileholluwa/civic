@@ -8,8 +8,9 @@ import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart'
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_edit_post_draft_dialog.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_save_post_draft_dialog.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/edit_post_dialog.dart';
+import 'package:civic_flutter/features/post/presentation/widgets/save_post_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_detail_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
@@ -56,12 +57,12 @@ class CreatePostScreen extends ConsumerWidget {
         if (didPop) return;
         final bool? shouldPop = canSendPost
             ? id == 0
-                ? await createContentSavePostDraftDialog(
+                ? await savePostDraftDialog(
                     ref,
                     context,
                     data.value!,
                   )
-                : await createContentEditPostDraftDialog(
+                : await editPostDialog(
                     ref,
                     context,
                     data.value!,
@@ -92,7 +93,7 @@ class CreatePostScreen extends ConsumerWidget {
                 }
                 context.go(
                   FeedRoutes.namespace,
-                  extra: () => THelperFunctions.sendPost(
+                  extra: () => PostHelperFunctions.sendPost(
                     ref,
                     id != 0
                         ? Post(
@@ -105,7 +106,7 @@ class CreatePostScreen extends ConsumerWidget {
                             taggedUsers: postState.taggedUsers,
                             locations: postState.locations,
                             mentions: ref.watch(selectedMentionsProvider),
-                            tags: ref.watch(hashtagsProvider),
+                            tags: ref.watch(hashtagsProvider(postState.text)),
                           )
                         : Post(
                             id: null,
@@ -117,19 +118,19 @@ class CreatePostScreen extends ConsumerWidget {
                             taggedUsers: postState.taggedUsers,
                             locations: postState.locations,
                             mentions: ref.watch(selectedMentionsProvider),
-                            tags: ref.watch(hashtagsProvider),
+                            tags: ref.watch(hashtagsProvider(postState.text)),
                           ),
                   ),
                 );
               },
               onCanSendPost: () async {
                 final shouldPop = id == 0
-                    ? await createContentSavePostDraftDialog(
+                    ? await savePostDraftDialog(
                         ref,
                         context,
                         data.value!,
                       )
-                    : await createContentEditPostDraftDialog(
+                    : await editPostDialog(
                         ref,
                         context,
                         data.value!,
@@ -148,7 +149,7 @@ class CreatePostScreen extends ConsumerWidget {
               },
               draftPressed: (){ 
                 ref.invalidate(postDraftsProvider);
-                  THelperFunctions.showPostDraftsScreen(context);
+                  PostHelperFunctions.showPostDraftsScreen(context);
                   }
             ),
           ),
@@ -158,6 +159,7 @@ class CreatePostScreen extends ConsumerWidget {
                       THelperFunctions.onSuggestionSelected(
                     ref,
                     suggestion,
+                    postState.controller,
                   ),
                 )
               : hashtagsSuggestions.isNotEmpty
@@ -166,6 +168,7 @@ class CreatePostScreen extends ConsumerWidget {
                           THelperFunctions.onSuggestionSelected(
                         ref,
                         suggestion,
+                        postState.controller,
                       ),
                     )
                   : null,

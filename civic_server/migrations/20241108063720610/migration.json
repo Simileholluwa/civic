@@ -1,0 +1,56 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          },
+          {
+            "name": "pollDuration",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "pollDuration"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column pollDuration of table poll is modified in a way that it must be deleted and recreated.",
+            "table": "poll",
+            "columns": [
+              "pollDuration"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column pollDuration of table poll is modified in a way that it must be deleted and recreated.",
+      "table": "poll",
+      "columns": [
+        "pollDuration"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

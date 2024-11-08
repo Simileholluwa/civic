@@ -97,16 +97,22 @@ class PollDrafts extends _$PollDrafts {
     DraftPoll draftPoll,
     int index,
   ) async {
-    final result =
-        await ref.read(sendPollProvider.notifier).sendPollNowOrFuture(
-              question: draftPoll.question,
-              pollDuration: Duration(days: draftPoll.pollDuration!),
-              locations: draftPoll.locations,
-              taggedUsers: draftPoll.taggedUsers,
-              mentions: draftPoll.mentions,
-              tags: draftPoll.tags,
+    final result = await ref.read(sendPollProvider.notifier).send(
+          poll: Poll(
+            ownerId: 0,
+            question: draftPoll.question,
+            pollDuration: draftPoll.pollDuration,
+            locations: draftPoll.locations,
+            taggedUsers: draftPoll.taggedUsers,
+            mentions: draftPoll.mentions,
+            tags: draftPoll.tags,
+            options: PollOption(
+              votes: 0,
+              voters: [],
               option: draftPoll.options!.option,
-            );
+            ),
+          ),
+        );
 
     if (result) {
       await deleteDraftById(

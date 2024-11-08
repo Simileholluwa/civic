@@ -1,40 +1,46 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateContentSelectedLocations extends StatelessWidget {
-  const CreateContentSelectedLocations({
+class PollSelectedLocations extends ConsumerWidget {
+  const PollSelectedLocations({
     super.key,
     required this.locations,
     this.showRemoveLocations = true,
     this.height = 50,
     this.showTopBorder = true,
+    this.poll,
   });
 
   final List<AWSPlaces> locations;
   final bool showRemoveLocations;
   final double height;
   final bool showTopBorder;
+  final Poll? poll;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pollNotifier = ref.watch(pollsOptionsProvider(poll).notifier);
     return Consumer(builder: (context, ref, _) {
       return InkWell(
         onTap: showRemoveLocations
-            ? () => THelperFunctions.selectLocationBottomSheet(context: context)
+            ? () => PollHelperFunctions.selectLocationBottomSheet(
+                context: context, poll: poll!)
             : null,
         child: Ink(
           height: height,
           decoration: BoxDecoration(
-            border: showTopBorder ? Border(
-              top: BorderSide(
-                color: Theme.of(context).dividerColor,
-              ),
-            ) : null,
+            border: showTopBorder
+                ? Border(
+                    top: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  )
+                : null,
           ),
           child: Row(
             children: [
@@ -67,9 +73,7 @@ class CreateContentSelectedLocations extends StatelessWidget {
                     left: 14,
                   ),
                   child: GestureDetector(
-                    onTap: ref
-                        .read(selectLocationsProvider.notifier)
-                        .removeAllLocations,
+                    onTap: pollNotifier.removeAllLocations,
                     child: const Icon(
                       Iconsax.close_square5,
                       color: TColors.secondary,

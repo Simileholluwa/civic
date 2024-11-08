@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-Future<bool?> createContentEditArticleDialog(
+Future<bool?> editPollDialog(
   WidgetRef ref,
   BuildContext context,
-) =>
-    postDialog(
+) {
+    return postDialog(
       context: context,
       title: 'Exit editing?',
       description:
@@ -26,4 +26,4 @@ Future<bool?> createContentEditArticleDialog(
       onTapActiveButton: () {
         context.pop();
       },
-    );
+    );}

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
+import 'package:civic_flutter/core/services/local_storage.dart';
 
 abstract class PollLocalDatabase {
   Future<void> saveDraft({
@@ -17,9 +17,9 @@ abstract class PollLocalDatabase {
 
 class PollLocalDatabaseImpl extends PollLocalDatabase {
   PollLocalDatabaseImpl({
-    required AppLocalStorage prefs,
+    required LocalStorage prefs,
   }) : _prefs = prefs;
-  final AppLocalStorage _prefs;
+  final LocalStorage _prefs;
   @override
   List<DraftPoll> retrieveDrafts() {
     try {

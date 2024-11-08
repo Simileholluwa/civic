@@ -1,4 +1,5 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
@@ -62,7 +63,7 @@ class ArticleBanner extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               final banner =
-                                  await THelperFunctions.pickBannerImage(
+                                  await ArticleHelperFunctions.pickBannerImage(
                                 ref,
                                 context,
                               );
@@ -77,7 +78,7 @@ class ArticleBanner extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               final banner =
-                                  await THelperFunctions.captureBannerImage(
+                                  await ArticleHelperFunctions.captureBannerImage(
                                 ref,
                                 context,
                               );
@@ -124,7 +125,7 @@ class ArticleBanner extends ConsumerWidget {
                       color: TColors.textWhite,
                     ),
                     onPressed: () async {
-                      final banner = await THelperFunctions.pickBannerImage(
+                      final banner = await ArticleHelperFunctions.pickBannerImage(
                         ref,
                         context,
                       );
@@ -139,7 +140,7 @@ class ArticleBanner extends ConsumerWidget {
                       ),
                       onPressed: () async {
                         final banner =
-                            await THelperFunctions.captureBannerImage(
+                            await ArticleHelperFunctions.captureBannerImage(
                           ref,
                           context,
                         );

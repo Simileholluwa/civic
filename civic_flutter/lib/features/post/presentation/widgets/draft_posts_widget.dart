@@ -57,6 +57,7 @@ class DraftPostsWidget extends ConsumerWidget {
           CreateContentLocationsAndTaggedUsers(
             locations: draftPost.locations,
             taggedUsers: draftPost.taggedUsers,
+            isPost: true,
           ),
           if (draftPost.imagesPath.isNotEmpty || draftPost.videoPath.isNotEmpty)
             const SizedBox(

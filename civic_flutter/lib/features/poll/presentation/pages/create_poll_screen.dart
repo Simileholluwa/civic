@@ -1,15 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_save_poll_draft_dialog.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
+import 'package:civic_flutter/features/poll/presentation/widgets/edit_poll_dialog.dart';
+import 'package:civic_flutter/features/poll/presentation/widgets/save_poll_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_detail_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/create_poll_widget.dart';
+import 'package:civic_flutter/features/poll/presentation/widgets/poll_bottom_navigation.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/hastags_suggestions_widget.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/mentions_suggestions_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,27 +26,37 @@ class CreatePollScreen extends ConsumerWidget {
   const CreatePollScreen({
     super.key,
     required this.id,
+    required this.draft,
   });
 
   final int id;
+  final DraftPoll? draft;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = THelperFunctions.isDarkMode(context);
     final suggestions = ref.watch(mentionSuggestionsProvider);
+    final data = ref.watch(pollDetailProvider(draft, id));
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final pollState = ref.watch(pollsOptionsProvider);
-    final draftsData = ref.watch(pollDraftsProvider);
+    final pollState = ref.watch(pollsOptionsProvider(data.value));
+    final draftsData = id == 0 ? ref.watch(pollDraftsProvider) : [];
     final canSendPoll = pollState.question.isNotEmpty &&
         pollState.optionText.every((text) => text.isNotEmpty);
-    final data = ref.watch(pollDetailProvider(id));
 
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
-        final bool? shouldPop = canSendPoll ? await createContentSavePollDraftDialog(ref, context) : true;
+        final bool? shouldPop = canSendPoll
+            ? id == 0
+                ? await savePollDraftDialog(
+                    ref, context, data.value!)
+                : await editPollDialog(
+                    ref,
+                    context,
+                  )
+            : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
             context.pop();
@@ -59,19 +75,55 @@ class CreatePollScreen extends ConsumerWidget {
               sendPressed: () {
                 context.go(
                   FeedRoutes.namespace,
-                  extra: () => THelperFunctions.sendPoll(
+                  extra: () => PollHelperFunctions.sendPoll(
                     ref,
+                    id != 0
+                        ? Poll(
+                            id: data.value!.id,
+                            ownerId: data.value!.ownerId,
+                            question: pollState.question,
+                            taggedUsers: pollState.taggedUsers,
+                            locations: pollState.locations,
+                            mentions: pollState.mentions,
+                            tags: pollState.tags,
+                            options: PollOption(
+                              option: pollState.optionText,
+                              votes: data.value!.options?.votes ?? 0,
+                              voters: data.value!.options?.voters ?? [],
+                            ),
+                            pollDuration: pollState.duration,
+                          )
+                        : Poll(
+                            ownerId: data.value!.ownerId,
+                            question: pollState.question,
+                            taggedUsers: pollState.taggedUsers,
+                            locations: pollState.locations,
+                            mentions: pollState.mentions,
+                            tags: pollState.tags,
+                            options: PollOption(
+                              option: pollState.optionText,
+                              votes: 0,
+                              voters: [],
+                            ),
+                            pollDuration: pollState.duration,
+                          ),
                   ),
                 );
               },
               onCanSendPost: () async {
-                  final shouldPop = await createContentSavePollDraftDialog(ref, context);
-                  if (shouldPop ?? false) {
-                    if (context.mounted) context.pop();
-                  }
-                },
+                final shouldPop = id == 0
+                    ? await savePollDraftDialog(
+                        ref, context, data.value!)
+                    : await editPollDialog(
+                        ref,
+                        context,
+                      );
+                if (shouldPop ?? false) {
+                  if (context.mounted) context.pop();
+                }
+              },
               draftPressed: () =>
-                  THelperFunctions.showPollDraftsScreen(context),
+                  PollHelperFunctions.showPollDraftsScreen(context),
             ),
           ),
           bottomSheet: suggestions.isNotEmpty
@@ -80,6 +132,7 @@ class CreatePollScreen extends ConsumerWidget {
                       THelperFunctions.onSuggestionSelected(
                     ref,
                     suggestion,
+                    pollState.questionController,
                   ),
                 )
               : hashtagsSuggestions.isNotEmpty
@@ -88,16 +141,16 @@ class CreatePollScreen extends ConsumerWidget {
                           THelperFunctions.onSuggestionSelected(
                         ref,
                         suggestion,
+                        pollState.questionController,
                       ),
                     )
                   : null,
-          // bottomNavigationBar:
-          //     (data.isLoading || data.hasError || data.value == null)
-          //         ? const SizedBox()
-          //         : const PostBottomNavigation(
-          //             showSelectMedia: false,
-          //             maxLength: 300,
-          //           ),
+          bottomNavigationBar:
+              (data.isLoading || data.hasError || data.value == null)
+                  ? const SizedBox()
+                  : PollBottomNavigation(
+                      poll: data.value!,
+                    ),
           body: data.when(
             data: (poll) {
               if (poll == null) {

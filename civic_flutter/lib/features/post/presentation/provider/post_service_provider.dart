@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
+import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/features/post/data/datasources/post_local_database.dart';
 import 'package:civic_flutter/features/post/data/datasources/post_remote_database.dart';
 import 'package:civic_flutter/features/post/data/repositories/post_repository_impl.dart';
@@ -19,7 +19,7 @@ part 'post_service_provider.g.dart';
 @riverpod
 PostLocalDatabaseImpl postLocalDatabase(PostLocalDatabaseRef ref) {
   return PostLocalDatabaseImpl(
-    prefs: AppLocalStorage.to,
+    prefs: ref.read(localStorageProvider),
   );
 }
 

@@ -32,6 +32,7 @@ class CreateContentDraftText extends StatelessWidget {
       maxLines: 6,
       linkColor: TColors.primary,
       linkStyle: Theme.of(context).textTheme.labelLarge,
+      textAlign: TextAlign.start,
     );
   }
 }

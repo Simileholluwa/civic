@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import 'create_content_video_options.dart';
+import 'post_video_options.dart';
 
-class CreateContentVideoPost extends ConsumerWidget {
-  const CreateContentVideoPost({
+class PostVideoPost extends ConsumerWidget {
+  const PostVideoPost({
     super.key,
     required this.post,
     this.showVideoOptions = true,
@@ -37,7 +37,7 @@ class CreateContentVideoPost extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showVideoOptions) CreateContentVideoOptions(post: post),
+          if (showVideoOptions) PostVideoOptions(post: post),
           Container(
             constraints: BoxConstraints(
               maxHeight: height,

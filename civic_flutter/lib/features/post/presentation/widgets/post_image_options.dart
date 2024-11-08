@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateContentImageOptions extends ConsumerWidget {
-  const CreateContentImageOptions({
+class PostImageOptions extends ConsumerWidget {
+  const PostImageOptions({
     super.key,
     required this.post,
   });

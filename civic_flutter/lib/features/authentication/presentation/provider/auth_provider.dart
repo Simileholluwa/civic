@@ -3,6 +3,7 @@
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
+import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/core/router/route_names.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
@@ -65,16 +66,25 @@ class Auth extends _$Auth {
       return;
     }, (userRecord) {
       ref.read(authUserProvider.notifier).setValue(true);
+
       if (userRecord != null && userRecord.verifiedAccount) {
         ref.read(verifiedUserProvider.notifier).setValue(true);
         context.goNamed(
           FeedRoutes.namespace,
         );
+        ref.read(localStorageProvider).setInt(
+              'userId',
+              userRecord.userInfo!.id!,
+            );
         return;
       } else if (userRecord != null && !userRecord.verifiedAccount) {
         context.goNamed(
           AppRoutes.verifyAccount,
         );
+        ref.read(localStorageProvider).setInt(
+              'userId',
+              userRecord.userInfo!.id!,
+            );
         return;
       }
     });
@@ -277,13 +287,17 @@ class Auth extends _$Auth {
     required String email,
   }) async {
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    ref.read(initiateResendPasswordResetLoadingProvider.notifier).setValue(true);
+    ref
+        .read(initiateResendPasswordResetLoadingProvider.notifier)
+        .setValue(true);
     final result = await initiatePasswordReset(
       InitiatePasswordResetParams(
         email,
       ),
     );
-    ref.read(initiateResendPasswordResetLoadingProvider.notifier).setValue(false);
+    ref
+        .read(initiateResendPasswordResetLoadingProvider.notifier)
+        .setValue(false);
     result.fold((error) {
       TToastMessages.errorToast(error.message);
       ref.read(countdownTimerProvider.notifier).resetTimer();

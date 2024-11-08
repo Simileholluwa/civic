@@ -6,7 +6,7 @@ part of 'post_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postLocalDatabaseHash() => r'16368a9a9085e353b4b74d972170dc615d58f0e5';
+String _$postLocalDatabaseHash() => r'754055ed24f8eb5cdae04b30be4350b1441a3543';
 
 /// See also [postLocalDatabase].
 @ProviderFor(postLocalDatabase)

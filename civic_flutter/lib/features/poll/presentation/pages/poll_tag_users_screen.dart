@@ -6,29 +6,28 @@ import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/core/widgets/app/app_infinite_list.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
 import 'package:civic_flutter/core/widgets/app/app_user_profile_image.dart';
-// import 'package:civic_flutter/features/post/presentation/provider/post_list_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
 import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
+import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-// import 'package:iconsax/iconsax.dart';
 
-class TagUsersScreen extends ConsumerWidget {
-  const TagUsersScreen({
+class PollTagUsersScreen extends ConsumerWidget {
+  const PollTagUsersScreen({
     super.key,
+    required this.poll,
   });
+
+  final Poll poll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final isDark = THelperFunctions.isDarkMode(context);
     final query = ref.watch(searchUsersListQueryProvider);
     final pagingController = ref.watch(usersListProvider(query).notifier);
-
     final queryProvider = ref.watch(searchUsersListQueryProvider.notifier);
-    final tagState = ref.watch(tagSelectionsProvider);
-    final tagProvider = ref.watch(tagSelectionsProvider.notifier);
+    final pollState = ref.watch(pollsOptionsProvider(poll));
+    final pollNotifier = ref.watch(pollsOptionsProvider(poll).notifier);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: PreferredSize(
@@ -62,7 +61,7 @@ class TagUsersScreen extends ConsumerWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: tagState.isEmpty ? null : context.pop,
+                      onTap: pollState.taggedUsers.isEmpty ? null : context.pop,
                       child: Container(
                         height: 25,
                         width: 25,
@@ -70,7 +69,7 @@ class TagUsersScreen extends ConsumerWidget {
                           left: TSizes.sm,
                         ),
                         decoration: BoxDecoration(
-                          color: tagState.isEmpty
+                          color: pollState.taggedUsers.isEmpty
                               ? Theme.of(context).disabledColor
                               : TColors.primary,
                           borderRadius: BorderRadius.circular(
@@ -101,11 +100,11 @@ class TagUsersScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               return Chip(
                 avatar: AppUserProfileImage(
-                  imageUrl: tagState[index].userInfo!.imageUrl!,
+                  imageUrl: pollState.taggedUsers[index].userInfo!.imageUrl!,
                 ),
                 label: Text(
-                  tagState[index].userInfo!.fullName ??
-                      tagState[index].userInfo!.userName!,
+                  pollState.taggedUsers[index].userInfo!.fullName ??
+                      pollState.taggedUsers[index].userInfo!.userName!,
                   style: Theme.of(context).textTheme.labelMedium!,
                 ),
                 elevation: 0,
@@ -121,8 +120,8 @@ class TagUsersScreen extends ConsumerWidget {
                   Icons.clear,
                   color: TColors.secondary,
                 ),
-                onDeleted: () => tagProvider.removeUser(
-                  tagState[index],
+                onDeleted: () => pollNotifier.removeUser(
+                  pollState.taggedUsers[index],
                 ),
               );
             },
@@ -132,14 +131,14 @@ class TagUsersScreen extends ConsumerWidget {
               );
             },
             scrollDirection: Axis.horizontal,
-            itemCount: tagState.length,
+            itemCount: pollState.taggedUsers.length,
           ),
         ),
         body: AppInfiniteList<UserRecord>(
           key: Key('tag_users_screen_$query'),
           pagingController: pagingController.pagingController,
           itemBuilder: (context, user, index) {
-            final isSelected = tagState.contains(user);
+            final isSelected = pollState.taggedUsers.contains(user);
             final itemLength =
                 pagingController.pagingController.itemList!.length;
             return Column(
@@ -158,9 +157,9 @@ class TagUsersScreen extends ConsumerWidget {
                     userRecord: user,
                     onTap: () {
                       if (isSelected) {
-                        tagProvider.removeUser(user);
+                        pollNotifier.removeUser(user);
                       } else {
-                        tagProvider.addUser(user);
+                        pollNotifier.addUser(user);
                       }
                     },
                   ),

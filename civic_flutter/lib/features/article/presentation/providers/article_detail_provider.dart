@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/local_storage/storage_utility.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/article/domain/usecases/get_article_usecase.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_service_provider.dart';
@@ -21,10 +20,6 @@ Future<Article?> articleDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      await AppLocalStorage.to.setInt(
-        'userId',
-        currentUser.userInfo!.id!,
-      );
       return Article(
         ownerId: currentUser.userInfo!.id!,
         owner: currentUser,
@@ -39,10 +34,6 @@ Future<Article?> articleDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      await AppLocalStorage.to.setInt(
-        'userId',
-        currentUser.userInfo!.id!,
-      );
       return Article(
         ownerId: currentUser.userInfo!.id!,
         owner: currentUser,
