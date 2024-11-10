@@ -21,7 +21,7 @@ class UsersListService {
           'You are not connected to the internet.',
         );
       }
-      final result = await client.userRecord.listUsers(
+      final result = await client.userRecord.getUsers(
         query: query,
         page: page,
         limit: limit,

@@ -4,14 +4,14 @@ import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class ListPostUseCase implements UseCase<PostList, ListPostParams> {
-  ListPostUseCase({required PostRepository postRepository})
+class GetPostsUseCase implements UseCase<PostList, GetPostsParams> {
+  GetPostsUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<Failure, PostList>> call(ListPostParams params) async {
-    final result = await _postRepository.listPost(
+  Future<Either<Failure, PostList>> call(GetPostsParams params) async {
+    final result = await _postRepository.getPosts(
       page: params.page,
       limit: params.limit,
     );
@@ -19,8 +19,8 @@ class ListPostUseCase implements UseCase<PostList, ListPostParams> {
   }
 }
 
-class ListPostParams {
-  ListPostParams(
+class GetPostsParams {
+  GetPostsParams(
     this.page,
     this.limit,
   );

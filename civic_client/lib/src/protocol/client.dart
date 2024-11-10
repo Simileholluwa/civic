@@ -92,13 +92,13 @@ class EndpointHashtag extends _i1.EndpointRef {
   @override
   String get name => 'hashtag';
 
-  _i2.Future<void> sendHashTags(
+  _i2.Future<void> sendPostHashtags(
     List<String> tags,
     int postId,
   ) =>
       caller.callServerEndpoint<void>(
         'hashtag',
-        'sendHashTags',
+        'sendPostHashtags',
         {
           'tags': tags,
           'postId': postId,
@@ -117,6 +117,19 @@ class EndpointHashtag extends _i1.EndpointRef {
           'pollId': pollId,
         },
       );
+
+  _i2.Future<List<String>> fetchHashtags({
+    required String query,
+    required int limit,
+  }) =>
+      caller.callServerEndpoint<List<String>>(
+        'hashtag',
+        'fetchHashtags',
+        {
+          'query': query,
+          'limit': limit,
+        },
+      );
 }
 
 /// {@category Endpoint}
@@ -133,10 +146,10 @@ class EndpointLocation extends _i1.EndpointRef {
         {'query': query},
       );
 
-  _i2.Future<List<_i5.AWSPlaces>> searchNearbyPlaces(List<double> position) =>
+  _i2.Future<List<_i5.AWSPlaces>> searchNearbyLocation(List<double> position) =>
       caller.callServerEndpoint<List<_i5.AWSPlaces>>(
         'location',
-        'searchNearbyPlaces',
+        'searchNearbyLocation',
         {'position': position},
       );
 }
@@ -148,30 +161,30 @@ class EndpointPoll extends _i1.EndpointRef {
   @override
   String get name => 'poll';
 
-  _i2.Future<_i6.Poll?> save(_i6.Poll poll) =>
+  _i2.Future<_i6.Poll?> savePoll(_i6.Poll poll) =>
       caller.callServerEndpoint<_i6.Poll?>(
         'poll',
-        'save',
+        'savePoll',
         {'poll': poll},
       );
 
-  _i2.Future<void> sendInFuture(
+  _i2.Future<void> schedulePoll(
     _i6.Poll poll,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
         'poll',
-        'sendInFuture',
+        'schedulePoll',
         {
           'poll': poll,
           'dateTime': dateTime,
         },
       );
 
-  _i2.Future<_i6.Poll?> retrieve(int pollId) =>
+  _i2.Future<_i6.Poll?> getPoll(int pollId) =>
       caller.callServerEndpoint<_i6.Poll?>(
         'poll',
-        'retrieve',
+        'getPoll',
         {'pollId': pollId},
       );
 
@@ -196,40 +209,39 @@ class EndpointPost extends _i1.EndpointRef {
   @override
   String get name => 'post';
 
-  _i2.Future<_i7.Post?> save(_i7.Post post) =>
+  _i2.Future<_i7.Post?> savePost(_i7.Post post) =>
       caller.callServerEndpoint<_i7.Post?>(
         'post',
-        'save',
+        'savePost',
         {'post': post},
       );
 
-  _i2.Future<void> sendInFuture(
+  _i2.Future<void> schedulePost(
     _i7.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
         'post',
-        'sendInFuture',
+        'schedulePost',
         {
           'post': post,
           'dateTime': dateTime,
         },
       );
 
-  _i2.Future<_i7.Post?> retrieve(int id) =>
-      caller.callServerEndpoint<_i7.Post?>(
+  _i2.Future<_i7.Post?> getPost(int id) => caller.callServerEndpoint<_i7.Post?>(
         'post',
-        'retrieve',
+        'getPost',
         {'id': id},
       );
 
-  _i2.Future<_i8.PostList> listPost({
+  _i2.Future<_i8.PostList> getPosts({
     required int limit,
     required int page,
   }) =>
       caller.callServerEndpoint<_i8.PostList>(
         'post',
-        'listPost',
+        'getPosts',
         {
           'limit': limit,
           'page': page,
@@ -271,10 +283,10 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i9.UserNinRecord?> findNinDetails(String ninNumber) =>
+  _i2.Future<_i9.UserNinRecord?> getNinDetails(String ninNumber) =>
       caller.callServerEndpoint<_i9.UserNinRecord?>(
         'userNin',
-        'findNinDetails',
+        'getNinDetails',
         {'ninNumber': ninNumber},
       );
 }
@@ -286,17 +298,17 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUserRecord(_i10.UserRecord userRecord) =>
+  _i2.Future<void> saveUser(_i10.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
-        'saveUserRecord',
+        'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i10.UserRecord?> me() =>
+  _i2.Future<_i10.UserRecord?> getUser() =>
       caller.callServerEndpoint<_i10.UserRecord?>(
         'userRecord',
-        'me',
+        'getUser',
         {},
       );
 
@@ -307,21 +319,21 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'email': email},
       );
 
-  _i2.Future<List<String>> fetchAllUsernames() =>
+  _i2.Future<List<String>> fetchUsernames() =>
       caller.callServerEndpoint<List<String>>(
         'userRecord',
-        'fetchAllUsernames',
+        'fetchUsernames',
         {},
       );
 
-  _i2.Future<_i11.UsersList> listUsers({
+  _i2.Future<_i11.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
       caller.callServerEndpoint<_i11.UsersList>(
         'userRecord',
-        'listUsers',
+        'getUsers',
         {
           'query': query,
           'limit': limit,
@@ -336,19 +348,6 @@ class EndpointUserRecord extends _i1.EndpointRef {
       caller.callServerEndpoint<List<_i10.UserRecord>>(
         'userRecord',
         'mentionUsers',
-        {
-          'query': query,
-          'limit': limit,
-        },
-      );
-
-  _i2.Future<List<String>> fetchHashtags({
-    required String query,
-    required int limit,
-  }) =>
-      caller.callServerEndpoint<List<String>>(
-        'userRecord',
-        'fetchHashtags',
         {
           'query': query,
           'limit': limit,

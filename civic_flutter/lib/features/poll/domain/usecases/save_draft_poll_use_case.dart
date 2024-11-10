@@ -11,7 +11,7 @@ class SaveDraftPollUseCase implements UseCase<void, SaveDraftPollParams> {
 
   @override
   Future<Either<Failure, void>> call(SaveDraftPollParams params) async {
-    final result = await _pollRepository.saveDraft(
+    final result = await _pollRepository.saveDraftPoll(
       draftPoll: params.draftPoll,
     );
     return result;

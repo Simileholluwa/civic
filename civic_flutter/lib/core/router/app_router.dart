@@ -43,7 +43,7 @@ GoRouter router(RouterRef ref) {
               return AppRoutes.initial;
             } else {
               final currentUser =
-                  await ref.read(clientProvider).userRecord.me();
+                  await ref.read(clientProvider).userRecord.getUser();
               if (currentUser == null) {
                 FlutterNativeSplash.remove();
                 return AppRoutes.auth;

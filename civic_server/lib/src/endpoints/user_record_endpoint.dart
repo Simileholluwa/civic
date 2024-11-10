@@ -3,7 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class UserRecordEndpoint extends Endpoint {
-  Future<void> saveUserRecord(Session session, UserRecord userRecord) async {
+  Future<void> saveUser(Session session, UserRecord userRecord) async {
     // Save the user record to the database
     await UserRecord.db.insertRow(
       session,
@@ -11,7 +11,7 @@ class UserRecordEndpoint extends Endpoint {
     );
   }
 
-  Future<UserRecord?> me(
+  Future<UserRecord?> getUser(
     Session session,
   ) async {
     // Fetch the authenticated user
@@ -62,7 +62,7 @@ class UserRecordEndpoint extends Endpoint {
     return userInfo.userName;
   }
 
-  Future<List<String>> fetchAllUsernames(Session session) async {
+  Future<List<String>> fetchUsernames(Session session) async {
     // Fetch all user records from the database
     var userInfos = await UserInfo.db.find(
       session,
@@ -72,7 +72,7 @@ class UserRecordEndpoint extends Endpoint {
     return userInfos.map((user) => user.userName!).toList();
   }
 
-  Future<UsersList> listUsers(
+  Future<UsersList> getUsers(
     Session session, {
     required String query,
     int limit = 20,
@@ -200,43 +200,6 @@ class UserRecordEndpoint extends Endpoint {
 
     // Return a list of users
     return users;
-  }
-
-  Future<List<String>> fetchHashtags(
-    Session session, {
-    required String query,
-    int limit = 20,
-  }) async {
-    // Fetch the authenticated user
-    final authInfo = await session.authenticated;
-
-    // If the user is not authenticated, throw an exception
-    if (authInfo == null) {
-      throw UserException(message: 'You must be logged in');
-    }
-
-    // Fetch hashtags that match the query
-    final hashtags = await Hashtag.db.find(
-      session,
-      limit: limit,
-      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
-    );
-
-    // Fetch hashtags that match query from poll hashtag
-    final pollHashtags = await PollHashtag.db.find(
-      session,
-      limit: limit,
-      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
-    );
-
-    final pollTags = pollHashtags.map((hashtag) => '#${hashtag.tag}').toList();
-    final postTags = hashtags.map((hashtag) => '#${hashtag.tag}').toList();
-
-    print(postTags);
-    print(pollTags);
-
-    // Return a list of hashtag strings
-    return (pollTags + postTags);
   }
 
   Future<void> followUnfollowUser(

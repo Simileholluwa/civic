@@ -35,7 +35,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, Poll?>> retrieve({
+  Future<Either<Failure, Poll?>> getPoll({
     required int id,
   }) async {
     try {
@@ -53,7 +53,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, Poll?>> save({
+  Future<Either<Failure, Poll?>> savePoll({
     required Poll poll,
   }) async {
     try {
@@ -71,7 +71,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveInFuture({
+  Future<Either<Failure, void>> schedulePoll({
     required Poll poll,
     required DateTime scheduledDatetime,
   }) async {
@@ -108,7 +108,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, List<DraftPoll>>> removeAllDraftPoll() async {
+  Future<Either<Failure, List<DraftPoll>>> deleteDraftsPoll() async {
     try {
       final result = await _pollLocalDatasource.removeAllDraftPoll();
       return Right(result);
@@ -122,7 +122,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Either<Failure, List<DraftPoll>> retrieveDrafts() {
+  Either<Failure, List<DraftPoll>> getDraftPolls() {
     try {
       final result = _pollLocalDatasource.retrieveDrafts();
       return Right(result);
@@ -136,7 +136,7 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveDraft({required DraftPoll draftPoll}) async {
+  Future<Either<Failure, void>> saveDraftPoll({required DraftPoll draftPoll}) async {
     try {
       final result = await _pollLocalDatasource.saveDraft(
         draftPoll: draftPoll,

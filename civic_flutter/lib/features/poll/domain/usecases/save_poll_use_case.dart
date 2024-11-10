@@ -12,7 +12,7 @@ class SavePollUseCase implements UseCase<Poll?, SavePollParams> {
 
   @override
   Future<Either<Failure, Poll?>> call(SavePollParams params) async {
-    final result = await _pollRepository.save(
+    final result = await _pollRepository.savePoll(
       poll: params.poll,
     );
     return result;

@@ -7,31 +7,31 @@ assets:
   - getUploadDescription:
   - verifyUpload:
 hashtag:
-  - sendHashTags:
+  - sendPostHashtags:
   - sendPollHashtags:
+  - fetchHashtags:
 location:
   - searchLocation:
-  - searchNearbyPlaces:
+  - searchNearbyLocation:
 poll:
-  - save:
-  - sendInFuture:
-  - retrieve:
+  - savePoll:
+  - schedulePoll:
+  - getPoll:
   - castVote:
 post:
-  - save:
-  - sendInFuture:
-  - retrieve:
-  - listPost:
+  - savePost:
+  - schedulePost:
+  - getPost:
+  - getPosts:
 sendEmail:
   - sendEmail:
 userNin:
-  - findNinDetails:
+  - getNinDetails:
 userRecord:
-  - saveUserRecord:
-  - me:
+  - saveUser:
+  - getUser:
   - checkIfNewUser:
-  - fetchAllUsernames:
-  - listUsers:
+  - fetchUsernames:
+  - getUsers:
   - mentionUsers:
-  - fetchHashtags:
   - followUnfollowUser:

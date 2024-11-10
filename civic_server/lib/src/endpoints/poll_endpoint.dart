@@ -3,7 +3,7 @@ import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class PollEndpoint extends Endpoint {
-  Future<Poll?> save(
+  Future<Poll?> savePoll(
     Session session,
     Poll poll,
   ) async {
@@ -79,19 +79,19 @@ class PollEndpoint extends Endpoint {
     }
   }
 
-  Future<void> sendInFuture(
+  Future<void> schedulePoll(
     Session session,
     Poll poll,
     DateTime dateTime,
   ) async {
     await session.serverpod.futureCallAtTime(
-      'sendPollFutureCall',
+      'schedulePollFutureCall',
       poll,
       dateTime,
     );
   }
 
-  Future<Poll?> retrieve(
+  Future<Poll?> getPoll(
     Session session,
     int pollId,
   ) async {

@@ -32,7 +32,7 @@ class LocationServices {
     List<double> position,
   ) async {
     try {
-      final response = await client.location.searchNearbyPlaces(position);
+      final response = await client.location.searchNearbyLocation(position);
       return right(response);
     } on SocketException catch (_) {
       return left('Failed to connect to server');

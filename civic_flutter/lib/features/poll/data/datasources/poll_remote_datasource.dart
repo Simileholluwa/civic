@@ -67,7 +67,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.poll.retrieve(
+      final result = await _client.poll.getPoll(
         id,
       );
 
@@ -102,7 +102,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.poll.save(
+      final result = await _client.poll.savePoll(
         poll,
       );
       if (result == null) {
@@ -133,7 +133,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
           message: 'You are not connected to the internet.',
         );
       }
-      return await _client.poll.sendInFuture(
+      return await _client.poll.schedulePoll(
         poll,
         scheduledDatetime,
       );

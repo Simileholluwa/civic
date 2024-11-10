@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/post/domain/usecases/list_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/get_posts_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,7 +28,7 @@ class PostList extends _$PostList {
   Future<void> fetchPage(int page, {int limit = 10}) async {
     final listPostUseCase = ref.read(listPostProvider);
     final result = await listPostUseCase(
-      ListPostParams(
+      GetPostsParams(
         page,
         limit,
       ),

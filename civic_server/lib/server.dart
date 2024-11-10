@@ -25,8 +25,8 @@ void run(List<String> args) async {
   );
 
   // Future calls
-  pod.registerFutureCall(SendPostFutureCall(), 'sendPostFutureCall');
-  pod.registerFutureCall(SendPollFutureCall(), 'sendPollFutureCall');
+  pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
+  pod.registerFutureCall(SchedulePollFutureCall(), 'schedulePollFutureCall');
 
   // Auth
   auth.AuthConfig.set(

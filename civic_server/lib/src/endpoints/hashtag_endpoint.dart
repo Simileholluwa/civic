@@ -2,7 +2,7 @@ import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class HashtagEndpoint extends Endpoint {
-  Future<void> sendHashTags(
+  Future<void> sendPostHashtags(
     Session session,
     List<String> tags,
     int postId,
@@ -96,6 +96,40 @@ class HashtagEndpoint extends Endpoint {
       print(e);
       return;
     }
+  }
+
+  Future<List<String>> fetchHashtags(
+    Session session, {
+    required String query,
+    int limit = 20,
+  }) async {
+    // Fetch the authenticated user
+    final authInfo = await session.authenticated;
+
+    // If the user is not authenticated, throw an exception
+    if (authInfo == null) {
+      throw UserException(message: 'You must be logged in');
+    }
+
+    // Fetch hashtags that match the query
+    final hashtags = await Hashtag.db.find(
+      session,
+      limit: limit,
+      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
+    );
+
+    // Fetch hashtags that match query from poll hashtag
+    final pollHashtags = await PollHashtag.db.find(
+      session,
+      limit: limit,
+      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
+    );
+
+    final pollTags = pollHashtags.map((hashtag) => '#${hashtag.tag}').toList();
+    final postTags = hashtags.map((hashtag) => '#${hashtag.tag}').toList();
+
+    // Return a list of hashtag strings
+    return (pollTags + postTags);
   }
 
 }

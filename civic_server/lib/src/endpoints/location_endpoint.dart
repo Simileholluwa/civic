@@ -57,7 +57,7 @@ class LocationEndpoint extends Endpoint {
     }
   }
 
-  Future<List<AWSPlaces>> searchNearbyPlaces(
+  Future<List<AWSPlaces>> searchNearbyLocation(
     Session session,
     List<double> position,
   ) async {

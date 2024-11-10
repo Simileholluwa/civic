@@ -72,10 +72,10 @@ final savePostProvider = AutoDisposeProvider<SavePostUseCase>.internal(
 typedef SavePostRef = AutoDisposeProviderRef<SavePostUseCase>;
 String _$listPostHash() => r'95f681074c964c1e0cd0beea8acc36a156de24b4';
 
-/// See also [listPost].
-@ProviderFor(listPost)
-final listPostProvider = AutoDisposeProvider<ListPostUseCase>.internal(
-  listPost,
+/// See also [getPosts].
+@ProviderFor(getPosts)
+final listPostProvider = AutoDisposeProvider<GetPostsUseCase>.internal(
+  getPosts,
   name: r'listPostProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$listPostHash,
@@ -83,13 +83,13 @@ final listPostProvider = AutoDisposeProvider<ListPostUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef ListPostRef = AutoDisposeProviderRef<ListPostUseCase>;
+typedef GetPostsRef = AutoDisposeProviderRef<GetPostsUseCase>;
 String _$retrievePostHash() => r'0fc10663241135c6243fe125ab7f265f414d0f92';
 
-/// See also [retrievePost].
-@ProviderFor(retrievePost)
-final retrievePostProvider = AutoDisposeProvider<RetrievePostUseCase>.internal(
-  retrievePost,
+/// See also [getPost].
+@ProviderFor(getPost)
+final retrievePostProvider = AutoDisposeProvider<GetPostUseCase>.internal(
+  getPost,
   name: r'retrievePostProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$retrievePostHash,
@@ -97,14 +97,14 @@ final retrievePostProvider = AutoDisposeProvider<RetrievePostUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef RetrievePostRef = AutoDisposeProviderRef<RetrievePostUseCase>;
+typedef GetPostRef = AutoDisposeProviderRef<GetPostUseCase>;
 String _$saveDraftPostHash() => r'2d04a978119e6e3f42ed62b58de412da9f050068';
 
-/// See also [saveDraftPost].
-@ProviderFor(saveDraftPost)
+/// See also [saveDraft].
+@ProviderFor(saveDraft)
 final saveDraftPostProvider =
-    AutoDisposeProvider<SaveDraftPostUseCase>.internal(
-  saveDraftPost,
+    AutoDisposeProvider<SaveDraftUseCase>.internal(
+  saveDraft,
   name: r'saveDraftPostProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -113,14 +113,14 @@ final saveDraftPostProvider =
   allTransitiveDependencies: null,
 );
 
-typedef SaveDraftPostRef = AutoDisposeProviderRef<SaveDraftPostUseCase>;
+typedef SaveDraftRef = AutoDisposeProviderRef<SaveDraftUseCase>;
 String _$retrieveDraftPostHash() => r'2ba51857d02e30e05a6fcb43a2157deff6e5b5f5';
 
-/// See also [retrieveDraftPost].
-@ProviderFor(retrieveDraftPost)
+/// See also [getDraft].
+@ProviderFor(getDraft)
 final retrieveDraftPostProvider =
-    AutoDisposeProvider<RetrieveDraftPostUseCase>.internal(
-  retrieveDraftPost,
+    AutoDisposeProvider<GetDraftsUseCase>.internal(
+  getDraft,
   name: r'retrieveDraftPostProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -129,15 +129,15 @@ final retrieveDraftPostProvider =
   allTransitiveDependencies: null,
 );
 
-typedef RetrieveDraftPostRef = AutoDisposeProviderRef<RetrieveDraftPostUseCase>;
+typedef GetDraftRef = AutoDisposeProviderRef<GetDraftsUseCase>;
 String _$deleteAllDraftPostHash() =>
     r'021154b08f79a19e1d7c26f925b34f865994ed9a';
 
-/// See also [deleteAllDraftPost].
-@ProviderFor(deleteAllDraftPost)
+/// See also [deleteDrafts].
+@ProviderFor(deleteDrafts)
 final deleteAllDraftPostProvider =
-    AutoDisposeProvider<DeleteAllDraftPostUseCase>.internal(
-  deleteAllDraftPost,
+    AutoDisposeProvider<DeleteDraftsUseCase>.internal(
+  deleteDrafts,
   name: r'deleteAllDraftPostProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -146,15 +146,15 @@ final deleteAllDraftPostProvider =
   allTransitiveDependencies: null,
 );
 
-typedef DeleteAllDraftPostRef
-    = AutoDisposeProviderRef<DeleteAllDraftPostUseCase>;
+typedef DeleteDraftsRef
+    = AutoDisposeProviderRef<DeleteDraftsUseCase>;
 String _$deleteDraftPostHash() => r'32f2461b87a21295bd78142d019d4f1f64ec1611';
 
-/// See also [deleteDraftPost].
-@ProviderFor(deleteDraftPost)
+/// See also [deleteDraft].
+@ProviderFor(deleteDraft)
 final deleteDraftPostProvider =
-    AutoDisposeProvider<DeleteDraftPostUseCase>.internal(
-  deleteDraftPost,
+    AutoDisposeProvider<DeleteDraftUseCase>.internal(
+  deleteDraft,
   name: r'deleteDraftPostProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -163,13 +163,13 @@ final deleteDraftPostProvider =
   allTransitiveDependencies: null,
 );
 
-typedef DeleteDraftPostRef = AutoDisposeProviderRef<DeleteDraftPostUseCase>;
+typedef DeleteDraftRef = AutoDisposeProviderRef<DeleteDraftUseCase>;
 String _$saveInFutureHash() => r'975e3577929f4bd6bc1c6bcba703df57836eb5f2';
 
-/// See also [saveInFuture].
-@ProviderFor(saveInFuture)
-final saveInFutureProvider = AutoDisposeProvider<SaveInFutureUseCase>.internal(
-  saveInFuture,
+/// See also [schedulePost].
+@ProviderFor(schedulePost)
+final saveInFutureProvider = AutoDisposeProvider<SchedulePostUseCase>.internal(
+  schedulePost,
   name: r'saveInFutureProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$saveInFutureHash,
@@ -177,6 +177,6 @@ final saveInFutureProvider = AutoDisposeProvider<SaveInFutureUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef SaveInFutureRef = AutoDisposeProviderRef<SaveInFutureUseCase>;
+typedef SchedulePostRef = AutoDisposeProviderRef<SchedulePostUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -3,7 +3,7 @@ import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class PostEndpoint extends Endpoint {
-  Future<Post?> save(
+  Future<Post?> savePost(
     Session session,
     Post post,
   ) async {
@@ -29,7 +29,7 @@ class PostEndpoint extends Endpoint {
           session,
           post,
         );
-        await HashtagEndpoint().sendHashTags(
+        await HashtagEndpoint().sendPostHashtags(
           session,
           post.tags,
           post.id!,
@@ -46,7 +46,7 @@ class PostEndpoint extends Endpoint {
         if (sentPost.id == null) {
           throw Exception('Post ID is null after insert');
         } else {
-          await HashtagEndpoint().sendHashTags(
+          await HashtagEndpoint().sendPostHashtags(
             session,
             post.tags,
             sentPost.id!,
@@ -60,19 +60,19 @@ class PostEndpoint extends Endpoint {
     }
   }
 
-  Future<void> sendInFuture(
+  Future<void> schedulePost(
     Session session,
     Post post,
     DateTime dateTime,
   ) async {
     await session.serverpod.futureCallAtTime(
-      'sendPostFutureCall',
+      'schedulePostFutureCall',
       post,
       dateTime,
     );
   }
 
-  Future<Post?> retrieve(
+  Future<Post?> getPost(
     Session session,
     int id,
   ) async {
@@ -83,7 +83,7 @@ class PostEndpoint extends Endpoint {
     return result;
   }
 
-  Future<PostList> listPost(
+  Future<PostList> getPosts(
     Session session, {
     int limit = 10,
     int page = 1,

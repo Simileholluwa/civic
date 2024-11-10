@@ -8,7 +8,7 @@ import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/post/domain/usecases/save_in_future_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/schedule_post_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
 
@@ -157,7 +157,7 @@ class SendPost extends _$SendPost {
       postScheduledDateTimeProvider.notifier,
     );
     final result = await saveInFuture(
-      SaveInFutureParams(post, dateTime),
+      SchedulePostParams(post, dateTime),
     );
     return result.fold(
       (error) async {

@@ -16,7 +16,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   @override
   Future<UserRecord> me() async {
     try {
-      final result = await _client.userRecord.me();
+      final result = await _client.userRecord.getUser();
       if (result == null) {
         throw const ServerException(message: 'User not found');
       }

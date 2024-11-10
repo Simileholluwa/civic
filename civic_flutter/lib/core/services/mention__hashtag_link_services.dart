@@ -33,7 +33,7 @@ class MentionHashTagLinkServices {
   ) async {
     try {
       final response =
-          await client.userRecord.fetchHashtags(limit: 10, query: query);
+          await client.hashtag.fetchHashtags(limit: 10, query: query);
       return right(response);
     } on SocketException catch (_) {
       return left('Failed to connect to server');

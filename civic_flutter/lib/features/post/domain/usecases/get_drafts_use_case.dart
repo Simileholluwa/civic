@@ -4,23 +4,15 @@ import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class SavePostUseCase implements UseCase<Post?, SavePostParams> {
-  SavePostUseCase({required PostRepository postRepository})
+class GetDraftsUseCase
+    implements NotFutureUseCase<List<DraftPost>?, NoParams> {
+  GetDraftsUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<Failure, Post?>> call(SavePostParams params) async {
-    final result = await _postRepository.savePost(
-      post: params.post,
-    );
+  Either<Failure, List<DraftPost>?> call(NoParams params) {
+    final result = _postRepository.getDrafts();
     return result;
   }
-}
-
-class SavePostParams {
-  SavePostParams(
-    this.post,
-  );
-  final Post post;
 }

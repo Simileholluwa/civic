@@ -4,14 +4,14 @@ import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class SaveInFutureUseCase implements UseCase<void, SaveInFutureParams> {
-  SaveInFutureUseCase({required PostRepository postRepository})
+class SchedulePostUseCase implements UseCase<void, SchedulePostParams> {
+  SchedulePostUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<Failure, void>> call(SaveInFutureParams params) async {
-    final result = await _postRepository.saveInFuture(
+  Future<Either<Failure, void>> call(SchedulePostParams params) async {
+    final result = await _postRepository.schedulePost(
       post: params.post,
       dateTime: params.dateTime,
     );
@@ -19,8 +19,8 @@ class SaveInFutureUseCase implements UseCase<void, SaveInFutureParams> {
   }
 }
 
-class SaveInFutureParams {
-  SaveInFutureParams(
+class SchedulePostParams {
+  SchedulePostParams(
     this.post,
     this.dateTime,
   );

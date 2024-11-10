@@ -201,7 +201,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
 
       await _sessionManager.refreshSession();
 
-      return await _client.userRecord.me();
+      return await _client.userRecord.getUser();
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
@@ -314,7 +314,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         following: [],
       );
 
-      await _client.userRecord.saveUserRecord(userRecord);
+      await _client.userRecord.saveUser(userRecord);
 
       await signInWithEmailAndPassword(
         email: email,
@@ -362,7 +362,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.userNin.findNinDetails(ninNumber);
+      final result = await _client.userNin.getNinDetails(ninNumber);
       if (result == null) {
         return null;
       }
@@ -379,7 +379,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<List<String>> fetchAllUsernames() async {
     try {
-      return await _client.userRecord.fetchAllUsernames();
+      return await _client.userRecord.fetchUsernames();
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -464,7 +464,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.userRecord.me();
+      final result = await _client.userRecord.getUser();
       return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');

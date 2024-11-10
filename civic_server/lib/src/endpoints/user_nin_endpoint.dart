@@ -2,7 +2,7 @@ import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class UserNinEndpoint extends Endpoint {
-  Future<UserNinRecord?> findNinDetails(
+  Future<UserNinRecord?> getNinDetails(
       Session session, String ninNumber) async {
     final userRecord = await UserRecord.db.findFirstRow(
       session,

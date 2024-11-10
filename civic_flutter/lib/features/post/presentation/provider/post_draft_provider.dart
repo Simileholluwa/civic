@@ -5,7 +5,7 @@ import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/delete_draft_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/save_draft_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/save_draft_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,7 +54,7 @@ class PostDrafts extends _$PostDrafts {
   Future<bool> saveDraftPost(DraftPost draftPost) async {
     final saveDraft = ref.read(saveDraftPostProvider);
     final result = await saveDraft(
-      SaveDraftPostParams(
+      SaveDraftParams(
         draftPost,
       ),
     );

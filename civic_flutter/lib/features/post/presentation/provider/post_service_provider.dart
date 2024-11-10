@@ -4,13 +4,13 @@ import 'package:civic_flutter/core/providers/local_storage_provider.dart';
 import 'package:civic_flutter/features/post/data/datasources/post_local_database.dart';
 import 'package:civic_flutter/features/post/data/datasources/post_remote_database.dart';
 import 'package:civic_flutter/features/post/data/repositories/post_repository_impl.dart';
-import 'package:civic_flutter/features/post/domain/usecases/delete_all_drafts_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/delete_drafts_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/delete_draft_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/list_post_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/retrieve_drafts_post_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/retrieve_post_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/save_draft_post_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/save_in_future_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/get_drafts_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/get_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/get_posts_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/save_draft_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/schedule_post_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -50,51 +50,51 @@ SavePostUseCase savePost(SavePostRef ref) {
 }
 
 @riverpod
-ListPostUseCase listPost(ListPostRef ref) {
-  return ListPostUseCase(
+GetPostsUseCase getPosts(GetPostsRef ref) {
+  return GetPostsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-RetrievePostUseCase retrievePost(RetrievePostRef ref) {
-  return RetrievePostUseCase(
+GetPostUseCase getPost(GetPostRef ref) {
+  return GetPostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-SaveDraftPostUseCase saveDraftPost(SaveDraftPostRef ref) {
-  return SaveDraftPostUseCase(
+SaveDraftUseCase saveDraft(SaveDraftRef ref) {
+  return SaveDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-RetrieveDraftPostUseCase retrieveDraftPost(RetrieveDraftPostRef ref) {
-  return RetrieveDraftPostUseCase(
+GetDraftsUseCase getDraft(GetDraftRef ref) {
+  return GetDraftsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteAllDraftPostUseCase deleteAllDraftPost(DeleteAllDraftPostRef ref) {
-  return DeleteAllDraftPostUseCase(
+DeleteDraftsUseCase deleteDrafts(DeleteDraftsRef ref) {
+  return DeleteDraftsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftPostUseCase deleteDraftPost(DeleteDraftPostRef ref) {
-  return DeleteDraftPostUseCase(
+DeleteDraftUseCase deleteDraft(DeleteDraftRef ref) {
+  return DeleteDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 
 @riverpod
-SaveInFutureUseCase saveInFuture(SaveInFutureRef ref) {
-  return SaveInFutureUseCase(
+SchedulePostUseCase schedulePost(SchedulePostRef ref) {
+  return SchedulePostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }

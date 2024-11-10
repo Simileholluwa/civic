@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/post/domain/usecases/retrieve_post_use_case.dart';
+import 'package:civic_flutter/features/post/domain/usecases/get_post_use_case.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -56,7 +56,7 @@ Future<Post?> postDetail(
   } else {
     final retrievePost = ref.read(retrievePostProvider);
     final result = await retrievePost(
-      RetrievePostParams(
+      GetPostParams(
         id,
       ),
     );

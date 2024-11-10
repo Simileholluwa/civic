@@ -16,7 +16,7 @@ class PostRepositoryImpl implements PostRepository {
   final PostRemoteDatabaseImpl _remoteDatabase;
   final PostLocalDatabaseImpl _localDatabase;
   @override
-  Future<Either<Failure, Post?>> save({required Post post}) async {
+  Future<Either<Failure, Post?>> savePost({required Post post}) async {
     try {
       final result = await _remoteDatabase.save(post: post);
       return Right(result);
@@ -30,7 +30,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostList>> listPost({
+  Future<Either<Failure, PostList>> getPosts({
     required int page,
     required int limit,
   }) async {
@@ -50,7 +50,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<String, Post?>> retrieve({required int id}) async {
+  Future<Either<String, Post?>> getPost({required int id}) async {
     try {
       final result = await _remoteDatabase.retrieve(
         id: id,
@@ -80,7 +80,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Either<Failure, List<DraftPost>?> retrieveDrafts() {
+  Either<Failure, List<DraftPost>?> getDrafts() {
     try {
       final result = _localDatabase.retrieveDrafts();
       return Right(result);
@@ -94,7 +94,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteDraftPost({
+  Future<Either<Failure, void>> deleteDraft({
     required DraftPost draftPost,
   }) async {
     try {
@@ -110,7 +110,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<DraftPost>>> removeAllDraftPost() async {
+  Future<Either<Failure, List<DraftPost>>> deleteDrafts() async {
     try {
       final result = await _localDatabase.removeAllDraftPost();
       return Right(result);
@@ -124,7 +124,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveInFuture({
+  Future<Either<Failure, void>> schedulePost({
     required Post post,
     required DateTime dateTime,
   }) async {

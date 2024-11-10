@@ -35,7 +35,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       }
 
       final result = await _client.post
-          .save(
+          .savePost(
             post,
           )
           .timeout(
@@ -77,7 +77,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = _client.post.listPost(
+      final result = _client.post.getPosts(
         limit: limit,
         page: page,
       );
@@ -104,7 +104,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.post.retrieve(
+      final result = await _client.post.getPost(
         id,
       );
       return result;
@@ -132,7 +132,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      await _client.post.sendInFuture(
+      await _client.post.schedulePost(
         post,
         dateTime,
       );

@@ -2,7 +2,7 @@ import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
-class SendPostFutureCall extends FutureCall<Post> {
+class SchedulePostFutureCall extends FutureCall<Post> {
   @override
   Future<void> invoke(Session session, Post? object) async {
     if (object != null) {
@@ -18,7 +18,7 @@ class SendPostFutureCall extends FutureCall<Post> {
             object,
           );
 
-          await HashtagEndpoint().sendHashTags(
+          await HashtagEndpoint().sendPostHashtags(
             session,
             sentPost.tags,
             sentPost.id!,
@@ -27,7 +27,7 @@ class SendPostFutureCall extends FutureCall<Post> {
         print('Sent post!');
       } catch (e) {
         await session.serverpod.futureCallWithDelay(
-          'sendPostFutureCall',
+          'schedulePostFutureCall',
           object,
           Duration(
             seconds: 60,

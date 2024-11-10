@@ -4,14 +4,14 @@ import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class DeleteDraftPostUseCase implements UseCase<void, DeleteDraftPostParams> {
-  DeleteDraftPostUseCase({required PostRepository postRepository})
+class DeleteDraftUseCase implements UseCase<void, DeleteDraftPostParams> {
+  DeleteDraftUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
   Future<Either<Failure, void>> call(DeleteDraftPostParams params) async {
-    final result = await _postRepository.deleteDraftPost(
+    final result = await _postRepository.deleteDraft(
       draftPost: params.draftPost,
     );
     return result;

@@ -2,7 +2,7 @@ import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
-class SendPollFutureCall extends FutureCall<Poll> {
+class SchedulePollFutureCall extends FutureCall<Poll> {
   @override
   Future<void> invoke(Session session, Poll? object) async {
     if (object != null) {
@@ -29,7 +29,7 @@ class SendPollFutureCall extends FutureCall<Poll> {
         }
       } catch (e) {
         await session.serverpod.futureCallWithDelay(
-          'sendPollFutureCall',
+          'schedulePollFutureCall',
           object,
           Duration(
             seconds: 60,

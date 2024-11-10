@@ -4,15 +4,24 @@ import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/repositories/poll_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class DeleteAllDraftPollUseCase implements UseCase<List<DraftPoll>, NoParams> {
-  DeleteAllDraftPollUseCase({
+class GetPollUseCase implements UseCase<Poll?, GetPollParams> {
+  GetPollUseCase({
     required PollRepository pollRepository,
   }) : _pollRepository = pollRepository;
   final PollRepository _pollRepository;
 
   @override
-  Future<Either<Failure, List<DraftPoll>>> call(NoParams params) async {
-    final result = await _pollRepository.removeAllDraftPoll();
+  Future<Either<Failure, Poll?>> call(GetPollParams params) async {
+    final result = await _pollRepository.getPoll(
+      id: params.id,
+    );
     return result;
   }
+}
+
+class GetPollParams {
+  GetPollParams(
+    this.id,
+  );
+  final int id;
 }
