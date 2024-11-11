@@ -15,7 +15,7 @@ part 'post_draft_provider.g.dart';
 class PostDrafts extends _$PostDrafts {
   @override
   List<DraftPost> build() {
-    final retrieveDraftPost = ref.read(retrieveDraftPostProvider);
+    final retrieveDraftPost = ref.read(getDraftProvider);
     final result = retrieveDraftPost(
       NoParams(),
     );
@@ -33,7 +33,7 @@ class PostDrafts extends _$PostDrafts {
   }
 
   Future<bool> deleteAllDrafts() async {
-    final deleteAll = ref.read(deleteAllDraftPostProvider);
+    final deleteAll = ref.read(deleteDraftsProvider);
     final result = await deleteAll(
       NoParams(),
     );
@@ -52,7 +52,7 @@ class PostDrafts extends _$PostDrafts {
   }
 
   Future<bool> saveDraftPost(DraftPost draftPost) async {
-    final saveDraft = ref.read(saveDraftPostProvider);
+    final saveDraft = ref.read(saveDraftProvider);
     final result = await saveDraft(
       SaveDraftParams(
         draftPost,
@@ -73,7 +73,7 @@ class PostDrafts extends _$PostDrafts {
     DraftPost draftPost,
     int index,
   ) async {
-    final deleteDraft = ref.read(deleteDraftPostProvider);
+    final deleteDraft = ref.read(deleteDraftProvider);
     final result = await deleteDraft(
       DeleteDraftPostParams(
         draftPost,

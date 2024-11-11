@@ -23,6 +23,12 @@ post:
   - schedulePost:
   - getPost:
   - getPosts:
+project:
+  - getProject:
+  - saveProject:
+  - scheduleProject:
+  - getProjects:
+  - deleteProject:
 sendEmail:
   - sendEmail:
 userNin:

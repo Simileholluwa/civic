@@ -14,7 +14,7 @@ part 'poll_draft_provider.g.dart';
 class PollDrafts extends _$PollDrafts {
   @override
   List<DraftPoll> build() {
-    final retrieveDraftPoll = ref.read(retrieveDraftPollProvider);
+    final retrieveDraftPoll = ref.read(getDraftsPollProvider);
     final result = retrieveDraftPoll(
       NoParams(),
     );
@@ -32,7 +32,7 @@ class PollDrafts extends _$PollDrafts {
   }
 
   Future<bool> deleteAllDrafts() async {
-    final deleteAll = ref.read(deleteAllDraftPollProvider);
+    final deleteAll = ref.read(deleteDraftsPollProvider);
     final result = await deleteAll(
       NoParams(),
     );

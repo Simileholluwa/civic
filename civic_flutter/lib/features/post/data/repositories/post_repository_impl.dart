@@ -18,7 +18,7 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, Post?>> savePost({required Post post}) async {
     try {
-      final result = await _remoteDatabase.save(post: post);
+      final result = await _remoteDatabase.savePost(post: post);
       return Right(result);
     } on ServerException catch (e) {
       return Left(
@@ -35,7 +35,7 @@ class PostRepositoryImpl implements PostRepository {
     required int limit,
   }) async {
     try {
-      final result = await _remoteDatabase.listPost(
+      final result = await _remoteDatabase.getPosts(
         page: page,
         limit: limit,
       );
@@ -52,7 +52,7 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<String, Post?>> getPost({required int id}) async {
     try {
-      final result = await _remoteDatabase.retrieve(
+      final result = await _remoteDatabase.getPost(
         id: id,
       );
       return Right(result);
@@ -129,7 +129,7 @@ class PostRepositoryImpl implements PostRepository {
     required DateTime dateTime,
   }) async {
     try {
-      final result = await _remoteDatabase.saveInFuture(
+      final result = await _remoteDatabase.schedulePost(
         post: post,
         dateTime: dateTime,
       );

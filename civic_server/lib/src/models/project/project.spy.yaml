@@ -1,0 +1,17 @@
+class: Project
+table: project
+fields:
+    owner: UserRecord?, relation
+    title: String
+    description: String
+    category: List<String>
+    status: ProjectStatus
+    images: List<String>
+    startDate: DateTime
+    endDate: DateTime
+    completionRate: double?
+    cost: double?
+    currency: String?
+    locations: List<AWSPlaces>?
+    fundingSources: List<String>?
+

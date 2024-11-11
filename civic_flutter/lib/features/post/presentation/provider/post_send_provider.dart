@@ -152,7 +152,7 @@ class SendPost extends _$SendPost {
     Post post,
     DateTime dateTime,
   ) async {
-    final saveInFuture = ref.read(saveInFutureProvider);
+    final saveInFuture = ref.read(schedulePostProvider);
     final scheduledDateTimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,
     );

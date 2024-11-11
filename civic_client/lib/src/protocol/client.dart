@@ -17,11 +17,13 @@ import 'package:civic_client/src/protocol/general/aws_places.dart' as _i5;
 import 'package:civic_client/src/protocol/poll/poll.dart' as _i6;
 import 'package:civic_client/src/protocol/post/post.dart' as _i7;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i8;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i9;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i10;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i11;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i12;
-import 'protocol.dart' as _i13;
+import 'package:civic_client/src/protocol/project/project.dart' as _i9;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i10;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i11;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i12;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i13;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i14;
+import 'protocol.dart' as _i15;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -250,6 +252,60 @@ class EndpointPost extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointProject extends _i1.EndpointRef {
+  EndpointProject(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'project';
+
+  _i2.Future<_i9.Project?> getProject(int id) =>
+      caller.callServerEndpoint<_i9.Project?>(
+        'project',
+        'getProject',
+        {'id': id},
+      );
+
+  _i2.Future<_i9.Project?> saveProject(_i9.Project project) =>
+      caller.callServerEndpoint<_i9.Project?>(
+        'project',
+        'saveProject',
+        {'project': project},
+      );
+
+  _i2.Future<void> scheduleProject(
+    _i9.Project project,
+    DateTime dateTime,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'scheduleProject',
+        {
+          'project': project,
+          'dateTime': dateTime,
+        },
+      );
+
+  _i2.Future<_i10.ProjectList> getProjects({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i10.ProjectList>(
+        'project',
+        'getProjects',
+        {
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Future<void> deleteProject(int id) => caller.callServerEndpoint<void>(
+        'project',
+        'deleteProject',
+        {'id': id},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointSendEmail extends _i1.EndpointRef {
   EndpointSendEmail(_i1.EndpointCaller caller) : super(caller);
 
@@ -283,8 +339,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i9.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i9.UserNinRecord?>(
+  _i2.Future<_i11.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i11.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -298,15 +354,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUser(_i10.UserRecord userRecord) =>
+  _i2.Future<void> saveUser(_i12.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i10.UserRecord?> getUser() =>
-      caller.callServerEndpoint<_i10.UserRecord?>(
+  _i2.Future<_i12.UserRecord?> getUser() =>
+      caller.callServerEndpoint<_i12.UserRecord?>(
         'userRecord',
         'getUser',
         {},
@@ -326,12 +382,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i11.UsersList> getUsers({
+  _i2.Future<_i13.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i11.UsersList>(
+      caller.callServerEndpoint<_i13.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -341,11 +397,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i10.UserRecord>> mentionUsers({
+  _i2.Future<List<_i12.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i10.UserRecord>>(
+      caller.callServerEndpoint<List<_i12.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {
@@ -364,10 +420,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i12.Caller(client);
+    auth = _i14.Caller(client);
   }
 
-  late final _i12.Caller auth;
+  late final _i14.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -386,7 +442,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i13.Protocol(),
+          _i15.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -402,6 +458,7 @@ class Client extends _i1.ServerpodClientShared {
     location = EndpointLocation(this);
     poll = EndpointPoll(this);
     post = EndpointPost(this);
+    project = EndpointProject(this);
     sendEmail = EndpointSendEmail(this);
     userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
@@ -420,6 +477,8 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointPost post;
 
+  late final EndpointProject project;
+
   late final EndpointSendEmail sendEmail;
 
   late final EndpointUserNin userNin;
@@ -436,6 +495,7 @@ class Client extends _i1.ServerpodClientShared {
         'location': location,
         'poll': poll,
         'post': post,
+        'project': project,
         'sendEmail': sendEmail,
         'userNin': userNin,
         'userRecord': userRecord,

@@ -71,31 +71,29 @@ final savePollProvider = AutoDisposeProvider<SavePollUseCase>.internal(
 );
 
 typedef SavePollRef = AutoDisposeProviderRef<SavePollUseCase>;
-String _$savePollInFutureHash() => r'd61655efba3a283e32059b75d3440330cf6084b0';
+String _$schedulePollHash() => r'49c2878e7b11e6c50f255c91eaf2686162e92b46';
 
 /// See also [schedulePoll].
 @ProviderFor(schedulePoll)
-final savePollInFutureProvider =
-    AutoDisposeProvider<SchedulePollUseCase>.internal(
+final schedulePollProvider = AutoDisposeProvider<SchedulePollUseCase>.internal(
   schedulePoll,
-  name: r'savePollInFutureProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$savePollInFutureHash,
+  name: r'schedulePollProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$schedulePollHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 typedef SchedulePollRef = AutoDisposeProviderRef<SchedulePollUseCase>;
-String _$retrievePollHash() => r'c9f141f13fa0c12bb569e95b26a7edff7f162a30';
+String _$getPollHash() => r'df806c63867911137000c0b15599f892a1ecf98d';
 
 /// See also [getPoll].
 @ProviderFor(getPoll)
-final retrievePollProvider = AutoDisposeProvider<GetPollUseCase>.internal(
+final getPollProvider = AutoDisposeProvider<GetPollUseCase>.internal(
   getPoll,
-  name: r'retrievePollProvider',
+  name: r'getPollProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$retrievePollHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getPollHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -131,40 +129,38 @@ final saveDraftPollProvider =
 );
 
 typedef SaveDraftPollRef = AutoDisposeProviderRef<SaveDraftPollUseCase>;
-String _$retrieveDraftPollHash() => r'750e4031249b0cc72f9cf657141be480c9d61dbc';
+String _$getDraftsPollHash() => r'ca8132daa2cd87215bbbf8e9e2a4c627f7ef3319';
 
 /// See also [getDraftsPoll].
 @ProviderFor(getDraftsPoll)
-final retrieveDraftPollProvider =
+final getDraftsPollProvider =
     AutoDisposeProvider<GetDraftsPollUseCase>.internal(
   getDraftsPoll,
-  name: r'retrieveDraftPollProvider',
+  name: r'getDraftsPollProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$retrieveDraftPollHash,
+      : _$getDraftsPollHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 typedef GetDraftsPollRef = AutoDisposeProviderRef<GetDraftsPollUseCase>;
-String _$deleteAllDraftPollHash() =>
-    r'ac05a92e861f2dd206d08662bd87d6246cc9fe4b';
+String _$deleteDraftsPollHash() => r'4c37385d722e41389325dce8c20301a3ddbdf67d';
 
 /// See also [deleteDraftsPoll].
 @ProviderFor(deleteDraftsPoll)
-final deleteAllDraftPollProvider =
+final deleteDraftsPollProvider =
     AutoDisposeProvider<DeleteDraftsPollUseCase>.internal(
   deleteDraftsPoll,
-  name: r'deleteAllDraftPollProvider',
+  name: r'deleteDraftsPollProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$deleteAllDraftPollHash,
+      : _$deleteDraftsPollHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef DeleteDraftsPollRef
-    = AutoDisposeProviderRef<DeleteDraftsPollUseCase>;
+typedef DeleteDraftsPollRef = AutoDisposeProviderRef<DeleteDraftsPollUseCase>;
 String _$deleteDraftPollHash() => r'4729084e9b90d36c8af88641c91840b403c63793';
 
 /// See also [deleteDraftPoll].

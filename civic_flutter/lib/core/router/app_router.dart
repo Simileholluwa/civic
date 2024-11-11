@@ -14,7 +14,7 @@ import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_
 import 'package:civic_flutter/features/poll/presentation/pages/create_poll_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
-import 'package:civic_flutter/features/projects/presentation/routes/projects_routes.dart';
+import 'package:civic_flutter/features/project/presentation/routes/projects_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';

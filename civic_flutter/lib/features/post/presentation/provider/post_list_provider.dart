@@ -26,7 +26,7 @@ class PostList extends _$PostList {
   }
 
   Future<void> fetchPage(int page, {int limit = 10}) async {
-    final listPostUseCase = ref.read(listPostProvider);
+    final listPostUseCase = ref.read(getPostsProvider);
     final result = await listPostUseCase(
       GetPostsParams(
         page,

@@ -54,7 +54,7 @@ Future<Poll?> pollDetail(
       );
     });
   } else {
-    final retrievePoll = ref.read(retrievePollProvider);
+    final retrievePoll = ref.read(getPollProvider);
     final result = await retrievePoll(
       GetPollParams(
         id,

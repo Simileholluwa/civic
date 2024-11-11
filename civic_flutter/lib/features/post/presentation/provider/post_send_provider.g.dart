@@ -6,7 +6,7 @@ part of 'post_send_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendPostHash() => r'ed94bebd8047e6df71ed8bdbc0dd2bd255242b47';
+String _$sendPostHash() => r'f18c82025c55058d3c17736e5337715b70d935c7';
 
 /// See also [SendPost].
 @ProviderFor(SendPost)

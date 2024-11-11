@@ -50,7 +50,7 @@ class SendPoll extends _$SendPoll {
   }
 
   Future<bool> sendPollInFuture({required Poll poll}) async {
-    final sendPollInFuture = ref.read(savePollInFutureProvider);
+    final sendPollInFuture = ref.read(schedulePollProvider);
     final scheduledDatetime = ref.read(postScheduledDateTimeProvider);
     final scheduledDatetimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,

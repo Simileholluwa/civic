@@ -5,27 +5,28 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:civic_flutter/core/errors/exceptions.dart';
 
-abstract class PostRemoteDatabase {
-  Future<Post?> savePost({required Post post});
-  Future<PostList> getPosts({
-    required int page,
-    required int limit,
+abstract class ProjectRemoteDataSource {
+  Future<ProjectList> getProjects({required int limit, required int page,});
+
+  Future<Project?> getProject({required int id});
+
+  Future<Project?> saveProject({required Project project});
+
+  Future<void> scheduleProject({
+    required Project project,
+    required DateTime dateTime,
   });
-  Future<Post?> getPost({
-    required int id,
-  });
+
+  Future<void> deleteProject({required int id});
 }
 
-class PostRemoteDatabaseImpl implements PostRemoteDatabase {
-  PostRemoteDatabaseImpl({
+class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
+  ProjectRemoteDatasourceImpl({
     required Client client,
-  })  : _client = client;
-
+  }) : _client = client;
   final Client _client;
   @override
-  Future<Post?> savePost({
-    required Post post,
-  }) async {
+  Future<void> deleteProject({required int id}) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
       if (!isConnected) {
@@ -34,9 +35,91 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         );
       }
 
-      final result = await _client.post
-          .savePost(
-            post,
+      return await _client.project.deleteProject(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Project?> getProject({required int id}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = await _client.project.getProject(
+        id,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectList> getProjects({required int limit, required int page,}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = _client.project.getProjects(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Project?> saveProject({required Project project}) async {
+    
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+
+      final result = await _client.project
+          .saveProject(
+            project,
           )
           .timeout(
             const Duration(
@@ -63,13 +146,11 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         message: e.toString(),
       );
     }
+
   }
 
   @override
-  Future<PostList> getPosts({
-    required int page,
-    required int limit,
-  }) async {
+  Future<void> scheduleProject({required Project project, required DateTime dateTime,}) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
       if (!isConnected) {
@@ -77,63 +158,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = _client.post.getPosts(
-        limit: limit,
-        page: page,
-      );
-      return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
-    } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<Post?> getPost({required int id}) async {
-    try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-      final result = await _client.post.getPost(
-        id,
-      );
-      return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
-    } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  Future<void> schedulePost({
-    required Post post,
-    required DateTime dateTime,
-  }) async {
-    try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-      await _client.post.schedulePost(
-        post,
+      await _client.project.scheduleProject(
+        project,
         dateTime,
       );
     } catch (e) {
@@ -141,5 +167,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         message: e.toString(),
       );
     }
+  
   }
 }

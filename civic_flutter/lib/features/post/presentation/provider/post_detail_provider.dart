@@ -54,7 +54,7 @@ Future<Post?> postDetail(
       );
     });
   } else {
-    final retrievePost = ref.read(retrievePostProvider);
+    final retrievePost = ref.read(getPostProvider);
     final result = await retrievePost(
       GetPostParams(
         id,
