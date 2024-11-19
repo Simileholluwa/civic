@@ -65,7 +65,7 @@ class PollEndpoint extends Endpoint {
           // Send the hashtags
           await HashtagEndpoint().sendPollHashtags(
             session,
-            poll.tags,
+            poll.tags ?? [],
             sentPoll.id!,
           );
         }

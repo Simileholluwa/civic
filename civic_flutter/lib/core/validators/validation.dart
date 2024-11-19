@@ -113,9 +113,9 @@ class TValidator {
 
   static String? validateProjectLink(String? value) {
     final urlPattern = RegExp(
-      r'^(ftp:\/\/|www\.|ftp\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(\S*)$',
+      r'^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:\d+)?(\/\S*)?$',
     );
-
+    
     if (value == null || value.isEmpty) {
       return 'URL is required';
     }

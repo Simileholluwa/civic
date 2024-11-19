@@ -20,7 +20,7 @@ class SchedulePostFutureCall extends FutureCall<Post> {
 
           await HashtagEndpoint().sendPostHashtags(
             session,
-            sentPost.tags,
+            sentPost.tags ?? [],
             sentPost.id!,
           );
         }

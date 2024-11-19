@@ -90,7 +90,6 @@ Future<bool?> createContentScheduleDialog({
                               context.pop();
                             }
                           },
-                          textInputType: TextInputType.emailAddress,
                         ),
                         const SizedBox(
                           height: TSizes.spaceBtwSections,

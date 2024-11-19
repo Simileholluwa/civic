@@ -1,37 +1,63 @@
 import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/app/app_filled_icon_button.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/projects_search_bar.dart';
+import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:go_router/go_router.dart';
 
 class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
-
     return Scaffold(
-      appBar: AppBar(
-        title: CivicSearchBar(
-          leftWidget: AppFilledIconButton(
-            color: Theme.of(context).iconTheme.color!,
-            backgroundColor: isDark ? TColors.dark : TColors.light,
-            icon: Iconsax.filter,
-            onPressed: () {},
-          ),
-          rightWidget: AppFilledIconButton(
-            color: Theme.of(context).iconTheme.color!,
-            backgroundColor: isDark ? TColors.dark : TColors.light,
-            icon: Iconsax.setting_2,
-            onPressed: () {},
-          ),
-          searchText: 'Search projects',
-          placeBeforeSearch: false,
-          placeAfterSearch: false,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+          80,
         ),
-        toolbarHeight: 70,
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.only(
+              bottom: TSizes.sm - 2,
+              top: TSizes.sm - 2,
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Theme.of(context).dividerColor),
+              ),
+            ),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: ProjectSearchBar(
+                onChanged: (text) {},
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          context.push(
+            AppRoutes.createProject,
+            extra: {
+              'id': 0,
+            },
+          );
+        },
+        child: Container(
+          height: 70,
+          width: 70,
+          decoration: const BoxDecoration(
+            color: TColors.primary,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
       ),
     );
   }

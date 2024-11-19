@@ -96,8 +96,8 @@ class SendArticle extends _$SendArticle {
         embeddedImages,
         mediaUrls,
       );
-      final modifiedContent =
-          ArticleHelperFunctions.modifyArticleContent(content, pathReplacements);
+      final modifiedContent = ArticleHelperFunctions.modifyArticleContent(
+          content, pathReplacements);
       return modifiedContent;
     });
   }
@@ -115,13 +115,14 @@ class SendArticle extends _$SendArticle {
     }, (user) async {
       final saveArticle = ref.read(saveArticleProvider);
       String? modifiedContent;
-      final embeddedImages = ArticleHelperFunctions.getAllImagesFromEditor(article.content);
+      final embeddedImages =
+          ArticleHelperFunctions.getAllImagesFromEditor(article.content ?? '');
       if (embeddedImages.isNotEmpty) {
         modifiedContent = await sendMediaAndModifyContent(
           embeddedImages,
-          article.title,
-          article.content,
-          article.banner,
+          article.title ?? '',
+          article.content ?? '',
+          article.banner ?? '',
         );
         if (modifiedContent == null) {
           return false;
@@ -129,8 +130,12 @@ class SendArticle extends _$SendArticle {
       }
       String? bannerUrl = article.banner;
       final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-      if (!regex.hasMatch(article.banner)) {
-        bannerUrl = await sendArticleBanner(article.title, article.content, article.banner);
+      if (!regex.hasMatch(article.banner ?? '')) {
+        bannerUrl = await sendArticleBanner(
+          article.title ?? '',
+          article.content ?? '',
+          article.banner ?? '',
+        );
         if (bannerUrl == null) {
           return false;
         }
@@ -151,9 +156,9 @@ class SendArticle extends _$SendArticle {
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         await saveFailedArticleAsDraft(
           l.message,
-          article.title,
-          article.content,
-          article.banner,
+          article.title ?? '',
+          article.content ?? '',
+          article.banner ?? '',
         );
         return false;
       }, (r) async {

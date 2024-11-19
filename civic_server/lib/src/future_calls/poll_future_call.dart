@@ -23,7 +23,7 @@ class SchedulePollFutureCall extends FutureCall<Poll> {
           // Send the hashtags
           await HashtagEndpoint().sendPollHashtags(
             session,
-            sentPoll.tags,
+            sentPoll.tags ?? [],
             sentPoll.id!,
           );
         }

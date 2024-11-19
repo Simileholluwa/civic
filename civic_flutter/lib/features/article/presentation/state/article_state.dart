@@ -1,27 +1,58 @@
+import 'dart:convert';
+
+import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class ArticleState {
-  final String banner;
-  final String title;
-  final String content;
-  final String contentPlainText;
-  final FocusNode? focusNode;
-  final ScrollController? scrollController;
-  final TextEditingController? titleController;
-  final QuillController? controller;
-  final bool isEmptyContent;
   ArticleState({
-    this.focusNode, 
-    this.scrollController, 
-    this.titleController, 
-    this.controller,
+    required this.focusNode,
+    required this.scrollController,
+    required this.titleController,
+    required this.controller,
     this.banner = '',
     this.title = '',
     this.content = '',
     this.contentPlainText = '',
     this.isEmptyContent = true,
   });
+
+  factory ArticleState.empty() {
+    return ArticleState(
+      focusNode: FocusNode(),
+      scrollController: ScrollController(),
+      titleController: TextEditingController(),
+      controller: QuillController.basic(),
+    );
+  }
+
+  factory ArticleState.populate(Article article) {
+    return ArticleState(
+      focusNode: FocusNode(),
+      scrollController: ScrollController(),
+      titleController: TextEditingController(text: article.title),
+      controller: QuillController(
+        document: Document.fromJson(
+          jsonDecode(article.content ?? '{}'),
+        ),
+        selection: const TextSelection.collapsed(offset: 0),
+      ),
+      isEmptyContent: true,
+      title: article.title ?? '',
+      content: article.content ?? '',
+      banner: article.banner ?? '',
+    );
+  }
+
+  final String banner;
+  final String content;
+  final String contentPlainText;
+  final QuillController controller;
+  final FocusNode focusNode;
+  final bool isEmptyContent;
+  final ScrollController scrollController;
+  final String title;
+  final TextEditingController titleController;
 
   ArticleState copyWith({
     String? banner,

@@ -31,7 +31,7 @@ class PostEndpoint extends Endpoint {
         );
         await HashtagEndpoint().sendPostHashtags(
           session,
-          post.tags,
+          post.tags ?? [],
           post.id!,
         );
         return sentPost;
@@ -48,7 +48,7 @@ class PostEndpoint extends Endpoint {
         } else {
           await HashtagEndpoint().sendPostHashtags(
             session,
-            post.tags,
+            post.tags ?? [],
             sentPost.id!,
           );
         }

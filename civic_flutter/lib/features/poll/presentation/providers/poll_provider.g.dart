@@ -6,7 +6,7 @@ part of 'poll_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pollsOptionsHash() => r'fedc66de51edcf2009680f4d3375be78f4cdca53';
+String _$pollsOptionsHash() => r'4940c4511a7b9113c0425ce490a6f857caccbd54';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,11 +29,10 @@ class _SystemHash {
   }
 }
 
-abstract class _$PollsOptions
-    extends BuildlessAutoDisposeNotifier<PollCreationState> {
+abstract class _$PollsOptions extends BuildlessAutoDisposeNotifier<PollState> {
   late final Poll? poll;
 
-  PollCreationState build(
+  PollState build(
     Poll? poll,
   );
 }
@@ -43,7 +42,7 @@ abstract class _$PollsOptions
 const pollsOptionsProvider = PollsOptionsFamily();
 
 /// See also [PollsOptions].
-class PollsOptionsFamily extends Family<PollCreationState> {
+class PollsOptionsFamily extends Family<PollState> {
   /// See also [PollsOptions].
   const PollsOptionsFamily();
 
@@ -82,7 +81,7 @@ class PollsOptionsFamily extends Family<PollCreationState> {
 
 /// See also [PollsOptions].
 class PollsOptionsProvider
-    extends AutoDisposeNotifierProviderImpl<PollsOptions, PollCreationState> {
+    extends AutoDisposeNotifierProviderImpl<PollsOptions, PollState> {
   /// See also [PollsOptions].
   PollsOptionsProvider(
     Poll? poll,
@@ -113,7 +112,7 @@ class PollsOptionsProvider
   final Poll? poll;
 
   @override
-  PollCreationState runNotifierBuild(
+  PollState runNotifierBuild(
     covariant PollsOptions notifier,
   ) {
     return notifier.build(
@@ -138,8 +137,7 @@ class PollsOptionsProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<PollsOptions, PollCreationState>
-      createElement() {
+  AutoDisposeNotifierProviderElement<PollsOptions, PollState> createElement() {
     return _PollsOptionsProviderElement(this);
   }
 
@@ -157,13 +155,13 @@ class PollsOptionsProvider
   }
 }
 
-mixin PollsOptionsRef on AutoDisposeNotifierProviderRef<PollCreationState> {
+mixin PollsOptionsRef on AutoDisposeNotifierProviderRef<PollState> {
   /// The parameter `poll` of this provider.
   Poll? get poll;
 }
 
 class _PollsOptionsProviderElement
-    extends AutoDisposeNotifierProviderElement<PollsOptions, PollCreationState>
+    extends AutoDisposeNotifierProviderElement<PollsOptions, PollState>
     with PollsOptionsRef {
   _PollsOptionsProviderElement(super.provider);
 

@@ -2,14 +2,6 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 
 class PostState {
-  final String text;
-  final List<String> imageUrls;
-  final String videoUrl;
-  final List<UserRecord> taggedUsers;
-  final List<AWSPlaces> locations;
-  final List<UserRecord> mentions;
-  final List<String> tags;
-  final MentionHashtagLinkTextEditingController controller;
   PostState({
     required this.text,
     required this.imageUrls,
@@ -20,6 +12,41 @@ class PostState {
     required this.tags,
     required this.controller,
   });
+
+  factory PostState.empty() {
+    return PostState(
+      text: '',
+      imageUrls: [],
+      videoUrl: '',
+      taggedUsers: [],
+      locations: [],
+      mentions: [],
+      tags: [],
+      controller: MentionHashtagLinkTextEditingController(),
+    );
+  }
+
+  factory PostState.populate(Post post) {
+    return PostState(
+      text: post.text ?? '',
+      imageUrls: post.imageUrls ?? [],
+      videoUrl: post.videoUrl ?? '',
+      taggedUsers: post.taggedUsers ?? [],
+      locations: post.locations ?? [],
+      mentions: post.mentions ?? [],
+      tags: post.tags ?? [],
+      controller: MentionHashtagLinkTextEditingController(text: post.text),
+    );
+  }
+
+  final MentionHashtagLinkTextEditingController controller;
+  final List<String> imageUrls;
+  final List<AWSPlaces> locations;
+  final List<UserRecord> mentions;
+  final List<UserRecord> taggedUsers;
+  final List<String> tags;
+  final String text;
+  final String videoUrl;
 
   PostState copyWith({
     String? text,

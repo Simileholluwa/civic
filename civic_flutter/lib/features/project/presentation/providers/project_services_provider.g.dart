@@ -25,7 +25,7 @@ final projectRemoteDatasourceProvider =
 typedef ProjectRemoteDatasourceRef
     = AutoDisposeProviderRef<ProjectRemoteDatasourceImpl>;
 String _$projectRepositoryImplHash() =>
-    r'91b8f43c46672819064fd3aaaf08f12ad3a9d49f';
+    r'079da85cd54feeacb4c96879839407be5488b22f';
 
 /// See also [projectRepositoryImpl].
 @ProviderFor(projectRepositoryImpl)

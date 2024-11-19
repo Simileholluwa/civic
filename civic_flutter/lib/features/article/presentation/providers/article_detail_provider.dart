@@ -22,10 +22,6 @@ Future<Article?> articleDetail(
     }, (currentUser) async {
       return Article(
         ownerId: currentUser.userInfo!.id!,
-        owner: currentUser,
-        banner: '',
-        title: '',
-        content: '',
       );
     });
   } else if(id == 0 && articleDraft != null) {
