@@ -52,7 +52,7 @@ class ProjectPageController extends _$ProjectPageController {
   }
 }
 
-class _VSync implements TickerProvider {
+class _VSync implements TickerProvider{
   @override
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }
@@ -65,7 +65,7 @@ final vsyncProvider = Provider<TickerProvider>(
 class ProjectTabController extends _$ProjectTabController {
   @override
   TabController build() => TabController(
-    length: 2,
+    length: 3,
     vsync: ref.watch(vsyncProvider),
   );
 

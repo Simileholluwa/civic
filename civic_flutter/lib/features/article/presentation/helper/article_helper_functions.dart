@@ -5,6 +5,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/helpers/image_helper.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
+import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
 import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
 import 'package:flutter/material.dart';
@@ -198,6 +199,18 @@ class ArticleHelperFunctions {
         null,
         null,
       ),
+    );
+  }
+
+    static Future<bool?> showArticleDraftsScreen(BuildContext context) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (context) {
+        return const DraftArticleScreen();
+      },
     );
   }
 }

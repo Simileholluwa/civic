@@ -789,6 +789,18 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'List<String>?',
         ),
+        _i2.ColumnDefinition(
+          name: 'pdfAttachmentsThumbnail',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectVideoUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -1347,6 +1359,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<List<_i32.AWSPlaces>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<_i32.AWSPlaces>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {

@@ -33,7 +33,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
         itemBuilder: (context, index) {
           return AppTextField(
             textController: TextEditingController(
-              text: isPhysical ? locations![index].places : locations![index],
+              text: isPhysical ? locations![index].place : locations![index],
             ),
             prefixIcon: isManual
                 ? Iconsax.edit

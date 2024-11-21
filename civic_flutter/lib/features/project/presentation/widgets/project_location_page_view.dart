@@ -32,8 +32,7 @@ class ProjectLocationPageView extends ConsumerWidget {
               'Make it effortless to find where this project is located. Whether physical or virtual or both.',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 17,
-                    color:
-                        Theme.of(context).textTheme.bodySmall!.color!,
+                    color: Theme.of(context).textTheme.bodySmall!.color!,
                   ),
             ),
           ),
@@ -63,16 +62,15 @@ class ProjectLocationPageView extends ConsumerWidget {
               ProjectLocationOptions(
                 onTap: projectState.canAddLocations
                     ? () {
-                        ProjectHelperFunctions
-                            .selectLocationBottomSheet(
-                          context: context,
-                          project: _project,
+                        ProjectHelperFunctions.selectLocation(
+                          context,
+                          _project,
                         );
                       }
                     : () => TToastMessages.infoToast(
                           'You have reached the maximum number of location entries.',
                         ),
-                text: ' Physical location ',
+                text: 'Physical location ',
                 icon: Iconsax.location,
               ),
               const SizedBox(width: 10),

@@ -1,5 +1,6 @@
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/services/location_services.dart';
+import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:async';
 import 'dart:developer';
@@ -25,6 +26,9 @@ class CurrentLocationData extends _$CurrentLocationData {
     final data = await ref.watch(locationServiceProvider).getCurrentPosition();
 
     return data.fold((error) {
+      TToastMessages.errorToast(
+        error,
+      );
       return [];
     }, (currentPosition) async {
       return currentPosition;

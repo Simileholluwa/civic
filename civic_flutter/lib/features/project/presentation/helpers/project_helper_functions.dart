@@ -1,9 +1,11 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
 import 'package:civic_flutter/features/project/presentation/helpers/project_data.dart';
 import 'package:civic_flutter/features/project/presentation/pages/project_locations_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ProjectHelperFunctions {
   ProjectHelperFunctions._();
@@ -121,5 +123,28 @@ class ProjectHelperFunctions {
         );
       },
     );
+  }
+
+  static Future<void> selectLocation(
+    BuildContext context,
+    Project project,
+  ) async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      TToastMessages.infoToast('Location services are disabled on your device');
+    }
+    await Geolocator.requestPermission();
+    final permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      if (context.mounted) {
+        await appRequestLocationPremissionDialog(context: context);
+      }
+    } else if (permission == LocationPermission.deniedForever) {
+      Geolocator.openLocationSettings();
+    } else {
+      if (context.mounted) {
+        selectLocationBottomSheet(context: context, project: project);
+      }
+    }
   }
 }

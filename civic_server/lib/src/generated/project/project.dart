@@ -37,6 +37,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.physicalLocations,
     this.virtualLocations,
     this.manualLocations,
+    this.pdfAttachmentsThumbnail,
+    this.projectVideoUrl,
   });
 
   factory Project({
@@ -61,6 +63,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -105,6 +109,11 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       manualLocations: (jsonSerialization['manualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      pdfAttachmentsThumbnail:
+          (jsonSerialization['pdfAttachmentsThumbnail'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+      projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
     );
   }
 
@@ -155,6 +164,10 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<String>? manualLocations;
 
+  List<String>? pdfAttachmentsThumbnail;
+
+  String? projectVideoUrl;
+
   @override
   _i1.Table get table => t;
 
@@ -180,6 +193,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -210,6 +225,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
+      if (pdfAttachmentsThumbnail != null)
+        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
+      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
 
@@ -242,6 +260,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
+      if (pdfAttachmentsThumbnail != null)
+        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
+      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
 
@@ -300,6 +321,8 @@ class _ProjectImpl extends Project {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -322,6 +345,8 @@ class _ProjectImpl extends Project {
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
           manualLocations: manualLocations,
+          pdfAttachmentsThumbnail: pdfAttachmentsThumbnail,
+          projectVideoUrl: projectVideoUrl,
         );
 
   @override
@@ -347,6 +372,8 @@ class _ProjectImpl extends Project {
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? manualLocations = _Undefined,
+    Object? pdfAttachmentsThumbnail = _Undefined,
+    Object? projectVideoUrl = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -387,6 +414,11 @@ class _ProjectImpl extends Project {
       manualLocations: manualLocations is List<String>?
           ? manualLocations
           : this.manualLocations?.map((e0) => e0).toList(),
+      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail is List<String>?
+          ? pdfAttachmentsThumbnail
+          : this.pdfAttachmentsThumbnail?.map((e0) => e0).toList(),
+      projectVideoUrl:
+          projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
     );
   }
 }
@@ -469,6 +501,14 @@ class ProjectTable extends _i1.Table {
       'manualLocations',
       this,
     );
+    pdfAttachmentsThumbnail = _i1.ColumnSerializable(
+      'pdfAttachmentsThumbnail',
+      this,
+    );
+    projectVideoUrl = _i1.ColumnString(
+      'projectVideoUrl',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -511,6 +551,10 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnSerializable manualLocations;
 
+  late final _i1.ColumnSerializable pdfAttachmentsThumbnail;
+
+  late final _i1.ColumnString projectVideoUrl;
+
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
@@ -546,6 +590,8 @@ class ProjectTable extends _i1.Table {
         physicalLocations,
         virtualLocations,
         manualLocations,
+        pdfAttachmentsThumbnail,
+        projectVideoUrl,
       ];
 
   @override

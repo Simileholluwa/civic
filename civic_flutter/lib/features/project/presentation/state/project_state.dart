@@ -17,6 +17,7 @@ class ProjectState {
     required this.manualLocationController,
     required this.virtualLocationController,
     required this.canAddLocations,
+    this.pdfAttachmentsThumbnail,
     this.title,
     this.description,
     this.projectCategory,
@@ -35,6 +36,7 @@ class ProjectState {
     this.virtualLocations,
     this.completionRate,
     this.manualLocations,
+    this.projectVideoUrl,
   });
 
   factory ProjectState.empty() {
@@ -100,7 +102,7 @@ class ProjectState {
       ),
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
-      
+      pdfAttachmentsThumbnail: project.pdfAttachmentsThumbnail,
       canAddLocations: [
         ...?project.manualLocations,
         ...?project.virtualLocations,
@@ -108,6 +110,7 @@ class ProjectState {
           (locations) => locations.place,
         ),
       ].length < 4,
+      projectVideoUrl: project.projectVideoUrl,
     );
   }
 
@@ -135,12 +138,15 @@ class ProjectState {
   final TextEditingController startDateController;
   final String? status;
   final String? title;
+  final List<String>? pdfAttachmentsThumbnail;
   final TextEditingController titleController;
   final List<String>? virtualLocations;
   final List<String>? manualLocations;
   final TextEditingController manualLocationController;
   final TextEditingController virtualLocationController;
   final bool canAddLocations;
+  final String? projectVideoUrl;
+  
 
   ProjectState copyWith({
     String? title,
@@ -173,6 +179,8 @@ class ProjectState {
     TextEditingController? manualLocationController,
     TextEditingController? virtualLocationController,
     bool? canAddLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) {
     return ProjectState(
       title: title ?? this.title,
@@ -212,6 +220,8 @@ class ProjectState {
       virtualLocationController:
           virtualLocationController ?? this.virtualLocationController,
       canAddLocations: canAddLocations ?? this.canAddLocations,
+      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail ?? this.pdfAttachmentsThumbnail,
+      projectVideoUrl: projectVideoUrl ?? this.projectVideoUrl,
     );
   }
 }

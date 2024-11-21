@@ -66,7 +66,9 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
               ProjectLocationPageView(
                 project: _project,
               ),
-              const ProjectAttachmentsPageView(),
+              ProjectAttachmentsPageView(
+                project: _project,
+              ),
             ],
           ),
         ),

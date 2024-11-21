@@ -52,7 +52,7 @@ final searchPlacesProvider = FutureProvider<List<AWSPlaces>?>.internal(
 
 typedef SearchPlacesRef = FutureProviderRef<List<AWSPlaces>?>;
 String _$currentLocationDataHash() =>
-    r'8fa5aa9f59b1d00f5971515e61f5a5bea14539b5';
+    r'bb732f0cc3dffd70b95309ed63132bdee7ab474d';
 
 /// See also [CurrentLocationData].
 @ProviderFor(CurrentLocationData)

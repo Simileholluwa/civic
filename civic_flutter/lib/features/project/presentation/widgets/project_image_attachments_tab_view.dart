@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
+import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_image_attachments_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,13 +14,19 @@ import 'package:transparent_image/transparent_image.dart';
 class ProjectImageAttachmentsTabView extends ConsumerWidget {
   const ProjectImageAttachmentsTabView({
     super.key,
+    required this.project,
   });
+
+  final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final imageUrls = [];
-    int current = ref.watch(pageChangedProvider);
+    final projectState = ref.watch(projectProviderProvider(project));
+    final projectNotifier =
+        ref.watch(projectProviderProvider(project).notifier);
+    final imageUrls = projectState.projectImageAttachments ?? <String>[];
+    int current = ref.watch(projectImageAttachmentPageChangedProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -52,7 +61,7 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                             size: 60,
                             color: Colors.grey[600],
                           ),
-                          onPressed: () async {},
+                          onPressed: projectNotifier.pickPicture,
                         ),
                         IconButton(
                           icon: Icon(
@@ -60,13 +69,13 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                             size: 60,
                             color: Colors.grey[600],
                           ),
-                          onPressed: () async {},
+                          onPressed: projectNotifier.takePicture,
                         ),
                       ],
                     ),
                     Center(
                       child: Text(
-                        'Select up to 5 images or capture them.',
+                        'Select or capture up to 5 images.',
                         style: TextStyle(
                           fontSize: 17,
                           color: Colors.grey[600],
@@ -77,9 +86,6 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                 ),
               ),
             ),
-          // PostImageOptions(
-          //   post: post,
-          // ),
           if (imageUrls.isNotEmpty)
             Stack(
               alignment: Alignment.bottomCenter,
@@ -110,7 +116,7 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                           viewportFraction: 1,
                           onPageChanged: (index, reason) {
                             ref
-                                .read(pageChangedProvider.notifier)
+                                .read(projectImageAttachmentPageChangedProvider.notifier)
                                 .carouselPageChanged(
                                   index,
                                   reason,
@@ -146,39 +152,52 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (imageUrls.length > 1)
-                  Container(
-                    margin: const EdgeInsets.only(
-                      bottom: TSizes.md,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: TSizes.sm,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                      color: Colors.black54,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: imageUrls.asMap().entries.map((entry) {
-                        return Container(
-                          width: 12.0,
-                          height: 12.0,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(
-                              current == entry.key ? 0.9 : 0.4,
-                            ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (imageUrls.length > 1)
+                      Container(
+                        margin: const EdgeInsets.only(
+                          bottom: TSizes.md,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: TSizes.sm,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            100,
                           ),
-                        );
-                      }).toList(),
+                          color: Colors.black54,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: imageUrls.asMap().entries.map((entry) {
+                            return Container(
+                              width: 12.0,
+                              height: 12.0,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(
+                                  current == entry.key ? 0.9 : 0.4,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 5,
+                      ),
+                      child: ProjectImageAttachmentsOptions(
+                        project: project,
+                      ),
                     ),
-                  ),
+                  ],
+                ),
               ],
             ),
         ],

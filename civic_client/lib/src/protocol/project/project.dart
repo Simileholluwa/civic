@@ -35,6 +35,8 @@ abstract class Project implements _i1.SerializableModel {
     this.physicalLocations,
     this.virtualLocations,
     this.manualLocations,
+    this.pdfAttachmentsThumbnail,
+    this.projectVideoUrl,
   });
 
   factory Project({
@@ -59,6 +61,8 @@ abstract class Project implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -103,6 +107,11 @@ abstract class Project implements _i1.SerializableModel {
       manualLocations: (jsonSerialization['manualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      pdfAttachmentsThumbnail:
+          (jsonSerialization['pdfAttachmentsThumbnail'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+      projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
     );
   }
 
@@ -151,6 +160,10 @@ abstract class Project implements _i1.SerializableModel {
 
   List<String>? manualLocations;
 
+  List<String>? pdfAttachmentsThumbnail;
+
+  String? projectVideoUrl;
+
   Project copyWith({
     int? id,
     int? ownerId,
@@ -173,6 +186,8 @@ abstract class Project implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -203,6 +218,9 @@ abstract class Project implements _i1.SerializableModel {
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
+      if (pdfAttachmentsThumbnail != null)
+        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
+      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
 
@@ -237,6 +255,8 @@ class _ProjectImpl extends Project {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -259,6 +279,8 @@ class _ProjectImpl extends Project {
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
           manualLocations: manualLocations,
+          pdfAttachmentsThumbnail: pdfAttachmentsThumbnail,
+          projectVideoUrl: projectVideoUrl,
         );
 
   @override
@@ -284,6 +306,8 @@ class _ProjectImpl extends Project {
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? manualLocations = _Undefined,
+    Object? pdfAttachmentsThumbnail = _Undefined,
+    Object? projectVideoUrl = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -324,6 +348,11 @@ class _ProjectImpl extends Project {
       manualLocations: manualLocations is List<String>?
           ? manualLocations
           : this.manualLocations?.map((e0) => e0).toList(),
+      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail is List<String>?
+          ? pdfAttachmentsThumbnail
+          : this.pdfAttachmentsThumbnail?.map((e0) => e0).toList(),
+      projectVideoUrl:
+          projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
     );
   }
 }

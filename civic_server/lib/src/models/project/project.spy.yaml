@@ -20,5 +20,7 @@ fields:
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
     manualLocations: List<String>?
+    pdfAttachmentsThumbnail: List<String>?
+    projectVideoUrl: String?
     
 

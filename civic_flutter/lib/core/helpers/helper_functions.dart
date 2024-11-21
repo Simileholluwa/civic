@@ -9,7 +9,6 @@ import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart'
 import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
-import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -233,22 +232,6 @@ class THelperFunctions {
     return email.substring(0, 3) + redactedPart + email.substring(atIndex);
   }
 
-
-
-
-
-  static Future<bool?> showArticleDraftsScreen(BuildContext context) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (context) {
-        return const DraftArticleScreen();
-      },
-    );
-  }
-
   static Future<bool?> showScheduleDialog(
     BuildContext context,
   ) {
@@ -297,8 +280,6 @@ class THelperFunctions {
       );
     }
   }
-
-
 
   static void _handleMentions(WidgetRef ref, String text) {
     final selectedMentions = ref.watch(
@@ -445,8 +426,5 @@ class THelperFunctions {
     });
     _handleMentions(ref, text);
   }
-
-  
-
  
 }
