@@ -2,38 +2,38 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
+import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class PostVideoOptions extends ConsumerWidget {
-  const PostVideoOptions({
+class ProjectAttachmentsVideoOptions extends ConsumerWidget {
+  const ProjectAttachmentsVideoOptions({
     super.key,
-    required this.post,
+    required this.project,
   });
 
-  final Post post;
+  final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postState = ref.watch(
-      regularPostProvider(post),
+    final projectState = ref.watch(
+      projectProviderProvider(project),
     );
-    final postNotifier = ref.watch(
-      regularPostProvider(post).notifier,
+    final projectNotifier = ref.watch(
+      projectProviderProvider(project).notifier,
     );
     final videoControl = ref.watch(
       mediaVideoPlayerProvider(
-        postState.videoUrl,
+        projectState.projectVideoUrl,
       ),
     );
-    final videoController =
-        ref.watch(mediaVideoPlayerProvider(postState.videoUrl).notifier);
+    final videoController = ref
+        .watch(mediaVideoPlayerProvider(projectState.projectVideoUrl).notifier);
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: 20,
+        bottom: TSizes.md,
       ),
       child: Container(
         height: 45,
@@ -60,7 +60,7 @@ class PostVideoOptions extends ConsumerWidget {
               child: IconButton(
                 onPressed: () {
                   videoControl?.dispose();
-                  postNotifier.clearMedia();
+                  projectNotifier.clearVideo();
                 },
                 icon: const Icon(
                   CupertinoIcons.clear,

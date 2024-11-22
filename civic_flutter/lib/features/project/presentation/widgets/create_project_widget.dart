@@ -1,5 +1,7 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/features/project/presentation/providers/project_page_provider.dart';
+import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
 import 'package:civic_flutter/features/project/presentation/widgets/project_attachments_page_view.dart';
 import 'package:civic_flutter/features/project/presentation/widgets/project_category_page_view.dart';
 import 'package:civic_flutter/features/project/presentation/widgets/project_funding_page_view.dart';
@@ -24,7 +26,6 @@ class CreateProjectWidget extends ConsumerStatefulWidget {
 }
 
 class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
-
   late Project _project;
 
   @override
@@ -39,6 +40,7 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
   Widget build(BuildContext context) {
     final currentPageNotifier = ref.watch(projectCurrentPageProvider.notifier);
     final pageController = ref.watch(projectPageControllerProvider);
+    final projectState = ref.watch(projectProviderProvider(_project));
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -49,7 +51,13 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
             controller: pageController,
             onPageChanged: (index) {
               currentPageNotifier.setCurrentPage(index);
+              ref
+                  .read(mediaVideoPlayerProvider(
+                    projectState.projectVideoUrl,
+                  ).notifier)
+                  .pause();
             },
+            physics: const ClampingScrollPhysics(),
             children: [
               ProjectOverviewPageView(
                 project: _project,

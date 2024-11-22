@@ -32,76 +32,75 @@ class PostImagePost extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(
         horizontal: TSizes.md,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          PostImageOptions(post: post,),
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Container(
-                constraints: const BoxConstraints(
-                  maxWidth: 500,
-                  maxHeight: 500,
-                ),
-                decoration: BoxDecoration(
-                  border:  Border.all(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                  borderRadius: BorderRadius.circular(
-                    TSizes.md,
-                  ),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                          TSizes.md,
-                        )
-                      ,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                        scrollPhysics: const ClampingScrollPhysics(),
-                        height: 498,
-                        enableInfiniteScroll: false,
-                        viewportFraction: 1,
-                        onPageChanged: (index, reason) {
-                          ref
-                              .read(pageChangedProvider.notifier)
-                              .carouselPageChanged(
-                                index,
-                                reason,
-                              );
-                        }),
-                    items: postState.imageUrls.map((image) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            width: double.maxFinite,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.circular(
-                                      TSizes.md,
-                                    ),
-                            ),
-                            child: FadeInImage(
-                              image: regex.hasMatch(image)
-                                  ? CachedNetworkImageProvider(image)
-                                  : FileImage(
-                                      File(image),
-                                    ) as ImageProvider,
-                              placeholder: MemoryImage(
-                                kTransparentImage,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),
+          Container(
+            constraints: const BoxConstraints(
+              maxWidth: 500,
+              maxHeight: 500,
+            ),
+            decoration: BoxDecoration(
+              border:  Border.all(
+                      color: Theme.of(context).dividerColor,
+                    ),
+              borderRadius: BorderRadius.circular(
+                TSizes.md,
               ),
-              if (postState.imageUrls.length > 1)
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                      TSizes.md,
+                    )
+                  ,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                    scrollPhysics: const ClampingScrollPhysics(),
+                    height: 498,
+                    enableInfiniteScroll: false,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      ref
+                          .read(pageChangedProvider.notifier)
+                          .carouselPageChanged(
+                            index,
+                            reason,
+                          );
+                    }),
+                items: postState.imageUrls.map((image) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(
+                                  TSizes.md,
+                                ),
+                        ),
+                        child: FadeInImage(
+                          image: regex.hasMatch(image)
+                              ? CachedNetworkImageProvider(image)
+                              : FileImage(
+                                  File(image),
+                                ) as ImageProvider,
+                          placeholder: MemoryImage(
+                            kTransparentImage,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+          if (postState.imageUrls.length > 1)
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Container(
                   margin: const EdgeInsets.only(
                     bottom: TSizes.md,
@@ -134,8 +133,9 @@ class PostImagePost extends ConsumerWidget {
                     }).toList(),
                   ),
                 ),
-            ],
-          ),
+                PostImageOptions(post: post,),
+              ],
+            ),
         ],
       ),
     );

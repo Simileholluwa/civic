@@ -93,15 +93,46 @@ class ProjectProvider extends _$ProjectProvider {
     if (state.virtualLocations == null) {
       state = state.copyWith(virtualLocations: []);
     }
+    state = state.copyWith(
+      virtualLocations: [
+        ...state.virtualLocations!,
+        virtualLocation,
+      ],
+    );
     canAddLocation();
+  }
+
+  void editVirtualLocation(String virtualLocation, int index) {
+    if (state.virtualLocations == null) {
+      state = state.copyWith(virtualLocations: []);
+    }
+    state.virtualLocations![index] = virtualLocation;
+    state = state.copyWith(
+      virtualLocations: state.virtualLocations,
+    );
   }
 
   void addManualLocation(String manualLocation) {
     if (state.manualLocations == null) {
       state = state.copyWith(manualLocations: []);
     }
-
+    state = state.copyWith(
+      manualLocations: [
+        ...state.manualLocations!,
+        manualLocation,
+      ],
+    );
     canAddLocation();
+  }
+
+  void editManualLocation(String manualLocation, int index) {
+    if (state.manualLocations == null) {
+      state = state.copyWith(manualLocations: []);
+    }
+    state.manualLocations![index] = manualLocation;
+    state = state.copyWith(
+      manualLocations: state.manualLocations,
+    );
   }
 
   void removePhysicalLocation(AWSPlaces physicalLocation) {
@@ -114,7 +145,6 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   void removeVirtualLocation(String virtualLocation) {
-    canAddLocation();
     state = state.copyWith(
       virtualLocations: state.virtualLocations!
           .where((element) => element != virtualLocation)
@@ -123,8 +153,11 @@ class ProjectProvider extends _$ProjectProvider {
     canAddLocation();
   }
 
+  void clearVideo() {
+    state = state.copyWith(projectVideoUrl: '');
+  }
+
   void removeManualLocation(String manualLocation) {
-    canAddLocation();
     state = state.copyWith(
       manualLocations: state.manualLocations!
           .where((element) => element != manualLocation)
@@ -141,7 +174,12 @@ class ProjectProvider extends _$ProjectProvider {
       state = state.copyWith(
         canAddLocations: false,
       );
+    } else {
+      state = state.copyWith(
+        canAddLocations: true,
+      );
     }
+    log((state.virtualLocations.toString() + state.manualLocations.toString() + state.physicalLocations.toString()));
     log('Total Locations: $totalLocations');
   }
 

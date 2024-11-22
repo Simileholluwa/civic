@@ -23,6 +23,7 @@ class AppTextField extends StatelessWidget {
     this.maxLines,
     this.style,
     this.onChanged,
+    this.focusedBorder,
     super.key,
   });
 
@@ -46,6 +47,7 @@ class AppTextField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final void Function()? onTap;
   final int? maxLines;
+  final InputBorder? focusedBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,8 @@ class AppTextField extends StatelessWidget {
                 ),
             hintStyle: hintStyle,
             errorMaxLines: 2,
-            contentPadding: EdgeInsets.fromLTRB( showPrefixIcon ? 0 : 16, 16, 16, 16)
+            contentPadding: EdgeInsets.fromLTRB( showPrefixIcon ? 0 : 16, 16, 16, 16),
+            focusedBorder: focusedBorder,
           ),
           style: style,
           

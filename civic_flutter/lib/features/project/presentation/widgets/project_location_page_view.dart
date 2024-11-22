@@ -22,42 +22,26 @@ class ProjectLocationPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectState = ref.watch(projectProviderProvider(_project));
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              'Make it effortless to find where this project is located. Whether physical or virtual or both.',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 17,
-                    color: Theme.of(context).textTheme.bodySmall!.color!,
-                  ),
-            ),
+    final manualLocation = projectState.manualLocations ?? [];
+    final virtualLocation = projectState.virtualLocations ?? [];
+    final physicalLocation = projectState.physicalLocations ?? [];
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            'Make it effortless to find where this project is located. Whether physical or virtual or both.',
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 17,
+                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                ),
           ),
-          Row(
-            children: [
-              ProjectLocationOptions(
-                onTap: projectState.canAddLocations
-                    ? () {
-                        manualLocationDialog(
-                          context: context,
-                          project: _project,
-                        );
-                      }
-                    : () => TToastMessages.infoToast(
-                          'You have reached the maximum number of location entries.',
-                        ),
-                text: "Manually type the project's location",
-                icon: Iconsax.edit,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ProjectLocationOptions(
                 onTap: projectState.canAddLocations
@@ -68,9 +52,9 @@ class ProjectLocationPageView extends ConsumerWidget {
                         );
                       }
                     : () => TToastMessages.infoToast(
-                          'You have reached the maximum number of location entries.',
+                          'Maximum location entries reached.',
                         ),
-                text: 'Physical location ',
+                text: 'Search for a location ',
                 icon: Iconsax.location,
               ),
               const SizedBox(width: 10),
@@ -83,49 +67,67 @@ class ProjectLocationPageView extends ConsumerWidget {
                         );
                       }
                     : () => TToastMessages.infoToast(
-                          'You have reached the maximum number of location entries.',
+                          'Maximum location entries reached.',
                         ),
                 text: 'Virtual location',
                 icon: Iconsax.link,
               ),
+              const SizedBox(width: 10),
+              ProjectLocationOptions(
+                onTap: projectState.canAddLocations
+                    ? () {
+                        manualLocationDialog(
+                          context: context,
+                          project: _project,
+                        );
+                      }
+                    : () => TToastMessages.infoToast(
+                          'Maximum location entries reached.',
+                        ),
+                text: "Manually type the project's location",
+                icon: Iconsax.edit,
+              ),
             ],
           ),
+        ),
+        if (manualLocation.isNotEmpty ||
+            virtualLocation.isNotEmpty ||
+            physicalLocation.isNotEmpty)
+          const SizedBox(
+            height: 20,
+          ),
+        if (manualLocation.isNotEmpty)
+          ProjectSelectedLocations(
+            project: _project,
+            isManual: true,
+            isVirtual: false,
+            isPhysical: false,
+          ),
+        if (manualLocation.isNotEmpty &&
+            (virtualLocation.isNotEmpty || physicalLocation.isNotEmpty))
           const SizedBox(
             height: TSizes.md,
           ),
-          if (projectState.manualLocations != null)
-            ProjectSelectedLocations(
-              project: _project,
-              isManual: true,
-              isVirtual: false,
-              isPhysical: false,
-            ),
-          if (projectState.manualLocations != null &&
-              projectState.virtualLocations != null)
-            const SizedBox(
-              height: TSizes.md,
-            ),
-          if (projectState.virtualLocations != null)
-            ProjectSelectedLocations(
-              project: _project,
-              isManual: false,
-              isVirtual: true,
-              isPhysical: false,
-            ),
-          if (projectState.virtualLocations != null &&
-              projectState.physicalLocations != null)
-            const SizedBox(
-              height: TSizes.md,
-            ),
-          if (projectState.physicalLocations != null)
-            ProjectSelectedLocations(
-              project: _project,
-              isManual: false,
-              isVirtual: false,
-              isPhysical: true,
-            ),
-        ],
-      ),
+        if (projectState.virtualLocations != null)
+          ProjectSelectedLocations(
+            project: _project,
+            isManual: false,
+            isVirtual: true,
+            isPhysical: false,
+          ),
+        if (virtualLocation.isNotEmpty &&
+            physicalLocation.isNotEmpty)
+          const SizedBox(
+            height: TSizes.md,
+          ),
+        if (projectState.physicalLocations != null)
+          ProjectSelectedLocations(
+            project: _project,
+            isManual: false,
+            isVirtual: false,
+            isPhysical: true,
+          ),
+      ],
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/integer_provider.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +18,6 @@ class PostImageOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = THelperFunctions.isDarkMode(context);
     final postState = ref.watch(
       regularPostProvider(post),
     );
@@ -28,14 +26,16 @@ class PostImageOptions extends ConsumerWidget {
     );
     final pageIndex = ref.watch(pageChangedProvider) + 1;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16,),
+      padding: const EdgeInsets.only(bottom: 20,),
       child: Container(
-        height: 45,
-        
+        height: 45,    
         decoration: BoxDecoration(
-          color: isDark ? TColors.dark : TColors.light,
+          color: Colors.black54,
           borderRadius: BorderRadius.circular(
             100,
+          ),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
           ),
         ),
         child: Row(
@@ -70,18 +70,21 @@ class PostImageOptions extends ConsumerWidget {
               },
               icon: const Icon(
                 Iconsax.trash,
+                color: TColors.textWhite,
               ),
             ),
             IconButton(
               onPressed: () {},
               icon: const Icon(
                 Iconsax.crop,
+                color: TColors.textWhite,
               ),
             ),
             IconButton(
               onPressed: () {},
               icon: const Icon(
                 Iconsax.magicpen,
+                color: TColors.textWhite,
                 size: 22,
               ),
             ),

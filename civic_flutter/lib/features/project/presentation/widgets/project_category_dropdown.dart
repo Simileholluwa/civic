@@ -53,7 +53,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
           height: 58,
           width: width,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
+            borderRadius: BorderRadius.circular(TSizes.sm),
     
             border: Border.all(
               color: THelperFunctions.isDarkMode(context) ? TColors.darkGrey : TColors.darkerGrey,

@@ -1,8 +1,8 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
 import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_attachments_video_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -22,6 +22,12 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     final videoUrl = projectState.projectVideoUrl ?? '';
+    final videoControl = ref.watch(
+      mediaVideoPlayerProvider(
+        videoUrl,
+      ),
+    );
+    final controller = ref.watch(mediaVideoPlayerProvider(videoUrl).notifier);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -69,7 +75,9 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20,),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
                       child: Center(
                         child: Text(
                           'Select or capture a video. Maximum video size allowed is 20MB.',
@@ -86,76 +94,42 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
               ),
             ),
           if (videoUrl.isNotEmpty)
-            Container(
-              width: double.maxFinite,
-              constraints: const BoxConstraints(
-              maxWidth: 500,
-              maxHeight: 500,
-            ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              child: Builder(
-                builder: (context) {
-                  final videoControl = ref.watch(
-                    mediaVideoPlayerProvider(
-                      videoUrl,
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  constraints: const BoxConstraints(
+                    maxWidth: 500,
+                    maxHeight: 500,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      TSizes.md,
                     ),
-                  );
-                  final controller = ref
-                      .watch(mediaVideoPlayerProvider(videoUrl).notifier);
-                  return videoControl != null
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                  child: videoControl != null
                       ? videoControl.value.isInitialized
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(
                                 TSizes.md,
                               ),
                               child: AspectRatio(
-                                aspectRatio:
-                                    videoControl.value.aspectRatio,
+                                aspectRatio: videoControl.value.aspectRatio,
                                 child: FittedBox(
                                   fit: BoxFit.cover,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: videoControl.value.size.width,
-                                        height:
-                                            videoControl.value.size.height,
-                                        child: GestureDetector(
-                                          onTap: controller.pausePlay,
-                                          child: VideoPlayer(
-                                            videoControl,
-                                          ),
-                                        ),
+                                  child: SizedBox(
+                                    width: videoControl.value.size.width,
+                                    height: videoControl.value.size.height,
+                                    child: GestureDetector(
+                                      onTap: controller.pausePlay,
+                                      child: VideoPlayer(
+                                        videoControl,
                                       ),
-                                      AnimatedOpacity(
-                                            opacity: videoControl.value.isPlaying ? 0 : 1, 
-                                            duration: const Duration(milliseconds: 300),
-                                            child: GestureDetector(
-                                              onTap: controller.pausePlay,
-                                              child: Container(
-                                                height: 50,
-                                                width: 50,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: TColors.primary,
-                                              
-                                                ),
-                                                child: Icon(
-                                                  videoControl.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                                                  color: TColors.textWhite,
-                                                  size: 30,
-                                                ),
-                                              ),
-                                            ),
-                                            ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -173,9 +147,18 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
                           child: Center(
                             child: CircularProgressIndicator(),
                           ),
-                        );
-                },
-              ),
+                        ),
+                ),
+                if (videoUrl.isNotEmpty &&
+                    videoControl != null &&
+                    videoControl.value.isInitialized)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: ProjectAttachmentsVideoOptions(
+                      project: project,
+                    ),
+                  ),
+              ],
             ),
         ],
       ),

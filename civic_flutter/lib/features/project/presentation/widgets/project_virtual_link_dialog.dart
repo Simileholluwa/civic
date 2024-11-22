@@ -13,6 +13,8 @@ import 'package:iconsax/iconsax.dart';
 Future<bool?> virtualLinkDialog({
   required BuildContext context,
   required Project project,
+  int? index,
+  String? link,
 }) {
   return showDialog<bool>(
       context: context,
@@ -22,6 +24,9 @@ Future<bool?> virtualLinkDialog({
           final projectState = ref.watch(projectProviderProvider(project));
           final projectNotifier =
               ref.watch(projectProviderProvider(project).notifier);
+          if (index != null && link != null) {
+            projectState.virtualLocationController.text = link;
+          }
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -111,11 +116,22 @@ Future<bool?> virtualLinkDialog({
                                   final isValid =
                                       formKey.currentState!.validate();
                                   if (!isValid) return;
-                                  projectNotifier.addVirtualLocations(
-                                    projectState.virtualLocationController.text,
-                                  );
-                                  projectState.virtualLocationController.clear();
-                                  context.pop(true);
+                                  if (index != null) {
+                                    projectNotifier.editVirtualLocation(
+                                      projectState.virtualLocationController.text,
+                                      index,
+                                    );
+                                    projectState.virtualLocationController
+                                        .clear();
+                                    context.pop();
+                                  } else {
+                                    projectNotifier.addVirtualLocations(
+                                      projectState.virtualLocationController.text,
+                                    );
+                                    projectState.virtualLocationController
+                                        .clear();
+                                    context.pop();
+                                  }
                                 },
                                 activeButtonText: 'Submit',
                                 activeButtonLoading: false,

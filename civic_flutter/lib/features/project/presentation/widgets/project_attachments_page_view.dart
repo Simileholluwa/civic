@@ -29,8 +29,7 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           labelColor: isDark ? TColors.textWhite : TColors.dark,
-          unselectedLabelColor:
-              isDark ? TColors.darkerGrey : TColors.darkGrey,
+          unselectedLabelColor: isDark ? TColors.darkerGrey : TColors.darkGrey,
           unselectedLabelStyle:
               Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontSize: 14,

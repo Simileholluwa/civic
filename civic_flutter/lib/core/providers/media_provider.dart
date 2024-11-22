@@ -18,6 +18,7 @@ class MediaVideoPlayer extends _$MediaVideoPlayer {
           Uri.parse(videoUrl),
         )..initialize().then((_) {
             state?.pause();
+            state?.setLooping(true);
             ref.notifyListeners();
           });
 
@@ -30,6 +31,7 @@ class MediaVideoPlayer extends _$MediaVideoPlayer {
         videoFile,
       )..initialize().then((_) {
           state?.pause();
+          state?.setLooping(true);
           ref.notifyListeners();
         });
 
@@ -65,6 +67,14 @@ class MediaVideoPlayer extends _$MediaVideoPlayer {
     if (state != null) {
       state!.dispose();
       ref.notifyListeners();
+    }
+  }
+
+  void pause() {
+    if (state != null) {
+      if (state!.value.isPlaying) {
+        state!.pause();
+      }
     }
   }
 }

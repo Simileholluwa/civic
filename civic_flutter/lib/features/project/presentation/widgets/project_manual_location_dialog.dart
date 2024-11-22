@@ -13,6 +13,8 @@ import 'package:iconsax/iconsax.dart';
 Future<bool?> manualLocationDialog({
   required BuildContext context,
   required Project project,
+  int? index,
+  String? location,
 }) {
   final formKey = GlobalKey<FormState>();
   return showDialog<bool>(
@@ -23,6 +25,9 @@ Future<bool?> manualLocationDialog({
           final projectState = ref.watch(projectProviderProvider(project));
           final projectNotifier =
               ref.watch(projectProviderProvider(project).notifier);
+          if (index != null) {
+            projectState.manualLocationController.text = location!;
+          }
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -116,11 +121,24 @@ Future<bool?> manualLocationDialog({
                                   if (!isValid) {
                                     return;
                                   }
-                                  projectNotifier.addManualLocation(
-                                    projectState.manualLocationController.text,
-                                  );
-                                  projectState.manualLocationController.clear();
-                                  context.pop();
+                                  if (index != null) {
+                                    projectNotifier.editManualLocation(
+                                      projectState
+                                          .manualLocationController.text,
+                                      index,
+                                    );
+                                    projectState.manualLocationController
+                                        .clear();
+                                    context.pop();
+                                  } else {
+                                    projectNotifier.addManualLocation(
+                                      projectState
+                                          .manualLocationController.text,
+                                    );
+                                    projectState.manualLocationController
+                                        .clear();
+                                    context.pop();
+                                  }
                                 },
                                 activeButtonText: 'Submit',
                                 activeButtonLoading: false,
