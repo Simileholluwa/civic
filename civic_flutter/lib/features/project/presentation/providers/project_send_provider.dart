@@ -1,0 +1,137 @@
+import 'dart:developer';
+
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/providers/assets_service_provider.dart';
+import 'package:civic_flutter/core/providers/boolean_providers.dart';
+import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/features/project/domain/usecases/save_project_use_case.dart';
+import 'package:civic_flutter/features/project/presentation/providers/project_services_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'project_send_provider.g.dart';
+
+@riverpod
+class SendProject extends _$SendProject {
+  @override
+  void build() {}
+
+  Future<List<String>> sendImageAttachments(Project project) async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (project.projectImageAttachments == null) return <String>[];
+    if (project.projectImageAttachments!.isNotEmpty) {
+      for (final image in project.projectImageAttachments!) {
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (regex.hasMatch(image)) {
+          existingUpload.add(image);
+        } else {
+          newUpload.add(image);
+        }
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+            newUpload,
+            'projects',
+            'images',
+          );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        return [];
+      }, (imageUrls) {
+        return imageUrls + existingUpload;
+      });
+    }
+    return [];
+  }
+
+  Future<List<String>> sendPDFAttachments(Project project) async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (project.projectPDFAttachments == null) return <String>[];
+    if (project.projectPDFAttachments!.isNotEmpty) {
+      for (final pdf in project.projectPDFAttachments!) {
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (regex.hasMatch(pdf)) {
+          existingUpload.add(pdf);
+        } else {
+          newUpload.add(pdf);
+        }
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+            newUpload,
+            'projects',
+            'pdfs',
+          );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        return [];
+      }, (pdfUrls) {
+        return pdfUrls + existingUpload;
+      });
+    }
+    return [];
+  }
+
+  Future<String> sendVideoAttachment(Project project) async {
+    if (project.projectVideoUrl == null) return '';
+    final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+    if (regex.hasMatch(project.projectVideoUrl!)) {
+      return project.projectVideoUrl!;
+    } else {
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+        [project.projectVideoUrl!],
+        'projects',
+        'videos',
+      );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        return '';
+      }, (videoUrl) {
+        return videoUrl.first;
+      });
+    }
+  }
+
+  Future<Project?> sendProject(Project project) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    final imageUrls = await sendImageAttachments(project);
+    final pdfUrls = await sendPDFAttachments(project);
+    final videoUrl = await sendVideoAttachment(project);
+
+    final updatedProject = project.copyWith(
+      projectImageAttachments: imageUrls,
+      projectPDFAttachments: pdfUrls,
+      projectVideoUrl: videoUrl,
+    );
+    log(updatedProject.toString());
+    final saveProject = ref.read(saveProjectProvider);
+
+    final result = await saveProject(
+      SaveProjectParams(
+        updatedProject,
+      ),
+    );
+
+    return result.fold((error) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      log(error.message);
+      
+      TToastMessages.errorToast(error.message);
+      return null;
+    }, (project) {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      if (project == null) {
+        // save to drafts
+        return null;
+      }
+      TToastMessages.successToast(
+        'Your project was sent.',
+      );
+      return project;
+    });
+  }
+}

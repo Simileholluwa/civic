@@ -14,6 +14,7 @@ import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_
 import 'package:civic_flutter/features/poll/presentation/pages/create_poll_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
+import 'package:civic_flutter/features/project/presentation/pages/create_project_screen.dart';
 import 'package:civic_flutter/features/project/presentation/routes/projects_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
@@ -215,8 +216,8 @@ GoRouter router(RouterRef ref) {
 
       StatefulShellRoute.indexedStack(
         branches: [
-          FeedRoutes.branch,
           ProjectsRoutes.branch,
+          FeedRoutes.branch,
           DiscoverRoutes.branch,
           NotificationsRoutes.branch,
           ProfileRoutes.branch,
@@ -257,6 +258,16 @@ GoRouter router(RouterRef ref) {
           return CreateArticleScreen(
             id: data['id'],
             draft: data['draft'],
+          );
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.createProject,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return CreateProjectScreen(
+            id: data['id'],
           );
         },
       ),

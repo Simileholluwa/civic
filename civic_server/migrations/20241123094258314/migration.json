@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "pdfAttachmentsThumbnail"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"pdfAttachmentsThumbnail\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "pdfAttachmentsThumbnail"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"pdfAttachmentsThumbnail\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "pdfAttachmentsThumbnail"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}
