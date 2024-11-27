@@ -1,11 +1,7 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/features/project/data/datasources/project_remote_datasource.dart';
-import 'package:civic_flutter/features/project/data/repository/project_repository_impl.dart';
-import 'package:civic_flutter/features/project/domain/usecases/get_project_use_case.dart';
-import 'package:civic_flutter/features/project/domain/usecases/get_projects_use_case.dart';
-import 'package:civic_flutter/features/project/domain/usecases/save_project_use_case.dart';
-import 'package:civic_flutter/features/project/domain/usecases/schedule_project_use_case.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'project_services_provider.g.dart';

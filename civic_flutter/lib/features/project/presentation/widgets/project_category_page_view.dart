@@ -1,9 +1,6 @@
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/project/presentation/helpers/project_data.dart';
-import 'package:civic_flutter/features/project/presentation/helpers/project_helper_functions.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_category_dropdown.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 
 class ProjectCategoryPageView extends ConsumerWidget {

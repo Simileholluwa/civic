@@ -1,9 +1,6 @@
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_text_editor.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_text_toolbar.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_title_field.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 

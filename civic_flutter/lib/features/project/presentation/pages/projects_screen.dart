@@ -1,9 +1,7 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key, required this.sendProject,});

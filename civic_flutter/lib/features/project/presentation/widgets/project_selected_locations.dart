@@ -1,10 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/app/app_text_field.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_manual_location_dialog.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_virtual_link_dialog.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';

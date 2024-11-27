@@ -1,13 +1,7 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_page_provider.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_attachments_tab_keep_alive.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_pdf_attachment_tab_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_video_attachment_tab_view.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_image_attachments_tab_view.dart';
 import 'package:flutter/material.dart';
 
 class ProjectAttachmentsPageView extends ConsumerWidget {

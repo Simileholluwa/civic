@@ -1,6 +1,6 @@
-import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class ProjectTextEditor extends StatelessWidget {
   const ProjectTextEditor({
@@ -33,7 +33,7 @@ class ProjectTextEditor extends StatelessWidget {
             useTextColorForDot: true,
           ),
         ),
-        customStyles: ArticleHelperFunctions.articleTextEditorStyles(
+        customStyles: THelperFunctions.articleTextEditorStyles(
           context,
           defaultTextStyle,
         ),

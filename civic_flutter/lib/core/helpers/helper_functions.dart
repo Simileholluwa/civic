@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -73,6 +74,67 @@ class THelperFunctions {
     } else {
       return number.toString();
     }
+  }
+
+  static DefaultStyles articleTextEditorStyles(
+    BuildContext context,
+    DefaultTextStyle defaultTextStyle,
+  ) {
+    return DefaultStyles(
+      h1: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: 23,
+              height: 1.15,
+            ),
+        HorizontalSpacing.zero,
+        const VerticalSpacing(16, 0),
+        VerticalSpacing.zero,
+        null,
+      ),
+      paragraph: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+      ),
+      placeHolder: DefaultTextBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+              color: Theme.of(context).textTheme.bodySmall!.color!,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+      ),
+      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
+      lists: DefaultListBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        const VerticalSpacing(
+          0,
+          20,
+        ),
+        null,
+        null,
+      ),
+      leading: DefaultListBlockStyle(
+        Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 17,
+            ),
+        HorizontalSpacing.zero,
+        VerticalSpacing.zero,
+        VerticalSpacing.zero,
+        null,
+        null,
+      ),
+    );
   }
 
   static double getWidth(BuildContext context) {

@@ -1,6 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_page_provider.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 
 class CreateProjectBottomNavigationBar extends ConsumerWidget {

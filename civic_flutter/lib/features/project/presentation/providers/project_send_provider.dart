@@ -1,11 +1,8 @@
 import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/assets_service_provider.dart';
-import 'package:civic_flutter/core/providers/boolean_providers.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/features/project/domain/usecases/save_project_use_case.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_services_provider.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_send_provider.g.dart';
 

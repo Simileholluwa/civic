@@ -1,8 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/features/project/data/datasources/project_remote_datasource.dart';
-import 'package:civic_flutter/features/project/domain/repository/project_repository.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
 class ProjectRepositoryImpl extends ProjectRepository {

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -138,67 +137,6 @@ class ArticleHelperFunctions {
       return croppedFile!.path;
     }
     return '';
-  }
-
-  static DefaultStyles articleTextEditorStyles(
-    BuildContext context,
-    DefaultTextStyle defaultTextStyle,
-  ) {
-    return DefaultStyles(
-      h1: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: 23,
-              height: 1.15,
-            ),
-        HorizontalSpacing.zero,
-        const VerticalSpacing(16, 0),
-        VerticalSpacing.zero,
-        null,
-      ),
-      paragraph: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-      ),
-      placeHolder: DefaultTextBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-              color: Theme.of(context).textTheme.bodySmall!.color!,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-      ),
-      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
-      lists: DefaultListBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        const VerticalSpacing(
-          0,
-          20,
-        ),
-        null,
-        null,
-      ),
-      leading: DefaultListBlockStyle(
-        Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
-            ),
-        HorizontalSpacing.zero,
-        VerticalSpacing.zero,
-        VerticalSpacing.zero,
-        null,
-        null,
-      ),
-    );
   }
 
   static Future<bool?> showArticleDraftsScreen(BuildContext context) {

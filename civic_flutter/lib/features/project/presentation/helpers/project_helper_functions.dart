@@ -1,11 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
-import 'package:civic_flutter/features/project/presentation/helpers/project_data.dart';
-import 'package:civic_flutter/features/project/presentation/pages/project_locations_screen.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_send_provider.dart';
-import 'package:civic_flutter/features/project/presentation/state/project_state.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';

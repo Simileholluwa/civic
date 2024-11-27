@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:civic_flutter/features/article/article.dart';
-
 class ArticleDraftWidget extends StatelessWidget {
   const ArticleDraftWidget({
     super.key,
@@ -95,7 +93,7 @@ class ArticleDraftWidget extends StatelessWidget {
                     useTextColorForDot: true,
                   ),
                 ),
-                customStyles: ArticleHelperFunctions.articleTextEditorStyles(
+                customStyles: THelperFunctions.articleTextEditorStyles(
                   context,
                   defaultTextStyle,
                 ),

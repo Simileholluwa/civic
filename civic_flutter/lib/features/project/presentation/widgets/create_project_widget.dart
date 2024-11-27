@@ -1,14 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_page_provider.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_attachments_page_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_category_page_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_funding_page_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_location_page_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_overview_page_view.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_progress_indicator.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_status_page_view.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

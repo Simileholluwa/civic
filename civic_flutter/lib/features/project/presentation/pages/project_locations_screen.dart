@@ -1,12 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
-import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_location_error.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

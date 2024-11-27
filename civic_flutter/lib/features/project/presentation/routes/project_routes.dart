@@ -1,4 +1,4 @@
-import 'package:civic_flutter/features/project/presentation/pages/projects_screen.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

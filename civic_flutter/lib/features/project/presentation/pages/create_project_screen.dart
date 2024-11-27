@@ -1,15 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
-import 'package:civic_flutter/features/project/presentation/helpers/project_helper_functions.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_detail_provider.dart';
-import 'package:civic_flutter/features/project/presentation/providers/project_provider.dart';
-import 'package:civic_flutter/features/project/presentation/routes/project_routes.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/create_project_widget.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
