@@ -21,7 +21,8 @@ final usersListServiceProvider = Provider<UsersListService>.internal(
 );
 
 typedef UsersListServiceRef = ProviderRef<UsersListService>;
-String _$usersListHash() => r'a3dcd733edc6fe0f75aaa802d17bf913c079eeb3';
+String _$paginatedUsersListHash() =>
+    r'1483a3e25cd25300c61bb9dca9505c9d05db38b5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -44,7 +45,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$UsersList extends BuildlessNotifier<PagingStatus> {
+abstract class _$PaginatedUsersList extends BuildlessNotifier<PagingStatus> {
   late final String query;
 
   PagingStatus build(
@@ -52,27 +53,27 @@ abstract class _$UsersList extends BuildlessNotifier<PagingStatus> {
   );
 }
 
-/// See also [UsersList].
-@ProviderFor(UsersList)
-const usersListProvider = UsersListFamily();
+/// See also [PaginatedUsersList].
+@ProviderFor(PaginatedUsersList)
+const paginatedUsersListProvider = PaginatedUsersListFamily();
 
-/// See also [UsersList].
-class UsersListFamily extends Family<PagingStatus> {
-  /// See also [UsersList].
-  const UsersListFamily();
+/// See also [PaginatedUsersList].
+class PaginatedUsersListFamily extends Family<PagingStatus> {
+  /// See also [PaginatedUsersList].
+  const PaginatedUsersListFamily();
 
-  /// See also [UsersList].
-  UsersListProvider call(
+  /// See also [PaginatedUsersList].
+  PaginatedUsersListProvider call(
     String query,
   ) {
-    return UsersListProvider(
+    return PaginatedUsersListProvider(
       query,
     );
   }
 
   @override
-  UsersListProvider getProviderOverride(
-    covariant UsersListProvider provider,
+  PaginatedUsersListProvider getProviderOverride(
+    covariant PaginatedUsersListProvider provider,
   ) {
     return call(
       provider.query,
@@ -91,28 +92,30 @@ class UsersListFamily extends Family<PagingStatus> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'usersListProvider';
+  String? get name => r'paginatedUsersListProvider';
 }
 
-/// See also [UsersList].
-class UsersListProvider extends NotifierProviderImpl<UsersList, PagingStatus> {
-  /// See also [UsersList].
-  UsersListProvider(
+/// See also [PaginatedUsersList].
+class PaginatedUsersListProvider
+    extends NotifierProviderImpl<PaginatedUsersList, PagingStatus> {
+  /// See also [PaginatedUsersList].
+  PaginatedUsersListProvider(
     String query,
   ) : this._internal(
-          () => UsersList()..query = query,
-          from: usersListProvider,
-          name: r'usersListProvider',
+          () => PaginatedUsersList()..query = query,
+          from: paginatedUsersListProvider,
+          name: r'paginatedUsersListProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$usersListHash,
-          dependencies: UsersListFamily._dependencies,
-          allTransitiveDependencies: UsersListFamily._allTransitiveDependencies,
+                  : _$paginatedUsersListHash,
+          dependencies: PaginatedUsersListFamily._dependencies,
+          allTransitiveDependencies:
+              PaginatedUsersListFamily._allTransitiveDependencies,
           query: query,
         );
 
-  UsersListProvider._internal(
+  PaginatedUsersListProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -126,7 +129,7 @@ class UsersListProvider extends NotifierProviderImpl<UsersList, PagingStatus> {
 
   @override
   PagingStatus runNotifierBuild(
-    covariant UsersList notifier,
+    covariant PaginatedUsersList notifier,
   ) {
     return notifier.build(
       query,
@@ -134,10 +137,10 @@ class UsersListProvider extends NotifierProviderImpl<UsersList, PagingStatus> {
   }
 
   @override
-  Override overrideWith(UsersList Function() create) {
+  Override overrideWith(PaginatedUsersList Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UsersListProvider._internal(
+      override: PaginatedUsersListProvider._internal(
         () => create()..query = query,
         from: from,
         name: null,
@@ -150,13 +153,13 @@ class UsersListProvider extends NotifierProviderImpl<UsersList, PagingStatus> {
   }
 
   @override
-  NotifierProviderElement<UsersList, PagingStatus> createElement() {
-    return _UsersListProviderElement(this);
+  NotifierProviderElement<PaginatedUsersList, PagingStatus> createElement() {
+    return _PaginatedUsersListProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UsersListProvider && other.query == query;
+    return other is PaginatedUsersListProvider && other.query == query;
   }
 
   @override
@@ -168,17 +171,18 @@ class UsersListProvider extends NotifierProviderImpl<UsersList, PagingStatus> {
   }
 }
 
-mixin UsersListRef on NotifierProviderRef<PagingStatus> {
+mixin PaginatedUsersListRef on NotifierProviderRef<PagingStatus> {
   /// The parameter `query` of this provider.
   String get query;
 }
 
-class _UsersListProviderElement
-    extends NotifierProviderElement<UsersList, PagingStatus> with UsersListRef {
-  _UsersListProviderElement(super.provider);
+class _PaginatedUsersListProviderElement
+    extends NotifierProviderElement<PaginatedUsersList, PagingStatus>
+    with PaginatedUsersListRef {
+  _PaginatedUsersListProviderElement(super.provider);
 
   @override
-  String get query => (origin as UsersListProvider).query;
+  String get query => (origin as PaginatedUsersListProvider).query;
 }
 
 String _$searchUsersListQueryHash() =>

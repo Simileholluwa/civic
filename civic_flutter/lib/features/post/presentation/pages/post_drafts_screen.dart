@@ -1,8 +1,5 @@
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_drafts_appbar.dart';
-import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_widget.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

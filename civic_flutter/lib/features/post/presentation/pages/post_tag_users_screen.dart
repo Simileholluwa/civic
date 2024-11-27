@@ -1,13 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/providers/users_list_service_provider.dart';
-import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/app/app_infinite_list.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_search_bar.dart';
-import 'package:civic_flutter/core/widgets/app/app_user_profile_image.dart';
-import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +17,7 @@ class PostTagUsersScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final query = ref.watch(searchUsersListQueryProvider);
-    final pagingController = ref.watch(usersListProvider(query).notifier);
+    final pagingController = ref.watch(paginatedUsersListProvider(query).notifier);
     final queryProvider = ref.watch(searchUsersListQueryProvider.notifier);
     final postState = ref.watch(regularPostProvider(post));
     final postNotifier = ref.watch(regularPostProvider(post).notifier);

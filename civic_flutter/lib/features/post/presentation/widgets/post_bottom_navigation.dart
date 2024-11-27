@@ -1,12 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_privacy.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_schedule.dart';
-import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
-import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_bottom_options.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_selected_locations.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_selected_tags.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

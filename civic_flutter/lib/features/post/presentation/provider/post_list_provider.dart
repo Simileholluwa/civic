@@ -1,15 +1,13 @@
 import 'dart:developer';
-
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/post/domain/usecases/get_posts_use_case.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'post_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class PostList extends _$PostList {
+class PaginatedPostList extends _$PaginatedPostList {
   final PagingController<int, Post> pagingController =
       PagingController(firstPageKey: 1);
 

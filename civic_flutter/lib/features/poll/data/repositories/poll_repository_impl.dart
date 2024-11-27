@@ -1,9 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/features/poll/data/datasources/poll_local_datasource.dart';
-import 'package:civic_flutter/features/poll/data/datasources/poll_remote_datasource.dart';
-import 'package:civic_flutter/features/poll/domain/repositories/poll_repository.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:fpdart/fpdart.dart';
 
 class PollRepositoryImpl implements PollRepository {

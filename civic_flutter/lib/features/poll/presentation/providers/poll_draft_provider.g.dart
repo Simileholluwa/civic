@@ -6,7 +6,7 @@ part of 'poll_draft_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pollDraftsHash() => r'b76953cf05a170c3cb8989f4a6236486581968b5';
+String _$pollDraftsHash() => r'14efc6672faff82262846e2d6139b93371824ad6';
 
 /// See also [PollDrafts].
 @ProviderFor(PollDrafts)

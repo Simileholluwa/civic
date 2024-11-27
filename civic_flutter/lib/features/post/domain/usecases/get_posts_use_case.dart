@@ -1,6 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';
 

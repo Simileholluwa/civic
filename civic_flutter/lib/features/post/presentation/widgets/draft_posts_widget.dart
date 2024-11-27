@@ -1,11 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_locations_and_tagged_users.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_darft_text.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/draft_image_post.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/draft_post_title.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_icons.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/draft_posts_video_thumbnail.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,7 +31,7 @@ class DraftPostsWidget extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              DraftPostTitle(
+              CreateContentDraftTitle(
                 createdAt: draftPost.createdAt!,
                 index: index,
               ),

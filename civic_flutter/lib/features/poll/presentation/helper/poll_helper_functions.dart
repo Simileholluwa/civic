@@ -1,14 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
-import 'package:civic_flutter/features/poll/presentation/pages/poll_drafts_screen.dart';
-import 'package:civic_flutter/features/poll/presentation/pages/poll_locations_screen.dart';
-import 'package:civic_flutter/features/poll/presentation/pages/poll_tag_users_screen.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/state/poll_state.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';

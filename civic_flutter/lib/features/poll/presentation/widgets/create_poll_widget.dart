@@ -1,10 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/app/app_user_info_widget.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/widgets/poll_duration_and_add_options.dart';
-import 'package:civic_flutter/features/poll/presentation/widgets/poll_options_text_field.dart';
-import 'package:civic_flutter/features/poll/presentation/widgets/poll_question_textfield.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/poll/presentation/state/poll_state.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'poll_provider.g.dart';

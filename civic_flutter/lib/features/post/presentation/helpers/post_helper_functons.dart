@@ -1,15 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/app/app_request_location_permission_dialog.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_select_media_dialog.dart';
-import 'package:civic_flutter/features/post/presentation/pages/post_drafts_screen.dart';
-import 'package:civic_flutter/features/post/presentation/pages/post_locations_screen.dart';
-import 'package:civic_flutter/features/post/presentation/pages/post_tag_users_screen.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/state/post_state.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';

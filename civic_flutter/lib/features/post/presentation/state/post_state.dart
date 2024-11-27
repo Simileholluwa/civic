@@ -1,5 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class PostState {
   PostState({

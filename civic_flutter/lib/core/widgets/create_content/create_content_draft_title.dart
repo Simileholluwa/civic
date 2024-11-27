@@ -3,8 +3,8 @@ import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class DraftPostTitle extends StatelessWidget {
-  const DraftPostTitle({
+class CreateContentDraftTitle extends StatelessWidget {
+  const CreateContentDraftTitle({
     super.key,
     required this.createdAt,
     required this.index,

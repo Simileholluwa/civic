@@ -1,15 +1,8 @@
 //ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/boolean_providers.dart';
-import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/schedule_poll__use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/save_poll_use_case.dart';
-import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'poll_send_provider.g.dart';

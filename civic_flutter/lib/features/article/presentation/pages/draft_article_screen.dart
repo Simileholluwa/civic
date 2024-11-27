@@ -1,4 +1,4 @@
-import 'package:civic_flutter/features/post/presentation/widgets/draft_post_title.dart';
+import 'package:civic_flutter/core/widgets/create_content/create_content_draft_title.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -41,7 +41,7 @@ class DraftArticleScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DraftPostTitle(
+                  CreateContentDraftTitle(
                     createdAt: article.createdAt!,
                     index: index,
                   ),

@@ -85,3 +85,6 @@ export './widgets/create_content/create_content_schedule.dart';
 export './widgets/create_content/create_content_schedule_dialog.dart';
 export './widgets/create_content/create_content_search_bar.dart';
 export './widgets/create_content/create_content_text_counter.dart';
+export './widgets/create_content/create_content_hastags_suggestions_widget.dart';
+export './widgets/create_content/create_content_mentions_suggestions_widget.dart';
+export './widgets/create_content/create_content_draft_title.dart';

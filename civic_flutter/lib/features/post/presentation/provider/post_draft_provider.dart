@@ -1,13 +1,8 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/post/domain/usecases/delete_draft_use_case.dart';
-import 'package:civic_flutter/features/post/domain/usecases/save_draft_use_case.dart';
-import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_send_provider.dart';
-import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_draft_provider.g.dart';
 

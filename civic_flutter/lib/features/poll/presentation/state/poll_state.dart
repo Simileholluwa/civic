@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
-import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:civic_client/civic_client.dart';
 
 class PollState {

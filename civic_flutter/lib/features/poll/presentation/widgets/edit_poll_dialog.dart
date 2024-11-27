@@ -1,6 +1,6 @@
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

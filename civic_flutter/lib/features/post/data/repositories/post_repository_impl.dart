@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/features/post/data/datasources/post_local_database.dart';
-import 'package:civic_flutter/features/post/data/datasources/post_remote_database.dart';
-import 'package:civic_flutter/features/post/domain/repositories/post_repository.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:fpdart/fpdart.dart';
 
 class PostRepositoryImpl implements PostRepository {

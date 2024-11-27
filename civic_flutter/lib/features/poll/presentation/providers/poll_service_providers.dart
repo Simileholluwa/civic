@@ -1,17 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/providers/local_storage_provider.dart';
-import 'package:civic_flutter/features/poll/data/datasources/poll_local_datasource.dart';
-import 'package:civic_flutter/features/poll/data/datasources/poll_remote_datasource.dart';
-import 'package:civic_flutter/features/poll/data/repositories/poll_repository_impl.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/cast_vote_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/delete_drafts_poll_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/delete_draft_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/get_drafts_poll_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/get_poll_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/save_draft_poll_use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/schedule_poll__use_case.dart';
-import 'package:civic_flutter/features/poll/domain/usecases/save_poll_use_case.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'poll_service_providers.g.dart';

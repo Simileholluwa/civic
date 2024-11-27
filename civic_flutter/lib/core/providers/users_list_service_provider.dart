@@ -17,7 +17,7 @@ UsersListService usersListService(UsersListServiceRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-class UsersList extends _$UsersList {
+class PaginatedUsersList extends _$PaginatedUsersList {
   final PagingController<int, UserRecord> pagingController =
       PagingController(firstPageKey: 1);
 
