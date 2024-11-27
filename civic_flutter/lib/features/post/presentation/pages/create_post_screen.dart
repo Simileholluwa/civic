@@ -60,7 +60,7 @@ class CreatePostScreen extends ConsumerWidget {
                 ? await savePostDraftDialog(
                     ref,
                     context,
-                    data.value!,
+                    postState,
                   )
                 : await editPostDialog(
                     ref,
@@ -71,7 +71,6 @@ class CreatePostScreen extends ConsumerWidget {
         if (shouldPop ?? false) {
           if (context.mounted) {
             context.pop();
-            
           }
         }
       },
@@ -82,76 +81,53 @@ class CreatePostScreen extends ConsumerWidget {
               60,
             ),
             child: CreateContentAppbar(
-              canSend: canSendPost,
-              draftData: draftsData,
-              sendPressed: () {
-                if (postState.videoUrl.isNotEmpty) {
-                  ref
-                      .read(
-                          mediaVideoPlayerProvider(postState.videoUrl).notifier)
-                      .dispose();
-                }
-                context.go(
-                  FeedRoutes.namespace,
-                  extra: () => PostHelperFunctions.sendPost(
-                    ref,
-                    id != 0
-                        ? Post(
-                            id: data.value!.id,
-                            ownerId: data.value!.ownerId,
-                            postType: PostType.none,
-                            text: postState.text,
-                            imageUrls: postState.imageUrls,
-                            videoUrl: postState.videoUrl,
-                            taggedUsers: postState.taggedUsers,
-                            locations: postState.locations,
-                            mentions: ref.watch(selectedMentionsProvider),
-                            tags: ref.watch(hashtagsProvider(postState.text)),
-                          )
-                        : Post(
-                            id: null,
-                            ownerId: 0,
-                            postType: PostType.none,
-                            text: postState.text,
-                            imageUrls: postState.imageUrls,
-                            videoUrl: postState.videoUrl,
-                            taggedUsers: postState.taggedUsers,
-                            locations: postState.locations,
-                            mentions: ref.watch(selectedMentionsProvider),
-                            tags: ref.watch(hashtagsProvider(postState.text)),
-                          ),
-                  ),
-                );
-              },
-              onCanSendPost: () async {
-                final shouldPop = id == 0
-                    ? await savePostDraftDialog(
-                        ref,
-                        context,
-                        data.value!,
-                      )
-                    : await editPostDialog(
-                        ref,
-                        context,
-                        data.value!,
-                      );
-                if (shouldPop ?? false) {
-                  if (context.mounted) {
-                    if (postState.videoUrl.isNotEmpty) {
-                      ref
-                          .read(mediaVideoPlayerProvider(postState.videoUrl)
-                              .notifier)
-                          .dispose();
+                canSend: canSendPost,
+                draftData: draftsData,
+                sendPressed: () {
+                  if (postState.videoUrl.isNotEmpty) {
+                    ref
+                        .read(mediaVideoPlayerProvider(postState.videoUrl)
+                            .notifier)
+                        .dispose();
+                  }
+                  context.go(
+                    FeedRoutes.namespace,
+                    extra: () => PostHelperFunctions.sendPost(
+                      ref,
+                      postState,
+                      id,
+                      data.value!.ownerId,
+                    ),
+                  );
+                },
+                onCanSendPost: () async {
+                  final shouldPop = id == 0
+                      ? await savePostDraftDialog(
+                          ref,
+                          context,
+                          postState,
+                        )
+                      : await editPostDialog(
+                          ref,
+                          context,
+                          data.value!,
+                        );
+                  if (shouldPop ?? false) {
+                    if (context.mounted) {
+                      if (postState.videoUrl.isNotEmpty) {
+                        ref
+                            .read(mediaVideoPlayerProvider(postState.videoUrl)
+                                .notifier)
+                            .dispose();
+                      }
+                      context.pop();
                     }
-                    context.pop();
                   }
-                }
-              },
-              draftPressed: (){ 
-                ref.invalidate(postDraftsProvider);
+                },
+                draftPressed: () {
+                  ref.invalidate(postDraftsProvider);
                   PostHelperFunctions.showPostDraftsScreen(context);
-                  }
-            ),
+                }),
           ),
           bottomSheet: suggestions.isNotEmpty
               ? MentionsSuggestionsWidget(

@@ -723,6 +723,12 @@
           "dartType": "List<String>?"
         },
         {
+          "name": "pdfAttachmentsThumbnail",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
           "name": "projectVideoUrl",
           "columnType": 0,
           "isNullable": true,
@@ -1018,7 +1024,7 @@
     },
     {
       "module": "civic",
-      "version": "20241123091506441"
+      "version": "20240714185027578"
     }
   ],
   "migrationApiVersion": 1

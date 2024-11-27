@@ -13,7 +13,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
     required this.value,
     required this.onChanged,
     required this.hintText,
-    this.width = double.maxFinite, 
+    this.width = double.maxFinite,
     this.rightPadding = 16,
     this.leftPadding = 8,
   });
@@ -36,8 +36,8 @@ class ProjectCategoryDropdown extends ConsumerWidget {
           child: Text(
             hintText,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: Theme.of(context).textTheme.bodySmall!.color!,
-            ),
+                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                ),
           ),
         ),
         style: Theme.of(context).textTheme.bodyMedium,
@@ -48,16 +48,16 @@ class ProjectCategoryDropdown extends ConsumerWidget {
         buttonStyleData: ButtonStyleData(
           padding: EdgeInsets.only(
             right: rightPadding,
-            left: leftPadding,  
+            left: leftPadding,
           ),
           height: 58,
           width: width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(TSizes.sm),
-    
             border: Border.all(
-              color: THelperFunctions.isDarkMode(context) ? TColors.darkGrey : TColors.darkerGrey,
-              
+              color: THelperFunctions.isDarkMode(context)
+                  ? TColors.darkGrey
+                  : TColors.darkerGrey,
             ),
           ),
         ),
@@ -82,8 +82,14 @@ class ProjectCategoryDropdown extends ConsumerWidget {
           ),
         ),
         iconStyleData: const IconStyleData(
-          openMenuIcon: Icon(Icons.arrow_drop_up, color: TColors.primary),
-          icon: Icon(Icons.arrow_drop_down, color: TColors.primary),
+          openMenuIcon: Icon(
+            Icons.arrow_drop_up,
+            color: TColors.primary,
+          ),
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: TColors.primary,
+          ),
         ),
       ),
     );

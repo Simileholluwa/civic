@@ -1,6 +1,4 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/app/app_dual_button.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

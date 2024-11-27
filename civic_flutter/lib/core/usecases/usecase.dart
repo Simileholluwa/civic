@@ -1,6 +1,6 @@
 // ignore_for_file: one_member_abstracts
 
-import 'package:civic_flutter/core/errors/failure.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class UseCase<SuccessType, Params> {

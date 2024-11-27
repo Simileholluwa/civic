@@ -715,6 +715,24 @@
           "columnType": 8,
           "isNullable": true,
           "dartType": "List<String>?"
+        },
+        {
+          "name": "manualLocations",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "pdfAttachmentsThumbnail",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "projectVideoUrl",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
         }
       ],
       "foreignKeys": [
@@ -2687,7 +2705,7 @@
   "installedModules": [
     {
       "module": "civic",
-      "version": "20241118100845977"
+      "version": "20241126140157986"
     },
     {
       "module": "serverpod",

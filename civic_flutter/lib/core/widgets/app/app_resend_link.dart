@@ -1,9 +1,6 @@
-import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/count_down_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/constants/text_strings.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 

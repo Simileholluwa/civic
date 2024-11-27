@@ -114,7 +114,6 @@ class PollsOptions extends _$PollsOptions {
       pollState.questionController.addListener(() {
         setQuestion(pollState.questionController.text);
       });
-      log(pollState.optionText.toString());
       return pollState;
     } else {
       final pollState = PollState.populate(poll);

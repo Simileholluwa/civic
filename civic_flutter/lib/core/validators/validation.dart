@@ -1,4 +1,4 @@
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class TValidator {
   TValidator._();

@@ -26,7 +26,7 @@ class ProjectLocationOptions extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             TSizes.sm,
           ),
-          color: Theme.of(context).splashColor,
+          color: TColors.primary.withOpacity(.1),
         ),
         child: Center(
           child: Row(

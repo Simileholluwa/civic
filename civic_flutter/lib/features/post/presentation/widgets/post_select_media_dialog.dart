@@ -1,14 +1,11 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_media_option.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_media_options.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-Future<bool?> createContentSelectMediaDialog(
+Future<bool?> postSelectMediaDialog(
   BuildContext context,
   Post post,
 ) {

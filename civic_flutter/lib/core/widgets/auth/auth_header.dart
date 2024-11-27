@@ -1,6 +1,5 @@
 
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/app/app_decoration_dot.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AuthHeader extends StatelessWidget {

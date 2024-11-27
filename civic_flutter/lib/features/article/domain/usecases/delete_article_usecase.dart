@@ -1,6 +1,5 @@
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/article/domain/repositries/article_repository.dart';
+import 'package:civic_flutter/features/article/article.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 class DeleteArticleUseCase implements UseCase<void, DeleteArticleParams> {

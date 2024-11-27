@@ -2,6 +2,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/get_poll_use_case.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,16 +31,9 @@ Future<Poll?> pollDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      return Poll(
-        ownerId: currentUser.userInfo!.id!,
-        owner: currentUser,
-        question: draftPoll.question,
-        taggedUsers: draftPoll.taggedUsers,
-        locations: draftPoll.locations,
-        mentions: draftPoll.mentions,
-        tags: draftPoll.tags,
-        pollDuration: draftPoll.pollDuration,
-        options: draftPoll.options,
+      return PollHelperFunctions.createPollFromDraft(
+        draftPoll,
+        currentUser,
       );
     });
   } else {

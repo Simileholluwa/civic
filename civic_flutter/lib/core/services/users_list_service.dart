@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:fpdart/fpdart.dart';

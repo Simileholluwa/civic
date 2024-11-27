@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/services/local_storage.dart';
-import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 

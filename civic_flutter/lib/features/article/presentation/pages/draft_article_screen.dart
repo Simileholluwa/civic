@@ -1,13 +1,9 @@
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_drafts_appbar.dart';
-import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_draft_options.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_draft_widget.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/draft_post_title.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/features/article/article.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class DraftArticleScreen extends ConsumerWidget {
   const DraftArticleScreen({super.key});

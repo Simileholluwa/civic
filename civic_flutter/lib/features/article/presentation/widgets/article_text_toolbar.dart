@@ -1,8 +1,7 @@
 import 'dart:io' as io show File;
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/flutter_quill_internal.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';

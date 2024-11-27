@@ -145,7 +145,11 @@ class ProjectProvider extends _$ProjectProvider {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     if (state.physicalLocations == null) {
-      state = state.copyWith(physicalLocations: []);
+      state = state.copyWith(
+        physicalLocations: [],
+        fundingSubCategory: fundingSubCategory,
+        projectSubCategory: projectSubCategory,
+      );
     }
 
     state = state.copyWith(
@@ -163,7 +167,11 @@ class ProjectProvider extends _$ProjectProvider {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     if (state.virtualLocations == null) {
-      state = state.copyWith(virtualLocations: []);
+      state = state.copyWith(
+        virtualLocations: [],
+        fundingSubCategory: fundingSubCategory,
+        projectSubCategory: projectSubCategory,
+      );
     }
     state = state.copyWith(
       virtualLocations: [

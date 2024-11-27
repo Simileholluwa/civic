@@ -1,7 +1,4 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AppCustomBottomNavigationBar extends StatelessWidget {

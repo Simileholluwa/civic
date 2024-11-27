@@ -1,6 +1,7 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:civic_flutter/features/article/article.dart';
+
 import 'package:flutter/material.dart';
 
 class ArticleTitleField extends ConsumerWidget {

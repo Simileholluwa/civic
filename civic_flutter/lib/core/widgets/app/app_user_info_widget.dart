@@ -1,9 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/app/app_decoration_dot.dart';
-import 'package:civic_flutter/core/widgets/app/app_user_profile_image.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 // import 'package:iconsax/iconsax.dart';

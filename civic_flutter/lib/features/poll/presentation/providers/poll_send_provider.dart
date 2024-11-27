@@ -7,10 +7,10 @@ import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/schedule_poll__use_case.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/save_poll_use_case.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'poll_send_provider.g.dart';
 
@@ -23,21 +23,7 @@ class SendPoll extends _$SendPoll {
     Poll poll,
     String errorMessage,
   ) async {
-    final draftPoll = DraftPoll(
-      draftId: DateTime.now().millisecondsSinceEpoch,
-      options: PollOption(
-        option: poll.options!.option,
-        votes: 0,
-        voters: [],
-      ),
-      question: poll.question ?? '',
-      taggedUsers: poll.taggedUsers ?? [],
-      locations: poll.locations ?? [],
-      createdAt: DateTime.now(),
-      mentions: poll.mentions ?? [],
-      tags: poll.tags ?? [],
-      pollDuration: poll.pollDuration,
-    );
+    final draftPoll = PollHelperFunctions.createDraftPollFromPoll(poll);
     final draftPollProvider = ref.read(pollDraftsProvider.notifier);
     final result = await draftPollProvider.saveDraftPoll(
       draftPoll,
@@ -88,7 +74,7 @@ class SendPoll extends _$SendPoll {
       SavePollParams(
         poll.copyWith(
           createdAt: DateTime.now(),
-        ),  
+        ),
       ),
     );
 
@@ -108,7 +94,7 @@ class SendPoll extends _$SendPoll {
     });
   }
 
-  Future<bool> send({
+  Future<bool> sendPollNowOrLater({
     required Poll poll,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
@@ -125,10 +111,13 @@ class SendPoll extends _$SendPoll {
       return false;
     }, (record) async {
       final scheduledDatetime = ref.read(postScheduledDateTimeProvider);
+      final scheduledDatetimeNotifier =
+          ref.read(postScheduledDateTimeProvider.notifier);
       final pollToSend = poll.copyWith(
         owner: record,
       );
-      if (scheduledDatetime == null) {
+      if (scheduledDatetime == null &&
+          !scheduledDatetimeNotifier.canSendLater()) {
         return await sendPoll(
           poll: pollToSend,
         );

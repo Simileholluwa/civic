@@ -1,20 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
-import 'package:civic_flutter/features/article/presentation/helper/article_helper_functions.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/edit_article_dialog.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_appbar.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_privacy.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/save_article_draft_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class CreateArticleScreen extends ConsumerWidget {
   const CreateArticleScreen({
@@ -33,13 +25,13 @@ class CreateArticleScreen extends ConsumerWidget {
         id,
       ),
     );
-    final articleWriter = ref.watch(
+    final articleState = ref.watch(
       articleWriterProvider(data.value),
     );
     final draftsData = id == 0 ? ref.watch(articleDraftsProvider) : [];
-    final canSend = articleWriter.banner.isNotEmpty &&
-        articleWriter.title.isNotEmpty &&
-        !articleWriter.isEmptyContent;
+    final canSend = articleState.banner.isNotEmpty &&
+        articleState.title.isNotEmpty &&
+        !articleState.isEmptyContent;
 
     return PopScope(
       canPop: false,
@@ -51,9 +43,7 @@ class CreateArticleScreen extends ConsumerWidget {
                 ? await saveArticleDraftDialog(
                     ref,
                     context,
-                    articleWriter.title,
-                    articleWriter.content,
-                    articleWriter.banner,
+                    articleState,
                   )
                 : await editArticleDialog(
                     ref,
@@ -80,21 +70,9 @@ class CreateArticleScreen extends ConsumerWidget {
                   FeedRoutes.namespace,
                   extra: () => ArticleHelperFunctions.sendArticle(
                     ref,
-                    id != 0
-                        ? Article(
-                            id: data.value!.id,
-                            ownerId: data.value!.ownerId,
-                            title: articleWriter.title,
-                            content: articleWriter.content,
-                            banner: articleWriter.banner,
-                          )
-                        : Article(
-                            id: null,
-                            ownerId: 0,
-                            title: articleWriter.title,
-                            content: articleWriter.content,
-                            banner: articleWriter.banner,
-                          ),
+                    articleState,
+                    id,
+                    data.value!.ownerId,
                   ),
                 );
               },
@@ -103,9 +81,7 @@ class CreateArticleScreen extends ConsumerWidget {
                     ? await saveArticleDraftDialog(
                         ref,
                         context,
-                        articleWriter.title,
-                        articleWriter.content,
-                        articleWriter.banner,
+                        articleState,
                       )
                     : await editArticleDialog(
                         ref,

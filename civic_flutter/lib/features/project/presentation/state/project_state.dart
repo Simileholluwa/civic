@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -102,7 +103,6 @@ class ProjectState {
       ),
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
-      pdfAttachmentsThumbnail: project.pdfAttachmentsThumbnail,
       canAddLocations: [
         ...?project.manualLocations,
         ...?project.virtualLocations,
@@ -138,7 +138,7 @@ class ProjectState {
   final TextEditingController startDateController;
   final String? status;
   final String? title;
-  final List<String>? pdfAttachmentsThumbnail;
+  final List<Uint8List>? pdfAttachmentsThumbnail;
   final TextEditingController titleController;
   final List<String>? virtualLocations;
   final List<String>? manualLocations;
@@ -179,7 +179,7 @@ class ProjectState {
     TextEditingController? manualLocationController,
     TextEditingController? virtualLocationController,
     bool? canAddLocations,
-    List<String>? pdfAttachmentsThumbnail,
+    List<Uint8List>? pdfAttachmentsThumbnail,
     String? projectVideoUrl,
   }) {
     return ProjectState(
@@ -190,7 +190,7 @@ class ProjectState {
       titleController: titleController ?? this.titleController,
       quillController: quillController ?? this.quillController,
       projectCategory: projectCategory ?? this.projectCategory,
-      projectSubCategory: projectSubCategory ?? this.projectSubCategory,
+      projectSubCategory: projectSubCategory ,
       status: status ?? this.status,
       startDateController: startDateController ?? this.startDateController,
       endDateController: endDateController ?? this.endDateController,
@@ -198,7 +198,7 @@ class ProjectState {
       endDate: endDate ?? this.endDate,
       currency: currency ?? this.currency,
       fundingCategory: fundingCategory ?? this.fundingCategory,
-      fundingSubCategory: fundingSubCategory ?? this.fundingSubCategory,
+      fundingSubCategory: fundingSubCategory,
       projectCostController:
           projectCostController ?? this.projectCostController,
       projectCost: projectCost ?? this.projectCost,
@@ -220,7 +220,6 @@ class ProjectState {
       virtualLocationController:
           virtualLocationController ?? this.virtualLocationController,
       canAddLocations: canAddLocations ?? this.canAddLocations,
-      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail ?? this.pdfAttachmentsThumbnail,
       projectVideoUrl: projectVideoUrl ?? this.projectVideoUrl,
     );
   }

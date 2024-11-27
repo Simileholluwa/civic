@@ -1,4 +1,4 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AppPulsingCircle extends StatefulWidget {

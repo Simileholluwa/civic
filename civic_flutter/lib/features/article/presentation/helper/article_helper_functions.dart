@@ -1,26 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/helpers/image_helper.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
-import 'package:civic_flutter/features/article/presentation/pages/draft_article_screen.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_draft_provider.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_send_provider.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class ArticleHelperFunctions {
   ArticleHelperFunctions._();
   static void sendArticle(
     WidgetRef ref,
-    Article article,
+    ArticleState articleState,
+    int id,
+    int ownerId,
   ) {
     ref.read(sendArticleProvider.notifier).sendArticle(
-          article: article,
+          article: id != 0 
+          ? articleToSend(articleState, id, ownerId)
+          : articleToSend(articleState, null, ownerId),
         );
   }
 
@@ -202,7 +201,7 @@ class ArticleHelperFunctions {
     );
   }
 
-    static Future<bool?> showArticleDraftsScreen(BuildContext context) {
+  static Future<bool?> showArticleDraftsScreen(BuildContext context) {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -211,6 +210,60 @@ class ArticleHelperFunctions {
       builder: (context) {
         return const DraftArticleScreen();
       },
+    );
+  }
+
+  static Article createArticleFromDraft(
+    ArticleDraft articleDraft,
+    UserRecord currentUser,
+  ) {
+    return Article(
+      ownerId: currentUser.userInfo!.id!,
+      owner: currentUser,
+      banner: articleDraft.banner,
+      title: articleDraft.title,
+      content: articleDraft.content,
+    );
+  }
+
+  static Article articleToSendFromDraft(ArticleDraft articleDraft) {
+    return Article(
+      ownerId: 0,
+      title: articleDraft.title,
+      content: articleDraft.content,
+      banner: articleDraft.banner,
+    );
+  }
+
+  static ArticleDraft createDraftFromArticle(Article article) {
+    return ArticleDraft(
+      draftId: DateTime.now().millisecondsSinceEpoch,
+      title: article.title ?? '',
+      content: article.content ?? '',
+      banner: article.banner ?? '',
+      createdAt: DateTime.now(),
+    );
+  }
+
+  static ArticleDraft createDraftFromArticleState(ArticleState articleState) {
+    return ArticleDraft(
+      banner: articleState.banner,
+      content: articleState.content,
+      title: articleState.title,
+    );
+  }
+
+  static Article articleToSend(
+    ArticleState articleState,
+    int? id,
+    int ownerId,
+  ) {
+    return Article(
+      id: id,
+      ownerId: ownerId,
+      title: articleState.title,
+      content: articleState.content,
+      banner: articleState.banner,
     );
   }
 }

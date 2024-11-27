@@ -8,6 +8,7 @@ import 'package:civic_flutter/features/poll/presentation/pages/poll_tag_users_sc
 import 'package:civic_flutter/features/poll/presentation/providers/poll_draft_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/state/poll_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
@@ -39,19 +40,26 @@ class PollHelperFunctions {
       isScrollControlled: true,
       showDragHandle: true,
       builder: (context) {
-        return PollLocationsScreen(poll: poll,);
+        return PollLocationsScreen(
+          poll: poll,
+        );
       },
     );
   }
 
-  static Future<bool?> tagUsersBottomSheet(BuildContext context, Poll poll,) {
+  static Future<bool?> tagUsersBottomSheet(
+    BuildContext context,
+    Poll poll,
+  ) {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
       builder: (context) {
-        return PollTagUsersScreen(poll: poll,);
+        return PollTagUsersScreen(
+          poll: poll,
+        );
       },
     );
   }
@@ -74,12 +82,15 @@ class PollHelperFunctions {
       Geolocator.openLocationSettings();
     } else {
       if (context.mounted) {
-        selectLocationBottomSheet(context: context, poll: poll,);
+        selectLocationBottomSheet(
+          context: context,
+          poll: poll,
+        );
       }
     }
   }
 
-    static Future<bool?> showPollDraftsScreen(BuildContext context) {
+  static Future<bool?> showPollDraftsScreen(BuildContext context) {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -94,15 +105,25 @@ class PollHelperFunctions {
   static void sendPoll(
     WidgetRef ref,
     Poll poll,
+    int id,
   ) {
     final pollState = ref.watch(pollsOptionsProvider(poll));
-    final canSendPoll = pollState.question.isNotEmpty &&
-        pollState.optionText.every((text) => text.isNotEmpty);
-    if (canSendPoll) {
-      ref.read(sendPollProvider.notifier).send(
-            poll: poll,
-          );
-    }
+
+    ref.read(sendPollProvider.notifier).sendPollNowOrLater(
+          poll: id != 0
+              ? createPollFromPollState(
+                  pollState,
+                  id,
+                  poll.ownerId,
+                  poll,
+                )
+              : createPollFromPollState(
+                  pollState,
+                  null,
+                  poll.ownerId,
+                  poll,
+                ),
+        );
   }
 
   static Future<bool?> deletePollDraftsDialog(
@@ -126,6 +147,81 @@ class PollHelperFunctions {
         }
         TToastMessages.successToast('All drafts was deleted');
       },
+    );
+  }
+
+  static Poll createPollFromDraft(
+    DraftPoll draftPoll,
+    UserRecord owner,
+  ) {
+    return Poll(
+      ownerId: owner.userInfo!.id!,
+      owner: owner,
+      question: draftPoll.question,
+      taggedUsers: draftPoll.taggedUsers,
+      locations: draftPoll.locations,
+      mentions: draftPoll.mentions,
+      tags: draftPoll.tags,
+      pollDuration: draftPoll.pollDuration,
+      options: draftPoll.options,
+    );
+  }
+
+  static Poll draftPollToSend(DraftPoll draftPoll) {
+    return Poll(
+      ownerId: 0,
+      question: draftPoll.question,
+      pollDuration: draftPoll.pollDuration,
+      locations: draftPoll.locations,
+      taggedUsers: draftPoll.taggedUsers,
+      mentions: draftPoll.mentions,
+      tags: draftPoll.tags,
+      options: PollOption(
+        votes: 0,
+        voters: [],
+        option: draftPoll.options!.option,
+      ),
+    );
+  }
+
+  static DraftPoll createDraftPollFromPoll(Poll poll) {
+    return DraftPoll(
+      draftId: DateTime.now().millisecondsSinceEpoch,
+      options: PollOption(
+        option: poll.options!.option,
+        votes: 0,
+        voters: [],
+      ),
+      question: poll.question ?? '',
+      taggedUsers: poll.taggedUsers ?? [],
+      locations: poll.locations ?? [],
+      createdAt: DateTime.now(),
+      mentions: poll.mentions ?? [],
+      tags: poll.tags ?? [],
+      pollDuration: poll.pollDuration,
+    );
+  }
+
+  static Poll createPollFromPollState(
+    PollState pollState,
+    int? id,
+    int ownerId,
+    Poll poll,
+  ) {
+    return Poll(
+      id: id,
+      ownerId: ownerId,
+      question: pollState.question,
+      taggedUsers: pollState.taggedUsers,
+      locations: pollState.locations,
+      mentions: pollState.mentions,
+      tags: pollState.tags,
+      options: PollOption(
+        option: pollState.optionText,
+        votes: poll.options?.votes ?? 0,
+        voters: poll.options?.voters ?? [],
+      ),
+      pollDuration: pollState.duration,
     );
   }
 }

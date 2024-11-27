@@ -17,7 +17,7 @@ import 'package:civic_flutter/features/authentication/domain/usecases/reset_user
 import 'package:civic_flutter/features/authentication/domain/usecases/user_sign_in_use_case.dart';
 import 'package:civic_flutter/features/authentication/domain/usecases/validate_create_account_use_case.dart';
 import 'package:civic_flutter/features/authentication/presentation/provider/auth_service_provider.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
+import 'package:civic_flutter/features/project/presentation/routes/project_routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -70,7 +70,7 @@ class Auth extends _$Auth {
       if (userRecord != null && userRecord.verifiedAccount) {
         ref.read(verifiedUserProvider.notifier).setValue(true);
         context.goNamed(
-          FeedRoutes.namespace,
+          ProjectRoutes.namespace,
         );
         ref.read(localStorageProvider).setInt(
               'userId',
@@ -197,8 +197,8 @@ class Auth extends _$Auth {
     state = AuthStateUsername(email: email, politicalStatus: politicalStatus);
   }
 
-  void navigateToMenu(BuildContext context) {
-    context.go(FeedRoutes.namespace);
+  void navigateToApp(BuildContext context) {
+    context.go(ProjectRoutes.namespace);
   }
 
   void navigateToCreateAccount(

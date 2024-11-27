@@ -1,11 +1,8 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/article/presentation/providers/article_provider.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_banner.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_text_editor.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_text_toolbar.dart';
-import 'package:civic_flutter/features/article/presentation/widgets/article_title_field.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateArticleWidget extends ConsumerStatefulWidget {

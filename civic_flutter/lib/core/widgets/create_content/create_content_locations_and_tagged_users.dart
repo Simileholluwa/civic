@@ -1,5 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/poll_selected_locations.dart';
 import 'package:civic_flutter/features/poll/presentation/widgets/poll_selected_tags.dart';
 import 'package:civic_flutter/features/post/presentation/widgets/post_selected_locations.dart';

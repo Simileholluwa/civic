@@ -121,6 +121,7 @@ CREATE TABLE "project" (
     "physicalLocations" json,
     "virtualLocations" json,
     "manualLocations" json,
+    "pdfAttachmentsThumbnail" json,
     "projectVideoUrl" text
 );
 
@@ -621,9 +622,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR civic
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('civic', '20241123094258314', now())
+    VALUES ('civic', '20241126140157986', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241123094258314', "timestamp" = now();
+    DO UPDATE SET "version" = '20241126140157986', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

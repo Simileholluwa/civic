@@ -20,7 +20,8 @@ class ProjectFundingPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectState = ref.watch(projectProviderProvider(project));
-    final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
+    final projectNotifier =
+        ref.watch(projectProviderProvider(project).notifier);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -58,7 +59,10 @@ class ProjectFundingPageView extends ConsumerWidget {
                   hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).textTheme.bodySmall!.color!,
                       ),
-                  validator: TValidator.validateEmail,
+                  validator: (value) => TValidator.validateEmptyText(
+                    'Project cost',
+                    value,
+                  ),
                   textInputType: TextInputType.number,
                   onChanged: (value) {
                     projectNotifier.setProjectCost(value);
@@ -79,8 +83,8 @@ class ProjectFundingPageView extends ConsumerWidget {
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Select funding subcategory',
-            dropdownItems:
-                ProjectHelperFunctions.getFundingSubcategories(projectState.fundingCategory),
+            dropdownItems: ProjectHelperFunctions.getFundingSubcategories(
+                projectState.fundingCategory),
             value: projectState.fundingSubCategory,
             onChanged: (String? value) {
               projectNotifier.setFundingSubCategory(value);

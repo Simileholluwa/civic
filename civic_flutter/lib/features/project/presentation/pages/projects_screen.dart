@@ -6,10 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProjectsScreen extends StatelessWidget {
-  const ProjectsScreen({super.key});
+  const ProjectsScreen({super.key, required this.sendProject,});
+
+  final VoidCallback? sendProject;
 
   @override
   Widget build(BuildContext context) {
+    if (sendProject != null) {
+      Future.delayed(Duration.zero, () {
+        sendProject!();
+      });
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(

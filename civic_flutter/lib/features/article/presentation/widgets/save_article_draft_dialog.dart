@@ -1,8 +1,6 @@
-import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_dialog.dart';
 import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,9 +8,7 @@ import 'package:go_router/go_router.dart';
 Future<bool?> saveArticleDraftDialog(
   WidgetRef ref,
   BuildContext context,
-  String title,
-    String content,
-    String banner,
+  ArticleState articleState,
 ) =>
     postDialog(
       context: context,
@@ -36,14 +32,15 @@ Future<bool?> saveArticleDraftDialog(
             extra: null,
           );
         }
-        final result =
-            await ref.read(articleDraftsProvider.notifier).saveArticleDraft(
-                  ArticleDraft(
-                    banner: banner,
-                    content: content,
-                    title: title,
-                  ),
-                );
+        final result = await ref
+            .read(
+              articleDraftsProvider.notifier,
+            )
+            .saveArticleDraft(
+              ArticleHelperFunctions.createDraftFromArticleState(
+                articleState,
+              ),
+            );
         if (result) {
           TToastMessages.successToast(
             'Your article has been saved as draft.',

@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/delete_draft_use_case.dart';
 import 'package:civic_flutter/features/poll/domain/usecases/save_draft_poll_use_case.dart';
+import 'package:civic_flutter/features/poll/presentation/helper/poll_helper_functions.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_send_provider.dart';
 import 'package:civic_flutter/features/poll/presentation/providers/poll_service_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -97,20 +98,9 @@ class PollDrafts extends _$PollDrafts {
     DraftPoll draftPoll,
     int index,
   ) async {
-    final result = await ref.read(sendPollProvider.notifier).send(
-          poll: Poll(
-            ownerId: 0,
-            question: draftPoll.question,
-            pollDuration: draftPoll.pollDuration,
-            locations: draftPoll.locations,
-            taggedUsers: draftPoll.taggedUsers,
-            mentions: draftPoll.mentions,
-            tags: draftPoll.tags,
-            options: PollOption(
-              votes: 0,
-              voters: [],
-              option: draftPoll.options!.option,
-            ),
+    final result = await ref.read(sendPollProvider.notifier).sendPollNowOrLater(
+          poll: PollHelperFunctions.draftPollToSend(
+            draftPoll,
           ),
         );
 

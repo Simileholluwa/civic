@@ -1,14 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:civic_flutter/core/core.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
-import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/create_content/create_content_schedule_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -66,34 +61,6 @@ class THelperFunctions {
         ext.endsWith(".mpg") ||
         ext.endsWith(".mpeg") ||
         ext.endsWith(".3gp");
-  }
-
-  static PostType determinePostType({
-    required String text,
-    required List<String> pickedImages,
-    required String pickedVideo,
-  }) {
-    if (pickedVideo.isNotEmpty && text.isNotEmpty) {
-      return PostType.textWithVideo;
-    } else if (pickedVideo.isNotEmpty) {
-      return PostType.video;
-    } else if (pickedImages.isNotEmpty &&
-        pickedImages.length > 1 &&
-        text.isNotEmpty) {
-      return PostType.textWithImages;
-    } else if (pickedImages.isNotEmpty && pickedImages.length > 1) {
-      return PostType.images;
-    } else if (pickedImages.isNotEmpty &&
-        pickedImages.length == 1 &&
-        text.isNotEmpty) {
-      return PostType.textWithImage;
-    } else if (pickedImages.isNotEmpty && pickedImages.length == 1) {
-      return PostType.image;
-    } else if (text.isNotEmpty) {
-      return PostType.text;
-    } else {
-      return PostType.none;
-    }
   }
 
   static String humanizeNumber(int number) {

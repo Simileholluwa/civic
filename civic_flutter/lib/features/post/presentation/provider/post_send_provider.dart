@@ -1,8 +1,6 @@
 //ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/providers/assets_service_provider.dart';
 import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
@@ -10,11 +8,10 @@ import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/schedule_post_use_case.dart';
 import 'package:civic_flutter/features/post/domain/usecases/save_post_use_case.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_draft_provider.dart';
-
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_send_provider.g.dart';
 
@@ -27,19 +24,8 @@ class SendPost extends _$SendPost {
     Post post,
     String errorMessage,
   ) async {
-    final draftPost = DraftPost(
-      postType: THelperFunctions.determinePostType(
-        text: post.text ?? '',
-        pickedImages: post.imageUrls ?? [],
-        pickedVideo: post.videoUrl ?? '',
-      ),
-      text: post.text ?? '',
-      imagesPath: post.imageUrls ?? [],
-      videoPath: post.videoUrl ?? '',
-      taggedUsers: post.taggedUsers ?? [],
-      locations: post.locations ?? [],
-      mentions: post.mentions ?? [],
-      tags: post.tags ?? [],
+    final draftPost = PostHelperFunctions.createDraftPostFromPost(
+      post,
     );
     final draftPostProvider = ref.read(postDraftsProvider.notifier);
     final result = await draftPostProvider.saveDraftPost(
@@ -208,21 +194,16 @@ class SendPost extends _$SendPost {
           videoUrl: uploadedVideo,
           owner: record,
         );
-        if (scheduledDateTime == null) {
+        if (scheduledDateTime == null &&
+            !scheduledDateTimeProvider.canSendLater()) {
           await sendPost(
             postTosend,
           );
         } else {
-          if (scheduledDateTimeProvider.canSendLater()) {
-            await saveInFuture(
-              postTosend,
-              scheduledDateTime,
-            );
-          } else {
-            await sendPost(
-              postTosend,
-            );
-          }
+          await saveInFuture(
+            postTosend,
+            scheduledDateTime!,
+          );
         }
         return;
       },

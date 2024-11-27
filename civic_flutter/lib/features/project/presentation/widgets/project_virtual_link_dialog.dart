@@ -135,7 +135,10 @@ Future<bool?> virtualLinkDialog({
                                 },
                                 activeButtonText: 'Submit',
                                 activeButtonLoading: false,
-                                onTapSkipButton: context.pop,
+                                onTapSkipButton: () {
+                                  projectState.virtualLocationController.clear();
+                                  context.pop();
+                                },
                                 skipButtonLoading: false,
                                 skipText: 'Cancel',
                               ),

@@ -1,4 +1,4 @@
-import 'package:civic_flutter/core/providers/local_storage_provider.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'initial_dependencies_provider.g.dart';
 

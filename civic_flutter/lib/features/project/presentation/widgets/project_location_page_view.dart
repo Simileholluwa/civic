@@ -54,7 +54,7 @@ class ProjectLocationPageView extends ConsumerWidget {
                     : () => TToastMessages.infoToast(
                           'Maximum location entries reached.',
                         ),
-                text: 'Search for a location ',
+                text: 'Search location ',
                 icon: Iconsax.location,
               ),
               const SizedBox(width: 10),
@@ -84,7 +84,7 @@ class ProjectLocationPageView extends ConsumerWidget {
                     : () => TToastMessages.infoToast(
                           'Maximum location entries reached.',
                         ),
-                text: "Manually type the project's location",
+                text: "Type location",
                 icon: Iconsax.edit,
               ),
             ],

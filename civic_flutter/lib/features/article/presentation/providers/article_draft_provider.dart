@@ -1,10 +1,9 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:civic_flutter/core/core.dart';
 part 'article_draft_provider.g.dart';
 
 @riverpod
@@ -97,11 +96,8 @@ class ArticleDrafts extends _$ArticleDrafts {
     int index,
   ) async {
     final result = await ref.read(sendArticleProvider.notifier).sendArticle(
-          article: Article(
-            ownerId: 0,
-            title: articleDraft.title,
-            content: articleDraft.content,
-            banner: articleDraft.banner,
+          article: ArticleHelperFunctions.articleToSendFromDraft(
+            articleDraft,
           ),
         );
 

@@ -1,8 +1,6 @@
 import 'dart:developer';
-
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/services/users_list_service.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'dart:async';

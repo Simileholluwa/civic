@@ -1,13 +1,8 @@
-import 'package:civic_flutter/core/entity/custom_bottom_navigation_bar.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/boolean_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/app/app_custom_bottom_navigation_bar.dart';
 
 class AppWrapper extends ConsumerStatefulWidget {
   const AppWrapper({

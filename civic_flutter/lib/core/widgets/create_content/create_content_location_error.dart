@@ -1,5 +1,5 @@
 
-import 'package:civic_flutter/core/providers/location_service_provider.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

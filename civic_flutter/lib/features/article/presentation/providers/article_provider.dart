@@ -1,7 +1,7 @@
 import 'dart:convert';
-
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/article/presentation/state/article_state.dart';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'article_provider.g.dart';
 

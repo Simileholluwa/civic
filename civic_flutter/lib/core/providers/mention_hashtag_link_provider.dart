@@ -1,8 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/services/mention__hashtag_link_services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:civic_flutter/core/core.dart';
 part 'mention_hashtag_link_provider.g.dart';
 
 @riverpod

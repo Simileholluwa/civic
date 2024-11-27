@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

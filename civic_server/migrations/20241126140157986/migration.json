@@ -740,6 +740,24 @@
             "columnType": 8,
             "isNullable": true,
             "dartType": "List<String>?"
+          },
+          {
+            "name": "manualLocations",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "pdfAttachmentsThumbnail",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "projectVideoUrl",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
           }
         ],
         "foreignKeys": [

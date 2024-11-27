@@ -1,8 +1,7 @@
 
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class TAppBarTheme {
   TAppBarTheme._();

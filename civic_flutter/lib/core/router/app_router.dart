@@ -1,10 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/providers/initial_dependencies_provider.dart';
-import 'package:civic_flutter/core/providers/local_storage_provider.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/screens/media_picker.dart';
-import 'package:civic_flutter/core/widgets/app/app_wrapper.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/presentation/pages/create_article_screen.dart';
 import 'package:civic_flutter/features/authentication/presentation/pages/auth_pages.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
@@ -15,7 +10,7 @@ import 'package:civic_flutter/features/poll/presentation/pages/create_poll_scree
 import 'package:civic_flutter/features/post/presentation/pages/create_post_screen.dart';
 import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/project/presentation/pages/create_project_screen.dart';
-import 'package:civic_flutter/features/project/presentation/routes/projects_routes.dart';
+import 'package:civic_flutter/features/project/presentation/routes/project_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';

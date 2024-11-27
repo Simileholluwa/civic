@@ -2,6 +2,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/post/domain/usecases/get_post_use_case.dart';
+import 'package:civic_flutter/features/post/presentation/helpers/post_helper_functons.dart';
 import 'package:civic_flutter/features/post/presentation/provider/post_service_provider.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,7 +20,6 @@ Future<Post?> postDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      
       return Post(
         ownerId: currentUser.userInfo!.id!,
         owner: currentUser,
@@ -31,18 +31,9 @@ Future<Post?> postDetail(
     return result.fold((error) {
       return null;
     }, (currentUser) async {
-      
-      return Post(
-        ownerId: currentUser.userInfo!.id!,
-        postType: PostType.none,
-        owner: currentUser,
-        text: draftPost.text,
-        imageUrls: draftPost.imagesPath,
-        videoUrl: draftPost.videoPath,
-        taggedUsers: draftPost.taggedUsers,
-        locations: draftPost.locations,
-        mentions: draftPost.mentions,
-        tags: draftPost.tags,
+      return PostHelperFunctions.createPostFromDraftPost(
+        draftPost,
+        currentUser,
       );
     });
   } else {

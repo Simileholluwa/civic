@@ -115,7 +115,8 @@ Future<bool?> manualLocationDialog({
                                 height: TSizes.spaceBtwSections,
                               ),
                               AppDualButton(
-                                onTapActiveButton: () {
+                                onTapActiveButton: projectState
+                                          .manualLocationController.text.isNotEmpty ? () {
                                   final isValid =
                                       formKey.currentState!.validate();
                                   if (!isValid) {
@@ -139,10 +140,13 @@ Future<bool?> manualLocationDialog({
                                         .clear();
                                     context.pop();
                                   }
-                                },
+                                } : null,
                                 activeButtonText: 'Submit',
                                 activeButtonLoading: false,
-                                onTapSkipButton: context.pop,
+                                onTapSkipButton: () {
+                                  projectState.manualLocationController.clear();
+                                  context.pop();
+                                },
                                 skipButtonLoading: false,
                                 skipText: 'Cancel',
                               ),

@@ -1,7 +1,5 @@
-import 'package:civic_flutter/core/constants/text_strings.dart';
-import 'package:civic_flutter/core/router/app_router.dart';
-import 'package:civic_flutter/core/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';

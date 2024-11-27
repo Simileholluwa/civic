@@ -51,7 +51,7 @@ class _NinFormState extends ConsumerState<NinForm> {
             ),
             AppDualButton(
               onTapSkipButton: () =>
-                  ref.read(authProvider.notifier).navigateToMenu(
+                  ref.read(authProvider.notifier).navigateToApp(
                         context,
                       ),
               activeButtonText: TTexts.tContinue,

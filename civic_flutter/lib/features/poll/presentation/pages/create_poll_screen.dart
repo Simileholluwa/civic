@@ -28,8 +28,8 @@ class CreatePollScreen extends ConsumerWidget {
     required this.draft,
   });
 
-  final int id;
   final DraftPoll? draft;
+  final int id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,8 +48,7 @@ class CreatePollScreen extends ConsumerWidget {
         if (didPop) return;
         final bool? shouldPop = canSendPoll
             ? id == 0
-                ? await savePollDraftDialog(
-                    ref, context, data.value!)
+                ? await savePollDraftDialog(ref, context, data.value!)
                 : await editPollDialog(
                     ref,
                     context,
@@ -75,43 +74,14 @@ class CreatePollScreen extends ConsumerWidget {
                   FeedRoutes.namespace,
                   extra: () => PollHelperFunctions.sendPoll(
                     ref,
-                    id != 0
-                        ? Poll(
-                            id: data.value!.id,
-                            ownerId: data.value!.ownerId,
-                            question: pollState.question,
-                            taggedUsers: pollState.taggedUsers,
-                            locations: pollState.locations,
-                            mentions: pollState.mentions,
-                            tags: pollState.tags,
-                            options: PollOption(
-                              option: pollState.optionText,
-                              votes: data.value!.options?.votes ?? 0,
-                              voters: data.value!.options?.voters ?? [],
-                            ),
-                            pollDuration: pollState.duration,
-                          )
-                        : Poll(
-                            ownerId: data.value!.ownerId,
-                            question: pollState.question,
-                            taggedUsers: pollState.taggedUsers,
-                            locations: pollState.locations,
-                            mentions: pollState.mentions,
-                            tags: pollState.tags,
-                            options: PollOption(
-                              option: pollState.optionText,
-                              votes: 0,
-                              voters: [],
-                            ),
-                            pollDuration: pollState.duration,
-                          ),
+                    data.value!,
+                    id,
                   ),
                 );
               },
               onCanSendPost: () async {
                 final shouldPop = id == 0
-                    ? await savePollDraftDialog(
-                        ref, context, data.value!)
+                    ? await savePollDraftDialog(ref, context, data.value!)
                     : await editPollDialog(
                         ref,
                         context,

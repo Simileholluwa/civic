@@ -1,7 +1,5 @@
 import 'dart:io';
-
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';

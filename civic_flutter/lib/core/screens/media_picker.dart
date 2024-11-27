@@ -1,15 +1,6 @@
 import 'dart:developer';
-
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/core/providers/media_services.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
-import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
-import 'package:civic_flutter/core/widgets/app/app_loading_widget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';

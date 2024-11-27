@@ -1,7 +1,5 @@
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
-import 'package:civic_flutter/core/services/location_services.dart';
-import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'dart:async';
 import 'dart:developer';
 

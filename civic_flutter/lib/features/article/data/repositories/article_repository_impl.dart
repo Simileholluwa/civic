@@ -1,9 +1,6 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/errors/exceptions.dart';
-import 'package:civic_flutter/core/errors/failure.dart';
-import 'package:civic_flutter/features/article/data/datasources/local_datasource/article_local_datasource.dart';
-import 'package:civic_flutter/features/article/data/datasources/remote_datasourece/article_remote_datasource.dart';
-import 'package:civic_flutter/features/article/domain/repositries/article_repository.dart';
+import 'package:civic_flutter/features/article/article.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 class ArticleRepositoryImpl extends ArticleRepository {
