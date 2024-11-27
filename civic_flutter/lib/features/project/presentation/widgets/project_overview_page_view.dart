@@ -31,7 +31,6 @@ class ProjectOverviewPageView extends ConsumerWidget {
           ),
           padding: const EdgeInsets.only(
             bottom: 4,
-            top: 4,
           ),
           child: ProjectTextToolbar(
             controller: projectState.quillController,

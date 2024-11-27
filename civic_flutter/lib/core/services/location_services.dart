@@ -53,7 +53,7 @@ class LocationServices {
       log(
         e.toString(),
       );
-      return left('Unable to get current location data');
+      return left(e.toString(),);
     }
   }
 }

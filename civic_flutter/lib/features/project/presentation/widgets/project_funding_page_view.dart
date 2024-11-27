@@ -17,12 +17,10 @@ class ProjectFundingPageView extends ConsumerWidget {
 
   final Project project;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectState = ref.watch(projectProviderProvider(project));
     final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -75,7 +73,6 @@ class ProjectFundingPageView extends ConsumerWidget {
             dropdownItems: fundingSources.keys.toList(),
             value: projectState.fundingCategory,
             onChanged: (String? value) {
-              
               projectNotifier.setFundingCategory(value);
             },
           ),
@@ -86,7 +83,6 @@ class ProjectFundingPageView extends ConsumerWidget {
                 ProjectHelperFunctions.getFundingSubcategories(projectState.fundingCategory),
             value: projectState.fundingSubCategory,
             onChanged: (String? value) {
-              
               projectNotifier.setFundingSubCategory(value);
             },
           ),

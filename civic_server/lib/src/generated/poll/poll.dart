@@ -19,12 +19,12 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     this.id,
     required this.ownerId,
     this.owner,
-    required this.question,
-    required this.taggedUsers,
-    required this.locations,
-    required this.mentions,
+    this.question,
+    this.taggedUsers,
+    this.locations,
+    this.mentions,
     this.options,
-    required this.tags,
+    this.tags,
     this.createdAt,
     this.pollDuration,
     this.hashtags,
@@ -34,12 +34,12 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String question,
-    required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
-    required List<_i2.UserRecord> mentions,
+    String? question,
+    List<_i2.UserRecord>? taggedUsers,
+    List<_i2.AWSPlaces>? locations,
+    List<_i2.UserRecord>? mentions,
     _i2.PollOption? options,
-    required List<String> tags,
+    List<String>? tags,
     DateTime? createdAt,
     int? pollDuration,
     List<_i2.PollsHashtags>? hashtags,
@@ -53,22 +53,23 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      question: jsonSerialization['question'] as String,
-      taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+      question: jsonSerialization['question'] as String?,
+      taggedUsers: (jsonSerialization['taggedUsers'] as List?)
+          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      locations: (jsonSerialization['locations'] as List)
-          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+      locations: (jsonSerialization['locations'] as List?)
+          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      mentions: (jsonSerialization['mentions'] as List)
-          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+      mentions: (jsonSerialization['mentions'] as List?)
+          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       options: jsonSerialization['options'] == null
           ? null
           : _i2.PollOption.fromJson(
               (jsonSerialization['options'] as Map<String, dynamic>)),
-      tags:
-          (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
+      tags: (jsonSerialization['tags'] as List?)
+          ?.map((e) => e as String)
+          .toList(),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -90,17 +91,17 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i2.UserRecord? owner;
 
-  String question;
+  String? question;
 
-  List<_i2.UserRecord> taggedUsers;
+  List<_i2.UserRecord>? taggedUsers;
 
-  List<_i2.AWSPlaces> locations;
+  List<_i2.AWSPlaces>? locations;
 
-  List<_i2.UserRecord> mentions;
+  List<_i2.UserRecord>? mentions;
 
   _i2.PollOption? options;
 
-  List<String> tags;
+  List<String>? tags;
 
   DateTime? createdAt;
 
@@ -131,12 +132,15 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      'question': question,
-      'taggedUsers': taggedUsers.toJson(valueToJson: (v) => v.toJson()),
-      'locations': locations.toJson(valueToJson: (v) => v.toJson()),
-      'mentions': mentions.toJson(valueToJson: (v) => v.toJson()),
+      if (question != null) 'question': question,
+      if (taggedUsers != null)
+        'taggedUsers': taggedUsers?.toJson(valueToJson: (v) => v.toJson()),
+      if (locations != null)
+        'locations': locations?.toJson(valueToJson: (v) => v.toJson()),
+      if (mentions != null)
+        'mentions': mentions?.toJson(valueToJson: (v) => v.toJson()),
       if (options != null) 'options': options?.toJson(),
-      'tags': tags.toJson(),
+      if (tags != null) 'tags': tags?.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (pollDuration != null) 'pollDuration': pollDuration,
       if (hashtags != null)
@@ -150,13 +154,17 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
-      'question': question,
-      'taggedUsers':
-          taggedUsers.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      'locations': locations.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      'mentions': mentions.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (question != null) 'question': question,
+      if (taggedUsers != null)
+        'taggedUsers':
+            taggedUsers?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (locations != null)
+        'locations':
+            locations?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (mentions != null)
+        'mentions': mentions?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (options != null) 'options': options?.toJsonForProtocol(),
-      'tags': tags.toJson(),
+      if (tags != null) 'tags': tags?.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (pollDuration != null) 'pollDuration': pollDuration,
       if (hashtags != null)
@@ -207,12 +215,12 @@ class _PollImpl extends Poll {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String question,
-    required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
-    required List<_i2.UserRecord> mentions,
+    String? question,
+    List<_i2.UserRecord>? taggedUsers,
+    List<_i2.AWSPlaces>? locations,
+    List<_i2.UserRecord>? mentions,
     _i2.PollOption? options,
-    required List<String> tags,
+    List<String>? tags,
     DateTime? createdAt,
     int? pollDuration,
     List<_i2.PollsHashtags>? hashtags,
@@ -236,12 +244,12 @@ class _PollImpl extends Poll {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    String? question,
-    List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
-    List<_i2.UserRecord>? mentions,
+    Object? question = _Undefined,
+    Object? taggedUsers = _Undefined,
+    Object? locations = _Undefined,
+    Object? mentions = _Undefined,
     Object? options = _Undefined,
-    List<String>? tags,
+    Object? tags = _Undefined,
     Object? createdAt = _Undefined,
     Object? pollDuration = _Undefined,
     Object? hashtags = _Undefined,
@@ -250,14 +258,18 @@ class _PollImpl extends Poll {
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      question: question ?? this.question,
-      taggedUsers:
-          taggedUsers ?? this.taggedUsers.map((e0) => e0.copyWith()).toList(),
-      locations:
-          locations ?? this.locations.map((e0) => e0.copyWith()).toList(),
-      mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
+      question: question is String? ? question : this.question,
+      taggedUsers: taggedUsers is List<_i2.UserRecord>?
+          ? taggedUsers
+          : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
+      locations: locations is List<_i2.AWSPlaces>?
+          ? locations
+          : this.locations?.map((e0) => e0.copyWith()).toList(),
+      mentions: mentions is List<_i2.UserRecord>?
+          ? mentions
+          : this.mentions?.map((e0) => e0.copyWith()).toList(),
       options: options is _i2.PollOption? ? options : this.options?.copyWith(),
-      tags: tags ?? this.tags.map((e0) => e0).toList(),
+      tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
       hashtags: hashtags is List<_i2.PollsHashtags>?

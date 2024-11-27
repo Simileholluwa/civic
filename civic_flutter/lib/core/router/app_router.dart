@@ -54,7 +54,7 @@ GoRouter router(RouterRef ref) {
                       currentUser.userInfo!.id!,
                     );
                 FlutterNativeSplash.remove();
-                return FeedRoutes.namespace;
+                return ProjectRoutes.namespace;
               }
             }
           } catch (_) {
@@ -216,7 +216,7 @@ GoRouter router(RouterRef ref) {
 
       StatefulShellRoute.indexedStack(
         branches: [
-          ProjectsRoutes.branch,
+          ProjectRoutes.branch,
           FeedRoutes.branch,
           DiscoverRoutes.branch,
           NotificationsRoutes.branch,

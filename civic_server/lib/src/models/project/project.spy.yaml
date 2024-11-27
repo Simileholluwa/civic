@@ -2,16 +2,25 @@ class: Project
 table: project
 fields:
     owner: UserRecord?, relation
-    title: String
-    description: String
-    category: List<String>
-    status: ProjectStatus
-    images: List<String>
-    startDate: DateTime
-    endDate: DateTime
-    completionRate: double?
-    cost: double?
+    title: String?
+    description: String?
+    projectCategory: String?
+    projectSubCategory: String?
+    status: String?
+    startDate: DateTime?
+    endDate: DateTime?
     currency: String?
-    locations: List<AWSPlaces>?
-    fundingSources: List<String>?
+    fundingCategory: String?
+    fundingSubCategory: String?
+    projectCost: String?
+    fundingNote: String?
+    projectImageAttachments: List<String>?
+    projectPDFAttachments: List<String>?
+    completionRate: double?
+    physicalLocations: List<AWSPlaces>?
+    virtualLocations: List<String>?
+    manualLocations: List<String>?
+    pdfAttachmentsThumbnail: List<String>?
+    projectVideoUrl: String?
+    
 

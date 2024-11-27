@@ -30,12 +30,12 @@ class SendPoll extends _$SendPoll {
         votes: 0,
         voters: [],
       ),
-      question: poll.question,
-      taggedUsers: poll.taggedUsers,
-      locations: poll.locations,
+      question: poll.question ?? '',
+      taggedUsers: poll.taggedUsers ?? [],
+      locations: poll.locations ?? [],
       createdAt: DateTime.now(),
-      mentions: poll.mentions,
-      tags: poll.tags,
+      mentions: poll.mentions ?? [],
+      tags: poll.tags ?? [],
       pollDuration: poll.pollDuration,
     );
     final draftPollProvider = ref.read(pollDraftsProvider.notifier);

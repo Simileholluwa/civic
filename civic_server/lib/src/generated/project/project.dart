@@ -19,36 +19,52 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.id,
     required this.ownerId,
     this.owner,
-    required this.title,
-    required this.description,
-    required this.category,
-    required this.status,
-    required this.images,
-    required this.startDate,
-    required this.endDate,
-    this.completionRate,
-    this.cost,
+    this.title,
+    this.description,
+    this.projectCategory,
+    this.projectSubCategory,
+    this.status,
+    this.startDate,
+    this.endDate,
     this.currency,
-    this.locations,
-    this.fundingSources,
+    this.fundingCategory,
+    this.fundingSubCategory,
+    this.projectCost,
+    this.fundingNote,
+    this.projectImageAttachments,
+    this.projectPDFAttachments,
+    this.completionRate,
+    this.physicalLocations,
+    this.virtualLocations,
+    this.manualLocations,
+    this.pdfAttachmentsThumbnail,
+    this.projectVideoUrl,
   });
 
   factory Project({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String title,
-    required String description,
-    required List<String> category,
-    required _i2.ProjectStatus status,
-    required List<String> images,
-    required DateTime startDate,
-    required DateTime endDate,
-    double? completionRate,
-    double? cost,
+    String? title,
+    String? description,
+    String? projectCategory,
+    String? projectSubCategory,
+    String? status,
+    DateTime? startDate,
+    DateTime? endDate,
     String? currency,
-    List<_i2.AWSPlaces>? locations,
-    List<String>? fundingSources,
+    String? fundingCategory,
+    String? fundingSubCategory,
+    String? projectCost,
+    String? fundingNote,
+    List<String>? projectImageAttachments,
+    List<String>? projectPDFAttachments,
+    double? completionRate,
+    List<_i2.AWSPlaces>? physicalLocations,
+    List<String>? virtualLocations,
+    List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -59,27 +75,45 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      title: jsonSerialization['title'] as String,
-      description: jsonSerialization['description'] as String,
-      category: (jsonSerialization['category'] as List)
-          .map((e) => e as String)
-          .toList(),
-      status: _i2.ProjectStatus.fromJson((jsonSerialization['status'] as int)),
-      images: (jsonSerialization['images'] as List)
-          .map((e) => e as String)
-          .toList(),
-      startDate:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startDate']),
-      endDate: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endDate']),
-      completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
-      cost: (jsonSerialization['cost'] as num?)?.toDouble(),
+      title: jsonSerialization['title'] as String?,
+      description: jsonSerialization['description'] as String?,
+      projectCategory: jsonSerialization['projectCategory'] as String?,
+      projectSubCategory: jsonSerialization['projectSubCategory'] as String?,
+      status: jsonSerialization['status'] as String?,
+      startDate: jsonSerialization['startDate'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startDate']),
+      endDate: jsonSerialization['endDate'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['endDate']),
       currency: jsonSerialization['currency'] as String?,
-      locations: (jsonSerialization['locations'] as List?)
+      fundingCategory: jsonSerialization['fundingCategory'] as String?,
+      fundingSubCategory: jsonSerialization['fundingSubCategory'] as String?,
+      projectCost: jsonSerialization['projectCost'] as String?,
+      fundingNote: jsonSerialization['fundingNote'] as String?,
+      projectImageAttachments:
+          (jsonSerialization['projectImageAttachments'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+      projectPDFAttachments:
+          (jsonSerialization['projectPDFAttachments'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+      completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
+      physicalLocations: (jsonSerialization['physicalLocations'] as List?)
           ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      fundingSources: (jsonSerialization['fundingSources'] as List?)
+      virtualLocations: (jsonSerialization['virtualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      manualLocations: (jsonSerialization['manualLocations'] as List?)
+          ?.map((e) => e as String)
+          .toList(),
+      pdfAttachmentsThumbnail:
+          (jsonSerialization['pdfAttachmentsThumbnail'] as List?)
+              ?.map((e) => e as String)
+              .toList(),
+      projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
     );
   }
 
@@ -94,29 +128,45 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i2.UserRecord? owner;
 
-  String title;
+  String? title;
 
-  String description;
+  String? description;
 
-  List<String> category;
+  String? projectCategory;
 
-  _i2.ProjectStatus status;
+  String? projectSubCategory;
 
-  List<String> images;
+  String? status;
 
-  DateTime startDate;
+  DateTime? startDate;
 
-  DateTime endDate;
-
-  double? completionRate;
-
-  double? cost;
+  DateTime? endDate;
 
   String? currency;
 
-  List<_i2.AWSPlaces>? locations;
+  String? fundingCategory;
 
-  List<String>? fundingSources;
+  String? fundingSubCategory;
+
+  String? projectCost;
+
+  String? fundingNote;
+
+  List<String>? projectImageAttachments;
+
+  List<String>? projectPDFAttachments;
+
+  double? completionRate;
+
+  List<_i2.AWSPlaces>? physicalLocations;
+
+  List<String>? virtualLocations;
+
+  List<String>? manualLocations;
+
+  List<String>? pdfAttachmentsThumbnail;
+
+  String? projectVideoUrl;
 
   @override
   _i1.Table get table => t;
@@ -127,16 +177,24 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     String? title,
     String? description,
-    List<String>? category,
-    _i2.ProjectStatus? status,
-    List<String>? images,
+    String? projectCategory,
+    String? projectSubCategory,
+    String? status,
     DateTime? startDate,
     DateTime? endDate,
-    double? completionRate,
-    double? cost,
     String? currency,
-    List<_i2.AWSPlaces>? locations,
-    List<String>? fundingSources,
+    String? fundingCategory,
+    String? fundingSubCategory,
+    String? projectCost,
+    String? fundingNote,
+    List<String>? projectImageAttachments,
+    List<String>? projectPDFAttachments,
+    double? completionRate,
+    List<_i2.AWSPlaces>? physicalLocations,
+    List<String>? virtualLocations,
+    List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -144,19 +202,32 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      'title': title,
-      'description': description,
-      'category': category.toJson(),
-      'status': status.toJson(),
-      'images': images.toJson(),
-      'startDate': startDate.toJson(),
-      'endDate': endDate.toJson(),
-      if (completionRate != null) 'completionRate': completionRate,
-      if (cost != null) 'cost': cost,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (projectCategory != null) 'projectCategory': projectCategory,
+      if (projectSubCategory != null) 'projectSubCategory': projectSubCategory,
+      if (status != null) 'status': status,
+      if (startDate != null) 'startDate': startDate?.toJson(),
+      if (endDate != null) 'endDate': endDate?.toJson(),
       if (currency != null) 'currency': currency,
-      if (locations != null)
-        'locations': locations?.toJson(valueToJson: (v) => v.toJson()),
-      if (fundingSources != null) 'fundingSources': fundingSources?.toJson(),
+      if (fundingCategory != null) 'fundingCategory': fundingCategory,
+      if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
+      if (projectCost != null) 'projectCost': projectCost,
+      if (fundingNote != null) 'fundingNote': fundingNote,
+      if (projectImageAttachments != null)
+        'projectImageAttachments': projectImageAttachments?.toJson(),
+      if (projectPDFAttachments != null)
+        'projectPDFAttachments': projectPDFAttachments?.toJson(),
+      if (completionRate != null) 'completionRate': completionRate,
+      if (physicalLocations != null)
+        'physicalLocations':
+            physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
+      if (virtualLocations != null)
+        'virtualLocations': virtualLocations?.toJson(),
+      if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
+      if (pdfAttachmentsThumbnail != null)
+        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
+      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
 
@@ -166,20 +237,32 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
-      'title': title,
-      'description': description,
-      'category': category.toJson(),
-      'status': status.toJson(),
-      'images': images.toJson(),
-      'startDate': startDate.toJson(),
-      'endDate': endDate.toJson(),
-      if (completionRate != null) 'completionRate': completionRate,
-      if (cost != null) 'cost': cost,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (projectCategory != null) 'projectCategory': projectCategory,
+      if (projectSubCategory != null) 'projectSubCategory': projectSubCategory,
+      if (status != null) 'status': status,
+      if (startDate != null) 'startDate': startDate?.toJson(),
+      if (endDate != null) 'endDate': endDate?.toJson(),
       if (currency != null) 'currency': currency,
-      if (locations != null)
-        'locations':
-            locations?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      if (fundingSources != null) 'fundingSources': fundingSources?.toJson(),
+      if (fundingCategory != null) 'fundingCategory': fundingCategory,
+      if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
+      if (projectCost != null) 'projectCost': projectCost,
+      if (fundingNote != null) 'fundingNote': fundingNote,
+      if (projectImageAttachments != null)
+        'projectImageAttachments': projectImageAttachments?.toJson(),
+      if (projectPDFAttachments != null)
+        'projectPDFAttachments': projectPDFAttachments?.toJson(),
+      if (completionRate != null) 'completionRate': completionRate,
+      if (physicalLocations != null)
+        'physicalLocations': physicalLocations?.toJson(
+            valueToJson: (v) => v.toJsonForProtocol()),
+      if (virtualLocations != null)
+        'virtualLocations': virtualLocations?.toJson(),
+      if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
+      if (pdfAttachmentsThumbnail != null)
+        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
+      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
 
@@ -220,34 +303,50 @@ class _ProjectImpl extends Project {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String title,
-    required String description,
-    required List<String> category,
-    required _i2.ProjectStatus status,
-    required List<String> images,
-    required DateTime startDate,
-    required DateTime endDate,
-    double? completionRate,
-    double? cost,
+    String? title,
+    String? description,
+    String? projectCategory,
+    String? projectSubCategory,
+    String? status,
+    DateTime? startDate,
+    DateTime? endDate,
     String? currency,
-    List<_i2.AWSPlaces>? locations,
-    List<String>? fundingSources,
+    String? fundingCategory,
+    String? fundingSubCategory,
+    String? projectCost,
+    String? fundingNote,
+    List<String>? projectImageAttachments,
+    List<String>? projectPDFAttachments,
+    double? completionRate,
+    List<_i2.AWSPlaces>? physicalLocations,
+    List<String>? virtualLocations,
+    List<String>? manualLocations,
+    List<String>? pdfAttachmentsThumbnail,
+    String? projectVideoUrl,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
           title: title,
           description: description,
-          category: category,
+          projectCategory: projectCategory,
+          projectSubCategory: projectSubCategory,
           status: status,
-          images: images,
           startDate: startDate,
           endDate: endDate,
-          completionRate: completionRate,
-          cost: cost,
           currency: currency,
-          locations: locations,
-          fundingSources: fundingSources,
+          fundingCategory: fundingCategory,
+          fundingSubCategory: fundingSubCategory,
+          projectCost: projectCost,
+          fundingNote: fundingNote,
+          projectImageAttachments: projectImageAttachments,
+          projectPDFAttachments: projectPDFAttachments,
+          completionRate: completionRate,
+          physicalLocations: physicalLocations,
+          virtualLocations: virtualLocations,
+          manualLocations: manualLocations,
+          pdfAttachmentsThumbnail: pdfAttachmentsThumbnail,
+          projectVideoUrl: projectVideoUrl,
         );
 
   @override
@@ -255,40 +354,71 @@ class _ProjectImpl extends Project {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    String? title,
-    String? description,
-    List<String>? category,
-    _i2.ProjectStatus? status,
-    List<String>? images,
-    DateTime? startDate,
-    DateTime? endDate,
-    Object? completionRate = _Undefined,
-    Object? cost = _Undefined,
+    Object? title = _Undefined,
+    Object? description = _Undefined,
+    Object? projectCategory = _Undefined,
+    Object? projectSubCategory = _Undefined,
+    Object? status = _Undefined,
+    Object? startDate = _Undefined,
+    Object? endDate = _Undefined,
     Object? currency = _Undefined,
-    Object? locations = _Undefined,
-    Object? fundingSources = _Undefined,
+    Object? fundingCategory = _Undefined,
+    Object? fundingSubCategory = _Undefined,
+    Object? projectCost = _Undefined,
+    Object? fundingNote = _Undefined,
+    Object? projectImageAttachments = _Undefined,
+    Object? projectPDFAttachments = _Undefined,
+    Object? completionRate = _Undefined,
+    Object? physicalLocations = _Undefined,
+    Object? virtualLocations = _Undefined,
+    Object? manualLocations = _Undefined,
+    Object? pdfAttachmentsThumbnail = _Undefined,
+    Object? projectVideoUrl = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      title: title ?? this.title,
-      description: description ?? this.description,
-      category: category ?? this.category.map((e0) => e0).toList(),
-      status: status ?? this.status,
-      images: images ?? this.images.map((e0) => e0).toList(),
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
+      title: title is String? ? title : this.title,
+      description: description is String? ? description : this.description,
+      projectCategory:
+          projectCategory is String? ? projectCategory : this.projectCategory,
+      projectSubCategory: projectSubCategory is String?
+          ? projectSubCategory
+          : this.projectSubCategory,
+      status: status is String? ? status : this.status,
+      startDate: startDate is DateTime? ? startDate : this.startDate,
+      endDate: endDate is DateTime? ? endDate : this.endDate,
+      currency: currency is String? ? currency : this.currency,
+      fundingCategory:
+          fundingCategory is String? ? fundingCategory : this.fundingCategory,
+      fundingSubCategory: fundingSubCategory is String?
+          ? fundingSubCategory
+          : this.fundingSubCategory,
+      projectCost: projectCost is String? ? projectCost : this.projectCost,
+      fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
+      projectImageAttachments: projectImageAttachments is List<String>?
+          ? projectImageAttachments
+          : this.projectImageAttachments?.map((e0) => e0).toList(),
+      projectPDFAttachments: projectPDFAttachments is List<String>?
+          ? projectPDFAttachments
+          : this.projectPDFAttachments?.map((e0) => e0).toList(),
       completionRate:
           completionRate is double? ? completionRate : this.completionRate,
-      cost: cost is double? ? cost : this.cost,
-      currency: currency is String? ? currency : this.currency,
-      locations: locations is List<_i2.AWSPlaces>?
-          ? locations
-          : this.locations?.map((e0) => e0.copyWith()).toList(),
-      fundingSources: fundingSources is List<String>?
-          ? fundingSources
-          : this.fundingSources?.map((e0) => e0).toList(),
+      physicalLocations: physicalLocations is List<_i2.AWSPlaces>?
+          ? physicalLocations
+          : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
+      virtualLocations: virtualLocations is List<String>?
+          ? virtualLocations
+          : this.virtualLocations?.map((e0) => e0).toList(),
+      manualLocations: manualLocations is List<String>?
+          ? manualLocations
+          : this.manualLocations?.map((e0) => e0).toList(),
+      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail is List<String>?
+          ? pdfAttachmentsThumbnail
+          : this.pdfAttachmentsThumbnail?.map((e0) => e0).toList(),
+      projectVideoUrl:
+          projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
     );
   }
 }
@@ -307,17 +437,16 @@ class ProjectTable extends _i1.Table {
       'description',
       this,
     );
-    category = _i1.ColumnSerializable(
-      'category',
+    projectCategory = _i1.ColumnString(
+      'projectCategory',
       this,
     );
-    status = _i1.ColumnEnum(
+    projectSubCategory = _i1.ColumnString(
+      'projectSubCategory',
+      this,
+    );
+    status = _i1.ColumnString(
       'status',
-      this,
-      _i1.EnumSerialization.byIndex,
-    );
-    images = _i1.ColumnSerializable(
-      'images',
       this,
     );
     startDate = _i1.ColumnDateTime(
@@ -328,24 +457,56 @@ class ProjectTable extends _i1.Table {
       'endDate',
       this,
     );
-    completionRate = _i1.ColumnDouble(
-      'completionRate',
-      this,
-    );
-    cost = _i1.ColumnDouble(
-      'cost',
-      this,
-    );
     currency = _i1.ColumnString(
       'currency',
       this,
     );
-    locations = _i1.ColumnSerializable(
-      'locations',
+    fundingCategory = _i1.ColumnString(
+      'fundingCategory',
       this,
     );
-    fundingSources = _i1.ColumnSerializable(
-      'fundingSources',
+    fundingSubCategory = _i1.ColumnString(
+      'fundingSubCategory',
+      this,
+    );
+    projectCost = _i1.ColumnString(
+      'projectCost',
+      this,
+    );
+    fundingNote = _i1.ColumnString(
+      'fundingNote',
+      this,
+    );
+    projectImageAttachments = _i1.ColumnSerializable(
+      'projectImageAttachments',
+      this,
+    );
+    projectPDFAttachments = _i1.ColumnSerializable(
+      'projectPDFAttachments',
+      this,
+    );
+    completionRate = _i1.ColumnDouble(
+      'completionRate',
+      this,
+    );
+    physicalLocations = _i1.ColumnSerializable(
+      'physicalLocations',
+      this,
+    );
+    virtualLocations = _i1.ColumnSerializable(
+      'virtualLocations',
+      this,
+    );
+    manualLocations = _i1.ColumnSerializable(
+      'manualLocations',
+      this,
+    );
+    pdfAttachmentsThumbnail = _i1.ColumnSerializable(
+      'pdfAttachmentsThumbnail',
+      this,
+    );
+    projectVideoUrl = _i1.ColumnString(
+      'projectVideoUrl',
       this,
     );
   }
@@ -358,25 +519,41 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnString description;
 
-  late final _i1.ColumnSerializable category;
+  late final _i1.ColumnString projectCategory;
 
-  late final _i1.ColumnEnum<_i2.ProjectStatus> status;
+  late final _i1.ColumnString projectSubCategory;
 
-  late final _i1.ColumnSerializable images;
+  late final _i1.ColumnString status;
 
   late final _i1.ColumnDateTime startDate;
 
   late final _i1.ColumnDateTime endDate;
 
-  late final _i1.ColumnDouble completionRate;
-
-  late final _i1.ColumnDouble cost;
-
   late final _i1.ColumnString currency;
 
-  late final _i1.ColumnSerializable locations;
+  late final _i1.ColumnString fundingCategory;
 
-  late final _i1.ColumnSerializable fundingSources;
+  late final _i1.ColumnString fundingSubCategory;
+
+  late final _i1.ColumnString projectCost;
+
+  late final _i1.ColumnString fundingNote;
+
+  late final _i1.ColumnSerializable projectImageAttachments;
+
+  late final _i1.ColumnSerializable projectPDFAttachments;
+
+  late final _i1.ColumnDouble completionRate;
+
+  late final _i1.ColumnSerializable physicalLocations;
+
+  late final _i1.ColumnSerializable virtualLocations;
+
+  late final _i1.ColumnSerializable manualLocations;
+
+  late final _i1.ColumnSerializable pdfAttachmentsThumbnail;
+
+  late final _i1.ColumnString projectVideoUrl;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -397,16 +574,24 @@ class ProjectTable extends _i1.Table {
         ownerId,
         title,
         description,
-        category,
+        projectCategory,
+        projectSubCategory,
         status,
-        images,
         startDate,
         endDate,
-        completionRate,
-        cost,
         currency,
-        locations,
-        fundingSources,
+        fundingCategory,
+        fundingSubCategory,
+        projectCost,
+        fundingNote,
+        projectImageAttachments,
+        projectPDFAttachments,
+        completionRate,
+        physicalLocations,
+        virtualLocations,
+        manualLocations,
+        pdfAttachmentsThumbnail,
+        projectVideoUrl,
       ];
 
   @override

@@ -103,20 +103,20 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'title',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'content',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'banner',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
       ],
       foreignKeys: [
@@ -214,26 +214,26 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'question',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'taggedUsers',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:UserRecord>',
+          isNullable: true,
+          dartType: 'List<protocol:UserRecord>?',
         ),
         _i2.ColumnDefinition(
           name: 'locations',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:AWSPlaces>',
+          isNullable: true,
+          dartType: 'List<protocol:AWSPlaces>?',
         ),
         _i2.ColumnDefinition(
           name: 'mentions',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:UserRecord>',
+          isNullable: true,
+          dartType: 'List<protocol:UserRecord>?',
         ),
         _i2.ColumnDefinition(
           name: 'options',
@@ -244,8 +244,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'tags',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<String>',
+          isNullable: true,
+          dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -505,50 +505,50 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'postType',
           columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'protocol:PostType',
+          isNullable: true,
+          dartType: 'protocol:PostType?',
         ),
         _i2.ColumnDefinition(
           name: 'text',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'imageUrls',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<String>',
+          isNullable: true,
+          dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
           name: 'videoUrl',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'taggedUsers',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:UserRecord>',
+          isNullable: true,
+          dartType: 'List<protocol:UserRecord>?',
         ),
         _i2.ColumnDefinition(
           name: 'locations',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:AWSPlaces>',
+          isNullable: true,
+          dartType: 'List<protocol:AWSPlaces>?',
         ),
         _i2.ColumnDefinition(
           name: 'mentions',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<protocol:UserRecord>',
+          isNullable: true,
+          dartType: 'List<protocol:UserRecord>?',
         ),
         _i2.ColumnDefinition(
           name: 'tags',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<String>',
+          isNullable: true,
+          dartType: 'List<String>?',
         ),
       ],
       foreignKeys: [
@@ -684,56 +684,44 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'title',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'description',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'category',
-          columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<String>',
+          name: 'projectCategory',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectSubCategory',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'status',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'protocol:ProjectStatus',
-        ),
-        _i2.ColumnDefinition(
-          name: 'images',
-          columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<String>',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'startDate',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: false,
-          dartType: 'DateTime',
+          isNullable: true,
+          dartType: 'DateTime?',
         ),
         _i2.ColumnDefinition(
           name: 'endDate',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: false,
-          dartType: 'DateTime',
-        ),
-        _i2.ColumnDefinition(
-          name: 'completionRate',
-          columnType: _i2.ColumnType.doublePrecision,
           isNullable: true,
-          dartType: 'double?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'cost',
-          columnType: _i2.ColumnType.doublePrecision,
-          isNullable: true,
-          dartType: 'double?',
+          dartType: 'DateTime?',
         ),
         _i2.ColumnDefinition(
           name: 'currency',
@@ -742,16 +730,76 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'locations',
+          name: 'fundingCategory',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'fundingSubCategory',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectCost',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'fundingNote',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectImageAttachments',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectPDFAttachments',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'completionRate',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'physicalLocations',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<protocol:AWSPlaces>?',
         ),
         _i2.ColumnDefinition(
-          name: 'fundingSources',
+          name: 'virtualLocations',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'manualLocations',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'pdfAttachmentsThumbnail',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<String>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectVideoUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
         ),
       ],
       foreignKeys: [
@@ -1221,6 +1269,26 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
+    if (t == _i1.getType<List<_i32.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i32.AWSPlaces>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.AWSPlaces>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i32.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i32.PollsHashtags>?>()) {
       return (data != null
           ? (data as List)
@@ -1240,6 +1308,31 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List)
               .map((e) => deserialize<_i32.PostsHashtags>(e))
               .toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i32.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i32.AWSPlaces>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.AWSPlaces>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i32.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i32.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i32.PostsHashtags>?>()) {
@@ -1253,9 +1346,29 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<_i32.Post>(e)).toList()
           as dynamic;
     }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i32.AWSPlaces>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<_i32.AWSPlaces>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {

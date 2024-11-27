@@ -19,18 +19,18 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
     this.id,
     required this.ownerId,
     this.owner,
-    required this.title,
-    required this.content,
-    required this.banner,
+    this.title,
+    this.content,
+    this.banner,
   });
 
   factory Article({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String title,
-    required String content,
-    required String banner,
+    String? title,
+    String? content,
+    String? banner,
   }) = _ArticleImpl;
 
   factory Article.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -41,9 +41,9 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      title: jsonSerialization['title'] as String,
-      content: jsonSerialization['content'] as String,
-      banner: jsonSerialization['banner'] as String,
+      title: jsonSerialization['title'] as String?,
+      content: jsonSerialization['content'] as String?,
+      banner: jsonSerialization['banner'] as String?,
     );
   }
 
@@ -58,11 +58,11 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i2.UserRecord? owner;
 
-  String title;
+  String? title;
 
-  String content;
+  String? content;
 
-  String banner;
+  String? banner;
 
   @override
   _i1.Table get table => t;
@@ -81,9 +81,9 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      'title': title,
-      'content': content,
-      'banner': banner,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (banner != null) 'banner': banner,
     };
   }
 
@@ -93,9 +93,9 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
-      'title': title,
-      'content': content,
-      'banner': banner,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (banner != null) 'banner': banner,
     };
   }
 
@@ -136,9 +136,9 @@ class _ArticleImpl extends Article {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    required String title,
-    required String content,
-    required String banner,
+    String? title,
+    String? content,
+    String? banner,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -153,17 +153,17 @@ class _ArticleImpl extends Article {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    String? title,
-    String? content,
-    String? banner,
+    Object? title = _Undefined,
+    Object? content = _Undefined,
+    Object? banner = _Undefined,
   }) {
     return Article(
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      title: title ?? this.title,
-      content: content ?? this.content,
-      banner: banner ?? this.banner,
+      title: title is String? ? title : this.title,
+      content: content is String? ? content : this.content,
+      banner: banner is String? ? banner : this.banner,
     );
   }
 }

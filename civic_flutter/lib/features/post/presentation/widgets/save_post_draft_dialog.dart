@@ -38,7 +38,7 @@ Future<bool?> savePostDraftDialog(
     skipButtonLoading: false,
     skipText: "Don't save",
     onTapActiveButton: () async {
-      if (post.videoUrl.isNotEmpty) {
+      if (post.videoUrl!.isNotEmpty) {
         ref
             .read(mediaVideoPlayerProvider(postState.videoUrl).notifier)
             .dispose();

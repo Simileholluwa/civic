@@ -19,6 +19,11 @@ class AppTextField extends StatelessWidget {
     this.autoFocus = false,
     this.onTap,
     this.onSave,
+    this.hintStyle,
+    this.maxLines,
+    this.style,
+    this.onChanged,
+    this.focusedBorder,
     super.key,
   });
 
@@ -36,8 +41,13 @@ class AppTextField extends StatelessWidget {
   final bool enabled;
   final IconButton? suffixIcon;
   final bool autoFocus;
+  final TextStyle? hintStyle;
+  final TextStyle? style;
   final void Function(String?)? onSave;
+  final void Function(String?)? onChanged;
   final void Function()? onTap;
+  final int? maxLines;
+  final InputBorder? focusedBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +77,7 @@ class AppTextField extends StatelessWidget {
           readOnly: readOnly,
           onSaved: onSave,
           onTap: onTap,
+          onChanged: onChanged,
           textCapitalization: TextCapitalization.sentences,
           decoration: InputDecoration(
             prefixIcon: showPrefixIcon
@@ -79,11 +90,17 @@ class AppTextField extends StatelessWidget {
             errorStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                   color: Theme.of(context).colorScheme.error,
                 ),
+            hintStyle: hintStyle,
             errorMaxLines: 2,
+            contentPadding: EdgeInsets.fromLTRB( showPrefixIcon ? 0 : 16, 16, 16, 16),
+            focusedBorder: focusedBorder,
           ),
+          style: style,
+          
           textInputAction: textInputAction,
           keyboardType: textInputType,
           autofocus: autoFocus,
+          maxLines: maxLines,
         ),
       ],
     );

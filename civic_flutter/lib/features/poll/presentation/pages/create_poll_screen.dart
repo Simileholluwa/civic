@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
@@ -42,7 +41,6 @@ class CreatePollScreen extends ConsumerWidget {
     final draftsData = id == 0 ? ref.watch(pollDraftsProvider) : [];
     final canSendPoll = pollState.question.isNotEmpty &&
         pollState.optionText.every((text) => text.isNotEmpty);
-
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use

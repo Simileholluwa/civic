@@ -2,7 +2,6 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/core/helpers/image_helper.dart';
 import 'package:civic_flutter/core/providers/media_provider.dart';
-import 'package:civic_flutter/core/services/mention_hashtag_link_text_controller.dart';
 import 'package:civic_flutter/core/toasts_messages/toast_messages.dart';
 import 'package:civic_flutter/features/post/presentation/state/post_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,16 +15,7 @@ class RegularPost extends _$RegularPost {
   @override
   PostState build(Post? post) {
     if (post == null) {
-      final postState = PostState(
-        text: '',
-        imageUrls: [],
-        videoUrl: '',
-        taggedUsers: [],
-        locations: [],
-        mentions: [],
-        tags: [],
-        controller: MentionHashtagLinkTextEditingController(),
-      );
+      final postState = PostState.empty();
       postState.controller.addListener(
         () {
           setText(postState.controller.text);
@@ -33,22 +23,19 @@ class RegularPost extends _$RegularPost {
       );
       return postState;
     } else {
-      final postState = PostState(
-        text: post.text,
-        imageUrls: post.imageUrls,
-        videoUrl: post.videoUrl,
-        taggedUsers: post.taggedUsers,
-        locations: post.locations,
-        mentions: post.mentions,
-        tags: post.tags,
-        controller: MentionHashtagLinkTextEditingController(text: post.text),
-      );
+      final postState = PostState.populate(post);
       postState.controller.addListener(() {
         setText(postState.controller.text);
       });
 
-      if (post.videoUrl.isNotEmpty) {
-        ref.read(mediaVideoPlayerProvider(postState.videoUrl));
+      if (post.videoUrl != null) {
+        if (post.videoUrl!.isNotEmpty) {
+          ref.read(
+            mediaVideoPlayerProvider(
+              postState.videoUrl,
+            ),
+          );
+        }
       }
       return postState;
     }

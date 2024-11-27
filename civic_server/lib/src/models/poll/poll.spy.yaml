@@ -3,12 +3,12 @@ table: poll
 
 fields: 
     owner: UserRecord?, relation 
-    question: String
-    taggedUsers: List<UserRecord>
-    locations: List<AWSPlaces>
-    mentions: List<UserRecord>
+    question: String?
+    taggedUsers: List<UserRecord>?
+    locations: List<AWSPlaces>?
+    mentions: List<UserRecord>?
     options: PollOption?
-    tags: List<String>
+    tags: List<String>?
     createdAt: DateTime?
     pollDuration: int?
     hashtags: List<PollsHashtags>?, relation(name=polls_pollshashtags)

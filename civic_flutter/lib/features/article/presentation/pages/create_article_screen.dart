@@ -118,7 +118,7 @@ class CreateArticleScreen extends ConsumerWidget {
                 }
               },
               draftPressed: () =>
-                  THelperFunctions.showArticleDraftsScreen(context),
+                  ArticleHelperFunctions.showArticleDraftsScreen(context),
             ),
           ),
           bottomNavigationBar: const CreateContentPrivacy(),

@@ -22,17 +22,6 @@ Future<Poll?> pollDetail(
       return Poll(
         ownerId: currentUser.userInfoId,
         owner: currentUser,
-        question: '',
-        taggedUsers: [],
-        locations: [],
-        mentions: [],
-        tags: [],
-        pollDuration: 1,
-        options: PollOption(
-          option: ['', ''],
-          votes: 0,
-          voters: [],
-        ),
       );
     });
   } else if (id == 0 && draftPoll != null) {

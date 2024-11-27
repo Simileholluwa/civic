@@ -19,19 +19,7 @@ Future<Project?> projectDetail(
       return null;
     }, (currentUser) async {
       return Project(
-        ownerId: currentUser.userInfoId,
-        owner: currentUser,
-        title: '',
-        description: '',
-        images: [],
-        category: [],
-        status: ProjectStatus.pending,
-        startDate: DateTime.now(),
-        endDate: DateTime.now().add(
-          const Duration(
-            days: 5,
-          ),
-        ),
+        ownerId: currentUser.userInfo!.id!,
       );
     });
   } else {
@@ -44,15 +32,15 @@ Future<Project?> projectDetail(
 
     return result.fold(
       (error) => null,
-      (poll) async {
-        if (poll == null) {
+      (project) async {
+        if (project == null) {
           return null;
         }
         final me = ref.read(meUseCaseProvider);
         final userRecord = await me(NoParams());
         final owner = userRecord.fold((error) => null, (user) => user);
         if (owner == null) return null;
-        return poll.copyWith(
+        return project.copyWith(
           owner: owner,
         );
       },

@@ -51,8 +51,8 @@ class _CreateArticleWidgetState extends ConsumerState<CreateArticleWidget> {
             vertical: 4,
           ),
           child: ArticleTextToolbar(
-            controller: articleWriter.controller!,
-            focusNode: articleWriter.focusNode!,
+            controller: articleWriter.controller,
+            focusNode: articleWriter.focusNode,
           ),
         ),
         Expanded(
@@ -62,9 +62,9 @@ class _CreateArticleWidgetState extends ConsumerState<CreateArticleWidget> {
                 ArticleBanner(article: _article,),
                 ArticleTitleField(article: _article),
                 ArticleTextEditor(
-                  controller: articleWriter.controller!,
-                  scrollController: articleWriter.scrollController!,
-                  focusNode: articleWriter.focusNode!,
+                  controller: articleWriter.controller,
+                  scrollController: articleWriter.scrollController,
+                  focusNode: articleWriter.focusNode,
                   configurations: const QuillEditorConfigurations(),
                 ),
               ],

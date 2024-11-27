@@ -1,6 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/features/project/presentation/providers/project_page_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -15,27 +14,23 @@ class CreateProjectBottomNavigationBar extends ConsumerWidget {
     final pageControllerNotifier =
         ref.watch(projectPageControllerProvider.notifier);
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).dividerColor,
-          ),
-        ),
+      margin: const EdgeInsets.fromLTRB(
+        20, 10, 20, 4
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ElevatedButton(
+          FilledButton(
             onPressed: currentPage == 0
                 ? null
                 : () => pageControllerNotifier.previousPage(),
             child: const Text("Previous"),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: currentPage == 4
                 ? null
                 : () => pageControllerNotifier.nextPage(),
-            child: const Text("Next"),
+            child: const Text("Continue"),
           ),
         ],
       ),

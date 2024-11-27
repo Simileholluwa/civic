@@ -22,15 +22,7 @@ Future<Post?> postDetail(
       
       return Post(
         ownerId: currentUser.userInfo!.id!,
-        postType: PostType.none,
         owner: currentUser,
-        text: '',
-        imageUrls: [],
-        videoUrl: '',
-        taggedUsers: [],
-        locations: [],
-        mentions: [],
-        tags: [],
       );
     });
   } else if (id == 0 && draftPost != null) {

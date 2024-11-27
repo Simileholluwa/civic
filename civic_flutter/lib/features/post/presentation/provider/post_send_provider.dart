@@ -29,17 +29,17 @@ class SendPost extends _$SendPost {
   ) async {
     final draftPost = DraftPost(
       postType: THelperFunctions.determinePostType(
-        text: post.text,
-        pickedImages: post.imageUrls,
-        pickedVideo: post.videoUrl,
+        text: post.text ?? '',
+        pickedImages: post.imageUrls ?? [],
+        pickedVideo: post.videoUrl ?? '',
       ),
-      text: post.text,
-      imagesPath: post.imageUrls,
-      videoPath: post.videoUrl,
-      taggedUsers: post.taggedUsers,
-      locations: post.locations,
-      mentions: post.mentions,
-      tags: post.tags,
+      text: post.text ?? '',
+      imagesPath: post.imageUrls ?? [],
+      videoPath: post.videoUrl ?? '',
+      taggedUsers: post.taggedUsers ?? [],
+      locations: post.locations ?? [],
+      mentions: post.mentions ?? [],
+      tags: post.tags ?? [],
     );
     final draftPostProvider = ref.read(postDraftsProvider.notifier);
     final result = await draftPostProvider.saveDraftPost(
@@ -55,8 +55,8 @@ class SendPost extends _$SendPost {
   Future<List<String>> sendMediaImages(Post post) async {
     var existingUpload = <String>[];
     var newUpload = <String>[];
-    if (post.imageUrls.isNotEmpty) {
-      for (final image in post.imageUrls) {
+    if (post.imageUrls!.isNotEmpty) {
+      for (final image in post.imageUrls!) {
         final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
         if (regex.hasMatch(image)) {
           existingUpload.add(image);
@@ -87,13 +87,13 @@ class SendPost extends _$SendPost {
   }
 
   Future<String> sendMediaVideo(Post post) async {
-    if (post.videoUrl.isNotEmpty) {
+    if (post.videoUrl!.isNotEmpty) {
       final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-      if (regex.hasMatch(post.videoUrl)) {
-        return post.videoUrl;
+      if (regex.hasMatch(post.videoUrl!)) {
+        return post.videoUrl!;
       }
       final result = await ref.read(assetServiceProvider).uploadMediaAssets(
-        [post.videoUrl],
+        [post.videoUrl!],
         'posts',
         'videos',
       );
