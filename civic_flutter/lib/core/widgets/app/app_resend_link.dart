@@ -1,4 +1,4 @@
-import 'package:civic_flutter/features/authentication/presentation/provider/count_down_provider.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
