@@ -19,7 +19,7 @@ class ProjectFundingPageView extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(context).viewInsets.bottom + 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

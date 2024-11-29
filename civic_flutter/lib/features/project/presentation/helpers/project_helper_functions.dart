@@ -83,11 +83,14 @@ class ProjectHelperFunctions {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            datePickerTheme: const DatePickerThemeData(
+            datePickerTheme: DatePickerThemeData(
               surfaceTintColor: Colors.transparent,
               elevation: 4,
               headerBackgroundColor: TColors.primary,
               headerForegroundColor: TColors.textWhite,
+              backgroundColor: THelperFunctions.isDarkMode(context)
+                  ? TColors.dark
+                  : TColors.textWhite,
             ),
             dialogTheme: const DialogTheme(
               elevation: 10,
@@ -123,8 +126,12 @@ class ProjectHelperFunctions {
     );
   }
 
-  static Project projectToSend(int? postId, int ownerId, ProjectState projectState,) {
-    return Project( 
+  static Project projectToSend(
+    int? postId,
+    int ownerId,
+    ProjectState projectState,
+  ) {
+    return Project(
       id: postId,
       ownerId: ownerId,
       title: projectState.title,
@@ -170,6 +177,30 @@ class ProjectHelperFunctions {
         selectLocationBottomSheet(context: context, project: project);
       }
     }
+  }
+
+  static void scrollToActiveIndicator(
+    GlobalKey activeIndicatorKey,
+    ScrollController scrollController,
+    BuildContext context,
+  ) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (activeIndicatorKey.currentContext != null) {
+        final RenderBox renderBox =
+            activeIndicatorKey.currentContext!.findRenderObject() as RenderBox;
+        final position = renderBox.localToGlobal(Offset.zero);
+
+        final screenWidth = MediaQuery.of(context).size.width;
+
+        if (position.dx < 0 || position.dx > screenWidth - 50) {
+          scrollController.animateTo(
+            position.dx,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      }
+    });
   }
 
   static void sendProject(

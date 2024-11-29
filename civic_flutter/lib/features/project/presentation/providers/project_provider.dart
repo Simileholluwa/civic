@@ -88,9 +88,11 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   void setProjectCategory(String? projectCategory) {
+    final fundingSubCategory = state.fundingSubCategory;
     state = state.copyWith(
       projectCategory: projectCategory,
       projectSubCategory: null,
+      fundingCategory: fundingSubCategory,
     );
   }
 
@@ -115,9 +117,11 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   void setFundingCategory(String? fundingCategory) {
+    final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
       fundingCategory: fundingCategory,
       fundingSubCategory: null,
+      projectSubCategory: projectSubCategory,
     );
   }
 
@@ -490,6 +494,7 @@ class ProjectProvider extends _$ProjectProvider {
       page.close();
       pdfDocument.close();
     }
+    log(thumbnails.toString());
     state = state.copyWith(
       pdfAttachmentsThumbnail: [
         ...state.pdfAttachmentsThumbnail!,
@@ -498,7 +503,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
-    return state.pdfAttachmentsThumbnail!;
+    return thumbnails;
   }
 
   void removePDFAtIndex(index) {
@@ -507,28 +512,22 @@ class ProjectProvider extends _$ProjectProvider {
     if (state.projectPDFAttachments == null) {
       state = state.copyWith(
         projectPDFAttachments: [],
-        pdfAttachmentsThumbnail: [],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
-    if (state.projectPDFAttachments!.isEmpty ||
-        state.pdfAttachmentsThumbnail!.isEmpty) return;
+    if (state.projectPDFAttachments!.isEmpty) return;
     var pdfs = state.projectPDFAttachments!;
-    var thumbnails = state.pdfAttachmentsThumbnail!;
     if (pdfs.length == 1) {
       state = state.copyWith(
         projectPDFAttachments: [],
-        pdfAttachmentsThumbnail: [],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
     pdfs.removeAt(index);
-    thumbnails.removeAt(index);
     state = state.copyWith(
       projectPDFAttachments: [...pdfs],
-      pdfAttachmentsThumbnail: [...thumbnails],
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
@@ -539,10 +538,104 @@ class ProjectProvider extends _$ProjectProvider {
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
       projectPDFAttachments: [],
-      pdfAttachmentsThumbnail: [],
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
+  }
+
+  bool validateProject() {
+    final validations = [
+      validateOverview(),
+      validateCategory(),
+      validateStatus(),
+      validateFunding(),
+      validateLocation(),
+      validateAttachment(),
+      validateDates()
+    ];
+
+    if (validations.every((validation) => validation)) {
+      return true;
+    }
+
+    if (!validateDates()) {
+      TToastMessages.infoToast('End date must be after start date.');
+    } else {
+      TToastMessages.infoToast('Please fill all required fields.');
+    }
+
+    return false;
+  }
+  // bool validateProject() {
+  //   if (validateOverview() &&
+  //       validateCategory() &&
+  //       validateStatus() &&
+  //       validateFunding() &&
+  //       validateLocation() &&
+  //       validateAttachment()) {
+  //     if (validateDates()) {
+  //       return true;
+  //     } else {
+  //       TToastMessages.infoToast('End date must be after start date.');
+  //       return false;
+  //     }
+  //   }
+  //   TToastMessages.infoToast('Please fill all required fields.');
+  //   return false;
+  // }
+
+  bool validateDates() {
+    if (state.startDate != null && state.endDate != null) {
+      return state.startDate!.isBefore(state.endDate!) ||
+          state.startDate!.isAtSameMomentAs(state.endDate!);
+    }
+    return true;
+  }
+
+  bool validateOverview() {
+    return !(state.title?.isEmpty ?? true) &&
+        !(state.description?.isEmpty ?? true);
+  }
+
+  bool validateCategory() {
+    return state.projectCategory != null || state.projectSubCategory != null;
+  }
+
+  bool validateStatus() {
+    if (state.status == null ||
+        state.startDate == null ||
+        state.endDate == null) {
+      return false;
+    }
+    if (state.status == 'Ongoing' && (state.completionRate?.isNaN ?? true)) {
+      return false;
+    }
+    return true;
+  }
+
+  bool validateFunding() {
+    return state.fundingCategory != null &&
+        state.fundingSubCategory != null &&
+        state.currency != null &&
+        (state.projectCost?.isNotEmpty ?? false);
+  }
+
+  bool validateLocation() {
+    final physicalLocations = state.physicalLocations ?? [];
+    final virtualLocations = state.virtualLocations ?? [];
+    final manualLocations = state.manualLocations ?? [];
+
+    return physicalLocations.isNotEmpty ||
+        virtualLocations.isNotEmpty ||
+        manualLocations.isNotEmpty;
+  }
+
+  bool validateAttachment() {
+    final hasImages = state.projectImageAttachments?.isNotEmpty ?? false;
+    final hasPDFs = state.projectPDFAttachments?.isNotEmpty ?? false;
+    final hasVideo = state.projectVideoUrl?.isNotEmpty ?? false;
+
+    return hasImages || hasPDFs || hasVideo;
   }
 
   Future<void> takeVideo() async {

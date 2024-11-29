@@ -20,6 +20,8 @@ class CreateProjectScreen extends ConsumerWidget {
       ),
     );
     final projectState = ref.watch(projectProviderProvider(data.value));
+    final projectNotifier =
+        ref.watch(projectProviderProvider(data.value).notifier);
     return PopScope(
       canPop: true,
       // ignore: deprecated_member_use
@@ -34,6 +36,7 @@ class CreateProjectScreen extends ConsumerWidget {
       },
       child: AppAndroidBottomNav(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(
               60,
@@ -42,6 +45,7 @@ class CreateProjectScreen extends ConsumerWidget {
               canSend: true,
               draftData: const [],
               sendPressed: () {
+                if (!projectNotifier.validateProject()) return;
                 ref
                     .read(
                       mediaVideoPlayerProvider(

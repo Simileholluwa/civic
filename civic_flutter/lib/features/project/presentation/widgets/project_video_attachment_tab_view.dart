@@ -19,7 +19,7 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
     final projectState = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
-    final videoUrl = projectState.projectVideoUrl ?? '';
+    final videoUrl = projectState.projectVideoUrl;
     final videoControl = ref.watch(
       mediaVideoPlayerProvider(
         videoUrl,
@@ -32,7 +32,7 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          if (videoUrl.isEmpty)
+          if (videoUrl == null)
             Container(
               constraints: const BoxConstraints(
                 maxWidth: 500,
@@ -91,7 +91,7 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
                 ),
               ),
             ),
-          if (videoUrl.isNotEmpty)
+          if (videoUrl != null)
             Stack(
               alignment: Alignment.bottomCenter,
               children: [

@@ -12,6 +12,7 @@ class CreateContentAppbar extends StatelessWidget {
     required this.sendPressed,
     required this.draftPressed,
     required this.onCanSendPost,
+    this.title,
   });
 
   final bool canSend;
@@ -19,6 +20,7 @@ class CreateContentAppbar extends StatelessWidget {
   final VoidCallback sendPressed;
   final VoidCallback draftPressed;
   final VoidCallback onCanSendPost;
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,8 @@ class CreateContentAppbar extends StatelessWidget {
             Iconsax.arrow_left_2,
           ),
         ),
+        title: title,
+        centerTitle: true,
         titleSpacing: 0,
         actions: [
           Visibility(

@@ -85,10 +85,9 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
-                projectState.startDateController.text = pickedDate.toString();
+                projectState.startDateController.text = pickedDate.toString().substring(0, 11);
               }
             },
-            textInputType: TextInputType.emailAddress,
             validator: (value) => TValidator.validateStartDate(value),
           ),
           const SizedBox(height: 20),
@@ -108,10 +107,9 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);
-                projectState.endDateController.text = pickedDate.toString();
+                projectState.endDateController.text = pickedDate.toString().substring(0, 11);
               }
             },
-            textInputType: TextInputType.emailAddress,
             validator: (value) =>
                 TValidator.validateEndDate(value, '12/10/2024'),
           ),

@@ -78,7 +78,7 @@ class ProjectLocationPageView extends ConsumerWidget {
                     : () => TToastMessages.infoToast(
                           'Maximum location entries reached.',
                         ),
-                text: "Type location",
+                text: "Input location",
                 icon: Iconsax.edit,
               ),
             ],

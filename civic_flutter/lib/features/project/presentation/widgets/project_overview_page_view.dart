@@ -36,6 +36,7 @@ class ProjectOverviewPageView extends ConsumerWidget {
         ),
         Expanded(
           child: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 60),
             child: Column(
               children: [
                 ProjectTitleField(
