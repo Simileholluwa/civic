@@ -1,11 +1,11 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'auth_service_provider.g.dart';
 
 @riverpod
-AuthRemoteDatabaseImpl authRemoteDatabase(AuthRemoteDatabaseRef ref) {
+AuthRemoteDatabaseImpl authRemoteDatabase(Ref ref) {
   return AuthRemoteDatabaseImpl(
     client: ref.read(clientProvider),
     sessionManager: ref.read(sessionProvider),
@@ -14,7 +14,7 @@ AuthRemoteDatabaseImpl authRemoteDatabase(AuthRemoteDatabaseRef ref) {
 }
 
 @riverpod
-AuthRepositoryImpl authRepository(AuthRepositoryRef ref) {
+AuthRepositoryImpl authRepository(Ref ref) {
   return AuthRepositoryImpl(
     remoteDatabase: ref.read(
       authRemoteDatabaseProvider,
@@ -23,14 +23,14 @@ AuthRepositoryImpl authRepository(AuthRepositoryRef ref) {
 }
 
 @riverpod
-CreateAccountRequestUseCase createAccountRequest(CreateAccountRequestRef ref) {
+CreateAccountRequestUseCase createAccountRequest(Ref ref) {
   return CreateAccountRequestUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-UserSignInUseCase userSignIn(UserSignInRef ref) {
+UserSignInUseCase userSignIn(Ref ref) {
   return UserSignInUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
@@ -38,21 +38,21 @@ UserSignInUseCase userSignIn(UserSignInRef ref) {
 
 @riverpod
 InitiatePasswordResetUseCase initiatePasswordReset(
-    InitiatePasswordResetRef ref) {
+    Ref ref) {
   return InitiatePasswordResetUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-CheckIfNewUserUseCase checkIfNewUser(CheckIfNewUserRef ref) {
+CheckIfNewUserUseCase checkIfNewUser(Ref ref) {
   return CheckIfNewUserUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-LogoutUseCase logOut(LogOutRef ref) {
+LogoutUseCase logOut(Ref ref) {
   return LogoutUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
@@ -60,42 +60,42 @@ LogoutUseCase logOut(LogOutRef ref) {
 
 @riverpod
 ValidateCreateAccountUseCase validateCreateAccount(
-    ValidateCreateAccountRef ref) {
+    Ref ref) {
   return ValidateCreateAccountUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-SearchUserNinUseCase searchUserNin(SearchUserNinRef ref) {
+SearchUserNinUseCase searchUserNin(Ref ref) {
   return SearchUserNinUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-FetchAllUsernamesUseCase fetchAllUsernames(FetchAllUsernamesRef ref) {
+FetchAllUsernamesUseCase fetchAllUsernames(Ref ref) {
   return FetchAllUsernamesUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-UploadProfileImageUseCase uploadProfileImage(UploadProfileImageRef ref) {
+UploadProfileImageUseCase uploadProfileImage(Ref ref) {
   return UploadProfileImageUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-ResetUserPasswordUseCase resetUserPassword(ResetUserPasswordRef ref) {
+ResetUserPasswordUseCase resetUserPassword(Ref ref) {
   return ResetUserPasswordUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }
 
 @riverpod
-CurrentUserUseCase currentUser(CurrentUserRef ref) {
+CurrentUserUseCase currentUser(Ref ref) {
   return CurrentUserUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,7 +25,7 @@ class ProjectCurrentPage extends _$ProjectCurrentPage {
 @riverpod
 class ProjectPageController extends _$ProjectPageController {
   @override
-  PageController build() => PageController();
+  Raw<PageController> build() => PageController();
 
   void nextPage() {
     ref.watch(projectCurrentPageProvider.notifier).add();
@@ -64,7 +65,7 @@ final vsyncProvider = Provider<TickerProvider>(
 @riverpod
 class ProjectTabController extends _$ProjectTabController {
   @override
-  TabController build() => TabController(
+  Raw<TabController> build() => TabController(
     length: 3,
     vsync: ref.watch(vsyncProvider),
   );

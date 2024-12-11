@@ -5,11 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'project_pdf_thumbnail_provider.g.dart';
 
 @riverpod
 Future<List<Uint8List>> projectPdfThumbnail(
-  ProjectPdfThumbnailRef ref,
+  Ref ref,
   List<String> pdfPaths,
 ) async {
   if (pdfPaths.isEmpty) {

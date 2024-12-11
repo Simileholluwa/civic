@@ -14,8 +14,8 @@ part 'project_provider.g.dart';
 
 @riverpod
 class ProjectProvider extends _$ProjectProvider {
-  final imageHelper = ImageHelper();
-  int maxImageCount = 5;
+  static final imageHelper = ImageHelper();
+  static int maxImageCount = 5;
 
   void setContent(String description) {
     final fundingSubCategory = state.fundingSubCategory;

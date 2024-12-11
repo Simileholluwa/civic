@@ -1,3 +1,4 @@
+//ignore_for_file:avoid_public_notifier_properties
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';

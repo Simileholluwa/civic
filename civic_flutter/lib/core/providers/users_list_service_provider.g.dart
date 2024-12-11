@@ -20,6 +20,8 @@ final usersListServiceProvider = Provider<UsersListService>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef UsersListServiceRef = ProviderRef<UsersListService>;
 String _$paginatedUsersListHash() =>
     r'1483a3e25cd25300c61bb9dca9505c9d05db38b5';
@@ -171,6 +173,8 @@ class PaginatedUsersListProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin PaginatedUsersListRef on NotifierProviderRef<PagingStatus> {
   /// The parameter `query` of this provider.
   String get query;
@@ -203,4 +207,4 @@ final searchUsersListQueryProvider =
 
 typedef _$SearchUsersListQuery = Notifier<String>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

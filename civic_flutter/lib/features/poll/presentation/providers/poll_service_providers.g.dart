@@ -21,6 +21,8 @@ final pollLocalDatabaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PollLocalDatabaseRef = AutoDisposeProviderRef<PollLocalDatabaseImpl>;
 String _$pollRemoteDatasourceHash() =>
     r'ce975844add50128841a1236613f485c09b45c32';
@@ -38,6 +40,8 @@ final pollRemoteDatasourceProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PollRemoteDatasourceRef
     = AutoDisposeProviderRef<PollRemoteDatasourceImpl>;
 String _$pollRepositoryImplHash() =>
@@ -56,6 +60,8 @@ final pollRepositoryImplProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PollRepositoryImplRef = AutoDisposeProviderRef<PollRepositoryImpl>;
 String _$savePollHash() => r'926040d4c9064ff2f0f0b1c7a96d42519d880c0e';
 
@@ -70,6 +76,8 @@ final savePollProvider = AutoDisposeProvider<SavePollUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SavePollRef = AutoDisposeProviderRef<SavePollUseCase>;
 String _$schedulePollHash() => r'49c2878e7b11e6c50f255c91eaf2686162e92b46';
 
@@ -84,6 +92,8 @@ final schedulePollProvider = AutoDisposeProvider<SchedulePollUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SchedulePollRef = AutoDisposeProviderRef<SchedulePollUseCase>;
 String _$getPollHash() => r'df806c63867911137000c0b15599f892a1ecf98d';
 
@@ -98,6 +108,8 @@ final getPollProvider = AutoDisposeProvider<GetPollUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetPollRef = AutoDisposeProviderRef<GetPollUseCase>;
 String _$castVoteHash() => r'abf3e61792a2dbcd0ed37cbf360400571158a672';
 
@@ -112,6 +124,8 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
 String _$saveDraftPollHash() => r'1c62af353842bbca0ef9f84ecff22683c0b6096a';
 
@@ -128,6 +142,8 @@ final saveDraftPollProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveDraftPollRef = AutoDisposeProviderRef<SaveDraftPollUseCase>;
 String _$getDraftsPollHash() => r'ca8132daa2cd87215bbbf8e9e2a4c627f7ef3319';
 
@@ -144,6 +160,8 @@ final getDraftsPollProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetDraftsPollRef = AutoDisposeProviderRef<GetDraftsPollUseCase>;
 String _$deleteDraftsPollHash() => r'4c37385d722e41389325dce8c20301a3ddbdf67d';
 
@@ -160,6 +178,8 @@ final deleteDraftsPollProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteDraftsPollRef = AutoDisposeProviderRef<DeleteDraftsPollUseCase>;
 String _$deleteDraftPollHash() => r'4729084e9b90d36c8af88641c91840b403c63793';
 
@@ -176,6 +196,8 @@ final deleteDraftPollProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteDraftPollRef = AutoDisposeProviderRef<DeleteDraftPollUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

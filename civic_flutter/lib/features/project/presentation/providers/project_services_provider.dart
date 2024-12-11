@@ -3,18 +3,18 @@ import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'project_services_provider.g.dart';
 
 @riverpod
-ProjectRemoteDatasourceImpl projectRemoteDatasource(ProjectRemoteDatasourceRef ref) {
+ProjectRemoteDatasourceImpl projectRemoteDatasource(Ref ref) {
   return ProjectRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
 @riverpod
-ProjectRepositoryImpl projectRepositoryImpl(ProjectRepositoryImplRef ref) {
+ProjectRepositoryImpl projectRepositoryImpl(Ref ref) {
   return ProjectRepositoryImpl(
     remoteDatasource: ref.read(
       projectRemoteDatasourceProvider,
@@ -23,28 +23,28 @@ ProjectRepositoryImpl projectRepositoryImpl(ProjectRepositoryImplRef ref) {
 }
 
 @riverpod
-SaveProjectUseCase saveProject(SaveProjectRef ref) {
+SaveProjectUseCase saveProject(Ref ref) {
   return SaveProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetProjectsUseCase getProjects(GetProjectsRef ref) {
+GetProjectsUseCase getProjects(Ref ref) {
   return GetProjectsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetProjectUseCase getProject(GetProjectRef ref) {
+GetProjectUseCase getProject(Ref ref) {
   return GetProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
 
 @riverpod
-ScheduleProjectUseCase scheduleProject(ScheduleProjectRef ref) {
+ScheduleProjectUseCase scheduleProject(Ref ref) {
   return ScheduleProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );

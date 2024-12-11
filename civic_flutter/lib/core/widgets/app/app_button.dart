@@ -13,7 +13,7 @@ extension AppFilledButton on FilledButton {
             height: 60,
             child: FilledButton(
               onPressed: null,
-              child: LoadingAnimationWidget.prograssiveDots(
+              child: LoadingAnimationWidget.progressiveDots(
                 color: TColors.primary,
                 size: 50,
               ),

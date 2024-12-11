@@ -1,25 +1,26 @@
 
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 part 'article_service_provider.g.dart';
 
 @riverpod
-ArticleLocalDatabaseImpl articleLocalDatabase(ArticleLocalDatabaseRef ref) {
+ArticleLocalDatabaseImpl articleLocalDatabase(Ref ref) {
   return ArticleLocalDatabaseImpl(
     prefs: ref.read(localStorageProvider),
   );
 }
 
 @riverpod
-ArticleRemoteDatasourceImpl articleRemoteDatasource(ArticleRemoteDatasourceRef ref) {
+ArticleRemoteDatasourceImpl articleRemoteDatasource(Ref ref) {
   return ArticleRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
 @riverpod
-ArticleRepositoryImpl articleRepository(ArticleRepositoryRef ref) {
+ArticleRepositoryImpl articleRepository(Ref ref) {
   return ArticleRepositoryImpl(
     remoteDatasource: ref.read(articleRemoteDatasourceProvider),
     localDatabase: ref.read(articleLocalDatabaseProvider),
@@ -27,56 +28,56 @@ ArticleRepositoryImpl articleRepository(ArticleRepositoryRef ref) {
 }
 
 @riverpod
-SaveArticleUseCase saveArticle(SaveArticleRef ref) {
+SaveArticleUseCase saveArticle(Ref ref) {
   return SaveArticleUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-DeleteArticleUseCase deleteArticle(DeleteArticleRef ref) {
+DeleteArticleUseCase deleteArticle(Ref ref) {
   return DeleteArticleUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-GetArticleUseCase getArticle(GetArticleRef ref) {
+GetArticleUseCase getArticle(Ref ref) {
   return GetArticleUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-GetArticlesUseCase getArticles(GetArticlesRef ref) {
+GetArticlesUseCase getArticles(Ref ref) {
   return GetArticlesUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-DeleteDraftArticleUseCase deleteDraftArticle(DeleteDraftArticleRef ref) {
+DeleteDraftArticleUseCase deleteDraftArticle(Ref ref) {
   return DeleteDraftArticleUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-DeleteDraftArticlesUseCase deleteDraftArticles(DeleteDraftArticlesRef ref) {
+DeleteDraftArticlesUseCase deleteDraftArticles(Ref ref) {
   return DeleteDraftArticlesUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-SaveDraftArticleUseCase saveDraftArticle(SaveDraftArticleRef ref) {
+SaveDraftArticleUseCase saveDraftArticle(Ref ref) {
   return SaveDraftArticleUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );
 }
 
 @riverpod
-RetrieveDraftArticlesUseCase retrieveDraftArticles(RetrieveDraftArticlesRef ref) {
+RetrieveDraftArticlesUseCase retrieveDraftArticles(Ref ref) {
   return RetrieveDraftArticlesUseCase(
     articleRepository: ref.read(articleRepositoryProvider),
   );

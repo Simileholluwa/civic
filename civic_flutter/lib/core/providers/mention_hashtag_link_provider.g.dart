@@ -21,6 +21,8 @@ final mentionServicesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef MentionServicesRef = AutoDisposeProviderRef<MentionHashTagLinkServices>;
 String _$fetchUsersToMentionHash() =>
     r'0e8eaceba0e81c51cea1a1b116cf1f70b2e81ddb';
@@ -160,6 +162,8 @@ class FetchUsersToMentionProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchUsersToMentionRef on AutoDisposeFutureProviderRef<List<UserRecord>> {
   /// The parameter `query` of this provider.
   String get query;
@@ -289,6 +293,8 @@ class FetchHashtagsProvider extends AutoDisposeFutureProvider<List<String>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchHashtagsRef on AutoDisposeFutureProviderRef<List<String>> {
   /// The parameter `query` of this provider.
   String get query;
@@ -419,6 +425,8 @@ class FetchLinkMetadataProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchLinkMetadataRef on AutoDisposeFutureProviderRef<LinkMetadata?> {
   /// The parameter `text` of this provider.
   String get text;
@@ -596,6 +604,8 @@ class ExtractedMentionsProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ExtractedMentionsRef on AutoDisposeNotifierProviderRef<List<String>> {
   /// The parameter `text` of this provider.
   String get text;
@@ -756,6 +766,8 @@ class ValidMentionsProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ValidMentionsRef on AutoDisposeNotifierProviderRef<bool> {
   /// The parameter `username` of this provider.
   String get username;
@@ -901,6 +913,8 @@ class HashtagsProvider extends NotifierProviderImpl<Hashtags, List<String>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin HashtagsRef on NotifierProviderRef<List<String>> {
   /// The parameter `text` of this provider.
   String get text;
@@ -1059,6 +1073,8 @@ class ExtractLinkProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ExtractLinkRef on AutoDisposeNotifierProviderRef<String> {
   /// The parameter `text` of this provider.
   String get text;
@@ -1073,4 +1089,4 @@ class _ExtractLinkProviderElement
   String get text => (origin as ExtractLinkProvider).text;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

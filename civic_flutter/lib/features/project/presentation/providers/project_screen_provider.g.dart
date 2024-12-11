@@ -7,7 +7,7 @@ part of 'project_screen_provider.dart';
 // **************************************************************************
 
 String _$projectScreenWidgetsHash() =>
-    r'dca9ac1352cda6258d624be80e4ec96efe01b28e';
+    r'92d100f65d9e77469793e39cccbc989621f5daf7';
 
 /// See also [ProjectScreenWidgets].
 @ProviderFor(ProjectScreenWidgets)
@@ -24,4 +24,4 @@ final projectScreenWidgetsProvider = AutoDisposeNotifierProvider<
 
 typedef _$ProjectScreenWidgets = AutoDisposeNotifier<ProjectScreenState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

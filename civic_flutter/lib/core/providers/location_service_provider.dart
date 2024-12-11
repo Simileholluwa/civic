@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 
 part 'location_service_provider.g.dart';
@@ -10,7 +10,7 @@ part 'location_service_provider.g.dart';
 Timer? _debounce;
 
 @Riverpod(keepAlive: true)
-LocationServices locationService(LocationServiceRef ref) {
+LocationServices locationService(Ref ref) {
   return LocationServices(
     client: ref.read(clientProvider),
   );
@@ -35,7 +35,7 @@ class CurrentLocationData extends _$CurrentLocationData {
 }
 
 @Riverpod(keepAlive: true)
-Future<List<AWSPlaces>?> searchNearbyPlaces(SearchNearbyPlacesRef ref) async {
+Future<List<AWSPlaces>?> searchNearbyPlaces(Ref ref) async {
   final currentPosition = await ref.watch(currentLocationDataProvider.future);
   if (currentPosition.isEmpty) {
     return [];
@@ -53,7 +53,7 @@ Future<List<AWSPlaces>?> searchNearbyPlaces(SearchNearbyPlacesRef ref) async {
 
 @Riverpod(keepAlive: true)
 Future<List<AWSPlaces>?> searchPlaces(
-  SearchPlacesRef ref,
+  Ref ref,
 ) async {
   const debounceDuration = Duration(milliseconds: 1000);
   final completer = Completer<List<AWSPlaces>?>();

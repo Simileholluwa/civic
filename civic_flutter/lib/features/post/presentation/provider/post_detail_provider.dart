@@ -5,11 +5,12 @@ import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/core/usecases/usecase.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'post_detail_provider.g.dart';
 
 @riverpod
 Future<Post?> postDetail(
-  PostDetailRef ref,
+  Ref ref,
   DraftPost? draftPost,
   int id,
 ) async {

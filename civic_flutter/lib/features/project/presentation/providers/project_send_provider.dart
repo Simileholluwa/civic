@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';

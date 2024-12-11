@@ -22,6 +22,8 @@ final projectRemoteDatasourceProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ProjectRemoteDatasourceRef
     = AutoDisposeProviderRef<ProjectRemoteDatasourceImpl>;
 String _$projectRepositoryImplHash() =>
@@ -40,6 +42,8 @@ final projectRepositoryImplProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ProjectRepositoryImplRef
     = AutoDisposeProviderRef<ProjectRepositoryImpl>;
 String _$saveProjectHash() => r'11023df8b0fe27c502dc7f503579eea70c8e8984';
@@ -55,6 +59,8 @@ final saveProjectProvider = AutoDisposeProvider<SaveProjectUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveProjectRef = AutoDisposeProviderRef<SaveProjectUseCase>;
 String _$getProjectsHash() => r'948913ba389c2ed52da12e3e1b106363ad02ae71';
 
@@ -69,6 +75,8 @@ final getProjectsProvider = AutoDisposeProvider<GetProjectsUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetProjectsRef = AutoDisposeProviderRef<GetProjectsUseCase>;
 String _$getProjectHash() => r'1c49f1d4a68cabe274e6f0407302135c266ae8d6';
 
@@ -83,6 +91,8 @@ final getProjectProvider = AutoDisposeProvider<GetProjectUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetProjectRef = AutoDisposeProviderRef<GetProjectUseCase>;
 String _$scheduleProjectHash() => r'b9badc69a60c086bc99166e1ba18e4385b93677c';
 
@@ -99,6 +109,8 @@ final scheduleProjectProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ScheduleProjectRef = AutoDisposeProviderRef<ScheduleProjectUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

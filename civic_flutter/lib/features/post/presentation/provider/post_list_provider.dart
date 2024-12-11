@@ -1,3 +1,4 @@
+//ignore_for_file:avoid_public_notifier_properties
 import 'dart:developer';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_client/civic_client.dart';

@@ -1,8 +1,10 @@
+//ignore_for_file:avoid_public_notifier_properties
 import 'dart:developer';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 
 part 'users_list_service_provider.g.dart';
@@ -10,7 +12,7 @@ part 'users_list_service_provider.g.dart';
 Timer? _debounce;
 
 @Riverpod(keepAlive: true)
-UsersListService usersListService(UsersListServiceRef ref) {
+UsersListService usersListService(Ref ref) {
   return UsersListService(
     client: ref.read(clientProvider),
   );

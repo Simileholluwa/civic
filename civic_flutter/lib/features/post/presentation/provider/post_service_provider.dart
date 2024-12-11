@@ -2,25 +2,25 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'post_service_provider.g.dart';
 
 @riverpod
-PostLocalDatabaseImpl postLocalDatabase(PostLocalDatabaseRef ref) {
+PostLocalDatabaseImpl postLocalDatabase(Ref ref) {
   return PostLocalDatabaseImpl(
     prefs: ref.read(localStorageProvider),
   );
 }
 
 @riverpod
-PostRemoteDatabaseImpl postRemoteDatabase(PostRemoteDatabaseRef ref) {
+PostRemoteDatabaseImpl postRemoteDatabase(Ref ref) {
   return PostRemoteDatabaseImpl(
     client: ref.read(clientProvider),
   );
 }
 
 @riverpod
-PostRepositoryImpl postRepositoryImpl(PostRepositoryImplRef ref) {
+PostRepositoryImpl postRepositoryImpl(Ref ref) {
   return PostRepositoryImpl(
     remoteDatabase: ref.read(
       postRemoteDatabaseProvider,
@@ -32,49 +32,49 @@ PostRepositoryImpl postRepositoryImpl(PostRepositoryImplRef ref) {
 }
 
 @riverpod
-SavePostUseCase savePost(SavePostRef ref) {
+SavePostUseCase savePost(Ref ref) {
   return SavePostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetPostsUseCase getPosts(GetPostsRef ref) {
+GetPostsUseCase getPosts(Ref ref) {
   return GetPostsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetPostUseCase getPost(GetPostRef ref) {
+GetPostUseCase getPost(Ref ref) {
   return GetPostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-SaveDraftUseCase saveDraft(SaveDraftRef ref) {
+SaveDraftUseCase saveDraft(Ref ref) {
   return SaveDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetDraftsUseCase getDraft(GetDraftRef ref) {
+GetDraftsUseCase getDraft(Ref ref) {
   return GetDraftsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftsUseCase deleteDrafts(DeleteDraftsRef ref) {
+DeleteDraftsUseCase deleteDrafts(Ref ref) {
   return DeleteDraftsUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftUseCase deleteDraft(DeleteDraftRef ref) {
+DeleteDraftUseCase deleteDraft(Ref ref) {
   return DeleteDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
@@ -82,7 +82,7 @@ DeleteDraftUseCase deleteDraft(DeleteDraftRef ref) {
 
 
 @riverpod
-SchedulePostUseCase schedulePost(SchedulePostRef ref) {
+SchedulePostUseCase schedulePost(Ref ref) {
   return SchedulePostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );

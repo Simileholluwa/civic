@@ -20,6 +20,8 @@ final locationServiceProvider = Provider<LocationServices>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LocationServiceRef = ProviderRef<LocationServices>;
 String _$searchNearbyPlacesHash() =>
     r'c33e5eed5cdaf213e001c0274a41645ed7381f34';
@@ -36,6 +38,8 @@ final searchNearbyPlacesProvider = FutureProvider<List<AWSPlaces>?>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SearchNearbyPlacesRef = FutureProviderRef<List<AWSPlaces>?>;
 String _$searchPlacesHash() => r'9bb884eaa568e88e1f7dbf5e01e002c2a0b7374a';
 
@@ -50,6 +54,8 @@ final searchPlacesProvider = FutureProvider<List<AWSPlaces>?>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SearchPlacesRef = FutureProviderRef<List<AWSPlaces>?>;
 String _$currentLocationDataHash() =>
     r'bb732f0cc3dffd70b95309ed63132bdee7ab474d';
@@ -102,4 +108,4 @@ final selectLocationsProvider =
 
 typedef _$SelectLocations = AutoDisposeNotifier<List<AWSPlaces>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

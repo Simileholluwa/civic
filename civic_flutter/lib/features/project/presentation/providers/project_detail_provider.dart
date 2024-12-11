@@ -4,11 +4,12 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'project_detail_provider.g.dart';
 
 @riverpod
 Future<Project?> projectDetail(
-  ProjectDetailRef ref,
+  Ref ref,
   int id,
 ) async {
   if (id == 0) {

@@ -5,11 +5,12 @@ import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'article_detail_provider.g.dart';
 
 @riverpod
 Future<Article?> articleDetail(
-  ArticleDetailRef ref,
+  Ref ref,
   ArticleDraft? articleDraft,
   int id,
 ) async {

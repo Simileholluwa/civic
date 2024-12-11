@@ -1,10 +1,11 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 part 'mention_hashtag_link_provider.g.dart';
 
 @riverpod
-MentionHashTagLinkServices mentionServices(MentionServicesRef ref) {
+MentionHashTagLinkServices mentionServices(Ref ref) {
   return MentionHashTagLinkServices(
     client: ref.read(clientProvider),
   );
@@ -12,7 +13,7 @@ MentionHashTagLinkServices mentionServices(MentionServicesRef ref) {
 
 @riverpod
 Future<List<UserRecord>> fetchUsersToMention(
-    FetchUsersToMentionRef ref, String query) async {
+    Ref ref, String query) async {
   final result = await ref.watch(mentionServicesProvider).mentionUsers(query);
 
   return result.fold(
@@ -99,7 +100,7 @@ class Hashtags extends _$Hashtags {
 
 @riverpod
 Future<List<String>> fetchHashtags(
-  FetchHashtagsRef ref,
+  Ref ref,
   String query,
 ) async {
   final result = await ref.watch(mentionServicesProvider).fetchHashtags(query);
@@ -126,7 +127,7 @@ class HashtagsSuggestions extends _$HashtagsSuggestions {
 
 @riverpod
 Future<LinkMetadata?> fetchLinkMetadata(
-  FetchLinkMetadataRef ref,
+  Ref ref,
   String text,
 ) async {
   final url = ref.watch(extractLinkProvider(text));

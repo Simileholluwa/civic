@@ -2,25 +2,25 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'poll_service_providers.g.dart';
 
 @riverpod
-PollLocalDatabaseImpl pollLocalDatabase(PollLocalDatabaseRef ref) {
+PollLocalDatabaseImpl pollLocalDatabase(Ref ref) {
   return PollLocalDatabaseImpl(
     prefs: ref.read(localStorageProvider),
   );
 }
 
 @riverpod
-PollRemoteDatasourceImpl pollRemoteDatasource(PollRemoteDatasourceRef ref) {
+PollRemoteDatasourceImpl pollRemoteDatasource(Ref ref) {
   return PollRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
 @riverpod
-PollRepositoryImpl pollRepositoryImpl(PollRepositoryImplRef ref) {
+PollRepositoryImpl pollRepositoryImpl(Ref ref) {
   return PollRepositoryImpl(
     pollRemoteDatasource: ref.read(
       pollRemoteDatasourceProvider,
@@ -32,56 +32,56 @@ PollRepositoryImpl pollRepositoryImpl(PollRepositoryImplRef ref) {
 }
 
 @riverpod
-SavePollUseCase savePoll(SavePollRef ref) {
+SavePollUseCase savePoll(Ref ref) {
   return SavePollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-SchedulePollUseCase schedulePoll(SchedulePollRef ref) {
+SchedulePollUseCase schedulePoll(Ref ref) {
   return SchedulePollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetPollUseCase getPoll(GetPollRef ref) {
+GetPollUseCase getPoll(Ref ref) {
   return GetPollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-CastVoteUseCase castVote(CastVoteRef ref) {
+CastVoteUseCase castVote(Ref ref) {
   return CastVoteUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-SaveDraftPollUseCase saveDraftPoll(SaveDraftPollRef ref) {
+SaveDraftPollUseCase saveDraftPoll(Ref ref) {
   return SaveDraftPollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetDraftsPollUseCase getDraftsPoll(GetDraftsPollRef ref) {
+GetDraftsPollUseCase getDraftsPoll(Ref ref) {
   return GetDraftsPollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftsPollUseCase deleteDraftsPoll(DeleteDraftsPollRef ref) {
+DeleteDraftsPollUseCase deleteDraftsPoll(Ref ref) {
   return DeleteDraftsPollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftPollUseCase deleteDraftPoll(DeleteDraftPollRef ref) {
+DeleteDraftPollUseCase deleteDraftPoll(Ref ref) {
   return DeleteDraftPollUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );

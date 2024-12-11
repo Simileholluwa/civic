@@ -22,6 +22,8 @@ final authRemoteDatabaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthRemoteDatabaseRef = AutoDisposeProviderRef<AuthRemoteDatabaseImpl>;
 String _$authRepositoryHash() => r'5d64cdd83e580174769ff771ce4fc024a18773af';
 
@@ -37,6 +39,8 @@ final authRepositoryProvider = AutoDisposeProvider<AuthRepositoryImpl>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepositoryImpl>;
 String _$createAccountRequestHash() =>
     r'56b5d9b02222043c5762936ed52ab44fc06287a4';
@@ -54,6 +58,8 @@ final createAccountRequestProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CreateAccountRequestRef
     = AutoDisposeProviderRef<CreateAccountRequestUseCase>;
 String _$userSignInHash() => r'dbbd230907b58b4b37bb4b7bf5749e4eca44e038';
@@ -69,6 +75,8 @@ final userSignInProvider = AutoDisposeProvider<UserSignInUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef UserSignInRef = AutoDisposeProviderRef<UserSignInUseCase>;
 String _$initiatePasswordResetHash() =>
     r'05f1e9a9f8470153ea8c60827345a0082c1b4e0e';
@@ -86,6 +94,8 @@ final initiatePasswordResetProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef InitiatePasswordResetRef
     = AutoDisposeProviderRef<InitiatePasswordResetUseCase>;
 String _$checkIfNewUserHash() => r'f2e78d68a3cffe283cecda680c3821de2fc9853d';
@@ -103,6 +113,8 @@ final checkIfNewUserProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CheckIfNewUserRef = AutoDisposeProviderRef<CheckIfNewUserUseCase>;
 String _$logOutHash() => r'04b8d55230906f058c32461d13413d059e04a53d';
 
@@ -117,6 +129,8 @@ final logOutProvider = AutoDisposeProvider<LogoutUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef LogOutRef = AutoDisposeProviderRef<LogoutUseCase>;
 String _$validateCreateAccountHash() =>
     r'58a23a035c3e035fd54a57e5d694f1e4129c070f';
@@ -134,6 +148,8 @@ final validateCreateAccountProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ValidateCreateAccountRef
     = AutoDisposeProviderRef<ValidateCreateAccountUseCase>;
 String _$searchUserNinHash() => r'c5da46f92886bd301ba8cc4ab7fc9a0d8a554da6';
@@ -151,6 +167,8 @@ final searchUserNinProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SearchUserNinRef = AutoDisposeProviderRef<SearchUserNinUseCase>;
 String _$fetchAllUsernamesHash() => r'0a8fd616d2f1651b4c60a8133ea3a34e51f0ff1a';
 
@@ -167,6 +185,8 @@ final fetchAllUsernamesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchAllUsernamesRef = AutoDisposeProviderRef<FetchAllUsernamesUseCase>;
 String _$uploadProfileImageHash() =>
     r'b2057ca8c288a0d6a128ccabdb2eb014f01c0f2d';
@@ -184,6 +204,8 @@ final uploadProfileImageProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef UploadProfileImageRef
     = AutoDisposeProviderRef<UploadProfileImageUseCase>;
 String _$resetUserPasswordHash() => r'e67f4de7ed66416942d9ed20e9fa6e96dc642797';
@@ -201,6 +223,8 @@ final resetUserPasswordProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ResetUserPasswordRef = AutoDisposeProviderRef<ResetUserPasswordUseCase>;
 String _$currentUserHash() => r'234c4810bcb32c17fba5d99f5897a7687574d01c';
 
@@ -215,6 +239,8 @@ final currentUserProvider = AutoDisposeProvider<CurrentUserUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CurrentUserRef = AutoDisposeProviderRef<CurrentUserUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

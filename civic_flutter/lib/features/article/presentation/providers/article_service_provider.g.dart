@@ -22,6 +22,8 @@ final articleLocalDatabaseProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ArticleLocalDatabaseRef
     = AutoDisposeProviderRef<ArticleLocalDatabaseImpl>;
 String _$articleRemoteDatasourceHash() =>
@@ -40,6 +42,8 @@ final articleRemoteDatasourceProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ArticleRemoteDatasourceRef
     = AutoDisposeProviderRef<ArticleRemoteDatasourceImpl>;
 String _$articleRepositoryHash() => r'34c032cd2255592ffd0aeb69574943a8bea4de52';
@@ -57,6 +61,8 @@ final articleRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ArticleRepositoryRef = AutoDisposeProviderRef<ArticleRepositoryImpl>;
 String _$saveArticleHash() => r'419c74c01f67dcbc06ef70ab18df4f8b0c461909';
 
@@ -71,6 +77,8 @@ final saveArticleProvider = AutoDisposeProvider<SaveArticleUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveArticleRef = AutoDisposeProviderRef<SaveArticleUseCase>;
 String _$deleteArticleHash() => r'373dd9db68c0b0bbe28b4fadd3ead1c11e97ff96';
 
@@ -87,6 +95,8 @@ final deleteArticleProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteArticleRef = AutoDisposeProviderRef<DeleteArticleUseCase>;
 String _$getArticleHash() => r'470a8eebcab23c5a312cd31bc0b3298359c7ed83';
 
@@ -101,6 +111,8 @@ final getArticleProvider = AutoDisposeProvider<GetArticleUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetArticleRef = AutoDisposeProviderRef<GetArticleUseCase>;
 String _$getArticlesHash() => r'52d1df080312494a248270a8530b3efd8ef19800';
 
@@ -115,6 +127,8 @@ final getArticlesProvider = AutoDisposeProvider<GetArticlesUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetArticlesRef = AutoDisposeProviderRef<GetArticlesUseCase>;
 String _$deleteDraftArticleHash() =>
     r'5ba8092fe4dd292b1e7f8eac3911e1714412d790';
@@ -132,6 +146,8 @@ final deleteDraftArticleProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteDraftArticleRef
     = AutoDisposeProviderRef<DeleteDraftArticleUseCase>;
 String _$deleteDraftArticlesHash() =>
@@ -150,6 +166,8 @@ final deleteDraftArticlesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef DeleteDraftArticlesRef
     = AutoDisposeProviderRef<DeleteDraftArticlesUseCase>;
 String _$saveDraftArticleHash() => r'9701a621ede03bf1d055f736e837566c50c1e86d';
@@ -167,6 +185,8 @@ final saveDraftArticleProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SaveDraftArticleRef = AutoDisposeProviderRef<SaveDraftArticleUseCase>;
 String _$retrieveDraftArticlesHash() =>
     r'd7cf98085bea8ed005f2a9486661df92c745311d';
@@ -184,7 +204,9 @@ final retrieveDraftArticlesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef RetrieveDraftArticlesRef
     = AutoDisposeProviderRef<RetrieveDraftArticlesUseCase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

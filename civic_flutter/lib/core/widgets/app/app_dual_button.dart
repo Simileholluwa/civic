@@ -39,7 +39,7 @@ class AppDualButton extends StatelessWidget {
         TextButton(
           onPressed: skipButtonLoading ? null : onTapSkipButton,
           child: skipButtonLoading == true
-              ? LoadingAnimationWidget.prograssiveDots(
+              ? LoadingAnimationWidget.progressiveDots(
                   color: TColors.primary,
                   size: 50,
                 )
