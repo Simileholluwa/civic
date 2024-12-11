@@ -16,13 +16,13 @@ class ProjectPDFttachmentsOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(
+    final projectCreationSate = ref.watch(
       projectProviderProvider(project),
     );
     final projectNotifier = ref.watch(
       projectProviderProvider(project).notifier,
     );
-    final pdfs = projectState.projectPDFAttachments ?? [];
+    final pdfs = projectCreationSate.projectPDFAttachments ?? [];
     final pageIndex = ref.watch(projectPDFAttachmentPageChangedProvider) + 1;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16,),
@@ -102,7 +102,7 @@ class ProjectPDFttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${projectState.projectPDFAttachments!.length}',
+                  '$pageIndex/${projectCreationSate.projectPDFAttachments!.length}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

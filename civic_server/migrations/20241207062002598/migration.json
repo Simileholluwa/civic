@@ -1,0 +1,75 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "zeroCost",
+            "columnType": 1,
+            "isNullable": true,
+            "dartType": "bool?"
+          },
+          {
+            "name": "projectCost",
+            "columnType": 3,
+            "isNullable": true,
+            "dartType": "double?"
+          }
+        ],
+        "deleteColumns": [
+          "pdfAttachmentsThumbnail",
+          "projectCost"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"pdfAttachmentsThumbnail\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "pdfAttachmentsThumbnail"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column projectCost of table project is modified in a way that it must be deleted and recreated.",
+            "table": "project",
+            "columns": [
+              "projectCost"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"pdfAttachmentsThumbnail\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "pdfAttachmentsThumbnail"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column projectCost of table project is modified in a way that it must be deleted and recreated.",
+      "table": "project",
+      "columns": [
+        "projectCost"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -18,11 +18,11 @@ Future<bool?> manualLocationDialog({
     builder: (context) {
       return Consumer(
         builder: (context, ref, _) {
-          final projectState = ref.watch(projectProviderProvider(project));
+          final projectCreationSate = ref.watch(projectProviderProvider(project));
           final projectNotifier =
               ref.watch(projectProviderProvider(project).notifier);
           if (index != null) {
-            projectState.manualLocationController.text = location!;
+            projectCreationSate.manualLocationController.text = location!;
           }
           return LayoutBuilder(builder: (context, constraints) {
             return ConstrainedBox(
@@ -96,7 +96,7 @@ Future<bool?> manualLocationDialog({
                                   children: [
                                     AppTextField(
                                       textController:
-                                          projectState.manualLocationController,
+                                          projectCreationSate.manualLocationController,
                                       prefixIcon: Iconsax.location_tick5,
                                       hintText:
                                           'E.g. 123 Main St, Ikeja, Lagos, Nigeria',
@@ -129,19 +129,19 @@ Future<bool?> manualLocationDialog({
                                         }
                                         if (index != null) {
                                           projectNotifier.editManualLocation(
-                                            projectState
+                                            projectCreationSate
                                                 .manualLocationController.text,
                                             index,
                                           );
-                                          projectState.manualLocationController
+                                          projectCreationSate.manualLocationController
                                               .clear();
                                           context.pop();
                                         } else {
                                           projectNotifier.addManualLocation(
-                                            projectState
+                                            projectCreationSate
                                                 .manualLocationController.text,
                                           );
-                                          projectState.manualLocationController
+                                          projectCreationSate.manualLocationController
                                               .clear();
                                           context.pop();
                                         }
@@ -149,7 +149,7 @@ Future<bool?> manualLocationDialog({
                                       activeButtonText: 'Submit',
                                       activeButtonLoading: false,
                                       onTapSkipButton: () {
-                                        projectState.manualLocationController
+                                        projectCreationSate.manualLocationController
                                             .clear();
                                         context.pop();
                                       },

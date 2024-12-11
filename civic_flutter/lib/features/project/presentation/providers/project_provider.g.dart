@@ -6,7 +6,7 @@ part of 'project_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectProviderHash() => r'2a9ae6db6cd6ba27f7731c92ec52e0e721d26ee7';
+String _$projectProviderHash() => r'b4fce49e96232ba15f1fc7e10891b712d5797402';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$ProjectProvider
-    extends BuildlessAutoDisposeNotifier<ProjectState> {
+    extends BuildlessAutoDisposeNotifier<ProjectCreationState> {
   late final Project? project;
 
-  ProjectState build(
+  ProjectCreationState build(
     Project? project,
   );
 }
@@ -43,7 +43,7 @@ abstract class _$ProjectProvider
 const projectProviderProvider = ProjectProviderFamily();
 
 /// See also [ProjectProvider].
-class ProjectProviderFamily extends Family<ProjectState> {
+class ProjectProviderFamily extends Family<ProjectCreationState> {
   /// See also [ProjectProvider].
   const ProjectProviderFamily();
 
@@ -81,8 +81,8 @@ class ProjectProviderFamily extends Family<ProjectState> {
 }
 
 /// See also [ProjectProvider].
-class ProjectProviderProvider
-    extends AutoDisposeNotifierProviderImpl<ProjectProvider, ProjectState> {
+class ProjectProviderProvider extends AutoDisposeNotifierProviderImpl<
+    ProjectProvider, ProjectCreationState> {
   /// See also [ProjectProvider].
   ProjectProviderProvider(
     Project? project,
@@ -113,7 +113,7 @@ class ProjectProviderProvider
   final Project? project;
 
   @override
-  ProjectState runNotifierBuild(
+  ProjectCreationState runNotifierBuild(
     covariant ProjectProvider notifier,
   ) {
     return notifier.build(
@@ -138,7 +138,7 @@ class ProjectProviderProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ProjectProvider, ProjectState>
+  AutoDisposeNotifierProviderElement<ProjectProvider, ProjectCreationState>
       createElement() {
     return _ProjectProviderProviderElement(this);
   }
@@ -157,14 +157,15 @@ class ProjectProviderProvider
   }
 }
 
-mixin ProjectProviderRef on AutoDisposeNotifierProviderRef<ProjectState> {
+mixin ProjectProviderRef
+    on AutoDisposeNotifierProviderRef<ProjectCreationState> {
   /// The parameter `project` of this provider.
   Project? get project;
 }
 
 class _ProjectProviderProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectProvider, ProjectState>
-    with ProjectProviderRef {
+    extends AutoDisposeNotifierProviderElement<ProjectProvider,
+        ProjectCreationState> with ProjectProviderRef {
   _ProjectProviderProviderElement(super.provider);
 
   @override

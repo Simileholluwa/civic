@@ -110,7 +110,7 @@ class ProjectProvider extends _$ProjectProvider {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
-      projectCost: projectCost,
+      projectCost: double.tryParse(projectCost!,),
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
@@ -617,7 +617,7 @@ class ProjectProvider extends _$ProjectProvider {
     return state.fundingCategory != null &&
         state.fundingSubCategory != null &&
         state.currency != null &&
-        (state.projectCost?.isNotEmpty ?? false);
+        (state.projectCost?.isNaN ?? false);
   }
 
   bool validateLocation() {
@@ -691,28 +691,28 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   @override
-  ProjectState build(Project? project) {
+  ProjectCreationState build(Project? project) {
     if (project == null) {
-      final projectState = ProjectState.empty();
-      projectState.quillController.addListener(() {
+      final projectCreationSate = ProjectCreationState.empty();
+      projectCreationSate.quillController.addListener(() {
         setContent(
           jsonEncode(
-            projectState.quillController.document.toDelta().toJson(),
+            projectCreationSate.quillController.document.toDelta().toJson(),
           ),
         );
       });
-      return projectState;
+      return projectCreationSate;
     } else {
-      final projectState = ProjectState.populate(project);
-      projectState.quillController.addListener(() {
+      final projectCreationSate = ProjectCreationState.populate(project);
+      projectCreationSate.quillController.addListener(() {
         setContent(
           jsonEncode(
-            projectState.quillController.document.toDelta().toJson(),
+            projectCreationSate.quillController.document.toDelta().toJson(),
           ),
         );
       });
 
-      return projectState;
+      return projectCreationSate;
     }
   }
 }

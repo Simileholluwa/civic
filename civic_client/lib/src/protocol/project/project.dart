@@ -28,6 +28,7 @@ abstract class Project implements _i1.SerializableModel {
     this.fundingCategory,
     this.fundingSubCategory,
     this.projectCost,
+    this.zeroCost,
     this.fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
@@ -35,7 +36,6 @@ abstract class Project implements _i1.SerializableModel {
     this.physicalLocations,
     this.virtualLocations,
     this.manualLocations,
-    this.pdfAttachmentsThumbnail,
     this.projectVideoUrl,
   });
 
@@ -53,7 +53,8 @@ abstract class Project implements _i1.SerializableModel {
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
-    String? projectCost,
+    double? projectCost,
+    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
@@ -61,7 +62,6 @@ abstract class Project implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
-    List<String>? pdfAttachmentsThumbnail,
     String? projectVideoUrl,
   }) = _ProjectImpl;
 
@@ -87,7 +87,8 @@ abstract class Project implements _i1.SerializableModel {
       currency: jsonSerialization['currency'] as String?,
       fundingCategory: jsonSerialization['fundingCategory'] as String?,
       fundingSubCategory: jsonSerialization['fundingSubCategory'] as String?,
-      projectCost: jsonSerialization['projectCost'] as String?,
+      projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
+      zeroCost: jsonSerialization['zeroCost'] as bool?,
       fundingNote: jsonSerialization['fundingNote'] as String?,
       projectImageAttachments:
           (jsonSerialization['projectImageAttachments'] as List?)
@@ -107,10 +108,6 @@ abstract class Project implements _i1.SerializableModel {
       manualLocations: (jsonSerialization['manualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      pdfAttachmentsThumbnail:
-          (jsonSerialization['pdfAttachmentsThumbnail'] as List?)
-              ?.map((e) => e as String)
-              .toList(),
       projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
     );
   }
@@ -144,7 +141,9 @@ abstract class Project implements _i1.SerializableModel {
 
   String? fundingSubCategory;
 
-  String? projectCost;
+  double? projectCost;
+
+  bool? zeroCost;
 
   String? fundingNote;
 
@@ -159,8 +158,6 @@ abstract class Project implements _i1.SerializableModel {
   List<String>? virtualLocations;
 
   List<String>? manualLocations;
-
-  List<String>? pdfAttachmentsThumbnail;
 
   String? projectVideoUrl;
 
@@ -178,7 +175,8 @@ abstract class Project implements _i1.SerializableModel {
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
-    String? projectCost,
+    double? projectCost,
+    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
@@ -186,7 +184,6 @@ abstract class Project implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
-    List<String>? pdfAttachmentsThumbnail,
     String? projectVideoUrl,
   });
   @override
@@ -206,6 +203,7 @@ abstract class Project implements _i1.SerializableModel {
       if (fundingCategory != null) 'fundingCategory': fundingCategory,
       if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
       if (projectCost != null) 'projectCost': projectCost,
+      if (zeroCost != null) 'zeroCost': zeroCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
       if (projectImageAttachments != null)
         'projectImageAttachments': projectImageAttachments?.toJson(),
@@ -218,8 +216,6 @@ abstract class Project implements _i1.SerializableModel {
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
-      if (pdfAttachmentsThumbnail != null)
-        'pdfAttachmentsThumbnail': pdfAttachmentsThumbnail?.toJson(),
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
     };
   }
@@ -247,7 +243,8 @@ class _ProjectImpl extends Project {
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
-    String? projectCost,
+    double? projectCost,
+    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
@@ -255,7 +252,6 @@ class _ProjectImpl extends Project {
     List<_i2.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
-    List<String>? pdfAttachmentsThumbnail,
     String? projectVideoUrl,
   }) : super._(
           id: id,
@@ -272,6 +268,7 @@ class _ProjectImpl extends Project {
           fundingCategory: fundingCategory,
           fundingSubCategory: fundingSubCategory,
           projectCost: projectCost,
+          zeroCost: zeroCost,
           fundingNote: fundingNote,
           projectImageAttachments: projectImageAttachments,
           projectPDFAttachments: projectPDFAttachments,
@@ -279,7 +276,6 @@ class _ProjectImpl extends Project {
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
           manualLocations: manualLocations,
-          pdfAttachmentsThumbnail: pdfAttachmentsThumbnail,
           projectVideoUrl: projectVideoUrl,
         );
 
@@ -299,6 +295,7 @@ class _ProjectImpl extends Project {
     Object? fundingCategory = _Undefined,
     Object? fundingSubCategory = _Undefined,
     Object? projectCost = _Undefined,
+    Object? zeroCost = _Undefined,
     Object? fundingNote = _Undefined,
     Object? projectImageAttachments = _Undefined,
     Object? projectPDFAttachments = _Undefined,
@@ -306,7 +303,6 @@ class _ProjectImpl extends Project {
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? manualLocations = _Undefined,
-    Object? pdfAttachmentsThumbnail = _Undefined,
     Object? projectVideoUrl = _Undefined,
   }) {
     return Project(
@@ -329,7 +325,8 @@ class _ProjectImpl extends Project {
       fundingSubCategory: fundingSubCategory is String?
           ? fundingSubCategory
           : this.fundingSubCategory,
-      projectCost: projectCost is String? ? projectCost : this.projectCost,
+      projectCost: projectCost is double? ? projectCost : this.projectCost,
+      zeroCost: zeroCost is bool? ? zeroCost : this.zeroCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
       projectImageAttachments: projectImageAttachments is List<String>?
           ? projectImageAttachments
@@ -348,9 +345,6 @@ class _ProjectImpl extends Project {
       manualLocations: manualLocations is List<String>?
           ? manualLocations
           : this.manualLocations?.map((e0) => e0).toList(),
-      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail is List<String>?
-          ? pdfAttachmentsThumbnail
-          : this.pdfAttachmentsThumbnail?.map((e0) => e0).toList(),
       projectVideoUrl:
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
     );

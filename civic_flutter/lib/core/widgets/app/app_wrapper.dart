@@ -53,13 +53,12 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
               inactiveIcon: Iconsax.notification,
             ),
             CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.message5,
-              inactiveIcon: Iconsax.message,
+              activeIcon: Iconsax.profile_circle5,
+              inactiveIcon: Iconsax.profile_circle,
               iconSize: 32,
             ),
           ],
-        ),
-        
+        ),     
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [

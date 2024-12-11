@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class CreateProjectScreen extends ConsumerWidget {
         id,
       ),
     );
-    final projectState = ref.watch(projectProviderProvider(data.value));
+    final projectCreationState = ref.watch(projectProviderProvider(data.value));
     final projectNotifier =
         ref.watch(projectProviderProvider(data.value).notifier);
     return PopScope(
@@ -29,7 +29,7 @@ class CreateProjectScreen extends ConsumerWidget {
         ref
             .read(
               mediaVideoPlayerProvider(
-                projectState.projectVideoUrl,
+                projectCreationState.projectVideoUrl,
               ).notifier,
             )
             .dispose();
@@ -49,7 +49,7 @@ class CreateProjectScreen extends ConsumerWidget {
                 ref
                     .read(
                       mediaVideoPlayerProvider(
-                        projectState.projectVideoUrl,
+                        projectCreationState.projectVideoUrl,
                       ).notifier,
                     )
                     .dispose();
@@ -57,7 +57,7 @@ class CreateProjectScreen extends ConsumerWidget {
                   ProjectRoutes.namespace,
                   extra: () => ProjectHelperFunctions.sendProject(
                     ref,
-                    projectState,
+                    projectCreationState,
                     id,
                     data.value!.ownerId,
                   ),

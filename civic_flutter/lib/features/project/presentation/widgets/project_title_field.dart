@@ -13,7 +13,7 @@ class ProjectTitleField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     return TextFormField(
@@ -35,7 +35,7 @@ class ProjectTitleField extends ConsumerWidget {
         projectNotifier.setTitle(value);
       },
       maxLines: null,
-      controller: projectState.titleController,
+      controller: projectCreationSate.titleController,
       textInputAction: TextInputAction.done,
       maxLength: 100,
     );

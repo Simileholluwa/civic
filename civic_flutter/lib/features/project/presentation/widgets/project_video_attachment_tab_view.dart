@@ -16,10 +16,10 @@ class ProjectVideoAttachmentTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
-    final videoUrl = projectState.projectVideoUrl;
+    final videoUrl = projectCreationSate.projectVideoUrl;
     final videoControl = ref.watch(
       mediaVideoPlayerProvider(
         videoUrl,

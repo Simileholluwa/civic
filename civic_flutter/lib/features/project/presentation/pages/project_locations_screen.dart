@@ -18,9 +18,9 @@ class ProjectLocationsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchQueryProvider = ref.watch(locationSearchQueryProvider.notifier);
     final data = ref.watch(searchPlacesProvider);
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
-    final locations = projectState.physicalLocations ?? [];
+    final locations = projectCreationSate.physicalLocations ?? [];
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(

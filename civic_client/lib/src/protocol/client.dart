@@ -288,6 +288,18 @@ class EndpointProject extends _i1.EndpointRef {
   _i2.Future<_i10.ProjectList> getProjects({
     required int limit,
     required int page,
+    String? projectCategory,
+    String? fundingCategory,
+    String? status,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? currency,
+    double? projectCostFrom,
+    double? projectCostTo,
+    bool? zeroCost,
+    String? location,
+    double? completionRateFrom,
+    double? completionRateTo,
   }) =>
       caller.callServerEndpoint<_i10.ProjectList>(
         'project',
@@ -295,6 +307,18 @@ class EndpointProject extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
+          'projectCategory': projectCategory,
+          'fundingCategory': fundingCategory,
+          'status': status,
+          'startDate': startDate,
+          'endDate': endDate,
+          'currency': currency,
+          'projectCostFrom': projectCostFrom,
+          'projectCostTo': projectCostTo,
+          'zeroCost': zeroCost,
+          'location': location,
+          'completionRateFrom': completionRateFrom,
+          'completionRateTo': completionRateTo,
         },
       );
 

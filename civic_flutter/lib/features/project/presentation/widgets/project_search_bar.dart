@@ -66,24 +66,7 @@ class ProjectSearchBar extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
-          width: TSizes.sm,
-        ),
-        Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              100,
-            ),
-            color: THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
-          ),
-          child: IconButton(
-              onPressed: (){},
-              icon: const Icon(Iconsax.filter),
-            ),
-          
-        ),
+        
       ],
     );
   }

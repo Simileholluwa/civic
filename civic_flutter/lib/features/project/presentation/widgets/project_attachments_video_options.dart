@@ -16,7 +16,7 @@ class ProjectAttachmentsVideoOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(
+    final projectCreationSate = ref.watch(
       projectProviderProvider(project),
     );
     final projectNotifier = ref.watch(
@@ -24,11 +24,11 @@ class ProjectAttachmentsVideoOptions extends ConsumerWidget {
     );
     final videoControl = ref.watch(
       mediaVideoPlayerProvider(
-        projectState.projectVideoUrl,
+        projectCreationSate.projectVideoUrl,
       ),
     );
     final videoController = ref
-        .watch(mediaVideoPlayerProvider(projectState.projectVideoUrl).notifier);
+        .watch(mediaVideoPlayerProvider(projectCreationSate.projectVideoUrl).notifier);
     return Padding(
       padding: const EdgeInsets.only(
         bottom: TSizes.md,

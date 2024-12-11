@@ -743,9 +743,15 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'projectCost',
-          columnType: _i2.ColumnType.text,
+          columnType: _i2.ColumnType.doublePrecision,
           isNullable: true,
-          dartType: 'String?',
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'zeroCost',
+          columnType: _i2.ColumnType.boolean,
+          isNullable: true,
+          dartType: 'bool?',
         ),
         _i2.ColumnDefinition(
           name: 'fundingNote',
@@ -785,12 +791,6 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'manualLocations',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'pdfAttachmentsThumbnail',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<String>?',
@@ -1359,11 +1359,6 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<List<_i32.AWSPlaces>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<_i32.AWSPlaces>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {

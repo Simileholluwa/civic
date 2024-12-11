@@ -12,7 +12,8 @@ fields:
     currency: String?
     fundingCategory: String?
     fundingSubCategory: String?
-    projectCost: String?
+    projectCost: double?
+    zeroCost: bool?
     fundingNote: String?
     projectImageAttachments: List<String>?
     projectPDFAttachments: List<String>?
@@ -20,7 +21,6 @@ fields:
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
     manualLocations: List<String>?
-    pdfAttachmentsThumbnail: List<String>?
     projectVideoUrl: String?
     
 

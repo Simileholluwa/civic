@@ -14,7 +14,7 @@ class ProjectOverviewPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     return Column(
       children: [
         Container(
@@ -30,8 +30,8 @@ class ProjectOverviewPageView extends ConsumerWidget {
             bottom: 4,
           ),
           child: ProjectTextToolbar(
-            controller: projectState.quillController,
-            focusNode: projectState.focusNode,
+            controller: projectCreationSate.quillController,
+            focusNode: projectCreationSate.focusNode,
           ),
         ),
         Expanded(
@@ -43,9 +43,9 @@ class ProjectOverviewPageView extends ConsumerWidget {
                   project: project,
                 ),
                 ProjectTextEditor(
-                  controller: projectState.quillController,
-                  scrollController: projectState.scrollController,
-                  focusNode: projectState.focusNode,
+                  controller: projectCreationSate.quillController,
+                  scrollController: projectCreationSate.scrollController,
+                  focusNode: projectCreationSate.focusNode,
                   configurations: const QuillEditorConfigurations(),
                 ),
               ],

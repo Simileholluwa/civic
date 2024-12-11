@@ -1,2 +1,3 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
+SELECT * 
+FROM project 
+WHERE "projectImageAttachments" IS NOT NULL;

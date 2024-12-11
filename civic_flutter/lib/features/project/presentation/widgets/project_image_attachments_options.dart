@@ -16,7 +16,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(
+    final projectCreationSate = ref.watch(
       projectProviderProvider(project),
     );
     final projectNotifier = ref.watch(
@@ -89,7 +89,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
                 color: TColors.textWhite,
               ),
             ),
-            if (projectState.projectImageAttachments!.length < 5)
+            if (projectCreationSate.projectImageAttachments!.length < 5)
               Row(
                 children: [
                   IconButton(
@@ -119,7 +119,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${projectState.projectImageAttachments!.length}',
+                  '$pageIndex/${projectCreationSate.projectImageAttachments!.length}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

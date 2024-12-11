@@ -4,8 +4,8 @@ import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-class ProjectState {
-  ProjectState({
+class ProjectCreationState {
+  ProjectCreationState({
     required this.focusNode,
     required this.scrollController,
     required this.titleController,
@@ -40,8 +40,8 @@ class ProjectState {
     this.projectVideoUrl,
   });
 
-  factory ProjectState.empty() {
-    return ProjectState(
+  factory ProjectCreationState.empty() {
+    return ProjectCreationState(
       focusNode: FocusNode(),
       scrollController: ScrollController(),
       titleController: TextEditingController(),
@@ -57,7 +57,7 @@ class ProjectState {
     );
   }
 
-  factory ProjectState.populate(Project project) {
+  factory ProjectCreationState.populate(Project project) {
     Document? document;
     if (project.description != null) {
       document = Document.fromJson(
@@ -66,7 +66,7 @@ class ProjectState {
     } else {
       document = Document();
     }
-    return ProjectState(
+    return ProjectCreationState(
       title: project.title,
       description: project.description,
       focusNode: FocusNode(),
@@ -83,7 +83,7 @@ class ProjectState {
       startDate: project.startDate,
       endDate: project.endDate,
       currency: project.currency,
-      projectCostController: TextEditingController(text: project.projectCost),
+      projectCostController: TextEditingController(text: project.projectCost.toString(),),
       projectCost: project.projectCost,
       fundingNoteController: TextEditingController(text: project.fundingNote),
       fundingNote: project.fundingNote,
@@ -127,7 +127,7 @@ class ProjectState {
   final String? fundingSubCategory;
   final List<AWSPlaces>? physicalLocations;
   final String? projectCategory;
-  final String? projectCost;
+  final double? projectCost;
   final TextEditingController projectCostController;
   final List<String>? projectImageAttachments;
   final List<String>? projectPDFAttachments;
@@ -148,7 +148,7 @@ class ProjectState {
   final String? projectVideoUrl;
   
 
-  ProjectState copyWith({
+  ProjectCreationState copyWith({
     String? title,
     String? description,
     FocusNode? focusNode,
@@ -166,7 +166,7 @@ class ProjectState {
     String? fundingCategory,
     String? fundingSubCategory,
     TextEditingController? projectCostController,
-    String? projectCost,
+    double? projectCost,
     TextEditingController? fundingNoteController,
     String? fundingNote,
     List<String>? projectImageAttachments,
@@ -182,7 +182,7 @@ class ProjectState {
     List<Uint8List>? pdfAttachmentsThumbnail,
     String? projectVideoUrl,
   }) {
-    return ProjectState(
+    return ProjectCreationState(
       title: title ?? this.title,
       description: description ?? this.description,
       focusNode: focusNode ?? this.focusNode,

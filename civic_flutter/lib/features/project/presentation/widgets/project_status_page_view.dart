@@ -15,7 +15,7 @@ class ProjectStatusPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     return SingleChildScrollView(
@@ -23,11 +23,11 @@ class ProjectStatusPageView extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            projectState.status == projectStatus[0]
+            projectCreationSate.status == projectStatus[0]
                 ? 'Select when this project will start and when it is expected to end.'
-                : projectState.status == projectStatus[1]
+                : projectCreationSate.status == projectStatus[1]
                     ? 'Select when this project started, its completion rate, and when it is expected to end.'
-                    : projectState.status == projectStatus[2]
+                    : projectCreationSate.status == projectStatus[2]
                         ? 'Select when this project started and when it ended.'
                         : 'Share insights on the status of this project with your constituents.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -38,16 +38,16 @@ class ProjectStatusPageView extends ConsumerWidget {
           ProjectCategoryDropdown(
             hintText: 'Project status',
             dropdownItems: projectStatus,
-            value: projectState.status,
+            value: projectCreationSate.status,
             onChanged: (String? value) {
               projectNotifier.setProjectStatus(value);
             },
           ),
           const SizedBox(height: 20),
           Visibility(
-            visible: projectState.status == projectStatus[1],
+            visible: projectCreationSate.status == projectStatus[1],
             child: AppTextField(
-              textController: projectState.completionRateController,
+              textController: projectCreationSate.completionRateController,
               prefixIcon: Iconsax.percentage_square,
               hintText: 'Percentage completion',
               hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -64,13 +64,13 @@ class ProjectStatusPageView extends ConsumerWidget {
             ),
           ),
           Visibility(
-            visible: projectState.status == projectStatus[1],
+            visible: projectCreationSate.status == projectStatus[1],
             child: const SizedBox(
               height: 20,
             ),
           ),
           AppTextField(
-            textController: projectState.startDateController,
+            textController: projectCreationSate.startDateController,
             prefixIcon: Iconsax.calendar_1,
             hintText: 'Start date',
             readOnly: true,
@@ -85,14 +85,14 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
-                projectState.startDateController.text = pickedDate.toString().substring(0, 11);
+                projectCreationSate.startDateController.text = pickedDate.toString().substring(0, 11);
               }
             },
             validator: (value) => TValidator.validateStartDate(value),
           ),
           const SizedBox(height: 20),
           AppTextField(
-            textController: projectState.endDateController,
+            textController: projectCreationSate.endDateController,
             prefixIcon: Iconsax.calendar5,
             hintText: 'End date',
             readOnly: true,
@@ -107,7 +107,7 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);
-                projectState.endDateController.text = pickedDate.toString().substring(0, 11);
+                projectCreationSate.endDateController.text = pickedDate.toString().substring(0, 11);
               }
             },
             validator: (value) =>

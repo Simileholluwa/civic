@@ -1,0 +1,66 @@
+
+
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ProjectFilterButtons extends ConsumerWidget {
+  const ProjectFilterButtons({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
+    final projectWidgetsNotifier =
+        ref.watch(projectScreenWidgetsProvider.notifier);
+    final isDark = THelperFunctions.isDarkMode(context);
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 1000),
+      opacity: projectWidgetsState.isActiveFilter ? 1 : 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 5,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: projectWidgetsNotifier.toggleFilter,
+                child: const Text(
+                  'Cancel',
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDark ? TColors.dark : TColors.light,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              flex: 2,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  'Apply filter',
+                  style: const TextStyle().copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: TColors.primary,
+                  foregroundColor: TColors.textWhite,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

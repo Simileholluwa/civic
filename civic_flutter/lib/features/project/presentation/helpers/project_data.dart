@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 final Map<String, List<String>> projectCategories = {
   "Infrastructure Development": [
     "Roads and Highways",
@@ -241,8 +243,8 @@ final sectionNames = [
 
 final projectStatus = [
   'Planning',
-  'Ongoing',
   'Completed',
+  'Ongoing',
 ];
 
 final Map<String, List<String>> fundingSources = {
@@ -402,6 +404,161 @@ final Map<String, String> currencies = {
   "Euro": "€",
   "Nigerian Naira": "₦",
   "British Pound Sterling": "£",
-  "Japanese Yen": "¥"
 };
+
+final List<String> filterTexts = [
+  'Category',
+  'Status',
+  'Funding',
+  'Location',
+  'Attachments',
+];
+
+const List<String> statesInNigeria = [
+  'Abia',
+  'Adamawa',
+  'Akwa Ibom',
+  'Anambra',
+  'Bauchi',
+  'Bayelsa',
+  'Benue',
+  'Borno',
+  'Cross River',
+  'Delta',
+  'Ebonyi',
+  'Edo',
+  'Ekiti',
+  'Enugu',
+  'FCT - Abuja',
+  'Gombe',
+  'Imo',
+  'Jigawa',
+  'Kaduna',
+  'Kano',
+  'Katsina',
+  'Kebbi',
+  'Kogi',
+  'Kwara',
+  'Lagos',
+  'Nasarawa',
+  'Niger',
+  'Ogun',
+  'Ondo',
+  'Osun',
+  'Oyo',
+  'Plateau',
+  'Rivers',
+  'Sokoto',
+  'Taraba',
+  'Yobe',
+  'Zamfara',
+];
+
+  final Map<String, String> selectedFilters = {
+    'CATEGORIES': '',
+    'FUNDING': '',
+    'ATTACHMENMTS': '',
+    'COST': '',
+    'DATE': '',
+    'LOCATION': '',
+    'STATUS': '',
+  };
+
+  final Map<String, Map<String, bool>> attachments = {
+    'Images' : {
+      'Images': true,
+      'PDFs': false,
+      'Video': false,
+    },
+    'Video' : {
+      'Images': false,
+      'PDFs': false,
+      'Video': true,
+    },
+    'PDFs' : {
+      'Images': false,
+      'PDFs': true,
+      'Video': false,
+    },
+    'PDFs and Images' : {
+      'Images': true,
+      'PDFs': true,
+      'Video': false,
+    },
+    'PDFs and Video' : {
+      'Images': false,
+      'PDFs': true,
+      'Video': true,
+    },
+    'Images and Video' : {
+      'Images': true,
+      'PDFs': false,
+      'Video': true,
+    },
+    'PDFs, Images and Video' : {
+      'Images': true,
+      'PDFs': true,
+      'Video': true,
+    },
+  };
+
+  final Map<String, DateTimeRange?> startDateFilters = {
+    "Today": DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    ),
+    "Yesterday": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 1)),
+      end: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    "7 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 7)),
+      end: DateTime.now(),
+    ),
+    "14 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 14)),
+      end: DateTime.now(),
+    ),
+    "Custom range": null,
+  };
+  final Map<String, DateTimeRange?> endDateFilters = {
+    "Today": DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    ),
+    "Yesterday": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 1)),
+      end: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    "7 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 7)),
+      end: DateTime.now(),
+    ),
+    "14 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 14)),
+      end: DateTime.now(),
+    ),
+    "Custom range": null,
+  };
+  final Map<String, DateTimeRange?> publishDateFilters = {
+    "Today": DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    ),
+    "Yesterday": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 1)),
+      end: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    "7 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 7)),
+      end: DateTime.now(),
+    ),
+    "14 Days ago": DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 14)),
+      end: DateTime.now(),
+    ),
+    "Custom range": null,
+  };
+
+  final List<String> radiusOptions = ["1km", "10km", "20km", "50km"];
 

@@ -68,11 +68,37 @@ class ProjectEndpoint extends Endpoint {
     Session session, {
     int limit = 10,
     int page = 1,
+    String? projectCategory,
+    String? fundingCategory,
+    String? status,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? currency,
+    double? projectCostFrom,
+    double? projectCostTo,
+    bool? zeroCost,
+    String? location,
+    double? completionRateFrom,
+    double? completionRateTo,
   }) async {
     final count = await Project.db.count(session);
     final results = await Project.db.find(
       session,
       limit: limit,
+      // where: (t) => [
+      //   if (projectCategory != null) t.projectCategory.equals(projectCategory),
+      //   if (fundingCategory != null) t.fundingCategory.equals(fundingCategory),
+      //   if (projectCostFrom != null && projectCostTo != null)
+      //     (t.projectCost >= projectCostFrom) & (t.projectCost <= projectCostTo),
+      //   if (currency != null) t.fundingCategory.equals(currency),
+      //   if (zeroCost != null) t.zeroCost.equals(zeroCost),
+      //   if (startDate != null && endDate != null)
+      //     (t.startDate >= startDate) & (t.endDate <= endDate),
+      //   if (status != null) t.status.equals(status),
+      //   if (completionRateFrom != null && completionRateTo != null)
+      //     (t.completionRate >= completionRateFrom) &
+      //         (t.completionRate <= completionRateTo),
+      // ].reduce((value, element) => value & element),
       offset: (page * limit) - limit,
       include: Project.include(
         owner: UserRecord.include(),

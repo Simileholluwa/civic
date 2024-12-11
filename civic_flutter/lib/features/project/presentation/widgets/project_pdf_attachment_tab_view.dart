@@ -15,8 +15,8 @@ class ProjectPDFAttachmentsTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
-    final pdfPaths = projectState.projectPDFAttachments ?? [];
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
+    final pdfPaths = projectCreationSate.projectPDFAttachments ?? [];
     final thumbnails = pdfPaths.isEmpty
         ? const AsyncValue<List<Uint8List>>.data([])
         : ref.watch(projectPdfThumbnailProvider(pdfPaths));

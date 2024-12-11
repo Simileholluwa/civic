@@ -20,10 +20,10 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
-    final imageUrls = projectState.projectImageAttachments ?? <String>[];
+    final imageUrls = projectCreationSate.projectImageAttachments ?? <String>[];
     int current = ref.watch(projectImageAttachmentPageChangedProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(

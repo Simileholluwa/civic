@@ -15,10 +15,10 @@ class ProjectLocationPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(_project));
-    final manualLocation = projectState.manualLocations ?? [];
-    final virtualLocation = projectState.virtualLocations ?? [];
-    final physicalLocation = projectState.physicalLocations ?? [];
+    final projectCreationSate = ref.watch(projectProviderProvider(_project));
+    final manualLocation = projectCreationSate.manualLocations ?? [];
+    final virtualLocation = projectCreationSate.virtualLocations ?? [];
+    final physicalLocation = projectCreationSate.physicalLocations ?? [];
     return Column(
       children: [
         Padding(
@@ -38,7 +38,7 @@ class ProjectLocationPageView extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ProjectLocationOptions(
-                onTap: projectState.canAddLocations
+                onTap: projectCreationSate.canAddLocations
                     ? () {
                         ProjectHelperFunctions.selectLocation(
                           context,
@@ -53,7 +53,7 @@ class ProjectLocationPageView extends ConsumerWidget {
               ),
               const SizedBox(width: 10),
               ProjectLocationOptions(
-                onTap: projectState.canAddLocations
+                onTap: projectCreationSate.canAddLocations
                     ? () {
                         virtualLinkDialog(
                           context: context,
@@ -68,7 +68,7 @@ class ProjectLocationPageView extends ConsumerWidget {
               ),
               const SizedBox(width: 10),
               ProjectLocationOptions(
-                onTap: projectState.canAddLocations
+                onTap: projectCreationSate.canAddLocations
                     ? () {
                         manualLocationDialog(
                           context: context,
@@ -102,7 +102,7 @@ class ProjectLocationPageView extends ConsumerWidget {
           const SizedBox(
             height: TSizes.md,
           ),
-        if (projectState.virtualLocations != null)
+        if (projectCreationSate.virtualLocations != null)
           ProjectSelectedLocations(
             project: _project,
             isManual: false,
@@ -114,7 +114,7 @@ class ProjectLocationPageView extends ConsumerWidget {
           const SizedBox(
             height: TSizes.md,
           ),
-        if (projectState.physicalLocations != null)
+        if (projectCreationSate.physicalLocations != null)
           ProjectSelectedLocations(
             project: _project,
             isManual: false,

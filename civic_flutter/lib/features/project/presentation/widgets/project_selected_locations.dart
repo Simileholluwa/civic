@@ -21,13 +21,13 @@ class ProjectSelectedLocations extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectState = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     List<dynamic>? locations;
-    if (isManual) locations = projectState.manualLocations ?? <String>[];
-    if (isVirtual) locations = projectState.virtualLocations ?? <String>[];
-    if (isPhysical) locations = projectState.physicalLocations ?? <AWSPlaces>[];
+    if (isManual) locations = projectCreationSate.manualLocations ?? <String>[];
+    if (isVirtual) locations = projectCreationSate.virtualLocations ?? <String>[];
+    if (isPhysical) locations = projectCreationSate.physicalLocations ?? <AWSPlaces>[];
     return Flexible(
       child: ListView.separated(
         shrinkWrap: true,
@@ -118,17 +118,17 @@ class ProjectSelectedLocations extends ConsumerWidget {
                       onPressed: () {
                         if (isManual) {
                           projectNotifier.removeManualLocation(
-                            projectState.manualLocations![index],
+                            projectCreationSate.manualLocations![index],
                           );
                         }
                         if (isVirtual) {
                           projectNotifier.removeVirtualLocation(
-                            projectState.virtualLocations![index],
+                            projectCreationSate.virtualLocations![index],
                           );
                         }
                         if (isPhysical) {
                           projectNotifier.removePhysicalLocation(
-                            projectState.physicalLocations![index],
+                            projectCreationSate.physicalLocations![index],
                           );
                         }
                       },

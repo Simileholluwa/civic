@@ -129,30 +129,30 @@ class ProjectHelperFunctions {
   static Project projectToSend(
     int? postId,
     int ownerId,
-    ProjectState projectState,
+    ProjectCreationState projectCreationSate,
   ) {
     return Project(
       id: postId,
       ownerId: ownerId,
-      title: projectState.title,
-      description: projectState.description,
-      projectCategory: projectState.projectCategory,
-      projectSubCategory: projectState.projectSubCategory,
-      fundingCategory: projectState.fundingCategory,
-      fundingSubCategory: projectState.fundingSubCategory,
-      startDate: projectState.startDate,
-      endDate: projectState.endDate,
-      physicalLocations: projectState.physicalLocations,
-      manualLocations: projectState.manualLocations,
-      virtualLocations: projectState.virtualLocations,
-      projectVideoUrl: projectState.projectVideoUrl,
-      projectPDFAttachments: projectState.projectPDFAttachments,
-      projectImageAttachments: projectState.projectImageAttachments,
-      status: projectState.status,
-      currency: projectState.currency,
-      projectCost: projectState.projectCost,
-      fundingNote: projectState.fundingNote,
-      completionRate: projectState.completionRate,
+      title: projectCreationSate.title,
+      description: projectCreationSate.description,
+      projectCategory: projectCreationSate.projectCategory,
+      projectSubCategory: projectCreationSate.projectSubCategory,
+      fundingCategory: projectCreationSate.fundingCategory,
+      fundingSubCategory: projectCreationSate.fundingSubCategory,
+      startDate: projectCreationSate.startDate,
+      endDate: projectCreationSate.endDate,
+      physicalLocations: projectCreationSate.physicalLocations,
+      manualLocations: projectCreationSate.manualLocations,
+      virtualLocations: projectCreationSate.virtualLocations,
+      projectVideoUrl: projectCreationSate.projectVideoUrl,
+      projectPDFAttachments: projectCreationSate.projectPDFAttachments,
+      projectImageAttachments: projectCreationSate.projectImageAttachments,
+      status: projectCreationSate.status,
+      currency: projectCreationSate.currency,
+      projectCost: projectCreationSate.projectCost,
+      fundingNote: projectCreationSate.fundingNote,
+      completionRate: projectCreationSate.completionRate,
     );
   }
 
@@ -205,7 +205,7 @@ class ProjectHelperFunctions {
 
   static void sendProject(
     WidgetRef ref,
-    ProjectState projectState,
+    ProjectCreationState projectCreationSate,
     int id,
     int ownerId,
   ) async {
@@ -214,12 +214,12 @@ class ProjectHelperFunctions {
               ? projectToSend(
                   id,
                   ownerId,
-                  projectState,
+                  projectCreationSate,
                 )
               : projectToSend(
                   null,
                   0,
-                  projectState,
+                  projectCreationSate,
                 ),
         );
   }

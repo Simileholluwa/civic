@@ -1,0 +1,50 @@
+import 'dart:async';
+import 'dart:developer';
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/features/project/domain/usecases/get_projects_use_case.dart';
+import 'package:civic_flutter/features/project/presentation/providers/project_services_provider.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'project_paginated_list_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class PaginatedProjectList extends _$PaginatedProjectList {
+  final PagingController<int, Project> pagingController =
+      PagingController(firstPageKey: 1);
+
+  @override
+  PagingStatus build() {
+    pagingController.addPageRequestListener((page) {
+      fetchPage(page);
+    });
+
+    pagingController.addStatusListener((status) {
+      state = status;
+    });
+    return PagingStatus.loadingFirstPage;
+  }
+
+  Future<void> fetchPage(int page, {int limit = 10}) async {
+    final listProjectUseCase = ref.read(getProjectsProvider);
+    final result = await listProjectUseCase(
+      GetProjectsParams(
+        page,
+        limit,
+      ),
+    );
+    result.fold((error) => log(error.message), (data) {
+      if (data.canLoadMore) {
+        pagingController.appendPage(
+          data.results,
+          data.page + 1,
+        );
+      } else {
+        pagingController.appendLastPage(data.results);
+      }
+    });
+  }
+
+  void refresh() {
+    pagingController.refresh();
+  }
+}
