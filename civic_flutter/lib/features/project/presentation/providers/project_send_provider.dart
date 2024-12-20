@@ -105,7 +105,6 @@ class SendProject extends _$SendProject {
       projectPDFAttachments: pdfUrls,
       projectVideoUrl: videoUrl,
     );
-    log(updatedProject.toString());
     final saveProject = ref.read(saveProjectProvider);
 
     final result = await saveProject(

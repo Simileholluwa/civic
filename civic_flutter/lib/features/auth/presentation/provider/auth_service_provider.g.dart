@@ -7,7 +7,7 @@ part of 'auth_service_provider.dart';
 // **************************************************************************
 
 String _$authRemoteDatabaseHash() =>
-    r'32402ef72e0d1c879f8d0cd8242547c15c292122';
+    r'daa7ce8ba7e86e01553fa25c60043959d94cfc08';
 
 /// See also [authRemoteDatabase].
 @ProviderFor(authRemoteDatabase)
@@ -25,7 +25,7 @@ final authRemoteDatabaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRemoteDatabaseRef = AutoDisposeProviderRef<AuthRemoteDatabaseImpl>;
-String _$authRepositoryHash() => r'5d64cdd83e580174769ff771ce4fc024a18773af';
+String _$authRepositoryHash() => r'a8ccccfb7339ced909584054d0666dd5ccceaa71';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -43,7 +43,7 @@ final authRepositoryProvider = AutoDisposeProvider<AuthRepositoryImpl>.internal(
 // ignore: unused_element
 typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepositoryImpl>;
 String _$createAccountRequestHash() =>
-    r'56b5d9b02222043c5762936ed52ab44fc06287a4';
+    r'b653f1f620cde6ffc3a99bae8ffcdd32534c8323';
 
 /// See also [createAccountRequest].
 @ProviderFor(createAccountRequest)
@@ -62,7 +62,7 @@ final createAccountRequestProvider =
 // ignore: unused_element
 typedef CreateAccountRequestRef
     = AutoDisposeProviderRef<CreateAccountRequestUseCase>;
-String _$userSignInHash() => r'dbbd230907b58b4b37bb4b7bf5749e4eca44e038';
+String _$userSignInHash() => r'2adacc5f69874ed818ff3878e1a329a0d7d6d097';
 
 /// See also [userSignIn].
 @ProviderFor(userSignIn)
@@ -79,7 +79,7 @@ final userSignInProvider = AutoDisposeProvider<UserSignInUseCase>.internal(
 // ignore: unused_element
 typedef UserSignInRef = AutoDisposeProviderRef<UserSignInUseCase>;
 String _$initiatePasswordResetHash() =>
-    r'05f1e9a9f8470153ea8c60827345a0082c1b4e0e';
+    r'6ec5d95bbb598d2e05c1fc8b5022f0c457dd223b';
 
 /// See also [initiatePasswordReset].
 @ProviderFor(initiatePasswordReset)
@@ -98,7 +98,7 @@ final initiatePasswordResetProvider =
 // ignore: unused_element
 typedef InitiatePasswordResetRef
     = AutoDisposeProviderRef<InitiatePasswordResetUseCase>;
-String _$checkIfNewUserHash() => r'f2e78d68a3cffe283cecda680c3821de2fc9853d';
+String _$checkIfNewUserHash() => r'dc9f8adbbe994c9c4bff9fc09234cf060ad6f9c9';
 
 /// See also [checkIfNewUser].
 @ProviderFor(checkIfNewUser)
@@ -116,7 +116,7 @@ final checkIfNewUserProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CheckIfNewUserRef = AutoDisposeProviderRef<CheckIfNewUserUseCase>;
-String _$logOutHash() => r'04b8d55230906f058c32461d13413d059e04a53d';
+String _$logOutHash() => r'40db795015672880a5d6e20dda78d2373d1dd3c7';
 
 /// See also [logOut].
 @ProviderFor(logOut)
@@ -133,7 +133,7 @@ final logOutProvider = AutoDisposeProvider<LogoutUseCase>.internal(
 // ignore: unused_element
 typedef LogOutRef = AutoDisposeProviderRef<LogoutUseCase>;
 String _$validateCreateAccountHash() =>
-    r'58a23a035c3e035fd54a57e5d694f1e4129c070f';
+    r'33a4d8366c25528612361c575441864125ab8107';
 
 /// See also [validateCreateAccount].
 @ProviderFor(validateCreateAccount)
@@ -152,7 +152,7 @@ final validateCreateAccountProvider =
 // ignore: unused_element
 typedef ValidateCreateAccountRef
     = AutoDisposeProviderRef<ValidateCreateAccountUseCase>;
-String _$searchUserNinHash() => r'c5da46f92886bd301ba8cc4ab7fc9a0d8a554da6';
+String _$searchUserNinHash() => r'ed11554b209d5982c8764ee68516b4575cb5533f';
 
 /// See also [searchUserNin].
 @ProviderFor(searchUserNin)
@@ -170,7 +170,7 @@ final searchUserNinProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SearchUserNinRef = AutoDisposeProviderRef<SearchUserNinUseCase>;
-String _$fetchAllUsernamesHash() => r'0a8fd616d2f1651b4c60a8133ea3a34e51f0ff1a';
+String _$fetchAllUsernamesHash() => r'850ed57946f632d715fb3dea341435687c890342';
 
 /// See also [fetchAllUsernames].
 @ProviderFor(fetchAllUsernames)
@@ -189,7 +189,7 @@ final fetchAllUsernamesProvider =
 // ignore: unused_element
 typedef FetchAllUsernamesRef = AutoDisposeProviderRef<FetchAllUsernamesUseCase>;
 String _$uploadProfileImageHash() =>
-    r'b2057ca8c288a0d6a128ccabdb2eb014f01c0f2d';
+    r'ca5bf8b6f7e98b567ffd163d25c5f19a8b1ac2be';
 
 /// See also [uploadProfileImage].
 @ProviderFor(uploadProfileImage)
@@ -208,7 +208,7 @@ final uploadProfileImageProvider =
 // ignore: unused_element
 typedef UploadProfileImageRef
     = AutoDisposeProviderRef<UploadProfileImageUseCase>;
-String _$resetUserPasswordHash() => r'e67f4de7ed66416942d9ed20e9fa6e96dc642797';
+String _$resetUserPasswordHash() => r'1373fc6a555622cc6f9bb85cb9f96c9a17392faa';
 
 /// See also [resetUserPassword].
 @ProviderFor(resetUserPassword)
@@ -226,7 +226,7 @@ final resetUserPasswordProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ResetUserPasswordRef = AutoDisposeProviderRef<ResetUserPasswordUseCase>;
-String _$currentUserHash() => r'234c4810bcb32c17fba5d99f5897a7687574d01c';
+String _$currentUserHash() => r'9d686e517b132f624f85293754159daaa76d8106';
 
 /// See also [currentUser].
 @ProviderFor(currentUser)

@@ -39,7 +39,7 @@ class ProjectStatusFilter extends ConsumerWidget {
               items: projectStatus,
             );
           }),
-          const FilterColumnDivider(),
+          const ProjectFilterColumnDivider(),
           Padding(
             padding: const EdgeInsets.only(
               top: 15,

@@ -43,14 +43,12 @@ dependencies:
   google_fonts:
   carousel_slider:
   transparent_image:
-  photo_manager_image_provider:
   permission_handler:
   animated_text_kit:
   geolocator:
   intl:
   video_player:
   toastification:
-  photo_manager:
   image_cropper:
   image_picker:
   url_launcher:
@@ -73,6 +71,8 @@ dependencies:
   file_picker: ^8.1.4
   pdfx: ^2.8.0
   dio: ^5.7.0
+  flutter_staggered_grid_view: ^0.7.0
+  flutter_slidable: ^3.1.2
 
 dev_dependencies:
   flutter_lints: '>=3.0.0 <5.0.0'

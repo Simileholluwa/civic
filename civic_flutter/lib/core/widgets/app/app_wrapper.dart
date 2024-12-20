@@ -20,44 +20,53 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    final isVisible = ref.watch(scrollVisibilityProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
         ),
-        bottomNavigationBar: AppCustomBottomNavigationBar(
-          currentIndex: widget.navigatorShell.currentIndex,
-          onItemTapped: (index) {
-            widget.navigatorShell.goBranch(
-              index,
-              initialLocation: index == widget.navigatorShell.currentIndex,
-            );
-          },
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          items: [
-            CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.activity5,
-              inactiveIcon: Iconsax.activity,
+        bottomNavigationBar: AnimatedSlide(
+          duration: const Duration(milliseconds: 300),
+          offset: isVisible ? Offset.zero : const Offset(0, 1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: isVisible ? 56 : 0,
+            child: AppCustomBottomNavigationBar(
+              currentIndex: widget.navigatorShell.currentIndex,
+              onItemTapped: (index) {
+                widget.navigatorShell.goBranch(
+                  index,
+                  initialLocation: index == widget.navigatorShell.currentIndex,
+                );
+              },
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              items: [
+                CustomBottomNavigationBarItem(
+                  activeIcon: Iconsax.activity5,
+                  inactiveIcon: Iconsax.activity,
+                ),
+                CustomBottomNavigationBarItem(
+                  activeIcon: Iconsax.airdrop5,
+                  inactiveIcon: Iconsax.airdrop,
+                ),
+                CustomBottomNavigationBarItem(
+                  activeIcon: Iconsax.search_normal4,
+                  inactiveIcon: Iconsax.search_normal,
+                  iconSize: 32,
+                ),
+                CustomBottomNavigationBarItem(
+                  activeIcon: Iconsax.notification5,
+                  inactiveIcon: Iconsax.notification,
+                ),
+                CustomBottomNavigationBarItem(
+                  activeIcon: Iconsax.profile_circle5,
+                  inactiveIcon: Iconsax.profile_circle,
+                  iconSize: 32,
+                ),
+              ],
             ),
-            CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.airdrop5,
-              inactiveIcon: Iconsax.airdrop,
-            ),
-            CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.search_normal4,
-              inactiveIcon: Iconsax.search_normal,
-              iconSize: 32,
-            ),
-            CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.notification5,
-              inactiveIcon: Iconsax.notification,
-            ),
-            CustomBottomNavigationBarItem(
-              activeIcon: Iconsax.profile_circle5,
-              inactiveIcon: Iconsax.profile_circle,
-              iconSize: 32,
-            ),
-          ],
+          ),
         ),     
         body: Stack(
           alignment: Alignment.bottomCenter,

@@ -1,5 +1,6 @@
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class ProjectEndpoint extends Endpoint {
   Future<Project?> getProject(Session session, int id) async {
@@ -16,17 +17,7 @@ class ProjectEndpoint extends Endpoint {
     Project project,
   ) async {
     try {
-      final authInfo = await session.authenticated;
-      if (authInfo == null) {
-        throw UserException(
-          message: 'You must be logged in',
-        );
-      }
-      final user = await UserRecord.db.findFirstRow(
-        session,
-        where: (row) => row.userInfoId.equals(authInfo.userId),
-      );
-      if (user == null) return null;
+      final user = await authUser(session);
       if (project.id != null) {
         if (project.ownerId != user.userInfoId) {
           throw PostException(
@@ -35,7 +26,9 @@ class ProjectEndpoint extends Endpoint {
         }
         return await Project.db.updateRow(
           session,
-          project,
+          project.copyWith(
+            updatedAt: DateTime.now(),
+          ),
         );
       } else {
         return await Project.db.insertRow(
@@ -43,6 +36,7 @@ class ProjectEndpoint extends Endpoint {
           project.copyWith(
             ownerId: user.id,
             owner: user,
+            dateCreated: DateTime.now(),
           ),
         );
       }
@@ -101,7 +95,9 @@ class ProjectEndpoint extends Endpoint {
       // ].reduce((value, element) => value & element),
       offset: (page * limit) - limit,
       include: Project.include(
-        owner: UserRecord.include(),
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
       ),
     );
 
@@ -119,22 +115,7 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int id,
   ) async {
-    final authInfo = await session.authenticated;
-    if (authInfo == null) {
-      throw UserException(
-        message: 'You must be logged in',
-      );
-    }
-    final user = await UserRecord.db.findFirstRow(
-      session,
-      where: (row) => row.userInfoId.equals(authInfo.userId),
-    );
-    if (user == null) {
-      throw UserException(
-        message: 'User not found',
-      );
-    }
-
+    final user = await authUser(session);
     final project = await Project.db.findFirstRow(
       session,
       where: (row) => row.id.equals(id),
@@ -154,5 +135,124 @@ class ProjectEndpoint extends Endpoint {
       session,
       project,
     );
+  }
+
+  Future<void> updateCommentCount(
+    Session session,
+    int projectId,
+    bool isAdding,
+  ) async {
+    final project = await Project.db.findById(session, projectId);
+
+    if (project == null) {
+      throw Exception('Project not found');
+    }
+
+    project.commentsCount = (project.commentsCount ?? 0) + (isAdding ? 1 : -1);
+    if (project.commentsCount! < 0) project.commentsCount = 0;
+
+    await Project.db.updateRow(session, project);
+  }
+
+  Future<void> updateRepostCount(
+    Session session,
+    int projectId,
+    bool isAdding,
+  ) async {
+    final project = await Project.db.findById(session, projectId);
+
+    if (project == null) {
+      throw Exception('Project not found');
+    }
+
+    project.repostCount = (project.repostCount ?? 0) + (isAdding ? 1 : -1);
+    if (project.repostCount! < 0) project.repostCount = 0;
+
+    await Project.db.updateRow(session, project);
+  }
+
+  Future<int> addRemoveLike(
+    Session session,
+    int id,
+  ) async {
+    
+    if (await hasLiked(
+      session,
+      id,
+    )) {
+      final user = await authUser(session);
+      final like = await ProjectLikes.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.projectId.equals(id) &
+            t.ownerId.equals(
+              user.userInfoId,
+            ),
+      );
+      await ProjectLikes.db.deleteRow(session, like!);
+      final project = await Project.db.findById(session, id);
+      if (project != null && (project.likesCount ?? 0) > 0) {
+        project.likesCount = project.likesCount! - 1;
+        await Project.db.updateRow(session, project);
+        return project.likesCount ?? 0;
+      }
+    } else {
+      final user = await authUser(session);
+      await ProjectLikes.db.insertRow(
+        session,
+        ProjectLikes(
+          projectId: id,
+          ownerId: user.userInfoId,
+          dateCreated: DateTime.now(),
+        ),
+      );
+      final project = await Project.db.findById(
+        session,
+        id,
+      );
+      if (project != null) {
+        project.likesCount = (project.likesCount ?? 0) + 1;
+        await Project.db.updateRow(session, project);
+        return project.likesCount ?? 0;
+      }
+      return 0;
+    }
+    return 0;
+  }
+
+  Future<bool> hasLiked(
+    Session session,
+    int id,
+  ) async {
+    final user = await authUser(session);
+    final like = await ProjectLikes.db.findFirstRow(
+      session,
+      where: (t) => t.projectId.equals(id) & t.ownerId.equals(user.id),
+    );
+    return like != null;
+  }
+
+  Future<UserRecord> authUser(
+    Session session,
+  ) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(
+        message: 'You must be logged in',
+      );
+    }
+    final user = await UserRecord.db.findFirstRow(
+      session,
+      where: (row) => row.userInfoId.equals(authInfo.userId),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+    if (user == null) {
+      throw UserException(
+        message: 'User not found',
+      );
+    }
+    return user;
   }
 }

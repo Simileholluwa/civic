@@ -24,12 +24,12 @@ final projectCurrentPageProvider =
 
 typedef _$ProjectCurrentPage = AutoDisposeNotifier<int>;
 String _$projectPageControllerHash() =>
-    r'467fd1747d7a06b7d8e7635bfa8654a278a15267';
+    r'51b1a2cac9bd393263a473f7221276400b82ee84';
 
 /// See also [ProjectPageController].
 @ProviderFor(ProjectPageController)
-final projectPageControllerProvider =
-    AutoDisposeNotifierProvider<ProjectPageController, PageController>.internal(
+final projectPageControllerProvider = AutoDisposeNotifierProvider<
+    ProjectPageController, Raw<PageController>>.internal(
   ProjectPageController.new,
   name: r'projectPageControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -39,14 +39,14 @@ final projectPageControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ProjectPageController = AutoDisposeNotifier<PageController>;
+typedef _$ProjectPageController = AutoDisposeNotifier<Raw<PageController>>;
 String _$projectTabControllerHash() =>
-    r'125279e3f6b9d8a78566d135fc54e4d2780c121a';
+    r'e98e7e8f7c09b525aa713adf987f9c4a635ce787';
 
 /// See also [ProjectTabController].
 @ProviderFor(ProjectTabController)
-final projectTabControllerProvider =
-    AutoDisposeNotifierProvider<ProjectTabController, TabController>.internal(
+final projectTabControllerProvider = AutoDisposeNotifierProvider<
+    ProjectTabController, Raw<TabController>>.internal(
   ProjectTabController.new,
   name: r'projectTabControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -56,6 +56,6 @@ final projectTabControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ProjectTabController = AutoDisposeNotifier<TabController>;
+typedef _$ProjectTabController = AutoDisposeNotifier<Raw<TabController>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

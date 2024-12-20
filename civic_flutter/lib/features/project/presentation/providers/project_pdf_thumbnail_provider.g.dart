@@ -7,7 +7,7 @@ part of 'project_pdf_thumbnail_provider.dart';
 // **************************************************************************
 
 String _$projectPdfThumbnailHash() =>
-    r'5bdb408a394757d7653a362bfa720ef2afb55905';
+    r'18cb116c4f049e28ab23217795bb3cadf368ea1d';
 
 /// Copied from Dart SDK
 class _SystemHash {

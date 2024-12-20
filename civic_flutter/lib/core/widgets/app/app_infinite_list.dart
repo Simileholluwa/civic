@@ -1,9 +1,10 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class AppInfiniteList<T> extends StatelessWidget {
+class AppInfiniteList<T> extends ConsumerWidget {
   const AppInfiniteList({
     super.key,
     required this.pagingController,
@@ -20,11 +21,12 @@ class AppInfiniteList<T> extends StatelessWidget {
   final Function() onRefresh;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return RefreshIndicator(
       onRefresh: () => onRefresh(),
       child: PagedListView(
         pagingController: pagingController,
+        scrollController: ref.watch(appScrollControllerProvider),
         builderDelegate: PagedChildBuilderDelegate<T>(
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
@@ -50,6 +52,16 @@ class AppInfiniteList<T> extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ],
+              ),
+            );
+          },
+          noMoreItemsIndicatorBuilder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              child: Text(
+                "This is where it ends.",
+                style: Theme.of(context).textTheme.labelMedium,
+                textAlign: TextAlign.center,
               ),
             );
           },

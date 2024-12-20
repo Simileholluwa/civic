@@ -7,7 +7,7 @@ part of 'article_service_provider.dart';
 // **************************************************************************
 
 String _$articleLocalDatabaseHash() =>
-    r'7f80e4f62328bc14d1c3c2c327b2ef2c73a670a9';
+    r'95c01ed0466074e6c99b159cebc7400ec319ff73';
 
 /// See also [articleLocalDatabase].
 @ProviderFor(articleLocalDatabase)
@@ -27,7 +27,7 @@ final articleLocalDatabaseProvider =
 typedef ArticleLocalDatabaseRef
     = AutoDisposeProviderRef<ArticleLocalDatabaseImpl>;
 String _$articleRemoteDatasourceHash() =>
-    r'ee15902ce7498c3da930d41701ccd6fe14916846';
+    r'1fb8b3f138e69e565853536701cd3501031979eb';
 
 /// See also [articleRemoteDatasource].
 @ProviderFor(articleRemoteDatasource)
@@ -46,7 +46,7 @@ final articleRemoteDatasourceProvider =
 // ignore: unused_element
 typedef ArticleRemoteDatasourceRef
     = AutoDisposeProviderRef<ArticleRemoteDatasourceImpl>;
-String _$articleRepositoryHash() => r'34c032cd2255592ffd0aeb69574943a8bea4de52';
+String _$articleRepositoryHash() => r'11e1e9b40135a99daa7eb594f72b6378d1c3d40e';
 
 /// See also [articleRepository].
 @ProviderFor(articleRepository)
@@ -64,7 +64,7 @@ final articleRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ArticleRepositoryRef = AutoDisposeProviderRef<ArticleRepositoryImpl>;
-String _$saveArticleHash() => r'419c74c01f67dcbc06ef70ab18df4f8b0c461909';
+String _$saveArticleHash() => r'd830db8b53c12612ca81ab51dac1c13159cecd92';
 
 /// See also [saveArticle].
 @ProviderFor(saveArticle)
@@ -80,7 +80,7 @@ final saveArticleProvider = AutoDisposeProvider<SaveArticleUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SaveArticleRef = AutoDisposeProviderRef<SaveArticleUseCase>;
-String _$deleteArticleHash() => r'373dd9db68c0b0bbe28b4fadd3ead1c11e97ff96';
+String _$deleteArticleHash() => r'76a9d060f43c43c9c587ddf9118938860548e20b';
 
 /// See also [deleteArticle].
 @ProviderFor(deleteArticle)
@@ -98,7 +98,7 @@ final deleteArticleProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DeleteArticleRef = AutoDisposeProviderRef<DeleteArticleUseCase>;
-String _$getArticleHash() => r'470a8eebcab23c5a312cd31bc0b3298359c7ed83';
+String _$getArticleHash() => r'4f70426d4d9ad60c9141bf404891648ae87b55a7';
 
 /// See also [getArticle].
 @ProviderFor(getArticle)
@@ -114,7 +114,7 @@ final getArticleProvider = AutoDisposeProvider<GetArticleUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetArticleRef = AutoDisposeProviderRef<GetArticleUseCase>;
-String _$getArticlesHash() => r'52d1df080312494a248270a8530b3efd8ef19800';
+String _$getArticlesHash() => r'b9874e98574069e3cf7a7ae0f267941a33c6ebf9';
 
 /// See also [getArticles].
 @ProviderFor(getArticles)
@@ -131,7 +131,7 @@ final getArticlesProvider = AutoDisposeProvider<GetArticlesUseCase>.internal(
 // ignore: unused_element
 typedef GetArticlesRef = AutoDisposeProviderRef<GetArticlesUseCase>;
 String _$deleteDraftArticleHash() =>
-    r'5ba8092fe4dd292b1e7f8eac3911e1714412d790';
+    r'd3ad00bfaa4e31680df0f2b860b77403495eeae7';
 
 /// See also [deleteDraftArticle].
 @ProviderFor(deleteDraftArticle)
@@ -151,7 +151,7 @@ final deleteDraftArticleProvider =
 typedef DeleteDraftArticleRef
     = AutoDisposeProviderRef<DeleteDraftArticleUseCase>;
 String _$deleteDraftArticlesHash() =>
-    r'7b4ed9f454e0d7bfaa12dd44d21a9870400023e9';
+    r'b92839cacfca0e93037dc011ff1e30a10629f2d2';
 
 /// See also [deleteDraftArticles].
 @ProviderFor(deleteDraftArticles)
@@ -170,7 +170,7 @@ final deleteDraftArticlesProvider =
 // ignore: unused_element
 typedef DeleteDraftArticlesRef
     = AutoDisposeProviderRef<DeleteDraftArticlesUseCase>;
-String _$saveDraftArticleHash() => r'9701a621ede03bf1d055f736e837566c50c1e86d';
+String _$saveDraftArticleHash() => r'f626eb1e7c94adc943c3f2858fc049a67f6ab41f';
 
 /// See also [saveDraftArticle].
 @ProviderFor(saveDraftArticle)
@@ -189,7 +189,7 @@ final saveDraftArticleProvider =
 // ignore: unused_element
 typedef SaveDraftArticleRef = AutoDisposeProviderRef<SaveDraftArticleUseCase>;
 String _$retrieveDraftArticlesHash() =>
-    r'd7cf98085bea8ed005f2a9486661df92c745311d';
+    r'b97c060dab1b0c53b317ef4ec2057b99e5ce0b1a';
 
 /// See also [retrieveDraftArticles].
 @ProviderFor(retrieveDraftArticles)

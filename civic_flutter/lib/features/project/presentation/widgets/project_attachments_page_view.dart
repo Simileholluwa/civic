@@ -15,31 +15,10 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = ref.watch(projectTabControllerProvider);
-    final isDark = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
-        TabBar(
-          controller: tabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          labelColor: isDark ? TColors.textWhite : TColors.dark,
-          unselectedLabelColor: isDark ? TColors.darkerGrey : TColors.darkGrey,
-          unselectedLabelStyle:
-              Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-          labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-          indicatorColor: isDark ? TColors.textWhite : TColors.dark,
-          padding: const EdgeInsets.only(
-            left: TSizes.xs - 1,
-            top: 0,
-            bottom: 0,
-          ),
-          indicatorWeight: 4,
+        AppTabBarDesign(
+          tabController: tabController,
           tabs: const [
             Tab(text: 'IMAGES'),
             Tab(text: 'PDFs'),
@@ -49,7 +28,8 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'Include images, PDFs, video or all to help your constituents understand your project better.',
+            'Include images, PDFs, video or all to help your constituents understand your '
+            'project better.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 17,
                   color: Theme.of(context).textTheme.bodySmall!.color!,

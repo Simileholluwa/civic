@@ -10,6 +10,7 @@ fields:
   following: List<int>
   followers: List<int>
   politicalStatus: PoliticalStatus
+  credibilityScore: double?
 
 indexes:
   user_info_id_unique_idx:

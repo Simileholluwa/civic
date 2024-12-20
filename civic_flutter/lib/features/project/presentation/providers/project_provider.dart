@@ -566,23 +566,6 @@ class ProjectProvider extends _$ProjectProvider {
 
     return false;
   }
-  // bool validateProject() {
-  //   if (validateOverview() &&
-  //       validateCategory() &&
-  //       validateStatus() &&
-  //       validateFunding() &&
-  //       validateLocation() &&
-  //       validateAttachment()) {
-  //     if (validateDates()) {
-  //       return true;
-  //     } else {
-  //       TToastMessages.infoToast('End date must be after start date.');
-  //       return false;
-  //     }
-  //   }
-  //   TToastMessages.infoToast('Please fill all required fields.');
-  //   return false;
-  // }
 
   bool validateDates() {
     if (state.startDate != null && state.endDate != null) {
@@ -607,7 +590,7 @@ class ProjectProvider extends _$ProjectProvider {
         state.endDate == null) {
       return false;
     }
-    if (state.status == 'Ongoing' && (state.completionRate?.isNaN ?? true)) {
+    if (state.status == 'Ongoing' && state.completionRate != null) {
       return false;
     }
     return true;
@@ -617,7 +600,7 @@ class ProjectProvider extends _$ProjectProvider {
     return state.fundingCategory != null &&
         state.fundingSubCategory != null &&
         state.currency != null &&
-        (state.projectCost?.isNaN ?? false);
+        state.projectCost != null;
   }
 
   bool validateLocation() {
@@ -630,6 +613,7 @@ class ProjectProvider extends _$ProjectProvider {
         manualLocations.isNotEmpty;
   }
 
+  
   bool validateAttachment() {
     final hasImages = state.projectImageAttachments?.isNotEmpty ?? false;
     final hasPDFs = state.projectPDFAttachments?.isNotEmpty ?? false;

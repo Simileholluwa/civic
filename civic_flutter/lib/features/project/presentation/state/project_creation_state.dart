@@ -83,7 +83,9 @@ class ProjectCreationState {
       startDate: project.startDate,
       endDate: project.endDate,
       currency: project.currency,
-      projectCostController: TextEditingController(text: project.projectCost.toString(),),
+      projectCostController: TextEditingController(
+        text: project.projectCost?.toString(),
+      ),
       projectCost: project.projectCost,
       fundingNoteController: TextEditingController(text: project.fundingNote),
       fundingNote: project.fundingNote,
@@ -104,12 +106,13 @@ class ProjectCreationState {
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
       canAddLocations: [
-        ...?project.manualLocations,
-        ...?project.virtualLocations,
-        ...?project.physicalLocations?.map(
-          (locations) => locations.place,
-        ),
-      ].length < 4,
+            ...?project.manualLocations,
+            ...?project.virtualLocations,
+            ...?project.physicalLocations?.map(
+              (locations) => locations.place,
+            ),
+          ].length <
+          4,
       projectVideoUrl: project.projectVideoUrl,
     );
   }
@@ -146,7 +149,6 @@ class ProjectCreationState {
   final TextEditingController virtualLocationController;
   final bool canAddLocations;
   final String? projectVideoUrl;
-  
 
   ProjectCreationState copyWith({
     String? title,
@@ -190,7 +192,7 @@ class ProjectCreationState {
       titleController: titleController ?? this.titleController,
       quillController: quillController ?? this.quillController,
       projectCategory: projectCategory ?? this.projectCategory,
-      projectSubCategory: projectSubCategory ,
+      projectSubCategory: projectSubCategory,
       status: status ?? this.status,
       startDateController: startDateController ?? this.startDateController,
       endDateController: endDateController ?? this.endDateController,
@@ -222,5 +224,10 @@ class ProjectCreationState {
       canAddLocations: canAddLocations ?? this.canAddLocations,
       projectVideoUrl: projectVideoUrl ?? this.projectVideoUrl,
     );
+  }
+
+  @override
+  String toString() {
+    return 'ProjectCreationState(title: $title, description: $description, projectCategory: $projectCategory, projectSubCategory: $projectSubCategory, status: $status, startDate: $startDate, endDate: $endDate, currency: $currency, fundingCategory: $fundingCategory, fundingSubCategory: $fundingSubCategory, projectCost: $projectCost, fundingNote: $fundingNote, projectImageAttachments: $projectImageAttachments, projectPDFAttachments: $projectPDFAttachments, completionRate: $completionRate, physicalLocations: $physicalLocations, virtualLocations: $virtualLocations, manualLocations: $manualLocations, canAddLocations: $canAddLocations, pdfAttachmentsThumbnail: $pdfAttachmentsThumbnail, projectVideoUrl: $projectVideoUrl)';
   }
 }

@@ -12,8 +12,6 @@ import 'package:civic_flutter/features/profile/presentation/routes/profile_route
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
@@ -263,20 +261,6 @@ GoRouter router(Ref ref) {
           final data = state.extra as Map<String, dynamic>;
           return CreateProjectScreen(
             id: data['id'],
-          );
-        },
-      ),
-
-      GoRoute(
-        path: AppRoutes.pickMedia,
-        name: AppRoutes.pickMedia,
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return MediaPicker(
-            pickedAssets: data['pickedAssets'] ?? <XFile>[],
-            requestType: data['requestType'] ?? RequestType.common,
-            maxCount: data['maxCount'] ?? 1,
-            isAddMedia: data['isAddMedia'] ?? true,
           );
         },
       ),

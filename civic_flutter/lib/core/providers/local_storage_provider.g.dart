@@ -6,7 +6,7 @@ part of 'local_storage_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localStorageHash() => r'11f93af02a40fd2280989800b72baff748f0dd4e';
+String _$localStorageHash() => r'adca5231ccb62142164f9d15e676b8613d64567f';
 
 /// See also [localStorage].
 @ProviderFor(localStorage)

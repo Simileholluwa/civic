@@ -6,7 +6,7 @@ part of 'mention_hashtag_link_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mentionServicesHash() => r'ed5736f89487e1c314312d43ae2a0ba74e9d0285';
+String _$mentionServicesHash() => r'bd3b5edaf82eee204df7723d0b3bc049d1fcc6e5';
 
 /// See also [mentionServices].
 @ProviderFor(mentionServices)
@@ -25,7 +25,7 @@ final mentionServicesProvider =
 // ignore: unused_element
 typedef MentionServicesRef = AutoDisposeProviderRef<MentionHashTagLinkServices>;
 String _$fetchUsersToMentionHash() =>
-    r'0e8eaceba0e81c51cea1a1b116cf1f70b2e81ddb';
+    r'dd07560788a583979f3345feb854149cc164b104';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -178,7 +178,7 @@ class _FetchUsersToMentionProviderElement
   String get query => (origin as FetchUsersToMentionProvider).query;
 }
 
-String _$fetchHashtagsHash() => r'a62cb3a5aecba99984c3df450d38c7cb361ced36';
+String _$fetchHashtagsHash() => r'868cde6b8cb4f568a8c7d4d96e9220d758e55899';
 
 /// See also [fetchHashtags].
 @ProviderFor(fetchHashtags)
@@ -309,7 +309,7 @@ class _FetchHashtagsProviderElement
   String get query => (origin as FetchHashtagsProvider).query;
 }
 
-String _$fetchLinkMetadataHash() => r'639d4c276fc46318e8bf4eb5ca69ce6a592a327a';
+String _$fetchLinkMetadataHash() => r'5d7175a6b91f0db953156ab6393a776b91c81b4c';
 
 /// See also [fetchLinkMetadata].
 @ProviderFor(fetchLinkMetadata)

@@ -1,5 +1,3 @@
-
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +34,7 @@ class ProjectCostFilter extends ConsumerWidget {
               hintText: 'Filter by currency',
             ),
           ),
-          const FilterColumnDivider(),
+          const ProjectFilterColumnDivider(),
           Padding(
             padding: const EdgeInsets.only(
               top: 15,
@@ -107,7 +105,7 @@ class ProjectCostFilter extends ConsumerWidget {
               ],
             ),
           ),
-          const FilterColumnDivider(),
+          const ProjectFilterColumnDivider(),
           ProjectTextWithCheckbox(
             text: 'Zero cost',
             index: 0,

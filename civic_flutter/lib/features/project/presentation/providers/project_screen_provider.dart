@@ -6,16 +6,6 @@ part 'project_screen_provider.g.dart';
 
 @riverpod
 class ProjectScreenWidgets extends _$ProjectScreenWidgets {
-  @override
-  ProjectScreenState build() {
-    return ProjectScreenState(
-      costFromController: TextEditingController(),
-      costToController: TextEditingController(),
-      statusFromController: TextEditingController(),
-      statusToController: TextEditingController(),
-    );
-  }
-
   void toggleFilter() {
     final selectedCurrecy = state.selectedCurrency;
     final costToAndFromCurrency = state.costToAndFromCurrency;
@@ -306,6 +296,16 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
       selectedState: selectedState,
     );
   }
+
+  @override
+  ProjectScreenState build() {
+    return ProjectScreenState(
+      costFromController: TextEditingController(),
+      costToController: TextEditingController(),
+      statusFromController: TextEditingController(),
+      statusToController: TextEditingController(),
+    );
+  }
 }
 
 class _VSync implements TickerProvider {
@@ -314,6 +314,10 @@ class _VSync implements TickerProvider {
 }
 
 final projectVsyncProvider = Provider<TickerProvider>(
+  (ref) => _VSync(),
+);
+
+final projectCardVsyncProvider = Provider<TickerProvider>(
   (ref) => _VSync(),
 );
 

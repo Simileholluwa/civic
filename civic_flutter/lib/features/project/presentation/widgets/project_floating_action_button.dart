@@ -14,29 +14,33 @@ class ProjectFloatingActionButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
+    final isVisible = ref.watch(scrollVisibilityProvider);
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 500),
-      opacity: projectWidgetsState.isActiveFilter ? 0 : 1,
-      child: GestureDetector(
-        onTap: () {
-          context.push(
-            AppRoutes.createProject,
-            extra: {
-              'id': 0,
-            },
-          );
-        },
-        child: Container(
-          height: 70,
-          width: 70,
-          decoration: const BoxDecoration(
-            color: TColors.primary,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 40,
+      opacity: projectWidgetsState.isActiveFilter || !isVisible ? 0 : 1,
+      child: Visibility(
+        visible: !projectWidgetsState.isActiveFilter && isVisible,
+        child: GestureDetector(
+          onTap: () {
+            context.push(
+              AppRoutes.createProject,
+              extra: {
+                'id': 0,
+              },
+            );
+          },
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: const BoxDecoration(
+              color: TColors.primary,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 40,
+            ),
           ),
         ),
       ),

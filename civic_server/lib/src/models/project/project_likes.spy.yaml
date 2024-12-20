@@ -1,0 +1,11 @@
+class: ProjectLikes
+table: project_likes
+fields:
+    project: Project?, relation
+    owner: UserRecord?, relation
+    dateCreated: DateTime?
+
+indexes:
+  project_id_unique_idx:
+    fields: projectId, ownerId
+    unique: true

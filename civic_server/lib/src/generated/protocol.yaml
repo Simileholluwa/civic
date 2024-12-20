@@ -29,6 +29,11 @@ project:
   - scheduleProject:
   - getProjects:
   - deleteProject:
+  - updateCommentCount:
+  - updateRepostCount:
+  - addRemoveLike:
+  - hasLiked:
+  - authUser:
 sendEmail:
   - sendEmail:
 userNin:

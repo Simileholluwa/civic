@@ -7,7 +7,7 @@ part of 'onboarding_service_provider.dart';
 // **************************************************************************
 
 String _$onboardingLocalDatabaseHash() =>
-    r'ab8902fa53f939e4734a6a4e82aaad0715345e3d';
+    r'ba6768b3617e3840b62d7b50ae1e66c09ecab38f';
 
 /// See also [onboardingLocalDatabase].
 @ProviderFor(onboardingLocalDatabase)
@@ -27,7 +27,7 @@ final onboardingLocalDatabaseProvider =
 typedef OnboardingLocalDatabaseRef
     = AutoDisposeProviderRef<OnboardingLocalDatabaseImpl>;
 String _$onboardingRepositoryHash() =>
-    r'ec67068320633f38dc0a9f8ba6990e9c1a457d04';
+    r'c4be310716e269157c29bbc7bb23db9288fd42a8';
 
 /// See also [onboardingRepository].
 @ProviderFor(onboardingRepository)
@@ -47,7 +47,7 @@ final onboardingRepositoryProvider =
 typedef OnboardingRepositoryRef
     = AutoDisposeProviderRef<OnboardingRepositoryImpl>;
 String _$cacheFirstTimeUseCaseHash() =>
-    r'6b7cfaa6c0bc825d357f81eb44998da3271fb847';
+    r'f1613247230b9a1ee78838b5bfffe9c44981889d';
 
 /// See also [cacheFirstTimeUseCase].
 @ProviderFor(cacheFirstTimeUseCase)

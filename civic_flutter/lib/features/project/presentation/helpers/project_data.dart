@@ -400,10 +400,10 @@ final Map<String, List<String>> fundingSources = {
 };
 
 final Map<String, String> currencies = {
-  "United States Dollar": "\$",
-  "Euro": "€",
-  "Nigerian Naira": "₦",
-  "British Pound Sterling": "£",
+  "USD": "\$",
+  "EUR": "€",
+  "NGN": "₦",
+  "GBP": "£",
 };
 
 final List<String> filterTexts = [

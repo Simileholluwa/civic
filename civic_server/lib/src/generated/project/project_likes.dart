@@ -1,0 +1,499 @@
+/* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
+/*   To generate run: "serverpod generate"    */
+
+// ignore_for_file: implementation_imports
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
+// ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
+
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:serverpod/serverpod.dart' as _i1;
+import '../protocol.dart' as _i2;
+
+abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
+  ProjectLikes._({
+    this.id,
+    required this.projectId,
+    this.project,
+    required this.ownerId,
+    this.owner,
+    this.dateCreated,
+  });
+
+  factory ProjectLikes({
+    int? id,
+    required int projectId,
+    _i2.Project? project,
+    required int ownerId,
+    _i2.UserRecord? owner,
+    DateTime? dateCreated,
+  }) = _ProjectLikesImpl;
+
+  factory ProjectLikes.fromJson(Map<String, dynamic> jsonSerialization) {
+    return ProjectLikes(
+      id: jsonSerialization['id'] as int?,
+      projectId: jsonSerialization['projectId'] as int,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i2.Project.fromJson(
+              (jsonSerialization['project'] as Map<String, dynamic>)),
+      ownerId: jsonSerialization['ownerId'] as int,
+      owner: jsonSerialization['owner'] == null
+          ? null
+          : _i2.UserRecord.fromJson(
+              (jsonSerialization['owner'] as Map<String, dynamic>)),
+      dateCreated: jsonSerialization['dateCreated'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['dateCreated']),
+    );
+  }
+
+  static final t = ProjectLikesTable();
+
+  static const db = ProjectLikesRepository._();
+
+  @override
+  int? id;
+
+  int projectId;
+
+  _i2.Project? project;
+
+  int ownerId;
+
+  _i2.UserRecord? owner;
+
+  DateTime? dateCreated;
+
+  @override
+  _i1.Table get table => t;
+
+  ProjectLikes copyWith({
+    int? id,
+    int? projectId,
+    _i2.Project? project,
+    int? ownerId,
+    _i2.UserRecord? owner,
+    DateTime? dateCreated,
+  });
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
+      'ownerId': ownerId,
+      if (owner != null) 'owner': owner?.toJson(),
+      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
+    };
+  }
+
+  @override
+  Map<String, dynamic> toJsonForProtocol() {
+    return {
+      if (id != null) 'id': id,
+      'projectId': projectId,
+      if (project != null) 'project': project?.toJsonForProtocol(),
+      'ownerId': ownerId,
+      if (owner != null) 'owner': owner?.toJsonForProtocol(),
+      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
+    };
+  }
+
+  static ProjectLikesInclude include({
+    _i2.ProjectInclude? project,
+    _i2.UserRecordInclude? owner,
+  }) {
+    return ProjectLikesInclude._(
+      project: project,
+      owner: owner,
+    );
+  }
+
+  static ProjectLikesIncludeList includeList({
+    _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectLikesTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ProjectLikesTable>? orderByList,
+    ProjectLikesInclude? include,
+  }) {
+    return ProjectLikesIncludeList._(
+      where: where,
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectLikes.t),
+      orderDescending: orderDescending,
+      orderByList: orderByList?.call(ProjectLikes.t),
+      include: include,
+    );
+  }
+
+  @override
+  String toString() {
+    return _i1.SerializationManager.encode(this);
+  }
+}
+
+class _Undefined {}
+
+class _ProjectLikesImpl extends ProjectLikes {
+  _ProjectLikesImpl({
+    int? id,
+    required int projectId,
+    _i2.Project? project,
+    required int ownerId,
+    _i2.UserRecord? owner,
+    DateTime? dateCreated,
+  }) : super._(
+          id: id,
+          projectId: projectId,
+          project: project,
+          ownerId: ownerId,
+          owner: owner,
+          dateCreated: dateCreated,
+        );
+
+  @override
+  ProjectLikes copyWith({
+    Object? id = _Undefined,
+    int? projectId,
+    Object? project = _Undefined,
+    int? ownerId,
+    Object? owner = _Undefined,
+    Object? dateCreated = _Undefined,
+  }) {
+    return ProjectLikes(
+      id: id is int? ? id : this.id,
+      projectId: projectId ?? this.projectId,
+      project: project is _i2.Project? ? project : this.project?.copyWith(),
+      ownerId: ownerId ?? this.ownerId,
+      owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
+      dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
+    );
+  }
+}
+
+class ProjectLikesTable extends _i1.Table {
+  ProjectLikesTable({super.tableRelation}) : super(tableName: 'project_likes') {
+    projectId = _i1.ColumnInt(
+      'projectId',
+      this,
+    );
+    ownerId = _i1.ColumnInt(
+      'ownerId',
+      this,
+    );
+    dateCreated = _i1.ColumnDateTime(
+      'dateCreated',
+      this,
+    );
+  }
+
+  late final _i1.ColumnInt projectId;
+
+  _i2.ProjectTable? _project;
+
+  late final _i1.ColumnInt ownerId;
+
+  _i2.UserRecordTable? _owner;
+
+  late final _i1.ColumnDateTime dateCreated;
+
+  _i2.ProjectTable get project {
+    if (_project != null) return _project!;
+    _project = _i1.createRelationTable(
+      relationFieldName: 'project',
+      field: ProjectLikes.t.projectId,
+      foreignField: _i2.Project.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.ProjectTable(tableRelation: foreignTableRelation),
+    );
+    return _project!;
+  }
+
+  _i2.UserRecordTable get owner {
+    if (_owner != null) return _owner!;
+    _owner = _i1.createRelationTable(
+      relationFieldName: 'owner',
+      field: ProjectLikes.t.ownerId,
+      foreignField: _i2.UserRecord.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.UserRecordTable(tableRelation: foreignTableRelation),
+    );
+    return _owner!;
+  }
+
+  @override
+  List<_i1.Column> get columns => [
+        id,
+        projectId,
+        ownerId,
+        dateCreated,
+      ];
+
+  @override
+  _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'project') {
+      return project;
+    }
+    if (relationField == 'owner') {
+      return owner;
+    }
+    return null;
+  }
+}
+
+class ProjectLikesInclude extends _i1.IncludeObject {
+  ProjectLikesInclude._({
+    _i2.ProjectInclude? project,
+    _i2.UserRecordInclude? owner,
+  }) {
+    _project = project;
+    _owner = owner;
+  }
+
+  _i2.ProjectInclude? _project;
+
+  _i2.UserRecordInclude? _owner;
+
+  @override
+  Map<String, _i1.Include?> get includes => {
+        'project': _project,
+        'owner': _owner,
+      };
+
+  @override
+  _i1.Table get table => ProjectLikes.t;
+}
+
+class ProjectLikesIncludeList extends _i1.IncludeList {
+  ProjectLikesIncludeList._({
+    _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
+    super.limit,
+    super.offset,
+    super.orderBy,
+    super.orderDescending,
+    super.orderByList,
+    super.include,
+  }) {
+    super.where = where?.call(ProjectLikes.t);
+  }
+
+  @override
+  Map<String, _i1.Include?> get includes => include?.includes ?? {};
+
+  @override
+  _i1.Table get table => ProjectLikes.t;
+}
+
+class ProjectLikesRepository {
+  const ProjectLikesRepository._();
+
+  final attachRow = const ProjectLikesAttachRowRepository._();
+
+  Future<List<ProjectLikes>> find(
+    _i1.Session session, {
+    _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectLikesTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ProjectLikesTable>? orderByList,
+    _i1.Transaction? transaction,
+    ProjectLikesInclude? include,
+  }) async {
+    return session.db.find<ProjectLikes>(
+      where: where?.call(ProjectLikes.t),
+      orderBy: orderBy?.call(ProjectLikes.t),
+      orderByList: orderByList?.call(ProjectLikes.t),
+      orderDescending: orderDescending,
+      limit: limit,
+      offset: offset,
+      transaction: transaction ?? session.transaction,
+      include: include,
+    );
+  }
+
+  Future<ProjectLikes?> findFirstRow(
+    _i1.Session session, {
+    _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
+    int? offset,
+    _i1.OrderByBuilder<ProjectLikesTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ProjectLikesTable>? orderByList,
+    _i1.Transaction? transaction,
+    ProjectLikesInclude? include,
+  }) async {
+    return session.db.findFirstRow<ProjectLikes>(
+      where: where?.call(ProjectLikes.t),
+      orderBy: orderBy?.call(ProjectLikes.t),
+      orderByList: orderByList?.call(ProjectLikes.t),
+      orderDescending: orderDescending,
+      offset: offset,
+      transaction: transaction ?? session.transaction,
+      include: include,
+    );
+  }
+
+  Future<ProjectLikes?> findById(
+    _i1.Session session,
+    int id, {
+    _i1.Transaction? transaction,
+    ProjectLikesInclude? include,
+  }) async {
+    return session.db.findById<ProjectLikes>(
+      id,
+      transaction: transaction ?? session.transaction,
+      include: include,
+    );
+  }
+
+  Future<List<ProjectLikes>> insert(
+    _i1.Session session,
+    List<ProjectLikes> rows, {
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.insert<ProjectLikes>(
+      rows,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<ProjectLikes> insertRow(
+    _i1.Session session,
+    ProjectLikes row, {
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.insertRow<ProjectLikes>(
+      row,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<List<ProjectLikes>> update(
+    _i1.Session session,
+    List<ProjectLikes> rows, {
+    _i1.ColumnSelections<ProjectLikesTable>? columns,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.update<ProjectLikes>(
+      rows,
+      columns: columns?.call(ProjectLikes.t),
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<ProjectLikes> updateRow(
+    _i1.Session session,
+    ProjectLikes row, {
+    _i1.ColumnSelections<ProjectLikesTable>? columns,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateRow<ProjectLikes>(
+      row,
+      columns: columns?.call(ProjectLikes.t),
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<List<ProjectLikes>> delete(
+    _i1.Session session,
+    List<ProjectLikes> rows, {
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.delete<ProjectLikes>(
+      rows,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<ProjectLikes> deleteRow(
+    _i1.Session session,
+    ProjectLikes row, {
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.deleteRow<ProjectLikes>(
+      row,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<List<ProjectLikes>> deleteWhere(
+    _i1.Session session, {
+    required _i1.WhereExpressionBuilder<ProjectLikesTable> where,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.deleteWhere<ProjectLikes>(
+      where: where(ProjectLikes.t),
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<int> count(
+    _i1.Session session, {
+    _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
+    int? limit,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.count<ProjectLikes>(
+      where: where?.call(ProjectLikes.t),
+      limit: limit,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class ProjectLikesAttachRowRepository {
+  const ProjectLikesAttachRowRepository._();
+
+  Future<void> project(
+    _i1.Session session,
+    ProjectLikes projectLikes,
+    _i2.Project project, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (projectLikes.id == null) {
+      throw ArgumentError.notNull('projectLikes.id');
+    }
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+
+    var $projectLikes = projectLikes.copyWith(projectId: project.id);
+    await session.db.updateRow<ProjectLikes>(
+      $projectLikes,
+      columns: [ProjectLikes.t.projectId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<void> owner(
+    _i1.Session session,
+    ProjectLikes projectLikes,
+    _i2.UserRecord owner, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (projectLikes.id == null) {
+      throw ArgumentError.notNull('projectLikes.id');
+    }
+    if (owner.id == null) {
+      throw ArgumentError.notNull('owner.id');
+    }
+
+    var $projectLikes = projectLikes.copyWith(ownerId: owner.id);
+    await session.db.updateRow<ProjectLikes>(
+      $projectLikes,
+      columns: [ProjectLikes.t.ownerId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}

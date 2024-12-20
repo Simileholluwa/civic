@@ -19,8 +19,8 @@ import 'package:civic_client/src/protocol/post/post.dart' as _i7;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i8;
 import 'package:civic_client/src/protocol/project/project.dart' as _i9;
 import 'package:civic_client/src/protocol/project/project_list.dart' as _i10;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i11;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i12;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i11;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i12;
 import 'package:civic_client/src/protocol/user/users_list.dart' as _i13;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i14;
 import 'protocol.dart' as _i15;
@@ -327,6 +327,51 @@ class EndpointProject extends _i1.EndpointRef {
         'deleteProject',
         {'id': id},
       );
+
+  _i2.Future<void> updateCommentCount(
+    int projectId,
+    bool isAdding,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'updateCommentCount',
+        {
+          'projectId': projectId,
+          'isAdding': isAdding,
+        },
+      );
+
+  _i2.Future<void> updateRepostCount(
+    int projectId,
+    bool isAdding,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'updateRepostCount',
+        {
+          'projectId': projectId,
+          'isAdding': isAdding,
+        },
+      );
+
+  _i2.Future<int> addRemoveLike(int id) => caller.callServerEndpoint<int>(
+        'project',
+        'addRemoveLike',
+        {'id': id},
+      );
+
+  _i2.Future<bool> hasLiked(int id) => caller.callServerEndpoint<bool>(
+        'project',
+        'hasLiked',
+        {'id': id},
+      );
+
+  _i2.Future<_i11.UserRecord> authUser() =>
+      caller.callServerEndpoint<_i11.UserRecord>(
+        'project',
+        'authUser',
+        {},
+      );
 }
 
 /// {@category Endpoint}
@@ -363,8 +408,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i11.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i11.UserNinRecord?>(
+  _i2.Future<_i12.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i12.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -378,15 +423,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUser(_i12.UserRecord userRecord) =>
+  _i2.Future<void> saveUser(_i11.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i12.UserRecord?> getUser() =>
-      caller.callServerEndpoint<_i12.UserRecord?>(
+  _i2.Future<_i11.UserRecord?> getUser() =>
+      caller.callServerEndpoint<_i11.UserRecord?>(
         'userRecord',
         'getUser',
         {},
@@ -421,11 +466,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i12.UserRecord>> mentionUsers({
+  _i2.Future<List<_i11.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i12.UserRecord>>(
+      caller.callServerEndpoint<List<_i11.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {

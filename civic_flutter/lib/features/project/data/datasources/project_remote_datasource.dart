@@ -16,6 +16,24 @@ abstract class ProjectRemoteDataSource {
   });
 
   Future<void> deleteProject({required int id});
+
+  Future<int> addRemoveLike({
+    required int id,
+  });
+
+  Future<void> updateCommentsCount({
+    required int projectId,
+    required bool isAdding,
+  });
+
+  Future<void> updateRepostCount({
+    required int projectId,
+    required bool isAdding,
+  });
+
+  Future<bool> hasLikedProject({
+    required int id,
+  });
 }
 
 class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
@@ -160,11 +178,81 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
         project,
         dateTime,
       );
-    } catch (e) {
+    }  catch (e) {
       throw ServerException(
         message: e.toString(),
       );
     }
   
+  }
+  
+  @override
+  Future<void> updateCommentsCount({required int projectId, required bool isAdding,}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      await _client.project.updateCommentCount(
+        projectId,
+        isAdding,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<int> addRemoveLike({required int id,}) async {
+    try {
+      return await _client.project.addRemoveLike(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<void> updateRepostCount({required int projectId, required bool isAdding,}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      await _client.project.updateRepostCount(
+        projectId,
+        isAdding,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<bool> hasLikedProject({required int id}) async {
+    try {
+      return await _client.project.hasLiked(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
   }
 }

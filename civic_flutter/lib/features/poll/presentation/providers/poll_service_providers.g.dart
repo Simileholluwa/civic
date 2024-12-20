@@ -6,7 +6,7 @@ part of 'poll_service_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pollLocalDatabaseHash() => r'60bb5ce2646a7524b4516a3ee018ffb353525699';
+String _$pollLocalDatabaseHash() => r'3e76a658a2b8584a32ac8f4da7e303b8d21192da';
 
 /// See also [pollLocalDatabase].
 @ProviderFor(pollLocalDatabase)
@@ -25,7 +25,7 @@ final pollLocalDatabaseProvider =
 // ignore: unused_element
 typedef PollLocalDatabaseRef = AutoDisposeProviderRef<PollLocalDatabaseImpl>;
 String _$pollRemoteDatasourceHash() =>
-    r'ce975844add50128841a1236613f485c09b45c32';
+    r'0da4537bb910bd69a786e73928edd28a2cc8faa8';
 
 /// See also [pollRemoteDatasource].
 @ProviderFor(pollRemoteDatasource)
@@ -45,7 +45,7 @@ final pollRemoteDatasourceProvider =
 typedef PollRemoteDatasourceRef
     = AutoDisposeProviderRef<PollRemoteDatasourceImpl>;
 String _$pollRepositoryImplHash() =>
-    r'22d7bc64f4dfd0823aacc3aa5895ec1393daa133';
+    r'4e40d2871eb23afbee14bee00b76d33f181bc78d';
 
 /// See also [pollRepositoryImpl].
 @ProviderFor(pollRepositoryImpl)
@@ -63,7 +63,7 @@ final pollRepositoryImplProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef PollRepositoryImplRef = AutoDisposeProviderRef<PollRepositoryImpl>;
-String _$savePollHash() => r'926040d4c9064ff2f0f0b1c7a96d42519d880c0e';
+String _$savePollHash() => r'1bfdeb5e948360484c00c2bc047b88fc5ba75fc0';
 
 /// See also [savePoll].
 @ProviderFor(savePoll)
@@ -79,7 +79,7 @@ final savePollProvider = AutoDisposeProvider<SavePollUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SavePollRef = AutoDisposeProviderRef<SavePollUseCase>;
-String _$schedulePollHash() => r'49c2878e7b11e6c50f255c91eaf2686162e92b46';
+String _$schedulePollHash() => r'd92ee4635d731a1abccd727a09b7aad1c2e654b1';
 
 /// See also [schedulePoll].
 @ProviderFor(schedulePoll)
@@ -95,7 +95,7 @@ final schedulePollProvider = AutoDisposeProvider<SchedulePollUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SchedulePollRef = AutoDisposeProviderRef<SchedulePollUseCase>;
-String _$getPollHash() => r'df806c63867911137000c0b15599f892a1ecf98d';
+String _$getPollHash() => r'454f4453d34384a27fec9df9710001641939bf5a';
 
 /// See also [getPoll].
 @ProviderFor(getPoll)
@@ -111,7 +111,7 @@ final getPollProvider = AutoDisposeProvider<GetPollUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetPollRef = AutoDisposeProviderRef<GetPollUseCase>;
-String _$castVoteHash() => r'abf3e61792a2dbcd0ed37cbf360400571158a672';
+String _$castVoteHash() => r'1b0ae53924b758797373ef41e9ecbf7cfb422813';
 
 /// See also [castVote].
 @ProviderFor(castVote)
@@ -127,7 +127,7 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
-String _$saveDraftPollHash() => r'1c62af353842bbca0ef9f84ecff22683c0b6096a';
+String _$saveDraftPollHash() => r'be3c0ab8f5b132edee268297cb9c163df820eec8';
 
 /// See also [saveDraftPoll].
 @ProviderFor(saveDraftPoll)
@@ -145,7 +145,7 @@ final saveDraftPollProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SaveDraftPollRef = AutoDisposeProviderRef<SaveDraftPollUseCase>;
-String _$getDraftsPollHash() => r'ca8132daa2cd87215bbbf8e9e2a4c627f7ef3319';
+String _$getDraftsPollHash() => r'324d711ac1a7753bb06da44fba06a7cf8e1f48ab';
 
 /// See also [getDraftsPoll].
 @ProviderFor(getDraftsPoll)
@@ -163,7 +163,7 @@ final getDraftsPollProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetDraftsPollRef = AutoDisposeProviderRef<GetDraftsPollUseCase>;
-String _$deleteDraftsPollHash() => r'4c37385d722e41389325dce8c20301a3ddbdf67d';
+String _$deleteDraftsPollHash() => r'bf47149a90f8beae55304ce53650b224a03e2da0';
 
 /// See also [deleteDraftsPoll].
 @ProviderFor(deleteDraftsPoll)
@@ -181,7 +181,7 @@ final deleteDraftsPollProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DeleteDraftsPollRef = AutoDisposeProviderRef<DeleteDraftsPollUseCase>;
-String _$deleteDraftPollHash() => r'4729084e9b90d36c8af88641c91840b403c63793';
+String _$deleteDraftPollHash() => r'dc8a10f5582d6863c2946626ba73c9392766f38f';
 
 /// See also [deleteDraftPoll].
 @ProviderFor(deleteDraftPoll)

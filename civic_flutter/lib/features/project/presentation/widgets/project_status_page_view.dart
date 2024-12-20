@@ -45,7 +45,7 @@ class ProjectStatusPageView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           Visibility(
-            visible: projectCreationSate.status == projectStatus[1],
+            visible: projectCreationSate.status == projectStatus[2],
             child: AppTextField(
               textController: projectCreationSate.completionRateController,
               prefixIcon: Iconsax.percentage_square,
@@ -64,7 +64,7 @@ class ProjectStatusPageView extends ConsumerWidget {
             ),
           ),
           Visibility(
-            visible: projectCreationSate.status == projectStatus[1],
+            visible: projectCreationSate.status == projectStatus[2],
             child: const SizedBox(
               height: 20,
             ),

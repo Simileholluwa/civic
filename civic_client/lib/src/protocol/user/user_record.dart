@@ -25,6 +25,7 @@ abstract class UserRecord implements _i1.SerializableModel {
     required this.following,
     required this.followers,
     required this.politicalStatus,
+    this.credibilityScore,
   });
 
   factory UserRecord({
@@ -38,6 +39,7 @@ abstract class UserRecord implements _i1.SerializableModel {
     required List<int> following,
     required List<int> followers,
     required _i3.PoliticalStatus politicalStatus,
+    double? credibilityScore,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -60,6 +62,8 @@ abstract class UserRecord implements _i1.SerializableModel {
           .toList(),
       politicalStatus: _i3.PoliticalStatus.fromJson(
           (jsonSerialization['politicalStatus'] as int)),
+      credibilityScore:
+          (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
     );
   }
 
@@ -86,6 +90,8 @@ abstract class UserRecord implements _i1.SerializableModel {
 
   _i3.PoliticalStatus politicalStatus;
 
+  double? credibilityScore;
+
   UserRecord copyWith({
     int? id,
     String? bio,
@@ -97,6 +103,7 @@ abstract class UserRecord implements _i1.SerializableModel {
     List<int>? following,
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
+    double? credibilityScore,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -111,6 +118,7 @@ abstract class UserRecord implements _i1.SerializableModel {
       'following': following.toJson(),
       'followers': followers.toJson(),
       'politicalStatus': politicalStatus.toJson(),
+      if (credibilityScore != null) 'credibilityScore': credibilityScore,
     };
   }
 
@@ -134,6 +142,7 @@ class _UserRecordImpl extends UserRecord {
     required List<int> following,
     required List<int> followers,
     required _i3.PoliticalStatus politicalStatus,
+    double? credibilityScore,
   }) : super._(
           id: id,
           bio: bio,
@@ -145,6 +154,7 @@ class _UserRecordImpl extends UserRecord {
           following: following,
           followers: followers,
           politicalStatus: politicalStatus,
+          credibilityScore: credibilityScore,
         );
 
   @override
@@ -159,6 +169,7 @@ class _UserRecordImpl extends UserRecord {
     List<int>? following,
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
+    Object? credibilityScore = _Undefined,
   }) {
     return UserRecord(
       id: id is int? ? id : this.id,
@@ -172,6 +183,9 @@ class _UserRecordImpl extends UserRecord {
       following: following ?? this.following.map((e0) => e0).toList(),
       followers: followers ?? this.followers.map((e0) => e0).toList(),
       politicalStatus: politicalStatus ?? this.politicalStatus,
+      credibilityScore: credibilityScore is double?
+          ? credibilityScore
+          : this.credibilityScore,
     );
   }
 }

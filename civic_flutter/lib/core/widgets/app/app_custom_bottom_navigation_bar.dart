@@ -58,7 +58,9 @@ class AppCustomBottomNavigationBar extends StatelessWidget {
             ? isDark
                 ? TColors.textWhite
                 : TColors.dark
-            : Theme.of(context).disabledColor,
+            : isDark
+                ? TColors.darkerGrey
+                : TColors.darkGrey,
         size: isSelected ? item.activeIconSize : item.iconSize,
       ),
     );

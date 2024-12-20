@@ -153,6 +153,10 @@ class ProjectHelperFunctions {
       projectCost: projectCreationSate.projectCost,
       fundingNote: projectCreationSate.fundingNote,
       completionRate: projectCreationSate.completionRate,
+      dateCreated: DateTime.now(),
+      likesCount: 0,
+      commentsCount: 0,
+      repostCount: 0,
     );
   }
 
@@ -222,5 +226,55 @@ class ProjectHelperFunctions {
                   projectCreationSate,
                 ),
         );
+  }
+
+  static String humanizeDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else {
+      return '${(difference.inDays / 365).floor()} years ago';
+    }
+  }
+
+  static String humanizeProjectCost(double number) {
+    if (number >= 1000000000) {
+      return '${(number / 1000000000).toStringAsFixed(2)}B';
+    } else if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(2)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(2)}K';
+    } else {
+      return number.toString();
+    }
+  }
+
+  static String humanizeProjectDuration(DateTime startDate, DateTime endDate) {
+    final duration = endDate.difference(startDate);
+
+    // Extracting duration components
+    final years = duration.inDays ~/ 365;
+    final months = (duration.inDays % 365) ~/ 30;
+    final days = (duration.inDays % 365) % 30;
+
+    // Building a human-readable string
+    final parts = <String>[];
+    if (years > 0) parts.add('$years year${years > 1 ? 's' : ''}');
+    if (months > 0) parts.add('$months month${months > 1 ? 's' : ''}');
+    if (days > 0) parts.add('$days day${days > 1 ? 's' : ''}');
+
+    return parts.isEmpty ? 'just now' : parts.join(', ');
   }
 }

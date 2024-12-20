@@ -697,6 +697,99 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'updateCommentCount': _i1.MethodConnector(
+          name: 'updateCommentCount',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'isAdding': _i1.ParameterDescription(
+              name: 'isAdding',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint).updateCommentCount(
+            session,
+            params['projectId'],
+            params['isAdding'],
+          ),
+        ),
+        'updateRepostCount': _i1.MethodConnector(
+          name: 'updateRepostCount',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'isAdding': _i1.ParameterDescription(
+              name: 'isAdding',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint).updateRepostCount(
+            session,
+            params['projectId'],
+            params['isAdding'],
+          ),
+        ),
+        'addRemoveLike': _i1.MethodConnector(
+          name: 'addRemoveLike',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint).addRemoveLike(
+            session,
+            params['id'],
+          ),
+        ),
+        'hasLiked': _i1.MethodConnector(
+          name: 'hasLiked',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint).hasLiked(
+            session,
+            params['id'],
+          ),
+        ),
+        'authUser': _i1.MethodConnector(
+          name: 'authUser',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint).authUser(session),
+        ),
       },
     );
     connectors['sendEmail'] = _i1.EndpointConnector(

@@ -17,7 +17,7 @@ class ProjectFilterButtons extends ConsumerWidget {
         ref.watch(projectScreenWidgetsProvider.notifier);
     final isDark = THelperFunctions.isDarkMode(context);
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 500),
       opacity: projectWidgetsState.isActiveFilter ? 1 : 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(

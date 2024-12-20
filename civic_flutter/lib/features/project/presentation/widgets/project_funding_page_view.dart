@@ -38,7 +38,9 @@ class ProjectFundingPageView extends ConsumerWidget {
                 dropdownItems: currencies.values.toList(),
                 value: projectCreationSate.currency,
                 onChanged: (String? value) {
-                  projectNotifier.setCurrency(value);
+                  projectNotifier.setCurrency(
+                    currencies[value]!,
+                  );
                 },
                 width: 100,
                 leftPadding: 4,

@@ -6,7 +6,7 @@ part of 'location_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$locationServiceHash() => r'b6d5d938f470cc52f0bcff0fad8028ed2009fe2f';
+String _$locationServiceHash() => r'707a437f2650a099ab5bfad3d55a13b4e126f743';
 
 /// See also [locationService].
 @ProviderFor(locationService)
@@ -24,7 +24,7 @@ final locationServiceProvider = Provider<LocationServices>.internal(
 // ignore: unused_element
 typedef LocationServiceRef = ProviderRef<LocationServices>;
 String _$searchNearbyPlacesHash() =>
-    r'c33e5eed5cdaf213e001c0274a41645ed7381f34';
+    r'cb471a1d09d54d83dd9e5b04bfe6e3facc23ec06';
 
 /// See also [searchNearbyPlaces].
 @ProviderFor(searchNearbyPlaces)
@@ -41,7 +41,7 @@ final searchNearbyPlacesProvider = FutureProvider<List<AWSPlaces>?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SearchNearbyPlacesRef = FutureProviderRef<List<AWSPlaces>?>;
-String _$searchPlacesHash() => r'9bb884eaa568e88e1f7dbf5e01e002c2a0b7374a';
+String _$searchPlacesHash() => r'3610369f42402c0d045f7d1466b664d1119335bc';
 
 /// See also [searchPlaces].
 @ProviderFor(searchPlaces)

@@ -49,3 +49,17 @@ ScheduleProjectUseCase scheduleProject(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+AddRemoveLikeUseCase addRemoveLike(Ref ref) {
+  return AddRemoveLikeUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+HasLikedProjectUseCase hasLikedProject(Ref ref) {
+  return HasLikedProjectUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

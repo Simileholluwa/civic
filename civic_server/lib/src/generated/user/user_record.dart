@@ -27,6 +27,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.following,
     required this.followers,
     required this.politicalStatus,
+    this.credibilityScore,
   });
 
   factory UserRecord({
@@ -40,6 +41,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
     required List<int> following,
     required List<int> followers,
     required _i3.PoliticalStatus politicalStatus,
+    double? credibilityScore,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -62,6 +64,8 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
           .toList(),
       politicalStatus: _i3.PoliticalStatus.fromJson(
           (jsonSerialization['politicalStatus'] as int)),
+      credibilityScore:
+          (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
     );
   }
 
@@ -90,6 +94,8 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i3.PoliticalStatus politicalStatus;
 
+  double? credibilityScore;
+
   @override
   _i1.Table get table => t;
 
@@ -104,6 +110,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? following,
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
+    double? credibilityScore,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -118,6 +125,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
       'following': following.toJson(),
       'followers': followers.toJson(),
       'politicalStatus': politicalStatus.toJson(),
+      if (credibilityScore != null) 'credibilityScore': credibilityScore,
     };
   }
 
@@ -134,6 +142,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
       'following': following.toJson(),
       'followers': followers.toJson(),
       'politicalStatus': politicalStatus.toJson(),
+      if (credibilityScore != null) 'credibilityScore': credibilityScore,
     };
   }
 
@@ -181,6 +190,7 @@ class _UserRecordImpl extends UserRecord {
     required List<int> following,
     required List<int> followers,
     required _i3.PoliticalStatus politicalStatus,
+    double? credibilityScore,
   }) : super._(
           id: id,
           bio: bio,
@@ -192,6 +202,7 @@ class _UserRecordImpl extends UserRecord {
           following: following,
           followers: followers,
           politicalStatus: politicalStatus,
+          credibilityScore: credibilityScore,
         );
 
   @override
@@ -206,6 +217,7 @@ class _UserRecordImpl extends UserRecord {
     List<int>? following,
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
+    Object? credibilityScore = _Undefined,
   }) {
     return UserRecord(
       id: id is int? ? id : this.id,
@@ -219,6 +231,9 @@ class _UserRecordImpl extends UserRecord {
       following: following ?? this.following.map((e0) => e0).toList(),
       followers: followers ?? this.followers.map((e0) => e0).toList(),
       politicalStatus: politicalStatus ?? this.politicalStatus,
+      credibilityScore: credibilityScore is double?
+          ? credibilityScore
+          : this.credibilityScore,
     );
   }
 }
@@ -258,6 +273,10 @@ class UserRecordTable extends _i1.Table {
       this,
       _i1.EnumSerialization.byIndex,
     );
+    credibilityScore = _i1.ColumnDouble(
+      'credibilityScore',
+      this,
+    );
   }
 
   late final _i1.ColumnString bio;
@@ -277,6 +296,8 @@ class UserRecordTable extends _i1.Table {
   late final _i1.ColumnSerializable followers;
 
   late final _i1.ColumnEnum<_i3.PoliticalStatus> politicalStatus;
+
+  late final _i1.ColumnDouble credibilityScore;
 
   _i2.UserInfoTable get userInfo {
     if (_userInfo != null) return _userInfo!;
@@ -302,6 +323,7 @@ class UserRecordTable extends _i1.Table {
         following,
         followers,
         politicalStatus,
+        credibilityScore,
       ];
 
   @override

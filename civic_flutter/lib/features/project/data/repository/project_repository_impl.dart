@@ -97,4 +97,38 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, int>> addRemoveLike({
+    required int id,
+  }) async {
+    try {
+      final result = await _remoteDatasource.addRemoveLike(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+  
+  @override
+  Future<Either<Failure, bool>> hasLikedProject({required int id}) async {
+    try {
+      final result = await _remoteDatasource.hasLikedProject(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

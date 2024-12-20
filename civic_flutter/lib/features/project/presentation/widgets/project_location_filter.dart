@@ -1,5 +1,3 @@
-
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +36,7 @@ class ProjectLocationFilter extends ConsumerWidget {
               hintText: 'Filter by state',
             ),
           ),
-          const FilterColumnDivider(),
+          const ProjectFilterColumnDivider(),
           ProjectTextWithCheckbox(
             text: 'Virtual location only',
             index: 0,
@@ -51,7 +49,7 @@ class ProjectLocationFilter extends ConsumerWidget {
             },
             items: const ['Virtual location'],
           ),
-          const FilterColumnDivider(),
+          const ProjectFilterColumnDivider(),
           Column(
             children: [
               ListTile(
