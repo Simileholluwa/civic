@@ -76,7 +76,7 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
           ),
           margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
           decoration: BoxDecoration(
-            color: TColors.warning.withOpacity(.1),
+            color: TColors.warning.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(100),
           ),
           child: Row(

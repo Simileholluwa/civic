@@ -95,42 +95,43 @@ class PostImagePost extends ConsumerWidget {
               ),
             ),
           ),
-          if (postState.imageUrls.length > 1)
+          if (postState.imageUrls.isNotEmpty)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    bottom: TSizes.md,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TSizes.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      100,
+                if (postState.imageUrls.length > 1)
+                  Container(
+                    margin: const EdgeInsets.only(
+                      bottom: TSizes.md,
                     ),
-                    color: Colors.black54,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: postState.imageUrls.asMap().entries.map((entry) {
-                      return Container(
-                        width: 12.0,
-                        height: 12.0,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(
-                            current == entry.key ? 0.9 : 0.4,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: TSizes.sm,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        100,
+                      ),
+                      color: Colors.black54,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: postState.imageUrls.asMap().entries.map((entry) {
+                        return Container(
+                          width: 12.0,
+                          height: 12.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha:
+                              current == entry.key ? 0.9 : 0.4,
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
                 PostImageOptions(post: post,),
               ],
             ),

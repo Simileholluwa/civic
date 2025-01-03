@@ -2,8 +2,8 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
-class ProjectInteractionButtons extends StatelessWidget {
-  const ProjectInteractionButtons({
+class ContentInteractionButton extends StatelessWidget {
+  const ContentInteractionButton({
     super.key,
     required this.icon,
     required this.title,

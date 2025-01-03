@@ -35,7 +35,7 @@ class ProjectQuickDetailWidget extends StatelessWidget {
             height: 30,
             width: 30,
             decoration: BoxDecoration(
-              color: color.withOpacity(
+              color: color.withValues(alpha: 
                 0.1,
               ),
               shape: BoxShape.circle,

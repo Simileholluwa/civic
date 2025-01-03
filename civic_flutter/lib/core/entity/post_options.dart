@@ -24,12 +24,4 @@ List<MoreOptionsModel> moreOptions = [
     icon: Iconsax.chart_215,
     text: 'Poll',
   ),
-  MoreOptionsModel(
-    icon: Iconsax.microphone5,
-    text: 'Townhall',
-  ),
-  MoreOptionsModel(
-    icon: Iconsax.video_octagon5,
-    text: 'Go Live',
-  ),
 ];

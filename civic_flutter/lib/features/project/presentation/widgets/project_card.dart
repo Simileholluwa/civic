@@ -1,27 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ProjectCard extends ConsumerWidget {
   const ProjectCard({
     super.key,
     required this.project,
     required this.index,
+    required this.isLiked,
   });
 
   final Project project;
   final int index;
+  final bool isLiked;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final defaultTextStyle = DefaultTextStyle.of(context);
-    int current = ref.watch(projectImageAttachmentPageChangedProvider);
     final pagingControllerNotifier =
         ref.watch(paginatedProjectListProvider.notifier);
     final projectCardState = ref.watch(
@@ -34,23 +34,34 @@ class ProjectCard extends ConsumerWidget {
         project,
       ).notifier,
     );
-    final isLiked = ref.watch(likedProjectProvider(project.id!,),);
     final isDark = THelperFunctions.isDarkMode(context);
-    final isVisible = ref.watch(scrollVisibilityProvider);
-    return AnimatedPadding(
-      padding: EdgeInsets.only(top: index == 0 && isVisible ? 55 : 0),
-      duration: const Duration(milliseconds: 300),
+    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
+    return InkWell(
+      onTap: () {
+        context.push(
+          ProjectDetailsScreen.route(
+            project.id!,
+          ),
+          extra: {
+            'id': project.id,
+          },
+        );
+        isVisibleNotifier.hide();
+      },
       child: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: TColors.primary.withOpacity(
-                0.01,
+              color: TColors.primary.withValues(
+                alpha: 0.01,
               ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 5,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 12, 15, 15),
                   child: Row(
@@ -139,121 +150,14 @@ class ProjectCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
+                projectCardState.imagesUrl.length == 1
+                    ? ContentSingleCachedImage(
+                        imageUrl: projectCardState.imagesUrl.first,
+                      )
+                    : ContentMultipleCachedImage(
+                        imageUrls: projectCardState.imagesUrl,
                       ),
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          maxWidth: 500,
-                          maxHeight: 350,
-                        ),
-                        
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(
-                            TSizes.md,
-                          ),
-                          border: Border.all(
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            TSizes.md,
-                          ),
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                                scrollPhysics: const ClampingScrollPhysics(),
-                                height: 498,
-                                enableInfiniteScroll: false,
-                                viewportFraction: 1,
-                                onPageChanged: (index, reason) {
-                                  ref
-                                      .read(
-                                          projectImageAttachmentPageChangedProvider
-                                              .notifier)
-                                      .carouselPageChanged(
-                                        index,
-                                        reason,
-                                      );
-                                }),
-                            items: projectCardState.imagesUrl.map((image) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    width: double.maxFinite,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.circular(
-                                        TSizes.md,
-                                      ),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                        TSizes.md,
-                                      ),
-                                      child: FadeInImage(
-                                        image: CachedNetworkImageProvider(image),
-                                        placeholder: MemoryImage(
-                                          kTransparentImage,
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    projectCardState.imagesUrl.length > 1
-                        ? Container(
-                            margin: const EdgeInsets.only(
-                              bottom: TSizes.sm,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: TSizes.xs,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                100,
-                              ),
-                              color: Colors.black54,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: project.projectImageAttachments!
-                                  .asMap()
-                                  .entries
-                                  .map((entry) {
-                                return Container(
-                                  width: 8,
-                                  height: 8,
-                                  margin: const EdgeInsets.all(4.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(
-                                      current == entry.key ? 0.9 : 0.4,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
+                
                 SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   scrollDirection: Axis.horizontal,
@@ -306,7 +210,7 @@ class ProjectCard extends ConsumerWidget {
                       Text(
                         projectCardState.description,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontSize: 15,
+                              fontSize: 17,
                             ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -368,27 +272,26 @@ class ProjectCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                ProjectInteractionButtons(
-                  icon: isLiked.hasValue && isLiked.value == true
-                      ? Iconsax.heart5
-                      : Iconsax.heart,
+                ContentInteractionButton(
+                  icon: isLiked == true ? Iconsax.heart5 : Iconsax.heart,
                   title: projectCardState.numberOfLikes,
                   onTap: () async {
                     await projectCardNotifier.addRemoveLike(
                       project.id!,
-                    );             
+                    );
+                    ref.invalidate(hasLikedProjectProvider);
                   },
-                  color: isLiked.hasValue && isLiked.value == true
+                  color: isLiked == true
                       ? TColors.primary
                       : Theme.of(context).textTheme.labelMedium!.color!,
                 ),
-                ProjectInteractionButtons(
+                ContentInteractionButton(
                   icon: Iconsax.messages_1,
                   title: '1.2k',
                   onTap: () {},
                   color: Theme.of(context).textTheme.labelMedium!.color!,
                 ),
-                ProjectInteractionButtons(
+                ContentInteractionButton(
                   icon: Iconsax.more_2,
                   title: '',
                   showTitle: false,

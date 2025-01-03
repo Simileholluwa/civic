@@ -27,6 +27,8 @@ class ProjectScreenState {
   final Map<String, List<DateTime?>>? selectedStartDate;
   final Map<String, List<DateTime?>>? selectedEndDate;
   final Map<String, List<DateTime?>>? selectedPublishedDate;
+  
+  
 
   ProjectScreenState({
     this.isActiveFilter = false,
@@ -84,7 +86,7 @@ class ProjectScreenState {
     Map<String, List<DateTime?>>? selectedStartDate,
     Map<String, List<DateTime?>>? selectedEndDate,
     Map<String, List<DateTime?>>? selectedPublishedDate,
-
+    
   }) {
     return ProjectScreenState(
       isActiveFilter: isActiveFilter ?? this.isActiveFilter,

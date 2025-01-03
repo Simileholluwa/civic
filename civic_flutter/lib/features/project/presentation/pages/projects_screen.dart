@@ -27,94 +27,90 @@ class ProjectsScreen extends ConsumerWidget {
     final projectWidgetsNotifier =
         ref.watch(projectScreenWidgetsProvider.notifier);
     final tabController = ref.watch(projectScreenTabProvider);
-    final isVisible = ref.watch(scrollVisibilityProvider);
+    final isVisible = ref.watch(appScrollVisibilityProvider);
+    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(65),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+          ),
+          child: AppBar(
+            title: Text(
+              'Projects',
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Iconsax.search_normal,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  projectWidgetsNotifier.toggleFilter();
+                  if (isVisible) {
+                    isVisibleNotifier.hide();
+                  }
+                },
+                icon: Icon(
+                  projectWidgetsState.isActiveFilter
+                      ? Iconsax.filter5
+                      : Iconsax.filter,
+                  color: projectWidgetsState.isActiveFilter
+                      ? TColors.primary
+                      : Theme.of(context).iconTheme.color,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Iconsax.send_square,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Iconsax.setting_2,
+                ),
+              ),
+              const SizedBox(width: 5),
+            ],
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           AppInfiniteList<Project>(
             pagingController: pagingControllerNotifier.pagingController,
+            scrollController: ref.read(projectScrollControllerProvider),
             itemBuilder: (context, project, index) {
+              final isLiked = ref.watch(
+                likedProjectProvider(
+                  project.id!,
+                ),
+              );
               return ProjectCard(
                 project: project,
                 index: index,
+                isLiked: isLiked.value ?? false,
               );
             },
             onRefresh: pagingControllerNotifier.refresh,
           ),
           AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            top: isVisible ? 0 : -70,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.only(
-                bottom: 10,
-              ),
-              height: 55,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                    ),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Text(
-                      'Projects',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.search_normal,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          projectWidgetsNotifier.toggleFilter();
-                        },
-                        icon: Icon(
-                          projectWidgetsState.isActiveFilter
-                              ? Iconsax.filter5
-                              : Iconsax.filter,
-                          color: projectWidgetsState.isActiveFilter
-                              ? TColors.primary
-                              : Theme.of(context).iconTheme.color,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.send_square,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.setting_2,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          AnimatedPositioned(
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
-            top: projectWidgetsState.isActiveFilter ? 55 : -screenHeight,
+            top: projectWidgetsState.isActiveFilter ? 0 : -screenHeight,
             left: 0,
             right: 0,
             child: Stack(
@@ -124,7 +120,7 @@ class ProjectsScreen extends ConsumerWidget {
                   duration: const Duration(milliseconds: 500),
                   width: MediaQuery.of(context).size.width,
                   height: projectWidgetsState.isActiveFilter
-                      ? MediaQuery.of(context).size.height - 140
+                      ? MediaQuery.of(context).size.height - 90
                       : 0,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 70),
                   color: Theme.of(context).scaffoldBackgroundColor,

@@ -1,14 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
+import 'package:civic_flutter/features/post/presentation/pages/posts_screen.dart';
 import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 
-class FeedScreen extends ConsumerStatefulWidget {
+class FeedScreen extends ConsumerWidget {
   const FeedScreen({
     required this.sendPost,
     super.key,
@@ -16,150 +16,111 @@ class FeedScreen extends ConsumerStatefulWidget {
   final VoidCallback? sendPost;
 
   @override
-  ConsumerState<FeedScreen> createState() => _FeedScreenState();
-}
-
-class _FeedScreenState extends ConsumerState<FeedScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 8, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tabController = ref.watch(feedScreenTabProvider);
     final isDark = THelperFunctions.isDarkMode(context);
-    if (widget.sendPost != null) {
+    if (sendPost != null) {
       Future.delayed(
         Duration.zero,
-        () => widget.sendPost!(),
+        () => sendPost!(),
       );
     }
-  
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'CIVIC',
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: TColors.primary,
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
+          'Updates',
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
               ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: TabBar(
-            controller: _tabController,
-            tabAlignment: TabAlignment.start,
-            isScrollable: true,
-            labelColor: isDark ? TColors.textWhite : TColors.dark,
-            unselectedLabelColor:
-                isDark ? TColors.darkerGrey : TColors.darkGrey,
-            padding: const EdgeInsets.only(
-              left: TSizes.xs - 1,
-            ),
-            unselectedLabelStyle:
-                Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-            labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-            indicatorColor: isDark ? TColors.textWhite : TColors.dark,
-            indicatorWeight: 4,
-            tabs: const [
-              Tab(
-                text: 'ALL',
-              ),
-              Tab(
-                text: 'POLLS',
-              ),
-              Tab(
-                text: 'TOWNHALLS',
-              ),
-              Tab(
-                text: 'ARTICLES',
-              ),
-              Tab(
-                text: 'LIVE',
-              ),
-              Tab(
-                text: 'TRENDING',
-              ),
-              Tab(
-                text: 'RECENT',
-              ),
-              Tab(
-                text: 'VIDEOS',
-              ),
-            ],
-          ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: TSizes.md,
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Iconsax.search_normal,
             ),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: TColors.primary,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      'https://civic-development.s3.eu-north-1.amazonaws.com/20231203_003323.jpg',
-                  fit: BoxFit.cover,
-                  height: 32,
-                  width: 32,
-                  errorWidget: (context, url, child) {
-                    return const Icon(
-                      CupertinoIcons.person_alt_circle_fill,
-                      size: 34,
-                    );
-                  },
-                  progressIndicatorBuilder: (context, url, progress) {
-                    return const Center(
-                      child: Icon(
-                        CupertinoIcons.person_alt_circle_fill,
-                        size: 34,
-                        color: TColors.textWhite,
-                      ),
-                    );
-                  },
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Iconsax.filter,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Iconsax.send_square,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Iconsax.setting_2,
+            ),
+          ),
+          const SizedBox(width: 5),
+        ],
+        toolbarHeight: 65,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: Container(
+            margin: const EdgeInsets.only(
+              top: 8,
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: const CreateContentButton(),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          Center(
-            child: TextButton(
-              onPressed: () {
-                ref.read(authProvider.notifier).logout(context);
-              },
-              child: const Text('Logout'),
+            child: TabBar(
+              controller: tabController,
+              tabAlignment: TabAlignment.start,
+              isScrollable: true,
+              labelColor: isDark ? TColors.textWhite : TColors.dark,
+              unselectedLabelColor:
+                  isDark ? TColors.darkerGrey : TColors.darkGrey,
+              
+              unselectedLabelStyle:
+                  Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+              labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+              indicatorColor: isDark ? TColors.textWhite : TColors.dark,
+              indicatorWeight: 4,
+              tabs: const [
+                Tab(
+                  text: 'POSTS',
+                ),
+                Tab(
+                  text: 'POLLS',
+                ),
+                Tab(
+                  text: 'ARTICLES',
+                ),
+                Tab(
+                  text: 'VIDEOS',
+                ),
+              ],
             ),
           ),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: CreateContentButton(
+        index: tabController.index,
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          const PostsScreen(),
           Container(),
           Container(),
           Container(),

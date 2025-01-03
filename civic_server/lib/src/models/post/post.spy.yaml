@@ -10,4 +10,6 @@ fields:
     locations: List<AWSPlaces>?
     mentions: List<UserRecord>?
     tags: List<String>?
+    dateCreated: DateTime?
+    updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)

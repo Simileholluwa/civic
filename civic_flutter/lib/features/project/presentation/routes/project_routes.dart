@@ -12,13 +12,23 @@ class ProjectRoutes {
     navigatorKey: shellNavigatorKey,
     routes: [
       GoRoute(
-          path: namespace,
-          builder: (_, state) {
-            final sendProject = state.extra as VoidCallback?;
-            return ProjectsScreen(
-              sendProject: sendProject,
-            );
-          }),
+        path: namespace,
+        builder: (_, state) {
+          final sendProject = state.extra as VoidCallback?;
+          return ProjectsScreen(
+            sendProject: sendProject,
+          );
+        },
+      ),
+      GoRoute(
+        path: ProjectDetailsScreen.route(),
+        builder: (_, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return ProjectDetailsScreen(
+            id: data['id'],
+          );
+        },
+      ),
     ],
   );
 }

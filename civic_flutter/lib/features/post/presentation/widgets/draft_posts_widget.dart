@@ -63,8 +63,8 @@ class DraftPostsWidget extends ConsumerWidget {
               post: draftPost,
             ),
           if (draftPost.videoPath.isNotEmpty)
-            DraftPostsVideoThumbnail(
-              post: draftPost,
+            VideoPost(
+              videoUrl: draftPost.videoPath,
             ),
         ],
       ),

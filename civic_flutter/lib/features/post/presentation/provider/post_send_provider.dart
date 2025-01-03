@@ -180,7 +180,13 @@ class SendPost extends _$SendPost {
           postScheduledDateTimeProvider.notifier,
         );
         final uploadedImages = await sendMediaImages(post);
+        if (post.imageUrls!.isNotEmpty && uploadedImages.isEmpty) {
+          return;
+        }
         final uploadedVideo = await sendMediaVideo(post);
+        if (post.videoUrl!.isNotEmpty && uploadedVideo.isEmpty) {
+          return;
+        }
         final postTosend = post.copyWith(
           imageUrls: uploadedImages,
           videoUrl: uploadedVideo,

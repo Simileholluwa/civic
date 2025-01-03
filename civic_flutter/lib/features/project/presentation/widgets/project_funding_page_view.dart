@@ -34,12 +34,12 @@ class ProjectFundingPageView extends ConsumerWidget {
           Row(
             children: [
               ProjectCategoryDropdown(
-                hintText: '₦',
-                dropdownItems: currencies.values.toList(),
+                hintText: 'NGN',
+                dropdownItems: currencies.keys.toList(),
                 value: projectCreationSate.currency,
                 onChanged: (String? value) {
                   projectNotifier.setCurrency(
-                    currencies[value]!,
+                    value,
                   );
                 },
                 width: 100,

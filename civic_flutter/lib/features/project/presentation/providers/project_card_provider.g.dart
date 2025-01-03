@@ -6,7 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$likedProjectHash() => r'fc6a895e8ebd09fedb7c808e6e4683b65ebd7fe1';
+String _$likedProjectHash() => r'6f6c60924502eda02156617eb7241b94e6c5e910';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class LikedProjectFamily extends Family<AsyncValue<bool>> {
 }
 
 /// See also [likedProject].
-class LikedProjectProvider extends AutoDisposeFutureProvider<bool> {
+class LikedProjectProvider extends FutureProvider<bool> {
   /// See also [likedProject].
   LikedProjectProvider(
     int id,
@@ -124,7 +124,7 @@ class LikedProjectProvider extends AutoDisposeFutureProvider<bool> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<bool> createElement() {
+  FutureProviderElement<bool> createElement() {
     return _LikedProjectProviderElement(this);
   }
 
@@ -144,20 +144,20 @@ class LikedProjectProvider extends AutoDisposeFutureProvider<bool> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin LikedProjectRef on AutoDisposeFutureProviderRef<bool> {
+mixin LikedProjectRef on FutureProviderRef<bool> {
   /// The parameter `id` of this provider.
   int get id;
 }
 
-class _LikedProjectProviderElement
-    extends AutoDisposeFutureProviderElement<bool> with LikedProjectRef {
+class _LikedProjectProviderElement extends FutureProviderElement<bool>
+    with LikedProjectRef {
   _LikedProjectProviderElement(super.provider);
 
   @override
   int get id => (origin as LikedProjectProvider).id;
 }
 
-String _$projectCardWidgetHash() => r'c261dc61b4d63e06f7125adc9764fabebe45e1ed';
+String _$projectCardWidgetHash() => r'3763931151fa76de47808f23a00ec9a3978d363a';
 
 abstract class _$ProjectCardWidget
     extends BuildlessAutoDisposeNotifier<ProjectCardState> {

@@ -46,7 +46,7 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
               ProjectPDFAttachmentsTabView(
                 project: project,
               ),
-              KeepAliveWrapper(
+              ContentKeepAliveWrapper(
                 child: ProjectVideoAttachmentTabView(
                   project: project,
                 ),

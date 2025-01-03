@@ -10,6 +10,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     required this.pagingController,
     required this.itemBuilder,
     required this.onRefresh,
+    this.scrollController,
   });
 
   final PagingController<int, T> pagingController;
@@ -19,6 +20,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     int index,
   ) itemBuilder;
   final Function() onRefresh;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +28,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
       onRefresh: () => onRefresh(),
       child: PagedListView(
         pagingController: pagingController,
-        scrollController: ref.watch(appScrollControllerProvider),
+        scrollController: scrollController,
         builderDelegate: PagedChildBuilderDelegate<T>(
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
@@ -38,7 +40,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
           },
           noItemsFoundIndicatorBuilder: (context) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -57,16 +61,42 @@ class AppInfiniteList<T> extends ConsumerWidget {
           },
           noMoreItemsIndicatorBuilder: (context) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,),
-              child: Text(
-                "This is where it ends.",
-                style: Theme.of(context).textTheme.labelMedium,
-                textAlign: TextAlign.center,
+              padding: const EdgeInsets.symmetric(vertical: 20,),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).dividerColor,
+                      thickness: 1,
+                      height: 0,
+                      indent: 100,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      'END',
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      
+                    ),
+                  ),
+                  
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).dividerColor,
+                      thickness: 1,
+                      height: 0,
+                      endIndent: 100,
+                    ),
+                  ),
+                ],
               ),
             );
           },
         ),
-
       ),
     );
   }

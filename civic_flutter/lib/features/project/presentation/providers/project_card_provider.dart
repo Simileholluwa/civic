@@ -30,7 +30,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<bool> likedProject(Ref ref, int id) async {
   final likedProject = ref.read(hasLikedProjectProvider);
   final result = await likedProject(

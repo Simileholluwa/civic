@@ -552,6 +552,18 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'List<String>?',
         ),
+        _i2.ColumnDefinition(
+          name: 'dateCreated',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'updatedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(

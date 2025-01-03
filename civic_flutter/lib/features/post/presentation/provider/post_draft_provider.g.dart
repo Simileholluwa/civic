@@ -6,7 +6,7 @@ part of 'post_draft_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postDraftsHash() => r'a9e879d2cee405a5f4361d6d0466414b7da32d0b';
+String _$postDraftsHash() => r'045731cc0290722bee6647ac9a730992ebc2654f';
 
 /// See also [PostDrafts].
 @ProviderFor(PostDrafts)

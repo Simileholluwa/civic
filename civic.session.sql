@@ -1,3 +1,2 @@
-SELECT * 
-FROM project 
-WHERE "projectImageAttachments" IS NOT NULL;
+DELETE FROM post CASCADE
+WHERE id IN (15, 16, 17, 18);

@@ -97,8 +97,8 @@ class PostDrafts extends _$PostDrafts {
         .read(
           sendPostProvider.notifier,
         )
-        .sendPost(
-          PostHelperFunctions.sendPostFromDraft(
+        .send(
+          post: PostHelperFunctions.sendPostFromDraft(
             draftPost,
           ),
         );

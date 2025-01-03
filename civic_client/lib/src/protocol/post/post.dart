@@ -25,6 +25,8 @@ abstract class Post implements _i1.SerializableModel {
     this.locations,
     this.mentions,
     this.tags,
+    this.dateCreated,
+    this.updatedAt,
     this.hashtags,
   });
 
@@ -40,6 +42,8 @@ abstract class Post implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   }) = _PostImpl;
 
@@ -71,6 +75,13 @@ abstract class Post implements _i1.SerializableModel {
       tags: (jsonSerialization['tags'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      dateCreated: jsonSerialization['dateCreated'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['dateCreated']),
+      updatedAt: jsonSerialization['updatedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -102,6 +113,10 @@ abstract class Post implements _i1.SerializableModel {
 
   List<String>? tags;
 
+  DateTime? dateCreated;
+
+  DateTime? updatedAt;
+
   List<_i2.PostsHashtags>? hashtags;
 
   Post copyWith({
@@ -116,6 +131,8 @@ abstract class Post implements _i1.SerializableModel {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   });
   @override
@@ -135,6 +152,8 @@ abstract class Post implements _i1.SerializableModel {
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJson()),
       if (tags != null) 'tags': tags?.toJson(),
+      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -161,6 +180,8 @@ class _PostImpl extends Post {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   }) : super._(
           id: id,
@@ -174,6 +195,8 @@ class _PostImpl extends Post {
           locations: locations,
           mentions: mentions,
           tags: tags,
+          dateCreated: dateCreated,
+          updatedAt: updatedAt,
           hashtags: hashtags,
         );
 
@@ -190,6 +213,8 @@ class _PostImpl extends Post {
     Object? locations = _Undefined,
     Object? mentions = _Undefined,
     Object? tags = _Undefined,
+    Object? dateCreated = _Undefined,
+    Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
   }) {
     return Post(
@@ -212,6 +237,8 @@ class _PostImpl extends Post {
           ? mentions
           : this.mentions?.map((e0) => e0.copyWith()).toList(),
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
+      dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
+      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       hashtags: hashtags is List<_i2.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),

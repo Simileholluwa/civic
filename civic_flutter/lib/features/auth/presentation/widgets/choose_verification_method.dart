@@ -26,7 +26,7 @@ Future<Widget?> chooseVerificationMethod(
               TSizes.borderRadiusLg + 20,
             ),
             border: Border.all(
-              color: Theme.of(context).hintColor.withOpacity(.2),
+              color: Theme.of(context).hintColor.withValues(alpha: .2),
               width: 0.5,
             ),
           ),

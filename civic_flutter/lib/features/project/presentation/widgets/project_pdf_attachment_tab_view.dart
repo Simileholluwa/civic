@@ -24,7 +24,7 @@ class ProjectPDFAttachmentsTabView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: KeepAliveWrapper(
+      child: ContentKeepAliveWrapper(
         child: Column(
           children: [
             thumbnails.when(

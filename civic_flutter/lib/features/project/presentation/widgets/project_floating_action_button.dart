@@ -14,7 +14,7 @@ class ProjectFloatingActionButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
-    final isVisible = ref.watch(scrollVisibilityProvider);
+    final isVisible = ref.watch(appScrollVisibilityProvider);
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 500),
       opacity: projectWidgetsState.isActiveFilter || !isVisible ? 0 : 1,

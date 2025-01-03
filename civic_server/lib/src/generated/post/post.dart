@@ -27,6 +27,8 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     this.locations,
     this.mentions,
     this.tags,
+    this.dateCreated,
+    this.updatedAt,
     this.hashtags,
   });
 
@@ -42,6 +44,8 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   }) = _PostImpl;
 
@@ -73,6 +77,13 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       tags: (jsonSerialization['tags'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      dateCreated: jsonSerialization['dateCreated'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['dateCreated']),
+      updatedAt: jsonSerialization['updatedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -106,6 +117,10 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<String>? tags;
 
+  DateTime? dateCreated;
+
+  DateTime? updatedAt;
+
   List<_i2.PostsHashtags>? hashtags;
 
   @override
@@ -123,6 +138,8 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   });
   @override
@@ -142,6 +159,8 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJson()),
       if (tags != null) 'tags': tags?.toJson(),
+      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -166,6 +185,8 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (tags != null) 'tags': tags?.toJson(),
+      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
@@ -222,6 +243,8 @@ class _PostImpl extends Post {
     List<_i2.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
+    DateTime? dateCreated,
+    DateTime? updatedAt,
     List<_i2.PostsHashtags>? hashtags,
   }) : super._(
           id: id,
@@ -235,6 +258,8 @@ class _PostImpl extends Post {
           locations: locations,
           mentions: mentions,
           tags: tags,
+          dateCreated: dateCreated,
+          updatedAt: updatedAt,
           hashtags: hashtags,
         );
 
@@ -251,6 +276,8 @@ class _PostImpl extends Post {
     Object? locations = _Undefined,
     Object? mentions = _Undefined,
     Object? tags = _Undefined,
+    Object? dateCreated = _Undefined,
+    Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
   }) {
     return Post(
@@ -273,6 +300,8 @@ class _PostImpl extends Post {
           ? mentions
           : this.mentions?.map((e0) => e0.copyWith()).toList(),
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
+      dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
+      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       hashtags: hashtags is List<_i2.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
@@ -319,6 +348,14 @@ class PostTable extends _i1.Table {
       'tags',
       this,
     );
+    dateCreated = _i1.ColumnDateTime(
+      'dateCreated',
+      this,
+    );
+    updatedAt = _i1.ColumnDateTime(
+      'updatedAt',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -340,6 +377,10 @@ class PostTable extends _i1.Table {
   late final _i1.ColumnSerializable mentions;
 
   late final _i1.ColumnSerializable tags;
+
+  late final _i1.ColumnDateTime dateCreated;
+
+  late final _i1.ColumnDateTime updatedAt;
 
   _i2.PostsHashtagsTable? ___hashtags;
 
@@ -401,6 +442,8 @@ class PostTable extends _i1.Table {
         locations,
         mentions,
         tags,
+        dateCreated,
+        updatedAt,
       ];
 
   @override

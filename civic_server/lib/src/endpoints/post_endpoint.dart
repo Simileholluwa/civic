@@ -1,6 +1,7 @@
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class PostEndpoint extends Endpoint {
   Future<Post?> savePost(
@@ -27,7 +28,10 @@ class PostEndpoint extends Endpoint {
         }
         final sentPost = await Post.db.updateRow(
           session,
-          post,
+          post.copyWith(
+            updatedAt: DateTime.now(),
+          ),
+
         );
         await HashtagEndpoint().sendPostHashtags(
           session,
@@ -41,6 +45,7 @@ class PostEndpoint extends Endpoint {
           post.copyWith(
             ownerId: user.id,
             owner: user,
+            dateCreated: DateTime.now(),
           ),
         );
         if (sentPost.id == null) {
@@ -94,7 +99,9 @@ class PostEndpoint extends Endpoint {
       limit: limit,
       offset: (page * limit) - limit,
       include: Post.include(
-        owner: UserRecord.include(),
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
       ),
     );
 

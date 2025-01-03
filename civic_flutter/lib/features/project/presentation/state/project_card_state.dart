@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/features/project/presentation/helpers/project_helper_functions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
@@ -98,7 +99,7 @@ class ProjectCardState {
       fullName: project.owner!.userInfo!.fullName,
       userName: project.owner!.userInfo!.userName!,
       bio: project.owner!.bio,
-      timeAgo: ProjectHelperFunctions.humanizeDateTime(
+      timeAgo: THelperFunctions.humanizeDateTime(
         project.dateCreated!,
       ),
       numberOfViews: '100',

@@ -70,7 +70,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                       height: 60,
                       width: 60,
                       decoration: BoxDecoration(
-                        color: TColors.primary.withOpacity(0.1),
+                        color: TColors.primary.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(TSizes.inputFieldRadius),
                       ),
@@ -106,7 +106,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                     height: 60,
                     width: 60,
                     decoration: BoxDecoration(
-                      color: TColors.primary.withOpacity(0.1),
+                      color: TColors.primary.withValues(alpha: 0.1),
                       borderRadius:
                           BorderRadius.circular(TSizes.inputFieldRadius),
                     ),

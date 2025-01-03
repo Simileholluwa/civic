@@ -1,12 +1,12 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'app_scroll_controller_provider.g.dart';
+part 'post_scroll_controller_provider.g.dart';
 
 @riverpod
-class AppScrollController extends _$AppScrollController {
+class PostScrollController extends _$PostScrollController {
   static late ScrollController _scrollController;
   @override
   Raw<ScrollController> build() {
@@ -16,7 +16,7 @@ class AppScrollController extends _$AppScrollController {
   }
 
   void _scrollListener() {
-    final visibilityNotifier = ref.read(scrollVisibilityProvider.notifier);
+    final visibilityNotifier = ref.read(appScrollVisibilityProvider.notifier);
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       visibilityNotifier.hide();
@@ -25,16 +25,4 @@ class AppScrollController extends _$AppScrollController {
       visibilityNotifier.show();
     }
   }
-}
-
-final scrollVisibilityProvider =
-    StateNotifierProvider<ScrollVisibilityNotifier, bool>(
-  (ref) => ScrollVisibilityNotifier(),
-);
-
-class ScrollVisibilityNotifier extends StateNotifier<bool> {
-  ScrollVisibilityNotifier() : super(true);
-
-  void hide() => state = false;
-  void show() => state = true;
 }

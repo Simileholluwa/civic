@@ -107,7 +107,7 @@ class DraftImagePost extends ConsumerWidget {
                         vertical: 8.0, horizontal: 4.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(
+                      color: Colors.white.withValues(alpha: 
                         current == entry.key ? 0.9 : 0.4,
                       ),
                     ),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class KeepAliveWrapper extends StatefulWidget {
+class ContentKeepAliveWrapper extends StatefulWidget {
   final Widget child;
 
-  const KeepAliveWrapper({
+  const ContentKeepAliveWrapper({
     super.key,
     required this.child,
   });
 
   @override
-  State<KeepAliveWrapper> createState() => _KeepAliveWrapperState();
+  State<ContentKeepAliveWrapper> createState() => _ContentKeepAliveWrapperState();
 }
 
-class _KeepAliveWrapperState extends State<KeepAliveWrapper>
+class _ContentKeepAliveWrapperState extends State<ContentKeepAliveWrapper>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;

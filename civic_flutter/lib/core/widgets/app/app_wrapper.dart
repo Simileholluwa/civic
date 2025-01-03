@@ -20,7 +20,7 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final isVisible = ref.watch(scrollVisibilityProvider);
+    final isVisible = ref.watch(appScrollVisibilityProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
