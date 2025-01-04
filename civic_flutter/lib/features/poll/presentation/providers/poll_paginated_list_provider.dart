@@ -2,14 +2,14 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'project_paginated_list_provider.g.dart';
+part 'poll_paginated_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class PaginatedProjectList extends _$PaginatedProjectList {
-  final PagingController<int, Project> pagingController =
+class PaginatedPollList extends _$PaginatedPollList {
+  final PagingController<int, Poll> pagingController =
       PagingController(firstPageKey: 1);
 
   @override
@@ -25,9 +25,9 @@ class PaginatedProjectList extends _$PaginatedProjectList {
   }
 
   Future<void> fetchPage(int page, {int limit = 10}) async {
-    final listProjectUseCase = ref.read(getProjectsProvider);
-    final result = await listProjectUseCase(
-      GetProjectsParams(
+    final listPollUseCase = ref.read(getPollsProvider);
+    final result = await listPollUseCase(
+      GetPollsParams(
         page,
         limit,
       ),

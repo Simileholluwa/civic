@@ -10,7 +10,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../post/post_type_enums.dart' as _i3;
+import '../general/aws_places.dart' as _i4;
+import '../post/posts_hashtags.dart' as _i5;
 
 abstract class Post implements _i1.SerializableModel {
   Post._({
@@ -34,17 +37,17 @@ abstract class Post implements _i1.SerializableModel {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -57,7 +60,7 @@ abstract class Post implements _i1.SerializableModel {
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       postType: jsonSerialization['postType'] == null
           ? null
-          : _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
+          : _i3.PostType.fromJson((jsonSerialization['postType'] as int)),
       text: jsonSerialization['text'] as String?,
       imageUrls: (jsonSerialization['imageUrls'] as List?)
           ?.map((e) => e as String)
@@ -67,7 +70,7 @@ abstract class Post implements _i1.SerializableModel {
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List?)
-          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i4.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       mentions: (jsonSerialization['mentions'] as List?)
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
@@ -83,7 +86,7 @@ abstract class Post implements _i1.SerializableModel {
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -97,7 +100,7 @@ abstract class Post implements _i1.SerializableModel {
 
   _i2.UserRecord? owner;
 
-  _i2.PostType? postType;
+  _i3.PostType? postType;
 
   String? text;
 
@@ -107,7 +110,7 @@ abstract class Post implements _i1.SerializableModel {
 
   List<_i2.UserRecord>? taggedUsers;
 
-  List<_i2.AWSPlaces>? locations;
+  List<_i4.AWSPlaces>? locations;
 
   List<_i2.UserRecord>? mentions;
 
@@ -117,23 +120,23 @@ abstract class Post implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  List<_i2.PostsHashtags>? hashtags;
+  List<_i5.PostsHashtags>? hashtags;
 
   Post copyWith({
     int? id,
     int? ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -172,17 +175,17 @@ class _PostImpl extends Post {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -221,7 +224,7 @@ class _PostImpl extends Post {
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      postType: postType is _i2.PostType? ? postType : this.postType,
+      postType: postType is _i3.PostType? ? postType : this.postType,
       text: text is String? ? text : this.text,
       imageUrls: imageUrls is List<String>?
           ? imageUrls
@@ -230,7 +233,7 @@ class _PostImpl extends Post {
       taggedUsers: taggedUsers is List<_i2.UserRecord>?
           ? taggedUsers
           : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
-      locations: locations is List<_i2.AWSPlaces>?
+      locations: locations is List<_i4.AWSPlaces>?
           ? locations
           : this.locations?.map((e0) => e0.copyWith()).toList(),
       mentions: mentions is List<_i2.UserRecord>?
@@ -239,7 +242,7 @@ class _PostImpl extends Post {
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      hashtags: hashtags is List<_i2.PostsHashtags>?
+      hashtags: hashtags is List<_i5.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
     );

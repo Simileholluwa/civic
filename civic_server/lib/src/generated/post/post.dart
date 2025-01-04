@@ -8,11 +8,12 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../post/post_type_enums.dart' as _i3;
+import '../general/aws_places.dart' as _i4;
+import '../post/posts_hashtags.dart' as _i5;
 
 abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
   Post._({
@@ -36,17 +37,17 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -59,7 +60,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       postType: jsonSerialization['postType'] == null
           ? null
-          : _i2.PostType.fromJson((jsonSerialization['postType'] as int)),
+          : _i3.PostType.fromJson((jsonSerialization['postType'] as int)),
       text: jsonSerialization['text'] as String?,
       imageUrls: (jsonSerialization['imageUrls'] as List?)
           ?.map((e) => e as String)
@@ -69,7 +70,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List?)
-          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i4.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       mentions: (jsonSerialization['mentions'] as List?)
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
@@ -85,7 +86,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -101,7 +102,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i2.UserRecord? owner;
 
-  _i2.PostType? postType;
+  _i3.PostType? postType;
 
   String? text;
 
@@ -111,7 +112,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<_i2.UserRecord>? taggedUsers;
 
-  List<_i2.AWSPlaces>? locations;
+  List<_i4.AWSPlaces>? locations;
 
   List<_i2.UserRecord>? mentions;
 
@@ -121,7 +122,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   DateTime? updatedAt;
 
-  List<_i2.PostsHashtags>? hashtags;
+  List<_i5.PostsHashtags>? hashtags;
 
   @override
   _i1.Table get table => t;
@@ -130,17 +131,17 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     int? id,
     int? ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -194,7 +195,7 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   static PostInclude include({
     _i2.UserRecordInclude? owner,
-    _i2.PostsHashtagsIncludeList? hashtags,
+    _i5.PostsHashtagsIncludeList? hashtags,
   }) {
     return PostInclude._(
       owner: owner,
@@ -235,17 +236,17 @@ class _PostImpl extends Post {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    _i2.PostType? postType,
+    _i3.PostType? postType,
     String? text,
     List<String>? imageUrls,
     String? videoUrl,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i4.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i2.PostsHashtags>? hashtags,
+    List<_i5.PostsHashtags>? hashtags,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -284,7 +285,7 @@ class _PostImpl extends Post {
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      postType: postType is _i2.PostType? ? postType : this.postType,
+      postType: postType is _i3.PostType? ? postType : this.postType,
       text: text is String? ? text : this.text,
       imageUrls: imageUrls is List<String>?
           ? imageUrls
@@ -293,7 +294,7 @@ class _PostImpl extends Post {
       taggedUsers: taggedUsers is List<_i2.UserRecord>?
           ? taggedUsers
           : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
-      locations: locations is List<_i2.AWSPlaces>?
+      locations: locations is List<_i4.AWSPlaces>?
           ? locations
           : this.locations?.map((e0) => e0.copyWith()).toList(),
       mentions: mentions is List<_i2.UserRecord>?
@@ -302,7 +303,7 @@ class _PostImpl extends Post {
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      hashtags: hashtags is List<_i2.PostsHashtags>?
+      hashtags: hashtags is List<_i5.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
     );
@@ -362,7 +363,7 @@ class PostTable extends _i1.Table {
 
   _i2.UserRecordTable? _owner;
 
-  late final _i1.ColumnEnum<_i2.PostType> postType;
+  late final _i1.ColumnEnum<_i3.PostType> postType;
 
   late final _i1.ColumnString text;
 
@@ -382,9 +383,9 @@ class PostTable extends _i1.Table {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  _i2.PostsHashtagsTable? ___hashtags;
+  _i5.PostsHashtagsTable? ___hashtags;
 
-  _i1.ManyRelation<_i2.PostsHashtagsTable>? _hashtags;
+  _i1.ManyRelation<_i5.PostsHashtagsTable>? _hashtags;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -399,32 +400,32 @@ class PostTable extends _i1.Table {
     return _owner!;
   }
 
-  _i2.PostsHashtagsTable get __hashtags {
+  _i5.PostsHashtagsTable get __hashtags {
     if (___hashtags != null) return ___hashtags!;
     ___hashtags = _i1.createRelationTable(
       relationFieldName: '__hashtags',
       field: Post.t.id,
-      foreignField: _i2.PostsHashtags.t.postId,
+      foreignField: _i5.PostsHashtags.t.postId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.PostsHashtagsTable(tableRelation: foreignTableRelation),
+          _i5.PostsHashtagsTable(tableRelation: foreignTableRelation),
     );
     return ___hashtags!;
   }
 
-  _i1.ManyRelation<_i2.PostsHashtagsTable> get hashtags {
+  _i1.ManyRelation<_i5.PostsHashtagsTable> get hashtags {
     if (_hashtags != null) return _hashtags!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'hashtags',
       field: Post.t.id,
-      foreignField: _i2.PostsHashtags.t.postId,
+      foreignField: _i5.PostsHashtags.t.postId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.PostsHashtagsTable(tableRelation: foreignTableRelation),
+          _i5.PostsHashtagsTable(tableRelation: foreignTableRelation),
     );
-    _hashtags = _i1.ManyRelation<_i2.PostsHashtagsTable>(
+    _hashtags = _i1.ManyRelation<_i5.PostsHashtagsTable>(
       tableWithRelations: relationTable,
-      table: _i2.PostsHashtagsTable(
+      table: _i5.PostsHashtagsTable(
           tableRelation: relationTable.tableRelation!.lastRelation),
     );
     return _hashtags!;
@@ -461,7 +462,7 @@ class PostTable extends _i1.Table {
 class PostInclude extends _i1.IncludeObject {
   PostInclude._({
     _i2.UserRecordInclude? owner,
-    _i2.PostsHashtagsIncludeList? hashtags,
+    _i5.PostsHashtagsIncludeList? hashtags,
   }) {
     _owner = owner;
     _hashtags = hashtags;
@@ -469,7 +470,7 @@ class PostInclude extends _i1.IncludeObject {
 
   _i2.UserRecordInclude? _owner;
 
-  _i2.PostsHashtagsIncludeList? _hashtags;
+  _i5.PostsHashtagsIncludeList? _hashtags;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -530,7 +531,7 @@ class PostRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -551,7 +552,7 @@ class PostRepository {
       orderByList: orderByList?.call(Post.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -564,7 +565,7 @@ class PostRepository {
   }) async {
     return session.db.findById<Post>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -576,7 +577,7 @@ class PostRepository {
   }) async {
     return session.db.insert<Post>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -587,7 +588,7 @@ class PostRepository {
   }) async {
     return session.db.insertRow<Post>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -600,7 +601,7 @@ class PostRepository {
     return session.db.update<Post>(
       rows,
       columns: columns?.call(Post.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -613,7 +614,7 @@ class PostRepository {
     return session.db.updateRow<Post>(
       row,
       columns: columns?.call(Post.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -624,7 +625,7 @@ class PostRepository {
   }) async {
     return session.db.delete<Post>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -635,7 +636,7 @@ class PostRepository {
   }) async {
     return session.db.deleteRow<Post>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -646,7 +647,7 @@ class PostRepository {
   }) async {
     return session.db.deleteWhere<Post>(
       where: where(Post.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -659,7 +660,7 @@ class PostRepository {
     return session.db.count<Post>(
       where: where?.call(Post.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -670,7 +671,7 @@ class PostAttachRepository {
   Future<void> hashtags(
     _i1.Session session,
     Post post,
-    List<_i2.PostsHashtags> postsHashtags, {
+    List<_i5.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.any((e) => e.id == null)) {
@@ -682,10 +683,10 @@ class PostAttachRepository {
 
     var $postsHashtags =
         postsHashtags.map((e) => e.copyWith(postId: post.id)).toList();
-    await session.db.update<_i2.PostsHashtags>(
+    await session.db.update<_i5.PostsHashtags>(
       $postsHashtags,
-      columns: [_i2.PostsHashtags.t.postId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PostsHashtags.t.postId],
+      transaction: transaction,
     );
   }
 }
@@ -710,14 +711,14 @@ class PostAttachRowRepository {
     await session.db.updateRow<Post>(
       $post,
       columns: [Post.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
   Future<void> hashtags(
     _i1.Session session,
     Post post,
-    _i2.PostsHashtags postsHashtags, {
+    _i5.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.id == null) {
@@ -728,10 +729,10 @@ class PostAttachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(postId: post.id);
-    await session.db.updateRow<_i2.PostsHashtags>(
+    await session.db.updateRow<_i5.PostsHashtags>(
       $postsHashtags,
-      columns: [_i2.PostsHashtags.t.postId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PostsHashtags.t.postId],
+      transaction: transaction,
     );
   }
 }
@@ -741,7 +742,7 @@ class PostDetachRepository {
 
   Future<void> hashtags(
     _i1.Session session,
-    List<_i2.PostsHashtags> postsHashtags, {
+    List<_i5.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.any((e) => e.id == null)) {
@@ -750,10 +751,10 @@ class PostDetachRepository {
 
     var $postsHashtags =
         postsHashtags.map((e) => e.copyWith(postId: null)).toList();
-    await session.db.update<_i2.PostsHashtags>(
+    await session.db.update<_i5.PostsHashtags>(
       $postsHashtags,
-      columns: [_i2.PostsHashtags.t.postId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PostsHashtags.t.postId],
+      transaction: transaction,
     );
   }
 }
@@ -763,7 +764,7 @@ class PostDetachRowRepository {
 
   Future<void> hashtags(
     _i1.Session session,
-    _i2.PostsHashtags postsHashtags, {
+    _i5.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.id == null) {
@@ -771,10 +772,10 @@ class PostDetachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(postId: null);
-    await session.db.updateRow<_i2.PostsHashtags>(
+    await session.db.updateRow<_i5.PostsHashtags>(
       $postsHashtags,
-      columns: [_i2.PostsHashtags.t.postId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PostsHashtags.t.postId],
+      transaction: transaction,
     );
   }
 }

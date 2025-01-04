@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -21,7 +20,6 @@ class ProjectCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final defaultTextStyle = DefaultTextStyle.of(context);
     final pagingControllerNotifier =
         ref.watch(paginatedProjectListProvider.notifier);
     final projectCardState = ref.watch(
@@ -64,90 +62,10 @@ class ProjectCard extends ConsumerWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 12, 15, 15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundImage: CachedNetworkImageProvider(
-                          projectCardState.photoUrl,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    projectCardState.displayName,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Iconsax.star5,
-                                      color: TColors.primary,
-                                      size: 14,
-                                    ),
-                                    const SizedBox(
-                                      width: 2,
-                                    ),
-                                    Text(
-                                      projectCardState.credibilityScore,
-                                      style: defaultTextStyle.style.copyWith(
-                                        color: TColors.primary,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Text(
-                              projectCardState.bio,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                    fontSize: 13,
-                                  ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              '@${projectCardState.userName} • ${projectCardState.timeAgo} • ${projectCardState.numberOfViews} views',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                    fontSize: 13,
-                                  ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: ContentCreatorInfo(
+                    creator: projectCardState.creator,
+                    timeAgo: projectCardState.timeAgo,
+                    numberOfViews: projectCardState.numberOfViews,
                   ),
                 ),
                 projectCardState.imagesUrl.length == 1
@@ -157,7 +75,6 @@ class ProjectCard extends ConsumerWidget {
                     : ContentMultipleCachedImage(
                         imageUrls: projectCardState.imagesUrl,
                       ),
-                
                 SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   scrollDirection: Axis.horizontal,

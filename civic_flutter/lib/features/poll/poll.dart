@@ -1,5 +1,3 @@
-library poll;
-
 export './data/datasources/poll_local_datasource.dart';
 export './data/datasources/poll_remote_datasource.dart';
 export './data/repositories/poll_repository_impl.dart';
@@ -12,6 +10,7 @@ export './domain/usecases/save_draft_poll_use_case.dart';
 export './domain/usecases/save_poll_use_case.dart';
 export './domain/usecases/schedule_poll__use_case.dart';
 export './domain/usecases/get_drafts_poll_use_case.dart';
+export './domain/usecases/get_polls_use_case.dart';
 export './presentation/helper/poll_helper_functions.dart';
 export './presentation/pages/create_poll_screen.dart';
 export './presentation/pages/poll_drafts_screen.dart';
@@ -22,6 +21,8 @@ export './presentation/providers/poll_draft_provider.dart';
 export './presentation/providers/poll_provider.dart';
 export './presentation/providers/poll_send_provider.dart';
 export './presentation/providers/poll_service_providers.dart';
+export './presentation/providers/poll_paginated_list_provider.dart';
+export './presentation/providers/poll_scroll_controller_provider.dart';
 export './presentation/state/poll_state.dart';
 export './presentation/widgets/create_poll_widget.dart';
 export './presentation/widgets/draft_poll_options.dart';

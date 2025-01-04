@@ -1,5 +1,3 @@
-library post;
-
 export './data/datasources/post_local_database.dart';
 export './data/datasources/post_remote_database.dart';
 export './data/repositories/post_repository_impl.dart';

@@ -1,5 +1,3 @@
-library auth;
-
 export './data/datasources/auth_remote_datasource.dart';
 export './data/repositories/auth_repository_impl.dart';
 export './domain/entities/political_status_card_entity.dart';

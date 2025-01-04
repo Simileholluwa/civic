@@ -8,11 +8,9 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
 
 abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
   Article._({
@@ -286,7 +284,7 @@ class ArticleRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -307,7 +305,7 @@ class ArticleRepository {
       orderByList: orderByList?.call(Article.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -320,7 +318,7 @@ class ArticleRepository {
   }) async {
     return session.db.findById<Article>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -332,7 +330,7 @@ class ArticleRepository {
   }) async {
     return session.db.insert<Article>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -343,7 +341,7 @@ class ArticleRepository {
   }) async {
     return session.db.insertRow<Article>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -356,7 +354,7 @@ class ArticleRepository {
     return session.db.update<Article>(
       rows,
       columns: columns?.call(Article.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -369,7 +367,7 @@ class ArticleRepository {
     return session.db.updateRow<Article>(
       row,
       columns: columns?.call(Article.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -380,7 +378,7 @@ class ArticleRepository {
   }) async {
     return session.db.delete<Article>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -391,7 +389,7 @@ class ArticleRepository {
   }) async {
     return session.db.deleteRow<Article>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -402,7 +400,7 @@ class ArticleRepository {
   }) async {
     return session.db.deleteWhere<Article>(
       where: where(Article.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -415,7 +413,7 @@ class ArticleRepository {
     return session.db.count<Article>(
       where: where?.call(Article.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -440,7 +438,7 @@ class ArticleAttachRowRepository {
     await session.db.updateRow<Article>(
       $article,
       columns: [Article.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

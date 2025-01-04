@@ -21,11 +21,14 @@ Future<DateTime?> createContentpickDateAndTime(BuildContext context) async {
     builder: (context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          datePickerTheme: const DatePickerThemeData(
+          datePickerTheme: DatePickerThemeData(
             surfaceTintColor: Colors.transparent,
             elevation: 4,
             headerBackgroundColor: TColors.primary,
             headerForegroundColor: TColors.textWhite,
+            backgroundColor: THelperFunctions.isDarkMode(context)
+                ? TColors.dark
+                : TColors.light,
           ),
           dialogTheme: const DialogTheme(
             elevation: 10,
@@ -45,9 +48,10 @@ Future<DateTime?> createContentpickDateAndTime(BuildContext context) async {
         return Theme(
           data: Theme.of(context!).copyWith(
             timePickerTheme: TimePickerThemeData(
-              dialBackgroundColor: isDark ? TColors.dark : TColors.light,
+              dialBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
               elevation: 4,
               entryModeIconColor: Colors.transparent,
+              backgroundColor: isDark ? TColors.dark : TColors.light,
             ),
             dialogTheme: const DialogTheme(
               elevation: 10,

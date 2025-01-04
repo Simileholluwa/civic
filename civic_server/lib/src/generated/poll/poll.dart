@@ -8,11 +8,12 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../general/aws_places.dart' as _i3;
+import '../poll/poll_option.dart' as _i4;
+import '../poll/poll_hashtags.dart' as _i5;
 
 abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
   Poll._({
@@ -36,13 +37,13 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     String? question,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     List<String>? tags,
     DateTime? createdAt,
     int? pollDuration,
-    List<_i2.PollsHashtags>? hashtags,
+    List<_i5.PollsHashtags>? hashtags,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -58,14 +59,14 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List?)
-          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       mentions: (jsonSerialization['mentions'] as List?)
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       options: jsonSerialization['options'] == null
           ? null
-          : _i2.PollOption.fromJson(
+          : _i4.PollOption.fromJson(
               (jsonSerialization['options'] as Map<String, dynamic>)),
       tags: (jsonSerialization['tags'] as List?)
           ?.map((e) => e as String)
@@ -75,7 +76,7 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       pollDuration: jsonSerialization['pollDuration'] as int?,
       hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i2.PollsHashtags.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i5.PollsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -95,11 +96,11 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<_i2.UserRecord>? taggedUsers;
 
-  List<_i2.AWSPlaces>? locations;
+  List<_i3.AWSPlaces>? locations;
 
   List<_i2.UserRecord>? mentions;
 
-  _i2.PollOption? options;
+  _i4.PollOption? options;
 
   List<String>? tags;
 
@@ -107,7 +108,7 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int? pollDuration;
 
-  List<_i2.PollsHashtags>? hashtags;
+  List<_i5.PollsHashtags>? hashtags;
 
   @override
   _i1.Table get table => t;
@@ -118,13 +119,13 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     String? question,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     List<String>? tags,
     DateTime? createdAt,
     int? pollDuration,
-    List<_i2.PollsHashtags>? hashtags,
+    List<_i5.PollsHashtags>? hashtags,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -174,7 +175,7 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
 
   static PollInclude include({
     _i2.UserRecordInclude? owner,
-    _i2.PollsHashtagsIncludeList? hashtags,
+    _i5.PollsHashtagsIncludeList? hashtags,
   }) {
     return PollInclude._(
       owner: owner,
@@ -217,13 +218,13 @@ class _PollImpl extends Poll {
     _i2.UserRecord? owner,
     String? question,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     List<String>? tags,
     DateTime? createdAt,
     int? pollDuration,
-    List<_i2.PollsHashtags>? hashtags,
+    List<_i5.PollsHashtags>? hashtags,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -262,17 +263,17 @@ class _PollImpl extends Poll {
       taggedUsers: taggedUsers is List<_i2.UserRecord>?
           ? taggedUsers
           : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
-      locations: locations is List<_i2.AWSPlaces>?
+      locations: locations is List<_i3.AWSPlaces>?
           ? locations
           : this.locations?.map((e0) => e0.copyWith()).toList(),
       mentions: mentions is List<_i2.UserRecord>?
           ? mentions
           : this.mentions?.map((e0) => e0.copyWith()).toList(),
-      options: options is _i2.PollOption? ? options : this.options?.copyWith(),
+      options: options is _i4.PollOption? ? options : this.options?.copyWith(),
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
-      hashtags: hashtags is List<_i2.PollsHashtags>?
+      hashtags: hashtags is List<_i5.PollsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
     );
@@ -339,9 +340,9 @@ class PollTable extends _i1.Table {
 
   late final _i1.ColumnInt pollDuration;
 
-  _i2.PollsHashtagsTable? ___hashtags;
+  _i5.PollsHashtagsTable? ___hashtags;
 
-  _i1.ManyRelation<_i2.PollsHashtagsTable>? _hashtags;
+  _i1.ManyRelation<_i5.PollsHashtagsTable>? _hashtags;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -356,32 +357,32 @@ class PollTable extends _i1.Table {
     return _owner!;
   }
 
-  _i2.PollsHashtagsTable get __hashtags {
+  _i5.PollsHashtagsTable get __hashtags {
     if (___hashtags != null) return ___hashtags!;
     ___hashtags = _i1.createRelationTable(
       relationFieldName: '__hashtags',
       field: Poll.t.id,
-      foreignField: _i2.PollsHashtags.t.pollId,
+      foreignField: _i5.PollsHashtags.t.pollId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.PollsHashtagsTable(tableRelation: foreignTableRelation),
+          _i5.PollsHashtagsTable(tableRelation: foreignTableRelation),
     );
     return ___hashtags!;
   }
 
-  _i1.ManyRelation<_i2.PollsHashtagsTable> get hashtags {
+  _i1.ManyRelation<_i5.PollsHashtagsTable> get hashtags {
     if (_hashtags != null) return _hashtags!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'hashtags',
       field: Poll.t.id,
-      foreignField: _i2.PollsHashtags.t.pollId,
+      foreignField: _i5.PollsHashtags.t.pollId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.PollsHashtagsTable(tableRelation: foreignTableRelation),
+          _i5.PollsHashtagsTable(tableRelation: foreignTableRelation),
     );
-    _hashtags = _i1.ManyRelation<_i2.PollsHashtagsTable>(
+    _hashtags = _i1.ManyRelation<_i5.PollsHashtagsTable>(
       tableWithRelations: relationTable,
-      table: _i2.PollsHashtagsTable(
+      table: _i5.PollsHashtagsTable(
           tableRelation: relationTable.tableRelation!.lastRelation),
     );
     return _hashtags!;
@@ -416,7 +417,7 @@ class PollTable extends _i1.Table {
 class PollInclude extends _i1.IncludeObject {
   PollInclude._({
     _i2.UserRecordInclude? owner,
-    _i2.PollsHashtagsIncludeList? hashtags,
+    _i5.PollsHashtagsIncludeList? hashtags,
   }) {
     _owner = owner;
     _hashtags = hashtags;
@@ -424,7 +425,7 @@ class PollInclude extends _i1.IncludeObject {
 
   _i2.UserRecordInclude? _owner;
 
-  _i2.PollsHashtagsIncludeList? _hashtags;
+  _i5.PollsHashtagsIncludeList? _hashtags;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -485,7 +486,7 @@ class PollRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -506,7 +507,7 @@ class PollRepository {
       orderByList: orderByList?.call(Poll.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -519,7 +520,7 @@ class PollRepository {
   }) async {
     return session.db.findById<Poll>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -531,7 +532,7 @@ class PollRepository {
   }) async {
     return session.db.insert<Poll>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -542,7 +543,7 @@ class PollRepository {
   }) async {
     return session.db.insertRow<Poll>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -555,7 +556,7 @@ class PollRepository {
     return session.db.update<Poll>(
       rows,
       columns: columns?.call(Poll.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -568,7 +569,7 @@ class PollRepository {
     return session.db.updateRow<Poll>(
       row,
       columns: columns?.call(Poll.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -579,7 +580,7 @@ class PollRepository {
   }) async {
     return session.db.delete<Poll>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -590,7 +591,7 @@ class PollRepository {
   }) async {
     return session.db.deleteRow<Poll>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -601,7 +602,7 @@ class PollRepository {
   }) async {
     return session.db.deleteWhere<Poll>(
       where: where(Poll.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -614,7 +615,7 @@ class PollRepository {
     return session.db.count<Poll>(
       where: where?.call(Poll.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -625,7 +626,7 @@ class PollAttachRepository {
   Future<void> hashtags(
     _i1.Session session,
     Poll poll,
-    List<_i2.PollsHashtags> pollsHashtags, {
+    List<_i5.PollsHashtags> pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (pollsHashtags.any((e) => e.id == null)) {
@@ -637,10 +638,10 @@ class PollAttachRepository {
 
     var $pollsHashtags =
         pollsHashtags.map((e) => e.copyWith(pollId: poll.id)).toList();
-    await session.db.update<_i2.PollsHashtags>(
+    await session.db.update<_i5.PollsHashtags>(
       $pollsHashtags,
-      columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PollsHashtags.t.pollId],
+      transaction: transaction,
     );
   }
 }
@@ -665,14 +666,14 @@ class PollAttachRowRepository {
     await session.db.updateRow<Poll>(
       $poll,
       columns: [Poll.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
   Future<void> hashtags(
     _i1.Session session,
     Poll poll,
-    _i2.PollsHashtags pollsHashtags, {
+    _i5.PollsHashtags pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (pollsHashtags.id == null) {
@@ -683,10 +684,10 @@ class PollAttachRowRepository {
     }
 
     var $pollsHashtags = pollsHashtags.copyWith(pollId: poll.id);
-    await session.db.updateRow<_i2.PollsHashtags>(
+    await session.db.updateRow<_i5.PollsHashtags>(
       $pollsHashtags,
-      columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PollsHashtags.t.pollId],
+      transaction: transaction,
     );
   }
 }
@@ -696,7 +697,7 @@ class PollDetachRepository {
 
   Future<void> hashtags(
     _i1.Session session,
-    List<_i2.PollsHashtags> pollsHashtags, {
+    List<_i5.PollsHashtags> pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (pollsHashtags.any((e) => e.id == null)) {
@@ -705,10 +706,10 @@ class PollDetachRepository {
 
     var $pollsHashtags =
         pollsHashtags.map((e) => e.copyWith(pollId: null)).toList();
-    await session.db.update<_i2.PollsHashtags>(
+    await session.db.update<_i5.PollsHashtags>(
       $pollsHashtags,
-      columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PollsHashtags.t.pollId],
+      transaction: transaction,
     );
   }
 }
@@ -718,7 +719,7 @@ class PollDetachRowRepository {
 
   Future<void> hashtags(
     _i1.Session session,
-    _i2.PollsHashtags pollsHashtags, {
+    _i5.PollsHashtags pollsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (pollsHashtags.id == null) {
@@ -726,10 +727,10 @@ class PollDetachRowRepository {
     }
 
     var $pollsHashtags = pollsHashtags.copyWith(pollId: null);
-    await session.db.updateRow<_i2.PollsHashtags>(
+    await session.db.updateRow<_i5.PollsHashtags>(
       $pollsHashtags,
-      columns: [_i2.PollsHashtags.t.pollId],
-      transaction: transaction ?? session.transaction,
+      columns: [_i5.PollsHashtags.t.pollId],
+      transaction: transaction,
     );
   }
 }

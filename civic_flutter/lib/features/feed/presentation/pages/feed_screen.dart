@@ -2,6 +2,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/constants/app_colors.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
+import 'package:civic_flutter/features/poll/presentation/pages/polls_screen.dart';
 import 'package:civic_flutter/features/post/presentation/pages/posts_screen.dart';
 import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class FeedScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Updates',
+          'Feed',
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -114,14 +115,12 @@ class FeedScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: CreateContentButton(
-        index: tabController.index,
-      ),
+      floatingActionButton: const CreateContentButton(),
       body: TabBarView(
         controller: tabController,
         children: [
           const PostsScreen(),
-          Container(),
+          const PollsScreen(),
           Container(),
           Container(),
         ],

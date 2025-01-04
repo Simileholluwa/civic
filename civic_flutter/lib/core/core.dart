@@ -1,5 +1,3 @@
-library core;
-
 export './config/env.dart';
 export './constants/app_colors.dart';
 export './constants/image_strings.dart';
@@ -66,6 +64,7 @@ export './widgets/app/app_resend_link.dart';
 export './widgets/app/app_text_field.dart';
 export './widgets/app/app_user_info_widget.dart';
 export './widgets/app/app_user_profile_image.dart';
+export './widgets/app/app_user_pl_status_icon.dart';
 export './widgets/app/app_wrapper.dart';
 export './widgets/auth/auth_app_bar.dart';
 export './widgets/auth/auth_header.dart';
@@ -91,4 +90,6 @@ export './widgets/content/content_multiple_cached_image.dart';
 export './widgets/content/content_single_cached_image.dart';
 export './widgets/content/content_interaction_buttons.dart';
 export './widgets/content/content_keep_alive_wrapper.dart';
+export './widgets/content/content_expandable_text.dart';
+export './widgets/content/content_creator_info.dart';
 export './widgets/app/app_tab_bar_design.dart';

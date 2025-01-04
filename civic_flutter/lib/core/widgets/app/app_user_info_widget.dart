@@ -2,7 +2,6 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-// import 'package:iconsax/iconsax.dart';
 
 class AppUserInfoWidget extends StatelessWidget {
   const AppUserInfoWidget({
@@ -71,14 +70,9 @@ class AppUserInfoWidget extends StatelessWidget {
                               color: TColors.primary,
                               size: 19,
                             ),
-                      if (userRecord.politicalStatus.index == 0)
-                        const PLStatus(statusText: 'CL'),
-                      if (userRecord.politicalStatus.index == 1)
-                        const PLStatus(statusText: 'FL'),
-                      if (userRecord.politicalStatus.index == 2)
-                        const PLStatus(statusText: 'AL'),
-                      if (userRecord.politicalStatus.index == 3)
-                        const PLStatus(statusText: 'CC'),
+                      AppUserPLStatusIcon(
+                        plStatusIndex: userRecord.politicalStatus.index,
+                      ),
                     ],
                   ),
                   Row(
@@ -118,42 +112,6 @@ class AppUserInfoWidget extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class PLStatus extends StatelessWidget {
-  const PLStatus({
-    super.key,
-    required this.statusText,
-  });
-
-  final String statusText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: TSizes.xs,
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          const Icon(
-            Iconsax.shield,
-            color: TColors.primary,
-            size: 18,
-          ),
-          Text(
-            statusText,
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  color: TColors.primary,
-                  fontSize: 6,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
       ),
     );
   }

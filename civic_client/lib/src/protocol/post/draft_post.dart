@@ -10,7 +10,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../post/post_type_enums.dart' as _i2;
+import '../user/user_record.dart' as _i3;
+import '../general/aws_places.dart' as _i4;
 
 abstract class DraftPost implements _i1.SerializableModel {
   DraftPost._({
@@ -34,10 +36,10 @@ abstract class DraftPost implements _i1.SerializableModel {
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
+    required List<_i3.UserRecord> taggedUsers,
+    required List<_i4.AWSPlaces> locations,
     DateTime? createdAt,
-    required List<_i2.UserRecord> mentions,
+    required List<_i3.UserRecord> mentions,
     required List<String> tags,
   }) = _DraftPostImpl;
 
@@ -52,16 +54,16 @@ abstract class DraftPost implements _i1.SerializableModel {
           .toList(),
       videoPath: jsonSerialization['videoPath'] as String,
       taggedUsers: (jsonSerialization['taggedUsers'] as List)
-          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i3.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List)
-          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i4.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       mentions: (jsonSerialization['mentions'] as List)
-          .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i3.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       tags:
           (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
@@ -80,13 +82,13 @@ abstract class DraftPost implements _i1.SerializableModel {
 
   String videoPath;
 
-  List<_i2.UserRecord> taggedUsers;
+  List<_i3.UserRecord> taggedUsers;
 
-  List<_i2.AWSPlaces> locations;
+  List<_i4.AWSPlaces> locations;
 
   DateTime? createdAt;
 
-  List<_i2.UserRecord> mentions;
+  List<_i3.UserRecord> mentions;
 
   List<String> tags;
 
@@ -97,10 +99,10 @@ abstract class DraftPost implements _i1.SerializableModel {
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.UserRecord>? taggedUsers,
+    List<_i4.AWSPlaces>? locations,
     DateTime? createdAt,
-    List<_i2.UserRecord>? mentions,
+    List<_i3.UserRecord>? mentions,
     List<String>? tags,
   });
   @override
@@ -136,10 +138,10 @@ class _DraftPostImpl extends DraftPost {
     required String text,
     required List<String> imagesPath,
     required String videoPath,
-    required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
+    required List<_i3.UserRecord> taggedUsers,
+    required List<_i4.AWSPlaces> locations,
     DateTime? createdAt,
-    required List<_i2.UserRecord> mentions,
+    required List<_i3.UserRecord> mentions,
     required List<String> tags,
   }) : super._(
           draftId: draftId,
@@ -163,10 +165,10 @@ class _DraftPostImpl extends DraftPost {
     String? text,
     List<String>? imagesPath,
     String? videoPath,
-    List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.UserRecord>? taggedUsers,
+    List<_i4.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
-    List<_i2.UserRecord>? mentions,
+    List<_i3.UserRecord>? mentions,
     List<String>? tags,
   }) {
     return DraftPost(

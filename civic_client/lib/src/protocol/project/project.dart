@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../general/aws_places.dart' as _i3;
 
 abstract class Project implements _i1.SerializableModel {
   Project._({
@@ -64,7 +65,7 @@ abstract class Project implements _i1.SerializableModel {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -110,7 +111,7 @@ abstract class Project implements _i1.SerializableModel {
               .toList(),
       completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
       physicalLocations: (jsonSerialization['physicalLocations'] as List?)
-          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       virtualLocations: (jsonSerialization['virtualLocations'] as List?)
           ?.map((e) => e as String)
@@ -173,7 +174,7 @@ abstract class Project implements _i1.SerializableModel {
 
   double? completionRate;
 
-  List<_i2.AWSPlaces>? physicalLocations;
+  List<_i3.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
 
@@ -211,7 +212,7 @@ abstract class Project implements _i1.SerializableModel {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -289,7 +290,7 @@ class _ProjectImpl extends Project {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -391,7 +392,7 @@ class _ProjectImpl extends Project {
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
       completionRate:
           completionRate is double? ? completionRate : this.completionRate,
-      physicalLocations: physicalLocations is List<_i2.AWSPlaces>?
+      physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
       virtualLocations: virtualLocations is List<String>?

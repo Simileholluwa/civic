@@ -49,6 +49,9 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
             userName: poll.owner!.userInfo!.userName!,
             poll: poll,
           ),
+          const SizedBox(
+            height: TSizes.md,
+          ),
           ...pollState.controllers.asMap().entries.map((entry) {
             final index = entry.key;
             final controller = entry.value;
@@ -67,13 +70,11 @@ class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
               ),
             );
           }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              PollDurationAndAddOptions(
-                poll: poll,
-              ),
-            ],
+          const SizedBox(
+            height: 8,
+          ),
+          PollDurationAndAddOptions(
+            poll: poll,
           ),
         ],
       ),

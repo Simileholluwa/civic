@@ -8,12 +8,10 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
-import '../protocol.dart' as _i3;
+import '../user/political_status_enum.dart' as _i3;
 
 abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
   UserRecord._({
@@ -392,7 +390,7 @@ class UserRecordRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -413,7 +411,7 @@ class UserRecordRepository {
       orderByList: orderByList?.call(UserRecord.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -426,7 +424,7 @@ class UserRecordRepository {
   }) async {
     return session.db.findById<UserRecord>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -438,7 +436,7 @@ class UserRecordRepository {
   }) async {
     return session.db.insert<UserRecord>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -449,7 +447,7 @@ class UserRecordRepository {
   }) async {
     return session.db.insertRow<UserRecord>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -462,7 +460,7 @@ class UserRecordRepository {
     return session.db.update<UserRecord>(
       rows,
       columns: columns?.call(UserRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -475,7 +473,7 @@ class UserRecordRepository {
     return session.db.updateRow<UserRecord>(
       row,
       columns: columns?.call(UserRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -486,7 +484,7 @@ class UserRecordRepository {
   }) async {
     return session.db.delete<UserRecord>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -497,7 +495,7 @@ class UserRecordRepository {
   }) async {
     return session.db.deleteRow<UserRecord>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -508,7 +506,7 @@ class UserRecordRepository {
   }) async {
     return session.db.deleteWhere<UserRecord>(
       where: where(UserRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -521,7 +519,7 @@ class UserRecordRepository {
     return session.db.count<UserRecord>(
       where: where?.call(UserRecord.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -546,7 +544,7 @@ class UserRecordAttachRowRepository {
     await session.db.updateRow<UserRecord>(
       $userRecord,
       columns: [UserRecord.t.userInfoId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

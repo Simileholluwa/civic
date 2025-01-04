@@ -8,11 +8,10 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../general/aws_places.dart' as _i3;
 
 abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
   Project._({
@@ -66,7 +65,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -112,7 +111,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
               .toList(),
       completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
       physicalLocations: (jsonSerialization['physicalLocations'] as List?)
-          ?.map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       virtualLocations: (jsonSerialization['virtualLocations'] as List?)
           ?.map((e) => e as String)
@@ -177,7 +176,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   double? completionRate;
 
-  List<_i2.AWSPlaces>? physicalLocations;
+  List<_i3.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
 
@@ -218,7 +217,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -359,7 +358,7 @@ class _ProjectImpl extends Project {
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     double? completionRate,
-    List<_i2.AWSPlaces>? physicalLocations,
+    List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
     String? projectVideoUrl,
@@ -461,7 +460,7 @@ class _ProjectImpl extends Project {
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
       completionRate:
           completionRate is double? ? completionRate : this.completionRate,
-      physicalLocations: physicalLocations is List<_i2.AWSPlaces>?
+      physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
       virtualLocations: virtualLocations is List<String>?
@@ -753,7 +752,7 @@ class ProjectRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -774,7 +773,7 @@ class ProjectRepository {
       orderByList: orderByList?.call(Project.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -787,7 +786,7 @@ class ProjectRepository {
   }) async {
     return session.db.findById<Project>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -799,7 +798,7 @@ class ProjectRepository {
   }) async {
     return session.db.insert<Project>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -810,7 +809,7 @@ class ProjectRepository {
   }) async {
     return session.db.insertRow<Project>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -823,7 +822,7 @@ class ProjectRepository {
     return session.db.update<Project>(
       rows,
       columns: columns?.call(Project.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -836,7 +835,7 @@ class ProjectRepository {
     return session.db.updateRow<Project>(
       row,
       columns: columns?.call(Project.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -847,7 +846,7 @@ class ProjectRepository {
   }) async {
     return session.db.delete<Project>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -858,7 +857,7 @@ class ProjectRepository {
   }) async {
     return session.db.deleteRow<Project>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -869,7 +868,7 @@ class ProjectRepository {
   }) async {
     return session.db.deleteWhere<Project>(
       where: where(Project.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -882,7 +881,7 @@ class ProjectRepository {
     return session.db.count<Project>(
       where: where?.call(Project.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -907,7 +906,7 @@ class ProjectAttachRowRepository {
     await session.db.updateRow<Project>(
       $project,
       columns: [Project.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

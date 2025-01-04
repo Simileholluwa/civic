@@ -156,7 +156,7 @@ class _GetVideoProviderElement extends AutoDisposeFutureProviderElement<String>
   String get videoUrl => (origin as GetVideoProvider).videoUrl;
 }
 
-String _$postVideoPlayerHash() => r'8ee29eace95415d01cabc2636a74c11923885e27';
+String _$postVideoPlayerHash() => r'0a09868f6b9937d3ebad76848c734a48f3032ce3';
 
 abstract class _$PostVideoPlayer
     extends BuildlessAutoDisposeNotifier<Raw<VideoPlayerController?>> {

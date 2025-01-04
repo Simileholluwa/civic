@@ -1,5 +1,3 @@
-library article;
-
 export './data/datasources/local_datasource/article_local_datasource.dart';
 export './data/datasources/remote_datasourece/article_remote_datasource.dart';
 export './data/repositories/article_repository_impl.dart';

@@ -8,11 +8,9 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../post/posts_hashtags.dart' as _i2;
 
 abstract class Hashtag implements _i1.TableRow, _i1.ProtocolSerialization {
   Hashtag._({
@@ -277,7 +275,7 @@ class HashtagRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -298,7 +296,7 @@ class HashtagRepository {
       orderByList: orderByList?.call(Hashtag.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -311,7 +309,7 @@ class HashtagRepository {
   }) async {
     return session.db.findById<Hashtag>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -323,7 +321,7 @@ class HashtagRepository {
   }) async {
     return session.db.insert<Hashtag>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -334,7 +332,7 @@ class HashtagRepository {
   }) async {
     return session.db.insertRow<Hashtag>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -347,7 +345,7 @@ class HashtagRepository {
     return session.db.update<Hashtag>(
       rows,
       columns: columns?.call(Hashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -360,7 +358,7 @@ class HashtagRepository {
     return session.db.updateRow<Hashtag>(
       row,
       columns: columns?.call(Hashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -371,7 +369,7 @@ class HashtagRepository {
   }) async {
     return session.db.delete<Hashtag>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -382,7 +380,7 @@ class HashtagRepository {
   }) async {
     return session.db.deleteRow<Hashtag>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -393,7 +391,7 @@ class HashtagRepository {
   }) async {
     return session.db.deleteWhere<Hashtag>(
       where: where(Hashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -406,7 +404,7 @@ class HashtagRepository {
     return session.db.count<Hashtag>(
       where: where?.call(Hashtag.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -432,7 +430,7 @@ class HashtagAttachRepository {
     await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -457,7 +455,7 @@ class HashtagAttachRowRepository {
     await session.db.updateRow<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -479,7 +477,7 @@ class HashtagDetachRepository {
     await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -500,7 +498,7 @@ class HashtagDetachRowRepository {
     await session.db.updateRow<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

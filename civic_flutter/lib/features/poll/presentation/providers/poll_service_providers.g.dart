@@ -111,6 +111,22 @@ final getPollProvider = AutoDisposeProvider<GetPollUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetPollRef = AutoDisposeProviderRef<GetPollUseCase>;
+String _$getPollsHash() => r'35455177f95aab2d39dcc2a4f27dd7b39116f003';
+
+/// See also [getPolls].
+@ProviderFor(getPolls)
+final getPollsProvider = AutoDisposeProvider<GetPollsUseCase>.internal(
+  getPolls,
+  name: r'getPollsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getPollsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetPollsRef = AutoDisposeProviderRef<GetPollsUseCase>;
 String _$castVoteHash() => r'1b0ae53924b758797373ef41e9ecbf7cfb422813';
 
 /// See also [castVote].

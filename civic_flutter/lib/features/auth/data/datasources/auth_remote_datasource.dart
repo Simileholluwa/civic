@@ -337,7 +337,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<void> logout() async {
     try {
-      final result = await _sessionManager.signOut();
+      final result = await _sessionManager.signOutDevice();
       if (!result) {
         throw const ServerException(
           message: 'Failed to sign out',

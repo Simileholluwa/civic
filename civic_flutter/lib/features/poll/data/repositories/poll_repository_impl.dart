@@ -119,6 +119,26 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
+  Future<Either<Failure, PollList>> getPolls({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _pollRemoteDatasource.getPolls(
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Either<Failure, List<DraftPoll>> getDraftPolls() {
     try {
       final result = _pollLocalDatasource.retrieveDrafts();

@@ -8,8 +8,6 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
@@ -486,7 +484,7 @@ class UserNinRecordRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -507,7 +505,7 @@ class UserNinRecordRepository {
       orderByList: orderByList?.call(UserNinRecord.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -520,7 +518,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.findById<UserNinRecord>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -532,7 +530,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.insert<UserNinRecord>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -543,7 +541,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.insertRow<UserNinRecord>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -556,7 +554,7 @@ class UserNinRecordRepository {
     return session.db.update<UserNinRecord>(
       rows,
       columns: columns?.call(UserNinRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -569,7 +567,7 @@ class UserNinRecordRepository {
     return session.db.updateRow<UserNinRecord>(
       row,
       columns: columns?.call(UserNinRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -580,7 +578,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.delete<UserNinRecord>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -591,7 +589,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.deleteRow<UserNinRecord>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -602,7 +600,7 @@ class UserNinRecordRepository {
   }) async {
     return session.db.deleteWhere<UserNinRecord>(
       where: where(UserNinRecord.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -615,7 +613,7 @@ class UserNinRecordRepository {
     return session.db.count<UserNinRecord>(
       where: where?.call(UserNinRecord.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -640,7 +638,7 @@ class UserNinRecordAttachRowRepository {
     await session.db.updateRow<UserNinRecord>(
       $userNinRecord,
       columns: [UserNinRecord.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

@@ -1,5 +1,3 @@
-library project;
-
 export './data/datasources/project_remote_datasource.dart';
 export './data/repository/project_repository_impl.dart';
 export './domain/repository/project_repository.dart';

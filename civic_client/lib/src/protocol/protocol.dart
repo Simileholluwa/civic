@@ -8,8 +8,7 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixes
-
+// ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'article/article.dart' as _i2;
 import 'article/article_draft.dart' as _i3;
@@ -22,25 +21,25 @@ import 'poll/draft_poll.dart' as _i9;
 import 'poll/poll.dart' as _i10;
 import 'poll/poll_hashtag.dart' as _i11;
 import 'poll/poll_hashtags.dart' as _i12;
-import 'poll/poll_option.dart' as _i13;
-import 'poll/poll_vote.dart' as _i14;
-import 'post/draft_post.dart' as _i15;
-import 'post/hashtags.dart' as _i16;
-import 'post/post.dart' as _i17;
-import 'post/post_exception.dart' as _i18;
-import 'post/post_list.dart' as _i19;
-import 'post/post_type_enums.dart' as _i20;
-import 'post/posts_hashtags.dart' as _i21;
-import 'project/project.dart' as _i22;
-import 'project/project_likes.dart' as _i23;
-import 'project/project_list.dart' as _i24;
-import 'project/project_status.dart' as _i25;
-import 'user/political_status_enum.dart' as _i26;
-import 'user/user_exception.dart' as _i27;
-import 'user/user_nin_record.dart' as _i28;
-import 'user/user_record.dart' as _i29;
-import 'user/users_list.dart' as _i30;
-import 'protocol.dart' as _i31;
+import 'poll/poll_list.dart' as _i13;
+import 'poll/poll_option.dart' as _i14;
+import 'poll/poll_vote.dart' as _i15;
+import 'post/draft_post.dart' as _i16;
+import 'post/hashtags.dart' as _i17;
+import 'post/post.dart' as _i18;
+import 'post/post_exception.dart' as _i19;
+import 'post/post_list.dart' as _i20;
+import 'post/post_type_enums.dart' as _i21;
+import 'post/posts_hashtags.dart' as _i22;
+import 'project/project.dart' as _i23;
+import 'project/project_likes.dart' as _i24;
+import 'project/project_list.dart' as _i25;
+import 'project/project_status.dart' as _i26;
+import 'user/political_status_enum.dart' as _i27;
+import 'user/user_exception.dart' as _i28;
+import 'user/user_nin_record.dart' as _i29;
+import 'user/user_record.dart' as _i30;
+import 'user/users_list.dart' as _i31;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i32;
 import 'package:civic_client/src/protocol/user/user_record.dart' as _i33;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i34;
@@ -55,6 +54,7 @@ export 'poll/draft_poll.dart';
 export 'poll/poll.dart';
 export 'poll/poll_hashtag.dart';
 export 'poll/poll_hashtags.dart';
+export 'poll/poll_list.dart';
 export 'poll/poll_option.dart';
 export 'poll/poll_vote.dart';
 export 'post/draft_post.dart';
@@ -121,59 +121,62 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i12.PollsHashtags) {
       return _i12.PollsHashtags.fromJson(data) as T;
     }
-    if (t == _i13.PollOption) {
-      return _i13.PollOption.fromJson(data) as T;
+    if (t == _i13.PollList) {
+      return _i13.PollList.fromJson(data) as T;
     }
-    if (t == _i14.PollVote) {
-      return _i14.PollVote.fromJson(data) as T;
+    if (t == _i14.PollOption) {
+      return _i14.PollOption.fromJson(data) as T;
     }
-    if (t == _i15.DraftPost) {
-      return _i15.DraftPost.fromJson(data) as T;
+    if (t == _i15.PollVote) {
+      return _i15.PollVote.fromJson(data) as T;
     }
-    if (t == _i16.Hashtag) {
-      return _i16.Hashtag.fromJson(data) as T;
+    if (t == _i16.DraftPost) {
+      return _i16.DraftPost.fromJson(data) as T;
     }
-    if (t == _i17.Post) {
-      return _i17.Post.fromJson(data) as T;
+    if (t == _i17.Hashtag) {
+      return _i17.Hashtag.fromJson(data) as T;
     }
-    if (t == _i18.PostException) {
-      return _i18.PostException.fromJson(data) as T;
+    if (t == _i18.Post) {
+      return _i18.Post.fromJson(data) as T;
     }
-    if (t == _i19.PostList) {
-      return _i19.PostList.fromJson(data) as T;
+    if (t == _i19.PostException) {
+      return _i19.PostException.fromJson(data) as T;
     }
-    if (t == _i20.PostType) {
-      return _i20.PostType.fromJson(data) as T;
+    if (t == _i20.PostList) {
+      return _i20.PostList.fromJson(data) as T;
     }
-    if (t == _i21.PostsHashtags) {
-      return _i21.PostsHashtags.fromJson(data) as T;
+    if (t == _i21.PostType) {
+      return _i21.PostType.fromJson(data) as T;
     }
-    if (t == _i22.Project) {
-      return _i22.Project.fromJson(data) as T;
+    if (t == _i22.PostsHashtags) {
+      return _i22.PostsHashtags.fromJson(data) as T;
     }
-    if (t == _i23.ProjectLikes) {
-      return _i23.ProjectLikes.fromJson(data) as T;
+    if (t == _i23.Project) {
+      return _i23.Project.fromJson(data) as T;
     }
-    if (t == _i24.ProjectList) {
-      return _i24.ProjectList.fromJson(data) as T;
+    if (t == _i24.ProjectLikes) {
+      return _i24.ProjectLikes.fromJson(data) as T;
     }
-    if (t == _i25.ProjectStatus) {
-      return _i25.ProjectStatus.fromJson(data) as T;
+    if (t == _i25.ProjectList) {
+      return _i25.ProjectList.fromJson(data) as T;
     }
-    if (t == _i26.PoliticalStatus) {
-      return _i26.PoliticalStatus.fromJson(data) as T;
+    if (t == _i26.ProjectStatus) {
+      return _i26.ProjectStatus.fromJson(data) as T;
     }
-    if (t == _i27.UserException) {
-      return _i27.UserException.fromJson(data) as T;
+    if (t == _i27.PoliticalStatus) {
+      return _i27.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i28.UserNinRecord) {
-      return _i28.UserNinRecord.fromJson(data) as T;
+    if (t == _i28.UserException) {
+      return _i28.UserException.fromJson(data) as T;
     }
-    if (t == _i29.UserRecord) {
-      return _i29.UserRecord.fromJson(data) as T;
+    if (t == _i29.UserNinRecord) {
+      return _i29.UserNinRecord.fromJson(data) as T;
     }
-    if (t == _i30.UsersList) {
-      return _i30.UsersList.fromJson(data) as T;
+    if (t == _i30.UserRecord) {
+      return _i30.UserRecord.fromJson(data) as T;
+    }
+    if (t == _i31.UsersList) {
+      return _i31.UsersList.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Article?>()) {
       return (data != null ? _i2.Article.fromJson(data) : null) as T;
@@ -208,115 +211,92 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i12.PollsHashtags?>()) {
       return (data != null ? _i12.PollsHashtags.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i13.PollOption?>()) {
-      return (data != null ? _i13.PollOption.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i13.PollList?>()) {
+      return (data != null ? _i13.PollList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i14.PollVote?>()) {
-      return (data != null ? _i14.PollVote.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i14.PollOption?>()) {
+      return (data != null ? _i14.PollOption.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i15.DraftPost?>()) {
-      return (data != null ? _i15.DraftPost.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i15.PollVote?>()) {
+      return (data != null ? _i15.PollVote.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i16.Hashtag?>()) {
-      return (data != null ? _i16.Hashtag.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i16.DraftPost?>()) {
+      return (data != null ? _i16.DraftPost.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i17.Post?>()) {
-      return (data != null ? _i17.Post.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i17.Hashtag?>()) {
+      return (data != null ? _i17.Hashtag.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i18.PostException?>()) {
-      return (data != null ? _i18.PostException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i18.Post?>()) {
+      return (data != null ? _i18.Post.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i19.PostList?>()) {
-      return (data != null ? _i19.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i19.PostException?>()) {
+      return (data != null ? _i19.PostException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i20.PostType?>()) {
-      return (data != null ? _i20.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i20.PostList?>()) {
+      return (data != null ? _i20.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i21.PostsHashtags?>()) {
-      return (data != null ? _i21.PostsHashtags.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i21.PostType?>()) {
+      return (data != null ? _i21.PostType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i22.Project?>()) {
-      return (data != null ? _i22.Project.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i22.PostsHashtags?>()) {
+      return (data != null ? _i22.PostsHashtags.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i23.ProjectLikes?>()) {
-      return (data != null ? _i23.ProjectLikes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i23.Project?>()) {
+      return (data != null ? _i23.Project.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i24.ProjectList?>()) {
-      return (data != null ? _i24.ProjectList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i24.ProjectLikes?>()) {
+      return (data != null ? _i24.ProjectLikes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i25.ProjectStatus?>()) {
-      return (data != null ? _i25.ProjectStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i25.ProjectList?>()) {
+      return (data != null ? _i25.ProjectList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i26.PoliticalStatus?>()) {
-      return (data != null ? _i26.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i26.ProjectStatus?>()) {
+      return (data != null ? _i26.ProjectStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i27.UserException?>()) {
-      return (data != null ? _i27.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i27.PoliticalStatus?>()) {
+      return (data != null ? _i27.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i28.UserNinRecord?>()) {
-      return (data != null ? _i28.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i28.UserException?>()) {
+      return (data != null ? _i28.UserException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i29.UserRecord?>()) {
-      return (data != null ? _i29.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i29.UserNinRecord?>()) {
+      return (data != null ? _i29.UserNinRecord.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i30.UsersList?>()) {
-      return (data != null ? _i30.UsersList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i30.UserRecord?>()) {
+      return (data != null ? _i30.UserRecord.fromJson(data) : null) as T;
     }
-    if (t == List<_i31.Article>) {
-      return (data as List).map((e) => deserialize<_i31.Article>(e)).toList()
+    if (t == _i1.getType<_i31.UsersList?>()) {
+      return (data != null ? _i31.UsersList.fromJson(data) : null) as T;
+    }
+    if (t == List<_i2.Article>) {
+      return (data as List).map((e) => deserialize<_i2.Article>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i31.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i31.UserRecord>(e)).toList()
+    if (t == List<_i30.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i30.UserRecord>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i31.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i31.AWSPlaces>(e)).toList()
+    if (t == List<_i5.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
           as dynamic;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i31.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i30.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i30.UserRecord>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.AWSPlaces>?>()) {
+    if (t == _i1.getType<List<_i5.AWSPlaces>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.AWSPlaces>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i30.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.UserRecord>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i31.PollsHashtags>?>()) {
-      return (data != null
-          ? (data as List)
-              .map((e) => deserialize<_i31.PollsHashtags>(e))
-              .toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i31.PollsHashtags>?>()) {
-      return (data != null
-          ? (data as List)
-              .map((e) => deserialize<_i31.PollsHashtags>(e))
-              .toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i31.PostsHashtags>?>()) {
-      return (data != null
-          ? (data as List)
-              .map((e) => deserialize<_i31.PostsHashtags>(e))
-              .toList()
+          ? (data as List).map((e) => deserialize<_i30.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -324,19 +304,29 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i12.PollsHashtags>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.UserRecord>(e)).toList()
+          ? (data as List)
+              .map((e) => deserialize<_i12.PollsHashtags>(e))
+              .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.AWSPlaces>?>()) {
+    if (t == _i1.getType<List<_i12.PollsHashtags>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.AWSPlaces>(e)).toList()
+          ? (data as List)
+              .map((e) => deserialize<_i12.PollsHashtags>(e))
+              .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.UserRecord>?>()) {
+    if (t == List<_i10.Poll>) {
+      return (data as List).map((e) => deserialize<_i10.Poll>(e)).toList()
+          as dynamic;
+    }
+    if (t == _i1.getType<List<_i22.PostsHashtags>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.UserRecord>(e)).toList()
+          ? (data as List)
+              .map((e) => deserialize<_i22.PostsHashtags>(e))
+              .toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -344,15 +334,35 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.PostsHashtags>?>()) {
+    if (t == _i1.getType<List<_i30.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i30.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i5.AWSPlaces>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i30.UserRecord>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i30.UserRecord>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i22.PostsHashtags>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i31.PostsHashtags>(e))
+              .map((e) => deserialize<_i22.PostsHashtags>(e))
               .toList()
           : null) as dynamic;
     }
-    if (t == List<_i31.Post>) {
-      return (data as List).map((e) => deserialize<_i31.Post>(e)).toList()
+    if (t == List<_i18.Post>) {
+      return (data as List).map((e) => deserialize<_i18.Post>(e)).toList()
           as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -365,9 +375,9 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i31.AWSPlaces>?>()) {
+    if (t == _i1.getType<List<_i5.AWSPlaces>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i31.AWSPlaces>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -380,8 +390,8 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i31.Project>) {
-      return (data as List).map((e) => deserialize<_i31.Project>(e)).toList()
+    if (t == List<_i23.Project>) {
+      return (data as List).map((e) => deserialize<_i23.Project>(e)).toList()
           as dynamic;
     }
     if (t == List<int>) {
@@ -446,58 +456,61 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i12.PollsHashtags) {
       return 'PollsHashtags';
     }
-    if (data is _i13.PollOption) {
+    if (data is _i13.PollList) {
+      return 'PollList';
+    }
+    if (data is _i14.PollOption) {
       return 'PollOption';
     }
-    if (data is _i14.PollVote) {
+    if (data is _i15.PollVote) {
       return 'PollVote';
     }
-    if (data is _i15.DraftPost) {
+    if (data is _i16.DraftPost) {
       return 'DraftPost';
     }
-    if (data is _i16.Hashtag) {
+    if (data is _i17.Hashtag) {
       return 'Hashtag';
     }
-    if (data is _i17.Post) {
+    if (data is _i18.Post) {
       return 'Post';
     }
-    if (data is _i18.PostException) {
+    if (data is _i19.PostException) {
       return 'PostException';
     }
-    if (data is _i19.PostList) {
+    if (data is _i20.PostList) {
       return 'PostList';
     }
-    if (data is _i20.PostType) {
+    if (data is _i21.PostType) {
       return 'PostType';
     }
-    if (data is _i21.PostsHashtags) {
+    if (data is _i22.PostsHashtags) {
       return 'PostsHashtags';
     }
-    if (data is _i22.Project) {
+    if (data is _i23.Project) {
       return 'Project';
     }
-    if (data is _i23.ProjectLikes) {
+    if (data is _i24.ProjectLikes) {
       return 'ProjectLikes';
     }
-    if (data is _i24.ProjectList) {
+    if (data is _i25.ProjectList) {
       return 'ProjectList';
     }
-    if (data is _i25.ProjectStatus) {
+    if (data is _i26.ProjectStatus) {
       return 'ProjectStatus';
     }
-    if (data is _i26.PoliticalStatus) {
+    if (data is _i27.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i27.UserException) {
+    if (data is _i28.UserException) {
       return 'UserException';
     }
-    if (data is _i28.UserNinRecord) {
+    if (data is _i29.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i29.UserRecord) {
+    if (data is _i30.UserRecord) {
       return 'UserRecord';
     }
-    if (data is _i30.UsersList) {
+    if (data is _i31.UsersList) {
       return 'UsersList';
     }
     className = _i34.Protocol().getClassNameForObject(data);
@@ -509,95 +522,102 @@ class Protocol extends _i1.SerializationManager {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'] == 'Article') {
+    var dataClassName = data['className'];
+    if (dataClassName is! String) {
+      return super.deserializeByClassName(data);
+    }
+    if (dataClassName == 'Article') {
       return deserialize<_i2.Article>(data['data']);
     }
-    if (data['className'] == 'ArticleDraft') {
+    if (dataClassName == 'ArticleDraft') {
       return deserialize<_i3.ArticleDraft>(data['data']);
     }
-    if (data['className'] == 'ArticleList') {
+    if (dataClassName == 'ArticleList') {
       return deserialize<_i4.ArticleList>(data['data']);
     }
-    if (data['className'] == 'AWSPlaces') {
+    if (dataClassName == 'AWSPlaces') {
       return deserialize<_i5.AWSPlaces>(data['data']);
     }
-    if (data['className'] == 'Example') {
+    if (dataClassName == 'Example') {
       return deserialize<_i6.Example>(data['data']);
     }
-    if (data['className'] == 'LinkMetadata') {
+    if (dataClassName == 'LinkMetadata') {
       return deserialize<_i7.LinkMetadata>(data['data']);
     }
-    if (data['className'] == 'LocationException') {
+    if (dataClassName == 'LocationException') {
       return deserialize<_i8.LocationException>(data['data']);
     }
-    if (data['className'] == 'DraftPoll') {
+    if (dataClassName == 'DraftPoll') {
       return deserialize<_i9.DraftPoll>(data['data']);
     }
-    if (data['className'] == 'Poll') {
+    if (dataClassName == 'Poll') {
       return deserialize<_i10.Poll>(data['data']);
     }
-    if (data['className'] == 'PollHashtag') {
+    if (dataClassName == 'PollHashtag') {
       return deserialize<_i11.PollHashtag>(data['data']);
     }
-    if (data['className'] == 'PollsHashtags') {
+    if (dataClassName == 'PollsHashtags') {
       return deserialize<_i12.PollsHashtags>(data['data']);
     }
-    if (data['className'] == 'PollOption') {
-      return deserialize<_i13.PollOption>(data['data']);
+    if (dataClassName == 'PollList') {
+      return deserialize<_i13.PollList>(data['data']);
     }
-    if (data['className'] == 'PollVote') {
-      return deserialize<_i14.PollVote>(data['data']);
+    if (dataClassName == 'PollOption') {
+      return deserialize<_i14.PollOption>(data['data']);
     }
-    if (data['className'] == 'DraftPost') {
-      return deserialize<_i15.DraftPost>(data['data']);
+    if (dataClassName == 'PollVote') {
+      return deserialize<_i15.PollVote>(data['data']);
     }
-    if (data['className'] == 'Hashtag') {
-      return deserialize<_i16.Hashtag>(data['data']);
+    if (dataClassName == 'DraftPost') {
+      return deserialize<_i16.DraftPost>(data['data']);
     }
-    if (data['className'] == 'Post') {
-      return deserialize<_i17.Post>(data['data']);
+    if (dataClassName == 'Hashtag') {
+      return deserialize<_i17.Hashtag>(data['data']);
     }
-    if (data['className'] == 'PostException') {
-      return deserialize<_i18.PostException>(data['data']);
+    if (dataClassName == 'Post') {
+      return deserialize<_i18.Post>(data['data']);
     }
-    if (data['className'] == 'PostList') {
-      return deserialize<_i19.PostList>(data['data']);
+    if (dataClassName == 'PostException') {
+      return deserialize<_i19.PostException>(data['data']);
     }
-    if (data['className'] == 'PostType') {
-      return deserialize<_i20.PostType>(data['data']);
+    if (dataClassName == 'PostList') {
+      return deserialize<_i20.PostList>(data['data']);
     }
-    if (data['className'] == 'PostsHashtags') {
-      return deserialize<_i21.PostsHashtags>(data['data']);
+    if (dataClassName == 'PostType') {
+      return deserialize<_i21.PostType>(data['data']);
     }
-    if (data['className'] == 'Project') {
-      return deserialize<_i22.Project>(data['data']);
+    if (dataClassName == 'PostsHashtags') {
+      return deserialize<_i22.PostsHashtags>(data['data']);
     }
-    if (data['className'] == 'ProjectLikes') {
-      return deserialize<_i23.ProjectLikes>(data['data']);
+    if (dataClassName == 'Project') {
+      return deserialize<_i23.Project>(data['data']);
     }
-    if (data['className'] == 'ProjectList') {
-      return deserialize<_i24.ProjectList>(data['data']);
+    if (dataClassName == 'ProjectLikes') {
+      return deserialize<_i24.ProjectLikes>(data['data']);
     }
-    if (data['className'] == 'ProjectStatus') {
-      return deserialize<_i25.ProjectStatus>(data['data']);
+    if (dataClassName == 'ProjectList') {
+      return deserialize<_i25.ProjectList>(data['data']);
     }
-    if (data['className'] == 'PoliticalStatus') {
-      return deserialize<_i26.PoliticalStatus>(data['data']);
+    if (dataClassName == 'ProjectStatus') {
+      return deserialize<_i26.ProjectStatus>(data['data']);
     }
-    if (data['className'] == 'UserException') {
-      return deserialize<_i27.UserException>(data['data']);
+    if (dataClassName == 'PoliticalStatus') {
+      return deserialize<_i27.PoliticalStatus>(data['data']);
     }
-    if (data['className'] == 'UserNinRecord') {
-      return deserialize<_i28.UserNinRecord>(data['data']);
+    if (dataClassName == 'UserException') {
+      return deserialize<_i28.UserException>(data['data']);
     }
-    if (data['className'] == 'UserRecord') {
-      return deserialize<_i29.UserRecord>(data['data']);
+    if (dataClassName == 'UserNinRecord') {
+      return deserialize<_i29.UserNinRecord>(data['data']);
     }
-    if (data['className'] == 'UsersList') {
-      return deserialize<_i30.UsersList>(data['data']);
+    if (dataClassName == 'UserRecord') {
+      return deserialize<_i30.UserRecord>(data['data']);
     }
-    if (data['className'].startsWith('serverpod_auth.')) {
-      data['className'] = data['className'].substring(15);
+    if (dataClassName == 'UsersList') {
+      return deserialize<_i31.UsersList>(data['data']);
+    }
+    if (dataClassName.startsWith('serverpod_auth.')) {
+      data['className'] = dataClassName.substring(15);
       return _i34.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);

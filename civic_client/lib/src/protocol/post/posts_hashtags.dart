@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../post/post.dart' as _i2;
+import '../post/hashtags.dart' as _i3;
 
 abstract class PostsHashtags implements _i1.SerializableModel {
   PostsHashtags._({
@@ -26,7 +27,7 @@ abstract class PostsHashtags implements _i1.SerializableModel {
     required int postId,
     _i2.Post? post,
     required int hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   }) = _PostsHashtagsImpl;
 
   factory PostsHashtags.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -40,7 +41,7 @@ abstract class PostsHashtags implements _i1.SerializableModel {
       hashtagId: jsonSerialization['hashtagId'] as int,
       hashtag: jsonSerialization['hashtag'] == null
           ? null
-          : _i2.Hashtag.fromJson(
+          : _i3.Hashtag.fromJson(
               (jsonSerialization['hashtag'] as Map<String, dynamic>)),
     );
   }
@@ -56,14 +57,14 @@ abstract class PostsHashtags implements _i1.SerializableModel {
 
   int hashtagId;
 
-  _i2.Hashtag? hashtag;
+  _i3.Hashtag? hashtag;
 
   PostsHashtags copyWith({
     int? id,
     int? postId,
     _i2.Post? post,
     int? hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -90,7 +91,7 @@ class _PostsHashtagsImpl extends PostsHashtags {
     required int postId,
     _i2.Post? post,
     required int hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   }) : super._(
           id: id,
           postId: postId,
@@ -112,7 +113,7 @@ class _PostsHashtagsImpl extends PostsHashtags {
       postId: postId ?? this.postId,
       post: post is _i2.Post? ? post : this.post?.copyWith(),
       hashtagId: hashtagId ?? this.hashtagId,
-      hashtag: hashtag is _i2.Hashtag? ? hashtag : this.hashtag?.copyWith(),
+      hashtag: hashtag is _i3.Hashtag? ? hashtag : this.hashtag?.copyWith(),
     );
   }
 }

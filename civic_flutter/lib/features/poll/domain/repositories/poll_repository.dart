@@ -13,6 +13,10 @@ abstract class PollRepository {
   Future<Either<Failure, Poll?>> getPoll({
     required int id,
   });
+  Future<Either<Failure, PollList>> getPolls({
+    required int page,
+    required int limit,
+  });
   Future<Either<Failure, void>> castVote({
     required int pollId,
     required int optionId,

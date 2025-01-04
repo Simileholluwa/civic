@@ -10,11 +10,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../article/article.dart' as _i2;
+import '../poll/poll.dart' as _i2;
 
-abstract class ArticleList
+abstract class PollList
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
-  ArticleList._({
+  PollList._({
     required this.results,
     required this.count,
     required this.page,
@@ -23,19 +23,19 @@ abstract class ArticleList
     required this.canLoadMore,
   });
 
-  factory ArticleList({
-    required List<_i2.Article> results,
+  factory PollList({
+    required List<_i2.Poll> results,
     required int count,
     required int page,
     required int numPages,
     required int limit,
     required bool canLoadMore,
-  }) = _ArticleListImpl;
+  }) = _PollListImpl;
 
-  factory ArticleList.fromJson(Map<String, dynamic> jsonSerialization) {
-    return ArticleList(
+  factory PollList.fromJson(Map<String, dynamic> jsonSerialization) {
+    return PollList(
       results: (jsonSerialization['results'] as List)
-          .map((e) => _i2.Article.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i2.Poll.fromJson((e as Map<String, dynamic>)))
           .toList(),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
@@ -45,7 +45,7 @@ abstract class ArticleList
     );
   }
 
-  List<_i2.Article> results;
+  List<_i2.Poll> results;
 
   int count;
 
@@ -57,8 +57,8 @@ abstract class ArticleList
 
   bool canLoadMore;
 
-  ArticleList copyWith({
-    List<_i2.Article>? results,
+  PollList copyWith({
+    List<_i2.Poll>? results,
     int? count,
     int? page,
     int? numPages,
@@ -95,9 +95,9 @@ abstract class ArticleList
   }
 }
 
-class _ArticleListImpl extends ArticleList {
-  _ArticleListImpl({
-    required List<_i2.Article> results,
+class _PollListImpl extends PollList {
+  _PollListImpl({
+    required List<_i2.Poll> results,
     required int count,
     required int page,
     required int numPages,
@@ -113,15 +113,15 @@ class _ArticleListImpl extends ArticleList {
         );
 
   @override
-  ArticleList copyWith({
-    List<_i2.Article>? results,
+  PollList copyWith({
+    List<_i2.Poll>? results,
     int? count,
     int? page,
     int? numPages,
     int? limit,
     bool? canLoadMore,
   }) {
-    return ArticleList(
+    return PollList(
       results: results ?? this.results.map((e0) => e0.copyWith()).toList(),
       count: count ?? this.count,
       page: page ?? this.page,

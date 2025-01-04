@@ -8,11 +8,10 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../post/post.dart' as _i2;
+import '../post/hashtags.dart' as _i3;
 
 abstract class PostsHashtags
     implements _i1.TableRow, _i1.ProtocolSerialization {
@@ -29,7 +28,7 @@ abstract class PostsHashtags
     required int postId,
     _i2.Post? post,
     required int hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   }) = _PostsHashtagsImpl;
 
   factory PostsHashtags.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,7 +42,7 @@ abstract class PostsHashtags
       hashtagId: jsonSerialization['hashtagId'] as int,
       hashtag: jsonSerialization['hashtag'] == null
           ? null
-          : _i2.Hashtag.fromJson(
+          : _i3.Hashtag.fromJson(
               (jsonSerialization['hashtag'] as Map<String, dynamic>)),
     );
   }
@@ -61,7 +60,7 @@ abstract class PostsHashtags
 
   int hashtagId;
 
-  _i2.Hashtag? hashtag;
+  _i3.Hashtag? hashtag;
 
   @override
   _i1.Table get table => t;
@@ -71,7 +70,7 @@ abstract class PostsHashtags
     int? postId,
     _i2.Post? post,
     int? hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -97,7 +96,7 @@ abstract class PostsHashtags
 
   static PostsHashtagsInclude include({
     _i2.PostInclude? post,
-    _i2.HashtagInclude? hashtag,
+    _i3.HashtagInclude? hashtag,
   }) {
     return PostsHashtagsInclude._(
       post: post,
@@ -139,7 +138,7 @@ class _PostsHashtagsImpl extends PostsHashtags {
     required int postId,
     _i2.Post? post,
     required int hashtagId,
-    _i2.Hashtag? hashtag,
+    _i3.Hashtag? hashtag,
   }) : super._(
           id: id,
           postId: postId,
@@ -161,7 +160,7 @@ class _PostsHashtagsImpl extends PostsHashtags {
       postId: postId ?? this.postId,
       post: post is _i2.Post? ? post : this.post?.copyWith(),
       hashtagId: hashtagId ?? this.hashtagId,
-      hashtag: hashtag is _i2.Hashtag? ? hashtag : this.hashtag?.copyWith(),
+      hashtag: hashtag is _i3.Hashtag? ? hashtag : this.hashtag?.copyWith(),
     );
   }
 }
@@ -184,7 +183,7 @@ class PostsHashtagsTable extends _i1.Table {
 
   late final _i1.ColumnInt hashtagId;
 
-  _i2.HashtagTable? _hashtag;
+  _i3.HashtagTable? _hashtag;
 
   _i2.PostTable get post {
     if (_post != null) return _post!;
@@ -199,15 +198,15 @@ class PostsHashtagsTable extends _i1.Table {
     return _post!;
   }
 
-  _i2.HashtagTable get hashtag {
+  _i3.HashtagTable get hashtag {
     if (_hashtag != null) return _hashtag!;
     _hashtag = _i1.createRelationTable(
       relationFieldName: 'hashtag',
       field: PostsHashtags.t.hashtagId,
-      foreignField: _i2.Hashtag.t.id,
+      foreignField: _i3.Hashtag.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.HashtagTable(tableRelation: foreignTableRelation),
+          _i3.HashtagTable(tableRelation: foreignTableRelation),
     );
     return _hashtag!;
   }
@@ -234,7 +233,7 @@ class PostsHashtagsTable extends _i1.Table {
 class PostsHashtagsInclude extends _i1.IncludeObject {
   PostsHashtagsInclude._({
     _i2.PostInclude? post,
-    _i2.HashtagInclude? hashtag,
+    _i3.HashtagInclude? hashtag,
   }) {
     _post = post;
     _hashtag = hashtag;
@@ -242,7 +241,7 @@ class PostsHashtagsInclude extends _i1.IncludeObject {
 
   _i2.PostInclude? _post;
 
-  _i2.HashtagInclude? _hashtag;
+  _i3.HashtagInclude? _hashtag;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -297,7 +296,7 @@ class PostsHashtagsRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -318,7 +317,7 @@ class PostsHashtagsRepository {
       orderByList: orderByList?.call(PostsHashtags.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -331,7 +330,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.findById<PostsHashtags>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -343,7 +342,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.insert<PostsHashtags>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -354,7 +353,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.insertRow<PostsHashtags>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -367,7 +366,7 @@ class PostsHashtagsRepository {
     return session.db.update<PostsHashtags>(
       rows,
       columns: columns?.call(PostsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -380,7 +379,7 @@ class PostsHashtagsRepository {
     return session.db.updateRow<PostsHashtags>(
       row,
       columns: columns?.call(PostsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -391,7 +390,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.delete<PostsHashtags>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -402,7 +401,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.deleteRow<PostsHashtags>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -413,7 +412,7 @@ class PostsHashtagsRepository {
   }) async {
     return session.db.deleteWhere<PostsHashtags>(
       where: where(PostsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -426,7 +425,7 @@ class PostsHashtagsRepository {
     return session.db.count<PostsHashtags>(
       where: where?.call(PostsHashtags.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -451,14 +450,14 @@ class PostsHashtagsAttachRowRepository {
     await session.db.updateRow<PostsHashtags>(
       $postsHashtags,
       columns: [PostsHashtags.t.postId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
   Future<void> hashtag(
     _i1.Session session,
     PostsHashtags postsHashtags,
-    _i2.Hashtag hashtag, {
+    _i3.Hashtag hashtag, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.id == null) {
@@ -472,7 +471,7 @@ class PostsHashtagsAttachRowRepository {
     await session.db.updateRow<PostsHashtags>(
       $postsHashtags,
       columns: [PostsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

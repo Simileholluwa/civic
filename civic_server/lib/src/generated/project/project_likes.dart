@@ -8,11 +8,10 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../project/project.dart' as _i2;
+import '../user/user_record.dart' as _i3;
 
 abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
   ProjectLikes._({
@@ -29,7 +28,7 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
     required int projectId,
     _i2.Project? project,
     required int ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) = _ProjectLikesImpl;
 
@@ -44,7 +43,7 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
+          : _i3.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
@@ -66,7 +65,7 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int ownerId;
 
-  _i2.UserRecord? owner;
+  _i3.UserRecord? owner;
 
   DateTime? dateCreated;
 
@@ -78,7 +77,7 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
     int? projectId,
     _i2.Project? project,
     int? ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   });
   @override
@@ -107,7 +106,7 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
 
   static ProjectLikesInclude include({
     _i2.ProjectInclude? project,
-    _i2.UserRecordInclude? owner,
+    _i3.UserRecordInclude? owner,
   }) {
     return ProjectLikesInclude._(
       project: project,
@@ -149,7 +148,7 @@ class _ProjectLikesImpl extends ProjectLikes {
     required int projectId,
     _i2.Project? project,
     required int ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
           id: id,
@@ -174,7 +173,7 @@ class _ProjectLikesImpl extends ProjectLikes {
       projectId: projectId ?? this.projectId,
       project: project is _i2.Project? ? project : this.project?.copyWith(),
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
+      owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
     );
   }
@@ -202,7 +201,7 @@ class ProjectLikesTable extends _i1.Table {
 
   late final _i1.ColumnInt ownerId;
 
-  _i2.UserRecordTable? _owner;
+  _i3.UserRecordTable? _owner;
 
   late final _i1.ColumnDateTime dateCreated;
 
@@ -219,15 +218,15 @@ class ProjectLikesTable extends _i1.Table {
     return _project!;
   }
 
-  _i2.UserRecordTable get owner {
+  _i3.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
       relationFieldName: 'owner',
       field: ProjectLikes.t.ownerId,
-      foreignField: _i2.UserRecord.t.id,
+      foreignField: _i3.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.UserRecordTable(tableRelation: foreignTableRelation),
+          _i3.UserRecordTable(tableRelation: foreignTableRelation),
     );
     return _owner!;
   }
@@ -255,7 +254,7 @@ class ProjectLikesTable extends _i1.Table {
 class ProjectLikesInclude extends _i1.IncludeObject {
   ProjectLikesInclude._({
     _i2.ProjectInclude? project,
-    _i2.UserRecordInclude? owner,
+    _i3.UserRecordInclude? owner,
   }) {
     _project = project;
     _owner = owner;
@@ -263,7 +262,7 @@ class ProjectLikesInclude extends _i1.IncludeObject {
 
   _i2.ProjectInclude? _project;
 
-  _i2.UserRecordInclude? _owner;
+  _i3.UserRecordInclude? _owner;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -318,7 +317,7 @@ class ProjectLikesRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -339,7 +338,7 @@ class ProjectLikesRepository {
       orderByList: orderByList?.call(ProjectLikes.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -352,7 +351,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.findById<ProjectLikes>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -364,7 +363,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.insert<ProjectLikes>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -375,7 +374,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.insertRow<ProjectLikes>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -388,7 +387,7 @@ class ProjectLikesRepository {
     return session.db.update<ProjectLikes>(
       rows,
       columns: columns?.call(ProjectLikes.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -401,7 +400,7 @@ class ProjectLikesRepository {
     return session.db.updateRow<ProjectLikes>(
       row,
       columns: columns?.call(ProjectLikes.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -412,7 +411,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.delete<ProjectLikes>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -423,7 +422,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.deleteRow<ProjectLikes>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -434,7 +433,7 @@ class ProjectLikesRepository {
   }) async {
     return session.db.deleteWhere<ProjectLikes>(
       where: where(ProjectLikes.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -447,7 +446,7 @@ class ProjectLikesRepository {
     return session.db.count<ProjectLikes>(
       where: where?.call(ProjectLikes.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -472,14 +471,14 @@ class ProjectLikesAttachRowRepository {
     await session.db.updateRow<ProjectLikes>(
       $projectLikes,
       columns: [ProjectLikes.t.projectId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
   Future<void> owner(
     _i1.Session session,
     ProjectLikes projectLikes,
-    _i2.UserRecord owner, {
+    _i3.UserRecord owner, {
     _i1.Transaction? transaction,
   }) async {
     if (projectLikes.id == null) {
@@ -493,7 +492,7 @@ class ProjectLikesAttachRowRepository {
     await session.db.updateRow<ProjectLikes>(
       $projectLikes,
       columns: [ProjectLikes.t.ownerId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

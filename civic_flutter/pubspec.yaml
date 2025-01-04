@@ -24,14 +24,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: 2.1.5
+  serverpod_flutter: 2.3.0
   civic_client:
     path: ../civic_client
-  serverpod_auth_shared_flutter: 2.1.5
-  serverpod_auth_email_flutter: 2.1.5
+  serverpod_auth_shared_flutter: 2.3.0
+  serverpod_auth_email_flutter: 2.3.0
   cupertino_icons: ^1.0.5
   fpdart: ^1.0.0
-  flex_color_scheme: ^7.3.1
+  flex_color_scheme: ^8.1.0
   responsive_framework: ^0.2.0 
   shared_preferences: 
   loading_animation_widget:
@@ -54,7 +54,7 @@ dependencies:
   url_launcher:
   pinput:
   font_awesome_flutter:
-  serverpod_auth_client: 2.1.5
+  serverpod_auth_client: 2.3.0
   flutter_portal:
   go_router:
   flutter_riverpod:
@@ -76,10 +76,10 @@ dependencies:
   flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
-  flutter_lints: '>=3.0.0 <5.0.0'
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^6.0.0
+  very_good_analysis: ^7.0.0
   build_runner:
   riverpod_generator:
   custom_lint:

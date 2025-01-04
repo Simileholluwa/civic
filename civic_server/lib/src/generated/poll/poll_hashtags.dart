@@ -8,11 +8,10 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../poll/poll.dart' as _i2;
+import '../poll/poll_hashtag.dart' as _i3;
 
 abstract class PollsHashtags
     implements _i1.TableRow, _i1.ProtocolSerialization {
@@ -29,7 +28,7 @@ abstract class PollsHashtags
     required int pollId,
     _i2.Poll? poll,
     required int hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   }) = _PollsHashtagsImpl;
 
   factory PollsHashtags.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -43,7 +42,7 @@ abstract class PollsHashtags
       hashtagId: jsonSerialization['hashtagId'] as int,
       hashtag: jsonSerialization['hashtag'] == null
           ? null
-          : _i2.PollHashtag.fromJson(
+          : _i3.PollHashtag.fromJson(
               (jsonSerialization['hashtag'] as Map<String, dynamic>)),
     );
   }
@@ -61,7 +60,7 @@ abstract class PollsHashtags
 
   int hashtagId;
 
-  _i2.PollHashtag? hashtag;
+  _i3.PollHashtag? hashtag;
 
   @override
   _i1.Table get table => t;
@@ -71,7 +70,7 @@ abstract class PollsHashtags
     int? pollId,
     _i2.Poll? poll,
     int? hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -97,7 +96,7 @@ abstract class PollsHashtags
 
   static PollsHashtagsInclude include({
     _i2.PollInclude? poll,
-    _i2.PollHashtagInclude? hashtag,
+    _i3.PollHashtagInclude? hashtag,
   }) {
     return PollsHashtagsInclude._(
       poll: poll,
@@ -139,7 +138,7 @@ class _PollsHashtagsImpl extends PollsHashtags {
     required int pollId,
     _i2.Poll? poll,
     required int hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   }) : super._(
           id: id,
           pollId: pollId,
@@ -161,7 +160,7 @@ class _PollsHashtagsImpl extends PollsHashtags {
       pollId: pollId ?? this.pollId,
       poll: poll is _i2.Poll? ? poll : this.poll?.copyWith(),
       hashtagId: hashtagId ?? this.hashtagId,
-      hashtag: hashtag is _i2.PollHashtag? ? hashtag : this.hashtag?.copyWith(),
+      hashtag: hashtag is _i3.PollHashtag? ? hashtag : this.hashtag?.copyWith(),
     );
   }
 }
@@ -185,7 +184,7 @@ class PollsHashtagsTable extends _i1.Table {
 
   late final _i1.ColumnInt hashtagId;
 
-  _i2.PollHashtagTable? _hashtag;
+  _i3.PollHashtagTable? _hashtag;
 
   _i2.PollTable get poll {
     if (_poll != null) return _poll!;
@@ -200,15 +199,15 @@ class PollsHashtagsTable extends _i1.Table {
     return _poll!;
   }
 
-  _i2.PollHashtagTable get hashtag {
+  _i3.PollHashtagTable get hashtag {
     if (_hashtag != null) return _hashtag!;
     _hashtag = _i1.createRelationTable(
       relationFieldName: 'hashtag',
       field: PollsHashtags.t.hashtagId,
-      foreignField: _i2.PollHashtag.t.id,
+      foreignField: _i3.PollHashtag.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.PollHashtagTable(tableRelation: foreignTableRelation),
+          _i3.PollHashtagTable(tableRelation: foreignTableRelation),
     );
     return _hashtag!;
   }
@@ -235,7 +234,7 @@ class PollsHashtagsTable extends _i1.Table {
 class PollsHashtagsInclude extends _i1.IncludeObject {
   PollsHashtagsInclude._({
     _i2.PollInclude? poll,
-    _i2.PollHashtagInclude? hashtag,
+    _i3.PollHashtagInclude? hashtag,
   }) {
     _poll = poll;
     _hashtag = hashtag;
@@ -243,7 +242,7 @@ class PollsHashtagsInclude extends _i1.IncludeObject {
 
   _i2.PollInclude? _poll;
 
-  _i2.PollHashtagInclude? _hashtag;
+  _i3.PollHashtagInclude? _hashtag;
 
   @override
   Map<String, _i1.Include?> get includes => {
@@ -298,7 +297,7 @@ class PollsHashtagsRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -319,7 +318,7 @@ class PollsHashtagsRepository {
       orderByList: orderByList?.call(PollsHashtags.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -332,7 +331,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.findById<PollsHashtags>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -344,7 +343,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.insert<PollsHashtags>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -355,7 +354,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.insertRow<PollsHashtags>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -368,7 +367,7 @@ class PollsHashtagsRepository {
     return session.db.update<PollsHashtags>(
       rows,
       columns: columns?.call(PollsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -381,7 +380,7 @@ class PollsHashtagsRepository {
     return session.db.updateRow<PollsHashtags>(
       row,
       columns: columns?.call(PollsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -392,7 +391,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.delete<PollsHashtags>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -403,7 +402,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.deleteRow<PollsHashtags>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -414,7 +413,7 @@ class PollsHashtagsRepository {
   }) async {
     return session.db.deleteWhere<PollsHashtags>(
       where: where(PollsHashtags.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -427,7 +426,7 @@ class PollsHashtagsRepository {
     return session.db.count<PollsHashtags>(
       where: where?.call(PollsHashtags.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -452,14 +451,14 @@ class PollsHashtagsAttachRowRepository {
     await session.db.updateRow<PollsHashtags>(
       $pollsHashtags,
       columns: [PollsHashtags.t.pollId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
   Future<void> hashtag(
     _i1.Session session,
     PollsHashtags pollsHashtags,
-    _i2.PollHashtag hashtag, {
+    _i3.PollHashtag hashtag, {
     _i1.Transaction? transaction,
   }) async {
     if (pollsHashtags.id == null) {
@@ -473,7 +472,7 @@ class PollsHashtagsAttachRowRepository {
     await session.db.updateRow<PollsHashtags>(
       $pollsHashtags,
       columns: [PollsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

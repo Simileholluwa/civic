@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../poll/poll.dart' as _i2;
+import '../poll/poll_hashtag.dart' as _i3;
 
 abstract class PollsHashtags implements _i1.SerializableModel {
   PollsHashtags._({
@@ -26,7 +27,7 @@ abstract class PollsHashtags implements _i1.SerializableModel {
     required int pollId,
     _i2.Poll? poll,
     required int hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   }) = _PollsHashtagsImpl;
 
   factory PollsHashtags.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -40,7 +41,7 @@ abstract class PollsHashtags implements _i1.SerializableModel {
       hashtagId: jsonSerialization['hashtagId'] as int,
       hashtag: jsonSerialization['hashtag'] == null
           ? null
-          : _i2.PollHashtag.fromJson(
+          : _i3.PollHashtag.fromJson(
               (jsonSerialization['hashtag'] as Map<String, dynamic>)),
     );
   }
@@ -56,14 +57,14 @@ abstract class PollsHashtags implements _i1.SerializableModel {
 
   int hashtagId;
 
-  _i2.PollHashtag? hashtag;
+  _i3.PollHashtag? hashtag;
 
   PollsHashtags copyWith({
     int? id,
     int? pollId,
     _i2.Poll? poll,
     int? hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -90,7 +91,7 @@ class _PollsHashtagsImpl extends PollsHashtags {
     required int pollId,
     _i2.Poll? poll,
     required int hashtagId,
-    _i2.PollHashtag? hashtag,
+    _i3.PollHashtag? hashtag,
   }) : super._(
           id: id,
           pollId: pollId,
@@ -112,7 +113,7 @@ class _PollsHashtagsImpl extends PollsHashtags {
       pollId: pollId ?? this.pollId,
       poll: poll is _i2.Poll? ? poll : this.poll?.copyWith(),
       hashtagId: hashtagId ?? this.hashtagId,
-      hashtag: hashtag is _i2.PollHashtag? ? hashtag : this.hashtag?.copyWith(),
+      hashtag: hashtag is _i3.PollHashtag? ? hashtag : this.hashtag?.copyWith(),
     );
   }
 }

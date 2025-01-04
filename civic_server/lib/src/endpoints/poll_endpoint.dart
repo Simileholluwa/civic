@@ -1,6 +1,7 @@
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class PollEndpoint extends Endpoint {
   Future<Poll?> savePoll(
@@ -185,5 +186,32 @@ class PollEndpoint extends Endpoint {
         poll,
       );
     }
+  }
+
+  Future<PollList> getPolls(
+    Session session, {
+    int limit = 10,
+    int page = 1,
+  }) async {
+    final count = await Poll.db.count(session);
+    final results = await Poll.db.find(
+      session,
+      limit: limit,
+      offset: (page * limit) - limit,
+      include: Poll.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+
+    return PollList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
   }
 }

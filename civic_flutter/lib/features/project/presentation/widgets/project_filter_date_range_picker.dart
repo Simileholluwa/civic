@@ -73,11 +73,14 @@ class DateTimeWidgetTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        datePickerTheme: const DatePickerThemeData(
+        datePickerTheme: DatePickerThemeData(
           surfaceTintColor: Colors.transparent,
           elevation: 4,
           headerBackgroundColor: TColors.primary,
           headerForegroundColor: TColors.textWhite,
+          backgroundColor: THelperFunctions.isDarkMode(context)
+              ? TColors.dark
+              : TColors.light,
         ),
         dialogTheme: const DialogTheme(
           elevation: 10,

@@ -35,8 +35,8 @@ class PollQuestionTextFormField extends ConsumerWidget {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
-            hintMaxLines: 2,
             hintText: '$userName, ask a question. Tap here to start typing.',
+            hintMaxLines: null,
             counter: const SizedBox(),
             contentPadding: const EdgeInsets.fromLTRB(
               TSizes.md + 2,

@@ -53,6 +53,13 @@ GetPollUseCase getPoll(Ref ref) {
 }
 
 @riverpod
+GetPollsUseCase getPolls(Ref ref) {
+  return GetPollsUseCase(
+    pollRepository: ref.read(pollRepositoryImplProvider),
+  );
+}
+
+@riverpod
 CastVoteUseCase castVote(Ref ref) {
   return CastVoteUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),

@@ -1,19 +1,18 @@
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/providers/mention_hashtag_link_provider.dart';
-import 'package:civic_flutter/core/providers/scheduled_datetime_provider.dart';
-import 'package:civic_flutter/core/providers/tag_selections_provider.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateContentButton extends ConsumerWidget {
-  const CreateContentButton({super.key, required this.index,});
-  final int index;
+  const CreateContentButton({super.key,});
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tabController = ref.watch(feedScreenTabProvider);
+    final isVisible = ref.watch(appScrollVisibilityProvider);
     
     void invalidateProviders() {
       ref.invalidate(postScheduledDateTimeProvider);
@@ -23,7 +22,7 @@ class CreateContentButton extends ConsumerWidget {
     }
 
     void navigate() {
-      switch (index) {
+      switch (tabController.index) {
         case 0:
           invalidateProviders();
 
@@ -61,19 +60,26 @@ class CreateContentButton extends ConsumerWidget {
       }
     }
 
-    return InkWell(
-      onTap: navigate,
-      child: Container(
-        height: 70,
-        width: 70,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: TColors.primary,
-        ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 35,
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 500),
+      opacity: !isVisible ? 0 : 1,
+      child: Visibility(
+        visible: isVisible,
+        child: InkWell(
+          onTap: navigate,
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: TColors.primary,
+            ),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 35,
+            ),
+          ),
         ),
       ),
     );

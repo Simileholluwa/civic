@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../project/project.dart' as _i2;
+import '../user/user_record.dart' as _i3;
 
 abstract class ProjectLikes implements _i1.SerializableModel {
   ProjectLikes._({
@@ -27,7 +28,7 @@ abstract class ProjectLikes implements _i1.SerializableModel {
     required int projectId,
     _i2.Project? project,
     required int ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) = _ProjectLikesImpl;
 
@@ -42,7 +43,7 @@ abstract class ProjectLikes implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
+          : _i3.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
@@ -62,7 +63,7 @@ abstract class ProjectLikes implements _i1.SerializableModel {
 
   int ownerId;
 
-  _i2.UserRecord? owner;
+  _i3.UserRecord? owner;
 
   DateTime? dateCreated;
 
@@ -71,7 +72,7 @@ abstract class ProjectLikes implements _i1.SerializableModel {
     int? projectId,
     _i2.Project? project,
     int? ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   });
   @override
@@ -100,7 +101,7 @@ class _ProjectLikesImpl extends ProjectLikes {
     required int projectId,
     _i2.Project? project,
     required int ownerId,
-    _i2.UserRecord? owner,
+    _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
           id: id,
@@ -125,7 +126,7 @@ class _ProjectLikesImpl extends ProjectLikes {
       projectId: projectId ?? this.projectId,
       project: project is _i2.Project? ? project : this.project?.copyWith(),
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
+      owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
     );
   }

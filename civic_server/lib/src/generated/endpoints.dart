@@ -427,6 +427,30 @@ class Endpoints extends _i1.EndpointDispatch {
             params['optionId'],
           ),
         ),
+        'getPolls': _i1.MethodConnector(
+          name: 'getPolls',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).getPolls(
+            session,
+            limit: params['limit'],
+            page: params['page'],
+          ),
+        ),
       },
     );
     connectors['post'] = _i1.EndpointConnector(

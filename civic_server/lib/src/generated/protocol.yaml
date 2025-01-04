@@ -18,6 +18,7 @@ poll:
   - schedulePoll:
   - getPoll:
   - castVote:
+  - getPolls:
 post:
   - savePost:
   - schedulePost:

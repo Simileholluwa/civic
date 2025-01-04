@@ -8,11 +8,9 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../poll/poll_hashtags.dart' as _i2;
 
 abstract class PollHashtag implements _i1.TableRow, _i1.ProtocolSerialization {
   PollHashtag._({
@@ -277,7 +275,7 @@ class PollHashtagRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -298,7 +296,7 @@ class PollHashtagRepository {
       orderByList: orderByList?.call(PollHashtag.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -311,7 +309,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.findById<PollHashtag>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -323,7 +321,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.insert<PollHashtag>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -334,7 +332,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.insertRow<PollHashtag>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -347,7 +345,7 @@ class PollHashtagRepository {
     return session.db.update<PollHashtag>(
       rows,
       columns: columns?.call(PollHashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -360,7 +358,7 @@ class PollHashtagRepository {
     return session.db.updateRow<PollHashtag>(
       row,
       columns: columns?.call(PollHashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -371,7 +369,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.delete<PollHashtag>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -382,7 +380,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.deleteRow<PollHashtag>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -393,7 +391,7 @@ class PollHashtagRepository {
   }) async {
     return session.db.deleteWhere<PollHashtag>(
       where: where(PollHashtag.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -406,7 +404,7 @@ class PollHashtagRepository {
     return session.db.count<PollHashtag>(
       where: where?.call(PollHashtag.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -433,7 +431,7 @@ class PollHashtagAttachRepository {
     await session.db.update<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -458,7 +456,7 @@ class PollHashtagAttachRowRepository {
     await session.db.updateRow<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -480,7 +478,7 @@ class PollHashtagDetachRepository {
     await session.db.update<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -501,7 +499,7 @@ class PollHashtagDetachRowRepository {
     await session.db.updateRow<_i2.PollsHashtags>(
       $pollsHashtags,
       columns: [_i2.PollsHashtags.t.hashtagId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

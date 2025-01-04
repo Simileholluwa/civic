@@ -8,11 +8,9 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../poll/poll.dart' as _i2;
 
 abstract class PollVote implements _i1.TableRow, _i1.ProtocolSerialization {
   PollVote._({
@@ -248,7 +246,7 @@ class PollVoteRepository {
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -269,7 +267,7 @@ class PollVoteRepository {
       orderByList: orderByList?.call(PollVote.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -282,7 +280,7 @@ class PollVoteRepository {
   }) async {
     return session.db.findById<PollVote>(
       id,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
       include: include,
     );
   }
@@ -294,7 +292,7 @@ class PollVoteRepository {
   }) async {
     return session.db.insert<PollVote>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -305,7 +303,7 @@ class PollVoteRepository {
   }) async {
     return session.db.insertRow<PollVote>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -318,7 +316,7 @@ class PollVoteRepository {
     return session.db.update<PollVote>(
       rows,
       columns: columns?.call(PollVote.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -331,7 +329,7 @@ class PollVoteRepository {
     return session.db.updateRow<PollVote>(
       row,
       columns: columns?.call(PollVote.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -342,7 +340,7 @@ class PollVoteRepository {
   }) async {
     return session.db.delete<PollVote>(
       rows,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -353,7 +351,7 @@ class PollVoteRepository {
   }) async {
     return session.db.deleteRow<PollVote>(
       row,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -364,7 +362,7 @@ class PollVoteRepository {
   }) async {
     return session.db.deleteWhere<PollVote>(
       where: where(PollVote.t),
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 
@@ -377,7 +375,7 @@ class PollVoteRepository {
     return session.db.count<PollVote>(
       where: where?.call(PollVote.t),
       limit: limit,
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }
@@ -402,7 +400,7 @@ class PollVoteAttachRowRepository {
     await session.db.updateRow<PollVote>(
       $pollVote,
       columns: [PollVote.t.pollId],
-      transaction: transaction ?? session.transaction,
+      transaction: transaction,
     );
   }
 }

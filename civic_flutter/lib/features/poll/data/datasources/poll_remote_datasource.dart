@@ -18,6 +18,10 @@ abstract class PollRemoteDatasource {
     required int pollId,
     required int optionId,
   });
+  Future<PollList> getPolls({
+    required int page,
+    required int limit,
+  });
 }
 
 class PollRemoteDatasourceImpl implements PollRemoteDatasource {
@@ -149,4 +153,33 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
     }
   }
   
+  @override
+  Future<PollList> getPolls({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = _client.poll.getPolls(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
 }

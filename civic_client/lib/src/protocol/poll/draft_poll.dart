@@ -10,7 +10,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../protocol.dart' as _i2;
+import '../user/user_record.dart' as _i2;
+import '../general/aws_places.dart' as _i3;
+import '../poll/poll_option.dart' as _i4;
 
 abstract class DraftPoll implements _i1.SerializableModel {
   DraftPoll._({
@@ -31,11 +33,11 @@ abstract class DraftPoll implements _i1.SerializableModel {
     int? ownerId,
     required String question,
     required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
+    required List<_i3.AWSPlaces> locations,
     DateTime? createdAt,
     required List<_i2.UserRecord> mentions,
     int? pollDuration,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     required List<String> tags,
   }) = _DraftPollImpl;
 
@@ -48,7 +50,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
           .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
       locations: (jsonSerialization['locations'] as List)
-          .map((e) => _i2.AWSPlaces.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -59,7 +61,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
       pollDuration: jsonSerialization['pollDuration'] as int?,
       options: jsonSerialization['options'] == null
           ? null
-          : _i2.PollOption.fromJson(
+          : _i4.PollOption.fromJson(
               (jsonSerialization['options'] as Map<String, dynamic>)),
       tags:
           (jsonSerialization['tags'] as List).map((e) => e as String).toList(),
@@ -74,7 +76,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
 
   List<_i2.UserRecord> taggedUsers;
 
-  List<_i2.AWSPlaces> locations;
+  List<_i3.AWSPlaces> locations;
 
   DateTime? createdAt;
 
@@ -82,7 +84,7 @@ abstract class DraftPoll implements _i1.SerializableModel {
 
   int? pollDuration;
 
-  _i2.PollOption? options;
+  _i4.PollOption? options;
 
   List<String> tags;
 
@@ -91,11 +93,11 @@ abstract class DraftPoll implements _i1.SerializableModel {
     int? ownerId,
     String? question,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.AWSPlaces>? locations,
     DateTime? createdAt,
     List<_i2.UserRecord>? mentions,
     int? pollDuration,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     List<String>? tags,
   });
   @override
@@ -128,11 +130,11 @@ class _DraftPollImpl extends DraftPoll {
     int? ownerId,
     required String question,
     required List<_i2.UserRecord> taggedUsers,
-    required List<_i2.AWSPlaces> locations,
+    required List<_i3.AWSPlaces> locations,
     DateTime? createdAt,
     required List<_i2.UserRecord> mentions,
     int? pollDuration,
-    _i2.PollOption? options,
+    _i4.PollOption? options,
     required List<String> tags,
   }) : super._(
           draftId: draftId,
@@ -153,7 +155,7 @@ class _DraftPollImpl extends DraftPoll {
     Object? ownerId = _Undefined,
     String? question,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i2.AWSPlaces>? locations,
+    List<_i3.AWSPlaces>? locations,
     Object? createdAt = _Undefined,
     List<_i2.UserRecord>? mentions,
     Object? pollDuration = _Undefined,
@@ -171,7 +173,7 @@ class _DraftPollImpl extends DraftPoll {
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       mentions: mentions ?? this.mentions.map((e0) => e0.copyWith()).toList(),
       pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
-      options: options is _i2.PollOption? ? options : this.options?.copyWith(),
+      options: options is _i4.PollOption? ? options : this.options?.copyWith(),
       tags: tags ?? this.tags.map((e0) => e0).toList(),
     );
   }

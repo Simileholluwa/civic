@@ -22,17 +22,12 @@ class PollOptionsTextField extends ConsumerWidget {
     final pollState = ref.watch(pollsOptionsProvider(poll));
     final pollNotifier = ref.read(pollsOptionsProvider(poll).notifier);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(6, 8, 4, 8),
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
         maxLength: 80,
         decoration: InputDecoration(
           hintText: 'Option ${index + 1}',
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
           suffix: Padding(
             padding: const EdgeInsets.only(
               left: TSizes.sm + 4,
@@ -42,7 +37,7 @@ class PollOptionsTextField extends ConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 4,
+                    top: 0,
                   ),
                   child: Text(
                     '${80 - controller.text.length}',
@@ -73,16 +68,6 @@ class PollOptionsTextField extends ConsumerWidget {
             ),
           ),
           counter: const SizedBox(),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: TColors.primary,
-            ),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
         ),
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontSize: 17,

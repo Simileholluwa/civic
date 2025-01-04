@@ -6,11 +6,7 @@ import 'package:civic_flutter/features/project/presentation/helpers/project_help
 import 'package:flutter_quill/flutter_quill.dart';
 
 class ProjectCardState {
-  final String photoUrl;
-  final String credibilityScore;
-  final String? fullName;
-  final String userName;
-  final String bio;
+  
   final String timeAgo;
   final String numberOfViews;
   final List<String> imagesUrl;
@@ -22,14 +18,9 @@ class ProjectCardState {
   final String duration;
   final String numberOfLikes;
   final String numberOfComments;
-  final String displayName;
   final bool hasLiked;
+  final UserRecord creator;
   ProjectCardState({
-    required this.photoUrl,
-    required this.credibilityScore,
-    required this.fullName,
-    required this.userName,
-    required this.bio,
     required this.timeAgo,
     required this.numberOfViews,
     required this.imagesUrl,
@@ -41,16 +32,11 @@ class ProjectCardState {
     required this.duration,
     required this.numberOfLikes,
     required this.numberOfComments,
-    required this.displayName,
+    required this.creator,
     this.hasLiked = false,
   });
 
   ProjectCardState copyWith({
-    String? photoUrl,
-    String? credibilityScore,
-    String? fullName,
-    String? userName,
-    String? bio,
     String? timeAgo,
     String? numberOfViews,
     List<String>? imagesUrl,
@@ -62,15 +48,10 @@ class ProjectCardState {
     String? duration,
     String? numberOfLikes,
     String? numberOfComments,
-    String? displayName,
     bool? hasLiked,
+    UserRecord? creator,
   }) {
     return ProjectCardState(
-      photoUrl: photoUrl ?? this.photoUrl,
-      credibilityScore: credibilityScore ?? this.credibilityScore,
-      fullName: fullName ?? this.fullName,
-      userName: userName ?? this.userName,
-      bio: bio ?? this.bio,
       timeAgo: timeAgo ?? this.timeAgo,
       numberOfViews: numberOfViews ?? this.numberOfViews,
       imagesUrl: imagesUrl ?? this.imagesUrl,
@@ -82,23 +63,19 @@ class ProjectCardState {
       duration: duration ?? this.duration,
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
       numberOfComments: numberOfComments ?? this.numberOfComments,
-      displayName: displayName ?? this.displayName,
       hasLiked: hasLiked ?? this.hasLiked,
+      creator: creator ?? this.creator,
     );
   }
 
   @override
   String toString() {
-    return 'ProjectCardState(photoUrl: $photoUrl, credibilityScore: $credibilityScore, fullName: $fullName, userName: $userName, bio: $bio, timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments)';
+    return 'ProjectCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments)';
   }
 
   factory ProjectCardState.populate(Project project) {
     return ProjectCardState(
-      photoUrl: project.owner!.userInfo!.imageUrl!,
-      credibilityScore: project.owner!.credibilityScore.toString(),
-      fullName: project.owner!.userInfo!.fullName,
-      userName: project.owner!.userInfo!.userName!,
-      bio: project.owner!.bio,
+      creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(
         project.dateCreated!,
       ),
@@ -123,8 +100,6 @@ class ProjectCardState {
       ),
       numberOfLikes: project.likesCount.toString(),
       numberOfComments: project.commentsCount.toString(),
-      displayName: project.owner!.userInfo!.fullName ??
-          project.owner!.userInfo!.userName!,
     );
   }
 }
