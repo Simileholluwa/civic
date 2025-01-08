@@ -17,7 +17,7 @@ final feedFilteerVsyncProvider = Provider<TickerProvider>(
 
 final feedScreenTabProvider = Provider<TabController>(
   (ref) => TabController(
-    length: 4,
+    length: 3,
     vsync: ref.watch(feedVsyncProvider),
   ),
 );

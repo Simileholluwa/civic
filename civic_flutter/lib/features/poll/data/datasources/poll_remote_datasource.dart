@@ -16,7 +16,7 @@ abstract class PollRemoteDatasource {
   });
   Future<void> castVote({
     required int pollId,
-    required int optionId,
+    required String option,
   });
   Future<PollList> getPolls({
     required int page,
@@ -32,7 +32,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
   @override
   Future<void> castVote({
     required int pollId,
-    required int optionId,
+    required String option,
   }) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
@@ -42,7 +42,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
         );
       }
       final result = await _client.poll.castVote(
-        pollId, optionId,
+        pollId, option,
       );
       return result;
     } on TimeoutException catch (_) {

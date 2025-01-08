@@ -1,5 +1,5 @@
 class: PollOption
 fields:
     option: List<String>
-    votes: int
+    votes: List<int>
     voters: List<UserRecord>

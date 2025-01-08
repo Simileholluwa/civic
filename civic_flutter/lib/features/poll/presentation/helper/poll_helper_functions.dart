@@ -169,7 +169,7 @@ class PollHelperFunctions {
       mentions: draftPoll.mentions,
       tags: draftPoll.tags,
       options: PollOption(
-        votes: 0,
+        votes: List<int>.filled(draftPoll.options!.votes.length, 0),
         voters: [],
         option: draftPoll.options!.option,
       ),
@@ -181,7 +181,7 @@ class PollHelperFunctions {
       draftId: DateTime.now().millisecondsSinceEpoch,
       options: PollOption(
         option: poll.options!.option,
-        votes: 0,
+        votes: List<int>.filled(poll.options!.votes.length, 0),
         voters: [],
       ),
       question: poll.question ?? '',
@@ -210,7 +210,8 @@ class PollHelperFunctions {
       tags: pollState.tags,
       options: PollOption(
         option: pollState.optionText,
-        votes: poll.options?.votes ?? 0,
+        votes: poll.options?.votes ??
+            List<int>.filled(poll.options!.votes.length, 0),
         voters: poll.options?.voters ?? [],
       ),
       pollDuration: pollState.duration,

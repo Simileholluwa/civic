@@ -311,6 +311,11 @@ class Protocol extends _i1.SerializationManager {
               .toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i12.PollsHashtags>?>()) {
       return (data != null
           ? (data as List)
@@ -321,6 +326,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<_i10.Poll>) {
       return (data as List).map((e) => deserialize<_i10.Poll>(e)).toList()
           as dynamic;
+    }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
     if (t == _i1.getType<List<_i22.PostsHashtags>?>()) {
       return (data != null
@@ -393,9 +401,6 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<_i23.Project>) {
       return (data as List).map((e) => deserialize<_i23.Project>(e)).toList()
           as dynamic;
-    }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()

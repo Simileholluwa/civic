@@ -103,7 +103,7 @@ class THelperFunctions {
       placeHolder: DefaultTextBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontSize: 17,
-              color: Theme.of(context).textTheme.bodySmall!.color!,
+              color: Theme.of(context).hintColor,
             ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
@@ -461,19 +461,19 @@ class THelperFunctions {
     final difference = now.difference(dateTime);
 
     if (difference.inSeconds < 60) {
-      return '${difference.inSeconds} seconds ago';
+      return '${difference.inSeconds}s';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours}h';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays}d';
     } else if (difference.inDays < 30) {
-      return '${(difference.inDays / 7).floor()} weeks ago';
+      return '${(difference.inDays / 7).floor()}w';
     } else if (difference.inDays < 365) {
-      return '${(difference.inDays / 30).floor()} months ago';
+      return '${(difference.inDays / 30).floor()}mo';
     } else {
-      return '${(difference.inDays / 365).floor()} years ago';
+      return '${(difference.inDays / 365).floor()}yr';
     }
   }
  

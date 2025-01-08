@@ -61,19 +61,19 @@ class _PoliticalStatusOptionsState
                           ? Border(
                               top: BorderSide(
                                 color: isSelected
-                                    ? TColors.primary.withAlpha(30)
+                                    ? Theme.of(context).highlightColor
                                     : Theme.of(context).dividerColor,
                               ),
                             )
                           : Border(
                               top: BorderSide(
                                 color: isSelected
-                                    ? TColors.primary.withAlpha(30)
+                                    ? Theme.of(context).highlightColor
                                     : Theme.of(context).dividerColor,
                               ),
                               bottom: BorderSide(
                                 color: isSelected
-                                    ? TColors.primary.withAlpha(30)
+                                    ? Theme.of(context).highlightColor
                                     : Theme.of(context).dividerColor,
                               ),
                             ),
@@ -97,7 +97,7 @@ class _PoliticalStatusOptionsState
                             )
                           : BorderRadius.zero,
                   color: isSelected
-                      ? TColors.primary.withAlpha(30)
+                      ? Theme.of(context).highlightColor
                       : Colors.transparent,
                 ),
                 child: ListTile(
@@ -106,17 +106,6 @@ class _PoliticalStatusOptionsState
                       _currentPoliticalStatus = status.politicalStatus;
                     });
                   },
-                  leading: SizedBox(
-                    height: 24,
-                    width: 18,
-                    child: Radio<PoliticalStatus>(
-                      value: _currentPoliticalStatus,
-                      groupValue: PoliticalStatus.values[index],
-                      onChanged: (value) {
-                        PoliticalStatus.values[index] = value!;
-                      },
-                    ),
-                  ),
                   title: Text(
                     status.title,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(

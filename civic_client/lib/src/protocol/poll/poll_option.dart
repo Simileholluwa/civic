@@ -21,7 +21,7 @@ abstract class PollOption implements _i1.SerializableModel {
 
   factory PollOption({
     required List<String> option,
-    required int votes,
+    required List<int> votes,
     required List<_i2.UserRecord> voters,
   }) = _PollOptionImpl;
 
@@ -30,7 +30,7 @@ abstract class PollOption implements _i1.SerializableModel {
       option: (jsonSerialization['option'] as List)
           .map((e) => e as String)
           .toList(),
-      votes: jsonSerialization['votes'] as int,
+      votes: (jsonSerialization['votes'] as List).map((e) => e as int).toList(),
       voters: (jsonSerialization['voters'] as List)
           .map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -39,20 +39,20 @@ abstract class PollOption implements _i1.SerializableModel {
 
   List<String> option;
 
-  int votes;
+  List<int> votes;
 
   List<_i2.UserRecord> voters;
 
   PollOption copyWith({
     List<String>? option,
-    int? votes,
+    List<int>? votes,
     List<_i2.UserRecord>? voters,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       'option': option.toJson(),
-      'votes': votes,
+      'votes': votes.toJson(),
       'voters': voters.toJson(valueToJson: (v) => v.toJson()),
     };
   }
@@ -66,7 +66,7 @@ abstract class PollOption implements _i1.SerializableModel {
 class _PollOptionImpl extends PollOption {
   _PollOptionImpl({
     required List<String> option,
-    required int votes,
+    required List<int> votes,
     required List<_i2.UserRecord> voters,
   }) : super._(
           option: option,
@@ -77,12 +77,12 @@ class _PollOptionImpl extends PollOption {
   @override
   PollOption copyWith({
     List<String>? option,
-    int? votes,
+    List<int>? votes,
     List<_i2.UserRecord>? voters,
   }) {
     return PollOption(
       option: option ?? this.option.map((e0) => e0).toList(),
-      votes: votes ?? this.votes,
+      votes: votes ?? this.votes.map((e0) => e0).toList(),
       voters: voters ?? this.voters.map((e0) => e0.copyWith()).toList(),
     );
   }

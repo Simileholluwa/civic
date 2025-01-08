@@ -1,10 +1,9 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
-import 'package:civic_flutter/features/poll/presentation/pages/polls_screen.dart';
-import 'package:civic_flutter/features/post/presentation/pages/posts_screen.dart';
 import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,7 +18,7 @@ class FeedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = ref.watch(feedScreenTabProvider);
-    final isDark = THelperFunctions.isDarkMode(context);
+    final isVisible = ref.watch(appScrollVisibilityProvider);
     if (sendPost != null) {
       Future.delayed(
         Duration.zero,
@@ -28,7 +27,8 @@ class FeedScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: ContentAppBar(
+        isVisible: isVisible,
         title: Text(
           'Feed',
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
@@ -63,56 +63,34 @@ class FeedScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 5),
         ],
-        toolbarHeight: 65,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
+          preferredSize: const Size.fromHeight(50),
           child: Container(
-            margin: const EdgeInsets.only(
-              top: 8,
-            ),
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-            ),
-            child: TabBar(
-              controller: tabController,
-              tabAlignment: TabAlignment.start,
-              isScrollable: true,
-              labelColor: isDark ? TColors.textWhite : TColors.dark,
-              unselectedLabelColor:
-                  isDark ? TColors.darkerGrey : TColors.darkGrey,
-              
-              unselectedLabelStyle:
-                  Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+            decoration: !isVisible
+                ? null
+                : BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Theme.of(context).dividerColor,
                       ),
-              labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    ),
                   ),
-              indicatorColor: isDark ? TColors.textWhite : TColors.dark,
-              indicatorWeight: 4,
-              tabs: const [
-                Tab(
-                  text: 'POSTS',
-                ),
-                Tab(
-                  text: 'POLLS',
-                ),
-                Tab(
-                  text: 'ARTICLES',
-                ),
-                Tab(
-                  text: 'VIDEOS',
+            margin: EdgeInsets.only(top: !isVisible ? 1 : 0),
+            child: AppTabBarDesign(
+              tabController: tabController,
+              tabs: [
+                ...['POSTS', 'POLLS', 'ARTICLES'].map(
+                  (filter) {
+                    return Tab(
+                      text: filter,
+                    );
+                  },
                 ),
               ],
             ),
           ),
         ),
+        bottomHeight: 52,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: const CreateContentButton(),
@@ -121,7 +99,6 @@ class FeedScreen extends ConsumerWidget {
         children: [
           const PostsScreen(),
           const PollsScreen(),
-          Container(),
           Container(),
         ],
       ),

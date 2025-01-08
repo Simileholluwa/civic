@@ -19,7 +19,7 @@ abstract class PollRepository {
   });
   Future<Either<Failure, void>> castVote({
     required int pollId,
-    required int optionId,
+    required String option,
   });
   Future<Either<Failure, List<DraftPoll>>> deleteDraftsPoll();
   Future<Either<Failure, void>> deleteDraftPoll({

@@ -6,8 +6,8 @@ class ContentExpandableText extends StatelessWidget {
   const ContentExpandableText({
     super.key,
     required this.text,
-    required this.hasVideo,
-    required this.hasImage,
+    this.hasVideo = false,
+    this.hasImage = false,
   });
 
   final String text;
@@ -22,34 +22,28 @@ class ContentExpandableText extends StatelessWidget {
       collapseText: 'see less',
       mentionStyle: Theme.of(context)
           .textTheme
-          .bodyMedium!
+          .labelMedium!
           .copyWith(
-            fontSize: 17,
             color: TColors.primary,
             fontWeight: FontWeight.bold,
           ),
       toggleTextStyle: Theme.of(context)
           .textTheme
-          .bodyMedium!
+          .labelMedium!
           .copyWith(
-            fontSize: 17,
-            color: Theme.of(context).textTheme.labelMedium!.color,
+            color: Theme.of(context).hintColor,
           ),
       hashtagStyle: Theme.of(context)
           .textTheme
-          .bodyMedium!
+          .labelMedium!
           .copyWith(
-            fontSize: 17,
             color: TColors.primary,
             fontWeight: FontWeight.bold,
           ),
       toggleTextColor: TColors.primary,
       style: Theme.of(context)
           .textTheme
-          .bodyMedium!
-          .copyWith(
-            fontSize: 17,
-          ),
+          .labelMedium!,
       maxLines: hasVideo || hasImage ? 3 : 6,
     );
   }

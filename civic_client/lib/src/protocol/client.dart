@@ -193,14 +193,14 @@ class EndpointPoll extends _i1.EndpointRef {
 
   _i2.Future<void> castVote(
     int pollId,
-    int optionId,
+    String option,
   ) =>
       caller.callServerEndpoint<void>(
         'poll',
         'castVote',
         {
           'pollId': pollId,
-          'optionId': optionId,
+          'option': option,
         },
       );
 
@@ -214,6 +214,19 @@ class EndpointPoll extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
+        },
+      );
+
+  _i2.Future<bool> hasVoted(
+    int pollId,
+    int userId,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'poll',
+        'hasVoted',
+        {
+          'pollId': pollId,
+          'userId': userId,
         },
       );
 }

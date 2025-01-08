@@ -18,9 +18,7 @@ class ContentMultipleCachedImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           TSizes.md,
         ),
-        color: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+        color: Theme.of(context).cardColor,
         border: Border.all(
           color: Theme.of(context).dividerColor,
         ),

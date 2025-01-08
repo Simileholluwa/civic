@@ -8,7 +8,7 @@ class AppPasswordField extends StatelessWidget {
     required this.textController,
     required this.validator,
     this.prefixIcon = Iconsax.password_check,
-    this.textInputType = TextInputType.text,
+    this.textInputType = TextInputType.visiblePassword,
     this.textInputAction = TextInputAction.done,
     this.iconSize = 24,
     this.hintText = 'Enter a strong password',
@@ -46,7 +46,7 @@ class AppPasswordField extends StatelessWidget {
                   ref.watch(showPasswordProvider.notifier).setValue(true);
                 }
               },
-              icon: ref.watch(showPasswordProvider) == true
+              icon: ref.watch(showPasswordProvider) == false
                   ? const Icon(
                       Icons.visibility,
                     )
@@ -61,7 +61,7 @@ class AppPasswordField extends StatelessWidget {
               ),
           errorMaxLines: 2,
         ),
-        obscureText: ref.watch(showPasswordProvider),
+        obscureText: !ref.watch(showPasswordProvider),
         textInputAction: textInputAction,
         keyboardType: textInputType,
       );

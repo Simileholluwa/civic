@@ -25,10 +25,7 @@ class ProjectFundingPageView extends ConsumerWidget {
         children: [
           Text(
             'Share details on how much this project will cost and how it will be funded.',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 17,
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           Row(
@@ -54,9 +51,6 @@ class ProjectFundingPageView extends ConsumerWidget {
                   textController: projectCreationSate.projectCostController,
                   prefixIcon: Iconsax.calendar5,
                   hintText: "Enter the project's cost",
-                  hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).textTheme.bodySmall!.color!,
-                      ),
                   validator: (value) => TValidator.validateEmptyText(
                     'Project cost',
                     value,
@@ -93,10 +87,6 @@ class ProjectFundingPageView extends ConsumerWidget {
             textController: projectCreationSate.fundingNoteController,
             showPrefixIcon: false,
             hintText: 'Optional note on funding and or cost...',
-            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
-            style: Theme.of(context).textTheme.bodyMedium,
             validator: (value) => null,
             textInputType: TextInputType.text,
             showUpperText: true,

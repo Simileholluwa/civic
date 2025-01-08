@@ -60,6 +60,7 @@ class AppTextField extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge!.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).hintColor,
                 ),
           )
         else
@@ -90,12 +91,14 @@ class AppTextField extends StatelessWidget {
             errorStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                   color: Theme.of(context).colorScheme.error,
                 ),
-            hintStyle: hintStyle,
+            hintStyle: hintStyle ?? Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).hintColor,
+                ),
             errorMaxLines: 2,
             contentPadding: EdgeInsets.fromLTRB( showPrefixIcon ? 0 : 16, 16, 16, 16),
             focusedBorder: focusedBorder,
           ),
-          style: style,
+          style: style ?? Theme.of(context).textTheme.bodyMedium,
           
           textInputAction: textInputAction,
           keyboardType: textInputType,

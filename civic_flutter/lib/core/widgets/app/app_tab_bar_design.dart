@@ -13,26 +13,23 @@ class AppTabBarDesign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return TabBar(
       controller: tabController,
       tabAlignment: TabAlignment.start,
       isScrollable: true,
-      labelColor: isDark ? TColors.textWhite : TColors.dark,
-      unselectedLabelColor: isDark ? TColors.darkerGrey : TColors.darkGrey,
       padding: const EdgeInsets.only(
-        left: TSizes.xs - 1,
+        left: TSizes.xs - 2,
         right: TSizes.xs,
       ),
       unselectedLabelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
             fontSize: 14,
-            fontWeight: FontWeight.bold,
+            color: Theme.of(context).dividerColor,
           ),
+      dividerColor: Theme.of(context).dividerColor,
       labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
-      indicatorColor: isDark ? TColors.textWhite : TColors.dark,
       indicatorWeight: 4,
       tabs: tabs,
     );

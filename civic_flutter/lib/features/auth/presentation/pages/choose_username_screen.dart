@@ -33,7 +33,7 @@ class UsernameScreen extends StatelessWidget {
               const AuthHeader(
                 authTitle: 'Choose a username',
                 authSubTitle:
-                    'Enter a username that uniquely identifies you on civic.',
+                    'Enter a username that uniquely identifies you.',
               ),
               UsernameForm(
                 email: email,

@@ -28,65 +28,50 @@ class ProjectsScreen extends ConsumerWidget {
         ref.watch(projectScreenWidgetsProvider.notifier);
     final tabController = ref.watch(projectScreenTabProvider);
     final isVisible = ref.watch(appScrollVisibilityProvider);
-    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(65),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
+      appBar: ContentAppBar(
+        isVisible: isVisible,
+        title: Text(
+            'Projects',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Iconsax.search_normal,
               ),
             ),
-          ),
-          child: AppBar(
-            title: Text(
-              'Projects',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
+            IconButton(
+              onPressed: () {
+                projectWidgetsNotifier.toggleFilter();
+              },
+              icon: Icon(
+                projectWidgetsState.isActiveFilter
+                    ? Iconsax.filter5
+                    : Iconsax.filter,
+                color: projectWidgetsState.isActiveFilter
+                    ? TColors.primary
+                    : Theme.of(context).iconTheme.color,
+              ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Iconsax.search_normal,
-                ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Iconsax.send_square,
               ),
-              IconButton(
-                onPressed: () {
-                  projectWidgetsNotifier.toggleFilter();
-                  if (isVisible) {
-                    isVisibleNotifier.hide();
-                  }
-                },
-                icon: Icon(
-                  projectWidgetsState.isActiveFilter
-                      ? Iconsax.filter5
-                      : Iconsax.filter,
-                  color: projectWidgetsState.isActiveFilter
-                      ? TColors.primary
-                      : Theme.of(context).iconTheme.color,
-                ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Iconsax.setting_2,
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Iconsax.send_square,
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Iconsax.setting_2,
-                ),
-              ),
-              const SizedBox(width: 5),
-            ],
-          ),
-        ),
+            ),
+            const SizedBox(width: 5),
+          ],
       ),
       body: Stack(
         children: [
@@ -120,7 +105,7 @@ class ProjectsScreen extends ConsumerWidget {
                   duration: const Duration(milliseconds: 500),
                   width: MediaQuery.of(context).size.width,
                   height: projectWidgetsState.isActiveFilter
-                      ? MediaQuery.of(context).size.height - 90
+                      ? MediaQuery.of(context).size.height - 145
                       : 0,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 70),
                   color: Theme.of(context).scaffoldBackgroundColor,
@@ -162,6 +147,7 @@ class ProjectsScreen extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: const ProjectFloatingActionButton(),
     );
   }

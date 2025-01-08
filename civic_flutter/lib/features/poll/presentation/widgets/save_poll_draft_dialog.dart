@@ -40,7 +40,7 @@ Future<bool?> savePollDraftDialog(
                     draftId: DateTime.now().millisecondsSinceEpoch,
                     options: PollOption(
                       option: pollState.optionText,
-                      votes: 0,
+                      votes: List<int>.filled(poll.options!.votes.length, 0),
                       voters: [],
                     ),
                     question: pollState.question,

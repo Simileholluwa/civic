@@ -65,7 +65,7 @@ class CreateContentButton extends ConsumerWidget {
       opacity: !isVisible ? 0 : 1,
       child: Visibility(
         visible: isVisible,
-        child: InkWell(
+        child: GestureDetector(
           onTap: navigate,
           child: Container(
             height: 70,
@@ -77,7 +77,7 @@ class CreateContentButton extends ConsumerWidget {
             child: const Icon(
               Icons.add,
               color: Colors.white,
-              size: 35,
+              size: 40,
             ),
           ),
         ),

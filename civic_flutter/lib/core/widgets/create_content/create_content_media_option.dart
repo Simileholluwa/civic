@@ -13,7 +13,6 @@ class CreateContentMediaOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +32,7 @@ class CreateContentMediaOption extends StatelessWidget {
             horizontal: TSizes.md,
           ),
           decoration: BoxDecoration(
-            color: isDark ? TColors.dark : TColors.light,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
               TSizes.sm,
             ),

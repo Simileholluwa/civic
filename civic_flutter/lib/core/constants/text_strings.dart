@@ -90,7 +90,7 @@ class TTexts {
   static const String notReceived = "Didn't receive code?";
   static const String noAccount = 'Not registered?';
   static const String confirmEmailSubTitle =
-      'Enter the 6-digit code sent to the e-mail you provided.';
+      'Enter the code sent to the e-mail you provided.';
   static const String emailNotReceivedMessage =
       'Didn’t get the email? Check your junk/spam or resend it.';
   static const String yourAccountCreatedTitle =

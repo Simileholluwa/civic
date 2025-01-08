@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_quick_detail_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -21,19 +22,11 @@ class ContentCreatorInfo extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundImage: CachedNetworkImageProvider(
-                creator.userInfo!.imageUrl!,
-              ),
-            ),
-            AppUserPLStatusIcon(
-              plStatusIndex: creator.politicalStatus.index,
-            ),
-          ],
+        CircleAvatar(
+          radius: 25,
+          backgroundImage: CachedNetworkImageProvider(
+            creator.userInfo!.imageUrl!,
+          ),
         ),
         const SizedBox(
           width: 15,
@@ -41,52 +34,84 @@ class ContentCreatorInfo extends StatelessWidget {
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 3,
             children: [
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                 Text(
+                      creator.userInfo!.fullName ?? creator.userInfo!.userName!,
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                 Text(
+                      ' • ',
+                      style: Theme.of(context).textTheme.labelMedium!,
+                    ),
+                  
                   Flexible(
                     child: Text(
-                      creator.userInfo!.fullName ?? creator.userInfo!.userName!,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      '@${creator.userInfo!.userName}',
+                      style: Theme.of(context).textTheme.labelMedium,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (creator.verifiedAccount)
-                    const Row(
-                      children: [
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Iconsax.verify5,
-                          color: TColors.primary,
-                          size: 19,
-                        ),
-                      ],
+                  Text(
+                      ' • $timeAgo',
+                      style: Theme.of(context).textTheme.labelMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                 ],
               ),
-              Text(
-                creator.bio,
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 13,
+              Row(
+                spacing: 10,
+                children: [
+                  ProjectQuickDetailWidget(
+                    size: 20,
+                    icon: Icons.person,
+                    title: creator.politicalStatus.index == 0
+                        ? 'CURRENT LEADER'
+                        : creator.politicalStatus.index == 1
+                            ? 'FORMER LEADER'
+                            : creator.politicalStatus.index == 2
+                                ? 'ASPIRING LEADER'
+                                : 'CONCERNED CITIZEN',
+                    color: TColors.primary,
+                    textStyle:
+                        Theme.of(context).textTheme.labelMedium!.copyWith(
+                              fontSize: 10,
+                            ),
+                  ),
+                
+                  if (creator.verifiedAccount)
+                    ProjectQuickDetailWidget(
+                      size: 20,
+                      icon: Iconsax.verify5,
+                      title: 'VERIFIED',
+                      color: TColors.primary,
+                      textStyle:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                fontSize: 10,
+                                color: TColors.primary,
+                              ),
+                    )
+                  else
+                    ProjectQuickDetailWidget(
+                      size: 20,
+                      icon: Iconsax.verify5,
+                      title: 'UNVERIFIED',
+                      color: TColors.secondary,
+                      textStyle:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                fontSize: 10,
+                              ),
                     ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                '@${creator.userInfo!.userName} • $timeAgo • $numberOfViews views',
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 13,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                ],
               ),
             ],
           ),

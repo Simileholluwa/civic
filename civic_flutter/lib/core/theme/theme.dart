@@ -18,10 +18,12 @@ class TAppTheme {
     ),
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
     blendLevel: 10,
-    lightIsWhite: true,
+    tabBarStyle: FlexTabBarStyle.forAppBar,
     appBarStyle: FlexAppBarStyle.scaffoldBackground,
     textTheme: TTextTheme.lightTextTheme,
     subThemesData: const FlexSubThemesData(
+      interactionEffects: true,
+      tintedDisabledControls: true,
       blendOnLevel: 20,
       blendOnColors: false,
       useMaterial3Typography: true,
@@ -45,7 +47,6 @@ class TAppTheme {
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,
-          color: TColors.dark,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
@@ -53,7 +54,6 @@ class TAppTheme {
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,
-          color: TColors.textWhite,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
@@ -78,10 +78,12 @@ class TAppTheme {
     ),
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
     blendLevel: 10,
-    darkIsTrueBlack: true,
+    tabBarStyle: FlexTabBarStyle.forAppBar,
     appBarStyle: FlexAppBarStyle.scaffoldBackground,
     textTheme: TTextTheme.darkTextTheme,
     subThemesData: const FlexSubThemesData(
+      interactionEffects: true,
+      tintedDisabledControls: true,
       blendOnLevel: 20,
       blendOnColors: false,
       useMaterial3Typography: true,
@@ -105,7 +107,6 @@ class TAppTheme {
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,
-          color: TColors.textWhite,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
@@ -113,7 +114,6 @@ class TAppTheme {
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,
-          color: TColors.textWhite,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),

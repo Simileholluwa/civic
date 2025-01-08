@@ -13,7 +13,6 @@ class ProjectFilterButtons extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     final projectWidgetsNotifier =
         ref.watch(projectScreenWidgetsProvider.notifier);
-    final isDark = THelperFunctions.isDarkMode(context);
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 500),
       opacity: projectWidgetsState.isActiveFilter ? 1 : 0,
@@ -34,7 +33,6 @@ class ProjectFilterButtons extends ConsumerWidget {
                   'Cancel',
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isDark ? TColors.dark : TColors.light,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
               ),

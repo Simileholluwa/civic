@@ -22,10 +22,7 @@ class ProjectCategoryPageView extends ConsumerWidget {
         children: [
           Text(
             'Choose a category and subcategory most suitable for this project.',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 17,
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium!,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(

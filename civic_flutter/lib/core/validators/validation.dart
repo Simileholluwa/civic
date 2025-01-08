@@ -15,7 +15,7 @@ class TValidator {
       return 'Username is required';
     }
 
-    if (value.length < 3 || value.length > 12) {
+    if (value.length < 3 || value.length > 15) {
       return 'Input 3 to 15 characters';
     }
 

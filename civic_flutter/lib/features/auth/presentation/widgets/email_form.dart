@@ -42,6 +42,7 @@ class _EmailFormState extends ConsumerState<EmailForm> {
               hintText: 'your-email@domain.com',
               validator: TValidator.validateEmail,
               textInputType: TextInputType.emailAddress,
+              maxLines: 1,
             ),
             const SizedBox(
               height: TSizes.spaceBtwSections,

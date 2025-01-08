@@ -29,6 +29,12 @@ abstract class Poll implements _i1.SerializableModel {
     this.createdAt,
     this.pollDuration,
     this.hashtags,
+    this.voteCount,
+    this.numberOfLikes,
+    this.numberOfComments,
+    this.numberOfViews,
+    this.imagesUrl,
+    this.updatedAt,
   });
 
   factory Poll({
@@ -44,6 +50,12 @@ abstract class Poll implements _i1.SerializableModel {
     DateTime? createdAt,
     int? pollDuration,
     List<_i5.PollsHashtags>? hashtags,
+    int? voteCount,
+    int? numberOfLikes,
+    int? numberOfComments,
+    int? numberOfViews,
+    List<String>? imagesUrl,
+    DateTime? updatedAt,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -78,6 +90,16 @@ abstract class Poll implements _i1.SerializableModel {
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i5.PollsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
+      voteCount: jsonSerialization['voteCount'] as int?,
+      numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
+      numberOfComments: jsonSerialization['numberOfComments'] as int?,
+      numberOfViews: jsonSerialization['numberOfViews'] as int?,
+      imagesUrl: (jsonSerialization['imagesUrl'] as List?)
+          ?.map((e) => e as String)
+          .toList(),
+      updatedAt: jsonSerialization['updatedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -108,6 +130,18 @@ abstract class Poll implements _i1.SerializableModel {
 
   List<_i5.PollsHashtags>? hashtags;
 
+  int? voteCount;
+
+  int? numberOfLikes;
+
+  int? numberOfComments;
+
+  int? numberOfViews;
+
+  List<String>? imagesUrl;
+
+  DateTime? updatedAt;
+
   Poll copyWith({
     int? id,
     int? ownerId,
@@ -121,6 +155,12 @@ abstract class Poll implements _i1.SerializableModel {
     DateTime? createdAt,
     int? pollDuration,
     List<_i5.PollsHashtags>? hashtags,
+    int? voteCount,
+    int? numberOfLikes,
+    int? numberOfComments,
+    int? numberOfViews,
+    List<String>? imagesUrl,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -141,6 +181,12 @@ abstract class Poll implements _i1.SerializableModel {
       if (pollDuration != null) 'pollDuration': pollDuration,
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
+      if (voteCount != null) 'voteCount': voteCount,
+      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
+      if (numberOfComments != null) 'numberOfComments': numberOfComments,
+      if (numberOfViews != null) 'numberOfViews': numberOfViews,
+      if (imagesUrl != null) 'imagesUrl': imagesUrl?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
     };
   }
 
@@ -166,6 +212,12 @@ class _PollImpl extends Poll {
     DateTime? createdAt,
     int? pollDuration,
     List<_i5.PollsHashtags>? hashtags,
+    int? voteCount,
+    int? numberOfLikes,
+    int? numberOfComments,
+    int? numberOfViews,
+    List<String>? imagesUrl,
+    DateTime? updatedAt,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -179,6 +231,12 @@ class _PollImpl extends Poll {
           createdAt: createdAt,
           pollDuration: pollDuration,
           hashtags: hashtags,
+          voteCount: voteCount,
+          numberOfLikes: numberOfLikes,
+          numberOfComments: numberOfComments,
+          numberOfViews: numberOfViews,
+          imagesUrl: imagesUrl,
+          updatedAt: updatedAt,
         );
 
   @override
@@ -195,6 +253,12 @@ class _PollImpl extends Poll {
     Object? createdAt = _Undefined,
     Object? pollDuration = _Undefined,
     Object? hashtags = _Undefined,
+    Object? voteCount = _Undefined,
+    Object? numberOfLikes = _Undefined,
+    Object? numberOfComments = _Undefined,
+    Object? numberOfViews = _Undefined,
+    Object? imagesUrl = _Undefined,
+    Object? updatedAt = _Undefined,
   }) {
     return Poll(
       id: id is int? ? id : this.id,
@@ -217,6 +281,15 @@ class _PollImpl extends Poll {
       hashtags: hashtags is List<_i5.PollsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
+      voteCount: voteCount is int? ? voteCount : this.voteCount,
+      numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
+      numberOfComments:
+          numberOfComments is int? ? numberOfComments : this.numberOfComments,
+      numberOfViews: numberOfViews is int? ? numberOfViews : this.numberOfViews,
+      imagesUrl: imagesUrl is List<String>?
+          ? imagesUrl
+          : this.imagesUrl?.map((e0) => e0).toList(),
+      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
     );
   }
 }

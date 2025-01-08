@@ -44,7 +44,9 @@ class PollEndpoint extends Endpoint {
         // Update the poll
         final sentPoll = await Poll.db.updateRow(
           session,
-          poll,
+          poll.copyWith(
+            updatedAt: DateTime.now(),
+          ),
         );
 
         // return the sent poll
@@ -56,6 +58,7 @@ class PollEndpoint extends Endpoint {
           poll.copyWith(
             ownerId: user.id,
             owner: user,
+            createdAt: DateTime.now(),
           ),
         );
 
@@ -116,7 +119,7 @@ class PollEndpoint extends Endpoint {
   Future<void> castVote(
     Session session,
     int pollId,
-    int optionId,
+    String option,
   ) async {
     // Fetch the authenticated user
     final authInfo = await session.authenticated;
@@ -142,49 +145,69 @@ class PollEndpoint extends Endpoint {
     }
 
     // Check if the user has already voted
-    var existingVote = await PollVote.db.findFirstRow(
-      session,
-      where: (t) =>
-          t.pollId.equals(
-            pollId,
-          ) &
-          t.voterId.equals(
-            user.id,
-          ),
-    );
+    var existingVote = await hasVoted(session, pollId, user.id!);
 
     // If the user has already voted, throw an exception and return
-    if (existingVote != null) {
-      throw UserException(
-        message: 'You have already voted in this poll',
+    if (existingVote) {
+      // Remove the vote and decrease vote count
+      var vote = PollVote(
+        pollId: pollId,
+        voterId: user.id!,
       );
-    }
 
-    // Cast the vote and increase the vote count
-    var vote = PollVote(
-      pollId: pollId,
-      voterId: user.id!,
-    );
+      // Insert the vote
+      await PollVote.db.insertRow(session, vote);
 
-    // Insert the vote
-    await PollVote.db.insertRow(session, vote);
-
-    // Fetch the poll option
-    final poll = await Poll.db.findById(
-      session,
-      pollId,
-    );
-
-    // Increase the vote count of the selected option if the poll is not null
-    if (poll != null) {
-      poll.options!.votes += 1;
-      poll.options!.voters.add(
-        user,
-      );
-      await Poll.db.updateRow(
+      // Fetch the poll option
+      final poll = await Poll.db.findById(
         session,
-        poll,
+        pollId,
       );
+
+      // Decrease the vote count of the selected option if the poll is not null
+      if (poll != null) {
+        final optionIndex = poll.options!.option.indexWhere(
+          (element) => element == option,
+        );
+        poll.options!.votes[optionIndex] -= 1;
+        poll.options!.voters.remove(
+          user,
+        );
+        await Poll.db.updateRow(
+          session,
+          poll,
+        );
+      }
+    } else {
+      // Cast the vote and increase the vote count
+      var vote = PollVote(
+        pollId: pollId,
+        voterId: user.id!,
+      );
+
+      // Insert the vote
+      await PollVote.db.insertRow(session, vote);
+
+      // Fetch the poll option
+      final poll = await Poll.db.findById(
+        session,
+        pollId,
+      );
+
+      // Increase the vote count of the selected option if the poll is not null
+      if (poll != null) {
+        final optionIndex = poll.options!.option.indexWhere(
+          (element) => element == option,
+        );
+        poll.options!.votes[optionIndex] += 1;
+        poll.options!.voters.add(
+          user,
+        );
+        await Poll.db.updateRow(
+          session,
+          poll,
+        );
+      }
     }
   }
 
@@ -213,5 +236,27 @@ class PollEndpoint extends Endpoint {
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
     );
+  }
+
+  Future<bool> hasVoted(Session session, int pollId, int userId) async {
+    // Check if the user has already voted
+    var existingVote = await PollVote.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.pollId.equals(
+            pollId,
+          ) &
+          t.voterId.equals(
+            userId,
+          ),
+    );
+
+    // If the user has already voted, return true
+    if (existingVote != null) {
+      return true;
+    }
+
+    // If the user has not voted, return false
+    return false;
   }
 }

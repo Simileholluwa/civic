@@ -14,12 +14,12 @@ class PollRepositoryImpl implements PollRepository {
   @override
   Future<Either<Failure, void>> castVote({
     required int pollId,
-    required int optionId,
+    required String option,
   }) async {
     try {
       final result = await _pollRemoteDatasource.castVote(
         pollId: pollId,
-        optionId: optionId,
+        option: option,
       );
       return Right(result);
     } on ServerException catch (e) {

@@ -45,7 +45,7 @@ class ContentInteractionButton extends StatelessWidget {
                 if (showTitle)
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           fontSize: 14,
                           color: color,
                         ),

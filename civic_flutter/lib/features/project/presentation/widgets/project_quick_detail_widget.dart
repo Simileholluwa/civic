@@ -1,4 +1,3 @@
-import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ProjectQuickDetailWidget extends StatelessWidget {
@@ -7,18 +6,23 @@ class ProjectQuickDetailWidget extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.color,
+    this.size = 30,
+    this.iconSize = 15,
+    required this.textStyle,
   });
 
   final Color color;
   final IconData icon;
   final String title;
+  final double size;
+  final double iconSize;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? TColors.dark : TColors.light,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
           100,
         ),
@@ -32,8 +36,8 @@ class ProjectQuickDetailWidget extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: 30,
-            width: 30,
+            height: size,
+            width: size,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 
                 0.1,
@@ -43,17 +47,14 @@ class ProjectQuickDetailWidget extends StatelessWidget {
             child: Icon(
               icon,
               color: color,
-              size: 15,
+              size: iconSize,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 10),
             child: Text(
               title,
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: textStyle,
             ),
           ),
         ],

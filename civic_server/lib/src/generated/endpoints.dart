@@ -411,9 +411,9 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
-            'optionId': _i1.ParameterDescription(
-              name: 'optionId',
-              type: _i1.getType<int>(),
+            'option': _i1.ParameterDescription(
+              name: 'option',
+              type: _i1.getType<String>(),
               nullable: false,
             ),
           },
@@ -424,7 +424,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['poll'] as _i6.PollEndpoint).castVote(
             session,
             params['pollId'],
-            params['optionId'],
+            params['option'],
           ),
         ),
         'getPolls': _i1.MethodConnector(
@@ -449,6 +449,30 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
+          ),
+        ),
+        'hasVoted': _i1.MethodConnector(
+          name: 'hasVoted',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).hasVoted(
+            session,
+            params['pollId'],
+            params['userId'],
           ),
         ),
       },

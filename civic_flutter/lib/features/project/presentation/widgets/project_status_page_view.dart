@@ -30,9 +30,7 @@ class ProjectStatusPageView extends ConsumerWidget {
                     : projectCreationSate.status == projectStatus[2]
                         ? 'Select when this project started and when it ended.'
                         : 'Share insights on the status of this project with your constituents.',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium!,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
@@ -50,9 +48,7 @@ class ProjectStatusPageView extends ConsumerWidget {
               textController: projectCreationSate.completionRateController,
               prefixIcon: Iconsax.percentage_square,
               hintText: 'Percentage completion',
-              hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall!.color!,
-                  ),
+              
               textInputType: TextInputType.number,
               validator: (value) => TValidator.validateEmptyText(
                 'Percentage completion',
@@ -74,9 +70,6 @@ class ProjectStatusPageView extends ConsumerWidget {
             prefixIcon: Iconsax.calendar_1,
             hintText: 'Start date',
             readOnly: true,
-            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
             onTap: () async {
               final pickedDate =
                   await ProjectHelperFunctions.pickProjectStartOrDate(
@@ -96,9 +89,7 @@ class ProjectStatusPageView extends ConsumerWidget {
             prefixIcon: Iconsax.calendar5,
             hintText: 'End date',
             readOnly: true,
-            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                ),
+            
             onTap: () async {
               final pickedDate =
                   await ProjectHelperFunctions.pickProjectStartOrDate(

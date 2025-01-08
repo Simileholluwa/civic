@@ -17,7 +17,9 @@ class ProjectTextToolbar extends StatelessWidget {
       controller: controller,
 
       configurations: const QuillSimpleToolbarConfigurations(
-        
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
         multiRowsDisplay: false,
         showSearchButton: false,
         showFontFamily: false,

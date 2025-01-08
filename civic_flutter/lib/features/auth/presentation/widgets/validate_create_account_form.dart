@@ -36,7 +36,6 @@ class _EmailVerificationFormState
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -63,7 +62,7 @@ class _EmailVerificationFormState
                   ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isDark ? TColors.dark : TColors.light,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
           ),

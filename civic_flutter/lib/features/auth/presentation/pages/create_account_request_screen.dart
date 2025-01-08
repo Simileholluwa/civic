@@ -38,7 +38,7 @@ class CreateAccountRequestScreen extends StatelessWidget {
               const AuthHeader(
                 authTitle: 'Create password',
                 authSubTitle: 'Use a combination of alphabets, '
-                    'numbers, and symbols',
+                    'numbers, and symbols.',
               ),
               CreateAccountRequestForm(
                 email: email,

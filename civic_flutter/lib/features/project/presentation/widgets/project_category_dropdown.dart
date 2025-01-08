@@ -34,7 +34,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
           child: Text(
             hintText,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                  color: Theme.of(context).hintColor,
                 ),
           ),
         ),
