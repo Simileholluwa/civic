@@ -8,12 +8,20 @@ class PollCardState {
   final String question;
   final String numberOfViews;
   final bool hasText;
+  final bool hasTags;
+  final bool hasLocations;
+  final List<UserRecord> tags;
+  final List<AWSPlaces> locations;
   PollCardState({
     required this.creator,
     required this.timeAgo,
     required this.question,
     required this.numberOfViews,
     required this.hasText,
+    required this.hasTags,
+    required this.hasLocations,
+    required this.tags,
+    required this.locations,
   });
 
   factory PollCardState.populate(Poll poll) {
@@ -23,6 +31,10 @@ class PollCardState {
       question: poll.question ?? '',
       numberOfViews: '100',
       hasText: poll.question?.isNotEmpty ?? false,
+      hasTags: poll.taggedUsers?.isNotEmpty ?? false,
+      hasLocations: poll.locations?.isNotEmpty ?? false,
+      tags: poll.taggedUsers!,
+      locations: poll.locations!,
     );
   }
 }

@@ -14,8 +14,8 @@ class ProjectFundingFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
+      padding: const EdgeInsets.fromLTRB(
+        16, 0, 20, 0
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

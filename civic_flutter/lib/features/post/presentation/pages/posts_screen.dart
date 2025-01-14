@@ -21,149 +21,100 @@ class PostsScreen extends ConsumerWidget {
           postCardWidgetProvider(post),
         );
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 10,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: TColors.primary.withValues(
-                  alpha: 0.01,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+              child: ContentCreatorInfo(
+                creator: postCardState.creator,
+                timeAgo: postCardState.timeAgo,
+                numberOfViews: postCardState.numberOfViews,
+              ),
+            ),
+            if (postCardState.hasText)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: ContentExpandableText(
+                  text: postCardState.text,
+                  hasImage: postCardState.hasImage,
+                  hasVideo: postCardState.hasVideo,
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            if (postCardState.hasImage)
+              postCardState.imageUrls.length == 1
+                  ? ContentSingleCachedImage(
+                    imageUrl: postCardState.imageUrls.first,
+                  )
+                  : ContentMultipleCachedImage(
+                    imageUrls: postCardState.imageUrls,
+                  ),
+            if (postCardState.hasVideo)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: VideoPost(
+                  videoUrl: postCardState.videoUrl,
+                ),
+              ),
+            if (postCardState.hasLocation || postCardState.hasTags)
+              ContentTagsAndLocations(
+                tags: postCardState.tags,
+                locations: postCardState.locations,
+                hasTags: postCardState.hasTags,
+                hasLocations: postCardState.hasLocation,
+              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(
-                    height: 5,
+                  ContentInteractionButton(
+                    icon: Iconsax.heart,
+                    title: '1.2k',
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 12, 15, 10),
-                    child: ContentCreatorInfo(
-                      creator: postCardState.creator,
-                      timeAgo: postCardState.timeAgo,
-                      numberOfViews: postCardState.numberOfViews,
-                    ),
+                  ContentInteractionButton(
+                    icon: Iconsax.messages_1,
+                    title: '1.2k',
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                  if (postCardState.hasText)
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                          ),
-                          child: ContentExpandableText(
-                            text: postCardState.text,
-                            hasImage: postCardState.hasImage,
-                            hasVideo: postCardState.hasVideo,
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (postCardState.hasImage)
-                    Column(
-                      children: [
-                        if (postCardState.hasText)
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        if (!postCardState.hasText)
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        postCardState.imageUrls.length == 1
-                            ? ContentKeepAliveWrapper(
-                                child: ContentSingleCachedImage(
-                                  imageUrl: postCardState.imageUrls.first,
-                                ),
-                              )
-                            : ContentKeepAliveWrapper(
-                                child: ContentMultipleCachedImage(
-                                  imageUrls: postCardState.imageUrls,
-                                ),
-                              ),
-                      ],
-                    ),
-                  if (postCardState.hasVideo)
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-                          child: VideoPost(
-                            videoUrl: postCardState.videoUrl,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ),
-                  if (postCardState.hasText &&
-                      !postCardState.hasImage &&
-                      !postCardState.hasVideo)
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ContentInteractionButton(
-                          icon: Iconsax.heart,
-                          title: '1.2k',
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                        ContentInteractionButton(
-                          icon: Iconsax.messages_1,
-                          title: '1.2k',
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                        ContentInteractionButton(
-                          icon: Iconsax.repeate_music5,
-                          title: '1.2k',
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                        ContentInteractionButton(
-                          icon: Icons.share,
-                          title: '',
-                          showTitle: false,
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                        ContentInteractionButton(
-                          icon: Iconsax.bookmark,
-                          title: '',
-                          showTitle: false,
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                        ContentInteractionButton(
-                          icon: Iconsax.more_2,
-                          title: '',
-                          showTitle: false,
-                          onTap: () {},
-                          color:
-                              Theme.of(context).textTheme.labelMedium!.color!,
-                        ),
-                      ],
-                    ),
+                  ContentInteractionButton(
+                    icon: Iconsax.repeate_music5,
+                    title: '1.2k',
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                  if (index !=
-                      pagingControllerNotifier
-                              .pagingController.itemList!.length -
-                          1)
-                    const Divider(
-                      height: 0,
-                    ),
+                  ContentInteractionButton(
+                    icon: Icons.share,
+                    title: '',
+                    showTitle: false,
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
+                  ),
+                  ContentInteractionButton(
+                    icon: Iconsax.bookmark,
+                    title: '',
+                    showTitle: false,
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
+                  ),
+                  ContentInteractionButton(
+                    icon: Iconsax.more_2,
+                    title: '',
+                    showTitle: false,
+                    onTap: () {},
+                    color: Theme.of(context).textTheme.labelMedium!.color!,
+                  ),
                 ],
               ),
             ),
+            if (index !=
+                pagingControllerNotifier.pagingController.itemList!.length - 1)
+              const Divider(
+                height: 0,
+              ),
           ],
         );
       },

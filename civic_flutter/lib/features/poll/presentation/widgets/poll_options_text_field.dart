@@ -25,7 +25,7 @@ class PollOptionsTextField extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(6, 8, 4, 8),
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
-        maxLength: 80,
+        maxLength: 35,
         decoration: InputDecoration(
           hintText: 'Option ${index + 1}',
           suffix: Padding(
@@ -39,9 +39,12 @@ class PollOptionsTextField extends ConsumerWidget {
                   padding: const EdgeInsets.only(
                     top: 0,
                   ),
-                  child: Text(
-                    '${80 - controller.text.length}',
-                    style: Theme.of(context).textTheme.labelMedium,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 3,),
+                    child: Text(
+                      '${35 - controller.text.length}',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
                   ),
                 ),
                 if (pollState.controllers.length > 2)

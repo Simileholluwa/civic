@@ -112,41 +112,41 @@ final scheduleProjectProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ScheduleProjectRef = AutoDisposeProviderRef<ScheduleProjectUseCase>;
-String _$addRemoveLikeHash() => r'69ef164712fba291299962d2caea0c62c0379a12';
+String _$toggleLikeHash() => r'6610dd1971c4bc0f3245dfa3b80af78912f3420a';
 
-/// See also [addRemoveLike].
-@ProviderFor(addRemoveLike)
-final addRemoveLikeProvider =
-    AutoDisposeProvider<AddRemoveLikeUseCase>.internal(
-  addRemoveLike,
-  name: r'addRemoveLikeProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$addRemoveLikeHash,
+/// See also [toggleLike].
+@ProviderFor(toggleLike)
+final toggleLikeProvider = AutoDisposeProvider<ToggleLikeUseCase>.internal(
+  toggleLike,
+  name: r'toggleLikeProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$toggleLikeHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef AddRemoveLikeRef = AutoDisposeProviderRef<AddRemoveLikeUseCase>;
-String _$hasLikedProjectHash() => r'1ae464665dc2004168292aef063bb0b3f163afc5';
+typedef ToggleLikeRef = AutoDisposeProviderRef<ToggleLikeUseCase>;
+String _$getUserLikedProjectsHash() =>
+    r'1ecab4acc6ea1ed86a67d31cc5ea8cebed773b65';
 
-/// See also [hasLikedProject].
-@ProviderFor(hasLikedProject)
-final hasLikedProjectProvider =
-    AutoDisposeProvider<HasLikedProjectUseCase>.internal(
-  hasLikedProject,
-  name: r'hasLikedProjectProvider',
+/// See also [getUserLikedProjects].
+@ProviderFor(getUserLikedProjects)
+final getUserLikedProjectsProvider =
+    AutoDisposeProvider<GetUserLikedProjectsUseCase>.internal(
+  getUserLikedProjects,
+  name: r'getUserLikedProjectsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$hasLikedProjectHash,
+      : _$getUserLikedProjectsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef HasLikedProjectRef = AutoDisposeProviderRef<HasLikedProjectUseCase>;
+typedef GetUserLikedProjectsRef
+    = AutoDisposeProviderRef<GetUserLikedProjectsUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

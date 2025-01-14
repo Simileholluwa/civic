@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
 import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
@@ -17,7 +18,6 @@ class FeedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = ref.watch(feedScreenTabProvider);
     final isVisible = ref.watch(appScrollVisibilityProvider);
     if (sendPost != null) {
       Future.delayed(
@@ -25,81 +25,98 @@ class FeedScreen extends ConsumerWidget {
         () => sendPost!(),
       );
     }
-
+    final pageController = ref.watch(feedPageControllerProvider);
+    final pageControllerNotifier = ref.watch(feedPageControllerProvider.notifier);
+    final currentPageNotifier = ref.watch(feedCurrentPageProvider.notifier);
+    final currentPageState = ref.watch(feedCurrentPageProvider);
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: isVisible,
-        title: Text(
-          'Feed',
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.apps,
+            size: 30,
+          ),
+          onPressed: () {},
+        ),
+        titleSpacing: 2,
+        title: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 8,
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 15,
+            children: [
+              ...['POSTS', 'POLLS', 'ARTICLES'].asMap().entries.map(
+                (filter) {
+                  final text = filter.value;
+                  final index = filter.key;
+                  return GestureDetector(
+                    onTap: () {
+                      pageControllerNotifier.gotoPage(
+                        index,);
+                    },
+                    child: Text(
+                      text,
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            color: currentPageState == index
+                                ? Theme.of(context).textTheme.labelMedium!.color
+                                : Theme.of(context).hintColor,
+                            fontWeight: currentPageState == index
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontSize: 15,
+                          ),
+                    ),
+                  );
+                },
               ),
+            ],
+          ),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
             icon: const Icon(
-              Iconsax.search_normal,
+              Icons.filter_list_rounded,
+              size: 30,
             ),
+            onPressed: () {},
+            
           ),
           IconButton(
-            onPressed: () {},
             icon: const Icon(
-              Iconsax.filter,
+              Iconsax.notification5,
+              size: 26,
             ),
-          ),
-          IconButton(
             onPressed: () {},
-            icon: const Icon(
-              Iconsax.send_square,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Iconsax.setting_2,
-            ),
           ),
           const SizedBox(width: 5),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: Container(
-            decoration: !isVisible
-                ? null
-                : BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                  ),
-            margin: EdgeInsets.only(top: !isVisible ? 1 : 0),
-            child: AppTabBarDesign(
-              tabController: tabController,
-              tabs: [
-                ...['POSTS', 'POLLS', 'ARTICLES'].map(
-                  (filter) {
-                    return Tab(
-                      text: filter,
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        bottomHeight: 52,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: const CreateContentButton(),
-      body: TabBarView(
-        controller: tabController,
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (index) {
+          currentPageNotifier.setCurrentPage(index);
+        },
+        physics: const ClampingScrollPhysics(),
         children: [
-          const PostsScreen(),
-          const PollsScreen(),
-          Container(),
+          ContentKeepAliveWrapper(
+            child: const PostsScreen(),
+          ),
+          ContentKeepAliveWrapper(
+            child: const PollsScreen(),
+          ),
+          ContentKeepAliveWrapper(
+            child: const ArticlesScreen(),
+          )
         ],
       ),
     );

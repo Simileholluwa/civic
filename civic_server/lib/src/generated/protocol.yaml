@@ -31,11 +31,11 @@ project:
   - scheduleProject:
   - getProjects:
   - deleteProject:
-  - updateCommentCount:
-  - updateRepostCount:
-  - addRemoveLike:
-  - hasLiked:
+  - updateCount:
+  - getUserLikedProjects:
+  - toggleLike:
   - authUser:
+  - validateProjectOwnership:
 sendEmail:
   - sendEmail:
 userNin:

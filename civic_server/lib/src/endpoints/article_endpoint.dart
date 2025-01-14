@@ -1,5 +1,6 @@
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class ArticleEndpoint extends Endpoint {
   Future<ArticleList> getArticles(
@@ -13,7 +14,9 @@ class ArticleEndpoint extends Endpoint {
       limit: limit,
       offset: (page * limit) - limit,
       include: Article.include(
-        owner: UserRecord.include(),
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
       ),
     );
 
@@ -64,7 +67,9 @@ class ArticleEndpoint extends Endpoint {
         }
         return await Article.db.updateRow(
           session,
-          article,
+          article.copyWith(
+            updatedAt: DateTime.now(),
+          ),
         );
         
       } else {

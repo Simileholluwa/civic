@@ -11,12 +11,10 @@ class ProjectCard extends ConsumerWidget {
     super.key,
     required this.project,
     required this.index,
-    required this.isLiked,
   });
 
   final Project project;
   final int index;
-  final bool isLiked;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,109 +44,91 @@ class ProjectCard extends ConsumerWidget {
         isVisibleNotifier.hide();
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 10,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 12, 15, 15),
-                child: ContentCreatorInfo(
-                  creator: projectCardState.creator,
-                  timeAgo: projectCardState.timeAgo,
-                  numberOfViews: projectCardState.numberOfViews,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+            child: ContentCreatorInfo(
+              creator: projectCardState.creator,
+              timeAgo: projectCardState.timeAgo,
+              numberOfViews: projectCardState.numberOfViews,
+            ),
+          ),
+          projectCardState.imagesUrl.length == 1
+              ? ContentSingleCachedImage(
+                  imageUrl: projectCardState.imagesUrl.first,
+                )
+              : ContentMultipleCachedImage(
+                  imageUrls: projectCardState.imagesUrl,
                 ),
-              ),
-              projectCardState.imagesUrl.length == 1
-                  ? ContentSingleCachedImage(
-                      imageUrl: projectCardState.imagesUrl.first,
-                    )
-                  : ContentMultipleCachedImage(
-                      imageUrls: projectCardState.imagesUrl,
-                    ),
-              SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ProjectQuickDetailWidget(
-                      icon: Iconsax.buy_crypto5,
-                      title:
-                          '${projectCardState.currency} ${projectCardState.amount}',
-                      color: TColors.primary,
-                      textStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    ProjectQuickDetailWidget(
-                      icon: Iconsax.percentage_circle5,
-                      title: projectCardState.completionRate,
-                      color: TColors.warning,
-                      textStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    ProjectQuickDetailWidget(
-                      icon: Iconsax.calendar_25,
-                      title: projectCardState.duration,
-                      color: Colors.blue,
-                      textStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                  ],
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 10,
+              children: [
+                ProjectQuickDetailWidget(
+                  icon: Iconsax.buy_crypto5,
+                  title:
+                      '${projectCardState.currency} ${projectCardState.amount}',
+                  color: TColors.primary,
+                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
+                ProjectQuickDetailWidget(
+                  icon: Iconsax.percentage_circle5,
+                  title: projectCardState.completionRate,
+                  color: TColors.warning,
+                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      projectCardState.title,
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      projectCardState.description,
-                      style: Theme.of(context).textTheme.labelMedium,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                ProjectQuickDetailWidget(
+                  icon: Iconsax.calendar_25,
+                  title: projectCardState.duration,
+                  color: Colors.blue,
+                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 5,
+              children: [
+                Text(
+                  projectCardState.title,
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Text(
+                  projectCardState.description,
+                  style: Theme.of(context).textTheme.labelMedium,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, projectCardState.canVet ? 5 : 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (project.status == 'Completed')
+                if (projectCardState.canVet)
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
@@ -194,31 +174,30 @@ class ProjectCard extends ConsumerWidget {
                     ),
                   ),
                 ContentInteractionButton(
-                  icon: isLiked == true ? Iconsax.heart5 : Iconsax.heart,
+                  icon: projectCardState.hasLiked == true ? Iconsax.heart5 : Iconsax.heart,
                   title: projectCardState.numberOfLikes,
                   onTap: () async {
-                    await projectCardNotifier.addRemoveLike(
+                    await projectCardNotifier.toggleLikeStatus(
                       project.id!,
                     );
-                    ref.invalidate(hasLikedProjectProvider);
                   },
-                  color: isLiked == true
+                  color: projectCardState.hasLiked == true
                       ? TColors.primary
                       : Theme.of(context).iconTheme.color!,
                 ),
                 ContentInteractionButton(
                   icon: Iconsax.messages_1,
-                  title: '1.2k',
+                  title: projectCardState.numberOfComments,
                   onTap: () {},
                   color: Theme.of(context).textTheme.labelMedium!.color!,
                 ),
                 ContentInteractionButton(
-                    icon: Iconsax.repeate_music5,
-                    title: '1.2k',
-                    onTap: () {},
-                    color: Theme.of(context).textTheme.labelMedium!.color!,
-                  ),
-                if (project.status == 'Completed')
+                  icon: Iconsax.repeate_music5,
+                  title: projectCardState.numberOfReposts,
+                  onTap: () {},
+                  color: Theme.of(context).textTheme.labelMedium!.color!,
+                ),
+                if (projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
                     title: '',
@@ -226,7 +205,7 @@ class ProjectCard extends ConsumerWidget {
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                if (project.status != 'Completed')
+                if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Icons.share,
                     title: '',
@@ -234,7 +213,7 @@ class ProjectCard extends ConsumerWidget {
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                if (project.status != 'Completed')
+                if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.bookmark,
                     title: '',
@@ -242,7 +221,7 @@ class ProjectCard extends ConsumerWidget {
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
-                if (project.status != 'Completed')
+                if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
                     title: '',

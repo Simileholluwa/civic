@@ -28,9 +28,10 @@ class PostHelperFunctions {
   }) {
     return showModalBottomSheet<bool>(
       context: context,
-      useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,
+      useSafeArea: true,
+      
       builder: (context) {
         return PostLocationsScreen(
           post: post,

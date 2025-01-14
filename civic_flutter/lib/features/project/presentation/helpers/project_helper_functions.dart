@@ -109,6 +109,36 @@ class ProjectHelperFunctions {
     return pickedDate;
   }
 
+  static String percentageElapsed(DateTime startDate, DateTime endDate) {
+    DateTime currentDate = DateTime.now();
+
+    if (currentDate.isBefore(startDate)) {
+      return 'Not started';
+    }
+
+    if (currentDate.isAfter(endDate)) {
+      return 'Completed';
+    }
+
+    int totalDays = endDate.difference(startDate).inDays;
+    int daysPassed = currentDate.difference(startDate).inDays;
+
+    double percentagePassed = (daysPassed / totalDays) * 100;
+    return '${percentagePassed.toStringAsFixed(2)}% complete';
+  }
+
+  static bool canVet(DateTime startDate, DateTime endDate) {
+    DateTime currentDate = DateTime.now();
+
+    if (currentDate.isBefore(startDate)) {
+      return false;
+    } else if (currentDate.isAfter(endDate)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static Future<bool?> selectLocationBottomSheet({
     required BuildContext context,
     required Project project,
@@ -154,9 +184,6 @@ class ProjectHelperFunctions {
       fundingNote: projectCreationSate.fundingNote,
       completionRate: projectCreationSate.completionRate,
       dateCreated: DateTime.now(),
-      likesCount: 0,
-      commentsCount: 0,
-      repostCount: 0,
     );
   }
 

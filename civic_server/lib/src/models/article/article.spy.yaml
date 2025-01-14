@@ -5,3 +5,8 @@ fields:
     title: String?
     content: String?
     banner: String?
+    dateCreated: DateTime?
+    updatedAt: DateTime?
+    numberOfComments: int?
+    numberOfLikes: int?
+    numberOfViews: int?

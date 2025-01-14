@@ -644,66 +644,6 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
-            'projectCategory': _i1.ParameterDescription(
-              name: 'projectCategory',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            ),
-            'fundingCategory': _i1.ParameterDescription(
-              name: 'fundingCategory',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            ),
-            'status': _i1.ParameterDescription(
-              name: 'status',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            ),
-            'startDate': _i1.ParameterDescription(
-              name: 'startDate',
-              type: _i1.getType<DateTime?>(),
-              nullable: true,
-            ),
-            'endDate': _i1.ParameterDescription(
-              name: 'endDate',
-              type: _i1.getType<DateTime?>(),
-              nullable: true,
-            ),
-            'currency': _i1.ParameterDescription(
-              name: 'currency',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            ),
-            'projectCostFrom': _i1.ParameterDescription(
-              name: 'projectCostFrom',
-              type: _i1.getType<double?>(),
-              nullable: true,
-            ),
-            'projectCostTo': _i1.ParameterDescription(
-              name: 'projectCostTo',
-              type: _i1.getType<double?>(),
-              nullable: true,
-            ),
-            'zeroCost': _i1.ParameterDescription(
-              name: 'zeroCost',
-              type: _i1.getType<bool?>(),
-              nullable: true,
-            ),
-            'location': _i1.ParameterDescription(
-              name: 'location',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            ),
-            'completionRateFrom': _i1.ParameterDescription(
-              name: 'completionRateFrom',
-              type: _i1.getType<double?>(),
-              nullable: true,
-            ),
-            'completionRateTo': _i1.ParameterDescription(
-              name: 'completionRateTo',
-              type: _i1.getType<double?>(),
-              nullable: true,
-            ),
           },
           call: (
             _i1.Session session,
@@ -713,18 +653,6 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
-            projectCategory: params['projectCategory'],
-            fundingCategory: params['fundingCategory'],
-            status: params['status'],
-            startDate: params['startDate'],
-            endDate: params['endDate'],
-            currency: params['currency'],
-            projectCostFrom: params['projectCostFrom'],
-            projectCostTo: params['projectCostTo'],
-            zeroCost: params['zeroCost'],
-            location: params['location'],
-            completionRateFrom: params['completionRateFrom'],
-            completionRateTo: params['completionRateTo'],
           ),
         ),
         'deleteProject': _i1.MethodConnector(
@@ -745,12 +673,22 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
-        'updateCommentCount': _i1.MethodConnector(
-          name: 'updateCommentCount',
+        'updateCount': _i1.MethodConnector(
+          name: 'updateCount',
           params: {
             'projectId': _i1.ParameterDescription(
               name: 'projectId',
               type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'field': _i1.ParameterDescription(
+              name: 'field',
+              type: _i1.getType<String>(),
               nullable: false,
             ),
             'isAdding': _i1.ParameterDescription(
@@ -763,70 +701,40 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).updateCommentCount(
+              (endpoints['project'] as _i8.ProjectEndpoint).updateCount(
             session,
             params['projectId'],
+            params['userId'],
+            params['field'],
             params['isAdding'],
           ),
         ),
-        'updateRepostCount': _i1.MethodConnector(
-          name: 'updateRepostCount',
+        'getUserLikedProjects': _i1.MethodConnector(
+          name: 'getUserLikedProjects',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint)
+                  .getUserLikedProjects(session),
+        ),
+        'toggleLike': _i1.MethodConnector(
+          name: 'toggleLike',
           params: {
             'projectId': _i1.ParameterDescription(
               name: 'projectId',
               type: _i1.getType<int>(),
               nullable: false,
-            ),
-            'isAdding': _i1.ParameterDescription(
-              name: 'isAdding',
-              type: _i1.getType<bool>(),
-              nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).updateRepostCount(
+              (endpoints['project'] as _i8.ProjectEndpoint).toggleLike(
             session,
             params['projectId'],
-            params['isAdding'],
-          ),
-        ),
-        'addRemoveLike': _i1.MethodConnector(
-          name: 'addRemoveLike',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).addRemoveLike(
-            session,
-            params['id'],
-          ),
-        ),
-        'hasLiked': _i1.MethodConnector(
-          name: 'hasLiked',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).hasLiked(
-            session,
-            params['id'],
           ),
         ),
         'authUser': _i1.MethodConnector(
@@ -837,6 +745,31 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['project'] as _i8.ProjectEndpoint).authUser(session),
+        ),
+        'validateProjectOwnership': _i1.MethodConnector(
+          name: 'validateProjectOwnership',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'user': _i1.ParameterDescription(
+              name: 'user',
+              type: _i1.getType<_i16.UserRecord>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i8.ProjectEndpoint)
+                  .validateProjectOwnership(
+            session,
+            params['projectId'],
+            params['user'],
+          ),
         ),
       },
     );

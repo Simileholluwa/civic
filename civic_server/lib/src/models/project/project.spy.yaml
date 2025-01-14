@@ -24,7 +24,7 @@ fields:
     projectVideoUrl: String?
     dateCreated: DateTime?
     updatedAt: DateTime?
-    likesCount: int?
-    commentsCount: int?
-    repostCount: int?
+    likedBy: List<int>?
+    commentBy: List<int>?
+    repostBy: List<int>?
 

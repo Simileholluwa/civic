@@ -19,7 +19,7 @@ abstract class ProjectRepository {
 
   Future<Either<Failure, void>> deleteProject({required int id});
 
-  Future<Either<Failure, int>> addRemoveLike({required int id});
+  Future<Either<Failure, int>> toggleLike({required int id});
   
-  Future<Either<Failure, bool>> hasLikedProject({required int id});
+  Future<Either<Failure, List<int>>> getUserLikedProjects();
 }

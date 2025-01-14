@@ -40,9 +40,9 @@ abstract class Project implements _i1.SerializableModel {
     this.projectVideoUrl,
     this.dateCreated,
     this.updatedAt,
-    this.likesCount,
-    this.commentsCount,
-    this.repostCount,
+    this.likedBy,
+    this.commentBy,
+    this.repostBy,
   });
 
   factory Project({
@@ -71,9 +71,9 @@ abstract class Project implements _i1.SerializableModel {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -127,9 +127,15 @@ abstract class Project implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likesCount: jsonSerialization['likesCount'] as int?,
-      commentsCount: jsonSerialization['commentsCount'] as int?,
-      repostCount: jsonSerialization['repostCount'] as int?,
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      commentBy: (jsonSerialization['commentBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      repostBy: (jsonSerialization['repostBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -186,11 +192,11 @@ abstract class Project implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  int? likesCount;
+  List<int>? likedBy;
 
-  int? commentsCount;
+  List<int>? commentBy;
 
-  int? repostCount;
+  List<int>? repostBy;
 
   Project copyWith({
     int? id,
@@ -218,9 +224,9 @@ abstract class Project implements _i1.SerializableModel {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -255,9 +261,9 @@ abstract class Project implements _i1.SerializableModel {
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likesCount != null) 'likesCount': likesCount,
-      if (commentsCount != null) 'commentsCount': commentsCount,
-      if (repostCount != null) 'repostCount': repostCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (commentBy != null) 'commentBy': commentBy?.toJson(),
+      if (repostBy != null) 'repostBy': repostBy?.toJson(),
     };
   }
 
@@ -296,9 +302,9 @@ class _ProjectImpl extends Project {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -325,9 +331,9 @@ class _ProjectImpl extends Project {
           projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          likesCount: likesCount,
-          commentsCount: commentsCount,
-          repostCount: repostCount,
+          likedBy: likedBy,
+          commentBy: commentBy,
+          repostBy: repostBy,
         );
 
   @override
@@ -357,9 +363,9 @@ class _ProjectImpl extends Project {
     Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likesCount = _Undefined,
-    Object? commentsCount = _Undefined,
-    Object? repostCount = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? commentBy = _Undefined,
+    Object? repostBy = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -405,9 +411,15 @@ class _ProjectImpl extends Project {
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likesCount: likesCount is int? ? likesCount : this.likesCount,
-      commentsCount: commentsCount is int? ? commentsCount : this.commentsCount,
-      repostCount: repostCount is int? ? repostCount : this.repostCount,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      commentBy: commentBy is List<int>?
+          ? commentBy
+          : this.commentBy?.map((e0) => e0).toList(),
+      repostBy: repostBy is List<int>?
+          ? repostBy
+          : this.repostBy?.map((e0) => e0).toList(),
     );
   }
 }

@@ -51,15 +51,15 @@ ScheduleProjectUseCase scheduleProject(Ref ref) {
 }
 
 @riverpod
-AddRemoveLikeUseCase addRemoveLike(Ref ref) {
-  return AddRemoveLikeUseCase(
+ToggleLikeUseCase toggleLike(Ref ref) {
+  return ToggleLikeUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
 
 @riverpod
-HasLikedProjectUseCase hasLikedProject(Ref ref) {
-  return HasLikedProjectUseCase(
+GetUserLikedProjectsUseCase getUserLikedProjects(Ref ref) {
+  return GetUserLikedProjectsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

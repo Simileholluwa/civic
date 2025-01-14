@@ -40,9 +40,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.projectVideoUrl,
     this.dateCreated,
     this.updatedAt,
-    this.likesCount,
-    this.commentsCount,
-    this.repostCount,
+    this.likedBy,
+    this.commentBy,
+    this.repostBy,
   });
 
   factory Project({
@@ -71,9 +71,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -127,9 +127,15 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likesCount: jsonSerialization['likesCount'] as int?,
-      commentsCount: jsonSerialization['commentsCount'] as int?,
-      repostCount: jsonSerialization['repostCount'] as int?,
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      commentBy: (jsonSerialization['commentBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      repostBy: (jsonSerialization['repostBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -188,11 +194,11 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   DateTime? updatedAt;
 
-  int? likesCount;
+  List<int>? likedBy;
 
-  int? commentsCount;
+  List<int>? commentBy;
 
-  int? repostCount;
+  List<int>? repostBy;
 
   @override
   _i1.Table get table => t;
@@ -223,9 +229,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -260,9 +266,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likesCount != null) 'likesCount': likesCount,
-      if (commentsCount != null) 'commentsCount': commentsCount,
-      if (repostCount != null) 'repostCount': repostCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (commentBy != null) 'commentBy': commentBy?.toJson(),
+      if (repostBy != null) 'repostBy': repostBy?.toJson(),
     };
   }
 
@@ -299,9 +305,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likesCount != null) 'likesCount': likesCount,
-      if (commentsCount != null) 'commentsCount': commentsCount,
-      if (repostCount != null) 'repostCount': repostCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (commentBy != null) 'commentBy': commentBy?.toJson(),
+      if (repostBy != null) 'repostBy': repostBy?.toJson(),
     };
   }
 
@@ -364,9 +370,9 @@ class _ProjectImpl extends Project {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likesCount,
-    int? commentsCount,
-    int? repostCount,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -393,9 +399,9 @@ class _ProjectImpl extends Project {
           projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          likesCount: likesCount,
-          commentsCount: commentsCount,
-          repostCount: repostCount,
+          likedBy: likedBy,
+          commentBy: commentBy,
+          repostBy: repostBy,
         );
 
   @override
@@ -425,9 +431,9 @@ class _ProjectImpl extends Project {
     Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likesCount = _Undefined,
-    Object? commentsCount = _Undefined,
-    Object? repostCount = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? commentBy = _Undefined,
+    Object? repostBy = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -473,9 +479,15 @@ class _ProjectImpl extends Project {
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likesCount: likesCount is int? ? likesCount : this.likesCount,
-      commentsCount: commentsCount is int? ? commentsCount : this.commentsCount,
-      repostCount: repostCount is int? ? repostCount : this.repostCount,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      commentBy: commentBy is List<int>?
+          ? commentBy
+          : this.commentBy?.map((e0) => e0).toList(),
+      repostBy: repostBy is List<int>?
+          ? repostBy
+          : this.repostBy?.map((e0) => e0).toList(),
     );
   }
 }
@@ -574,16 +586,16 @@ class ProjectTable extends _i1.Table {
       'updatedAt',
       this,
     );
-    likesCount = _i1.ColumnInt(
-      'likesCount',
+    likedBy = _i1.ColumnSerializable(
+      'likedBy',
       this,
     );
-    commentsCount = _i1.ColumnInt(
-      'commentsCount',
+    commentBy = _i1.ColumnSerializable(
+      'commentBy',
       this,
     );
-    repostCount = _i1.ColumnInt(
-      'repostCount',
+    repostBy = _i1.ColumnSerializable(
+      'repostBy',
       this,
     );
   }
@@ -636,11 +648,11 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  late final _i1.ColumnInt likesCount;
+  late final _i1.ColumnSerializable likedBy;
 
-  late final _i1.ColumnInt commentsCount;
+  late final _i1.ColumnSerializable commentBy;
 
-  late final _i1.ColumnInt repostCount;
+  late final _i1.ColumnSerializable repostBy;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -681,9 +693,9 @@ class ProjectTable extends _i1.Table {
         projectVideoUrl,
         dateCreated,
         updatedAt,
-        likesCount,
-        commentsCount,
-        repostCount,
+        likedBy,
+        commentBy,
+        repostBy,
       ];
 
   @override

@@ -315,18 +315,6 @@ class EndpointProject extends _i1.EndpointRef {
   _i2.Future<_i11.ProjectList> getProjects({
     required int limit,
     required int page,
-    String? projectCategory,
-    String? fundingCategory,
-    String? status,
-    DateTime? startDate,
-    DateTime? endDate,
-    String? currency,
-    double? projectCostFrom,
-    double? projectCostTo,
-    bool? zeroCost,
-    String? location,
-    double? completionRateFrom,
-    double? completionRateTo,
   }) =>
       caller.callServerEndpoint<_i11.ProjectList>(
         'project',
@@ -334,18 +322,6 @@ class EndpointProject extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
-          'projectCategory': projectCategory,
-          'fundingCategory': fundingCategory,
-          'status': status,
-          'startDate': startDate,
-          'endDate': endDate,
-          'currency': currency,
-          'projectCostFrom': projectCostFrom,
-          'projectCostTo': projectCostTo,
-          'zeroCost': zeroCost,
-          'location': location,
-          'completionRateFrom': completionRateFrom,
-          'completionRateTo': completionRateTo,
         },
       );
 
@@ -355,42 +331,34 @@ class EndpointProject extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<void> updateCommentCount(
+  _i2.Future<void> updateCount(
     int projectId,
+    int userId,
+    String field,
     bool isAdding,
   ) =>
       caller.callServerEndpoint<void>(
         'project',
-        'updateCommentCount',
+        'updateCount',
         {
           'projectId': projectId,
+          'userId': userId,
+          'field': field,
           'isAdding': isAdding,
         },
       );
 
-  _i2.Future<void> updateRepostCount(
-    int projectId,
-    bool isAdding,
-  ) =>
-      caller.callServerEndpoint<void>(
+  _i2.Future<List<int>> getUserLikedProjects() =>
+      caller.callServerEndpoint<List<int>>(
         'project',
-        'updateRepostCount',
-        {
-          'projectId': projectId,
-          'isAdding': isAdding,
-        },
+        'getUserLikedProjects',
+        {},
       );
 
-  _i2.Future<int> addRemoveLike(int id) => caller.callServerEndpoint<int>(
+  _i2.Future<int> toggleLike(int projectId) => caller.callServerEndpoint<int>(
         'project',
-        'addRemoveLike',
-        {'id': id},
-      );
-
-  _i2.Future<bool> hasLiked(int id) => caller.callServerEndpoint<bool>(
-        'project',
-        'hasLiked',
-        {'id': id},
+        'toggleLike',
+        {'projectId': projectId},
       );
 
   _i2.Future<_i12.UserRecord> authUser() =>
@@ -398,6 +366,19 @@ class EndpointProject extends _i1.EndpointRef {
         'project',
         'authUser',
         {},
+      );
+
+  _i2.Future<void> validateProjectOwnership(
+    int projectId,
+    _i12.UserRecord user,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'validateProjectOwnership',
+        {
+          'projectId': projectId,
+          'user': user,
+        },
       );
 }
 

@@ -27,8 +27,9 @@ class PostLocationsScreen extends ConsumerWidget {
         ),
         child: Center(
           child: Container(
-            margin: const EdgeInsets.only(
+            padding: const EdgeInsets.only(
               bottom: TSizes.sm - 2,
+              top: TSizes.sm,
             ),
             decoration: BoxDecoration(
               border: Border(

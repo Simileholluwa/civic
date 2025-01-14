@@ -6,7 +6,24 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$likedProjectHash() => r'6f6c60924502eda02156617eb7241b94e6c5e910';
+String _$getLikedProjectsHash() => r'a526f6dcf3ce6c5caa0ab411d10cc3d4584f060f';
+
+/// See also [getLikedProjects].
+@ProviderFor(getLikedProjects)
+final getLikedProjectsProvider = AutoDisposeFutureProvider<List<int>>.internal(
+  getLikedProjects,
+  name: r'getLikedProjectsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getLikedProjectsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetLikedProjectsRef = AutoDisposeFutureProviderRef<List<int>>;
+String _$projectCardWidgetHash() => r'ad00c0703997ce1d0a1c7062bfe54a153349255d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,138 +46,7 @@ class _SystemHash {
   }
 }
 
-/// See also [likedProject].
-@ProviderFor(likedProject)
-const likedProjectProvider = LikedProjectFamily();
-
-/// See also [likedProject].
-class LikedProjectFamily extends Family<AsyncValue<bool>> {
-  /// See also [likedProject].
-  const LikedProjectFamily();
-
-  /// See also [likedProject].
-  LikedProjectProvider call(
-    int id,
-  ) {
-    return LikedProjectProvider(
-      id,
-    );
-  }
-
-  @override
-  LikedProjectProvider getProviderOverride(
-    covariant LikedProjectProvider provider,
-  ) {
-    return call(
-      provider.id,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'likedProjectProvider';
-}
-
-/// See also [likedProject].
-class LikedProjectProvider extends FutureProvider<bool> {
-  /// See also [likedProject].
-  LikedProjectProvider(
-    int id,
-  ) : this._internal(
-          (ref) => likedProject(
-            ref as LikedProjectRef,
-            id,
-          ),
-          from: likedProjectProvider,
-          name: r'likedProjectProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$likedProjectHash,
-          dependencies: LikedProjectFamily._dependencies,
-          allTransitiveDependencies:
-              LikedProjectFamily._allTransitiveDependencies,
-          id: id,
-        );
-
-  LikedProjectProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.id,
-  }) : super.internal();
-
-  final int id;
-
-  @override
-  Override overrideWith(
-    FutureOr<bool> Function(LikedProjectRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: LikedProjectProvider._internal(
-        (ref) => create(ref as LikedProjectRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        id: id,
-      ),
-    );
-  }
-
-  @override
-  FutureProviderElement<bool> createElement() {
-    return _LikedProjectProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is LikedProjectProvider && other.id == id;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin LikedProjectRef on FutureProviderRef<bool> {
-  /// The parameter `id` of this provider.
-  int get id;
-}
-
-class _LikedProjectProviderElement extends FutureProviderElement<bool>
-    with LikedProjectRef {
-  _LikedProjectProviderElement(super.provider);
-
-  @override
-  int get id => (origin as LikedProjectProvider).id;
-}
-
-String _$projectCardWidgetHash() => r'3763931151fa76de47808f23a00ec9a3978d363a';
-
-abstract class _$ProjectCardWidget
-    extends BuildlessAutoDisposeNotifier<ProjectCardState> {
+abstract class _$ProjectCardWidget extends BuildlessNotifier<ProjectCardState> {
   late final Project project;
 
   ProjectCardState build(
@@ -211,8 +97,8 @@ class ProjectCardWidgetFamily extends Family<ProjectCardState> {
 }
 
 /// See also [ProjectCardWidget].
-class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
-    ProjectCardWidget, ProjectCardState> {
+class ProjectCardWidgetProvider
+    extends NotifierProviderImpl<ProjectCardWidget, ProjectCardState> {
   /// See also [ProjectCardWidget].
   ProjectCardWidgetProvider(
     Project project,
@@ -268,8 +154,7 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ProjectCardWidget, ProjectCardState>
-      createElement() {
+  NotifierProviderElement<ProjectCardWidget, ProjectCardState> createElement() {
     return _ProjectCardWidgetProviderElement(this);
   }
 
@@ -289,14 +174,14 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectCardWidgetRef on AutoDisposeNotifierProviderRef<ProjectCardState> {
+mixin ProjectCardWidgetRef on NotifierProviderRef<ProjectCardState> {
   /// The parameter `project` of this provider.
   Project get project;
 }
 
 class _ProjectCardWidgetProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectCardWidget,
-        ProjectCardState> with ProjectCardWidgetRef {
+    extends NotifierProviderElement<ProjectCardWidget, ProjectCardState>
+    with ProjectCardWidgetRef {
   _ProjectCardWidgetProviderElement(super.provider);
 
   @override

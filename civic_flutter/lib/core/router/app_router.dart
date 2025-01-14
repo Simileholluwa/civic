@@ -8,7 +8,6 @@ import 'package:civic_flutter/features/notifications/presentation/routes/notific
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/profile/presentation/routes/profile_routes.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
@@ -213,7 +212,6 @@ GoRouter router(Ref ref) {
           FeedRoutes.branch,
           DiscoverRoutes.branch,
           NotificationsRoutes.branch,
-          ProfileRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
           return AppWrapper(

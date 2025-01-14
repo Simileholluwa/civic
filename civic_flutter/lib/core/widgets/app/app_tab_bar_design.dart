@@ -6,26 +6,36 @@ class AppTabBarDesign extends StatelessWidget {
     super.key,
     required this.tabController,
     required this.tabs,
+    this.tabAlignment,
+    this.dividerColor,
+    this.dividerHeight,
+    this.indicator,
   });
 
   final TabController tabController;
   final List<Widget> tabs;
+  final TabAlignment? tabAlignment;
+  final Color? dividerColor;
+  final double? dividerHeight;
+  final Decoration? indicator;
 
   @override
   Widget build(BuildContext context) {
     return TabBar(
       controller: tabController,
-      tabAlignment: TabAlignment.start,
+      tabAlignment: tabAlignment ?? TabAlignment.start,
       isScrollable: true,
+      indicator: indicator,
       padding: const EdgeInsets.only(
-        left: TSizes.xs - 2,
+        left: TSizes.xs - 4,
         right: TSizes.xs,
       ),
+      dividerHeight: dividerHeight,
       unselectedLabelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
             fontSize: 14,
             color: Theme.of(context).dividerColor,
           ),
-      dividerColor: Theme.of(context).dividerColor,
+      dividerColor: dividerColor ?? Theme.of(context).dividerColor,
       labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
             fontSize: 14,
             fontWeight: FontWeight.bold,

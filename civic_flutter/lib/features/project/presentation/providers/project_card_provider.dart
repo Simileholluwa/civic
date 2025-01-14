@@ -1,44 +1,62 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_card_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ProjectCardWidget extends _$ProjectCardWidget {
   @override
   ProjectCardState build(Project project) {
-    return ProjectCardState.populate(project);
+    return ProjectCardState.populate(
+      project,
+    );
   }
 
-  Future<void> addRemoveLike(int id) async {
-    final addRemoveLike = ref.read(addRemoveLikeProvider);
-    final result = await addRemoveLike(
-      AddRemoveLikeParams(id),
+  Future<void> toggleLikeStatus(int id) async {
+    final toggleLike = ref.read(toggleLikeProvider);
+    final result = await toggleLike(
+      ToggleLikeParams(id),
     );
     return result.fold((error) {
       log(error.message);
       return;
-    }, (likesCount) {
-      state = state.copyWith(
-        numberOfLikes: likesCount.toString(),
+    }, (likesCount) async {
+      final likedProjects = ref.read(getUserLikedProjectsProvider);
+      final result = await likedProjects(
+        NoParams(),
       );
-      ref.invalidate(likedProjectProvider);
+      result.fold((error) {
+        log(error.message);
+      }, (isLiked) {
+        if (isLiked.contains(id)) {
+          likesCount+=1;
+        } else {
+          likesCount-=1;
+        }
+        state = state.copyWith(
+          numberOfLikes: likesCount.toString(),
+          hasLiked: isLiked.contains(id),
+        );
+      });
       return;
     });
   }
 }
 
-@Riverpod(keepAlive: true)
-Future<bool> likedProject(Ref ref, int id) async {
-  final likedProject = ref.read(hasLikedProjectProvider);
-  final result = await likedProject(
-    HasLikedProjectParams(id),
+@riverpod
+Future<List<int>> getLikedProjects(
+  Ref ref,
+) async {
+  final likedProjects = ref.read(getUserLikedProjectsProvider);
+  final result = await likedProjects(
+    NoParams(),
   );
   return result.fold((error) {
     log(error.message);
-    return false;
+    return <int>[];
   }, (isLiked) {
     return isLiked;
   });

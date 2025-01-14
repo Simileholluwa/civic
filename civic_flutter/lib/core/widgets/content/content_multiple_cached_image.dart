@@ -13,7 +13,7 @@ class ContentMultipleCachedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           TSizes.md,

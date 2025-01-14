@@ -99,11 +99,11 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, int>> addRemoveLike({
+  Future<Either<Failure, int>> toggleLike({
     required int id,
   }) async {
     try {
-      final result = await _remoteDatasource.addRemoveLike(
+      final result = await _remoteDatasource.toggleLike(
         id: id,
       );
       return Right(result);
@@ -117,11 +117,9 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
   
   @override
-  Future<Either<Failure, bool>> hasLikedProject({required int id}) async {
+  Future<Either<Failure, List<int>>> getUserLikedProjects() async {
     try {
-      final result = await _remoteDatasource.hasLikedProject(
-        id: id,
-      );
+      final result = await _remoteDatasource.getUserLikedProjects();
       return Right(result);
     } on ServerException catch (e) {
       return Left(

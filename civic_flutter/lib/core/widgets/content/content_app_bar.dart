@@ -7,6 +7,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final PreferredSizeWidget? bottom;
   final double? bottomHeight;
+  final Widget? leading;
+  final bool? centerTitle;
+  final double? titleSpacing;
   const ContentAppBar({
     super.key,
     required this.title,
@@ -15,6 +18,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions = const [],
     this.bottom,
     this.bottomHeight,
+    this.leading,
+    this.centerTitle,
+    this.titleSpacing,
   });
 
   @override
@@ -28,6 +34,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
           : bottom == null
               ? height
               : height + bottomHeight!,
+      padding: const EdgeInsets.only(
+        top: 3,
+      ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -39,6 +48,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: title,
         actions: actions,
         bottom: bottom,
+        leading: leading,
+        centerTitle: centerTitle,
+        titleSpacing: titleSpacing,
       ),
     );
   }

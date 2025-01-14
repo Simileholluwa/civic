@@ -8,7 +8,6 @@ class ProjectEndpoint extends Endpoint {
       session,
       where: (row) => row.id.equals(id),
     );
-
     return result;
   }
 
@@ -17,13 +16,16 @@ class ProjectEndpoint extends Endpoint {
     Project project,
   ) async {
     try {
-      final user = await authUser(session);
+      final user = await authUser(
+        session,
+      );
+
       if (project.id != null) {
-        if (project.ownerId != user.userInfoId) {
-          throw PostException(
-            message: 'Unauthorised operation',
-          );
-        }
+        await validateProjectOwnership(
+          session,
+          project.id!,
+          user,
+        );
         return await Project.db.updateRow(
           session,
           project.copyWith(
@@ -37,11 +39,19 @@ class ProjectEndpoint extends Endpoint {
             ownerId: user.id,
             owner: user,
             dateCreated: DateTime.now(),
+            commentBy: [],
+            likedBy: [],
+            repostBy: [],
           ),
         );
       }
-    } catch (e) {
-      print(e);
+    } catch (e, stackTrace) {
+      session.log(
+        'Error in saveProject: $e',
+        level: LogLevel.error,
+        exception: e,
+        stackTrace: stackTrace,
+      );
       return null;
     }
   }
@@ -62,38 +72,18 @@ class ProjectEndpoint extends Endpoint {
     Session session, {
     int limit = 10,
     int page = 1,
-    String? projectCategory,
-    String? fundingCategory,
-    String? status,
-    DateTime? startDate,
-    DateTime? endDate,
-    String? currency,
-    double? projectCostFrom,
-    double? projectCostTo,
-    bool? zeroCost,
-    String? location,
-    double? completionRateFrom,
-    double? completionRateTo,
   }) async {
+    if (limit <= 0 || page <= 0) {
+      throw UserException(
+        message: 'Invalid pagination parameters',
+      );
+    }
+
     final count = await Project.db.count(session);
     final results = await Project.db.find(
       session,
       limit: limit,
-      // where: (t) => [
-      //   if (projectCategory != null) t.projectCategory.equals(projectCategory),
-      //   if (fundingCategory != null) t.fundingCategory.equals(fundingCategory),
-      //   if (projectCostFrom != null && projectCostTo != null)
-      //     (t.projectCost >= projectCostFrom) & (t.projectCost <= projectCostTo),
-      //   if (currency != null) t.fundingCategory.equals(currency),
-      //   if (zeroCost != null) t.zeroCost.equals(zeroCost),
-      //   if (startDate != null && endDate != null)
-      //     (t.startDate >= startDate) & (t.endDate <= endDate),
-      //   if (status != null) t.status.equals(status),
-      //   if (completionRateFrom != null && completionRateTo != null)
-      //     (t.completionRate >= completionRateFrom) &
-      //         (t.completionRate <= completionRateTo),
-      // ].reduce((value, element) => value & element),
-      offset: (page * limit) - limit,
+      offset: (page - 1) * limit,
       include: Project.include(
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
@@ -115,121 +105,159 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int id,
   ) async {
-    final user = await authUser(session);
-    final project = await Project.db.findFirstRow(
+    final user = await authUser(
       session,
-      where: (row) => row.id.equals(id),
+    );
+    await validateProjectOwnership(
+      session,
+      id,
+      user,
+    );
+
+    await Project.db.deleteRow(
+      session,
+      Project(
+        id: id,
+        ownerId: user.userInfoId,
+      ),
+    );
+  }
+
+  Future<void> updateCount(
+    Session session,
+    int projectId,
+    int userId,
+    String field,
+    bool isAdding,
+  ) async {
+    final project = await Project.db.findById(
+      session,
+      projectId,
     );
     if (project == null) {
       throw PostException(
-        message: 'Project not found',
-      );
-    }
-    if (project.ownerId != user.userInfoId) {
-      throw PostException(
-        message: 'Unauthorised operation',
+        message: "Project not found",
       );
     }
 
-    await Project.db.deleteRow(
+    final Map<String, Function()> updateField = {
+      'likes': () {
+        isAdding
+            ? project.likedBy?.add(userId)
+            : project.likedBy?.remove(userId);
+      },
+      'comments': () {
+        isAdding
+            ? project.commentBy?.add(userId)
+            : project.commentBy?.remove(userId);
+      },
+      'repost': () {
+        isAdding
+            ? project.repostBy?.add(userId)
+            : project.repostBy?.remove(userId);
+      },
+    };
+
+    if (!updateField.containsKey(field)) {
+      throw Exception(
+        "Invalid field for count update",
+      );
+    }
+    updateField[field]!();
+
+    await Project.db.updateRow(
       session,
       project,
     );
   }
 
-  Future<void> updateCommentCount(
+  Future<List<int>> getUserLikedProjects(
     Session session,
-    int projectId,
-    bool isAdding,
   ) async {
-    final project = await Project.db.findById(session, projectId);
-
-    if (project == null) {
-      throw Exception('Project not found');
-    }
-
-    project.commentsCount = (project.commentsCount ?? 0) + (isAdding ? 1 : -1);
-    if (project.commentsCount! < 0) project.commentsCount = 0;
-
-    await Project.db.updateRow(session, project);
-  }
-
-  Future<void> updateRepostCount(
-    Session session,
-    int projectId,
-    bool isAdding,
-  ) async {
-    final project = await Project.db.findById(session, projectId);
-
-    if (project == null) {
-      throw Exception('Project not found');
-    }
-
-    project.repostCount = (project.repostCount ?? 0) + (isAdding ? 1 : -1);
-    if (project.repostCount! < 0) project.repostCount = 0;
-
-    await Project.db.updateRow(session, project);
-  }
-
-  Future<int> addRemoveLike(
-    Session session,
-    int id,
-  ) async {
-    
-    if (await hasLiked(
+    final user = await authUser(
       session,
-      id,
-    )) {
-      final user = await authUser(session);
-      final like = await ProjectLikes.db.findFirstRow(
+    );
+    final likedProjects = await ProjectLikes.db.find(
+      session,
+      where: (t) => t.ownerId.equals(
+        user.userInfoId,
+      ),
+    );
+    return likedProjects
+        .map(
+          (like) => like.projectId,
+        )
+        .toList();
+  }
+
+  Future<int> toggleLike(
+    Session session,
+    int projectId,
+  ) async {
+    int likesCount = 0;
+    await session.db.transaction((transaction) async {
+      final user = await authUser(
+        session,
+      );
+
+      final project = await Project.db.findById(
+        session,
+        projectId,
+        transaction: transaction,
+      );
+      if (project == null) {
+        throw PostException(
+          message: "Project not found",
+        );
+      }
+
+      final existingLike = await ProjectLikes.db.findFirstRow(
         session,
         where: (t) =>
-            t.projectId.equals(id) &
+            t.projectId.equals(
+              projectId,
+            ) &
             t.ownerId.equals(
               user.userInfoId,
             ),
+        transaction: transaction,
       );
-      await ProjectLikes.db.deleteRow(session, like!);
-      final project = await Project.db.findById(session, id);
-      if (project != null && (project.likesCount ?? 0) > 0) {
-        project.likesCount = project.likesCount! - 1;
-        await Project.db.updateRow(session, project);
-        return project.likesCount ?? 0;
-      }
-    } else {
-      final user = await authUser(session);
-      await ProjectLikes.db.insertRow(
-        session,
-        ProjectLikes(
-          projectId: id,
-          ownerId: user.userInfoId,
-          dateCreated: DateTime.now(),
-        ),
-      );
-      final project = await Project.db.findById(
-        session,
-        id,
-      );
-      if (project != null) {
-        project.likesCount = (project.likesCount ?? 0) + 1;
-        await Project.db.updateRow(session, project);
-        return project.likesCount ?? 0;
-      }
-      return 0;
-    }
-    return 0;
-  }
 
-  Future<bool> hasLiked(
-    Session session,
-    int id,
-  ) async {
-    final user = await authUser(session);
-    final like = await ProjectLikes.db.findFirstRow(
-      session,
-      where: (t) => t.projectId.equals(id) & t.ownerId.equals(user.id),
-    );
-    return like != null;
+      if (existingLike != null) {
+        await ProjectLikes.db.deleteRow(
+          session,
+          existingLike,
+          transaction: transaction,
+        );
+        await updateCount(
+          session,
+          projectId,
+          user.userInfoId,
+          'likes',
+          false,
+        );
+      } else {
+        await ProjectLikes.db.insertRow(
+          session,
+          ProjectLikes(
+            projectId: projectId,
+            ownerId: user.userInfoId,
+            dateCreated: DateTime.now(),
+          ),
+          transaction: transaction,
+        );
+        await updateCount(
+          session,
+          projectId,
+          user.userInfoId,
+          'likes',
+          true,
+        );
+      }
+      print(project.likedBy?.length);
+      likesCount = project.likedBy?.length ?? 0;
+    });
+    return likesCount;
   }
 
   Future<UserRecord> authUser(
@@ -241,18 +269,44 @@ class ProjectEndpoint extends Endpoint {
         message: 'You must be logged in',
       );
     }
+
     final user = await UserRecord.db.findFirstRow(
       session,
-      where: (row) => row.userInfoId.equals(authInfo.userId),
+      where: (row) => row.userInfoId.equals(
+        authInfo.userId,
+      ),
       include: UserRecord.include(
         userInfo: UserInfo.include(),
       ),
     );
+
     if (user == null) {
       throw UserException(
         message: 'User not found',
       );
     }
+
     return user;
+  }
+
+  Future<void> validateProjectOwnership(
+    Session session,
+    int projectId,
+    UserRecord user,
+  ) async {
+    final project = await Project.db.findById(
+      session,
+      projectId,
+    );
+    if (project == null) {
+      throw PostException(
+        message: 'Project not found',
+      );
+    }
+    if (project.ownerId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
   }
 }

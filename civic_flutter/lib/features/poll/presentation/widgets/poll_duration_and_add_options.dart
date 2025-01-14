@@ -39,9 +39,7 @@ class PollDurationAndAddOptions extends ConsumerWidget {
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: pollState.controllers.length < 5
-                    ? THelperFunctions.isDarkMode(context)
-                        ? TColors.dark
-                        : TColors.light
+                    ? Theme.of(context).cardColor
                     : Theme.of(context).disabledColor,
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
@@ -59,9 +57,7 @@ class PollDurationAndAddOptions extends ConsumerWidget {
                 color: TColors.primary,
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: THelperFunctions.isDarkMode(context)
-                    ? TColors.dark
-                    : TColors.light,
+                
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
             ),

@@ -37,8 +37,8 @@ class PostCardState {
       hasVideo: post.videoUrl?.isNotEmpty ?? false,
       locations: post.locations!,
       hasLocation: post.locations?.isNotEmpty ?? false,
-      tags: post.tags!,
-      hasTags: post.tags?.isNotEmpty ?? false,
+      tags: post.taggedUsers!,
+      hasTags: post.taggedUsers?.isNotEmpty ?? false,
       creator: post.owner!,
     );
   }
@@ -53,11 +53,12 @@ class PostCardState {
   final String numberOfComments;
   final String numberOfLikes;
   final String numberOfViews;
-  final List<String> tags;
+  final List<UserRecord> tags;
   final String text;
   final String timeAgo;
   final String videoUrl;
   final UserRecord creator;
+  final List<UserRecord> mentions = [];
 
   @override
   String toString() {
@@ -77,7 +78,7 @@ class PostCardState {
     bool? hasVideo,
     List<AWSPlaces>? locations,
     bool? hasLocation,
-    List<String>? tags,
+    List<UserRecord>? tags,
     bool? hasTags,
     UserRecord? creator,
   }) {

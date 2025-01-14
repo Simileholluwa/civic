@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/helpers/helper_functions.dart';
-import 'package:civic_flutter/features/project/presentation/helpers/project_helper_functions.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class ProjectCardState {
-  
   final String timeAgo;
   final String numberOfViews;
   final List<String> imagesUrl;
@@ -18,8 +16,10 @@ class ProjectCardState {
   final String duration;
   final String numberOfLikes;
   final String numberOfComments;
+  final String numberOfReposts;
   final bool hasLiked;
   final UserRecord creator;
+  final bool canVet;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -33,7 +33,9 @@ class ProjectCardState {
     required this.numberOfLikes,
     required this.numberOfComments,
     required this.creator,
+    required this.numberOfReposts,
     this.hasLiked = false,
+    required this.canVet,
   });
 
   ProjectCardState copyWith({
@@ -50,6 +52,8 @@ class ProjectCardState {
     String? numberOfComments,
     bool? hasLiked,
     UserRecord? creator,
+    String? numberOfReposts,
+    bool? canVet,
   }) {
     return ProjectCardState(
       timeAgo: timeAgo ?? this.timeAgo,
@@ -65,6 +69,8 @@ class ProjectCardState {
       numberOfComments: numberOfComments ?? this.numberOfComments,
       hasLiked: hasLiked ?? this.hasLiked,
       creator: creator ?? this.creator,
+      numberOfReposts: numberOfReposts ?? this.numberOfReposts,
+      canVet: canVet ?? this.canVet,
     );
   }
 
@@ -73,7 +79,9 @@ class ProjectCardState {
     return 'ProjectCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments)';
   }
 
-  factory ProjectCardState.populate(Project project) {
+  factory ProjectCardState.populate(
+    Project project,
+  ) {
     return ProjectCardState(
       creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -89,17 +97,31 @@ class ProjectCardState {
       title: project.title!,
       currency: project.currency!,
       amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),
-      completionRate: project.status! == 'Planning'
-          ? 'Not started'
-          : project.status == 'Completed'
-              ? '100% complete'
-              : '${project.completionRate}% complete',
+      completionRate: ProjectHelperFunctions.percentageElapsed(
+        project.startDate!,
+        project.endDate!,
+      ),
       duration: ProjectHelperFunctions.humanizeProjectDuration(
         project.startDate!,
         project.endDate!,
       ),
-      numberOfLikes: project.likesCount.toString(),
-      numberOfComments: project.commentsCount.toString(),
+      numberOfLikes: THelperFunctions.humanizeNumber(
+        project.likedBy!.length,
+      ),
+      numberOfComments: THelperFunctions.humanizeNumber(
+        project.commentBy!.length,
+      ),
+      hasLiked: project.likedBy?.contains(
+            project.owner!.id,
+          ) ??
+          false,
+      numberOfReposts: THelperFunctions.humanizeNumber(
+        project.repostBy!.length,
+      ),
+      canVet: ProjectHelperFunctions.canVet(
+        project.startDate!,
+        project.endDate!,
+      ),
     );
   }
 }

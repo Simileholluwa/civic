@@ -120,6 +120,36 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'String?',
         ),
+        _i2.ColumnDefinition(
+          name: 'dateCreated',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'updatedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'numberOfComments',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'numberOfLikes',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'numberOfViews',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -864,22 +894,22 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'DateTime?',
         ),
         _i2.ColumnDefinition(
-          name: 'likesCount',
-          columnType: _i2.ColumnType.bigint,
+          name: 'likedBy',
+          columnType: _i2.ColumnType.json,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'commentsCount',
-          columnType: _i2.ColumnType.bigint,
+          name: 'commentBy',
+          columnType: _i2.ColumnType.json,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'repostCount',
-          columnType: _i2.ColumnType.bigint,
+          name: 'repostBy',
+          columnType: _i2.ColumnType.json,
           isNullable: true,
-          dartType: 'int?',
+          dartType: 'List<int>?',
         ),
       ],
       foreignKeys: [
@@ -1569,6 +1599,21 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == List<_i25.Project>) {
       return (data as List).map((e) => deserialize<_i25.Project>(e)).toList()
           as dynamic;
@@ -1584,6 +1629,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<double>) {
       return (data as List).map((e) => deserialize<double>(e)).toList()
           as dynamic;
+    }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
     if (t == List<_i35.UserRecord>) {
       return (data as List).map((e) => deserialize<_i35.UserRecord>(e)).toList()

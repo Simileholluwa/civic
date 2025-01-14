@@ -26,7 +26,7 @@ class ProjectStatusPageView extends ConsumerWidget {
             projectCreationSate.status == projectStatus[0]
                 ? 'Select when this project will start and when it is expected to end.'
                 : projectCreationSate.status == projectStatus[1]
-                    ? 'Select when this project started, its completion rate, and when it is expected to end.'
+                    ? 'Select when this project started, and when it is expected to end.'
                     : projectCreationSate.status == projectStatus[2]
                         ? 'Select when this project started and when it ended.'
                         : 'Share insights on the status of this project with your constituents.',
@@ -42,29 +42,6 @@ class ProjectStatusPageView extends ConsumerWidget {
             },
           ),
           const SizedBox(height: 20),
-          Visibility(
-            visible: projectCreationSate.status == projectStatus[2],
-            child: AppTextField(
-              textController: projectCreationSate.completionRateController,
-              prefixIcon: Iconsax.percentage_square,
-              hintText: 'Percentage completion',
-              
-              textInputType: TextInputType.number,
-              validator: (value) => TValidator.validateEmptyText(
-                'Percentage completion',
-                value,
-              ),
-              onChanged: (value) {
-                projectNotifier.setCompletionRate(value ?? '');
-              },
-            ),
-          ),
-          Visibility(
-            visible: projectCreationSate.status == projectStatus[2],
-            child: const SizedBox(
-              height: 20,
-            ),
-          ),
           AppTextField(
             textController: projectCreationSate.startDateController,
             prefixIcon: Iconsax.calendar_1,

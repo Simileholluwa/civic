@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:iconsax/iconsax.dart';
 
-class AppWrapper extends ConsumerStatefulWidget {
+class AppWrapper extends ConsumerWidget {
   const AppWrapper({
     super.key,
     required this.navigatorShell,
@@ -12,14 +12,7 @@ class AppWrapper extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigatorShell;
 
   @override
-  ConsumerState<AppWrapper> createState() => _CivicWrapperState();
-}
-
-class _CivicWrapperState extends ConsumerState<AppWrapper> {
-  
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isVisible = ref.watch(appScrollVisibilityProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
@@ -31,47 +24,41 @@ class _CivicWrapperState extends ConsumerState<AppWrapper> {
           offset: isVisible ? Offset.zero : const Offset(0, 1),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            height: isVisible ? 56 : 0,
-            child: AppCustomBottomNavigationBar(
-              currentIndex: widget.navigatorShell.currentIndex,
-              onItemTapped: (index) {
-                widget.navigatorShell.goBranch(
+            height: isVisible ? 65 : 0,
+            child: BottomNavigationBar(
+              currentIndex: navigatorShell.currentIndex,
+              onTap: (index) {
+                navigatorShell.goBranch(
                   index,
-                  initialLocation: index == widget.navigatorShell.currentIndex,
+                  initialLocation: index == navigatorShell.currentIndex,
                 );
               },
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               items: [
-                CustomBottomNavigationBarItem(
-                  activeIcon: Iconsax.activity5,
-                  inactiveIcon: Iconsax.activity,
-                ),
-                CustomBottomNavigationBarItem(
-                  activeIcon: Iconsax.airdrop5,
-                  inactiveIcon: Iconsax.airdrop,
-                ),
-                CustomBottomNavigationBarItem(
-                  activeIcon: Iconsax.search_normal4,
-                  inactiveIcon: Iconsax.search_normal,
-                  iconSize: 32,
-                ),
-                CustomBottomNavigationBarItem(
-                  activeIcon: Iconsax.notification5,
-                  inactiveIcon: Iconsax.notification,
-                ),
-                CustomBottomNavigationBarItem(
-                  activeIcon: Iconsax.profile_circle5,
-                  inactiveIcon: Iconsax.profile_circle,
-                  iconSize: 32,
-                ),
+                BottomNavigationBarItem(
+                    activeIcon: Icon(Iconsax.activity5),
+                    icon: Icon(Iconsax.activity),
+                    label: 'Projects'),
+                BottomNavigationBarItem(
+                    activeIcon: Icon(Iconsax.airdrop5),
+                    icon: Icon(Iconsax.airdrop),
+                    label: 'Feed'),
+                BottomNavigationBarItem(
+                    activeIcon: Icon(Iconsax.search_normal4),
+                    icon: Icon(Iconsax.search_normal),
+                    label: 'Search'),
+                BottomNavigationBarItem(
+                    activeIcon: Icon(Iconsax.receipt_15),
+                    icon: Icon(Iconsax.receipt),
+                    label: 'Learn'),
               ],
             ),
           ),
-        ),     
+        ),
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            widget.navigatorShell,
+            navigatorShell,
             Visibility(
               visible: ref.watch(sendPostLoadingProvider),
               child: LinearProgressIndicator(
