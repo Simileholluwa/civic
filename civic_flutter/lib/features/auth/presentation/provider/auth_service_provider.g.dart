@@ -6,8 +6,28 @@ part of 'auth_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$authLocalDatasourceHash() =>
+    r'2f607a386fc73fbff44bbe21b775a23c6bfd8809';
+
+/// See also [authLocalDatasource].
+@ProviderFor(authLocalDatasource)
+final authLocalDatasourceProvider =
+    AutoDisposeProvider<AuthLocalDatasourceImpl>.internal(
+  authLocalDatasource,
+  name: r'authLocalDatasourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authLocalDatasourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef AuthLocalDatasourceRef
+    = AutoDisposeProviderRef<AuthLocalDatasourceImpl>;
 String _$authRemoteDatabaseHash() =>
-    r'daa7ce8ba7e86e01553fa25c60043959d94cfc08';
+    r'710caa8ddefd406e4f0c893307f64296c0772d4c';
 
 /// See also [authRemoteDatabase].
 @ProviderFor(authRemoteDatabase)
@@ -25,7 +45,7 @@ final authRemoteDatabaseProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRemoteDatabaseRef = AutoDisposeProviderRef<AuthRemoteDatabaseImpl>;
-String _$authRepositoryHash() => r'a8ccccfb7339ced909584054d0666dd5ccceaa71';
+String _$authRepositoryHash() => r'4661c1696def24c70b92329eb7d435e1f440dae0';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -242,5 +262,41 @@ final currentUserProvider = AutoDisposeProvider<CurrentUserUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentUserRef = AutoDisposeProviderRef<CurrentUserUseCase>;
+String _$saveUserRecordHash() => r'1e54d32b3a67d45c48fc62b95a40b3ed4556161b';
+
+/// See also [saveUserRecord].
+@ProviderFor(saveUserRecord)
+final saveUserRecordProvider =
+    AutoDisposeProvider<SaveUserRecordUserUseCase>.internal(
+  saveUserRecord,
+  name: r'saveUserRecordProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$saveUserRecordHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SaveUserRecordRef = AutoDisposeProviderRef<SaveUserRecordUserUseCase>;
+String _$getUserRecordHash() => r'18aea03ad612aa9a1d246d5df51b33778bf60708';
+
+/// See also [getUserRecord].
+@ProviderFor(getUserRecord)
+final getUserRecordProvider =
+    AutoDisposeProvider<GetUserRecordUseCase>.internal(
+  getUserRecord,
+  name: r'getUserRecordProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getUserRecordHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetUserRecordRef = AutoDisposeProviderRef<GetUserRecordUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -5,26 +5,15 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class PoliticalStatusOptions extends ConsumerStatefulWidget {
+class PoliticalStatusOptions extends ConsumerWidget {
   const PoliticalStatusOptions({
     super.key,
-    required this.email,
   });
 
-  final String email;
-
   @override
-  ConsumerState<PoliticalStatusOptions> createState() =>
-      _PoliticalStatusOptionsState();
-}
-
-class _PoliticalStatusOptionsState
-    extends ConsumerState<PoliticalStatusOptions> {
-  var _currentPoliticalStatus = PoliticalStatus.none;
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = ref.watch(authProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authNotifier = ref.watch(authProvider.notifier);
+    final authState = ref.watch(authProvider);
     return Column(
       children: [
         Container(
@@ -48,7 +37,7 @@ class _PoliticalStatusOptionsState
             itemBuilder: (context, index) {
               final status = allStatus[index];
               final isSelected =
-                  _currentPoliticalStatus == status.politicalStatus;
+                  authState.politicalStatus == status.politicalStatus;
               return Container(
                 decoration: BoxDecoration(
                   border: index == 0
@@ -102,9 +91,7 @@ class _PoliticalStatusOptionsState
                 ),
                 child: ListTile(
                   onTap: () {
-                    setState(() {
-                      _currentPoliticalStatus = status.politicalStatus;
-                    });
+                    authNotifier.setPoliticalStatus(status.politicalStatus);
                   },
                   title: Text(
                     status.title,
@@ -126,16 +113,8 @@ class _PoliticalStatusOptionsState
         ),
         FilledButton(
           onPressed: () {
-            controller.navigateToChooseUsername(
-              widget.email,
-              _currentPoliticalStatus.index,
-            );
             context.pushNamed(
               AppRoutes.chooseUsername,
-              extra: {
-                'email': widget.email,
-                'politicalStatus': _currentPoliticalStatus.index,
-              },
             );
           },
           child: const Text(

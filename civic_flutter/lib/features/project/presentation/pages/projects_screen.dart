@@ -27,10 +27,9 @@ class ProjectsScreen extends ConsumerWidget {
     final projectWidgetsNotifier =
         ref.watch(projectScreenWidgetsProvider.notifier);
     final tabController = ref.watch(projectScreenTabProvider);
-    final isVisible = ref.watch(appScrollVisibilityProvider);
     return Scaffold(
       appBar: ContentAppBar(
-        isVisible: isVisible,
+        isVisible: true,
         leading: IconButton(
           icon: const Icon(
             Icons.apps,

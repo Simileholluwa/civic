@@ -1,8 +1,10 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class NinForm extends ConsumerStatefulWidget {
   const NinForm({
@@ -45,16 +47,17 @@ class _NinFormState extends ConsumerState<NinForm> {
               height: TSizes.spaceBtwSections,
             ),
             AppDualButton(
-              onTapSkipButton: () =>
-                  ref.read(authProvider.notifier).navigateToApp(
-                        context,
-                      ),
+              onTapSkipButton: () {
+                context.go(
+                  ProjectRoutes.namespace,
+                );
+                ref.invalidate(authProvider);
+              },
               activeButtonText: TTexts.tContinue,
               onTapActiveButton: () =>
                   ref.read(authProvider.notifier).searchNinRecord(
                         ninNumber: _ninController.text.trim(),
                         formKey: _formKey,
-                        context: context,
                       ),
               activeButtonLoading: ref.watch(searchNinLoadingProvider),
               skipButtonLoading: false,

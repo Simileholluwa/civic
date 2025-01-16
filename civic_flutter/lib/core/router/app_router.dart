@@ -90,11 +90,7 @@ GoRouter router(Ref ref) {
             path: AppRoutes.login,
             name: AppRoutes.login,
             builder: (context, state) {
-              final data = state.extra as Map<String, String>;
-              return LoginScreen(
-                email: data['email'] ?? '',
-                username: data['username'] ?? '',
-              );
+              return LoginScreen();
             },
             routes: [
               // Password reset
@@ -102,30 +98,20 @@ GoRouter router(Ref ref) {
                 path: AppRoutes.resetPassword,
                 name: AppRoutes.resetPassword,
                 builder: (context, state) {
-                  final data = state.extra as Map<String, String>;
-                  return ResetPasswordScreen(
-                    email: data['email'] ?? '',
-                  );
+                  return ResetPasswordScreen();
                 },
                 routes: [
                   GoRoute(
                       path: AppRoutes.verifyResetPasswordCode,
                       name: AppRoutes.verifyResetPasswordCode,
                       builder: (context, state) {
-                        final data = state.extra as Map<String, String>;
-                        return VerifyPasswordResetCodeScreen(
-                          email: data['email'] ?? '',
-                        );
+                        return VerifyPasswordResetCodeScreen();
                       }),
                   GoRoute(
                       path: AppRoutes.createNewPassword,
                       name: AppRoutes.createNewPassword,
                       builder: (context, state) {
-                        final data = state.extra as Map<String, String>;
-                        return NewPasswordScreen(
-                          code: data['code'] ?? '',
-                          email: data['email'] ?? '',
-                        );
+                        return NewPasswordScreen();
                       }),
                 ],
               ),
@@ -134,46 +120,29 @@ GoRouter router(Ref ref) {
 
           // Sign up
           GoRoute(
-              path: AppRoutes.politicalStatus,
-              name: AppRoutes.politicalStatus,
-              builder: (context, state) {
-                final data = state.extra as Map<String, String>;
-                return PoliticalStatusScreen(
-                  email: data['email'] ?? '',
-                );
-              }),
+            path: AppRoutes.politicalStatus,
+            name: AppRoutes.politicalStatus,
+            builder: (context, state) {
+              return const PoliticalStatusScreen();
+            },
+          ),
           GoRoute(
               path: AppRoutes.chooseUsername,
               name: AppRoutes.chooseUsername,
               builder: (context, state) {
-                final data = state.extra as Map<String, dynamic>;
-                return UsernameScreen(
-                  email: data['email'] ?? '',
-                  politicalStatus: data['politicalStatus'] ?? 3,
-                );
+                return UsernameScreen();
               }),
           GoRoute(
               path: AppRoutes.createAccountRequest,
               name: AppRoutes.createAccountRequest,
               builder: (context, state) {
-                final data = state.extra as Map<String, dynamic>;
-                return CreateAccountRequestScreen(
-                  email: data['email'] ?? '',
-                  politicalStatus: data['politicalStatus'] ?? 3,
-                  username: data['username'] ?? '',
-                );
+                return CreateAccountRequestScreen();
               }),
           GoRoute(
               path: AppRoutes.validateCreateAccount,
               name: AppRoutes.validateCreateAccount,
               builder: (context, state) {
-                final data = state.extra as Map<String, dynamic>;
-                return ValidateCreateAccountScreen(
-                  email: data['email'] ?? '',
-                  politicalStatus: data['politicalStatus'] ?? 3,
-                  username: data['username'] ?? '',
-                  password: data['password'] ?? '',
-                );
+                return ValidateCreateAccountScreen();
               }),
 
           // Account verification

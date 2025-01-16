@@ -23,8 +23,8 @@ import '../endpoints/user_record_endpoint.dart' as _i11;
 import 'package:civic_server/src/generated/article/article.dart' as _i12;
 import 'package:civic_server/src/generated/poll/poll.dart' as _i13;
 import 'package:civic_server/src/generated/post/post.dart' as _i14;
-import 'package:civic_server/src/generated/project/project.dart' as _i15;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i16;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i15;
+import 'package:civic_server/src/generated/project/project.dart' as _i16;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i17;
 
 class Endpoints extends _i1.EndpointDispatch {
@@ -565,6 +565,121 @@ class Endpoints extends _i1.EndpointDispatch {
             page: params['page'],
           ),
         ),
+        'deletePost': _i1.MethodConnector(
+          name: 'deletePost',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).deletePost(
+            session,
+            params['id'],
+          ),
+        ),
+        'updateCount': _i1.MethodConnector(
+          name: 'updateCount',
+          params: {
+            'postId': _i1.ParameterDescription(
+              name: 'postId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'field': _i1.ParameterDescription(
+              name: 'field',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'isAdding': _i1.ParameterDescription(
+              name: 'isAdding',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).updateCount(
+            session,
+            params['postId'],
+            params['userId'],
+            params['field'],
+            params['isAdding'],
+          ),
+        ),
+        'getUserLikedPosts': _i1.MethodConnector(
+          name: 'getUserLikedPosts',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint)
+                  .getUserLikedPosts(session),
+        ),
+        'toggleLike': _i1.MethodConnector(
+          name: 'toggleLike',
+          params: {
+            'postId': _i1.ParameterDescription(
+              name: 'postId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).toggleLike(
+            session,
+            params['postId'],
+          ),
+        ),
+        'authUser': _i1.MethodConnector(
+          name: 'authUser',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).authUser(session),
+        ),
+        'validatePostOwnership': _i1.MethodConnector(
+          name: 'validatePostOwnership',
+          params: {
+            'postId': _i1.ParameterDescription(
+              name: 'postId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'user': _i1.ParameterDescription(
+              name: 'user',
+              type: _i1.getType<_i15.UserRecord>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).validatePostOwnership(
+            session,
+            params['postId'],
+            params['user'],
+          ),
+        ),
       },
     );
     connectors['project'] = _i1.EndpointConnector(
@@ -594,7 +709,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i15.Project>(),
+              type: _i1.getType<_i16.Project>(),
               nullable: false,
             )
           },
@@ -612,7 +727,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i15.Project>(),
+              type: _i1.getType<_i16.Project>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -756,7 +871,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i16.UserRecord>(),
+              type: _i1.getType<_i15.UserRecord>(),
               nullable: false,
             ),
           },
@@ -854,7 +969,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i16.UserRecord>(),
+              type: _i1.getType<_i15.UserRecord>(),
               nullable: false,
             )
           },

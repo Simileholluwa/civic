@@ -25,6 +25,12 @@ post:
   - schedulePost:
   - getPost:
   - getPosts:
+  - deletePost:
+  - updateCount:
+  - getUserLikedPosts:
+  - toggleLike:
+  - authUser:
+  - validatePostOwnership:
 project:
   - getProject:
   - saveProject:

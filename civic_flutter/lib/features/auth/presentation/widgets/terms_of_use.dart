@@ -1,31 +1,28 @@
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TermsAndConditions extends StatelessWidget {
+class TermsAndConditions extends ConsumerWidget {
   const TermsAndConditions({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
     return Row(
       children: [
         SizedBox(
           width: 24,
           height: 24,
-          child: Consumer(builder: (context, ref, _) {
-            return Checkbox(
-              value: ref.watch(acceptTermsProvider),
+          child: Checkbox(
+              value: authState.acceptTerms,
               onChanged: (value) {
-                if (ref.watch(acceptTermsProvider)) {
-                  ref.watch(acceptTermsProvider.notifier).setValue(false);
-                } else {
-                  ref.watch(acceptTermsProvider.notifier).setValue(true);
-                }
+                authNotifier.toggleAcceptTerms(value!);
               },
-            );
-          }),
+            ),
         ),
         const SizedBox(
           width: TSizes.sm,

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PoliticalStatusScreen extends StatelessWidget {
-  const PoliticalStatusScreen({super.key, required this.email});
-  final String email;
+  const PoliticalStatusScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +28,7 @@ class PoliticalStatusScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              PoliticalStatusOptions(
-                email: email,
-              ),
+              const PoliticalStatusOptions(),
             ],
           ),
         ),

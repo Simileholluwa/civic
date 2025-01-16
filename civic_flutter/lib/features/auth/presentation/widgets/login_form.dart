@@ -1,35 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
+class LoginForm extends ConsumerWidget {
   const LoginForm({
-    required this.email,
     super.key,
   });
 
-  final String email;
-
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authNotifier = ref.watch(authProvider.notifier);
+    final authState = ref.watch(authProvider);
 
-class _LoginFormState extends ConsumerState<LoginForm> {
-  final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = ref.watch(authProvider.notifier);
     return Form(
-      key: _formKey,
+      key: authState.passwordFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,
@@ -37,12 +25,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         child: Column(
           children: [
             AppPasswordField(
-              textController: _passwordController,
+              textController: authState.passwordController,
               validator: (value) => TValidator.validateEmptyText(
                 'Password',
                 value,
               ),
               hintText: 'Enter your password',
+              onChanged: (value) => authNotifier.setPassword(value!),
             ),
             const SizedBox(
               height: TSizes.spaceBtwInputFields,
@@ -51,10 +40,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => controller.navigateToResetPassword(
-                    widget.email,
-                    context,
-                  ),
+                  onTap: () {
+                    context.pushNamed(
+                      AppRoutes.resetPassword,
+                    );
+                  },
                   child: Text(
                     'Forgot password?',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -68,12 +58,22 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               height: TSizes.spaceBtwSections,
             ),
             FilledButton(
-              onPressed: () => controller.signInWithEmailAndPassword(
-                email: widget.email,
-                password: _passwordController.text,
-                formKey: _formKey,
-                context: context,
-              ),
+              onPressed: () async {
+                final isValid =
+                    authState.passwordFormKey.currentState!.validate();
+                if (!isValid) return;
+                final userRecord =
+                    await authNotifier.signInWithEmailAndPassword();
+                if (userRecord != null && userRecord.verifiedAccount) {
+                  ref.read(verifiedUserProvider.notifier).setValue(true);
+                  context.goNamed(ProjectRoutes.namespace);
+                  ref.invalidate(authProvider);
+                } else if (userRecord != null && !userRecord.verifiedAccount) {
+                  context.goNamed(AppRoutes.verifyAccount);
+                } else {
+                  return;
+                }
+              },
               child: const Text(
                 TTexts.signIn,
               ),

@@ -1,32 +1,22 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:go_router/go_router.dart';
 
-class CreateAccountRequestForm extends ConsumerStatefulWidget {
+class CreateAccountRequestForm extends ConsumerWidget {
   const CreateAccountRequestForm({
     super.key,
-    required this.email,
-    required this.politicalStatus,
-    required this.username,
   });
 
-  final String email;
-  final int politicalStatus;
-  final String username;
-
   @override
-  ConsumerState<CreateAccountRequestForm> createState() => _SignUpFormState();
-}
-
-class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
     return Form(
-      key: _formKey,
+      key: authState.newAccountPasswordFormKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -35,8 +25,11 @@ class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
         child: Column(
           children: [
             AppPasswordField(
-              textController: _passwordController,
+              textController: authState.newAccountPasswordController,
               validator: TValidator.validatePassword,
+              onChanged: (value) {
+                authNotifier.setNewAccountPassword(value!);
+              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwInputFields,
@@ -46,15 +39,18 @@ class _SignUpFormState extends ConsumerState<CreateAccountRequestForm> {
               height: TSizes.spaceBtwSections,
             ),
             FilledButton(
-              onPressed: () =>
-                  ref.watch(authProvider.notifier).createAccountRequest(
-                        formKey: _formKey,
-                        password: _passwordController.text,
-                        email: widget.email,
-                        username: widget.username,
-                        politicalStatus: widget.politicalStatus,
-                        context: context,
-                      ),
+              onPressed: () async {
+                final isValid = authState
+                    .newAccountPasswordFormKey.currentState!
+                    .validate();
+                if (!isValid) return;
+                final created = await authNotifier.createAccountRequest();
+                if (created) {
+                  context.pushNamed(
+                    AppRoutes.validateCreateAccount,
+                  );
+                }
+              },
               child: const Text(
                 TTexts.tContinue,
               ),

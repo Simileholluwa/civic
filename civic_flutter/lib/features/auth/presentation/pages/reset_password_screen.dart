@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key, required this.email});
-
-  final String email;
+  const ResetPasswordScreen({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +29,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 authTitle: TTexts.forgetPassword,
                 authSubTitle: TTexts.forgetPasswordSubTitle,
               ),
-              ResetPasswordForm(
-                email: email,
-              ),
+              ResetPasswordForm(),
             ],
           ),
         ),

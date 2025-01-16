@@ -6,11 +6,7 @@ import 'package:civic_flutter/features/auth/auth.dart';
 class UsernameScreen extends StatelessWidget {
   const UsernameScreen({
     super.key,
-    required this.email,
-    required this.politicalStatus,
   });
-  final String email;
-  final int politicalStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +31,7 @@ class UsernameScreen extends StatelessWidget {
                 authSubTitle:
                     'Enter a username that uniquely identifies you.',
               ),
-              UsernameForm(
-                email: email,
-                politicalStatus: politicalStatus,
-              ),
+              UsernameForm(),
             ],
           ),
         ),

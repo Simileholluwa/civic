@@ -1,12 +1,12 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-// ignore_for_file: avoid_build_context_in_providers
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/poll/poll.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
@@ -15,102 +15,104 @@ part 'auth_provider.g.dart';
 class Auth extends _$Auth {
   @override
   AuthState build() {
-    return AuthStateBooting();
+    return AuthState.initial();
   }
 
-  Future<void> logout(BuildContext context) async {
+  void setEmail(String email) {
+    state = state.copyWith(email: email);
+  }
+
+  void setUsername(String username) {
+    state = state.copyWith(username: username);
+  }
+
+  void setPassword(String password) {
+    state = state.copyWith(password: password);
+  }
+
+  void setPoliticalStatus(PoliticalStatus politicalStatus) {
+    state = state.copyWith(politicalStatus: politicalStatus);
+  }
+
+  void setNewAccountPassword (String password) {
+    state = state.copyWith(newAccountPassword: password);
+  }
+
+  void setVerificationCode(String code) {
+    state = state.copyWith(verificationCode: code);
+  }
+
+  void setResetPasswordEmail(String email) {
+    state = state.copyWith(resetPasswordEmail: email);
+  }
+
+  void setPasswordResetCode(String code) {
+    state = state.copyWith(passwordResetCode: code);
+  }
+
+  void setNewPassword(String password) {
+    state = state.copyWith(newPassword: password);
+  }
+
+  void toggleAcceptTerms(bool value) {
+    state = state.copyWith(acceptTerms: value);
+  }
+
+  Future<bool> logout() async {
     final logOutUseCase = ref.read(logOutProvider);
     final result = await logOutUseCase(
       NoParams(),
     );
-    result.fold((error) => TToastMessages.errorToast(error.message), (r) {
+    return result.fold((error) {
+      TToastMessages.errorToast(error.message);
+      return false;
+      }, (r) {
       ref.read(authUserProvider.notifier).setValue(false);
-      context.pushNamed(AppRoutes.auth);
+      ref.invalidate(paginatedProjectListProvider);
+      ref.invalidate(paginatedPostListProvider);
+      ref.invalidate(paginatedPollListProvider);
+      ref.invalidate(paginatedArticleListProvider);
+      return true;
     });
   }
 
-  Future<void> signInWithEmailAndPassword({
-    required String email,
-    required String password,
-    required GlobalKey<FormState> formKey,
-    required BuildContext context,
-  }) async {
-    final isValid = formKey.currentState!.validate();
-
-    if (!isValid) return;
+  Future<UserRecord?> signInWithEmailAndPassword() async {
     final signInUseCase = ref.read(userSignInProvider);
-
     ref.read(signInLoadingProvider.notifier).setValue(true);
     final result = await signInUseCase(
       UserSignInParams(
-        email,
-        password,
+        state.email,
+        state.password,
       ),
     );
     ref.read(signInLoadingProvider.notifier).setValue(false);
-    result.fold((error) {
+    return result.fold((error) {
       TToastMessages.errorToast(error.message);
-      return;
+      return null;
     }, (userRecord) {
       ref.read(authUserProvider.notifier).setValue(true);
-
-      if (userRecord != null && userRecord.verifiedAccount) {
-        ref.read(verifiedUserProvider.notifier).setValue(true);
-        context.goNamed(
-          ProjectRoutes.namespace,
-        );
-        ref.read(localStorageProvider).setInt(
-              'userId',
-              userRecord.userInfo!.id!,
-            );
-        return;
-      } else if (userRecord != null && !userRecord.verifiedAccount) {
-        context.goNamed(
-          AppRoutes.verifyAccount,
-        );
-        ref.read(localStorageProvider).setInt(
-              'userId',
-              userRecord.userInfo!.id!,
-            );
-        return;
-      }
+      return userRecord;
     });
   }
 
-  Future<void> checkIfNewUser({
-    required String email,
-    required GlobalKey<FormState> formKey,
-    required BuildContext context,
-  }) async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
-
+  Future<bool?> checkIfNewUser() async {
     final newUserUseCase = ref.read(checkIfNewUserProvider);
     ref.read(checkEmailLoadingProvider.notifier).setValue(true);
     final result = await newUserUseCase(
       CheckIfNewUserParams(
-        email,
+        state.email,
       ),
     );
     ref.read(checkEmailLoadingProvider.notifier).setValue(false);
-    result.fold((error) {
+    return result.fold((error) {
       TToastMessages.errorToast(error.message);
+      return null;
     }, (username) {
       if (username != null) {
-        context.pushNamed(
-          AppRoutes.login,
-          extra: {
-            'email': email,
-            'username': username,
-          },
-        );
+        setUsername(username);
+        return false;
       } else {
-        context.pushNamed(
-          AppRoutes.politicalStatus,
-          extra: {
-            'email': email,
-          },
-        );
+        return true;
       }
     });
   }
@@ -130,143 +132,75 @@ class Auth extends _$Auth {
     return usernames;
   }
 
-  Future<void> createAccountRequest({
-    required GlobalKey<FormState> formKey,
-    required String password,
-    required String email,
-    required String username,
-    required int politicalStatus,
-    required BuildContext context,
-  }) async {
-    final isValid = formKey.currentState!.validate();
+  Future<bool> createAccountRequest() async {
     final createAccountRequest = ref.read(createAccountRequestProvider);
-    if (!isValid) return;
-
-    if (!ref.watch(acceptTermsProvider)) {
-      if (context.mounted) {
+    if (!state.acceptTerms) {
         TToastMessages.errorToast(
           'Read and accept privacy policy and terms of use.',
-        );
-      }
-      return;
+        );     
+      return false;
     }
     ref.read(createAccountLoadingProvider.notifier).setValue(true);
     final result = await createAccountRequest(
       CreateAccountRequestParams(
-        password,
-        email,
-        username,
+        state.newAccountPassword,
+        state.email,
+        state.username,
       ),
     );
     ref.read(createAccountLoadingProvider.notifier).setValue(false);
-    result.fold((error) {
+    return result.fold((error) {
       TToastMessages.errorToast(error.message);
+      return false;
     }, (r) {
       TToastMessages.successToast(
-        'A verification code has been sent to your email',
+        'A verification code has been sent to your email.',
       );
-      context.pushNamed(
-        AppRoutes.validateCreateAccount,
-        extra: {
-          'email': email,
-          'politicalStatus': politicalStatus,
-          'username': username,
-          'password': password,
-        },
-      );
+      return true;
     });
   }
 
-  void navigateToChooseUsername(
-    String email,
-    int politicalStatus,
-  ) {
-    state = AuthStateUsername(email: email, politicalStatus: politicalStatus);
-  }
-
-  void navigateToApp(BuildContext context) {
-    context.go(ProjectRoutes.namespace);
-  }
-
-  void navigateToCreateAccount(
-    String email,
-    int politicalStatus,
-    String username,
-    BuildContext context, {
-    required GlobalKey<FormState> formKey,
-  }) {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
-    context.pushNamed(
-      AppRoutes.createAccountRequest,
-      extra: {
-        'email': email,
-        'politicalStatus': politicalStatus,
-        'username': username,
-      },
-    );
-  }
-
-  Future<void> validateCreateAccount({
-    required String code,
-    required String email,
-    required int politicalStatus,
-    required BuildContext context,
-    required String password,
-  }) async {
+  Future<bool> validateCreateAccount() async {
     final validateAccount = ref.read(validateCreateAccountProvider);
 
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(true);
     final result = await validateAccount(
       ValidateCreateAccountParams(
-        code: code,
-        email: email,
-        politicalStatus: PoliticalStatus.fromJson(politicalStatus),
-        password: password,
+        code: state.verificationCode,
+        email: state.email,
+        politicalStatus: PoliticalStatus.fromJson(state.politicalStatus.index),
+        password: state.newAccountPassword,
       ),
     );
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
-    result.fold((error) {
+    return result.fold((error) {
       TToastMessages.errorToast(error.message);
+      return false;
     }, (r) {
       TToastMessages.successToast(
         'Great! Your account has been created.',
       );
-      context.pushNamed(
-        AppRoutes.verifyAccount,
-      );
+      return true;
     });
   }
 
-  Future<void> initiatePasswordRequest({
-    required String email,
-    required GlobalKey<FormState> formKey,
-    required BuildContext context,
-  }) async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
-
+  Future<bool> initiatePasswordRequest() async {
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
     ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(true);
     final result = await initiatePasswordReset(
       InitiatePasswordResetParams(
-        email,
+        state.resetPasswordEmail,
       ),
     );
     ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(false);
-    result.fold((error) {
+    return result.fold((error) {
       TToastMessages.errorToast(error.message);
-      return;
+      return false;
     }, (r) {
       TToastMessages.successToast(
         'Password reset code has been sent to your email',
       );
-      context.goNamed(
-        AppRoutes.verifyResetPasswordCode,
-        extra: {
-          'email': email,
-        },
-      );
+      return true;
     });
   }
 
@@ -297,58 +231,24 @@ class Auth extends _$Auth {
     });
   }
 
-  void navigateToResetPassword(
-    String email,
-    BuildContext context,
-  ) {
-    context.pushNamed(
-      AppRoutes.resetPassword,
-      extra: {
-        'email': email,
-      },
-    );
-  }
-
-  navigateToCreateNewPassword(
-    String code,
-    String email,
-    BuildContext context,
-  ) {
-    context.goNamed(
-      AppRoutes.createNewPassword,
-      extra: {
-        'code': code,
-        'email': email,
-      },
-    );
-  }
-
-  Future<void> resetPassword({
-    required GlobalKey<FormState> formKey,
-    required String email,
-    required String newPassword,
-    required String code,
-    required BuildContext context,
-  }) async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
-
+  Future<bool> resetPassword() async {
     final resetPasswordUseCase = ref.read(resetUserPasswordProvider);
     ref.read(resetPasswordLoadingProvider.notifier).setValue(true);
     final result = await resetPasswordUseCase(
       ResetUserPasswordParams(
-        email,
-        newPassword,
-        code,
+        state.resetPasswordEmail,
+        state.newPassword,
+        state.passwordResetCode,
       ),
     );
     ref.read(resetPasswordLoadingProvider.notifier).setValue(false);
-    result.fold(
+    return result.fold(
       (error) {
         TToastMessages.errorToast(error.message);
+        return false;
       },
       (r) {
-        context.goNamed(AppRoutes.auth);
+        return true;
       },
     );
   }
@@ -356,7 +256,6 @@ class Auth extends _$Auth {
   Future<void> searchNinRecord({
     required String ninNumber,
     required GlobalKey<FormState> formKey,
-    required BuildContext context,
   }) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
@@ -368,12 +267,12 @@ class Auth extends _$Auth {
     ref.read(searchNinLoadingProvider.notifier).setValue(false);
     result.fold((error) => TToastMessages.errorToast(error.message), (r) {
       if (r != null) {
-        context.goNamed(
-          AppRoutes.confirmNinDetails,
-          extra: {
-            'ninRecord': r,
-          },
-        );
+        // context.goNamed(
+        //   AppRoutes.confirmNinDetails,
+        //   extra: {
+        //     'ninRecord': r,
+        //   },
+        // );
       } else {
         TToastMessages.errorToast('NIN already exists');
       }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
@@ -56,13 +57,16 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required Client client,
     required SessionManager sessionManager,
     required EmailAuthController auth,
+    required AuthLocalDatasource localDatabase,
   })  : _client = client,
         _auth = auth,
-        _sessionManager = sessionManager;
+        _sessionManager = sessionManager,
+        _localDatabase = localDatabase;
 
   final Client _client;
   final SessionManager _sessionManager;
   final EmailAuthController _auth;
+  final AuthLocalDatasource _localDatabase;
 
   @override
   Future<String?> checkIfNewUser({required String email}) async {
@@ -73,11 +77,9 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.userRecord
-          .checkIfNewUser(
-            email,
-          )
-          ;
+      final result = await _client.userRecord.checkIfNewUser(
+        email,
+      );
 
       if (result == null) {
         return null;
@@ -109,13 +111,11 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _auth
-          .resetPassword(
-            email,
-            verificationCode,
-            newPassword,
-          )
-          ;
+      final result = await _auth.resetPassword(
+        email,
+        verificationCode,
+        newPassword,
+      );
       if (!result) {
         throw const ServerException(
           message: 'Incorrect verification code.',
@@ -147,12 +147,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _client.modules.auth.email
-          .authenticate(
-            email,
-            password,
-          )
-          ;
+      final result = await _client.modules.auth.email.authenticate(
+        email,
+        password,
+      );
       if (!result.success && result.failReason != null) {
         final failReason = result.failReason!.index;
         switch (failReason) {
@@ -200,7 +198,16 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
 
       await _sessionManager.refreshSession();
 
-      return await _client.userRecord.getUser();
+      final userRecord = await _client.userRecord.getUser();
+      if (userRecord == null) {
+        throw const ServerException(
+          message: 'User record not found',
+        );
+      }
+      await _localDatabase.saveUserRecord(
+        userRecord: userRecord,
+      );
+      return userRecord;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
@@ -227,13 +234,11 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _auth
-          .createAccountRequest(
-            userName,
-            email,
-            password,
-          )
-          ;
+      final result = await _auth.createAccountRequest(
+        userName,
+        email,
+        password,
+      );
 
       if (!result) {
         await _auth
@@ -281,12 +286,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       }
       var bio = 'A Nigerian Citizen';
       final selectedPoliticalStatus = politicalStatus.name;
-      final result = await _auth
-          .validateAccount(
-            email,
-            code,
-          )
-          ;
+      final result = await _auth.validateAccount(
+        email,
+        code,
+      );
       if (result == null) {
         throw const ServerException(
           message: 'Incorrect verification code',
@@ -343,6 +346,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'Failed to sign out',
         );
       }
+      await _localDatabase.removeUserRecord();
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {
@@ -429,11 +433,9 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'You are not connected to the internet.',
         );
       }
-      final result = await _auth
-          .initiatePasswordReset(
-            email,
-          )
-          ;
+      final result = await _auth.initiatePasswordReset(
+        email,
+      );
       if (!result) {
         throw const ServerException(
           message: 'Failed to send validation code',

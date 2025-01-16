@@ -31,6 +31,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     this.dateCreated,
     this.updatedAt,
     this.hashtags,
+    this.likedBy,
+    this.commentBy,
+    this.repostBy,
   });
 
   factory Post({
@@ -48,6 +51,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -88,6 +94,15 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      commentBy: (jsonSerialization['commentBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      repostBy: (jsonSerialization['repostBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -124,6 +139,12 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<_i5.PostsHashtags>? hashtags;
 
+  List<int>? likedBy;
+
+  List<int>? commentBy;
+
+  List<int>? repostBy;
+
   @override
   _i1.Table get table => t;
 
@@ -142,6 +163,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -164,6 +188,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (commentBy != null) 'commentBy': commentBy?.toJson(),
+      if (repostBy != null) 'repostBy': repostBy?.toJson(),
     };
   }
 
@@ -190,6 +217,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (commentBy != null) 'commentBy': commentBy?.toJson(),
+      if (repostBy != null) 'repostBy': repostBy?.toJson(),
     };
   }
 
@@ -247,6 +277,9 @@ class _PostImpl extends Post {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
+    List<int>? likedBy,
+    List<int>? commentBy,
+    List<int>? repostBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -262,6 +295,9 @@ class _PostImpl extends Post {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           hashtags: hashtags,
+          likedBy: likedBy,
+          commentBy: commentBy,
+          repostBy: repostBy,
         );
 
   @override
@@ -280,6 +316,9 @@ class _PostImpl extends Post {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? commentBy = _Undefined,
+    Object? repostBy = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -306,6 +345,15 @@ class _PostImpl extends Post {
       hashtags: hashtags is List<_i5.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      commentBy: commentBy is List<int>?
+          ? commentBy
+          : this.commentBy?.map((e0) => e0).toList(),
+      repostBy: repostBy is List<int>?
+          ? repostBy
+          : this.repostBy?.map((e0) => e0).toList(),
     );
   }
 }
@@ -357,6 +405,18 @@ class PostTable extends _i1.Table {
       'updatedAt',
       this,
     );
+    likedBy = _i1.ColumnSerializable(
+      'likedBy',
+      this,
+    );
+    commentBy = _i1.ColumnSerializable(
+      'commentBy',
+      this,
+    );
+    repostBy = _i1.ColumnSerializable(
+      'repostBy',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -386,6 +446,12 @@ class PostTable extends _i1.Table {
   _i5.PostsHashtagsTable? ___hashtags;
 
   _i1.ManyRelation<_i5.PostsHashtagsTable>? _hashtags;
+
+  late final _i1.ColumnSerializable likedBy;
+
+  late final _i1.ColumnSerializable commentBy;
+
+  late final _i1.ColumnSerializable repostBy;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -445,6 +511,9 @@ class PostTable extends _i1.Table {
         tags,
         dateCreated,
         updatedAt,
+        likedBy,
+        commentBy,
+        repostBy,
       ];
 
   @override

@@ -18,9 +18,9 @@ import 'package:civic_client/src/protocol/poll/poll.dart' as _i6;
 import 'package:civic_client/src/protocol/poll/poll_list.dart' as _i7;
 import 'package:civic_client/src/protocol/post/post.dart' as _i8;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i9;
-import 'package:civic_client/src/protocol/project/project.dart' as _i10;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i11;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i12;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i10;
+import 'package:civic_client/src/protocol/project/project.dart' as _i11;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i12;
 import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i13;
 import 'package:civic_client/src/protocol/user/users_list.dart' as _i14;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i15;
@@ -276,6 +276,62 @@ class EndpointPost extends _i1.EndpointRef {
           'page': page,
         },
       );
+
+  _i2.Future<void> deletePost(int id) => caller.callServerEndpoint<void>(
+        'post',
+        'deletePost',
+        {'id': id},
+      );
+
+  _i2.Future<void> updateCount(
+    int postId,
+    int userId,
+    String field,
+    bool isAdding,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'updateCount',
+        {
+          'postId': postId,
+          'userId': userId,
+          'field': field,
+          'isAdding': isAdding,
+        },
+      );
+
+  _i2.Future<List<int>> getUserLikedPosts() =>
+      caller.callServerEndpoint<List<int>>(
+        'post',
+        'getUserLikedPosts',
+        {},
+      );
+
+  _i2.Future<int> toggleLike(int postId) => caller.callServerEndpoint<int>(
+        'post',
+        'toggleLike',
+        {'postId': postId},
+      );
+
+  _i2.Future<_i10.UserRecord> authUser() =>
+      caller.callServerEndpoint<_i10.UserRecord>(
+        'post',
+        'authUser',
+        {},
+      );
+
+  _i2.Future<void> validatePostOwnership(
+    int postId,
+    _i10.UserRecord user,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'validatePostOwnership',
+        {
+          'postId': postId,
+          'user': user,
+        },
+      );
 }
 
 /// {@category Endpoint}
@@ -285,22 +341,22 @@ class EndpointProject extends _i1.EndpointRef {
   @override
   String get name => 'project';
 
-  _i2.Future<_i10.Project?> getProject(int id) =>
-      caller.callServerEndpoint<_i10.Project?>(
+  _i2.Future<_i11.Project?> getProject(int id) =>
+      caller.callServerEndpoint<_i11.Project?>(
         'project',
         'getProject',
         {'id': id},
       );
 
-  _i2.Future<_i10.Project?> saveProject(_i10.Project project) =>
-      caller.callServerEndpoint<_i10.Project?>(
+  _i2.Future<_i11.Project?> saveProject(_i11.Project project) =>
+      caller.callServerEndpoint<_i11.Project?>(
         'project',
         'saveProject',
         {'project': project},
       );
 
   _i2.Future<void> scheduleProject(
-    _i10.Project project,
+    _i11.Project project,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -312,11 +368,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i11.ProjectList> getProjects({
+  _i2.Future<_i12.ProjectList> getProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i11.ProjectList>(
+      caller.callServerEndpoint<_i12.ProjectList>(
         'project',
         'getProjects',
         {
@@ -361,8 +417,8 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
-  _i2.Future<_i12.UserRecord> authUser() =>
-      caller.callServerEndpoint<_i12.UserRecord>(
+  _i2.Future<_i10.UserRecord> authUser() =>
+      caller.callServerEndpoint<_i10.UserRecord>(
         'project',
         'authUser',
         {},
@@ -370,7 +426,7 @@ class EndpointProject extends _i1.EndpointRef {
 
   _i2.Future<void> validateProjectOwnership(
     int projectId,
-    _i12.UserRecord user,
+    _i10.UserRecord user,
   ) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -431,15 +487,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUser(_i12.UserRecord userRecord) =>
+  _i2.Future<void> saveUser(_i10.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i12.UserRecord?> getUser() =>
-      caller.callServerEndpoint<_i12.UserRecord?>(
+  _i2.Future<_i10.UserRecord?> getUser() =>
+      caller.callServerEndpoint<_i10.UserRecord?>(
         'userRecord',
         'getUser',
         {},
@@ -474,11 +530,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i12.UserRecord>> mentionUsers({
+  _i2.Future<List<_i10.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i12.UserRecord>>(
+      caller.callServerEndpoint<List<_i10.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {

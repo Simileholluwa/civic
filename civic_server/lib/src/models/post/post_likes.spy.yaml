@@ -1,0 +1,11 @@
+class: PostLikes
+table: post_likes
+fields:
+    post: Post?, relation
+    owner: UserRecord?, relation
+    dateCreated: DateTime?
+
+indexes:
+  post_id_unique_idx:
+    fields: postId, ownerId
+    unique: true

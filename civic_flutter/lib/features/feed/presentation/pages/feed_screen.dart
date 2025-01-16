@@ -18,7 +18,6 @@ class FeedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isVisible = ref.watch(appScrollVisibilityProvider);
     if (sendPost != null) {
       Future.delayed(
         Duration.zero,
@@ -26,12 +25,13 @@ class FeedScreen extends ConsumerWidget {
       );
     }
     final pageController = ref.watch(feedPageControllerProvider);
-    final pageControllerNotifier = ref.watch(feedPageControllerProvider.notifier);
+    final pageControllerNotifier =
+        ref.watch(feedPageControllerProvider.notifier);
     final currentPageNotifier = ref.watch(feedCurrentPageProvider.notifier);
     final currentPageState = ref.watch(feedCurrentPageProvider);
     return Scaffold(
       appBar: ContentAppBar(
-        isVisible: isVisible,
+        isVisible: true,
         leading: IconButton(
           icon: const Icon(
             Icons.apps,
@@ -60,7 +60,8 @@ class FeedScreen extends ConsumerWidget {
                   return GestureDetector(
                     onTap: () {
                       pageControllerNotifier.gotoPage(
-                        index,);
+                        index,
+                      );
                     },
                     child: Text(
                       text,
@@ -87,7 +88,6 @@ class FeedScreen extends ConsumerWidget {
               size: 30,
             ),
             onPressed: () {},
-            
           ),
           IconButton(
             icon: const Icon(
@@ -96,7 +96,6 @@ class FeedScreen extends ConsumerWidget {
             ),
             onPressed: () {},
           ),
-          const SizedBox(width: 5),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

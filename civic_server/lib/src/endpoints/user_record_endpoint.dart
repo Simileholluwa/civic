@@ -59,6 +59,7 @@ class UserRecordEndpoint extends Endpoint {
     if (userInfo == null) return null;
 
     // If the user already exists, return the username
+    print(userInfo.userName);
     return userInfo.userName;
   }
 

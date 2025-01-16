@@ -1,52 +1,35 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class ValidateCreateAccountForm extends ConsumerStatefulWidget {
+class ValidateCreateAccountForm extends ConsumerWidget {
   const ValidateCreateAccountForm({
     super.key,
-    required this.email,
-    required this.password,
-    required this.politicalStatus,
-    required this.username,
   });
 
-  final String email;
-  final String password;
-  final int politicalStatus;
-  final String username;
-
   @override
-  ConsumerState<ValidateCreateAccountForm> createState() =>
-      _EmailVerificationFormState();
-}
-
-class _EmailVerificationFormState
-    extends ConsumerState<ValidateCreateAccountForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _codeController = TextEditingController();
-
-  @override
-  void dispose() {
-    _codeController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
     return Form(
-      key: _formKey,
+      key: authState.verificationCodeFormKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: _codeController,
+            controller: authState.verificationCodeController,
             validator: TValidator.validateOTP,
             obscureText: true,
             keyboardType: TextInputType.text,
+            onChanged: (code) {
+              authNotifier.setVerificationCode(code);
+            },
             obscuringWidget: const Icon(
               Icons.circle,
               size: 15,
@@ -70,14 +53,14 @@ class _EmailVerificationFormState
             height: TSizes.spaceBtwSections,
           ),
           FilledButton(
-            onPressed: () =>
-                ref.read(authProvider.notifier).validateCreateAccount(
-                      code: _codeController.text,
-                      email: widget.email,
-                      politicalStatus: widget.politicalStatus,
-                      context: context,
-                      password: widget.password,
-                    ),
+            onPressed: () async {
+              final validated = await authNotifier.validateCreateAccount();
+              if (validated) {
+                context.pushNamed(
+                  AppRoutes.verifyAccount,
+                );
+              }
+            },
             child: const Text(
               TTexts.tContinue,
             ),

@@ -5,50 +5,29 @@ import 'package:pinput/pinput.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class PasswordResetVerificationForm extends ConsumerStatefulWidget {
+class PasswordResetVerificationForm extends ConsumerWidget {
   const PasswordResetVerificationForm({
     super.key,
-    required this.email,
   });
 
-  final String email;
-
   @override
-  ConsumerState<PasswordResetVerificationForm> createState() =>
-      _PasswordResetVerificationFormState();
-}
-
-class _PasswordResetVerificationFormState
-    extends ConsumerState<PasswordResetVerificationForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _codeController = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
     final isDark = THelperFunctions.isDarkMode(context);
-    ref.listen(authProvider, (_, next) {
-      switch (next) {
-        case AuthStateNewPassword():
-          context.goNamed(
-            AppRoutes.createNewPassword,
-            pathParameters: {
-              'code': next.code,
-              'email': next.email,
-            },
-          );
-        default:
-          return;
-      }
-    });
     return Form(
-      key: _formKey,
+      key: authState.passwordResetCodeFormKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: _codeController,
+            controller: authState.passwordResetCodeController,
             validator: TValidator.validateOTP,
             obscureText: true,
+            onChanged: (code) {
+              authNotifier.setPasswordResetCode(code);
+            },
             keyboardType: TextInputType.text,
             obscuringWidget: const Icon(
               Icons.circle,
@@ -73,12 +52,11 @@ class _PasswordResetVerificationFormState
             height: TSizes.spaceBtwSections,
           ),
           FilledButton(
-            onPressed: () =>
-                ref.watch(authProvider.notifier).navigateToCreateNewPassword(
-                      _codeController.text,
-                      widget.email,
-                      context,
-                    ),
+            onPressed: () {
+              context.pushNamed(
+                AppRoutes.createNewPassword,
+              );
+            },
             child: const Text(
               TTexts.tContinue,
             ),

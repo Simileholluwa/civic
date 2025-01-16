@@ -13,3 +13,6 @@ fields:
     dateCreated: DateTime?
     updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)
+    likedBy: List<int>?
+    commentBy: List<int>?
+    repostBy: List<int>?

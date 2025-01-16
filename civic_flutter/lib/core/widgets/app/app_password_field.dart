@@ -12,6 +12,7 @@ class AppPasswordField extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.iconSize = 24,
     this.hintText = 'Enter a strong password',
+    this.onChanged,
     super.key,
   });
 
@@ -22,6 +23,7 @@ class AppPasswordField extends StatelessWidget {
   final TextInputAction textInputAction;
   final String? Function(String?)? validator;
   final double iconSize;
+  final void Function(String?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class AppPasswordField extends StatelessWidget {
       return TextFormField(
         controller: textController,
         validator: validator,
+        onChanged: onChanged,
         decoration: InputDecoration(
           prefixIcon: Icon(
             prefixIcon,

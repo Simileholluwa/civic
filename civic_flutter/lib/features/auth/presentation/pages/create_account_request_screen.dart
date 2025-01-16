@@ -8,14 +8,7 @@ import 'package:civic_flutter/features/auth/auth.dart';
 class CreateAccountRequestScreen extends StatelessWidget {
   const CreateAccountRequestScreen({
     super.key,
-    required this.email,
-    required this.username,
-    required this.politicalStatus,
   });
-
-  final String email;
-  final String username;
-  final int politicalStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +33,7 @@ class CreateAccountRequestScreen extends StatelessWidget {
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols.',
               ),
-              CreateAccountRequestForm(
-                email: email,
-                politicalStatus: politicalStatus,
-                username: username,
-              ),
+              CreateAccountRequestForm(),
             ],
           ),
         ),

@@ -1,26 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class ValidateCreateAccountScreen extends StatelessWidget {
+class ValidateCreateAccountScreen extends ConsumerWidget {
   const ValidateCreateAccountScreen({
     super.key,
-    required this.email,
-    required this.password,
-    required this.politicalStatus,
-    required this.username,
   });
 
-  final String email;
-  final String password;
-  final int politicalStatus;
-  final String username;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authNotifier = ref.watch(authProvider.notifier);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
@@ -44,17 +36,14 @@ class ValidateCreateAccountScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              ValidateCreateAccountForm(
-                email: email,
-                password: password,
-                politicalStatus: politicalStatus,
-                username: username,
-              ),
+              ValidateCreateAccountForm(),
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
               AppResendLink(
-                onTap: () {},
+                onTap: () {
+                  authNotifier.createAccountRequest();
+                },
               ),
             ],
           ),

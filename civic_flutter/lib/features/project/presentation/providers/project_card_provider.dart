@@ -11,7 +11,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
   @override
   ProjectCardState build(Project project) {
     return ProjectCardState.populate(
-      project,
+      project, ref,
     );
   }
 

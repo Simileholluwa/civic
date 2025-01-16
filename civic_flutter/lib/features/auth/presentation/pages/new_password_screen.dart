@@ -7,12 +7,7 @@ import 'package:civic_flutter/features/auth/auth.dart';
 class NewPasswordScreen extends StatelessWidget {
   const NewPasswordScreen({
     super.key,
-    required this.code,
-    required this.email,
   });
-
-  final String code;
-  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +32,7 @@ class NewPasswordScreen extends StatelessWidget {
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols',
               ),
-              NewPasswordForm(
-                code: code,
-                email: email,
-              ),
+              NewPasswordForm(),
             ],
           ),
         ),

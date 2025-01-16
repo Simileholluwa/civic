@@ -4,16 +4,14 @@ import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class VerifyPasswordResetCodeScreen extends StatelessWidget {
+class VerifyPasswordResetCodeScreen extends ConsumerWidget {
   const VerifyPasswordResetCodeScreen({
     super.key,
-    required this.email,
   });
 
-  final String email;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
@@ -39,9 +37,7 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              PasswordResetVerificationForm(
-                email: email,
-              ),
+              PasswordResetVerificationForm(),
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
@@ -50,7 +46,7 @@ class VerifyPasswordResetCodeScreen extends StatelessWidget {
                   return AppResendLink(
                     onTap: () {
                       ref.watch(authProvider.notifier).resendPasswordResetCode(
-                        email: email,
+                        email: authState.resetPasswordEmail,
                       );
                     },
                   );

@@ -1,36 +1,22 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:go_router/go_router.dart';
 
-class NewPasswordForm extends ConsumerStatefulWidget {
+class NewPasswordForm extends ConsumerWidget {
   const NewPasswordForm({
     super.key,
-    required this.code,
-    required this.email,
   });
 
-  final String code;
-  final String email;
-
   @override
-  ConsumerState<NewPasswordForm> createState() => _NewPasswordFormState();
-}
-
-class _NewPasswordFormState extends ConsumerState<NewPasswordForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _newPasswordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _newPasswordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
     return Form(
-      key: _formKey,
+      key: authState.newPasswordFormKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -39,20 +25,25 @@ class _NewPasswordFormState extends ConsumerState<NewPasswordForm> {
         child: Column(
           children: [
             AppPasswordField(
-              textController: _newPasswordController,
+              textController: authState.newPasswordController,
               validator: TValidator.validatePassword,
+              onChanged: (password) {
+                authNotifier.setNewPassword(password!);
+              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
             FilledButton(
-              onPressed: () => ref.watch(authProvider.notifier).resetPassword(
-                    formKey: _formKey,
-                    email: widget.email,
-                    newPassword: _newPasswordController.text,
-                    code: widget.code,
-                    context: context,
-                  ),
+              onPressed: () async {
+                final isValid =
+                    authState.newPasswordFormKey.currentState!.validate();
+                if (!isValid) return;
+                final success = await authNotifier.resetPassword();
+                if (success) {
+                  context.goNamed(AppRoutes.auth);
+                }
+              },
               child: const Text(
                 TTexts.tContinue,
               ),

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -5,17 +6,14 @@ import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({
     super.key,
-    required this.email,
-    required this.username,
   });
-  final String email;
-  final String username;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
@@ -33,12 +31,10 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               AuthHeader(
-                authTitle: username == '' ? 'Hi there' : 'Hi $username',
+                authTitle: authState.username == '' ? 'Hi there' : 'Hi ${authState.username}',
                 authSubTitle: 'Provide the password to your account.',
               ),
-              LoginForm(
-                email: email,
-              ),
+              const LoginForm(),
             ],
           ),
         ),

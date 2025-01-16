@@ -23,7 +23,7 @@ final getLikedProjectsProvider = AutoDisposeFutureProvider<List<int>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetLikedProjectsRef = AutoDisposeFutureProviderRef<List<int>>;
-String _$projectCardWidgetHash() => r'ad00c0703997ce1d0a1c7062bfe54a153349255d';
+String _$projectCardWidgetHash() => r'599cd4fca440d24f71ade5d9f961bed270e4c0ca';
 
 /// Copied from Dart SDK
 class _SystemHash {

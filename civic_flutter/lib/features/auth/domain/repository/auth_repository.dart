@@ -44,6 +44,14 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> logout();
 
+  Future<Either<Failure, void>> saveUserRecord({
+    required UserRecord userRecord,
+  });
+
+  Either<Failure, UserRecord> getUserRecord();
+
+  Future<Either<Failure, void>> removeUserRecord();
+
   Future<Either<Failure, UserNinRecord?>> searchNinDetails({
     required String ninNumber,
   });

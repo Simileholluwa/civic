@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileRoutes {
-  static String namespace = '/profile';
+  static String namespace = ProfileScreen.route();
   static final shellNavigatorKey = GlobalKey<NavigatorState>(
     debugLabel: 'Profile Screen',
   );
@@ -13,7 +13,12 @@ class ProfileRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (_, __) => const ProfileScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, String>;
+          return ProfileScreen(
+            username: extra['username']!,
+          );
+        },
       ),
     ],
   );

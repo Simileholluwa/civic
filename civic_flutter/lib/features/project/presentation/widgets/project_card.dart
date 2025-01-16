@@ -124,7 +124,8 @@ class ProjectCard extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, projectCardState.canVet ? 5 : 0),
+            padding:
+                EdgeInsets.fromLTRB(15, 0, 15, projectCardState.canVet ? 5 : 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -174,7 +175,9 @@ class ProjectCard extends ConsumerWidget {
                     ),
                   ),
                 ContentInteractionButton(
-                  icon: projectCardState.hasLiked == true ? Iconsax.heart5 : Iconsax.heart,
+                  icon: projectCardState.hasLiked == true
+                      ? Iconsax.heart5
+                      : Iconsax.heart,
                   title: projectCardState.numberOfLikes,
                   onTap: () async {
                     await projectCardNotifier.toggleLikeStatus(

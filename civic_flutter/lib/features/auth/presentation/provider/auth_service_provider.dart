@@ -1,3 +1,4 @@
+//ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -5,11 +6,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'auth_service_provider.g.dart';
 
 @riverpod
+AuthLocalDatasourceImpl authLocalDatasource(Ref ref) {
+  return AuthLocalDatasourceImpl(
+    prefs: ref.read(localStorageProvider),
+  );
+}
+
+@riverpod
 AuthRemoteDatabaseImpl authRemoteDatabase(Ref ref) {
   return AuthRemoteDatabaseImpl(
     client: ref.read(clientProvider),
     sessionManager: ref.read(sessionProvider),
     auth: ref.read(authEmailProvider),
+    localDatabase: ref.read(authLocalDatasourceProvider),
   );
 }
 
@@ -18,7 +27,8 @@ AuthRepositoryImpl authRepository(Ref ref) {
   return AuthRepositoryImpl(
     remoteDatabase: ref.read(
       authRemoteDatabaseProvider,
-    ),
+    ), 
+    localDatabase: ref.read(authLocalDatasourceProvider),
   );
 }
 
@@ -97,6 +107,20 @@ ResetUserPasswordUseCase resetUserPassword(Ref ref) {
 @riverpod
 CurrentUserUseCase currentUser(Ref ref) {
   return CurrentUserUseCase(
+    authRepository: ref.read(authRepositoryProvider),
+  );
+}
+
+@riverpod
+SaveUserRecordUserUseCase saveUserRecord(Ref ref) {
+  return SaveUserRecordUserUseCase(
+    authRepository: ref.read(authRepositoryProvider),
+  );
+}
+
+@riverpod
+GetUserRecordUseCase getUserRecord(Ref ref) {
+  return GetUserRecordUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }

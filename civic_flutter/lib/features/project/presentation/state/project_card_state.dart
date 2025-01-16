@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCardState {
   final String timeAgo;
@@ -81,7 +82,9 @@ class ProjectCardState {
 
   factory ProjectCardState.populate(
     Project project,
+    Ref ref,
   ) {
+    final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectCardState(
       creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -112,7 +115,7 @@ class ProjectCardState {
         project.commentBy!.length,
       ),
       hasLiked: project.likedBy?.contains(
-            project.owner!.id,
+            userId,
           ) ??
           false,
       numberOfReposts: THelperFunctions.humanizeNumber(
