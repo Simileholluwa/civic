@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post_comment",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "replies",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<protocol:PostComment>?"
+          }
+        ],
+        "deleteColumns": [
+          "_postCommentChildrenPostCommentId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [
+          "post_comment_fk_2"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"_postCommentChildrenPostCommentId\" of table \"post_comment\" will be dropped.",
+            "table": "post_comment",
+            "columns": [
+              "_postCommentChildrenPostCommentId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"_postCommentChildrenPostCommentId\" of table \"post_comment\" will be dropped.",
+      "table": "post_comment",
+      "columns": [
+        "_postCommentChildrenPostCommentId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

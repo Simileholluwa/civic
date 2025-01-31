@@ -8,43 +8,59 @@ class ContentExpandableText extends StatelessWidget {
     required this.text,
     this.hasVideo = false,
     this.hasImage = false,
+    this.noMaxLines = false,
   });
 
   final String text;
   final bool hasVideo;
   final bool hasImage;
+  final bool noMaxLines;
 
   @override
   Widget build(BuildContext context) {
     return ExpandableRichText(
       text,
-      expandText: 'see more',
+      onToggleTextTap: (){},
+      expandText: noMaxLines ? '' : 'see more',
       collapseText: 'see less',
       mentionStyle: Theme.of(context)
           .textTheme
           .labelMedium!
           .copyWith(
             color: TColors.primary,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
           ),
       toggleTextStyle: Theme.of(context)
           .textTheme
           .labelMedium!
           .copyWith(
             color: Theme.of(context).hintColor,
+            fontSize: 17,
           ),
       hashtagStyle: Theme.of(context)
           .textTheme
           .labelMedium!
           .copyWith(
             color: TColors.primary,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
+          ),
+      urlStyle: Theme.of(context)
+          .textTheme
+          .labelMedium!
+          .copyWith(
+            color: TColors.primary,
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
           ),
       toggleTextColor: TColors.primary,
       style: Theme.of(context)
           .textTheme
-          .labelMedium!,
-      maxLines: hasVideo || hasImage ? 3 : 6,
+          .labelMedium!.copyWith(
+            fontSize: 17,
+          ),
+      maxLines: noMaxLines ? 100 : (hasVideo || hasImage ? 3 : 6),
     );
   }
 }

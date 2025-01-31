@@ -28,9 +28,13 @@ class PollHelperFunctions {
   }) {
     return showModalBottomSheet<bool>(
       context: context,
-      useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+        minWidth: double.maxFinite,
+      ),
       builder: (context) {
         return PollLocationsScreen(
           poll: poll,

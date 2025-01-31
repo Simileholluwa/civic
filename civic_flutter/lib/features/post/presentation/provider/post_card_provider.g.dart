@@ -6,7 +6,24 @@ part of 'post_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postCardWidgetHash() => r'847669a9b31a1244e80821abd5e476cc17fa9a43';
+String _$getLikedProjectsHash() => r'eebda2b30e8fef5ea7dbeb8713fecff0bab8e105';
+
+/// See also [getLikedProjects].
+@ProviderFor(getLikedProjects)
+final getLikedProjectsProvider = AutoDisposeFutureProvider<List<int>>.internal(
+  getLikedProjects,
+  name: r'getLikedProjectsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getLikedProjectsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetLikedProjectsRef = AutoDisposeFutureProviderRef<List<int>>;
+String _$postCardWidgetHash() => r'3b9a3423287050feb6809496ee06283ff4fd9550';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +46,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$PostCardWidget
-    extends BuildlessAutoDisposeNotifier<PostCardState> {
-  late final Post post;
+abstract class _$PostCardWidget extends BuildlessNotifier<PostCardState> {
+  late final Post? post;
 
   PostCardState build(
-    Post post,
+    Post? post,
   );
 }
 
@@ -49,7 +65,7 @@ class PostCardWidgetFamily extends Family<PostCardState> {
 
   /// See also [PostCardWidget].
   PostCardWidgetProvider call(
-    Post post,
+    Post? post,
   ) {
     return PostCardWidgetProvider(
       post,
@@ -82,10 +98,10 @@ class PostCardWidgetFamily extends Family<PostCardState> {
 
 /// See also [PostCardWidget].
 class PostCardWidgetProvider
-    extends AutoDisposeNotifierProviderImpl<PostCardWidget, PostCardState> {
+    extends NotifierProviderImpl<PostCardWidget, PostCardState> {
   /// See also [PostCardWidget].
   PostCardWidgetProvider(
-    Post post,
+    Post? post,
   ) : this._internal(
           () => PostCardWidget()..post = post,
           from: postCardWidgetProvider,
@@ -110,7 +126,7 @@ class PostCardWidgetProvider
     required this.post,
   }) : super.internal();
 
-  final Post post;
+  final Post? post;
 
   @override
   PostCardState runNotifierBuild(
@@ -138,8 +154,7 @@ class PostCardWidgetProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
-      createElement() {
+  NotifierProviderElement<PostCardWidget, PostCardState> createElement() {
     return _PostCardWidgetProviderElement(this);
   }
 
@@ -159,18 +174,18 @@ class PostCardWidgetProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PostCardWidgetRef on AutoDisposeNotifierProviderRef<PostCardState> {
+mixin PostCardWidgetRef on NotifierProviderRef<PostCardState> {
   /// The parameter `post` of this provider.
-  Post get post;
+  Post? get post;
 }
 
 class _PostCardWidgetProviderElement
-    extends AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
+    extends NotifierProviderElement<PostCardWidget, PostCardState>
     with PostCardWidgetRef {
   _PostCardWidgetProviderElement(super.provider);
 
   @override
-  Post get post => (origin as PostCardWidgetProvider).post;
+  Post? get post => (origin as PostCardWidgetProvider).post;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

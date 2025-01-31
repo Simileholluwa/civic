@@ -15,7 +15,6 @@ class AppUserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return InkWell(
       onTap: onTap,
       child: Ink(
@@ -48,9 +47,8 @@ class AppUserInfoWidget extends StatelessWidget {
                               .textTheme
                               .headlineLarge!
                               .copyWith(
-                                fontSize: 20,
-                                color:
-                                    isDark ? TColors.textWhite : TColors.dark,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

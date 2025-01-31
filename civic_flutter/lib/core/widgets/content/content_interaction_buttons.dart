@@ -6,15 +6,11 @@ class ContentInteractionButton extends StatelessWidget {
   const ContentInteractionButton({
     super.key,
     required this.icon,
-    required this.title,
     required this.onTap,
     required this.color,
-    this.showTitle = true,
   });
 
   final IconData icon;
-  final bool showTitle;
-  final String title;
   final VoidCallback onTap;
   final Color color;
 
@@ -35,21 +31,9 @@ class ContentInteractionButton extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 20,
                   color: color,
+
                 ),
-                if (showTitle)
-                  const SizedBox(
-                    width: 5,
-                  ),
-                if (showTitle)
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontSize: 14,
-                          color: color,
-                        ),
-                  ),
               ],
             ),
           ),

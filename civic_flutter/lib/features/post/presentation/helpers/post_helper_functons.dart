@@ -29,9 +29,14 @@ class PostHelperFunctions {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      showDragHandle: true,
-      useSafeArea: true,
-      
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.85,
+        minWidth: double.maxFinite,
+      ),
       builder: (context) {
         return PostLocationsScreen(
           post: post,

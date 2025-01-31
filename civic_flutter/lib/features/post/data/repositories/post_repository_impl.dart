@@ -139,4 +139,150 @@ class PostRepositoryImpl implements PostRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, int>> toggleLike({
+    required int id,
+  }) async {
+    try {
+      final result = await _remoteDatabase.toggleLike(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<int>>> getUserLikedPosts() async {
+    try {
+      final result = await _remoteDatabase.getUserLikedProjects();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deletePost({required int id}) async {
+    try {
+      final result = await _remoteDatabase.deletePost(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deletePostComment({required int id}) async {
+    try {
+      final result = await _remoteDatabase.deletePostComment(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostCommentList>> getPostComments({
+    required int postId,
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatabase.getPostComments(
+        postId: postId,
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostComment>> savePostComment({
+    required int postId,
+    required PostComment comment,
+  }) async {
+    try {
+      final result = await _remoteDatabase.savePostComment(
+        postId: postId,
+        comment: comment,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> toggleCommentLike({required int id}) async {
+    try {
+      final result = await _remoteDatabase.toggleCommentLike(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostCommentList>> getPostCommentReplies({
+    required int commentId,
+    required int postId,
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatabase.getPostCommentReplies(
+        commentId: commentId,
+        postId: postId,
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

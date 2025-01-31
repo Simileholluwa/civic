@@ -20,13 +20,20 @@ poll:
   - castVote:
   - getPolls:
   - hasVoted:
+postComment:
+  - savePostComment:
+  - getPostComments:
+  - getPostCommentReplies:
+  - deletePostComment:
+  - getUserLikedComments:
+  - toggleCommentLike:
+  - validatePostCommentOwnership:
 post:
   - savePost:
   - schedulePost:
   - getPost:
   - getPosts:
   - deletePost:
-  - updateCount:
   - getUserLikedPosts:
   - toggleLike:
   - authUser:

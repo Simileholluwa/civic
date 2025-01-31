@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostCardState {
   PostCardState({
     required this.creator,
     required this.timeAgo,
-    required this.numberOfViews,
+    required this.numberOfReposts,
     required this.numberOfLikes,
     required this.numberOfComments,
     required this.text,
@@ -19,16 +20,31 @@ class PostCardState {
     required this.hasLocation,
     required this.tags,
     required this.hasTags,
+    required this.hasLiked,
+    required this.mentions,
+    required this.hasReposts,
+    required this.hasComments,
+    required this.hasLikes,
   });
 
-  factory PostCardState.populate(Post post) {
+  factory PostCardState.populate(
+    Post post,
+    Ref ref,
+  ) {
+    final userId = ref.read(localStorageProvider).getInt('userId');
     return PostCardState(
       timeAgo: THelperFunctions.humanizeDateTime(
         post.dateCreated ?? DateTime.now(),
       ),
-      numberOfViews: '204',
-      numberOfLikes: '5',
-      numberOfComments: '6',
+      numberOfLikes: THelperFunctions.humanizeNumber(
+        post.likedBy!.length,
+      ),
+      numberOfComments: THelperFunctions.humanizeNumber(
+        post.commentBy!.length,
+      ),
+      numberOfReposts: THelperFunctions.humanizeNumber(
+        post.repostBy!.length,
+      ),
       text: post.text!,
       hasText: post.text?.isNotEmpty ?? false,
       imageUrls: post.imageUrls!,
@@ -40,6 +56,14 @@ class PostCardState {
       tags: post.taggedUsers!,
       hasTags: post.taggedUsers?.isNotEmpty ?? false,
       creator: post.owner!,
+      hasLiked: post.likedBy?.contains(
+            userId,
+          ) ??
+          false,
+      mentions: [],
+      hasReposts: post.repostBy?.isNotEmpty ?? false,
+      hasComments: post.commentBy?.isNotEmpty ?? false,
+      hasLikes: post.likedBy?.isNotEmpty ?? false,
     );
   }
 
@@ -52,22 +76,26 @@ class PostCardState {
   final List<AWSPlaces> locations;
   final String numberOfComments;
   final String numberOfLikes;
-  final String numberOfViews;
+  final String numberOfReposts;
   final List<UserRecord> tags;
   final String text;
   final String timeAgo;
   final String videoUrl;
   final UserRecord creator;
-  final List<UserRecord> mentions = [];
+  final List<UserRecord> mentions;
+  final bool hasLiked;
+  final bool hasReposts;
+  final bool hasComments;
+  final bool hasLikes;
 
   @override
   String toString() {
-    return 'PostCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments, text: $text, hasText: $hasText, imageUrls: $imageUrls, hasImage: $hasImage, videoUrl: $videoUrl, hasVideo: $hasVideo, locations: $locations, hasLocation: $hasLocation, tags: $tags, hasTags: $hasTags)';
+    return 'PostCardState( timeAgo: $timeAgo, numberOfViews: $numberOfReposts, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments, text: $text, hasText: $hasText, imageUrls: $imageUrls, hasImage: $hasImage, videoUrl: $videoUrl, hasVideo: $hasVideo, locations: $locations, hasLocation: $hasLocation, tags: $tags, hasTags: $hasTags)';
   }
 
   PostCardState copyWith({
     String? timeAgo,
-    String? numberOfViews,
+    String? numberOfReposts,
     String? numberOfLikes,
     String? numberOfComments,
     String? text,
@@ -81,10 +109,15 @@ class PostCardState {
     List<UserRecord>? tags,
     bool? hasTags,
     UserRecord? creator,
+    bool? hasLiked,
+    List<UserRecord>? mentions,
+    bool? hasReposts,
+    bool? hasComments,
+    bool? hasLikes,
   }) {
     return PostCardState(
       timeAgo: timeAgo ?? this.timeAgo,
-      numberOfViews: numberOfViews ?? this.numberOfViews,
+      numberOfReposts: numberOfReposts ?? this.numberOfReposts,
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
       numberOfComments: numberOfComments ?? this.numberOfComments,
       text: text ?? this.text,
@@ -98,6 +131,43 @@ class PostCardState {
       tags: tags ?? this.tags,
       hasTags: hasTags ?? this.hasTags,
       creator: creator ?? this.creator,
+      hasLiked: hasLiked ?? this.hasLiked,
+      mentions: mentions ?? this.mentions,
+      hasReposts: hasReposts ?? this.hasReposts,
+      hasComments: hasComments ?? this.hasComments,
+      hasLikes: hasLikes ?? this.hasLikes,
+    );
+  }
+
+  factory PostCardState.initial() {
+    return PostCardState(
+      timeAgo: '',
+      numberOfReposts: '',
+      numberOfLikes: '',
+      numberOfComments: '',
+      text: '',
+      hasText: false,
+      imageUrls: [],
+      hasImage: false,
+      videoUrl: '',
+      hasVideo: false,
+      locations: [],
+      hasLocation: false,
+      tags: [],
+      hasTags: false,
+      creator: UserRecord(
+        bio: '',
+        userInfoId: 1,
+        verifiedAccount: false,
+        following: [],
+        followers: [],
+        politicalStatus: PoliticalStatus.none,
+      ),
+      hasLiked: false,
+      mentions: [],
+      hasReposts: false,
+      hasComments: false,
+      hasLikes: false,
     );
   }
 }

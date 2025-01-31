@@ -97,6 +97,7 @@ class AppTextField extends StatelessWidget {
             errorMaxLines: 2,
             contentPadding: EdgeInsets.fromLTRB( showPrefixIcon ? 0 : 16, 16, 16, 16),
             focusedBorder: focusedBorder,
+            hintMaxLines: 1,
           ),
           style: style ?? Theme.of(context).textTheme.bodyMedium,
           

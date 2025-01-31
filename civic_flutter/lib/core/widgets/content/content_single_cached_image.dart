@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 class ContentSingleCachedImage extends StatelessWidget {
   const ContentSingleCachedImage({
     required this.imageUrl,
+    this.useMargin = true,
     super.key,
   });
 
   final String imageUrl;
+  final bool useMargin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      margin: useMargin ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : null,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           TSizes.md,

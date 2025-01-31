@@ -85,7 +85,7 @@ class FeedScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(
               Icons.filter_list_rounded,
-              size: 30,
+              size: 32,
             ),
             onPressed: () {},
           ),
@@ -96,6 +96,7 @@ class FeedScreen extends ConsumerWidget {
             ),
             onPressed: () {},
           ),
+          const SizedBox(width: 5),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -118,6 +119,7 @@ class FeedScreen extends ConsumerWidget {
           )
         ],
       ),
+      
     );
   }
 }

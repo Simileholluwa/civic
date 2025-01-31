@@ -10,7 +10,10 @@ class AppInfiniteList<T> extends ConsumerWidget {
     required this.pagingController,
     required this.itemBuilder,
     required this.onRefresh,
+    this.noItemsFound,
     this.scrollController,
+    this.scrollPhysics,
+    this.shrinkWrap,
   });
 
   final PagingController<int, T> pagingController;
@@ -20,15 +23,28 @@ class AppInfiniteList<T> extends ConsumerWidget {
     int index,
   ) itemBuilder;
   final Function() onRefresh;
+  final Widget? noItemsFound;
   final ScrollController? scrollController;
+  final ScrollPhysics? scrollPhysics;
+  final bool? shrinkWrap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshIndicator(
       onRefresh: () => onRefresh(),
-      child: PagedListView(
+      child: PagedListView.separated(
         pagingController: pagingController,
         scrollController: scrollController,
+        physics: scrollPhysics,
+        separatorBuilder: (context, index) {
+          if (index != pagingController.itemList!.length - 1) {
+            return const Divider(
+              height: 0,
+            );
+          }
+          return const SizedBox();
+        },
+        shrinkWrap: shrinkWrap ?? false,
         builderDelegate: PagedChildBuilderDelegate<T>(
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
@@ -39,29 +55,32 @@ class AppInfiniteList<T> extends ConsumerWidget {
             );
           },
           noItemsFoundIndicatorBuilder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Iconsax.search_normal,
-                    size: 100,
+            return noItemsFound ??
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
                   ),
-                  Text(
-                    "We've searched far and wide, but we couldn't find any results.",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Iconsax.search_normal,
+                        size: 100,
+                      ),
+                      Text(
+                        "We've searched far and wide, but we couldn't find any results.",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
+                );
           },
           noMoreItemsIndicatorBuilder: (context) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20,),
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -77,13 +96,11 @@ class AppInfiniteList<T> extends ConsumerWidget {
                     child: Text(
                       'END',
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
-                  
                   Expanded(
                     child: Divider(
                       color: Theme.of(context).dividerColor,

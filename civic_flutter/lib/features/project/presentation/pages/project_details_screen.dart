@@ -12,7 +12,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
 
   final int id;
 
-  static String route([int? id]) => '${ProjectRoutes.namespace}/${id ?? ':id'}';
+  static String routePath([int? id]) => '${id ?? ':id'}';
+  static String routeName() => 'details';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -190,5 +190,97 @@ final schedulePostProvider = AutoDisposeProvider<SchedulePostUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SchedulePostRef = AutoDisposeProviderRef<SchedulePostUseCase>;
+String _$togglePostLikeHash() => r'1f13c452e7db8686cf857538197010ea418ae997';
+
+/// See also [togglePostLike].
+@ProviderFor(togglePostLike)
+final togglePostLikeProvider =
+    AutoDisposeProvider<TogglePostLikeUseCase>.internal(
+  togglePostLike,
+  name: r'togglePostLikeProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$togglePostLikeHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef TogglePostLikeRef = AutoDisposeProviderRef<TogglePostLikeUseCase>;
+String _$getUserLikedPostsHash() => r'e1f830a8c5034d6ce7aeda0d2699d974d4aab65b';
+
+/// See also [getUserLikedPosts].
+@ProviderFor(getUserLikedPosts)
+final getUserLikedPostsProvider =
+    AutoDisposeProvider<GetUserLikedPostsUseCase>.internal(
+  getUserLikedPosts,
+  name: r'getUserLikedPostsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getUserLikedPostsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetUserLikedPostsRef = AutoDisposeProviderRef<GetUserLikedPostsUseCase>;
+String _$savePostCommentHash() => r'e1fbcd3c60da881421d28543fc979691d24b3346';
+
+/// See also [savePostComment].
+@ProviderFor(savePostComment)
+final savePostCommentProvider =
+    AutoDisposeProvider<SavePostCommentUseCase>.internal(
+  savePostComment,
+  name: r'savePostCommentProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$savePostCommentHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SavePostCommentRef = AutoDisposeProviderRef<SavePostCommentUseCase>;
+String _$getPostCommentsHash() => r'14b6522e10091e35b1c85c92e4f1d1f54ae48ac2';
+
+/// See also [getPostComments].
+@ProviderFor(getPostComments)
+final getPostCommentsProvider =
+    AutoDisposeProvider<GetPostCommentsUseCase>.internal(
+  getPostComments,
+  name: r'getPostCommentsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getPostCommentsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetPostCommentsRef = AutoDisposeProviderRef<GetPostCommentsUseCase>;
+String _$getPostCommentRepliesHash() =>
+    r'd5b404ae00a6304099fbecf1ce2b221b98c373b9';
+
+/// See also [getPostCommentReplies].
+@ProviderFor(getPostCommentReplies)
+final getPostCommentRepliesProvider =
+    AutoDisposeProvider<GetPostCommentRepliesUseCase>.internal(
+  getPostCommentReplies,
+  name: r'getPostCommentRepliesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getPostCommentRepliesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetPostCommentRepliesRef
+    = AutoDisposeProviderRef<GetPostCommentRepliesUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,0 +1,11 @@
+class: PostCommentLikes
+table: post_comment_likes
+fields:
+    postComment: PostComment?, relation
+    owner: UserRecord?, relation
+    dateCreated: DateTime?
+
+indexes:
+  post_comment_id_unique_idx:
+    fields: postCommentId, ownerId
+    unique: true

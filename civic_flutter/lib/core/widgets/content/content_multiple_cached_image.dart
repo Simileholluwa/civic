@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 class ContentMultipleCachedImage extends StatelessWidget {
   const ContentMultipleCachedImage({
     required this.imageUrls,
+    this.useMargin = true,
     super.key,
   });
 
   final List<String> imageUrls;
+  final bool useMargin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      margin: useMargin ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : null,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           TSizes.md,

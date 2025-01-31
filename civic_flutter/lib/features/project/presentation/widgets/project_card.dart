@@ -18,8 +18,6 @@ class ProjectCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedProjectListProvider.notifier);
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
         project,
@@ -30,15 +28,15 @@ class ProjectCard extends ConsumerWidget {
         project,
       ).notifier,
     );
-    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
+    final isVisibleNotifier = ref.watch(
+      appScrollVisibilityProvider.notifier,
+    );
     return InkWell(
       onTap: () {
-        context.push(
-          ProjectDetailsScreen.route(
-            project.id!,
-          ),
-          extra: {
-            'id': project.id,
+        context.pushNamed(
+          ProjectDetailsScreen.routeName(),
+          pathParameters: {
+            'id': project.id.toString(),
           },
         );
         isVisibleNotifier.hide();
@@ -52,7 +50,6 @@ class ProjectCard extends ConsumerWidget {
             child: ContentCreatorInfo(
               creator: projectCardState.creator,
               timeAgo: projectCardState.timeAgo,
-              numberOfViews: projectCardState.numberOfViews,
             ),
           ),
           projectCardState.imagesUrl.length == 1
@@ -114,18 +111,16 @@ class ProjectCard extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                Text(
-                  projectCardState.description,
-                  style: Theme.of(context).textTheme.labelMedium,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+                ContentExpandableText(
+                  text: projectCardState.description,
+                  hasImage: true,
                 ),
               ],
             ),
           ),
           Padding(
             padding:
-                EdgeInsets.fromLTRB(15, 0, 15, projectCardState.canVet ? 5 : 0),
+                EdgeInsets.fromLTRB(15, 0, 15, projectCardState.canVet ? 15 : 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -178,7 +173,6 @@ class ProjectCard extends ConsumerWidget {
                   icon: projectCardState.hasLiked == true
                       ? Iconsax.heart5
                       : Iconsax.heart,
-                  title: projectCardState.numberOfLikes,
                   onTap: () async {
                     await projectCardNotifier.toggleLikeStatus(
                       project.id!,
@@ -190,56 +184,41 @@ class ProjectCard extends ConsumerWidget {
                 ),
                 ContentInteractionButton(
                   icon: Iconsax.messages_1,
-                  title: projectCardState.numberOfComments,
                   onTap: () {},
                   color: Theme.of(context).textTheme.labelMedium!.color!,
                 ),
                 ContentInteractionButton(
                   icon: Iconsax.repeate_music5,
-                  title: projectCardState.numberOfReposts,
                   onTap: () {},
                   color: Theme.of(context).textTheme.labelMedium!.color!,
                 ),
                 if (projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                 if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Icons.share,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                 if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.bookmark,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                 if (!projectCardState.canVet)
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
               ],
             ),
           ),
-          if (index !=
-              pagingControllerNotifier.pagingController.itemList!.length - 1)
-            const Divider(
-              height: 0,
-            ),
         ],
       ),
     );

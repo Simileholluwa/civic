@@ -1,0 +1,9 @@
+class: PostCommentList
+
+fields:
+    results: List<PostComment>
+    count: int
+    page: int
+    numPages: int
+    limit: int
+    canLoadMore: bool

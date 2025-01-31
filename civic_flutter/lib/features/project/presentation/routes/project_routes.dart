@@ -19,15 +19,17 @@ class ProjectRoutes {
             sendProject: sendProject,
           );
         },
-      ),
-      GoRoute(
-        path: ProjectDetailsScreen.route(),
-        builder: (_, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return ProjectDetailsScreen(
-            id: data['id'],
-          );
-        },
+        routes: [
+          GoRoute(
+            path: ProjectDetailsScreen.routePath(),
+            name: ProjectDetailsScreen.routeName(),
+            builder: (_, state) {
+              return ProjectDetailsScreen(
+                id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+              );
+            },
+          ),
+        ],
       ),
     ],
   );

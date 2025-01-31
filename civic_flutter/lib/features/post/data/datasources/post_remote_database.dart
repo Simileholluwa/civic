@@ -12,12 +12,38 @@ abstract class PostRemoteDatabase {
   Future<Post?> getPost({
     required int id,
   });
+  Future<void> schedulePost({
+    required Post post,
+    required DateTime dateTime,
+  });
+  Future<int> toggleLike({
+    required int id,
+  });
+  Future<List<int>> getUserLikedProjects();
+  Future<void> deletePost({required int id});
+  Future<void> deletePostComment({required int id});
+  Future<int> toggleCommentLike({required int id});
+  Future<PostComment> savePostComment({
+    required int postId,
+    required PostComment comment,
+  });
+  Future<PostCommentList> getPostComments({
+    required int postId,
+    required int page,
+    required int limit,
+  });
+  Future<PostCommentList> getPostCommentReplies({
+    required int commentId,
+    required int postId,
+    required int page,
+    required int limit,
+  });
 }
 
 class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   PostRemoteDatabaseImpl({
     required Client client,
-  })  : _client = client;
+  }) : _client = client;
 
   final Client _client;
   @override
@@ -119,6 +145,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     }
   }
 
+  @override
   Future<void> schedulePost({
     required Post post,
     required DateTime dateTime,
@@ -134,6 +161,144 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         post,
         dateTime,
       );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<int> toggleLike({
+    required int id,
+  }) async {
+    try {
+      return await _client.post.toggleLike(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<List<int>> getUserLikedProjects() async {
+    try {
+      return await _client.post.getUserLikedPosts();
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> deletePost({required int id}) async {
+    try {
+      return await _client.post.deletePost(id);
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> deletePostComment({required int id}) async {
+    try {
+      return await _client.postComment.deletePostComment(id);
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostCommentList> getPostComments({
+    required int postId,
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      return await _client.postComment.getPostComments(
+        postId,
+        page: page,
+        limit: limit,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostComment> savePostComment({
+    required int postId,
+    required PostComment comment,
+  }) async {
+    try {
+      final result = await _client.postComment.savePostComment(
+        postId,
+        comment,
+      );
+      if (result == null) {
+        throw ServerException(message: 'Failed to save comment');
+      }
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on ServerException catch (_) {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<int> toggleCommentLike({required int id}) async {
+    try {
+      return await _client.postComment.toggleCommentLike(id);
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostCommentList> getPostCommentReplies({
+    required int commentId,
+    required int postId,
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      return await _client.postComment.getPostCommentReplies(
+        commentId,
+        postId,
+        page: page,
+        limit: limit,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
         message: e.toString(),

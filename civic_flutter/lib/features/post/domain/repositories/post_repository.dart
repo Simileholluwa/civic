@@ -19,4 +19,24 @@ abstract class PostRepository {
   Future<Either<Failure, void>> deleteDraft({
     required DraftPost draftPost,
   });
+  Future<Either<Failure, int>> toggleLike({required int id});
+  Future<Either<Failure, List<int>>> getUserLikedPosts();
+  Future<Either<Failure, void>> deletePost({required int id});
+  Future<Either<Failure, void>> deletePostComment({required int id});
+  Future<Either<Failure, int>> toggleCommentLike({required int id});
+  Future<Either<Failure, PostComment>> savePostComment({
+    required int postId,
+    required PostComment comment,
+  });
+  Future<Either<Failure, PostCommentList>> getPostComments({
+    required int postId,
+    required int page,
+    required int limit,
+  });
+  Future<Either<Failure, PostCommentList>> getPostCommentReplies({
+    required int commentId,
+    required int postId,
+    required int page,
+    required int limit,
+  });
 }

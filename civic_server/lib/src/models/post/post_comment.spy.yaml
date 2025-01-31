@@ -1,0 +1,14 @@
+class: PostComment
+table: post_comment
+
+fields:
+    post: Post?, relation
+    owner: UserRecord?, relation
+    text: String?
+    dateCreated: DateTime?
+    dateUpdated: DateTime?
+    imageUrls: List<String>?
+    videoUrl: String?
+    likedBy: List<int>?
+    replyBy: List<int>?
+    parent: PostComment?, relation(optional)

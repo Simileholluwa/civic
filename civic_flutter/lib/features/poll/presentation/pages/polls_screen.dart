@@ -25,7 +25,6 @@ class PollsScreen extends ConsumerWidget {
               child: ContentCreatorInfo(
                 creator: pollCardState.creator,
                 timeAgo: pollCardState.timeAgo,
-                numberOfViews: pollCardState.numberOfViews,
               ),
             ),
             if (pollCardState.hasText)
@@ -134,65 +133,54 @@ class PollsScreen extends ConsumerWidget {
                 },
               ),
             ),
-            if (pollCardState.hasLocations || pollCardState.hasTags)
-              ContentTagsAndLocations(
+              //TODO: Implement ContentTagsAndLocations
+              ContentEngagementTagsAndLocations(
                 tags: pollCardState.tags,
                 locations: pollCardState.locations,
                 hasTags: pollCardState.hasTags,
                 hasLocations: pollCardState.hasLocations,
+                numberOfLikes: '0',
+                numberOfComments: '0',
+                numberOfReposts: '0',
               ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ContentInteractionButton(
                     icon: Iconsax.heart,
-                    title: '1.2k',
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                   ContentInteractionButton(
                     icon: Iconsax.messages_1,
-                    title: '1.2k',
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                   ContentInteractionButton(
                     icon: Iconsax.repeate_music5,
-                    title: '1.2k',
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                   ContentInteractionButton(
                     icon: Icons.share,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                   ContentInteractionButton(
                     icon: Iconsax.bookmark,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
-                    title: '',
-                    showTitle: false,
                     onTap: () {},
                     color: Theme.of(context).textTheme.labelMedium!.color!,
                   ),
                 ],
               ),
             ),
-            if (index !=
-                pagingControllerNotifier.pagingController.itemList!.length - 1)
-              const Divider(
-                height: 0,
-              ),
           ],
         );
       },

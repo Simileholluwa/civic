@@ -20,12 +20,15 @@ class FeedRoutes {
             sendPost: sendPost,
           );
         },
-      ),
-      GoRoute(
-        path: PostDetailScreen.route(),
-        builder: (context, state) => PostDetailScreen(
-          id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-        ),
+        routes: [
+          GoRoute(
+            path: PostDetailScreen.routePath(),
+            name: PostDetailScreen.routeName(),
+            builder: (context, state) => PostDetailScreen(
+              id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+            ),
+          ),
+        ],
       ),
     ],
   );

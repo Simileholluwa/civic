@@ -12,6 +12,9 @@ class PollCardState {
   final bool hasLocations;
   final List<UserRecord> tags;
   final List<AWSPlaces> locations;
+  final bool hasComments;
+  final bool hasLikes;
+  final bool hasReposts;
   PollCardState({
     required this.creator,
     required this.timeAgo,
@@ -22,6 +25,9 @@ class PollCardState {
     required this.hasLocations,
     required this.tags,
     required this.locations,
+    required this.hasComments,
+    required this.hasLikes,
+    required this.hasReposts,
   });
 
   factory PollCardState.populate(Poll poll) {
@@ -35,6 +41,9 @@ class PollCardState {
       hasLocations: poll.locations?.isNotEmpty ?? false,
       tags: poll.taggedUsers!,
       locations: poll.locations!,
+      hasComments: false,
+      hasLikes: false,
+      hasReposts: false,
     );
   }
 }

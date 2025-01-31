@@ -1,0 +1,66 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post_comment",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "_postCommentChildrenPostCommentId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "parentId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "post_comment_fk_2",
+            "columns": [
+              "_postCommentChildrenPostCommentId"
+            ],
+            "referenceTable": "post_comment",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [
+          "post_comment_fk_2"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"parentId\" of table \"post_comment\" will be dropped.",
+            "table": "post_comment",
+            "columns": [
+              "parentId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"parentId\" of table \"post_comment\" will be dropped.",
+      "table": "post_comment",
+      "columns": [
+        "parentId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

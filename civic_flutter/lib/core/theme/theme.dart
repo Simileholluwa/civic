@@ -47,12 +47,15 @@ class TAppTheme {
       bottomNavigationBarMutedUnselectedLabel: true,
       bottomNavigationBarMutedUnselectedIcon: true,
       bottomNavigationBarType: BottomNavigationBarType.fixed,
+      bottomNavigationBarElevation: 8,
       bottomNavigationBarLabelTextStyle: TextStyle(
         fontSize: 12,
         fontFamily: 'Montserrat',
       ),
       bottomNavigationBarSelectedLabelSize: 12,
       bottomNavigationBarUnselectedLabelSize: 12,
+      bottomSheetRadius: 16,
+      bottomSheetBackgroundColor: SchemeColor.white,
       bottomNavigationBarSelectedLabelSchemeColor: SchemeColor.black,
       bottomNavigationBarSelectedIconSchemeColor: SchemeColor.black,
       appBarScrolledUnderElevation: 0,
@@ -120,6 +123,7 @@ class TAppTheme {
       navigationBarIndicatorOpacity: 0,
       bottomNavigationBarMutedUnselectedLabel: true,   
       bottomNavigationBarMutedUnselectedIcon: true,
+      bottomNavigationBarElevation: 8,
       bottomNavigationBarType: BottomNavigationBarType.fixed,
       bottomNavigationBarLabelTextStyle: TextStyle(
         fontSize: 12,

@@ -37,6 +37,9 @@ class PostEndpoint extends Endpoint {
             ownerId: user.id,
             owner: user,
             dateCreated: DateTime.now(),
+            repostBy: [],
+            likedBy: [],
+            commentBy: [],
           ),
         );
         if (sentPost.id == null) {
@@ -104,6 +107,8 @@ class PostEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       ),
+      orderBy: (t) => t.dateCreated,
+      orderDescending: true,
     );
 
     return PostList(
@@ -135,54 +140,6 @@ class PostEndpoint extends Endpoint {
         id: id,
         ownerId: user.userInfoId,
       ),
-    );
-  }
-
-  Future<void> updateCount(
-    Session session,
-    int postId,
-    int userId,
-    String field,
-    bool isAdding,
-  ) async {
-    final post = await Post.db.findById(
-      session,
-      postId,
-    );
-    if (post == null) {
-      throw PostException(
-        message: "Post not found",
-      );
-    }
-
-    final Map<String, Function()> updateField = {
-      'likes': () {
-        isAdding
-            ? post.likedBy?.add(userId)
-            : post.likedBy?.remove(userId);
-      },
-      'comments': () {
-        isAdding
-            ? post.commentBy?.add(userId)
-            : post.commentBy?.remove(userId);
-      },
-      'repost': () {
-        isAdding
-            ? post.repostBy?.add(userId)
-            : post.repostBy?.remove(userId);
-      },
-    };
-
-    if (!updateField.containsKey(field)) {
-      throw Exception(
-        "Invalid field for count update",
-      );
-    }
-    updateField[field]!();
-
-    await Post.db.updateRow(
-      session,
-      post,
     );
   }
 
@@ -226,32 +183,22 @@ class PostEndpoint extends Endpoint {
         );
       }
 
-      final existingLike = await PostLikes.db.findFirstRow(
-        session,
-        where: (t) =>
-            t.postId.equals(
-              postId,
-            ) &
-            t.ownerId.equals(
-              user.userInfoId,
-            ),
-        transaction: transaction,
-      );
+      final isLiked = post.likedBy?.contains(
+            user.userInfoId,
+          ) ??
+          false;
 
-      if (existingLike != null) {
-        await PostLikes.db.deleteRow(
+      if (isLiked) {
+        post.likedBy?.remove(user.userInfoId);
+        await PostLikes.db.deleteWhere(
           session,
-          existingLike,
+          where: (t) =>
+              t.postId.equals(postId) &
+              t.ownerId.equals(user.userInfoId),
           transaction: transaction,
         );
-        await updateCount(
-          session,
-          postId,
-          user.userInfoId,
-          'likes',
-          false,
-        );
       } else {
+        post.likedBy?.add(user.userInfoId);
         await PostLikes.db.insertRow(
           session,
           PostLikes(
@@ -261,15 +208,12 @@ class PostEndpoint extends Endpoint {
           ),
           transaction: transaction,
         );
-        await updateCount(
-          session,
-          postId,
-          user.userInfoId,
-          'likes',
-          true,
-        );
       }
-      print(post.likedBy?.length);
+      await Post.db.updateRow(
+        session,
+        post,
+        transaction: transaction,
+      );
       likesCount = post.likedBy?.length ?? 0;
     });
     return likesCount;

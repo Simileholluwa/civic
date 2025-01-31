@@ -88,5 +88,6 @@ export './widgets/content/content_keep_alive_wrapper.dart';
 export './widgets/content/content_expandable_text.dart';
 export './widgets/content/content_creator_info.dart';
 export './widgets/content/content_app_bar.dart';
+export './widgets/content/content_comment_tree.dart';
 export './widgets/content/content_tags_and_locations.dart';
 export './widgets/app/app_tab_bar_design.dart';

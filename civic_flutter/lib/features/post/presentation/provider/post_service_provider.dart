@@ -87,3 +87,38 @@ SchedulePostUseCase schedulePost(Ref ref) {
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
+
+@riverpod
+TogglePostLikeUseCase togglePostLike(Ref ref) {
+  return TogglePostLikeUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetUserLikedPostsUseCase getUserLikedPosts(Ref ref) {
+  return GetUserLikedPostsUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+SavePostCommentUseCase savePostComment(Ref ref) {
+  return SavePostCommentUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetPostCommentsUseCase getPostComments(Ref ref) {
+  return GetPostCommentsUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetPostCommentRepliesUseCase getPostCommentReplies(Ref ref) {
+  return GetPostCommentRepliesUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}

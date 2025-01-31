@@ -16,15 +16,17 @@ import 'package:civic_client/src/protocol/article/article.dart' as _i4;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i5;
 import 'package:civic_client/src/protocol/poll/poll.dart' as _i6;
 import 'package:civic_client/src/protocol/poll/poll_list.dart' as _i7;
-import 'package:civic_client/src/protocol/post/post.dart' as _i8;
-import 'package:civic_client/src/protocol/post/post_list.dart' as _i9;
+import 'package:civic_client/src/protocol/post/post_comment.dart' as _i8;
+import 'package:civic_client/src/protocol/post/post_comment_list.dart' as _i9;
 import 'package:civic_client/src/protocol/user/user_record.dart' as _i10;
-import 'package:civic_client/src/protocol/project/project.dart' as _i11;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i12;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i13;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i14;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i15;
-import 'protocol.dart' as _i16;
+import 'package:civic_client/src/protocol/post/post.dart' as _i11;
+import 'package:civic_client/src/protocol/post/post_list.dart' as _i12;
+import 'package:civic_client/src/protocol/project/project.dart' as _i13;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i14;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i15;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i16;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i17;
+import 'protocol.dart' as _i18;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -232,21 +234,108 @@ class EndpointPoll extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointPostComment extends _i1.EndpointRef {
+  EndpointPostComment(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'postComment';
+
+  _i2.Future<_i8.PostComment?> savePostComment(
+    int postId,
+    _i8.PostComment postComment,
+  ) =>
+      caller.callServerEndpoint<_i8.PostComment?>(
+        'postComment',
+        'savePostComment',
+        {
+          'postId': postId,
+          'postComment': postComment,
+        },
+      );
+
+  _i2.Future<_i9.PostCommentList> getPostComments(
+    int postId, {
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i9.PostCommentList>(
+        'postComment',
+        'getPostComments',
+        {
+          'postId': postId,
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Future<_i9.PostCommentList> getPostCommentReplies(
+    int commentId,
+    int postId, {
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i9.PostCommentList>(
+        'postComment',
+        'getPostCommentReplies',
+        {
+          'commentId': commentId,
+          'postId': postId,
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Future<void> deletePostComment(int commentId) =>
+      caller.callServerEndpoint<void>(
+        'postComment',
+        'deletePostComment',
+        {'commentId': commentId},
+      );
+
+  _i2.Future<List<int>> getUserLikedComments() =>
+      caller.callServerEndpoint<List<int>>(
+        'postComment',
+        'getUserLikedComments',
+        {},
+      );
+
+  _i2.Future<int> toggleCommentLike(int commentId) =>
+      caller.callServerEndpoint<int>(
+        'postComment',
+        'toggleCommentLike',
+        {'commentId': commentId},
+      );
+
+  _i2.Future<void> validatePostCommentOwnership(
+    int commentId,
+    _i10.UserRecord user,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'postComment',
+        'validatePostCommentOwnership',
+        {
+          'commentId': commentId,
+          'user': user,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointPost extends _i1.EndpointRef {
   EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'post';
 
-  _i2.Future<_i8.Post?> savePost(_i8.Post post) =>
-      caller.callServerEndpoint<_i8.Post?>(
+  _i2.Future<_i11.Post?> savePost(_i11.Post post) =>
+      caller.callServerEndpoint<_i11.Post?>(
         'post',
         'savePost',
         {'post': post},
       );
 
   _i2.Future<void> schedulePost(
-    _i8.Post post,
+    _i11.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -258,17 +347,18 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i8.Post?> getPost(int id) => caller.callServerEndpoint<_i8.Post?>(
+  _i2.Future<_i11.Post?> getPost(int id) =>
+      caller.callServerEndpoint<_i11.Post?>(
         'post',
         'getPost',
         {'id': id},
       );
 
-  _i2.Future<_i9.PostList> getPosts({
+  _i2.Future<_i12.PostList> getPosts({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i9.PostList>(
+      caller.callServerEndpoint<_i12.PostList>(
         'post',
         'getPosts',
         {
@@ -281,23 +371,6 @@ class EndpointPost extends _i1.EndpointRef {
         'post',
         'deletePost',
         {'id': id},
-      );
-
-  _i2.Future<void> updateCount(
-    int postId,
-    int userId,
-    String field,
-    bool isAdding,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'post',
-        'updateCount',
-        {
-          'postId': postId,
-          'userId': userId,
-          'field': field,
-          'isAdding': isAdding,
-        },
       );
 
   _i2.Future<List<int>> getUserLikedPosts() =>
@@ -341,22 +414,22 @@ class EndpointProject extends _i1.EndpointRef {
   @override
   String get name => 'project';
 
-  _i2.Future<_i11.Project?> getProject(int id) =>
-      caller.callServerEndpoint<_i11.Project?>(
+  _i2.Future<_i13.Project?> getProject(int id) =>
+      caller.callServerEndpoint<_i13.Project?>(
         'project',
         'getProject',
         {'id': id},
       );
 
-  _i2.Future<_i11.Project?> saveProject(_i11.Project project) =>
-      caller.callServerEndpoint<_i11.Project?>(
+  _i2.Future<_i13.Project?> saveProject(_i13.Project project) =>
+      caller.callServerEndpoint<_i13.Project?>(
         'project',
         'saveProject',
         {'project': project},
       );
 
   _i2.Future<void> scheduleProject(
-    _i11.Project project,
+    _i13.Project project,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -368,11 +441,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i12.ProjectList> getProjects({
+  _i2.Future<_i14.ProjectList> getProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i12.ProjectList>(
+      caller.callServerEndpoint<_i14.ProjectList>(
         'project',
         'getProjects',
         {
@@ -472,8 +545,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i13.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i13.UserNinRecord?>(
+  _i2.Future<_i15.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i15.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -515,12 +588,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i14.UsersList> getUsers({
+  _i2.Future<_i16.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i14.UsersList>(
+      caller.callServerEndpoint<_i16.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -553,10 +626,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i15.Caller(client);
+    auth = _i17.Caller(client);
   }
 
-  late final _i15.Caller auth;
+  late final _i17.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -575,7 +648,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i16.Protocol(),
+          _i18.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -590,6 +663,7 @@ class Client extends _i1.ServerpodClientShared {
     hashtag = EndpointHashtag(this);
     location = EndpointLocation(this);
     poll = EndpointPoll(this);
+    postComment = EndpointPostComment(this);
     post = EndpointPost(this);
     project = EndpointProject(this);
     sendEmail = EndpointSendEmail(this);
@@ -607,6 +681,8 @@ class Client extends _i1.ServerpodClientShared {
   late final EndpointLocation location;
 
   late final EndpointPoll poll;
+
+  late final EndpointPostComment postComment;
 
   late final EndpointPost post;
 
@@ -627,6 +703,7 @@ class Client extends _i1.ServerpodClientShared {
         'hashtag': hashtag,
         'location': location,
         'poll': poll,
+        'postComment': postComment,
         'post': post,
         'project': project,
         'sendEmail': sendEmail,

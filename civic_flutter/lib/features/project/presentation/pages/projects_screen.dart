@@ -82,10 +82,8 @@ class ProjectsScreen extends ConsumerWidget {
             },
             icon: Icon(
               Icons.filter_list,
-              color: projectWidgetsState.isActiveFilter
-                  ? TColors.primary
-                  : Theme.of(context).iconTheme.color,
-              size: 30,
+              
+              size: 32,
             ),
           ),
           IconButton(
