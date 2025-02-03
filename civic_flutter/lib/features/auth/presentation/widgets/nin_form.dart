@@ -1,6 +1,6 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,7 +49,7 @@ class _NinFormState extends ConsumerState<NinForm> {
             AppDualButton(
               onTapSkipButton: () {
                 context.go(
-                  ProjectRoutes.namespace,
+                  FeedRoutes.namespace,
                 );
                 ref.invalidate(authProvider);
               },

@@ -1,5 +1,6 @@
 import 'package:civic_flutter/features/feed/presentation/pages/feed_screen.dart';
 import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +28,15 @@ class FeedRoutes {
             builder: (context, state) => PostDetailScreen(
               id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
             ),
+          ),
+          GoRoute(
+            path: ProjectDetailsScreen.routePath(),
+            name: ProjectDetailsScreen.routeName(),
+            builder: (_, state) {
+              return ProjectDetailsScreen(
+                id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+              );
+            },
           ),
         ],
       ),

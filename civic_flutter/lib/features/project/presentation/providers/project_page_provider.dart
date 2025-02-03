@@ -62,6 +62,7 @@ final vsyncProvider = Provider<TickerProvider>(
   (ref) => _VSync(),
 );
 
+
 @riverpod
 class ProjectTabController extends _$ProjectTabController {
   @override
@@ -73,5 +74,61 @@ class ProjectTabController extends _$ProjectTabController {
   void setTabIndex(int index) {
     state.index = index;
     state.animateTo(index);
+  }
+}
+
+@riverpod
+class ProjectDetailPageController extends _$ProjectDetailPageController {
+  @override
+  Raw<PageController> build() => PageController();
+
+  void nextPage() {
+    ref.watch(projectDetailCurrentPageProvider.notifier).add();
+    state.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void previousPage() {
+    ref.watch(projectDetailCurrentPageProvider.notifier).subtract();
+    state.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void gotoPage(int index) {
+    ref.watch(projectDetailCurrentPageProvider.notifier).setCurrentPage(index);
+    state.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void jumpToPage(int index) {
+    ref.watch(projectDetailCurrentPageProvider.notifier).setCurrentPage(index);
+    state.jumpToPage(
+      index,
+    );
+  }
+}
+
+@riverpod
+class ProjectDetailCurrentPage extends _$ProjectDetailCurrentPage {
+  @override
+  int build() => 0;
+
+  void setCurrentPage(int index) {
+    state = index;
+  }
+
+  void subtract() {
+    state = state - 1;
+  }
+
+  void add() {
+    state = state + 1;
   }
 }

@@ -5,9 +5,9 @@ import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_pr
 import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({
@@ -39,46 +39,56 @@ class FeedScreen extends ConsumerWidget {
           ),
           onPressed: () {},
         ),
-        titleSpacing: 2,
+        titleSpacing: 0,
         title: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 8,
-          ),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(100),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 15,
-            children: [
-              ...['POSTS', 'POLLS', 'ARTICLES'].asMap().entries.map(
-                (filter) {
-                  final text = filter.value;
-                  final index = filter.key;
-                  return GestureDetector(
-                    onTap: () {
-                      pageControllerNotifier.gotoPage(
-                        index,
-                      );
-                    },
-                    child: Text(
-                      text,
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: currentPageState == index
-                                ? Theme.of(context).textTheme.labelMedium!.color
-                                : Theme.of(context).hintColor,
-                            fontWeight: currentPageState == index
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            fontSize: 15,
-                          ),
-                    ),
-                  );
-                },
-              ),
-            ],
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 8,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 15,
+              children: [
+                ...['PROJECTS', 'POSTS', 'POLLS', 'ARTICLES']
+                    .asMap()
+                    .entries
+                    .map(
+                  (filter) {
+                    final text = filter.value;
+                    final index = filter.key;
+                    return GestureDetector(
+                      onTap: () {
+                        pageControllerNotifier.gotoPage(
+                          index,
+                        );
+                      },
+                      child: Text(
+                        text,
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: currentPageState == index
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .color
+                                      : Theme.of(context).hintColor,
+                                  fontWeight: currentPageState == index
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                  fontSize: 15,
+                                ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -87,39 +97,43 @@ class FeedScreen extends ConsumerWidget {
               Icons.filter_list_rounded,
               size: 32,
             ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(
-              Iconsax.notification5,
-              size: 26,
-            ),
-            onPressed: () {},
+            onPressed: () {
+              if (currentPageState == 0) {
+                ref.watch(projectScreenWidgetsProvider.notifier).toggleFilter();
+              }
+            },
           ),
           const SizedBox(width: 5),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: const CreateContentButton(),
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (index) {
-          currentPageNotifier.setCurrentPage(index);
-        },
-        physics: const ClampingScrollPhysics(),
+      body: Stack(
         children: [
-          ContentKeepAliveWrapper(
-            child: const PostsScreen(),
+          PageView(
+            controller: pageController,
+            onPageChanged: (index) {
+              currentPageNotifier.setCurrentPage(index);
+            },
+            physics: const ClampingScrollPhysics(),
+            children: [         
+              ContentKeepAliveWrapper(
+                child: const ProjectsScreen(),
+              ),
+              ContentKeepAliveWrapper(
+                child: const PostsScreen(),
+              ),
+              ContentKeepAliveWrapper(
+                child: const PollsScreen(),
+              ),
+              ContentKeepAliveWrapper(
+                child: const ArticlesScreen(),
+              )
+            ],
           ),
-          ContentKeepAliveWrapper(
-            child: const PollsScreen(),
-          ),
-          ContentKeepAliveWrapper(
-            child: const ArticlesScreen(),
-          )
+          if (currentPageState == 0) ProjectFilterOverlay(),
         ],
       ),
-      
     );
   }
 }

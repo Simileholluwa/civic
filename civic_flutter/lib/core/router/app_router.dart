@@ -3,7 +3,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
+import 'package:civic_flutter/features/learn/learn.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
@@ -46,7 +47,7 @@ GoRouter router(Ref ref) {
                       currentUser.userInfo!.id!,
                     );
                 FlutterNativeSplash.remove();
-                return ProjectRoutes.namespace;
+                return FeedRoutes.namespace;
               }
             }
           } catch (_) {
@@ -177,10 +178,10 @@ GoRouter router(Ref ref) {
 
       StatefulShellRoute.indexedStack(
         branches: [
-          ProjectRoutes.branch,
           FeedRoutes.branch,
           DiscoverRoutes.branch,
           NotificationsRoutes.branch,
+          LearnRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
           return AppWrapper(

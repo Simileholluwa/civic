@@ -8,7 +8,7 @@ class TTextTheme {
     headlineLarge: const TextStyle().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      fontFamily: GoogleFonts.lora().fontFamily,
+      fontFamily: GoogleFonts.poppins().fontFamily,
     ),
     headlineMedium: const TextStyle().copyWith(
       fontSize: 30,
@@ -56,7 +56,7 @@ class TTextTheme {
     headlineLarge: const TextStyle().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      fontFamily: GoogleFonts.lora().fontFamily,
+      fontFamily: GoogleFonts.poppins().fontFamily,
     ),
     headlineMedium: const TextStyle().copyWith(
       fontSize: 30,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppFilledIconButton extends StatelessWidget {
   const AppFilledIconButton({
-    required this.color,
+    this.color,
     required this.icon,
     required this.onPressed,
     required this.backgroundColor,
@@ -10,7 +10,7 @@ class AppFilledIconButton extends StatelessWidget {
     super.key,
   });
 
-  final Color color;
+  final Color? color;
   final IconData icon;
   final VoidCallback onPressed;
   final double size;

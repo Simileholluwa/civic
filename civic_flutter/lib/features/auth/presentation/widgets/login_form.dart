@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../feed/presentation/routes/feed_routes.dart';
 
 class LoginForm extends ConsumerWidget {
   const LoginForm({
@@ -66,7 +67,7 @@ class LoginForm extends ConsumerWidget {
                     await authNotifier.signInWithEmailAndPassword();
                 if (userRecord != null && userRecord.verifiedAccount) {
                   ref.read(verifiedUserProvider.notifier).setValue(true);
-                  context.goNamed(ProjectRoutes.namespace);
+                  context.goNamed(FeedRoutes.namespace);
                   ref.invalidate(authProvider);
                 } else if (userRecord != null && !userRecord.verifiedAccount) {
                   context.goNamed(AppRoutes.verifyAccount);

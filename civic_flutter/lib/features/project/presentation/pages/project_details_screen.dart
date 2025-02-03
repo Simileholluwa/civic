@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProjectDetailsScreen extends ConsumerWidget {
@@ -13,15 +17,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
   final int id;
 
   static String routePath([int? id]) => '${id ?? ':id'}';
-  static String routeName() => 'details';
+  static String routeName() => 'project/details';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(projectDetailProvider(id));
-    final isDark = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       body: data.when(
         data: (project) {
           if (project == null) {
@@ -31,48 +33,227 @@ class ProjectDetailsScreen extends ConsumerWidget {
               ),
             );
           }
+          final projectCardState = ref.watch(
+            projectCardWidgetProvider(
+              project,
+            ),
+          );
+          final pageControllerNotifier =
+              ref.watch(projectDetailPageControllerProvider.notifier);
+          final currentPageState = ref.watch(projectDetailCurrentPageProvider);
+          final defaultTextStyle = DefaultTextStyle.of(context);
           return CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 400,
-                floating: true,
-                snap: true,
                 automaticallyImplyLeading: false,
+                pinned: true,
+                titleSpacing: 8,
+                leading: IconButton(
+                  icon: Icon(Iconsax.arrow_left_2),
+                  onPressed: context.pop,
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Iconsax.heart),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Iconsax.more_circle),
+                    onPressed: () {},
+                  ),
+                  const SizedBox(width: 10),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
-                  background: DecoratedBox(
-                    position: DecorationPosition.foreground,
-                    decoration: const BoxDecoration(
-
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.center,
-                        colors: [
-                          Colors.black,
-                          Colors.transparent,
-                        ],
-                      ),
-                      
+                  background: Container(
+                    margin: const EdgeInsets.only(
+                      top: 61,
+                      bottom: 10,
                     ),
-                    child: Image.network(
-                      project.projectImageAttachments![2],
-                      fit: BoxFit.cover,
+                    child: projectCardState.imagesUrl.length == 1
+                        ? ContentSingleCachedImage(
+                            imageUrl: projectCardState.imagesUrl.first,
+                          )
+                        : ContentMultipleCachedImage(
+                            imageUrls: projectCardState.imagesUrl,
+                          ),
+                  ),
+                ),
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: ProjectDetailHeader(
+                  maxHeight: projectCardState.canVet ? 187 : 121,
+                  minHeight: projectCardState.canVet ? 187 : 121,
+                  delegate: ColoredBox(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Column(
+                      spacing: 15,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 5, 16, 0),
+                          child: Text(
+                            projectCardState.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                                  fontSize: 20,
+                                ),
+                          ),
+                        ),
+                        ProjectQuickDetails(
+                          project: project,
+                        ),
+                        if (projectCardState.canVet)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 3),
+                            child: Row(
+                              spacing: 10,
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 45,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {},
+                                      label: Text(
+                                        'Approve',
+                                        style: const TextStyle().copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Icons.thumb_up_alt_rounded,
+                                        color: TColors.textWhite,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: TColors.primary,
+                                        foregroundColor: TColors.textWhite,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 45,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {},
+                                      label: Text(
+                                        'Disapprove',
+                                        style: const TextStyle().copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Icons.thumb_down_alt_rounded,
+                                        color: TColors.textWhite,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: TColors.secondary,
+                                        foregroundColor: TColors.textWhite,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 15,
+                            children: [
+                              ...[
+                                'OVERVIEW',
+                                'CATEGORY',
+                                'STATUS',
+                                'FUNDING',
+                                'LOCATION',
+                                'ATTACHMENTS'
+                              ].asMap().entries.map(
+                                (filter) {
+                                  final text = filter.value;
+                                  final index = filter.key;
+                                  return GestureDetector(
+                                    onTap: () {
+                                      pageControllerNotifier.jumpToPage(
+                                        index,
+                                      );
+                                    },
+                                    child: Text(
+                                      text,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(
+                                            color: currentPageState == index
+                                                ? Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium!
+                                                    .color
+                                                : Theme.of(context).hintColor,
+                                            fontWeight:
+                                                currentPageState == index
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                            fontSize: 15,
+                                          ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  title: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      project.title!,
-                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                            color: TColors.textWhite,
-                            fontSize: 20,
-                          ),
+                ),
+              ),
+              SliverFillRemaining(
+                child: QuillEditor.basic(
+                  controller: QuillController(
+                    document: Document.fromJson(
+                      jsonDecode(
+                        project.description!,
+                      ),
                     ),
+                    selection: const TextSelection.collapsed(
+                      offset: 0,
+                    ),
+                    readOnly: true,
+                  ),
+                  configurations: QuillEditorConfigurations(
+                    customStyles: THelperFunctions.articleTextEditorStyles(
+                      context,
+                      defaultTextStyle,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                    ),
+                    scrollPhysics: const NeverScrollableScrollPhysics(),
+                    
                   ),
                 ),
               ),
             ],
           );
-                            
         },
         error: (error, st) {
           return Center(
@@ -89,53 +270,101 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-        child: Row(
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(
+          bottom: TSizes.xs,
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).dividerColor,
+            ),
+          ),
+        ),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppFilledIconButton(
-              color: TColors.textWhite,
-              icon: Iconsax.gallery5,
-              onPressed: () {},
-              backgroundColor: TColors.primary,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: TextField(
-                controller: TextEditingController(),
-                maxLines: null,
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  hintText: 'Add a comment',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: BorderSide.none,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 150,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: BorderSide.none,
+                  child: TextFormField(
+                    controller: TextEditingController(),
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      errorBorder: UnderlineInputBorder(),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                      hintText: 'Share your opinion...',
+                      errorStyle:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                      hintStyle:
+                          Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(context).hintColor,
+                              ),
+                      errorMaxLines: 2,
+                      contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 12),
+                      hintMaxLines: 1,
+                    ),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: isDark ? TColors.dark : TColors.light,
-                  filled: true,
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            AppFilledIconButton(
-              color: TColors.textWhite,
-              icon: Iconsax.send1,
-              onPressed: () {},
-              backgroundColor: TColors.primary,
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class ProjectDetailHeader extends SliverPersistentHeaderDelegate {
+  final Widget delegate;
+  final double maxHeight;
+  final double minHeight;
+
+  ProjectDetailHeader({
+    required this.delegate,
+    required this.maxHeight,
+    required this.minHeight,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return delegate;
+  }
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }

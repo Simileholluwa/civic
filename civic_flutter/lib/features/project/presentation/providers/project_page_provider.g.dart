@@ -57,5 +57,40 @@ final projectTabControllerProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$ProjectTabController = AutoDisposeNotifier<Raw<TabController>>;
+String _$projectDetailPageControllerHash() =>
+    r'1778f9ecc2fd5eb307dbf8241d5e5098752309ee';
+
+/// See also [ProjectDetailPageController].
+@ProviderFor(ProjectDetailPageController)
+final projectDetailPageControllerProvider = AutoDisposeNotifierProvider<
+    ProjectDetailPageController, Raw<PageController>>.internal(
+  ProjectDetailPageController.new,
+  name: r'projectDetailPageControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$projectDetailPageControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ProjectDetailPageController
+    = AutoDisposeNotifier<Raw<PageController>>;
+String _$projectDetailCurrentPageHash() =>
+    r'b46ff347e3b19b562661985c4637290751e056d8';
+
+/// See also [ProjectDetailCurrentPage].
+@ProviderFor(ProjectDetailCurrentPage)
+final projectDetailCurrentPageProvider =
+    AutoDisposeNotifierProvider<ProjectDetailCurrentPage, int>.internal(
+  ProjectDetailCurrentPage.new,
+  name: r'projectDetailCurrentPageProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$projectDetailCurrentPageHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ProjectDetailCurrentPage = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

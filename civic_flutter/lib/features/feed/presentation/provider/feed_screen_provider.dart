@@ -66,8 +66,6 @@ class FeedPageController extends _$FeedPageController {
     ref.watch(feedCurrentPageProvider.notifier).setCurrentPage(index);
     state.jumpToPage(
       index,
-      // duration: const Duration(milliseconds: 300),
-      // curve: Curves.easeInOut,
     );
   }
 }
