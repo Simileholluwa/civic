@@ -43,6 +43,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.likedBy,
     this.commentBy,
     this.repostBy,
+    this.overallRating,
+    this.numberOfReviews,
   });
 
   factory Project({
@@ -74,6 +76,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    double? overallRating,
+    int? numberOfReviews,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -136,6 +140,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       repostBy: (jsonSerialization['repostBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
+      numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
     );
   }
 
@@ -200,6 +206,10 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<int>? repostBy;
 
+  double? overallRating;
+
+  int? numberOfReviews;
+
   @override
   _i1.Table get table => t;
 
@@ -232,6 +242,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    double? overallRating,
+    int? numberOfReviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -269,6 +281,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (overallRating != null) 'overallRating': overallRating,
+      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -308,6 +322,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (overallRating != null) 'overallRating': overallRating,
+      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -373,6 +389,8 @@ class _ProjectImpl extends Project {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    double? overallRating,
+    int? numberOfReviews,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -402,6 +420,8 @@ class _ProjectImpl extends Project {
           likedBy: likedBy,
           commentBy: commentBy,
           repostBy: repostBy,
+          overallRating: overallRating,
+          numberOfReviews: numberOfReviews,
         );
 
   @override
@@ -434,6 +454,8 @@ class _ProjectImpl extends Project {
     Object? likedBy = _Undefined,
     Object? commentBy = _Undefined,
     Object? repostBy = _Undefined,
+    Object? overallRating = _Undefined,
+    Object? numberOfReviews = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -488,6 +510,10 @@ class _ProjectImpl extends Project {
       repostBy: repostBy is List<int>?
           ? repostBy
           : this.repostBy?.map((e0) => e0).toList(),
+      overallRating:
+          overallRating is double? ? overallRating : this.overallRating,
+      numberOfReviews:
+          numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
     );
   }
 }
@@ -598,6 +624,14 @@ class ProjectTable extends _i1.Table {
       'repostBy',
       this,
     );
+    overallRating = _i1.ColumnDouble(
+      'overallRating',
+      this,
+    );
+    numberOfReviews = _i1.ColumnInt(
+      'numberOfReviews',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -654,6 +688,10 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnSerializable repostBy;
 
+  late final _i1.ColumnDouble overallRating;
+
+  late final _i1.ColumnInt numberOfReviews;
+
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
@@ -696,6 +734,8 @@ class ProjectTable extends _i1.Table {
         likedBy,
         commentBy,
         repostBy,
+        overallRating,
+        numberOfReviews,
       ];
 
   @override

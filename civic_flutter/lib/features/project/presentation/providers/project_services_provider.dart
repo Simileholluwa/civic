@@ -44,6 +44,27 @@ GetProjectUseCase getProject(Ref ref) {
 }
 
 @riverpod
+SaveProjectReviewUseCase saveProjectReview(Ref ref) {
+  return SaveProjectReviewUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetProjectReviewsUseCase getProjectReviewss(Ref ref) {
+  return GetProjectReviewsUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetProjectReviewUseCase getProjectReview(Ref ref) {
+  return GetProjectReviewUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
 ScheduleProjectUseCase scheduleProject(Ref ref) {
   return ScheduleProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),

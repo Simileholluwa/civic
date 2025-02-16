@@ -61,8 +61,9 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, Project?>> saveProject(
-      {required Project project}) async {
+  Future<Either<Failure, Project?>> saveProject({
+    required Project project,
+  }) async {
     try {
       final result = await _remoteDatasource.saveProject(
         project: project,
@@ -115,11 +116,67 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
   Future<Either<Failure, List<int>>> getUserLikedProjects() async {
     try {
       final result = await _remoteDatasource.getUserLikedProjects();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<String, ProjectReview?>> getProjectReview({
+    required int id,
+  }) async {
+    try {
+      final result = await _remoteDatasource.getProjectReview(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        e.message,
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProjectReviewList>> getProjectReviews({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatasource.getProjectReviews(
+        page: page,
+        limit: limit,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProjectReview?>> saveProjectReview({
+    required ProjectReview projectReview,
+  }) async {
+    try {
+      final result = await _remoteDatasource.saveProjectReview(
+        projectReview: projectReview,
+      );
+
       return Right(result);
     } on ServerException catch (e) {
       return Left(

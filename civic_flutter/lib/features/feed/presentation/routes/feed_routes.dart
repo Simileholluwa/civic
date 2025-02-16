@@ -38,6 +38,15 @@ class FeedRoutes {
               );
             },
           ),
+          GoRoute(
+            path: ProjectReviewScreen.routePath(),
+            name: ProjectReviewScreen.routeName(),
+            builder: (_, state) {
+              return ProjectReviewScreen(
+                id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+              );
+            },
+          ),
         ],
       ),
     ],

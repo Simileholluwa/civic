@@ -1,15 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ContentSingleCachedImage extends StatelessWidget {
   const ContentSingleCachedImage({
     required this.imageUrl,
     this.useMargin = true,
+    this.isUrl = true,
     super.key,
   });
 
-  final String imageUrl;
+  final dynamic imageUrl;
   final bool useMargin;
+  final bool isUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,17 @@ class ContentSingleCachedImage extends StatelessWidget {
           constraints: const BoxConstraints(
             maxHeight: 400,
           ),
-          child: ContentCachedImage(url: imageUrl),   
+          child: isUrl
+              ? ContentCachedImage(url: imageUrl as String)
+              : FadeInImage(
+                  image: MemoryImage(
+                    imageUrl as Uint8List,
+                  ),
+                  placeholder: MemoryImage(
+                    kTransparentImage,
+                  ),
+                  fit: BoxFit.cover,
+                ),
         ),
       ),
     );

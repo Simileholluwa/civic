@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -7,6 +5,8 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailsScreen extends ConsumerWidget {
   const ProjectDetailsScreen({
@@ -38,25 +38,43 @@ class ProjectDetailsScreen extends ConsumerWidget {
               project,
             ),
           );
-          final pageControllerNotifier =
-              ref.watch(projectDetailPageControllerProvider.notifier);
+          final projectCardNotifier = ref.watch(
+            projectCardWidgetProvider(
+              project,
+            ).notifier,
+          );
           final currentPageState = ref.watch(projectDetailCurrentPageProvider);
+          final currentPageNotifier =
+              ref.watch(projectDetailCurrentPageProvider.notifier);
           final defaultTextStyle = DefaultTextStyle.of(context);
           return CustomScrollView(
             slivers: [
               SliverAppBar(
-                expandedHeight: 400,
+                expandedHeight: MediaQuery.of(context).size.height * .84,
                 automaticallyImplyLeading: false,
                 pinned: true,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 titleSpacing: 8,
+                toolbarHeight: 50,
                 leading: IconButton(
                   icon: Icon(Iconsax.arrow_left_2),
                   onPressed: context.pop,
                 ),
                 actions: [
                   IconButton(
-                    icon: Icon(Iconsax.heart),
-                    onPressed: () {},
+                    icon: Icon(
+                      projectCardState.hasLiked == true
+                          ? Iconsax.heart5
+                          : Iconsax.heart,
+                      color: projectCardState.hasLiked == true
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).iconTheme.color!,
+                    ),
+                    onPressed: () async {
+                      await projectCardNotifier.toggleLikeStatus(
+                        id,
+                      );
+                    },
                   ),
                   IconButton(
                     icon: Icon(Icons.share),
@@ -74,56 +92,100 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
-                    margin: const EdgeInsets.only(
-                      top: 61,
-                      bottom: 10,
-                    ),
-                    child: projectCardState.imagesUrl.length == 1
-                        ? ContentSingleCachedImage(
-                            imageUrl: projectCardState.imagesUrl.first,
-                          )
-                        : ContentMultipleCachedImage(
-                            imageUrls: projectCardState.imagesUrl,
+                    margin: const EdgeInsets.fromLTRB(18, 61, 18, 0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          projectCardState.imagesUrl.length == 1
+                              ? ContentSingleCachedImage(
+                                  imageUrl: projectCardState.imagesUrl.first,
+                                  useMargin: false,
+                                )
+                              : ContentMultipleCachedImage(
+                                  imageUrls: projectCardState.imagesUrl,
+                                  useMargin: false,
+                                ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 5,
+                            ),
+                            child: Text(
+                              projectCardState.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .copyWith(
+                                    fontSize: 23,
+                                  ),
+                            ),
                           ),
+                          QuillEditor.basic(
+                            controller: QuillController(
+                              document: projectCardState.rawDescription ?? Document(),
+                              selection: const TextSelection.collapsed(
+                                offset: 0,
+                              ),
+                              readOnly: true,
+                            ),
+                            configurations: QuillEditorConfigurations(
+                              customStyles:
+                                  THelperFunctions.articleTextEditorStyles(
+                                context,
+                                defaultTextStyle,
+                              ),
+                              scrollPhysics:
+                                  const NeverScrollableScrollPhysics(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 8,
+                      width: 70,
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                        bottom: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).dividerColor,
+                        borderRadius: BorderRadius.circular(
+                          TSizes.sm,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: ProjectDetailHeader(
-                  maxHeight: projectCardState.canVet ? 187 : 121,
-                  minHeight: projectCardState.canVet ? 187 : 121,
+                  maxHeight: 91,
+                  minHeight: 91,
                   delegate: ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: Column(
-                      spacing: 15,
+                      spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 5, 16, 0),
-                          child: Text(
-                            projectCardState.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .copyWith(
-                                  fontSize: 20,
-                                ),
-                          ),
-                        ),
-                        ProjectQuickDetails(
-                          project: project,
-                        ),
                         if (projectCardState.canVet)
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 3),
+                            padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
                             child: Row(
                               spacing: 10,
                               children: [
                                 Expanded(
                                   child: SizedBox(
-                                    height: 45,
+                                    height: 50,
                                     child: ElevatedButton.icon(
                                       onPressed: () {},
                                       label: Text(
@@ -147,7 +209,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ),
                                 Expanded(
                                   child: SizedBox(
-                                    height: 45,
+                                    height: 50,
                                     child: ElevatedButton.icon(
                                       onPressed: () {},
                                       label: Text(
@@ -171,28 +233,63 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ),
                               ],
                             ),
+                          )
+                        else
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          ProjectReviewScreen.routeName(),
+                                          pathParameters: {
+                                            'id': id.toString(),
+                                          },
+                                        );
+                                      },
+                                      label: Text(
+                                        'Review project',
+                                        style: const TextStyle().copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Iconsax.magic_star5,
+                                        color: TColors.textWhite,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: TColors.primary,
+                                        foregroundColor: TColors.textWhite,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          padding: const EdgeInsets.fromLTRB(18, 2, 18, 0),
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             spacing: 15,
                             children: [
-                              ...[
-                                'OVERVIEW',
-                                'CATEGORY',
-                                'STATUS',
-                                'FUNDING',
-                                'LOCATION',
-                                'ATTACHMENTS'
-                              ].asMap().entries.map(
+                              ...['OVERVIEW', 'REVIEWS', 'VETTINGS']
+                                  .asMap()
+                                  .entries
+                                  .map(
                                 (filter) {
                                   final text = filter.value;
                                   final index = filter.key;
                                   return GestureDetector(
                                     onTap: () {
-                                      pageControllerNotifier.jumpToPage(
+                                      currentPageNotifier.setCurrentPage(
                                         index,
                                       );
                                     },
@@ -226,32 +323,338 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              SliverFillRemaining(
-                child: QuillEditor.basic(
-                  controller: QuillController(
-                    document: Document.fromJson(
-                      jsonDecode(
-                        project.description!,
+              if (currentPageState == 0)
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * .82,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.maxFinite,
+                            margin: const EdgeInsets.fromLTRB(18, 10, 18, 20),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              border: Border(
+                                top: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 5,
+                                ),
+                                left: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                right: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                bottom: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                TSizes.md,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withAlpha(30),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                spacing: 20,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ProjectDetailTitleAndSubtitle(
+                                            title: 'Start Date',
+                                            subtitle:
+                                                projectCardState.startDateISO!,
+                                          ),
+                                          Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SizedBox(
+                                                height: 100,
+                                                child: VerticalDivider(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                              Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 70,
+                                                    width: 70,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Theme.of(context)
+                                                          .scaffoldBackgroundColor,
+                                                    ),
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: projectCardState
+                                                          .percentageElapsedInDouble,
+                                                      strokeWidth: 4,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .primaryColor
+                                                              .withAlpha(
+                                                                50,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        projectCardState
+                                                            .percentageElapsedInString!,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headlineLarge!
+                                                            .copyWith(
+                                                              fontSize: 20,
+                                                            ),
+                                                      ),
+                                                      Text(
+                                                        'complete',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelMedium!
+                                                            .copyWith(
+                                                              fontSize: 9,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          ProjectDetailTitleAndSubtitle(
+                                            title: 'End Date',
+                                            subtitle:
+                                                projectCardState.endDateISO!,
+                                          ),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        height: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  ProjectDetailTitleAndSubtitle(
+                                    title: 'Category',
+                                    subtitle: projectCardState.category!,
+                                  ),
+                                  ProjectDetailTitleAndSubtitle(
+                                    title: 'Sub-Category',
+                                    subtitle: projectCardState.subCategory!,
+                                  ),
+                                  const Divider(
+                                    height: 0,
+                                  ),
+                                  ProjectDetailTitleAndSubtitle(
+                                    title: 'Funding',
+                                    subtitle: projectCardState.fundingAmount!,
+                                  ),
+                                  ProjectDetailTitleAndSubtitle(
+                                    title: 'Funding Category',
+                                    subtitle: projectCardState.fundingCategory!,
+                                  ),
+                                  ProjectDetailTitleAndSubtitle(
+                                    title: 'Funding Sub-Category',
+                                    subtitle:
+                                        projectCardState.fundingSubCategory!,
+                                  ),
+                                  if (projectCardState.hasPdf!)
+                                    const Divider(
+                                      height: 0,
+                                    ),
+                                  if (projectCardState.hasPdf!)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      spacing: 2,
+                                      children: [
+                                        ProjectDetailTitleAndSubtitle(
+                                          title: 'Attachments',
+                                          subtitle:
+                                              '${projectCardState.pdfAttachments!.length} PDF ${projectCardState.pdfAttachments!.length == 1 ? 'Attachment' : 'Attachments'} ',
+                                        ),
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            spacing: 10,
+                                            children: projectCardState
+                                                .pdfAttachments!
+                                                .asMap()
+                                                .entries
+                                                .map(
+                                              (entry) {
+                                                final index = entry.key;
+                                                return GestureDetector(
+                                                  onTap: () async {
+                                                    await launchUrl(
+                                                      Uri.parse(
+                                                        projectCardState
+                                                                .pdfAttachments![
+                                                            index],
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Stack(
+                                                    alignment:
+                                                        Alignment.bottomRight,
+                                                    children: [
+                                                      Container(
+                                                        height: 70,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            .82,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .fromLTRB(
+                                                                0, 6, 10, 6),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            TSizes.sm,
+                                                          ),
+                                                          border: Border.all(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .dividerColor,
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            FadeInImage(
+                                                              image: AssetImage(
+                                                                'assets/images/pdf.png',
+                                                              ),
+                                                              placeholder:
+                                                                  MemoryImage(
+                                                                kTransparentImage,
+                                                              ),
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                            Flexible(
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    projectCardState
+                                                                        .pdfAttachments![
+                                                                            index]
+                                                                        .split(
+                                                                            '/')
+                                                                        .last,
+                                                                    style: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .labelMedium,
+                                                                    maxLines: 2,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 20,
+                                                        width: 40,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                              TSizes.sm,
+                                                            ),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                              TSizes.sm,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            '${index + 1}/${projectCardState.pdfAttachments!.length}',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .labelMedium!
+                                                                .copyWith(
+                                                                  fontSize: 13,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    selection: const TextSelection.collapsed(
-                      offset: 0,
-                    ),
-                    readOnly: true,
-                  ),
-                  configurations: QuillEditorConfigurations(
-                    customStyles: THelperFunctions.articleTextEditorStyles(
-                      context,
-                      defaultTextStyle,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                    ),
-                    scrollPhysics: const NeverScrollableScrollPhysics(),
-                    
                   ),
                 ),
-              ),
+              if (currentPageState == 1)
+                SliverToBoxAdapter(
+                  child: SizedBox(),
+                ),
+              if (currentPageState == 2)
+                SliverToBoxAdapter(
+                  child: SizedBox(),
+                ),
             ],
           );
         },
@@ -270,72 +673,39 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(
-          bottom: TSizes.xs,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+    );
+  }
+}
+
+class ProjectDetailTitleAndSubtitle extends StatelessWidget {
+  const ProjectDetailTitleAndSubtitle({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                fontSize: 13,
               ),
-              child: Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 150,
-                  ),
-                  child: TextFormField(
-                    controller: TextEditingController(),
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      errorBorder: UnderlineInputBorder(),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      hintText: 'Share your opinion...',
-                      errorStyle:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                      hintStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).hintColor,
-                              ),
-                      errorMaxLines: 2,
-                      contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 12),
-                      hintMaxLines: 1,
-                    ),
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
-      ),
+        Text(
+          subtitle,
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                fontSize: 20,
+              ),
+        ),
+      ],
     );
   }
 }

@@ -17,7 +17,7 @@ class ProjectFilterButtons extends ConsumerWidget {
       duration: const Duration(milliseconds: 500),
       opacity: projectWidgetsState.isActiveFilter ? 1 : 0,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
         child: Row(
           children: [
             Expanded(

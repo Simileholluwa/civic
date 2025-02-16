@@ -27,7 +27,8 @@ import 'package:civic_server/src/generated/post/post_comment.dart' as _i15;
 import 'package:civic_server/src/generated/user/user_record.dart' as _i16;
 import 'package:civic_server/src/generated/post/post.dart' as _i17;
 import 'package:civic_server/src/generated/project/project.dart' as _i18;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i19;
+import 'package:civic_server/src/generated/project/project_review.dart' as _i19;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i20;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -848,6 +849,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'getProjectReview': _i1.MethodConnector(
+          name: 'getProjectReview',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).getProjectReview(
+            session,
+            params['projectId'],
+          ),
+        ),
         'saveProject': _i1.MethodConnector(
           name: 'saveProject',
           params: {
@@ -864,6 +883,24 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['project'] as _i9.ProjectEndpoint).saveProject(
             session,
             params['project'],
+          ),
+        ),
+        'saveProjectReview': _i1.MethodConnector(
+          name: 'saveProjectReview',
+          params: {
+            'projectReview': _i1.ParameterDescription(
+              name: 'projectReview',
+              type: _i1.getType<_i19.ProjectReview>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).saveProjectReview(
+            session,
+            params['projectReview'],
           ),
         ),
         'scheduleProject': _i1.MethodConnector(
@@ -909,6 +946,30 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['project'] as _i9.ProjectEndpoint).getProjects(
+            session,
+            limit: params['limit'],
+            page: params['page'],
+          ),
+        ),
+        'getProjectReviews': _i1.MethodConnector(
+          name: 'getProjectReviews',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).getProjectReviews(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -1027,6 +1088,31 @@ class Endpoints extends _i1.EndpointDispatch {
                   .validateProjectOwnership(
             session,
             params['projectId'],
+            params['user'],
+          ),
+        ),
+        'validateProjectReviewOwnership': _i1.MethodConnector(
+          name: 'validateProjectReviewOwnership',
+          params: {
+            'projectReviewId': _i1.ParameterDescription(
+              name: 'projectReviewId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'user': _i1.ParameterDescription(
+              name: 'user',
+              type: _i1.getType<_i16.UserRecord>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint)
+                  .validateProjectReviewOwnership(
+            session,
+            params['projectReviewId'],
             params['user'],
           ),
         ),
@@ -1240,6 +1326,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i19.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i20.Endpoints()..initializeEndpoints(server);
   }
 }

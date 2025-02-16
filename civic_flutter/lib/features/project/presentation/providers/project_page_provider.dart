@@ -67,7 +67,7 @@ final vsyncProvider = Provider<TickerProvider>(
 class ProjectTabController extends _$ProjectTabController {
   @override
   Raw<TabController> build() => TabController(
-    length: 3,
+    length: 2,
     vsync: ref.watch(vsyncProvider),
   );
 

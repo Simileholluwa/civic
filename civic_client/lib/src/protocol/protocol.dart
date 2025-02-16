@@ -38,15 +38,17 @@ import 'post/posts_hashtags.dart' as _i26;
 import 'project/project.dart' as _i27;
 import 'project/project_likes.dart' as _i28;
 import 'project/project_list.dart' as _i29;
-import 'project/project_status.dart' as _i30;
-import 'user/political_status_enum.dart' as _i31;
-import 'user/user_exception.dart' as _i32;
-import 'user/user_nin_record.dart' as _i33;
-import 'user/user_record.dart' as _i34;
-import 'user/users_list.dart' as _i35;
-import 'package:civic_client/src/protocol/general/aws_places.dart' as _i36;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i37;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i38;
+import 'project/project_review.dart' as _i30;
+import 'project/project_review_list.dart' as _i31;
+import 'project/project_status.dart' as _i32;
+import 'user/political_status_enum.dart' as _i33;
+import 'user/user_exception.dart' as _i34;
+import 'user/user_nin_record.dart' as _i35;
+import 'user/user_record.dart' as _i36;
+import 'user/users_list.dart' as _i37;
+import 'package:civic_client/src/protocol/general/aws_places.dart' as _i38;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i39;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i40;
 export 'article/article.dart';
 export 'article/article_draft.dart';
 export 'article/article_list.dart';
@@ -75,6 +77,8 @@ export 'post/posts_hashtags.dart';
 export 'project/project.dart';
 export 'project/project_likes.dart';
 export 'project/project_list.dart';
+export 'project/project_review.dart';
+export 'project/project_review_list.dart';
 export 'project/project_status.dart';
 export 'user/political_status_enum.dart';
 export 'user/user_exception.dart';
@@ -180,23 +184,29 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i29.ProjectList) {
       return _i29.ProjectList.fromJson(data) as T;
     }
-    if (t == _i30.ProjectStatus) {
-      return _i30.ProjectStatus.fromJson(data) as T;
+    if (t == _i30.ProjectReview) {
+      return _i30.ProjectReview.fromJson(data) as T;
     }
-    if (t == _i31.PoliticalStatus) {
-      return _i31.PoliticalStatus.fromJson(data) as T;
+    if (t == _i31.ProjectReviewList) {
+      return _i31.ProjectReviewList.fromJson(data) as T;
     }
-    if (t == _i32.UserException) {
-      return _i32.UserException.fromJson(data) as T;
+    if (t == _i32.ProjectStatus) {
+      return _i32.ProjectStatus.fromJson(data) as T;
     }
-    if (t == _i33.UserNinRecord) {
-      return _i33.UserNinRecord.fromJson(data) as T;
+    if (t == _i33.PoliticalStatus) {
+      return _i33.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i34.UserRecord) {
-      return _i34.UserRecord.fromJson(data) as T;
+    if (t == _i34.UserException) {
+      return _i34.UserException.fromJson(data) as T;
     }
-    if (t == _i35.UsersList) {
-      return _i35.UsersList.fromJson(data) as T;
+    if (t == _i35.UserNinRecord) {
+      return _i35.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i36.UserRecord) {
+      return _i36.UserRecord.fromJson(data) as T;
+    }
+    if (t == _i37.UsersList) {
+      return _i37.UsersList.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.Article?>()) {
       return (data != null ? _i2.Article.fromJson(data) : null) as T;
@@ -282,30 +292,36 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i29.ProjectList?>()) {
       return (data != null ? _i29.ProjectList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i30.ProjectStatus?>()) {
-      return (data != null ? _i30.ProjectStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i30.ProjectReview?>()) {
+      return (data != null ? _i30.ProjectReview.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i31.PoliticalStatus?>()) {
-      return (data != null ? _i31.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i31.ProjectReviewList?>()) {
+      return (data != null ? _i31.ProjectReviewList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.UserException?>()) {
-      return (data != null ? _i32.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i32.ProjectStatus?>()) {
+      return (data != null ? _i32.ProjectStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i33.UserNinRecord?>()) {
-      return (data != null ? _i33.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.PoliticalStatus?>()) {
+      return (data != null ? _i33.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i34.UserRecord?>()) {
-      return (data != null ? _i34.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i34.UserException?>()) {
+      return (data != null ? _i34.UserException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i35.UsersList?>()) {
-      return (data != null ? _i35.UsersList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i35.UserNinRecord?>()) {
+      return (data != null ? _i35.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i36.UserRecord?>()) {
+      return (data != null ? _i36.UserRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i37.UsersList?>()) {
+      return (data != null ? _i37.UsersList.fromJson(data) : null) as T;
     }
     if (t == List<_i2.Article>) {
       return (data as List).map((e) => deserialize<_i2.Article>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i34.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i34.UserRecord>(e)).toList()
+    if (t == List<_i36.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
           as dynamic;
     }
     if (t == List<_i5.AWSPlaces>) {
@@ -316,9 +332,9 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i34.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i34.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i5.AWSPlaces>?>()) {
@@ -326,9 +342,9 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i34.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i34.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -374,9 +390,9 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i34.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i34.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i5.AWSPlaces>?>()) {
@@ -384,9 +400,9 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<_i5.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i34.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i34.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -484,12 +500,17 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<_i27.Project>(e)).toList()
           as dynamic;
     }
+    if (t == List<_i30.ProjectReview>) {
+      return (data as List)
+          .map((e) => deserialize<_i30.ProjectReview>(e))
+          .toList() as dynamic;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i36.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i36.AWSPlaces>(e)).toList()
+    if (t == List<_i38.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i38.AWSPlaces>(e)).toList()
           as dynamic;
     }
     if (t == List<double>) {
@@ -499,12 +520,12 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<int>) {
       return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
-    if (t == List<_i37.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i37.UserRecord>(e)).toList()
+    if (t == List<_i39.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i39.UserRecord>(e)).toList()
           as dynamic;
     }
     try {
-      return _i38.Protocol().deserialize<T>(data, t);
+      return _i40.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -597,25 +618,31 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i29.ProjectList) {
       return 'ProjectList';
     }
-    if (data is _i30.ProjectStatus) {
+    if (data is _i30.ProjectReview) {
+      return 'ProjectReview';
+    }
+    if (data is _i31.ProjectReviewList) {
+      return 'ProjectReviewList';
+    }
+    if (data is _i32.ProjectStatus) {
       return 'ProjectStatus';
     }
-    if (data is _i31.PoliticalStatus) {
+    if (data is _i33.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i32.UserException) {
+    if (data is _i34.UserException) {
       return 'UserException';
     }
-    if (data is _i33.UserNinRecord) {
+    if (data is _i35.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i34.UserRecord) {
+    if (data is _i36.UserRecord) {
       return 'UserRecord';
     }
-    if (data is _i35.UsersList) {
+    if (data is _i37.UsersList) {
       return 'UsersList';
     }
-    className = _i38.Protocol().getClassNameForObject(data);
+    className = _i40.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -712,27 +739,33 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'ProjectList') {
       return deserialize<_i29.ProjectList>(data['data']);
     }
+    if (dataClassName == 'ProjectReview') {
+      return deserialize<_i30.ProjectReview>(data['data']);
+    }
+    if (dataClassName == 'ProjectReviewList') {
+      return deserialize<_i31.ProjectReviewList>(data['data']);
+    }
     if (dataClassName == 'ProjectStatus') {
-      return deserialize<_i30.ProjectStatus>(data['data']);
+      return deserialize<_i32.ProjectStatus>(data['data']);
     }
     if (dataClassName == 'PoliticalStatus') {
-      return deserialize<_i31.PoliticalStatus>(data['data']);
+      return deserialize<_i33.PoliticalStatus>(data['data']);
     }
     if (dataClassName == 'UserException') {
-      return deserialize<_i32.UserException>(data['data']);
+      return deserialize<_i34.UserException>(data['data']);
     }
     if (dataClassName == 'UserNinRecord') {
-      return deserialize<_i33.UserNinRecord>(data['data']);
+      return deserialize<_i35.UserNinRecord>(data['data']);
     }
     if (dataClassName == 'UserRecord') {
-      return deserialize<_i34.UserRecord>(data['data']);
+      return deserialize<_i36.UserRecord>(data['data']);
     }
     if (dataClassName == 'UsersList') {
-      return deserialize<_i35.UsersList>(data['data']);
+      return deserialize<_i37.UsersList>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth.')) {
       data['className'] = dataClassName.substring(15);
-      return _i38.Protocol().deserializeByClassName(data);
+      return _i40.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

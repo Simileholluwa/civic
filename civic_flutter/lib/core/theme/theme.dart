@@ -61,6 +61,15 @@ class TAppTheme {
       appBarScrolledUnderElevation: 0,
       filledButtonRadius: 100,
       outlinedButtonRadius: 100,
+      elevatedButtonSchemeColor: SchemeColor.primary,
+      //elevatedButtonSecondarySchemeColor: SchemeColor.secondary,
+      elevatedButtonTextStyle: WidgetStatePropertyAll(
+        TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Montserrat',
+        ),
+      ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,

@@ -1,15 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ContentMultipleCachedImage extends StatelessWidget {
   const ContentMultipleCachedImage({
     required this.imageUrls,
     this.useMargin = true,
+    this.isUrl = true,
     super.key,
   });
 
-  final List<String> imageUrls;
+  final List<dynamic> imageUrls;
   final bool useMargin;
+  final bool isUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,17 @@ class ContentMultipleCachedImage extends StatelessWidget {
                         maxHeight: 400,
                         maxWidth: 400,
                       ),
-                      child: ContentCachedImage(url: url),
+                      child: isUrl
+                          ? ContentCachedImage(url: url as String)
+                          : FadeInImage(
+                              image: MemoryImage(
+                                url as Uint8List,
+                              ),
+                              placeholder: MemoryImage(
+                                kTransparentImage,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     if (!isLast)
                       const SizedBox(

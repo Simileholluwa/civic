@@ -40,15 +40,19 @@ post:
   - validatePostOwnership:
 project:
   - getProject:
+  - getProjectReview:
   - saveProject:
+  - saveProjectReview:
   - scheduleProject:
   - getProjects:
+  - getProjectReviews:
   - deleteProject:
   - updateCount:
   - getUserLikedProjects:
   - toggleLike:
   - authUser:
   - validateProjectOwnership:
+  - validateProjectReviewOwnership:
 sendEmail:
   - sendEmail:
 userNin:

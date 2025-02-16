@@ -1,9 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCardState {
   final String timeAgo;
@@ -21,6 +24,20 @@ class ProjectCardState {
   final bool hasLiked;
   final UserRecord creator;
   final bool canVet;
+  String? startDateISO;
+  String? endDateISO;
+  double? percentageElapsedInDouble;
+  String? percentageElapsedInString;
+  String? category;
+  String? subCategory;
+  String? fundingAmount;
+  String? fundingCategory;
+  String? fundingSubCategory;
+  Document? rawDescription;
+  List<String>? pdfAttachments;
+  bool? hasPdf;
+  List<AWSPlaces>? locations;
+  bool? hasLocation;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -33,10 +50,24 @@ class ProjectCardState {
     required this.duration,
     required this.numberOfLikes,
     required this.numberOfComments,
-    required this.creator,
     required this.numberOfReposts,
     this.hasLiked = false,
+    required this.creator,
     required this.canVet,
+    this.startDateISO,
+    this.endDateISO,
+    this.percentageElapsedInDouble,
+    this.percentageElapsedInString,
+    this.category,
+    this.subCategory,
+    this.fundingAmount,
+    this.fundingCategory,
+    this.fundingSubCategory,
+    this.rawDescription,
+    this.hasPdf,
+    this.pdfAttachments,
+    this.locations,
+    this.hasLocation,
   });
 
   ProjectCardState copyWith({
@@ -97,6 +128,11 @@ class ProjectCardState {
           project.description!,
         ),
       ).toPlainText(),
+      rawDescription: Document.fromJson(
+        jsonDecode(
+          project.description!,
+        ),
+      ),
       title: project.title!,
       currency: project.currency!,
       amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),
@@ -125,6 +161,29 @@ class ProjectCardState {
         project.startDate!,
         project.endDate!,
       ),
+      startDateISO: project.startDate!.toIso8601String().substring(0, 10),
+      endDateISO: project.endDate!.toIso8601String().substring(0, 10),
+      percentageElapsedInDouble:
+          ProjectHelperFunctions.percentageElapsedInDouble(
+        project.startDate!,
+        project.endDate!,
+      ),
+      percentageElapsedInString:
+          ProjectHelperFunctions.percentageElapsedInString(
+        project.startDate!,
+        project.endDate!,
+      ),
+      category: project.projectCategory,
+      subCategory: project.projectSubCategory,
+      fundingAmount: '${project.currency} ${ProjectHelperFunctions.formatNumber(
+        project.projectCost!,
+      )}',
+      fundingCategory: project.fundingCategory,
+      fundingSubCategory: project.fundingSubCategory,
+      hasPdf: project.projectPDFAttachments?.isNotEmpty ?? false,
+      pdfAttachments: project.projectPDFAttachments,
+      locations: project.physicalLocations,
+      hasLocation: project.physicalLocations?.isNotEmpty ?? false,
     );
   }
 }

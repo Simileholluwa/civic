@@ -22,11 +22,14 @@ import 'package:civic_client/src/protocol/user/user_record.dart' as _i10;
 import 'package:civic_client/src/protocol/post/post.dart' as _i11;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i12;
 import 'package:civic_client/src/protocol/project/project.dart' as _i13;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i14;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i15;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i16;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i17;
-import 'protocol.dart' as _i18;
+import 'package:civic_client/src/protocol/project/project_review.dart' as _i14;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i15;
+import 'package:civic_client/src/protocol/project/project_review_list.dart'
+    as _i16;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i17;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i18;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
+import 'protocol.dart' as _i20;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -421,11 +424,26 @@ class EndpointProject extends _i1.EndpointRef {
         {'id': id},
       );
 
+  _i2.Future<_i14.ProjectReview?> getProjectReview(int projectId) =>
+      caller.callServerEndpoint<_i14.ProjectReview?>(
+        'project',
+        'getProjectReview',
+        {'projectId': projectId},
+      );
+
   _i2.Future<_i13.Project?> saveProject(_i13.Project project) =>
       caller.callServerEndpoint<_i13.Project?>(
         'project',
         'saveProject',
         {'project': project},
+      );
+
+  _i2.Future<_i14.ProjectReview?> saveProjectReview(
+          _i14.ProjectReview projectReview) =>
+      caller.callServerEndpoint<_i14.ProjectReview?>(
+        'project',
+        'saveProjectReview',
+        {'projectReview': projectReview},
       );
 
   _i2.Future<void> scheduleProject(
@@ -441,13 +459,26 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i14.ProjectList> getProjects({
+  _i2.Future<_i15.ProjectList> getProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i14.ProjectList>(
+      caller.callServerEndpoint<_i15.ProjectList>(
         'project',
         'getProjects',
+        {
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Future<_i16.ProjectReviewList> getProjectReviews({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i16.ProjectReviewList>(
+        'project',
+        'getProjectReviews',
         {
           'limit': limit,
           'page': page,
@@ -509,6 +540,19 @@ class EndpointProject extends _i1.EndpointRef {
           'user': user,
         },
       );
+
+  _i2.Future<void> validateProjectReviewOwnership(
+    int projectReviewId,
+    _i10.UserRecord user,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'validateProjectReviewOwnership',
+        {
+          'projectReviewId': projectReviewId,
+          'user': user,
+        },
+      );
 }
 
 /// {@category Endpoint}
@@ -545,8 +589,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i15.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i15.UserNinRecord?>(
+  _i2.Future<_i17.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i17.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -588,12 +632,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i16.UsersList> getUsers({
+  _i2.Future<_i18.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i16.UsersList>(
+      caller.callServerEndpoint<_i18.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -626,10 +670,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i17.Caller(client);
+    auth = _i19.Caller(client);
   }
 
-  late final _i17.Caller auth;
+  late final _i19.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -648,7 +692,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i18.Protocol(),
+          _i20.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

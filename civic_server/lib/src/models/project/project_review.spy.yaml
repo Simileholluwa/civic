@@ -1,0 +1,15 @@
+class: ProjectReview
+table: project_review
+fields:
+    owner: UserRecord?, relation
+    project: Project?, relation
+    review: String?
+    locationRating: double?
+    descriptionRating: double?
+    attachmentsRating: double?
+    categoryRating: double?
+    fundingRating: double?
+    datesRating: double?
+    overallRating: double?
+    dateCreated: DateTime?
+    updatedAt: DateTime?

@@ -28,8 +28,27 @@ class ProjectFilterOverlay extends ConsumerWidget {
             height: projectWidgetsState.isActiveFilter
                 ? MediaQuery.of(context).size.height * .6
                 : 0,
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 70),
-            color: Theme.of(context).scaffoldBackgroundColor,
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).primaryColor,
+                  width: 1,
+                ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).primaryColor.withAlpha(30),
+                  blurRadius: 5,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 80),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

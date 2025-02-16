@@ -94,6 +94,62 @@ final getProjectProvider = AutoDisposeProvider<GetProjectUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetProjectRef = AutoDisposeProviderRef<GetProjectUseCase>;
+String _$saveProjectReviewHash() => r'92a7b5986f4adaead3c5e26540f84620072fc4e0';
+
+/// See also [saveProjectReview].
+@ProviderFor(saveProjectReview)
+final saveProjectReviewProvider =
+    AutoDisposeProvider<SaveProjectReviewUseCase>.internal(
+  saveProjectReview,
+  name: r'saveProjectReviewProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$saveProjectReviewHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SaveProjectReviewRef = AutoDisposeProviderRef<SaveProjectReviewUseCase>;
+String _$getProjectReviewssHash() =>
+    r'fd9cb5ac69cee87bd26a303994566edcf55bd1a9';
+
+/// See also [getProjectReviewss].
+@ProviderFor(getProjectReviewss)
+final getProjectReviewssProvider =
+    AutoDisposeProvider<GetProjectReviewsUseCase>.internal(
+  getProjectReviewss,
+  name: r'getProjectReviewssProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getProjectReviewssHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetProjectReviewssRef
+    = AutoDisposeProviderRef<GetProjectReviewsUseCase>;
+String _$getProjectReviewHash() => r'2f0aaa2efd3a5c28e84f8db96632efe52548811c';
+
+/// See also [getProjectReview].
+@ProviderFor(getProjectReview)
+final getProjectReviewProvider =
+    AutoDisposeProvider<GetProjectReviewUseCase>.internal(
+  getProjectReview,
+  name: r'getProjectReviewProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getProjectReviewHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetProjectReviewRef = AutoDisposeProviderRef<GetProjectReviewUseCase>;
 String _$scheduleProjectHash() => r'92b6eeb0dc4bb039e784f9b256f4e7d738da469d';
 
 /// See also [scheduleProject].

@@ -40,14 +40,16 @@ import 'post/posts_hashtags.dart' as _i28;
 import 'project/project.dart' as _i29;
 import 'project/project_likes.dart' as _i30;
 import 'project/project_list.dart' as _i31;
-import 'project/project_status.dart' as _i32;
-import 'user/political_status_enum.dart' as _i33;
-import 'user/user_exception.dart' as _i34;
-import 'user/user_nin_record.dart' as _i35;
-import 'user/user_record.dart' as _i36;
-import 'user/users_list.dart' as _i37;
-import 'package:civic_server/src/generated/general/aws_places.dart' as _i38;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i39;
+import 'project/project_review.dart' as _i32;
+import 'project/project_review_list.dart' as _i33;
+import 'project/project_status.dart' as _i34;
+import 'user/political_status_enum.dart' as _i35;
+import 'user/user_exception.dart' as _i36;
+import 'user/user_nin_record.dart' as _i37;
+import 'user/user_record.dart' as _i38;
+import 'user/users_list.dart' as _i39;
+import 'package:civic_server/src/generated/general/aws_places.dart' as _i40;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i41;
 export 'article/article.dart';
 export 'article/article_draft.dart';
 export 'article/article_list.dart';
@@ -76,6 +78,8 @@ export 'post/posts_hashtags.dart';
 export 'project/project.dart';
 export 'project/project_likes.dart';
 export 'project/project_list.dart';
+export 'project/project_review.dart';
+export 'project/project_review_list.dart';
 export 'project/project_status.dart';
 export 'user/political_status_enum.dart';
 export 'user/user_exception.dart';
@@ -1236,6 +1240,18 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'List<int>?',
         ),
+        _i2.ColumnDefinition(
+          name: 'overallRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'numberOfReviews',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -1351,6 +1367,131 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: true,
           isPrimary: false,
         ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'project_review',
+      dartName: 'ProjectReview',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'project_review_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'ownerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'review',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'locationRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'descriptionRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'attachmentsRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'categoryRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'fundingRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'datesRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'overallRating',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'dateCreated',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'updatedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_review_fk_0',
+          columns: ['ownerId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_review_fk_1',
+          columns: ['projectId'],
+          referenceTable: 'project',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'project_review_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
       ],
       managed: true,
     ),
@@ -1698,23 +1839,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i31.ProjectList) {
       return _i31.ProjectList.fromJson(data) as T;
     }
-    if (t == _i32.ProjectStatus) {
-      return _i32.ProjectStatus.fromJson(data) as T;
+    if (t == _i32.ProjectReview) {
+      return _i32.ProjectReview.fromJson(data) as T;
     }
-    if (t == _i33.PoliticalStatus) {
-      return _i33.PoliticalStatus.fromJson(data) as T;
+    if (t == _i33.ProjectReviewList) {
+      return _i33.ProjectReviewList.fromJson(data) as T;
     }
-    if (t == _i34.UserException) {
-      return _i34.UserException.fromJson(data) as T;
+    if (t == _i34.ProjectStatus) {
+      return _i34.ProjectStatus.fromJson(data) as T;
     }
-    if (t == _i35.UserNinRecord) {
-      return _i35.UserNinRecord.fromJson(data) as T;
+    if (t == _i35.PoliticalStatus) {
+      return _i35.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i36.UserRecord) {
-      return _i36.UserRecord.fromJson(data) as T;
+    if (t == _i36.UserException) {
+      return _i36.UserException.fromJson(data) as T;
     }
-    if (t == _i37.UsersList) {
-      return _i37.UsersList.fromJson(data) as T;
+    if (t == _i37.UserNinRecord) {
+      return _i37.UserNinRecord.fromJson(data) as T;
+    }
+    if (t == _i38.UserRecord) {
+      return _i38.UserRecord.fromJson(data) as T;
+    }
+    if (t == _i39.UsersList) {
+      return _i39.UsersList.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Article?>()) {
       return (data != null ? _i4.Article.fromJson(data) : null) as T;
@@ -1800,30 +1947,36 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i31.ProjectList?>()) {
       return (data != null ? _i31.ProjectList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.ProjectStatus?>()) {
-      return (data != null ? _i32.ProjectStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i32.ProjectReview?>()) {
+      return (data != null ? _i32.ProjectReview.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i33.PoliticalStatus?>()) {
-      return (data != null ? _i33.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.ProjectReviewList?>()) {
+      return (data != null ? _i33.ProjectReviewList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i34.UserException?>()) {
-      return (data != null ? _i34.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i34.ProjectStatus?>()) {
+      return (data != null ? _i34.ProjectStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i35.UserNinRecord?>()) {
-      return (data != null ? _i35.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i35.PoliticalStatus?>()) {
+      return (data != null ? _i35.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i36.UserRecord?>()) {
-      return (data != null ? _i36.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i36.UserException?>()) {
+      return (data != null ? _i36.UserException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i37.UsersList?>()) {
-      return (data != null ? _i37.UsersList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i37.UserNinRecord?>()) {
+      return (data != null ? _i37.UserNinRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i38.UserRecord?>()) {
+      return (data != null ? _i38.UserRecord.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i39.UsersList?>()) {
+      return (data != null ? _i39.UsersList.fromJson(data) : null) as T;
     }
     if (t == List<_i4.Article>) {
       return (data as List).map((e) => deserialize<_i4.Article>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i36.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
+    if (t == List<_i38.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i38.UserRecord>(e)).toList()
           as dynamic;
     }
     if (t == List<_i7.AWSPlaces>) {
@@ -1834,9 +1987,9 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i38.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i38.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i7.AWSPlaces>?>()) {
@@ -1844,9 +1997,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i7.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i38.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i38.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -1892,9 +2045,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i38.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i38.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i7.AWSPlaces>?>()) {
@@ -1902,9 +2055,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i7.AWSPlaces>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i36.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i38.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i36.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i38.UserRecord>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -2002,12 +2155,17 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<_i29.Project>(e)).toList()
           as dynamic;
     }
+    if (t == List<_i32.ProjectReview>) {
+      return (data as List)
+          .map((e) => deserialize<_i32.ProjectReview>(e))
+          .toList() as dynamic;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i38.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i38.AWSPlaces>(e)).toList()
+    if (t == List<_i40.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i40.AWSPlaces>(e)).toList()
           as dynamic;
     }
     if (t == List<double>) {
@@ -2017,8 +2175,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<int>) {
       return (data as List).map((e) => deserialize<int>(e)).toList() as dynamic;
     }
-    if (t == List<_i39.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i39.UserRecord>(e)).toList()
+    if (t == List<_i41.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i41.UserRecord>(e)).toList()
           as dynamic;
     }
     try {
@@ -2118,22 +2276,28 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i31.ProjectList) {
       return 'ProjectList';
     }
-    if (data is _i32.ProjectStatus) {
+    if (data is _i32.ProjectReview) {
+      return 'ProjectReview';
+    }
+    if (data is _i33.ProjectReviewList) {
+      return 'ProjectReviewList';
+    }
+    if (data is _i34.ProjectStatus) {
       return 'ProjectStatus';
     }
-    if (data is _i33.PoliticalStatus) {
+    if (data is _i35.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i34.UserException) {
+    if (data is _i36.UserException) {
       return 'UserException';
     }
-    if (data is _i35.UserNinRecord) {
+    if (data is _i37.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i36.UserRecord) {
+    if (data is _i38.UserRecord) {
       return 'UserRecord';
     }
-    if (data is _i37.UsersList) {
+    if (data is _i39.UsersList) {
       return 'UsersList';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -2237,23 +2401,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'ProjectList') {
       return deserialize<_i31.ProjectList>(data['data']);
     }
+    if (dataClassName == 'ProjectReview') {
+      return deserialize<_i32.ProjectReview>(data['data']);
+    }
+    if (dataClassName == 'ProjectReviewList') {
+      return deserialize<_i33.ProjectReviewList>(data['data']);
+    }
     if (dataClassName == 'ProjectStatus') {
-      return deserialize<_i32.ProjectStatus>(data['data']);
+      return deserialize<_i34.ProjectStatus>(data['data']);
     }
     if (dataClassName == 'PoliticalStatus') {
-      return deserialize<_i33.PoliticalStatus>(data['data']);
+      return deserialize<_i35.PoliticalStatus>(data['data']);
     }
     if (dataClassName == 'UserException') {
-      return deserialize<_i34.UserException>(data['data']);
+      return deserialize<_i36.UserException>(data['data']);
     }
     if (dataClassName == 'UserNinRecord') {
-      return deserialize<_i35.UserNinRecord>(data['data']);
+      return deserialize<_i37.UserNinRecord>(data['data']);
     }
     if (dataClassName == 'UserRecord') {
-      return deserialize<_i36.UserRecord>(data['data']);
+      return deserialize<_i38.UserRecord>(data['data']);
     }
     if (dataClassName == 'UsersList') {
-      return deserialize<_i37.UsersList>(data['data']);
+      return deserialize<_i39.UsersList>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -2307,10 +2477,12 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i29.Project.t;
       case _i30.ProjectLikes:
         return _i30.ProjectLikes.t;
-      case _i35.UserNinRecord:
-        return _i35.UserNinRecord.t;
-      case _i36.UserRecord:
-        return _i36.UserRecord.t;
+      case _i32.ProjectReview:
+        return _i32.ProjectReview.t;
+      case _i37.UserNinRecord:
+        return _i37.UserNinRecord.t;
+      case _i38.UserRecord:
+        return _i38.UserRecord.t;
     }
     return null;
   }

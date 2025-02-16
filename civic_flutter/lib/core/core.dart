@@ -61,6 +61,7 @@ export './widgets/app/app_user_info_widget.dart';
 export './widgets/app/app_user_profile_image.dart';
 export './widgets/app/app_user_pl_status_icon.dart';
 export './widgets/app/app_wrapper.dart';
+export './widgets/app/app_rating_bar.dart';
 export './widgets/auth/auth_app_bar.dart';
 export './widgets/auth/auth_header.dart';
 export './widgets/create_content/create_content_appbar.dart';

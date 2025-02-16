@@ -23,7 +23,7 @@ class CreateContentButton extends ConsumerWidget {
 
     void navigate() {
       switch (tabController.index) {
-        case 0:
+        case 1:
           invalidateProviders();
 
           context.push(
@@ -34,7 +34,7 @@ class CreateContentButton extends ConsumerWidget {
             },
           );
           break;
-        case 2:
+        case 3:
           invalidateProviders();
 
           context.push(
@@ -45,7 +45,7 @@ class CreateContentButton extends ConsumerWidget {
             },
           );
           break;
-        case 1:
+        case 2:
           invalidateProviders();
           ref.invalidate(pollsOptionsProvider);
 
@@ -54,6 +54,14 @@ class CreateContentButton extends ConsumerWidget {
             extra: {
               'id': 0,
               'draft': null,
+            },
+          );
+          break;
+        case 0:
+          context.push(
+            AppRoutes.createProject,
+            extra: {
+              'id': 0,
             },
           );
           break;

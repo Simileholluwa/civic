@@ -4,11 +4,25 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
 abstract class ProjectRemoteDataSource {
-  Future<ProjectList> getProjects({required int limit, required int page,});
+  Future<ProjectList> getProjects({
+    required int limit,
+    required int page,
+  });
 
   Future<Project?> getProject({required int id});
 
   Future<Project?> saveProject({required Project project});
+
+  Future<ProjectReviewList> getProjectReviews({
+    required int limit,
+    required int page,
+  });
+
+  Future<ProjectReview?> getProjectReview({required int id});
+
+  Future<ProjectReview?> saveProjectReview({
+    required ProjectReview projectReview,
+  });
 
   Future<void> scheduleProject({
     required Project project,
@@ -24,7 +38,7 @@ abstract class ProjectRemoteDataSource {
   Future<List<int>> getUserLikedProjects();
 }
 
-class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
+class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   ProjectRemoteDatasourceImpl({
     required Client client,
   }) : _client = client;
@@ -84,7 +98,10 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
   }
 
   @override
-  Future<ProjectList> getProjects({required int limit, required int page,}) async {
+  Future<ProjectList> getProjects({
+    required int limit,
+    required int page,
+  }) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
       if (!isConnected) {
@@ -112,7 +129,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
 
   @override
   Future<Project?> saveProject({required Project project}) async {
-    
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
       if (!isConnected) {
@@ -150,11 +166,13 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
         message: e.toString(),
       );
     }
-
   }
 
   @override
-  Future<void> scheduleProject({required Project project, required DateTime dateTime,}) async {
+  Future<void> scheduleProject({
+    required Project project,
+    required DateTime dateTime,
+  }) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
       if (!isConnected) {
@@ -166,16 +184,17 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
         project,
         dateTime,
       );
-    }  catch (e) {
+    } catch (e) {
       throw ServerException(
         message: e.toString(),
       );
     }
-  
   }
-  
+
   @override
-  Future<int> toggleLike({required int id,}) async {
+  Future<int> toggleLike({
+    required int id,
+  }) async {
     try {
       return await _client.project.toggleLike(
         id,
@@ -188,13 +207,112 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource{
       );
     }
   }
-  
+
   @override
   Future<List<int>> getUserLikedProjects() async {
     try {
       return await _client.project.getUserLikedProjects();
     } on UserException catch (e) {
       throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectReview?> getProjectReview({required int id}) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = await _client.project.getProjectReview(
+        id,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectReviewList> getProjectReviews({
+    required int limit,
+    required int page,
+  }) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+      final result = _client.project.getProjectReviews(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectReview?> saveProjectReview({
+    required ProjectReview projectReview,
+  }) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+
+      final result = await _client.project
+          .saveProjectReview(
+            projectReview,
+          )
+          .timeout(
+            const Duration(
+              seconds: 60,
+            ),
+          );
+
+      if (result == null) {
+        return null;
+      }
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),

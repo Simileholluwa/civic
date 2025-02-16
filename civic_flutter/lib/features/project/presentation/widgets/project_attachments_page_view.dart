@@ -22,13 +22,12 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
           tabs: const [
             Tab(text: 'IMAGES'),
             Tab(text: 'PDFs'),
-            Tab(text: 'VIDEO'),
           ],
         ),
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'Include images, PDFs, video or all to help your constituents understand your '
+            'Include images, and or PDFs to help your constituents understand your '
             'project better.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 17,
@@ -45,11 +44,6 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
               ),
               ProjectPDFAttachmentsTabView(
                 project: project,
-              ),
-              ContentKeepAliveWrapper(
-                child: ProjectVideoAttachmentTabView(
-                  project: project,
-                ),
               ),
             ],
           ),

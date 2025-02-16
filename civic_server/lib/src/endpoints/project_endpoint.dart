@@ -11,6 +11,21 @@ class ProjectEndpoint extends Endpoint {
     return result;
   }
 
+  Future<ProjectReview?> getProjectReview(
+    Session session,
+    int projectId,
+  ) async {
+    final user = await authUser(
+      session,
+    );
+    final result = await ProjectReview.db.findFirstRow(
+      session,
+      where: (row) =>
+          row.projectId.equals(projectId) & row.ownerId.equals(user.userInfoId),
+    );
+    return result;
+  }
+
   Future<Project?> saveProject(
     Session session,
     Project project,
@@ -42,6 +57,62 @@ class ProjectEndpoint extends Endpoint {
             commentBy: [],
             likedBy: [],
             repostBy: [],
+          ),
+        );
+      }
+    } catch (e, stackTrace) {
+      session.log(
+        'Error in saveProject: $e',
+        level: LogLevel.error,
+        exception: e,
+        stackTrace: stackTrace,
+      );
+      return null;
+    }
+  }
+
+  Future<ProjectReview?> saveProjectReview(
+    Session session,
+    ProjectReview projectReview,
+  ) async {
+    try {
+      final user = await authUser(
+        session,
+      );
+
+      if (projectReview.id != null) {
+        await validateProjectReviewOwnership(
+          session,
+          projectReview.id!,
+          user,
+        );
+        return await ProjectReview.db.updateRow(
+          session,
+          projectReview.copyWith(
+            updatedAt: DateTime.now(),
+            ownerId: user.id,
+          ),
+        );
+      } else {
+        final project = await Project.db.findById(
+          session,
+          projectReview.projectId,
+        );
+        if (project != null) {
+          await Project.db.updateRow(
+            session,
+            project.copyWith(
+              numberOfReviews: project.numberOfReviews ?? 0 + 1,
+              // overallRating: (project.overallRating ?? 0.0 + (projectReview.overallRating)) / (project.numberOfReviews ?? 1),
+            ),
+          );
+        }
+        return await ProjectReview.db.insertRow(
+          session,
+          projectReview.copyWith(
+            ownerId: user.id,
+            owner: user,
+            dateCreated: DateTime.now(),
           ),
         );
       }
@@ -89,9 +160,46 @@ class ProjectEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       ),
+      orderBy: (t) => t.dateCreated,
+      orderDescending: true,
     );
 
     return ProjectList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
+  }
+
+  Future<ProjectReviewList> getProjectReviews(
+    Session session, {
+    int limit = 10,
+    int page = 1,
+  }) async {
+    if (limit <= 0 || page <= 0) {
+      throw UserException(
+        message: 'Invalid pagination parameters',
+      );
+    }
+
+    final count = await ProjectReview.db.count(session);
+    final results = await ProjectReview.db.find(
+      session,
+      limit: limit,
+      offset: (page - 1) * limit,
+      include: ProjectReview.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+      orderBy: (t) => t.dateCreated,
+      orderDescending: true,
+    );
+
+    return ProjectReviewList(
       count: count,
       limit: limit,
       page: page,
@@ -304,6 +412,27 @@ class ProjectEndpoint extends Endpoint {
       );
     }
     if (project.ownerId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
+  }
+
+  Future<void> validateProjectReviewOwnership(
+    Session session,
+    int projectReviewId,
+    UserRecord user,
+  ) async {
+    final projectReview = await ProjectReview.db.findById(
+      session,
+      projectReviewId,
+    );
+    if (projectReview == null) {
+      throw PostException(
+        message: 'Project review not found',
+      );
+    }
+    if (projectReview.ownerId != user.userInfoId) {
       throw PostException(
         message: 'Unauthorised operation',
       );

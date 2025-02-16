@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 class ProjectHelperFunctions {
   ProjectHelperFunctions._();
@@ -127,6 +128,44 @@ class ProjectHelperFunctions {
     return '${percentagePassed.toStringAsFixed(2)}% complete';
   }
 
+  static String percentageElapsedInString(
+      DateTime startDate, DateTime endDate) {
+    DateTime currentDate = DateTime.now();
+
+    if (currentDate.isBefore(startDate)) {
+      return '0%';
+    }
+
+    if (currentDate.isAfter(endDate)) {
+      return '100%';
+    }
+
+    int totalDays = endDate.difference(startDate).inDays;
+    int daysPassed = currentDate.difference(startDate).inDays;
+
+    double percentagePassed = (daysPassed / totalDays) * 100;
+    return '${percentagePassed.toStringAsFixed(1)}%';
+  }
+
+  static double percentageElapsedInDouble(
+      DateTime startDate, DateTime endDate) {
+    DateTime currentDate = DateTime.now();
+
+    if (currentDate.isBefore(startDate)) {
+      return 0;
+    }
+
+    if (currentDate.isAfter(endDate)) {
+      return 1;
+    }
+
+    int totalDays = endDate.difference(startDate).inDays;
+    int daysPassed = currentDate.difference(startDate).inDays;
+
+    double percentagePassed = (daysPassed / totalDays);
+    return percentagePassed;
+  }
+
   static bool canVet(DateTime startDate, DateTime endDate) {
     DateTime currentDate = DateTime.now();
 
@@ -137,6 +176,11 @@ class ProjectHelperFunctions {
     } else {
       return false;
     }
+  }
+
+  static String formatNumber(double number) {
+    final formatter = NumberFormat("#,###");
+    return formatter.format(number);
   }
 
   static Future<bool?> selectLocationBottomSheet({

@@ -7,10 +7,18 @@ abstract class ProjectRepository {
     required int page,
     required int limit,
   });
+  Future<Either<Failure, ProjectReviewList>> getProjectReviews({
+    required int page,
+    required int limit,
+  });
 
   Future<Either<String, Project?>> getProject({required int id});
 
   Future<Either<Failure, Project?>> saveProject({required Project project});
+
+  Future<Either<String, ProjectReview?>> getProjectReview({required int id});
+
+  Future<Either<Failure, ProjectReview?>> saveProjectReview({required ProjectReview projectReview,});
 
   Future<Either<Failure, void>> scheduleProject({
     required Project project,

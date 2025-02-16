@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TTextTheme {
   TTextTheme._();
@@ -8,7 +7,7 @@ class TTextTheme {
     headlineLarge: const TextStyle().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      fontFamily: GoogleFonts.poppins().fontFamily,
+      fontFamily: 'Outfit',
     ),
     headlineMedium: const TextStyle().copyWith(
       fontSize: 30,
@@ -56,7 +55,7 @@ class TTextTheme {
     headlineLarge: const TextStyle().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      fontFamily: GoogleFonts.poppins().fontFamily,
+      fontFamily: 'Outfit',
     ),
     headlineMedium: const TextStyle().copyWith(
       fontSize: 30,

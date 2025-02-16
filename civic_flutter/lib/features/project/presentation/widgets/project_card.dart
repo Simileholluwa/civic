@@ -73,8 +73,7 @@ class ProjectCard extends ConsumerWidget {
                 Text(
                   projectCardState.title,
                   style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 23,
                       ),
                 ),
                 ContentExpandableText(
@@ -85,56 +84,88 @@ class ProjectCard extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(
-                15, 0, 15, projectCardState.canVet ? 15 : 10),
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (projectCardState.canVet)
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                      color: Theme.of(context).cardColor,
-                      border: const Border(
-                        right: BorderSide(
-                          color: TColors.primary,
-                          width: .3,
+                Row(
+                  spacing: 15,
+                  children: [
+                    if (projectCardState.canVet)
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            100,
+                          ),
+                          color: Theme.of(context).cardColor,
+                          border: const Border(
+                            right: BorderSide(
+                              color: TColors.primary,
+                              width: .3,
+                            ),
+                            left: BorderSide(
+                              color: TColors.primary,
+                              width: .3,
+                            ),
+                          ),
                         ),
-                        left: BorderSide(
-                          color: TColors.primary,
-                          width: .3,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        ProjectVetButton(
-                          title: 'Approve',
-                          icon: Icons.thumb_up_alt_rounded,
+                        child: ProjectVetButton(
+                          title: 'Verify',
+                          icon: Iconsax.medal_star5,
                           backgroundColor: Colors.transparent,
                           textColor:
                               Theme.of(context).textTheme.labelMedium!.color!,
                           isApprove: true,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                          child: VerticalDivider(
-                            width: 0,
-                          ),
-                        ),
-                        ProjectVetButton(
-                          title: '',
-                          icon: Icons.thumb_down_alt_rounded,
-                          backgroundColor: Colors.transparent,
-                          textColor:
-                              Theme.of(context).textTheme.labelLarge!.color!,
                           isDisapprove: true,
                         ),
-                      ],
+                      ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          100,
+                        ),
+                        color: Theme.of(context).cardColor,
+                        border: const Border(
+                          right: BorderSide(
+                            color: TColors.primary,
+                            width: .3,
+                          ),
+                          left: BorderSide(
+                            color: TColors.primary,
+                            width: .3,
+                          ),
+                        ),
+                      ),
+                      child: ProjectVetButton(
+                        title: 'Review',
+                        icon: Iconsax.magic_star5,
+                        backgroundColor: Colors.transparent,
+                        textColor:
+                            Theme.of(context).textTheme.labelMedium!.color!,
+                        isApprove: true,
+                        isDisapprove: true,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * .7,
+                              minHeight:
+                                  MediaQuery.of(context).size.height * .5,
+                            ),
+                            isScrollControlled: true,
+                            builder: (ctx) {
+                              return ProjectReviewScreen(
+                                id: project.id!,
+                              );
+                            },
+                          );
+                          isVisibleNotifier.hide();
+                        },
+                      ),
                     ),
-                  ),
+                  ],
+                ),
                 ContentInteractionButton(
                   icon: projectCardState.hasLiked == true
                       ? Iconsax.heart5
@@ -147,11 +178,6 @@ class ProjectCard extends ConsumerWidget {
                   color: projectCardState.hasLiked == true
                       ? TColors.primary
                       : Theme.of(context).iconTheme.color!,
-                ),
-                ContentInteractionButton(
-                  icon: Iconsax.messages_1,
-                  onTap: () {},
-                  color: Theme.of(context).textTheme.labelMedium!.color!,
                 ),
                 ContentInteractionButton(
                   icon: Iconsax.repeate_music5,

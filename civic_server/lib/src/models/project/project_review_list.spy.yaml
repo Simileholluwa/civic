@@ -1,0 +1,8 @@
+class: ProjectReviewList
+fields:
+    results: List<ProjectReview>
+    count: int
+    page: int
+    numPages: int
+    limit: int
+    canLoadMore: bool
