@@ -14,6 +14,7 @@ abstract class ProjectRemoteDataSource {
   Future<Project?> saveProject({required Project project});
 
   Future<ProjectReviewList> getProjectReviews({
+    required int projectId,
     required int limit,
     required int page,
   });
@@ -249,6 +250,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
 
   @override
   Future<ProjectReviewList> getProjectReviews({
+    required int projectId,
     required int limit,
     required int page,
   }) async {
@@ -260,6 +262,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         );
       }
       final result = _client.project.getProjectReviews(
+        projectId,
         limit: limit,
         page: page,
       );

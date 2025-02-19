@@ -44,6 +44,12 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.commentBy,
     this.repostBy,
     this.overallRating,
+    this.overallLocationRating,
+    this.overallDescriptionRating,
+    this.overallDatesRating,
+    this.overallAttachmentsRating,
+    this.overAllCategoryRating,
+    this.overallFundingRating,
     this.numberOfReviews,
   });
 
@@ -77,6 +83,12 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? commentBy,
     List<int>? repostBy,
     double? overallRating,
+    double? overallLocationRating,
+    double? overallDescriptionRating,
+    double? overallDatesRating,
+    double? overallAttachmentsRating,
+    double? overAllCategoryRating,
+    double? overallFundingRating,
     int? numberOfReviews,
   }) = _ProjectImpl;
 
@@ -141,6 +153,18 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
           ?.map((e) => e as int)
           .toList(),
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
+      overallLocationRating:
+          (jsonSerialization['overallLocationRating'] as num?)?.toDouble(),
+      overallDescriptionRating:
+          (jsonSerialization['overallDescriptionRating'] as num?)?.toDouble(),
+      overallDatesRating:
+          (jsonSerialization['overallDatesRating'] as num?)?.toDouble(),
+      overallAttachmentsRating:
+          (jsonSerialization['overallAttachmentsRating'] as num?)?.toDouble(),
+      overAllCategoryRating:
+          (jsonSerialization['overAllCategoryRating'] as num?)?.toDouble(),
+      overallFundingRating:
+          (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
       numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
     );
   }
@@ -208,6 +232,18 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   double? overallRating;
 
+  double? overallLocationRating;
+
+  double? overallDescriptionRating;
+
+  double? overallDatesRating;
+
+  double? overallAttachmentsRating;
+
+  double? overAllCategoryRating;
+
+  double? overallFundingRating;
+
   int? numberOfReviews;
 
   @override
@@ -243,6 +279,12 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? commentBy,
     List<int>? repostBy,
     double? overallRating,
+    double? overallLocationRating,
+    double? overallDescriptionRating,
+    double? overallDatesRating,
+    double? overallAttachmentsRating,
+    double? overAllCategoryRating,
+    double? overallFundingRating,
     int? numberOfReviews,
   });
   @override
@@ -282,6 +324,17 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
+      if (overallLocationRating != null)
+        'overallLocationRating': overallLocationRating,
+      if (overallDescriptionRating != null)
+        'overallDescriptionRating': overallDescriptionRating,
+      if (overallDatesRating != null) 'overallDatesRating': overallDatesRating,
+      if (overallAttachmentsRating != null)
+        'overallAttachmentsRating': overallAttachmentsRating,
+      if (overAllCategoryRating != null)
+        'overAllCategoryRating': overAllCategoryRating,
+      if (overallFundingRating != null)
+        'overallFundingRating': overallFundingRating,
       if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
@@ -323,6 +376,17 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
+      if (overallLocationRating != null)
+        'overallLocationRating': overallLocationRating,
+      if (overallDescriptionRating != null)
+        'overallDescriptionRating': overallDescriptionRating,
+      if (overallDatesRating != null) 'overallDatesRating': overallDatesRating,
+      if (overallAttachmentsRating != null)
+        'overallAttachmentsRating': overallAttachmentsRating,
+      if (overAllCategoryRating != null)
+        'overAllCategoryRating': overAllCategoryRating,
+      if (overallFundingRating != null)
+        'overallFundingRating': overallFundingRating,
       if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
@@ -390,6 +454,12 @@ class _ProjectImpl extends Project {
     List<int>? commentBy,
     List<int>? repostBy,
     double? overallRating,
+    double? overallLocationRating,
+    double? overallDescriptionRating,
+    double? overallDatesRating,
+    double? overallAttachmentsRating,
+    double? overAllCategoryRating,
+    double? overallFundingRating,
     int? numberOfReviews,
   }) : super._(
           id: id,
@@ -421,6 +491,12 @@ class _ProjectImpl extends Project {
           commentBy: commentBy,
           repostBy: repostBy,
           overallRating: overallRating,
+          overallLocationRating: overallLocationRating,
+          overallDescriptionRating: overallDescriptionRating,
+          overallDatesRating: overallDatesRating,
+          overallAttachmentsRating: overallAttachmentsRating,
+          overAllCategoryRating: overAllCategoryRating,
+          overallFundingRating: overallFundingRating,
           numberOfReviews: numberOfReviews,
         );
 
@@ -455,6 +531,12 @@ class _ProjectImpl extends Project {
     Object? commentBy = _Undefined,
     Object? repostBy = _Undefined,
     Object? overallRating = _Undefined,
+    Object? overallLocationRating = _Undefined,
+    Object? overallDescriptionRating = _Undefined,
+    Object? overallDatesRating = _Undefined,
+    Object? overallAttachmentsRating = _Undefined,
+    Object? overAllCategoryRating = _Undefined,
+    Object? overallFundingRating = _Undefined,
     Object? numberOfReviews = _Undefined,
   }) {
     return Project(
@@ -512,6 +594,24 @@ class _ProjectImpl extends Project {
           : this.repostBy?.map((e0) => e0).toList(),
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
+      overallLocationRating: overallLocationRating is double?
+          ? overallLocationRating
+          : this.overallLocationRating,
+      overallDescriptionRating: overallDescriptionRating is double?
+          ? overallDescriptionRating
+          : this.overallDescriptionRating,
+      overallDatesRating: overallDatesRating is double?
+          ? overallDatesRating
+          : this.overallDatesRating,
+      overallAttachmentsRating: overallAttachmentsRating is double?
+          ? overallAttachmentsRating
+          : this.overallAttachmentsRating,
+      overAllCategoryRating: overAllCategoryRating is double?
+          ? overAllCategoryRating
+          : this.overAllCategoryRating,
+      overallFundingRating: overallFundingRating is double?
+          ? overallFundingRating
+          : this.overallFundingRating,
       numberOfReviews:
           numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
     );
@@ -628,6 +728,30 @@ class ProjectTable extends _i1.Table {
       'overallRating',
       this,
     );
+    overallLocationRating = _i1.ColumnDouble(
+      'overallLocationRating',
+      this,
+    );
+    overallDescriptionRating = _i1.ColumnDouble(
+      'overallDescriptionRating',
+      this,
+    );
+    overallDatesRating = _i1.ColumnDouble(
+      'overallDatesRating',
+      this,
+    );
+    overallAttachmentsRating = _i1.ColumnDouble(
+      'overallAttachmentsRating',
+      this,
+    );
+    overAllCategoryRating = _i1.ColumnDouble(
+      'overAllCategoryRating',
+      this,
+    );
+    overallFundingRating = _i1.ColumnDouble(
+      'overallFundingRating',
+      this,
+    );
     numberOfReviews = _i1.ColumnInt(
       'numberOfReviews',
       this,
@@ -690,6 +814,18 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnDouble overallRating;
 
+  late final _i1.ColumnDouble overallLocationRating;
+
+  late final _i1.ColumnDouble overallDescriptionRating;
+
+  late final _i1.ColumnDouble overallDatesRating;
+
+  late final _i1.ColumnDouble overallAttachmentsRating;
+
+  late final _i1.ColumnDouble overAllCategoryRating;
+
+  late final _i1.ColumnDouble overallFundingRating;
+
   late final _i1.ColumnInt numberOfReviews;
 
   _i2.UserRecordTable get owner {
@@ -735,6 +871,12 @@ class ProjectTable extends _i1.Table {
         commentBy,
         repostBy,
         overallRating,
+        overallLocationRating,
+        overallDescriptionRating,
+        overallDatesRating,
+        overallAttachmentsRating,
+        overAllCategoryRating,
+        overallFundingRating,
         numberOfReviews,
       ];
 

@@ -472,7 +472,8 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i16.ProjectReviewList> getProjectReviews({
+  _i2.Future<_i16.ProjectReviewList> getProjectReviews(
+    int projectId, {
     required int limit,
     required int page,
   }) =>
@@ -480,6 +481,7 @@ class EndpointProject extends _i1.EndpointRef {
         'project',
         'getProjectReviews',
         {
+          'projectId': projectId,
           'limit': limit,
           'page': page,
         },

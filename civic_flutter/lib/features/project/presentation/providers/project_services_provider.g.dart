@@ -112,26 +112,24 @@ final saveProjectReviewProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SaveProjectReviewRef = AutoDisposeProviderRef<SaveProjectReviewUseCase>;
-String _$getProjectReviewssHash() =>
-    r'fd9cb5ac69cee87bd26a303994566edcf55bd1a9';
+String _$getProjectReviewsHash() => r'ef227494be06fd72b08969eccc5dbeebcce67556';
 
-/// See also [getProjectReviewss].
-@ProviderFor(getProjectReviewss)
-final getProjectReviewssProvider =
+/// See also [getProjectReviews].
+@ProviderFor(getProjectReviews)
+final getProjectReviewsProvider =
     AutoDisposeProvider<GetProjectReviewsUseCase>.internal(
-  getProjectReviewss,
-  name: r'getProjectReviewssProvider',
+  getProjectReviews,
+  name: r'getProjectReviewsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$getProjectReviewssHash,
+      : _$getProjectReviewsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetProjectReviewssRef
-    = AutoDisposeProviderRef<GetProjectReviewsUseCase>;
+typedef GetProjectReviewsRef = AutoDisposeProviderRef<GetProjectReviewsUseCase>;
 String _$getProjectReviewHash() => r'2f0aaa2efd3a5c28e84f8db96632efe52548811c';
 
 /// See also [getProjectReview].

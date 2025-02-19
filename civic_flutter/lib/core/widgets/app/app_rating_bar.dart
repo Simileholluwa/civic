@@ -38,14 +38,14 @@ class RatingBar extends StatelessWidget {
               children: [
                 Icon(
                   Iconsax.magic_star5,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).dividerColor,
                   size: size,
                 ),
                 ClipRect(
                   clipper: _Clipper(part: partNumber),
                   child: Icon(
-                    Iconsax.magic_star1,
-                    color: Theme.of(context).cardColor,
+                    Iconsax.magic_star5,
+                    color: Theme.of(context).dividerColor,
                     size: size,
                   ),
                 )
@@ -57,7 +57,7 @@ class RatingBar extends StatelessWidget {
         starList.add(
           Icon(
             Iconsax.magic_star5,
-            color: Theme.of(context).cardColor,
+            color: Theme.of(context).dividerColor,
             size: size,
           ),
         );

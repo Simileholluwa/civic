@@ -154,6 +154,8 @@ class ProjectCard extends ConsumerWidget {
                                   MediaQuery.of(context).size.height * .5,
                             ),
                             isScrollControlled: true,
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                            elevation: 0,
                             builder: (ctx) {
                               return ProjectReviewScreen(
                                 id: project.id!,

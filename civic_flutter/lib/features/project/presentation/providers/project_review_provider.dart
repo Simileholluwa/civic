@@ -92,7 +92,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     );
   }
 
-  void sendReview(int projectId, int? projectReviewId) async {
+  Future<bool> sendReview(int projectId, int? projectReviewId) async {
     state = state.copyWith(
       isLoading: true,
     );
@@ -118,14 +118,21 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     state = state.copyWith(
       isLoading: false,
     );
-    result.fold(
+    return result.fold(
       (failure) {
         TToastMessages.errorToast(failure.message);
+        return false;
       },
       (success) {
         TToastMessages.successToast(
           'Your review was sent successfully',
         );
+        ref
+            .read(
+              paginatedProjectReviewListProvider(projectId).notifier,
+            )
+            .addReview(success!);
+        return true;
       },
     );
   }

@@ -57,6 +57,7 @@ class ProjectEndpoint extends Endpoint {
             commentBy: [],
             likedBy: [],
             repostBy: [],
+            numberOfReviews: 0,
           ),
         );
       }
@@ -80,12 +81,72 @@ class ProjectEndpoint extends Endpoint {
         session,
       );
 
+      Project? project =
+          await Project.db.findById(session, projectReview.projectId);
+      if (project == null) {
+        throw PostException(message: 'Project not found');
+      }
+
       if (projectReview.id != null) {
+        final existingReview = await ProjectReview.db.findById(
+          session,
+          projectReview.id!,
+        );
+        if (existingReview == null) {
+          throw Exception('Review not found');
+        }
         await validateProjectReviewOwnership(
           session,
           projectReview.id!,
           user,
         );
+
+        if (project.numberOfReviews != null &&
+            (project.numberOfReviews ?? 1) > 0) {
+          final count = project.numberOfReviews ?? 1;
+
+          final newOverallLocation = (project.overallLocationRating ??
+                  1 * count -
+                      (existingReview.locationRating ?? 0) +
+                      (projectReview.locationRating ?? 0)) /
+              count;
+          final newOverallDescription = (project.overallDescriptionRating ??
+                  1 * count -
+                      (existingReview.descriptionRating ?? 0) +
+                      (projectReview.descriptionRating ?? 0)) /
+              count;
+          final newOverallDates = (project.overallDatesRating ??
+                  1 * count -
+                      (existingReview.datesRating ?? 0) +
+                      (projectReview.datesRating ?? 0)) /
+              count;
+          final newOverallAttachments = (project.overallAttachmentsRating ??
+                  1 * count -
+                      (existingReview.attachmentsRating ?? 0) +
+                      (projectReview.attachmentsRating ?? 0)) /
+              count;
+          final newOverallCategory = (project.overAllCategoryRating ??
+                  1 * count -
+                      (existingReview.categoryRating ?? 0) +
+                      (projectReview.categoryRating ?? 0)) /
+              count;
+          final newOverallFunding = (project.overallFundingRating ??
+                  1 * count -
+                      (existingReview.fundingRating ?? 0) +
+                      (projectReview.fundingRating ?? 0)) /
+              count;
+
+          project = project.copyWith(
+            overallLocationRating: newOverallLocation,
+            overallDescriptionRating: newOverallDescription,
+            overallDatesRating: newOverallDates,
+            overallAttachmentsRating: newOverallAttachments,
+            overAllCategoryRating: newOverallCategory,
+            overallFundingRating: newOverallFunding,
+          );
+          await Project.db.updateRow(session, project);
+        }
+
         return await ProjectReview.db.updateRow(
           session,
           projectReview.copyWith(
@@ -94,19 +155,44 @@ class ProjectEndpoint extends Endpoint {
           ),
         );
       } else {
-        final project = await Project.db.findById(
-          session,
-          projectReview.projectId,
+        final oldCount = project.numberOfReviews ?? 0;
+        final newCount = oldCount + 1;
+
+        final newOverallLocation =
+            ((project.overallLocationRating ?? 0) * oldCount +
+                    (projectReview.locationRating ?? 0)) /
+                newCount;
+        final newOverallDescription =
+            ((project.overallDescriptionRating ?? 0) * oldCount +
+                    (projectReview.descriptionRating ?? 0)) /
+                newCount;
+        final newOverallDates = ((project.overallDatesRating ?? 0) * oldCount +
+                (projectReview.datesRating ?? 0)) /
+            newCount;
+        final newOverallAttachments =
+            ((project.overallAttachmentsRating ?? 0) * oldCount +
+                    (projectReview.attachmentsRating ?? 0)) /
+                newCount;
+        final newOverallCategory =
+            ((project.overAllCategoryRating ?? 0) * oldCount +
+                    (projectReview.categoryRating ?? 0)) /
+                newCount;
+        final newOverallFunding =
+            ((project.overallFundingRating ?? 0) * oldCount +
+                    (projectReview.fundingRating ?? 0)) /
+                newCount;
+
+        project = project.copyWith(
+          numberOfReviews: newCount,
+          overallLocationRating: newOverallLocation,
+          overallDescriptionRating: newOverallDescription,
+          overallDatesRating: newOverallDates,
+          overallAttachmentsRating: newOverallAttachments,
+          overAllCategoryRating: newOverallCategory,
+          overallFundingRating: newOverallFunding,
         );
-        if (project != null) {
-          await Project.db.updateRow(
-            session,
-            project.copyWith(
-              numberOfReviews: project.numberOfReviews ?? 0 + 1,
-              // overallRating: (project.overallRating ?? 0.0 + (projectReview.overallRating)) / (project.numberOfReviews ?? 1),
-            ),
-          );
-        }
+
+        await Project.db.updateRow(session, project);
         return await ProjectReview.db.insertRow(
           session,
           projectReview.copyWith(
@@ -175,7 +261,8 @@ class ProjectEndpoint extends Endpoint {
   }
 
   Future<ProjectReviewList> getProjectReviews(
-    Session session, {
+    Session session,
+    int projectId, {
     int limit = 10,
     int page = 1,
   }) async {
@@ -185,7 +272,10 @@ class ProjectEndpoint extends Endpoint {
       );
     }
 
-    final count = await ProjectReview.db.count(session);
+    final count = await ProjectReview.db.count(
+      session,
+      where: (t) => t.projectId.equals(projectId),
+    );
     final results = await ProjectReview.db.find(
       session,
       limit: limit,
@@ -195,6 +285,7 @@ class ProjectEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       ),
+      where: (t) => t.projectId.equals(projectId),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );

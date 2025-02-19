@@ -51,7 +51,7 @@ SaveProjectReviewUseCase saveProjectReview(Ref ref) {
 }
 
 @riverpod
-GetProjectReviewsUseCase getProjectReviewss(Ref ref) {
+GetProjectReviewsUseCase getProjectReviews(Ref ref) {
   return GetProjectReviewsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );

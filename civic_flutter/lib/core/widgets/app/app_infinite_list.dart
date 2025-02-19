@@ -14,6 +14,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     this.scrollController,
     this.scrollPhysics,
     this.shrinkWrap,
+    this.showDivider = true,
   });
 
   final PagingController<int, T> pagingController;
@@ -27,6 +28,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
   final bool? shrinkWrap;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,9 +40,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
         physics: scrollPhysics,
         separatorBuilder: (context, index) {
           if (index != pagingController.itemList!.length - 1) {
-            return const Divider(
+            return showDivider ? const Divider(
               height: 0,
-            );
+            ) : const SizedBox();
           }
           return const SizedBox();
         },

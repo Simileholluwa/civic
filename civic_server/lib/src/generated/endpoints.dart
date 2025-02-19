@@ -954,6 +954,11 @@ class Endpoints extends _i1.EndpointDispatch {
         'getProjectReviews': _i1.MethodConnector(
           name: 'getProjectReviews',
           params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
             'limit': _i1.ParameterDescription(
               name: 'limit',
               type: _i1.getType<int>(),
@@ -971,6 +976,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['project'] as _i9.ProjectEndpoint).getProjectReviews(
             session,
+            params['projectId'],
             limit: params['limit'],
             page: params['page'],
           ),

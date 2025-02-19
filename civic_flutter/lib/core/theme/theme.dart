@@ -65,7 +65,7 @@ class TAppTheme {
       //elevatedButtonSecondarySchemeColor: SchemeColor.secondary,
       elevatedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
@@ -143,6 +143,13 @@ class TAppTheme {
       bottomNavigationBarSelectedLabelSchemeColor: SchemeColor.white,
       bottomNavigationBarSelectedIconSchemeColor: SchemeColor.white,
       outlinedButtonRadius: 100,
+      elevatedButtonTextStyle: WidgetStatePropertyAll(
+        TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Montserrat',
+        ),
+      ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 20,

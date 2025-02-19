@@ -149,11 +149,13 @@ class ProjectRepositoryImpl extends ProjectRepository {
 
   @override
   Future<Either<Failure, ProjectReviewList>> getProjectReviews({
+    required int projectId,
     required int page,
     required int limit,
   }) async {
     try {
       final result = await _remoteDatasource.getProjectReviews(
+        projectId: projectId,
         page: page,
         limit: limit,
       );

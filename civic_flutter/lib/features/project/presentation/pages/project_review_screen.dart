@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_rating_bar.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -198,25 +200,29 @@ class ProjectReviewScreen extends ConsumerWidget {
           if (projectReviewState.isEditing) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 5),
-              child: Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    projectReviewNotifier.setEditing(false);
-                  },
-                  child: Text(
-                    'Edit review',
-                    style: const TextStyle().copyWith(
-                      fontWeight: FontWeight.bold,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        projectReviewNotifier.setEditing(false);
+                      },
+                      child: Text(
+                        'Edit review',
+                        style: const TextStyle().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        foregroundColor: TColors.textWhite,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ).withLoading(
+                      loading: false,
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: TColors.textWhite,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                  ),
-                ).withLoading(
-                  loading: false,
-                ),
+                ],
               ),
             );
           } else {
@@ -247,11 +253,14 @@ class ProjectReviewScreen extends ConsumerWidget {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: projectReviewState.isValid
-                                ? () {
-                                    projectReviewNotifier.sendReview(
+                                ? () async {
+                                    final result = await projectReviewNotifier.sendReview(
                                       id,
                                       data.value?.id,
                                     );
+                                    if (result) {
+                                      context.pop();
+                                    }
                                   }
                                 : null,
                             child: Text(

@@ -67,8 +67,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           ? Iconsax.heart5
                           : Iconsax.heart,
                       color: projectCardState.hasLiked == true
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).iconTheme.color!,
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).iconTheme.color!,
                     ),
                     onPressed: () async {
                       await projectCardNotifier.toggleLikeStatus(
@@ -123,7 +123,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           ),
                           QuillEditor.basic(
                             controller: QuillController(
-                              document: projectCardState.rawDescription ?? Document(),
+                              document:
+                                  projectCardState.rawDescription ?? Document(),
                               selection: const TextSelection.collapsed(
                                 offset: 0,
                               ),
@@ -169,8 +170,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: ProjectDetailHeader(
-                  maxHeight: 91,
-                  minHeight: 91,
+                  maxHeight: 98,
+                  minHeight: 98,
                   delegate: ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: Column(
@@ -189,20 +190,18 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     child: ElevatedButton.icon(
                                       onPressed: () {},
                                       label: Text(
-                                        'Approve',
-                                        style: const TextStyle().copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        'Verify',
                                       ),
                                       icon: Icon(
-                                        Icons.thumb_up_alt_rounded,
+                                        Iconsax.medal_star5,
                                         color: TColors.textWhite,
                                       ),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: TColors.primary,
                                         foregroundColor: TColors.textWhite,
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
+                                          vertical: 10,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -211,22 +210,27 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                   child: SizedBox(
                                     height: 50,
                                     child: ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          ProjectReviewScreen.routeName(),
+                                          pathParameters: {
+                                            'id': id.toString(),
+                                          },
+                                        );
+                                      },
                                       label: Text(
-                                        'Disapprove',
-                                        style: const TextStyle().copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        'Review',
                                       ),
                                       icon: Icon(
-                                        Icons.thumb_down_alt_rounded,
+                                        Iconsax.magic_star5,
                                         color: TColors.textWhite,
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: TColors.secondary,
+                                        backgroundColor: Colors.blue,
                                         foregroundColor: TColors.textWhite,
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
+                                          vertical: 10,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -262,7 +266,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                         color: TColors.textWhite,
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: TColors.primary,
+                                        backgroundColor: Colors.blue,
                                         foregroundColor: TColors.textWhite,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
@@ -318,6 +322,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             ],
                           ),
                         ),
+                        const Divider(height: 0),
                       ],
                     ),
                   ),
@@ -332,7 +337,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         children: [
                           Container(
                             width: double.maxFinite,
-                            margin: const EdgeInsets.fromLTRB(18, 10, 18, 20),
+                            margin: const EdgeInsets.fromLTRB(18, 20, 18, 20),
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
                             decoration: BoxDecoration(
                               color: Theme.of(context).scaffoldBackgroundColor,
@@ -649,7 +654,15 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 ),
               if (currentPageState == 1)
                 SliverToBoxAdapter(
-                  child: SizedBox(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * .82,
+                    child: SingleChildScrollView(
+                      child: ProjectReviewsScreen(
+                        projectId: project.id!,
+                        project: project,
+                      ),
+                    ),
+                  ),
                 ),
               if (currentPageState == 2)
                 SliverToBoxAdapter(

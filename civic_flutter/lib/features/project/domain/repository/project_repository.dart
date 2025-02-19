@@ -8,6 +8,7 @@ abstract class ProjectRepository {
     required int limit,
   });
   Future<Either<Failure, ProjectReviewList>> getProjectReviews({
+    required int projectId,
     required int page,
     required int limit,
   });

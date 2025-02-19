@@ -11,6 +11,7 @@ class GetProjectReviewsUseCase implements UseCase<ProjectReviewList, GetProjectR
   @override
   Future<Either<Failure, ProjectReviewList>> call(GetProjectReviewsParams params) async {
     final result = await _projectRepository.getProjectReviews(
+      projectId: params.projectId,
       page: params.page,
       limit: params.limit,
     );
@@ -20,9 +21,11 @@ class GetProjectReviewsUseCase implements UseCase<ProjectReviewList, GetProjectR
 
 class GetProjectReviewsParams {
   GetProjectReviewsParams(
+    this.projectId,
     this.page,
     this.limit,
   );
+  final int projectId;
   final int page;
   final int limit;
 }
