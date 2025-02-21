@@ -28,7 +28,7 @@ void run(List<String> args) async {
     config: ServerpodConfig(
       apiServer: ServerConfig(
         port: 8080,
-        publicHost: 'api.examplepod.com',
+        publicHost: 'https://civic-4ifu.onrender.com',
         publicPort: 8080,
         publicScheme: 'https',
       ),
