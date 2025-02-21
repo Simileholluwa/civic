@@ -8,8 +8,8 @@ build/
 # Directory created by dartdoc
 doc/api/
 
-# Passwords file
-config/
+# # Passwords file
+# config/
 
 # Firebase service account key for Firebase auth
 config/firebase_service_account_key.json
