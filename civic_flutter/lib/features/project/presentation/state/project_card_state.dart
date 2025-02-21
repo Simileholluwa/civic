@@ -38,6 +38,7 @@ class ProjectCardState {
   bool? hasPdf;
   List<AWSPlaces>? locations;
   bool? hasLocation;
+  bool? toggleFilter;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -68,6 +69,7 @@ class ProjectCardState {
     this.pdfAttachments,
     this.locations,
     this.hasLocation,
+    this.toggleFilter = false,
   });
 
   ProjectCardState copyWith({
@@ -86,6 +88,7 @@ class ProjectCardState {
     UserRecord? creator,
     String? numberOfReposts,
     bool? canVet,
+    bool? toggleFilter,
   }) {
     return ProjectCardState(
       timeAgo: timeAgo ?? this.timeAgo,
@@ -103,6 +106,7 @@ class ProjectCardState {
       creator: creator ?? this.creator,
       numberOfReposts: numberOfReposts ?? this.numberOfReposts,
       canVet: canVet ?? this.canVet,
+      toggleFilter: toggleFilter ?? this.toggleFilter,
     );
   }
 

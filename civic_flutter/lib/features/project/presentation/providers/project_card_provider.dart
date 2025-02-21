@@ -15,6 +15,12 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     );
   }
 
+  void toggleFilter() {
+    state = state.copyWith(
+      toggleFilter: !state.toggleFilter!,
+    );
+  }
+
   Future<void> toggleLikeStatus(int id) async {
     final toggleLike = ref.read(toggleLikeProvider);
     final result = await toggleLike(

@@ -22,7 +22,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(projectDetailProvider(id));
-
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: data.when(
         data: (project) {
@@ -277,50 +277,73 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                        SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(18, 2, 18, 0),
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 15,
-                            children: [
-                              ...['OVERVIEW', 'REVIEWS', 'VETTINGS']
-                                  .asMap()
-                                  .entries
-                                  .map(
-                                (filter) {
-                                  final text = filter.value;
-                                  final index = filter.key;
-                                  return GestureDetector(
-                                    onTap: () {
-                                      currentPageNotifier.setCurrentPage(
-                                        index,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SingleChildScrollView(
+                              padding: const EdgeInsets.fromLTRB(18, 2, 18, 0),
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 15,
+                                children: [
+                                  ...['OVERVIEW', 'REVIEWS', 'VETTINGS']
+                                      .asMap()
+                                      .entries
+                                      .map(
+                                    (filter) {
+                                      final text = filter.value;
+                                      final index = filter.key;
+                                      return GestureDetector(
+                                        onTap: () {
+                                          currentPageNotifier.setCurrentPage(
+                                            index,
+                                          );
+                                        },
+                                        child: Text(
+                                          text,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium!
+                                              .copyWith(
+                                                color: currentPageState == index
+                                                    ? Theme.of(context)
+                                                        .textTheme
+                                                        .labelMedium!
+                                                        .color
+                                                    : Theme.of(context)
+                                                        .hintColor,
+                                                fontWeight:
+                                                    currentPageState == index
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                                fontSize: 15,
+                                              ),
+                                        ),
                                       );
                                     },
-                                    child: Text(
-                                      text,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(
-                                            color: currentPageState == index
-                                                ? Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium!
-                                                    .color
-                                                : Theme.of(context).hintColor,
-                                            fontWeight:
-                                                currentPageState == index
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal,
-                                            fontSize: 15,
-                                          ),
-                                    ),
-                                  );
-                                },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            if (currentPageState == 1)
+                              GestureDetector(
+                                onTap: () {
+                                  projectCardNotifier.toggleFilter();
+                                },
+                                child: SizedBox(
+                                  height: 22,
+                                  width: 50,
+                                  child: Icon(
+                                    Iconsax.document_filter5,
+                                    size: 22,
+                                    color: projectCardState.toggleFilter!
+                                        ? Theme.of(context).primaryColor
+                                        : Theme.of(context).iconTheme.color,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                         const Divider(height: 0),
                       ],
@@ -654,14 +677,118 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 ),
               if (currentPageState == 1)
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * .82,
-                    child: SingleChildScrollView(
-                      child: ProjectReviewsScreen(
-                        projectId: project.id!,
-                        project: project,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .82,
+                        child: SingleChildScrollView(
+                          child: ProjectReviewsScreen(
+                            projectId: project.id!,
+                            project: project,
+                          ),
+                        ),
                       ),
-                    ),
+                      AnimatedPositioned(
+                        top: projectCardState.toggleFilter! ? 0 : -screenHeight,
+                        right: 0,
+                        left: 0,
+                        duration: const Duration(milliseconds: 500),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          width: MediaQuery.of(context).size.width,
+                          height: screenHeight * .3,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Theme.of(context).dividerColor,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SingleChildScrollView(
+                                padding:
+                                    const EdgeInsets.fromLTRB(18, 15, 18, 0),
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  spacing: 15,
+                                  children: [
+                                    ...['All','5', '4', '3', '2', '1']
+                                        .asMap()
+                                        .entries
+                                        .map(
+                                      (filter) {
+                                        final text = filter.value;
+                                        final index = filter.key;
+                                        return FilterChip(
+                                          label: Row(
+                                            spacing: 5,
+                                            children: [
+                                              Text(
+                                                text,
+                                              ),
+                                              if (index > 0)
+                                                Icon(
+                                                  Iconsax.magic_star5,
+                                                  size: 16,
+                                                ),
+                                              
+                                            ],
+                                          ),
+                                          
+                                          onSelected: (value) {
+
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                padding:
+                                    const EdgeInsets.fromLTRB(18, 5, 18, 0),
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  spacing: 15,
+                                  children: [
+                                    ...['All','Location', 'Description', 'Attachments', 'Category', 'Funding', 'Dates']
+                                        .asMap()
+                                        .entries
+                                        .map(
+                                      (filter) {
+                                        final text = filter.value;
+                                        final index = filter.key;
+                                        return FilterChip(
+                                          label: Text(
+                                            text,
+                                          ),
+                                          
+                                          onSelected: (value) {
+
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               if (currentPageState == 2)

@@ -22,8 +22,7 @@ class AppWrapper extends ConsumerWidget {
         bottomNavigationBar: AnimatedSlide(
           duration: const Duration(milliseconds: 300),
           offset: isVisible ? Offset.zero : const Offset(0, 1),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+          child: SizedBox(
             height: isVisible ? 65 : 0,
             child: BottomNavigationBar(
               currentIndex: navigatorShell.currentIndex,

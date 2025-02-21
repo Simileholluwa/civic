@@ -26,7 +26,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
               SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(
                   18,
-                  5,
+                  9,
                   18,
                   5,
                 ),
@@ -44,7 +44,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 40,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
@@ -58,7 +58,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 40,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
@@ -72,7 +72,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 40,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
@@ -85,7 +85,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 40,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
@@ -98,7 +98,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 40,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
@@ -113,7 +113,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Divider(height: 5,),
+              const Divider(height: 3,),
             ],
           ),
         AppInfiniteList<ProjectReview>(
