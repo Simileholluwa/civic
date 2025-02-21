@@ -33,7 +33,7 @@ database:
   host: database.private-production.examplepod.com
   port: 5432
   name: serverpod
-  user: postgres
+  user: civic
 
 # This is the setup for Redis. The default for the Google Cloud Engine Terraform
 # configuration is to connect on a private IP address.

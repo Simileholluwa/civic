@@ -1,3 +1,4 @@
+import 'package:civic_server/env_settings.dart';
 import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
 import 'package:civic_server/src/future_calls/poll_future_call.dart';
 import 'package:civic_server/src/future_calls/post_future_call.dart';
@@ -17,12 +18,35 @@ import 'src/generated/endpoints.dart';
 // configuring Relic (Serverpod's web-server), or need custom setup work.
 
 void run(List<String> args) async {
+  final envSettings = EnvironmentSettings();
   // Initialize Serverpod and connect it with your generated code.
   final pod = Serverpod(
     args,
     Protocol(),
     Endpoints(),
     authenticationHandler: auth.authenticationHandler,
+    config: ServerpodConfig(
+      apiServer: ServerConfig(
+        port: 8080,
+        publicHost: 'api.examplepod.com',
+        publicPort: 8080,
+        publicScheme: 'https',
+      ),
+      webServer: ServerConfig(
+        port: 8082,
+        publicScheme: 'https',
+        publicHost: 'web.examplepod.com',
+        publicPort: 8082,
+      ),
+      insightsServer: ServerConfig(
+        port: 8081,
+        publicScheme: 'https',
+        publicHost: 'insights.examplepod.com',
+        publicPort: 8081,
+      ),
+      database: envSettings.databaseConfig,
+      serviceSecret: envSettings.serviceSecret,
+    ),
   );
 
   // Future calls
