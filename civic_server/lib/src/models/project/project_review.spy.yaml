@@ -13,3 +13,7 @@ fields:
     overallRating: double?
     dateCreated: DateTime?
     updatedAt: DateTime?
+    likes: int?
+    dislikes: int?
+    likedBy: List<int>?
+    dislikedBy: List<int>?

@@ -38,14 +38,14 @@ class ProjectDetailsScreen extends ConsumerWidget {
               project,
             ),
           );
-          final projectCardNotifier = ref.watch(
-            projectCardWidgetProvider(
-              project,
-            ).notifier,
-          );
           final currentPageState = ref.watch(projectDetailCurrentPageProvider);
           final currentPageNotifier =
               ref.watch(projectDetailCurrentPageProvider.notifier);
+          final projectReviewStateNotifier =
+              ref.watch(projectReviewListQueryProvider.notifier);
+          final projectReviewState = ref.watch(projectReviewListQueryProvider);
+          final pagingControllerNotifier =
+        ref.watch(paginatedProjectReviewListProvider(id).notifier);
           final defaultTextStyle = DefaultTextStyle.of(context);
           return CustomScrollView(
             slivers: [
@@ -61,21 +61,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   onPressed: context.pop,
                 ),
                 actions: [
-                  IconButton(
-                    icon: Icon(
-                      projectCardState.hasLiked == true
-                          ? Iconsax.heart5
-                          : Iconsax.heart,
-                      color: projectCardState.hasLiked == true
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).iconTheme.color!,
-                    ),
-                    onPressed: () async {
-                      await projectCardNotifier.toggleLikeStatus(
-                        id,
-                      );
-                    },
-                  ),
                   IconButton(
                     icon: Icon(Icons.share),
                     onPressed: () {},
@@ -326,22 +311,44 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                            if (currentPageState == 1)
-                              GestureDetector(
-                                onTap: () {
-                                  projectCardNotifier.toggleFilter();
-                                },
-                                child: SizedBox(
-                                  height: 22,
-                                  width: 50,
-                                  child: Icon(
-                                    Iconsax.document_filter5,
-                                    size: 22,
-                                    color: projectCardState.toggleFilter!
-                                        ? Theme.of(context).primaryColor
-                                        : Theme.of(context).iconTheme.color,
+                            if (currentPageState == 1 && project.overAllCategoryRating != null)
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  if (projectReviewState.cardinal != null)
+                                    GestureDetector(
+                                      onTap: (){
+                                        projectReviewStateNotifier.clearQuery();
+                                        pagingControllerNotifier.refresh();
+                                      },
+                                      child: SizedBox(
+                                        height: 22,
+                                        width: 20,
+                                        child: Icon(
+                                          Iconsax.filter_remove5,
+                                          size: 23,
+                                          color: TColors.secondary,
+                                        ),
+                                      ),
+                                    ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await projectReviewsFIlterDialog(
+                                        context,
+                                        id,
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 22,
+                                      width: 50,
+                                      child: Icon(
+                                        Iconsax.filter5,
+                                        size: 22,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  
+                                ],
                               ),
                           ],
                         ),
@@ -696,7 +703,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 500),
                           width: MediaQuery.of(context).size.width,
-                          height: screenHeight * .3,
+                          height: projectReviewState.rating == null ? 186 : 259,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: Theme.of(context).scaffoldBackgroundColor,
                             borderRadius: BorderRadius.only(
@@ -716,13 +726,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             children: [
                               SingleChildScrollView(
                                 padding:
-                                    const EdgeInsets.fromLTRB(18, 15, 18, 0),
+                                    const EdgeInsets.fromLTRB(18, 5, 18, 0),
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   spacing: 15,
                                   children: [
-                                    ...['All','5', '4', '3', '2', '1']
+                                    ...['All', 5, 4, 3, 2, 1]
                                         .asMap()
                                         .entries
                                         .map(
@@ -734,19 +744,38 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                             spacing: 5,
                                             children: [
                                               Text(
-                                                text,
+                                                text.toString(),
                                               ),
                                               if (index > 0)
                                                 Icon(
                                                   Iconsax.magic_star5,
                                                   size: 16,
                                                 ),
-                                              
                                             ],
                                           ),
-                                          
+                                          selected:
+                                              projectReviewState.rating != null
+                                                  ? projectReviewState.rating ==
+                                                      text
+                                                  : index == 0,
                                           onSelected: (value) {
-
+                                            if (index == 0) {
+                                              projectReviewStateNotifier
+                                                  .setRatingQuery(
+                                                null,
+                                              );
+                                              return;
+                                            }
+                                            projectReviewStateNotifier
+                                                .setRatingQuery(
+                                              (text as int).toDouble(),
+                                            );
+                                            ref
+                                                .watch(
+                                                    paginatedProjectReviewListProvider(
+                                                  id,
+                                                ).notifier)
+                                                .refresh();
                                           },
                                         );
                                       },
@@ -754,36 +783,103 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              SingleChildScrollView(
-                                padding:
-                                    const EdgeInsets.fromLTRB(18, 5, 18, 0),
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  spacing: 15,
-                                  children: [
-                                    ...['All','Location', 'Description', 'Attachments', 'Category', 'Funding', 'Dates']
-                                        .asMap()
-                                        .entries
-                                        .map(
-                                      (filter) {
-                                        final text = filter.value;
-                                        final index = filter.key;
-                                        return FilterChip(
-                                          label: Text(
-                                            text,
-                                          ),
-                                          
-                                          onSelected: (value) {
-
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
+                              if (projectReviewState.rating != null)
+                                SingleChildScrollView(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(18, 15, 18, 5),
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    spacing: 15,
+                                    children: [
+                                      ...[
+                                        'All',
+                                        'Location',
+                                        'Description',
+                                        'Attachments',
+                                        'Category',
+                                        'Funding',
+                                        'Dates'
+                                      ].asMap().entries.map(
+                                        (filter) {
+                                          final text = filter.value;
+                                          // final index = filter.key;
+                                          return FilterChip(
+                                            label: Text(
+                                              text,
+                                            ),
+                                            selected:
+                                                projectReviewState.cardinal ==
+                                                    text,
+                                            onSelected: (value) {
+                                              projectReviewStateNotifier
+                                                  .setCardinalQuery(
+                                                text,
+                                              );
+                                              ref
+                                                  .watch(
+                                                      paginatedProjectReviewListProvider(
+                                                    id,
+                                                  ).notifier)
+                                                  .refresh();
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      'Most recent',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                                    trailing: SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: Radio(
+                                        value: 0,
+                                        groupValue: 0,
+                                        onChanged: (value) {},
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 0,
+                                    indent: 20,
+                                    endIndent: 23,
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'Most liked',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(18, 0, 18, 0),
+                                    trailing: SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: Radio(
+                                        value: 1,
+                                        groupValue: 0,
+                                        onChanged: (value) {},
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-
                             ],
                           ),
                         ),
@@ -813,6 +909,279 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<dynamic> projectReviewsFIlterDialog(
+    BuildContext context,
+    int id,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final projectReviewState =
+                ref.watch(projectReviewListQueryProvider);
+            final projectReviewStateNotifier =
+                ref.watch(projectReviewListQueryProvider.notifier);
+            final pagingControllerNotifier =
+                ref.watch(paginatedProjectReviewListProvider(id).notifier);
+            return LayoutBuilder(
+              builder: (ctx, constraints) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: constraints.maxHeight * 0.9,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              TSizes.sm,
+                            ),
+                          ),
+                          elevation: 8,
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Filter reviews',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.pop();
+                                    },
+                                    child: const Icon(
+                                      Icons.clear,
+                                      color: TColors.secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: TSizes.md,
+                              ),
+                              const Divider(
+                                height: 0,
+                              ),
+                              SingleChildScrollView(
+                                padding: const EdgeInsets.only(
+                                  top: TSizes.sm + 4,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: const EdgeInsets.only(
+                                        top: 2,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        spacing: 15,
+                                        children: [
+                                          ...['All', 5, 4, 3, 2, 1]
+                                              .asMap()
+                                              .entries
+                                              .map(
+                                            (filter) {
+                                              final text = filter.value;
+                                              final index = filter.key;
+                                              return FilterChip(
+                                                label: Row(
+                                                  spacing: 5,
+                                                  children: [
+                                                    Text(
+                                                      text.toString(),
+                                                    ),
+                                                    if (index > 0)
+                                                      Icon(
+                                                        Iconsax.magic_star5,
+                                                        size: 16,
+                                                      ),
+                                                  ],
+                                                ),
+                                                selected: projectReviewState
+                                                            .rating !=
+                                                        null
+                                                    ? projectReviewState
+                                                            .rating ==
+                                                        text
+                                                    : index == 0,
+                                                onSelected: (value) {
+                                                  if (index == 0) {
+                                                    projectReviewStateNotifier
+                                                        .setRatingQuery(
+                                                      null,
+                                                    );
+                                                    return;
+                                                  }
+                                                  projectReviewStateNotifier
+                                                      .setRatingQuery(
+                                                    (text as int).toDouble(),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    if (projectReviewState.rating != null)
+                                      SingleChildScrollView(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 15, 0, 5),
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          spacing: 15,
+                                          children: [
+                                            ...[
+                                              'All',
+                                              'Location',
+                                              'Description',
+                                              'Attachments',
+                                              'Category',
+                                              'Funding',
+                                              'Dates'
+                                            ].asMap().entries.map(
+                                              (filter) {
+                                                final text = filter.value;
+                                                final index = filter.key;
+                                                return FilterChip(
+                                                  label: Text(
+                                                    text,
+                                                  ),
+                                                  selected: projectReviewState
+                                                              .cardinal !=
+                                                          null
+                                                      ? projectReviewState
+                                                              .cardinal ==
+                                                          text
+                                                      : index == 0,
+                                                  onSelected: (value) {
+                                                    if (index == 0) {
+                                                      projectReviewStateNotifier
+                                                          .setCardinalQuery(
+                                                        null,
+                                                      );
+                                                      return;
+                                                    }
+                                                    projectReviewStateNotifier
+                                                        .setCardinalQuery(
+                                                      text,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    Column(
+                                      children: [
+                                        ListTile(
+                                          title: Text(
+                                            'Most recent',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  3, 0, 0, 0),
+                                          trailing: SizedBox(
+                                            width: 20,
+                                            height: 24,
+                                            child: Radio(
+                                              value: 0,
+                                              groupValue: 0,
+                                              onChanged: (value) {},
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 0,
+                                          indent: 3,
+                                          endIndent: 3,
+                                        ),
+                                        ListTile(
+                                          title: Text(
+                                            'Most liked',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  3, 0, 0, 0),
+                                          trailing: SizedBox(
+                                            width: 20,
+                                            height: 24,
+                                            child: Radio(
+                                              value: 1,
+                                              groupValue: 0,
+                                              onChanged: (value) {},
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    AppDualButton(
+                                      onTapSkipButton: context.pop,
+                                      activeButtonText: 'Apply filter',
+                                      onTapActiveButton: () {
+                                        if (projectReviewState.cardinal == null) {
+                                          TToastMessages.errorToast(
+                                            'Please select a cardinal to apply filter.',
+                                          );
+                                          return;
+                                        }
+                                        pagingControllerNotifier.refresh();
+                                        context.pop();
+                                      },
+                                      activeButtonLoading: false,
+                                      skipButtonLoading: false,
+                                      skipText: 'Cancel',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

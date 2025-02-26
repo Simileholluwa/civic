@@ -27,7 +27,6 @@ Future<ProjectReview?> projectReviewDetail(
       return null;
     },
     (projectReview) async {
-      log('Project review: ${projectReview.toString()}');
       if (projectReview == null) {
         return null;
       }

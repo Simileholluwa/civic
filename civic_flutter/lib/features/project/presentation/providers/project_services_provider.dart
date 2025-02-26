@@ -79,8 +79,8 @@ ToggleLikeUseCase toggleLike(Ref ref) {
 }
 
 @riverpod
-GetUserLikedProjectsUseCase getUserLikedProjects(Ref ref) {
-  return GetUserLikedProjectsUseCase(
+ReactToProjectReviewUseCase reactToProjectReview(Ref ref) {
+  return ReactToProjectReviewUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

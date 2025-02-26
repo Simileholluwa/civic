@@ -182,25 +182,25 @@ final toggleLikeProvider = AutoDisposeProvider<ToggleLikeUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ToggleLikeRef = AutoDisposeProviderRef<ToggleLikeUseCase>;
-String _$getUserLikedProjectsHash() =>
-    r'1ecab4acc6ea1ed86a67d31cc5ea8cebed773b65';
+String _$reactToProjectReviewHash() =>
+    r'd89d5f9dd4106b72aeea78d1b5f3aa5610379004';
 
-/// See also [getUserLikedProjects].
-@ProviderFor(getUserLikedProjects)
-final getUserLikedProjectsProvider =
-    AutoDisposeProvider<GetUserLikedProjectsUseCase>.internal(
-  getUserLikedProjects,
-  name: r'getUserLikedProjectsProvider',
+/// See also [reactToProjectReview].
+@ProviderFor(reactToProjectReview)
+final reactToProjectReviewProvider =
+    AutoDisposeProvider<ReactToProjectReviewUseCase>.internal(
+  reactToProjectReview,
+  name: r'reactToProjectReviewProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$getUserLikedProjectsHash,
+      : _$reactToProjectReviewHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetUserLikedProjectsRef
-    = AutoDisposeProviderRef<GetUserLikedProjectsUseCase>;
+typedef ReactToProjectReviewRef
+    = AutoDisposeProviderRef<ReactToProjectReviewUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

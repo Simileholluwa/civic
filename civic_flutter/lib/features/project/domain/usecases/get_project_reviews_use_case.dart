@@ -14,6 +14,8 @@ class GetProjectReviewsUseCase implements UseCase<ProjectReviewList, GetProjectR
       projectId: params.projectId,
       page: params.page,
       limit: params.limit,
+      rating: params.rating,
+      cardinal: params.cardinal,
     );
     return result;
   }
@@ -24,8 +26,12 @@ class GetProjectReviewsParams {
     this.projectId,
     this.page,
     this.limit,
+    this.rating,
+    this.cardinal,
   );
   final int projectId;
   final int page;
   final int limit;
+  final double? rating;
+  final String? cardinal;
 }

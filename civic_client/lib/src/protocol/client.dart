@@ -26,10 +26,14 @@ import 'package:civic_client/src/protocol/project/project_review.dart' as _i14;
 import 'package:civic_client/src/protocol/project/project_list.dart' as _i15;
 import 'package:civic_client/src/protocol/project/project_review_list.dart'
     as _i16;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i17;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i18;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
-import 'protocol.dart' as _i20;
+import 'package:civic_client/src/protocol/project/project_review_response.dart'
+    as _i17;
+import 'package:civic_client/src/protocol/project/project_toggle_like.dart'
+    as _i18;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i19;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i20;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i21;
+import 'protocol.dart' as _i22;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -476,6 +480,8 @@ class EndpointProject extends _i1.EndpointRef {
     int projectId, {
     required int limit,
     required int page,
+    double? rating,
+    String? cardinal,
   }) =>
       caller.callServerEndpoint<_i16.ProjectReviewList>(
         'project',
@@ -484,6 +490,21 @@ class EndpointProject extends _i1.EndpointRef {
           'projectId': projectId,
           'limit': limit,
           'page': page,
+          'rating': rating,
+          'cardinal': cardinal,
+        },
+      );
+
+  _i2.Future<_i17.ProjectReviewResponse?> reactToReview(
+    int reviewId,
+    bool isLike,
+  ) =>
+      caller.callServerEndpoint<_i17.ProjectReviewResponse?>(
+        'project',
+        'reactToReview',
+        {
+          'reviewId': reviewId,
+          'isLike': isLike,
         },
       );
 
@@ -510,14 +531,8 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<int>> getUserLikedProjects() =>
-      caller.callServerEndpoint<List<int>>(
-        'project',
-        'getUserLikedProjects',
-        {},
-      );
-
-  _i2.Future<int> toggleLike(int projectId) => caller.callServerEndpoint<int>(
+  _i2.Future<_i18.ProjectToggleLikeResponse> toggleLike(int projectId) =>
+      caller.callServerEndpoint<_i18.ProjectToggleLikeResponse>(
         'project',
         'toggleLike',
         {'projectId': projectId},
@@ -591,8 +606,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i17.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i17.UserNinRecord?>(
+  _i2.Future<_i19.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i19.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -634,12 +649,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i18.UsersList> getUsers({
+  _i2.Future<_i20.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i18.UsersList>(
+      caller.callServerEndpoint<_i20.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -672,10 +687,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i19.Caller(client);
+    auth = _i21.Caller(client);
   }
 
-  late final _i19.Caller auth;
+  late final _i21.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -694,7 +709,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i20.Protocol(),
+          _i22.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

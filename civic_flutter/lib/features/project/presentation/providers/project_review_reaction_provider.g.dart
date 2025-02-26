@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'project_review_provider.dart';
+part of 'project_review_reaction_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectReviewProviderHash() =>
-    r'af5e30c764b2a92ab61f334ed99503e642fffeaa';
+String _$reviewReactionHash() => r'29923f6ba5e64cc409633e464a756c948df97ec3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,36 +29,36 @@ class _SystemHash {
   }
 }
 
-abstract class _$ProjectReviewProvider
-    extends BuildlessAutoDisposeNotifier<ProjectReviewState> {
-  late final ProjectReview? projectReview;
+abstract class _$ReviewReaction
+    extends BuildlessAutoDisposeNotifier<ProjectReviewReactionState> {
+  late final ProjectReview projectReview;
 
-  ProjectReviewState build(
-    ProjectReview? projectReview,
+  ProjectReviewReactionState build(
+    ProjectReview projectReview,
   );
 }
 
-/// See also [ProjectReviewProvider].
-@ProviderFor(ProjectReviewProvider)
-const projectReviewProviderProvider = ProjectReviewProviderFamily();
+/// See also [ReviewReaction].
+@ProviderFor(ReviewReaction)
+const reviewReactionProvider = ReviewReactionFamily();
 
-/// See also [ProjectReviewProvider].
-class ProjectReviewProviderFamily extends Family<ProjectReviewState> {
-  /// See also [ProjectReviewProvider].
-  const ProjectReviewProviderFamily();
+/// See also [ReviewReaction].
+class ReviewReactionFamily extends Family<ProjectReviewReactionState> {
+  /// See also [ReviewReaction].
+  const ReviewReactionFamily();
 
-  /// See also [ProjectReviewProvider].
-  ProjectReviewProviderProvider call(
-    ProjectReview? projectReview,
+  /// See also [ReviewReaction].
+  ReviewReactionProvider call(
+    ProjectReview projectReview,
   ) {
-    return ProjectReviewProviderProvider(
+    return ReviewReactionProvider(
       projectReview,
     );
   }
 
   @override
-  ProjectReviewProviderProvider getProviderOverride(
-    covariant ProjectReviewProviderProvider provider,
+  ReviewReactionProvider getProviderOverride(
+    covariant ReviewReactionProvider provider,
   ) {
     return call(
       provider.projectReview,
@@ -78,30 +77,30 @@ class ProjectReviewProviderFamily extends Family<ProjectReviewState> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'projectReviewProviderProvider';
+  String? get name => r'reviewReactionProvider';
 }
 
-/// See also [ProjectReviewProvider].
-class ProjectReviewProviderProvider extends AutoDisposeNotifierProviderImpl<
-    ProjectReviewProvider, ProjectReviewState> {
-  /// See also [ProjectReviewProvider].
-  ProjectReviewProviderProvider(
-    ProjectReview? projectReview,
+/// See also [ReviewReaction].
+class ReviewReactionProvider extends AutoDisposeNotifierProviderImpl<
+    ReviewReaction, ProjectReviewReactionState> {
+  /// See also [ReviewReaction].
+  ReviewReactionProvider(
+    ProjectReview projectReview,
   ) : this._internal(
-          () => ProjectReviewProvider()..projectReview = projectReview,
-          from: projectReviewProviderProvider,
-          name: r'projectReviewProviderProvider',
+          () => ReviewReaction()..projectReview = projectReview,
+          from: reviewReactionProvider,
+          name: r'reviewReactionProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$projectReviewProviderHash,
-          dependencies: ProjectReviewProviderFamily._dependencies,
+                  : _$reviewReactionHash,
+          dependencies: ReviewReactionFamily._dependencies,
           allTransitiveDependencies:
-              ProjectReviewProviderFamily._allTransitiveDependencies,
+              ReviewReactionFamily._allTransitiveDependencies,
           projectReview: projectReview,
         );
 
-  ProjectReviewProviderProvider._internal(
+  ReviewReactionProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -111,11 +110,11 @@ class ProjectReviewProviderProvider extends AutoDisposeNotifierProviderImpl<
     required this.projectReview,
   }) : super.internal();
 
-  final ProjectReview? projectReview;
+  final ProjectReview projectReview;
 
   @override
-  ProjectReviewState runNotifierBuild(
-    covariant ProjectReviewProvider notifier,
+  ProjectReviewReactionState runNotifierBuild(
+    covariant ReviewReaction notifier,
   ) {
     return notifier.build(
       projectReview,
@@ -123,10 +122,10 @@ class ProjectReviewProviderProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  Override overrideWith(ProjectReviewProvider Function() create) {
+  Override overrideWith(ReviewReaction Function() create) {
     return ProviderOverride(
       origin: this,
-      override: ProjectReviewProviderProvider._internal(
+      override: ReviewReactionProvider._internal(
         () => create()..projectReview = projectReview,
         from: from,
         name: null,
@@ -139,14 +138,14 @@ class ProjectReviewProviderProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ProjectReviewProvider, ProjectReviewState>
+  AutoDisposeNotifierProviderElement<ReviewReaction, ProjectReviewReactionState>
       createElement() {
-    return _ProjectReviewProviderProviderElement(this);
+    return _ReviewReactionProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectReviewProviderProvider &&
+    return other is ReviewReactionProvider &&
         other.projectReview == projectReview;
   }
 
@@ -161,20 +160,19 @@ class ProjectReviewProviderProvider extends AutoDisposeNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectReviewProviderRef
-    on AutoDisposeNotifierProviderRef<ProjectReviewState> {
+mixin ReviewReactionRef
+    on AutoDisposeNotifierProviderRef<ProjectReviewReactionState> {
   /// The parameter `projectReview` of this provider.
-  ProjectReview? get projectReview;
+  ProjectReview get projectReview;
 }
 
-class _ProjectReviewProviderProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectReviewProvider,
-        ProjectReviewState> with ProjectReviewProviderRef {
-  _ProjectReviewProviderProviderElement(super.provider);
+class _ReviewReactionProviderElement extends AutoDisposeNotifierProviderElement<
+    ReviewReaction, ProjectReviewReactionState> with ReviewReactionRef {
+  _ReviewReactionProviderElement(super.provider);
 
   @override
-  ProjectReview? get projectReview =>
-      (origin as ProjectReviewProviderProvider).projectReview;
+  ProjectReview get projectReview =>
+      (origin as ReviewReactionProvider).projectReview;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

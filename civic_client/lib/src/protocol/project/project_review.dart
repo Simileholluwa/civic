@@ -30,6 +30,10 @@ abstract class ProjectReview implements _i1.SerializableModel {
     this.overallRating,
     this.dateCreated,
     this.updatedAt,
+    this.likes,
+    this.dislikes,
+    this.likedBy,
+    this.dislikedBy,
   });
 
   factory ProjectReview({
@@ -48,6 +52,10 @@ abstract class ProjectReview implements _i1.SerializableModel {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? likes,
+    int? dislikes,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) = _ProjectReviewImpl;
 
   factory ProjectReview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -80,6 +88,14 @@ abstract class ProjectReview implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      likes: jsonSerialization['likes'] as int?,
+      dislikes: jsonSerialization['dislikes'] as int?,
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      dislikedBy: (jsonSerialization['dislikedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -116,6 +132,14 @@ abstract class ProjectReview implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
+  int? likes;
+
+  int? dislikes;
+
+  List<int>? likedBy;
+
+  List<int>? dislikedBy;
+
   ProjectReview copyWith({
     int? id,
     int? ownerId,
@@ -132,6 +156,10 @@ abstract class ProjectReview implements _i1.SerializableModel {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? likes,
+    int? dislikes,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -151,6 +179,10 @@ abstract class ProjectReview implements _i1.SerializableModel {
       if (overallRating != null) 'overallRating': overallRating,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (likes != null) 'likes': likes,
+      if (dislikes != null) 'dislikes': dislikes,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
     };
   }
 
@@ -179,6 +211,10 @@ class _ProjectReviewImpl extends ProjectReview {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? likes,
+    int? dislikes,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -195,6 +231,10 @@ class _ProjectReviewImpl extends ProjectReview {
           overallRating: overallRating,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
+          likes: likes,
+          dislikes: dislikes,
+          likedBy: likedBy,
+          dislikedBy: dislikedBy,
         );
 
   @override
@@ -214,6 +254,10 @@ class _ProjectReviewImpl extends ProjectReview {
     Object? overallRating = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? likes = _Undefined,
+    Object? dislikes = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? dislikedBy = _Undefined,
   }) {
     return ProjectReview(
       id: id is int? ? id : this.id,
@@ -239,6 +283,14 @@ class _ProjectReviewImpl extends ProjectReview {
           overallRating is double? ? overallRating : this.overallRating,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      likes: likes is int? ? likes : this.likes,
+      dislikes: dislikes is int? ? dislikes : this.dislikes,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      dislikedBy: dislikedBy is List<int>?
+          ? dislikedBy
+          : this.dislikedBy?.map((e0) => e0).toList(),
     );
   }
 }

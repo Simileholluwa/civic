@@ -60,7 +60,7 @@ class ProjectReviewScreen extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  'You have already reviewed this project. You can edit your review below.',
+                  'You have already reviewed this project. You can make changes to your review below.',
                   style: Theme.of(context).textTheme.labelMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -200,9 +200,12 @@ class ProjectReviewScreen extends ConsumerWidget {
           if (projectReviewState.isEditing) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 5),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 15,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: double.maxFinite,
                     child: ElevatedButton(
                       onPressed: () {
                         projectReviewNotifier.setEditing(false);
@@ -216,6 +219,27 @@ class ProjectReviewScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: TColors.textWhite,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ).withLoading(
+                      loading: false,
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        
+                      },
+                      child: Text(
+                        'Delete review',
+                        style: const TextStyle().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red.shade200,
+                        foregroundColor: TColors.secondary,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
                     ).withLoading(

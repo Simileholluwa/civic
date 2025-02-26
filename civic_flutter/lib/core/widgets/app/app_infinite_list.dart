@@ -15,6 +15,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     this.scrollPhysics,
     this.shrinkWrap,
     this.showDivider = true,
+    this.firstPageProgressIndicator,
   });
 
   final PagingController<int, T> pagingController;
@@ -29,6 +30,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
   final ScrollPhysics? scrollPhysics;
   final bool? shrinkWrap;
   final bool showDivider;
+  final Widget? firstPageProgressIndicator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +52,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
         builderDelegate: PagedChildBuilderDelegate<T>(
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
-            return AppLoadingWidget(
+            return firstPageProgressIndicator ?? AppLoadingWidget(
               backgroundColor: THelperFunctions.isDarkMode(context)
                   ? TColors.dark
                   : TColors.light,

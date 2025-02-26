@@ -199,6 +199,10 @@ class ProjectEndpoint extends Endpoint {
             ownerId: user.id,
             owner: user,
             dateCreated: DateTime.now(),
+            likes: 0,
+            dislikes: 0,
+            likedBy: [],
+            dislikedBy: [],
           ),
         );
       }
@@ -265,6 +269,8 @@ class ProjectEndpoint extends Endpoint {
     int projectId, {
     int limit = 10,
     int page = 1,
+    double? rating,
+    String? cardinal,
   }) async {
     if (limit <= 0 || page <= 0) {
       throw UserException(
@@ -272,10 +278,41 @@ class ProjectEndpoint extends Endpoint {
       );
     }
 
+    // Initialize filters
+    List<Expression> filters = [ProjectReview.t.projectId.equals(projectId)];
+
+    // Apply rating filter
+    if (rating != null && cardinal != null) {
+      final ratingMap = {
+        'Location': ProjectReview.t.locationRating,
+        'Description': ProjectReview.t.descriptionRating,
+        'Dates': ProjectReview.t.datesRating,
+        'Attachments': ProjectReview.t.attachmentsRating,
+        'Category': ProjectReview.t.categoryRating,
+        'Funding': ProjectReview.t.fundingRating,
+      };
+
+      if (!ratingMap.containsKey(cardinal)) {
+        throw UserException(
+          message: 'Invalid cardinal parameter',
+        );
+      }
+
+      filters.add(
+        ratingMap[cardinal]!.equals(rating),
+      );
+    }
+
+    // Construct final where clause
+    whereClause(t) => filters.reduce((a, b) => a & b);
+
+    // Get count with filters applied
     final count = await ProjectReview.db.count(
       session,
-      where: (t) => t.projectId.equals(projectId),
+      where: whereClause,
     );
+
+    // Fetch results with filters
     final results = await ProjectReview.db.find(
       session,
       limit: limit,
@@ -285,7 +322,7 @@ class ProjectEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       ),
-      where: (t) => t.projectId.equals(projectId),
+      where: whereClause,
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );
@@ -297,6 +334,129 @@ class ProjectEndpoint extends Endpoint {
       results: results,
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
+    );
+  }
+
+  Future<ProjectReviewResponse?> reactToReview(
+    Session session,
+    int reviewId,
+    bool isLike,
+  ) async {
+    ProjectReview? review;
+    ProjectReviewReaction? existingReaction;
+    ProjectReviewReaction? newReaction;
+    final user = await authUser(session);
+    await session.db.transaction((transaction) async {
+      try {
+        // Fetch the review
+        review = await ProjectReview.db.findById(
+          session,
+          reviewId,
+          transaction: transaction,
+        );
+        if (review == null) {
+          throw UserException(message: 'Review not found');
+        }
+
+        // Check for an existing reaction
+        existingReaction = await ProjectReviewReaction.db.findFirstRow(
+          session,
+          where: (r) => r.reviewId.equals(reviewId) & r.ownerId.equals(user.id),
+          transaction: transaction,
+        );
+
+        if (existingReaction != null) {
+          if (existingReaction!.isDeleted ?? false) {
+            // Reactivate a soft-deleted reaction
+            existingReaction!.isLike = isLike;
+            existingReaction!.isDeleted = false;
+            await ProjectReviewReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            isLike
+                ? review!.likes = (review!.likes ?? 0) + 1
+                : review!.dislikes = (review!.dislikes ?? 0) + 1;
+            isLike
+                ? review!.likedBy?.add(user.id!)
+                : review!.dislikedBy?.add(user.id!);
+          } else if (existingReaction!.isLike == isLike) {
+            existingReaction!.isDeleted = true;
+            await ProjectReviewReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            isLike
+                ? review!.likes = (review!.likes ?? 0) - 1
+                : review!.dislikes = (review!.dislikes ?? 0) - 1;
+            isLike
+                ? review!.likedBy?.remove(user.id!)
+                : review!.dislikedBy?.remove(user.id!);
+          } else {
+            // Switch between like and dislike
+            existingReaction!.isLike = isLike;
+            await ProjectReviewReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            if (isLike) {
+              review!.likes = (review!.likes ?? 0) + 1;
+              review!.likedBy?.add(user.id!);
+              review!.dislikedBy?.remove(user.id);
+              review!.dislikes = (review!.dislikes ?? 0) - 1;
+            } else {
+              review!.likes = (review!.likes ?? 0) - 1;
+              review!.likedBy?.remove(user.id);
+              review!.dislikedBy?.add(user.id!);
+              review!.dislikes = (review!.dislikes ?? 0) + 1;
+            }
+          }
+        } else {
+          // Create a new reaction
+          newReaction = ProjectReviewReaction(
+            ownerId: user.id!,
+            reviewId: reviewId,
+            isLike: isLike,
+            isDeleted: false,
+          );
+          await ProjectReviewReaction.db.insertRow(
+            session,
+            newReaction!,
+            transaction: transaction,
+          );
+          isLike
+              ? review!.likes = (review!.likes ?? 0) + 1
+              : review!.dislikes = (review!.dislikes ?? 0) + 1;
+          isLike
+              ? review!.likedBy?.add(user.id!)
+              : review!.dislikedBy?.add(user.id!);
+        }
+
+        // Update the like/dislike count on the review
+        await ProjectReview.db.updateRow(
+          session,
+          review!,
+          transaction: transaction,
+        );
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in reactToReview: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        return null;
+      }
+    });
+    return ProjectReviewResponse(
+      likes: review!.likes ?? 0,
+      dislikes: review!.dislikes ?? 0,
+      isLiked: review!.likedBy!.contains(user.id!),
+      isDisliked: review!.dislikedBy!.contains(user.id!),
+      isDeleted: existingReaction?.isDeleted ?? newReaction?.isDeleted ?? false,
     );
   }
 
@@ -370,36 +530,14 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-  Future<List<int>> getUserLikedProjects(
-    Session session,
-  ) async {
-    final user = await authUser(
-      session,
-    );
-    final likedProjects = await ProjectLikes.db.find(
-      session,
-      where: (t) => t.ownerId.equals(
-        user.userInfoId,
-      ),
-    );
-    return likedProjects
-        .map(
-          (like) => like.projectId,
-        )
-        .toList();
-  }
-
-  Future<int> toggleLike(
+  Future<ProjectToggleLikeResponse> toggleLike(
     Session session,
     int projectId,
   ) async {
-    int likesCount = 0;
+    Project? project;
+    final user = await authUser(session);
     await session.db.transaction((transaction) async {
-      final user = await authUser(
-        session,
-      );
-
-      final project = await Project.db.findById(
+      project = await Project.db.findById(
         session,
         projectId,
         transaction: transaction,
@@ -428,13 +566,7 @@ class ProjectEndpoint extends Endpoint {
           existingLike,
           transaction: transaction,
         );
-        await updateCount(
-          session,
-          projectId,
-          user.userInfoId,
-          'likes',
-          false,
-        );
+        project!.likedBy?.remove(user.id!);
       } else {
         await ProjectLikes.db.insertRow(
           session,
@@ -445,18 +577,21 @@ class ProjectEndpoint extends Endpoint {
           ),
           transaction: transaction,
         );
-        await updateCount(
-          session,
-          projectId,
-          user.userInfoId,
-          'likes',
-          true,
-        );
+        project!.likedBy?.add(user.id!);
       }
-      print(project.likedBy?.length);
-      likesCount = project.likedBy?.length ?? 0;
+      await Project.db.updateRow(
+        session,
+        project!,
+        transaction: transaction,
+      );
     });
-    return likesCount;
+    return ProjectToggleLikeResponse(
+      likedByUser: project!.likedBy?.contains(
+            user.id!,
+          ) ??
+          false,
+      likes: project!.likedBy?.length ?? 0,
+    );
   }
 
   Future<UserRecord> authUser(

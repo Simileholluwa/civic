@@ -46,9 +46,9 @@ project:
   - scheduleProject:
   - getProjects:
   - getProjectReviews:
+  - reactToReview:
   - deleteProject:
   - updateCount:
-  - getUserLikedProjects:
   - toggleLike:
   - authUser:
   - validateProjectOwnership:

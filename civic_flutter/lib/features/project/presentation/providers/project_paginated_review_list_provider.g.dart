@@ -7,7 +7,7 @@ part of 'project_paginated_review_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedProjectReviewListHash() =>
-    r'623b0b4989f4422aa1f8979616f60bdb1dce3ca0';
+    r'c4d3b49cd729da54de1c3e3b726018ddc8c84ba1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -174,5 +174,23 @@ class _PaginatedProjectReviewListProviderElement
   @override
   int get projectId => (origin as PaginatedProjectReviewListProvider).projectId;
 }
+
+String _$projectReviewListQueryHash() =>
+    r'f3afaeae241e7d4bdc5df0971cd269d5f9308ba1';
+
+/// See also [ProjectReviewListQuery].
+@ProviderFor(ProjectReviewListQuery)
+final projectReviewListQueryProvider =
+    NotifierProvider<ProjectReviewListQuery, ProjectReviewQueryState>.internal(
+  ProjectReviewListQuery.new,
+  name: r'projectReviewListQueryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$projectReviewListQueryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ProjectReviewListQuery = Notifier<ProjectReviewQueryState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

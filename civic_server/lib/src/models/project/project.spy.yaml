@@ -27,7 +27,7 @@ fields:
     likedBy: List<int>?
     commentBy: List<int>?
     repostBy: List<int>?
-    overallRating: double
+    overallRating: double?
     overallLocationRating: double?
     overallDescriptionRating: double?
     overallDatesRating: double?

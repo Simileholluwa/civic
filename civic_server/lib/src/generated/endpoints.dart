@@ -969,6 +969,16 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
+            'rating': _i1.ParameterDescription(
+              name: 'rating',
+              type: _i1.getType<double?>(),
+              nullable: true,
+            ),
+            'cardinal': _i1.ParameterDescription(
+              name: 'cardinal',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
           },
           call: (
             _i1.Session session,
@@ -979,6 +989,32 @@ class Endpoints extends _i1.EndpointDispatch {
             params['projectId'],
             limit: params['limit'],
             page: params['page'],
+            rating: params['rating'],
+            cardinal: params['cardinal'],
+          ),
+        ),
+        'reactToReview': _i1.MethodConnector(
+          name: 'reactToReview',
+          params: {
+            'reviewId': _i1.ParameterDescription(
+              name: 'reviewId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'isLike': _i1.ParameterDescription(
+              name: 'isLike',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).reactToReview(
+            session,
+            params['reviewId'],
+            params['isLike'],
           ),
         ),
         'deleteProject': _i1.MethodConnector(
@@ -1034,16 +1070,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['field'],
             params['isAdding'],
           ),
-        ),
-        'getUserLikedProjects': _i1.MethodConnector(
-          name: 'getUserLikedProjects',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i9.ProjectEndpoint)
-                  .getUserLikedProjects(session),
         ),
         'toggleLike': _i1.MethodConnector(
           name: 'toggleLike',

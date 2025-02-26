@@ -9,6 +9,8 @@ class ProjectVetButton extends StatelessWidget {
     this.onTap,
     this.isApprove = false,
     this.isDisapprove = false,
+    this.iconSize = 15,
+    this.fontSize = 16,
     super.key,
   });
 
@@ -19,6 +21,8 @@ class ProjectVetButton extends StatelessWidget {
   final bool isApprove;
   final bool isDisapprove;
   final VoidCallback? onTap;
+  final double iconSize;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class ProjectVetButton extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 15,
+              size: iconSize,
               color: textColor,
             ),
             Padding(
@@ -47,7 +51,7 @@ class ProjectVetButton extends StatelessWidget {
               child: Text(
                 title,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 16,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.bold,
                       color: textColor,
                     ),

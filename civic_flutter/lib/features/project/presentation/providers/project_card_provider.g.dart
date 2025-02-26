@@ -6,24 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getLikedProjectsHash() => r'a526f6dcf3ce6c5caa0ab411d10cc3d4584f060f';
-
-/// See also [getLikedProjects].
-@ProviderFor(getLikedProjects)
-final getLikedProjectsProvider = AutoDisposeFutureProvider<List<int>>.internal(
-  getLikedProjects,
-  name: r'getLikedProjectsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getLikedProjectsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetLikedProjectsRef = AutoDisposeFutureProviderRef<List<int>>;
-String _$projectCardWidgetHash() => r'599cd4fca440d24f71ade5d9f961bed270e4c0ca';
+String _$projectCardWidgetHash() => r'2b6c8e8e62e27ec240733f03450ff51c7af8135a';
 
 /// Copied from Dart SDK
 class _SystemHash {

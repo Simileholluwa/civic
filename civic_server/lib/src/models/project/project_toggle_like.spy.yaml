@@ -1,0 +1,5 @@
+class: ProjectToggleLikeResponse
+fields:
+  likedByUser: bool
+  likes: int
+  

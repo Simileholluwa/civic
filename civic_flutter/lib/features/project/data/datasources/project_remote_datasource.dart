@@ -17,9 +17,16 @@ abstract class ProjectRemoteDataSource {
     required int projectId,
     required int limit,
     required int page,
+    double? rating,
+    String? cardinal,
   });
 
   Future<ProjectReview?> getProjectReview({required int id});
+
+  Future<ProjectReviewResponse?> reactToReview({
+    required int reviewId,
+    required bool isLike,
+  });
 
   Future<ProjectReview?> saveProjectReview({
     required ProjectReview projectReview,
@@ -32,11 +39,9 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> deleteProject({required int id});
 
-  Future<int> toggleLike({
+  Future<ProjectToggleLikeResponse> toggleLike({
     required int id,
   });
-
-  Future<List<int>> getUserLikedProjects();
 }
 
 class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
@@ -193,26 +198,13 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<int> toggleLike({
+  Future<ProjectToggleLikeResponse> toggleLike({
     required int id,
   }) async {
     try {
       return await _client.project.toggleLike(
         id,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<List<int>> getUserLikedProjects() async {
-    try {
-      return await _client.project.getUserLikedProjects();
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
@@ -253,6 +245,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required int projectId,
     required int limit,
     required int page,
+    double? rating,
+    String? cardinal,
   }) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
@@ -265,6 +259,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectId,
         limit: limit,
         page: page,
+        rating: rating,
+        cardinal: cardinal,
       );
       return result;
     } on TimeoutException catch (_) {
@@ -304,6 +300,53 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
 
       if (result == null) {
         return null;
+      }
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectReviewResponse?> reactToReview({
+    required int reviewId,
+    required bool isLike,
+  }) async {
+    try {
+      final isConnected = await TDeviceUtils.hasInternetConnection();
+      if (!isConnected) {
+        throw const ServerException(
+          message: 'You are not connected to the internet.',
+        );
+      }
+
+      final result = await _client.project
+          .reactToReview(
+            reviewId,
+            isLike,
+          )
+          .timeout(
+            const Duration(
+              seconds: 60,
+            ),
+          );
+
+      if (result == null) {
+        throw const ServerException(
+          message: 'Failed to react to review',
+        );
       }
       return result;
     } on UserException catch (e) {

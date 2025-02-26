@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewsScreen extends ConsumerWidget {
   const ProjectReviewsScreen({
@@ -11,13 +12,16 @@ class ProjectReviewsScreen extends ConsumerWidget {
     required this.project,
   });
 
-  final int projectId;
   final Project project;
+  final int projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingControllerNotifier =
         ref.watch(paginatedProjectReviewListProvider(projectId).notifier);
+    final projectReviewStateNotifier =
+        ref.watch(projectReviewListQueryProvider.notifier);
+    final projectReviewState = ref.watch(projectReviewListQueryProvider);
     return Column(
       children: [
         if (project.overAllCategoryRating != null)
@@ -35,8 +39,9 @@ class ProjectReviewsScreen extends ConsumerWidget {
                   spacing: 10,
                   children: [
                     ProjectTitleAndRating(
-                      ratingNumber:
-                          project.overallLocationRating.toString().substring(0, 3),
+                      ratingNumber: project.overallLocationRating
+                          .toString()
+                          .substring(0, 3),
                       rating: project.overallLocationRating!,
                       title: 'Location',
                       titleSize: 50,
@@ -76,8 +81,9 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber:
-                          project.overAllCategoryRating.toString().substring(0, 3),
+                      ratingNumber: project.overAllCategoryRating
+                          .toString()
+                          .substring(0, 3),
                       rating: project.overAllCategoryRating!,
                       title: 'Category',
                       titleSize: 50,
@@ -89,8 +95,9 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber:
-                          project.overallFundingRating.toString().substring(0, 3),
+                      ratingNumber: project.overallFundingRating
+                          .toString()
+                          .substring(0, 3),
                       rating: project.overallFundingRating!,
                       title: 'Funding',
                       titleSize: 50,
@@ -113,15 +120,28 @@ class ProjectReviewsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Divider(height: 3,),
+              const Divider(
+                height: 3,
+              ),
             ],
           ),
         AppInfiniteList<ProjectReview>(
           pagingController: pagingControllerNotifier.pagingController,
           shrinkWrap: true,
-          showDivider: false,
           scrollPhysics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, projectReview, index) {
+            final reactToReviewNotifier = ref.watch(
+              reviewReactionProvider(
+                projectReview,
+              ).notifier,
+            );
+
+            final reactToReviewState = ref.watch(
+              reviewReactionProvider(
+                projectReview,
+              ),
+            );
+            
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
@@ -129,22 +149,13 @@ class ProjectReviewsScreen extends ConsumerWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 10,
                 children: [
                   ContentCreatorInfo(
                     timeAgo: THelperFunctions.humanizeDateTime(
                       projectReview.dateCreated ?? DateTime.now(),
                     ),
                     creator: projectReview.owner!,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    projectReview.review!,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontSize: 17,
-                        ),
-                    textAlign: TextAlign.start,
                   ),
                   SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
@@ -217,62 +228,77 @@ class ProjectReviewsScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Text(
+                    projectReview.review!,
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontSize: 17,
+                        ),
+                    textAlign: TextAlign.start,
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 13, right: 3),
-                    margin: const EdgeInsets.only(
-                      left: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 3,
-                        ),
-                        right: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 3,
-                        ),
-                        top: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1,
-                        ),
-                        bottom: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1,
-                        ),
-                      ),
-                      borderRadius: BorderRadius.circular(5),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 5,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Was this review helpful?',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    fontSize: 14,
-                                  ),
-                          textAlign: TextAlign.start,
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.thumb_up,
-                              ),
-                              onPressed: () {},
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              100,
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.thumb_down,
+                            color: Theme.of(context).cardColor,
+                            border: const Border(
+                              right: BorderSide(
+                                color: TColors.primary,
+                                width: .3,
                               ),
-                              onPressed: () {},
+                              left: BorderSide(
+                                color: TColors.primary,
+                                width: .3,
+                              ),
                             ),
-                          ],
+                          ),
+                          child: Row(
+                            children: [
+                              ProjectVetButton(
+                                title: THelperFunctions.humanizeNumber(
+                                  reactToReviewState.likesCount,
+                                ),
+                                icon: Icons.thumb_up_rounded,
+                                backgroundColor: Colors.transparent,
+                                textColor: reactToReviewState.isLiked &&
+                                        reactToReviewState.isDeleted == false
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                isApprove: true,
+                                iconSize: 20,
+                                fontSize: 18,
+                                onTap: () {
+                                  reactToReviewNotifier.reactToReview(true);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 35,
+                                child: VerticalDivider(),
+                              ),
+                              ProjectVetButton(
+                                title: '',
+                                icon: Icons.thumb_down_rounded,
+                                backgroundColor: Colors.transparent,
+                                textColor: reactToReviewState.isLiked ==
+                                            false &&
+                                        reactToReviewState.isDeleted == false
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                isDisapprove: true,
+                                iconSize: 20,
+                                onTap: () {
+                                  reactToReviewNotifier.reactToReview(false);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -282,6 +308,48 @@ class ProjectReviewsScreen extends ConsumerWidget {
             );
           },
           onRefresh: pagingControllerNotifier.refresh,
+          noItemsFound: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              50,
+              20,
+              0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Iconsax.search_zoom_in_1,
+                  size: 100,
+                ),
+                Text(
+                  projectReviewState.rating != null
+                      ? "There are no items matching your query."
+                      : "Be the first to review this project! Tap on the review button to get started.",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+                if (projectReviewState.rating != null)
+                  TextButton(
+                    onPressed: () {
+                      projectReviewStateNotifier.clearQuery();
+                      pagingControllerNotifier.refresh();
+                    },
+                    child: const Text('Clear filters'),
+                  ),
+              ],
+            ),
+          ),
+          firstPageProgressIndicator: Padding(
+            padding: const EdgeInsets.only(
+              top: 50,
+            ),
+            child: AppLoadingWidget(
+              backgroundColor: THelperFunctions.isDarkMode(context)
+                  ? TColors.dark
+                  : TColors.light,
+            ),
+          ),
         ),
       ],
     );
@@ -295,8 +363,8 @@ class ProjectOverallRating extends StatelessWidget {
     required this.rating,
   });
 
-  final String title;
   final double rating;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -339,12 +407,14 @@ class ProjectTitleAndRating extends StatelessWidget {
     this.titleSize2 = 12,
     super.key,
   });
-  final String ratingNumber;
+
   final double rating;
+  final String ratingNumber;
+  final double ratingSize;
   final String title;
   final double titleSize;
-  final double ratingSize;
   final double titleSize2;
+
   @override
   Widget build(BuildContext context) {
     return Row(

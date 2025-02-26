@@ -1,0 +1,14 @@
+class: ProjectReviewReaction
+table: project_review_reaction
+fields:
+    owner: UserRecord?, relation
+    review: ProjectReview?, relation
+    dateCreated: DateTime?
+    updatedAt: DateTime?
+    isLike: bool?
+    isDeleted: bool?
+
+indexes:
+  review_id_unique_idx:
+    fields: reviewId, ownerId
+    unique: true

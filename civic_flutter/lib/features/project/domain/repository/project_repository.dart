@@ -11,6 +11,13 @@ abstract class ProjectRepository {
     required int projectId,
     required int page,
     required int limit,
+    double? rating,
+    String? cardinal,
+  });
+
+  Future<Either<Failure, ProjectReviewResponse?>> reactToReview({
+    required int reviewId,
+    required bool isLike,
   });
 
   Future<Either<String, Project?>> getProject({required int id});
@@ -28,7 +35,5 @@ abstract class ProjectRepository {
 
   Future<Either<Failure, void>> deleteProject({required int id});
 
-  Future<Either<Failure, int>> toggleLike({required int id});
-  
-  Future<Either<Failure, List<int>>> getUserLikedProjects();
+  Future<Either<Failure, ProjectToggleLikeResponse>> toggleLike({required int id});
 }
