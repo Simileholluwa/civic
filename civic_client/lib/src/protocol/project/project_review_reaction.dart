@@ -85,6 +85,9 @@ abstract class ProjectReviewReaction implements _i1.SerializableModel {
 
   bool? isDeleted;
 
+  /// Returns a shallow copy of this [ProjectReviewReaction]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectReviewReaction copyWith({
     int? id,
     int? ownerId,
@@ -142,6 +145,9 @@ class _ProjectReviewReactionImpl extends ProjectReviewReaction {
           isDeleted: isDeleted,
         );
 
+  /// Returns a shallow copy of this [ProjectReviewReaction]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectReviewReaction copyWith({
     Object? id = _Undefined,

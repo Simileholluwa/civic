@@ -7,6 +7,11 @@ class ProjectEndpoint extends Endpoint {
     final result = await Project.db.findFirstRow(
       session,
       where: (row) => row.id.equals(id),
+      include: Project.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
     );
     return result;
   }
@@ -21,7 +26,10 @@ class ProjectEndpoint extends Endpoint {
     final result = await ProjectReview.db.findFirstRow(
       session,
       where: (row) =>
-          row.projectId.equals(projectId) & row.ownerId.equals(user.userInfoId),
+          row.projectId.equals(projectId) &
+          row.ownerId.equals(
+            user.userInfoId,
+          ),
     );
     return result;
   }
@@ -54,10 +62,10 @@ class ProjectEndpoint extends Endpoint {
             ownerId: user.id,
             owner: user,
             dateCreated: DateTime.now(),
-            commentBy: [],
             likedBy: [],
-            repostBy: [],
-            numberOfReviews: 0,
+            repostedBy: [],
+            reviewedBy: [],
+            verifiedBy: [],
           ),
         );
       }
@@ -76,145 +84,164 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     ProjectReview projectReview,
   ) async {
-    try {
-      final user = await authUser(
-        session,
-      );
-
-      Project? project =
-          await Project.db.findById(session, projectReview.projectId);
-      if (project == null) {
-        throw PostException(message: 'Project not found');
-      }
-
-      if (projectReview.id != null) {
-        final existingReview = await ProjectReview.db.findById(
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(
           session,
-          projectReview.id!,
         );
-        if (existingReview == null) {
-          throw Exception('Review not found');
+
+        Project? project = await Project.db.findById(
+          session,
+          projectReview.projectId,
+          transaction: transaction,
+        );
+        if (project == null) {
+          throw PostException(message: 'Project not found');
         }
-        await validateProjectReviewOwnership(
-          session,
-          projectReview.id!,
-          user,
-        );
 
-        if (project.numberOfReviews != null &&
-            (project.numberOfReviews ?? 1) > 0) {
-          final count = project.numberOfReviews ?? 1;
+        if (projectReview.id != null) {
+          final existingReview = await ProjectReview.db.findById(
+            session,
+            projectReview.id!,
+            transaction: transaction,
+          );
+          if (existingReview == null) {
+            throw Exception('Review not found');
+          }
+          await validateProjectReviewOwnership(
+            session,
+            projectReview.id!,
+            user,
+          );
 
-          final newOverallLocation = (project.overallLocationRating ??
-                  1 * count -
-                      (existingReview.locationRating ?? 0) +
+          if (project.numberOfReviews != null &&
+              (project.numberOfReviews ?? 1) > 0) {
+            final count = project.numberOfReviews ?? 1;
+
+            final newOverallLocation = (project.overallLocationRating ??
+                    1 * count -
+                        (existingReview.locationRating ?? 0) +
+                        (projectReview.locationRating ?? 0)) /
+                count;
+            final newOverallDescription = (project.overallDescriptionRating ??
+                    1 * count -
+                        (existingReview.descriptionRating ?? 0) +
+                        (projectReview.descriptionRating ?? 0)) /
+                count;
+            final newOverallDates = (project.overallDatesRating ??
+                    1 * count -
+                        (existingReview.datesRating ?? 0) +
+                        (projectReview.datesRating ?? 0)) /
+                count;
+            final newOverallAttachments = (project.overallAttachmentsRating ??
+                    1 * count -
+                        (existingReview.attachmentsRating ?? 0) +
+                        (projectReview.attachmentsRating ?? 0)) /
+                count;
+            final newOverallCategory = (project.overAllCategoryRating ??
+                    1 * count -
+                        (existingReview.categoryRating ?? 0) +
+                        (projectReview.categoryRating ?? 0)) /
+                count;
+            final newOverallFunding = (project.overallFundingRating ??
+                    1 * count -
+                        (existingReview.fundingRating ?? 0) +
+                        (projectReview.fundingRating ?? 0)) /
+                count;
+
+            project = project.copyWith(
+              overallLocationRating: newOverallLocation,
+              overallDescriptionRating: newOverallDescription,
+              overallDatesRating: newOverallDates,
+              overallAttachmentsRating: newOverallAttachments,
+              overAllCategoryRating: newOverallCategory,
+              overallFundingRating: newOverallFunding,
+              reviewedBy: <int>{...project.reviewedBy ?? [], user.id!}.toList(),
+            );
+            await Project.db.updateRow(
+              session,
+              project,
+              transaction: transaction,
+            );
+          }
+
+          return await ProjectReview.db.updateRow(
+            session,
+            projectReview.copyWith(
+              updatedAt: DateTime.now(),
+              ownerId: user.id,
+            ),
+            transaction: transaction,
+          );
+        } else {
+          final oldCount = project.numberOfReviews ?? 0;
+          final newCount = oldCount + 1;
+
+          final newOverallLocation =
+              ((project.overallLocationRating ?? 0) * oldCount +
                       (projectReview.locationRating ?? 0)) /
-              count;
-          final newOverallDescription = (project.overallDescriptionRating ??
-                  1 * count -
-                      (existingReview.descriptionRating ?? 0) +
+                  newCount;
+          final newOverallDescription =
+              ((project.overallDescriptionRating ?? 0) * oldCount +
                       (projectReview.descriptionRating ?? 0)) /
-              count;
-          final newOverallDates = (project.overallDatesRating ??
-                  1 * count -
-                      (existingReview.datesRating ?? 0) +
+                  newCount;
+          final newOverallDates =
+              ((project.overallDatesRating ?? 0) * oldCount +
                       (projectReview.datesRating ?? 0)) /
-              count;
-          final newOverallAttachments = (project.overallAttachmentsRating ??
-                  1 * count -
-                      (existingReview.attachmentsRating ?? 0) +
+                  newCount;
+          final newOverallAttachments =
+              ((project.overallAttachmentsRating ?? 0) * oldCount +
                       (projectReview.attachmentsRating ?? 0)) /
-              count;
-          final newOverallCategory = (project.overAllCategoryRating ??
-                  1 * count -
-                      (existingReview.categoryRating ?? 0) +
+                  newCount;
+          final newOverallCategory =
+              ((project.overAllCategoryRating ?? 0) * oldCount +
                       (projectReview.categoryRating ?? 0)) /
-              count;
-          final newOverallFunding = (project.overallFundingRating ??
-                  1 * count -
-                      (existingReview.fundingRating ?? 0) +
+                  newCount;
+          final newOverallFunding =
+              ((project.overallFundingRating ?? 0) * oldCount +
                       (projectReview.fundingRating ?? 0)) /
-              count;
+                  newCount;
 
           project = project.copyWith(
+            numberOfReviews: newCount,
             overallLocationRating: newOverallLocation,
             overallDescriptionRating: newOverallDescription,
             overallDatesRating: newOverallDates,
             overallAttachmentsRating: newOverallAttachments,
             overAllCategoryRating: newOverallCategory,
             overallFundingRating: newOverallFunding,
+            reviewedBy: <int>{...project.reviewedBy ?? [], user.id!}.toList(),
           );
-          await Project.db.updateRow(session, project);
+
+          await Project.db.updateRow(
+            session,
+            project,
+            transaction: transaction,
+          );
+          return await ProjectReview.db.insertRow(
+            session,
+            projectReview.copyWith(
+              ownerId: user.id,
+              owner: user,
+              dateCreated: DateTime.now(),
+              likes: 0,
+              dislikes: 0,
+              likedBy: [],
+              dislikedBy: [],
+            ),
+            transaction: transaction,
+          );
         }
-
-        return await ProjectReview.db.updateRow(
-          session,
-          projectReview.copyWith(
-            updatedAt: DateTime.now(),
-            ownerId: user.id,
-          ),
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in saveProject: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
         );
-      } else {
-        final oldCount = project.numberOfReviews ?? 0;
-        final newCount = oldCount + 1;
-
-        final newOverallLocation =
-            ((project.overallLocationRating ?? 0) * oldCount +
-                    (projectReview.locationRating ?? 0)) /
-                newCount;
-        final newOverallDescription =
-            ((project.overallDescriptionRating ?? 0) * oldCount +
-                    (projectReview.descriptionRating ?? 0)) /
-                newCount;
-        final newOverallDates = ((project.overallDatesRating ?? 0) * oldCount +
-                (projectReview.datesRating ?? 0)) /
-            newCount;
-        final newOverallAttachments =
-            ((project.overallAttachmentsRating ?? 0) * oldCount +
-                    (projectReview.attachmentsRating ?? 0)) /
-                newCount;
-        final newOverallCategory =
-            ((project.overAllCategoryRating ?? 0) * oldCount +
-                    (projectReview.categoryRating ?? 0)) /
-                newCount;
-        final newOverallFunding =
-            ((project.overallFundingRating ?? 0) * oldCount +
-                    (projectReview.fundingRating ?? 0)) /
-                newCount;
-
-        project = project.copyWith(
-          numberOfReviews: newCount,
-          overallLocationRating: newOverallLocation,
-          overallDescriptionRating: newOverallDescription,
-          overallDatesRating: newOverallDates,
-          overallAttachmentsRating: newOverallAttachments,
-          overAllCategoryRating: newOverallCategory,
-          overallFundingRating: newOverallFunding,
-        );
-
-        await Project.db.updateRow(session, project);
-        return await ProjectReview.db.insertRow(
-          session,
-          projectReview.copyWith(
-            ownerId: user.id,
-            owner: user,
-            dateCreated: DateTime.now(),
-            likes: 0,
-            dislikes: 0,
-            likedBy: [],
-            dislikedBy: [],
-          ),
-        );
+        return null;
       }
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in saveProject: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-      return null;
-    }
+    });
   }
 
   Future<void> scheduleProject(
@@ -479,54 +506,6 @@ class ProjectEndpoint extends Endpoint {
         id: id,
         ownerId: user.userInfoId,
       ),
-    );
-  }
-
-  Future<void> updateCount(
-    Session session,
-    int projectId,
-    int userId,
-    String field,
-    bool isAdding,
-  ) async {
-    final project = await Project.db.findById(
-      session,
-      projectId,
-    );
-    if (project == null) {
-      throw PostException(
-        message: "Project not found",
-      );
-    }
-
-    final Map<String, Function()> updateField = {
-      'likes': () {
-        isAdding
-            ? project.likedBy?.add(userId)
-            : project.likedBy?.remove(userId);
-      },
-      'comments': () {
-        isAdding
-            ? project.commentBy?.add(userId)
-            : project.commentBy?.remove(userId);
-      },
-      'repost': () {
-        isAdding
-            ? project.repostBy?.add(userId)
-            : project.repostBy?.remove(userId);
-      },
-    };
-
-    if (!updateField.containsKey(field)) {
-      throw Exception(
-        "Invalid field for count update",
-      );
-    }
-    updateField[field]!();
-
-    await Project.db.updateRow(
-      session,
-      project,
     );
   }
 

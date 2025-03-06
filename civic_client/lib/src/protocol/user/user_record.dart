@@ -92,6 +92,9 @@ abstract class UserRecord implements _i1.SerializableModel {
 
   double? credibilityScore;
 
+  /// Returns a shallow copy of this [UserRecord]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   UserRecord copyWith({
     int? id,
     String? bio,
@@ -157,6 +160,9 @@ class _UserRecordImpl extends UserRecord {
           credibilityScore: credibilityScore,
         );
 
+  /// Returns a shallow copy of this [UserRecord]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   UserRecord copyWith({
     Object? id = _Undefined,

@@ -16,10 +16,9 @@ class ProjectsScreen extends ConsumerWidget {
     return AppInfiniteList<Project>(
       pagingController: pagingControllerNotifier.pagingController,
       scrollController: ref.read(projectScrollControllerProvider),
-      itemBuilder: (context, project, index) {
+      itemBuilder: (__, project, _) {
         return ProjectCard(
           project: project,
-          index: index,
         );
       },
       onRefresh: pagingControllerNotifier.refresh,

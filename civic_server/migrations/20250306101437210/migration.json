@@ -1,0 +1,129 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "repostedBy",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          },
+          {
+            "name": "reviewedBy",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          },
+          {
+            "name": "verifiedBy",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          },
+          {
+            "name": "numberOfReposts",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          },
+          {
+            "name": "numberOfVerifies",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          },
+          {
+            "name": "numberOfLikes",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "completionRate",
+          "commentBy",
+          "repostBy"
+        ],
+        "modifyColumns": [
+          {
+            "columnName": "numberOfReviews",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0"
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"completionRate\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "completionRate"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"commentBy\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "commentBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"repostBy\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "repostBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"completionRate\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "completionRate"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"commentBy\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "commentBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"repostBy\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "repostBy"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

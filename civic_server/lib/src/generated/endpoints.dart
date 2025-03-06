@@ -1035,42 +1035,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
-        'updateCount': _i1.MethodConnector(
-          name: 'updateCount',
-          params: {
-            'projectId': _i1.ParameterDescription(
-              name: 'projectId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'userId': _i1.ParameterDescription(
-              name: 'userId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'field': _i1.ParameterDescription(
-              name: 'field',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-            'isAdding': _i1.ParameterDescription(
-              name: 'isAdding',
-              type: _i1.getType<bool>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i9.ProjectEndpoint).updateCount(
-            session,
-            params['projectId'],
-            params['userId'],
-            params['field'],
-            params['isAdding'],
-          ),
-        ),
         'toggleLike': _i1.MethodConnector(
           name: 'toggleLike',
           params: {

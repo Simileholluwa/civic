@@ -26,6 +26,9 @@ abstract class UserException
 
   String message;
 
+  /// Returns a shallow copy of this [UserException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   UserException copyWith({String? message});
   @override
   Map<String, dynamic> toJson() {
@@ -46,6 +49,9 @@ abstract class UserException
 class _UserExceptionImpl extends UserException {
   _UserExceptionImpl({required String message}) : super._(message: message);
 
+  /// Returns a shallow copy of this [UserException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   UserException copyWith({String? message}) {
     return UserException(message: message ?? this.message);

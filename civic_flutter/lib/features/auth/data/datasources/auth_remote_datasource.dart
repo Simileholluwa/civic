@@ -317,6 +317,9 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
 
       await _client.userRecord.saveUser(userRecord);
+      await _localDatabase.saveUserRecord(
+        userRecord: userRecord,
+      );
 
       await signInWithEmailAndPassword(
         email: email,

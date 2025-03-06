@@ -84,9 +84,7 @@ class PostLocationsScreen extends ConsumerWidget {
       ),
       body: data.isLoading
           ? AppLoadingWidget(
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.dark
-                  : TColors.light,
+              
             )
           : data.when(
               data: (data) {
@@ -141,9 +139,7 @@ class PostLocationsScreen extends ConsumerWidget {
               },
               loading: () {
                 return AppLoadingWidget(
-                  backgroundColor: THelperFunctions.isDarkMode(context)
-                      ? TColors.dark
-                      : TColors.light,
+                  
                 );
               },
             ),

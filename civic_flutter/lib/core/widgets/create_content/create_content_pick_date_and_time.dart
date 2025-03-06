@@ -26,9 +26,7 @@ Future<DateTime?> createContentpickDateAndTime(BuildContext context) async {
             elevation: 4,
             headerBackgroundColor: TColors.primary,
             headerForegroundColor: TColors.textWhite,
-            backgroundColor: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+            
           ),
           dialogTheme: const DialogTheme(
             elevation: 10,

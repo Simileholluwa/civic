@@ -1,0 +1,8 @@
+class: ProjectVetting
+table: project_vetting
+fields:
+    project: Project?, relation
+    owner: UserRecord?, relation
+    images: List<String>? images
+    text: String?
+    

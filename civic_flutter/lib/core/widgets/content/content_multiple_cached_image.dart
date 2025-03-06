@@ -9,12 +9,14 @@ class ContentMultipleCachedImage extends StatelessWidget {
     required this.imageUrls,
     this.useMargin = true,
     this.isUrl = true,
+    this.maxHeight = 300,
     super.key,
   });
 
   final List<dynamic> imageUrls;
   final bool useMargin;
   final bool isUrl;
+  final double maxHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +47,9 @@ class ContentMultipleCachedImage extends StatelessWidget {
                 return Row(
                   children: [
                     ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxHeight: 400,
-                        maxWidth: 400,
+                      constraints: BoxConstraints(
+                        maxHeight: maxHeight,
+                        maxWidth: maxHeight,
                       ),
                       child: isUrl
                           ? ContentCachedImage(url: url as String)

@@ -92,6 +92,9 @@ abstract class DraftPost implements _i1.SerializableModel {
 
   List<String> tags;
 
+  /// Returns a shallow copy of this [DraftPost]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   DraftPost copyWith({
     int? draftId,
     int? ownerId,
@@ -157,6 +160,9 @@ class _DraftPostImpl extends DraftPost {
           tags: tags,
         );
 
+  /// Returns a shallow copy of this [DraftPost]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   DraftPost copyWith({
     Object? draftId = _Undefined,

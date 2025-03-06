@@ -140,6 +140,9 @@ abstract class ProjectReview implements _i1.SerializableModel {
 
   List<int>? dislikedBy;
 
+  /// Returns a shallow copy of this [ProjectReview]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectReview copyWith({
     int? id,
     int? ownerId,
@@ -237,6 +240,9 @@ class _ProjectReviewImpl extends ProjectReview {
           dislikedBy: dislikedBy,
         );
 
+  /// Returns a shallow copy of this [ProjectReview]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectReview copyWith({
     Object? id = _Undefined,

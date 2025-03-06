@@ -23,23 +23,8 @@ class ProjectStatusPageView extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            projectCreationSate.status == projectStatus[0]
-                ? 'Select when this project will start and when it is expected to end.'
-                : projectCreationSate.status == projectStatus[1]
-                    ? 'Select when this project started, and when it is expected to end.'
-                    : projectCreationSate.status == projectStatus[2]
-                        ? 'Select when this project started and when it ended.'
-                        : 'Share insights on the status of this project with your constituents.',
+            "Select the start and end date of the project. It's status will be automatically determined.",
             style: Theme.of(context).textTheme.bodyMedium!,
-          ),
-          const SizedBox(height: 20),
-          ProjectCategoryDropdown(
-            hintText: 'Project status',
-            dropdownItems: projectStatus,
-            value: projectCreationSate.status,
-            onChanged: (String? value) {
-              projectNotifier.setProjectStatus(value);
-            },
           ),
           const SizedBox(height: 20),
           AppTextField(
@@ -55,10 +40,11 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
-                projectCreationSate.startDateController.text = pickedDate.toString().substring(0, 11);
+                projectCreationSate.startDateController.text =
+                    pickedDate.toString().substring(0, 11);
               }
             },
-            validator: (value) => TValidator.validateStartDate(value),
+            validator: (value) => null,
           ),
           const SizedBox(height: 20),
           AppTextField(
@@ -66,7 +52,6 @@ class ProjectStatusPageView extends ConsumerWidget {
             prefixIcon: Iconsax.calendar5,
             hintText: 'End date',
             readOnly: true,
-            
             onTap: () async {
               final pickedDate =
                   await ProjectHelperFunctions.pickProjectStartOrDate(
@@ -75,11 +60,11 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);
-                projectCreationSate.endDateController.text = pickedDate.toString().substring(0, 11);
+                projectCreationSate.endDateController.text =
+                    pickedDate.toString().substring(0, 11);
               }
             },
-            validator: (value) =>
-                TValidator.validateEndDate(value, '12/10/2024'),
+            validator: (value) => null,
           ),
         ],
       ),

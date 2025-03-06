@@ -21,6 +21,7 @@ Future<bool?> savePostDraftDialog(
             .read(mediaVideoPlayerProvider(postState.videoUrl).notifier)
             .dispose();
       }
+      context.pop();
       context.go(
         FeedRoutes.namespace,
         extra: null,

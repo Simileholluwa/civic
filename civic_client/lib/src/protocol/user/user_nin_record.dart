@@ -111,6 +111,9 @@ abstract class UserNinRecord implements _i1.SerializableModel {
 
   _i2.UserInfo? owner;
 
+  /// Returns a shallow copy of this [UserNinRecord]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   UserNinRecord copyWith({
     int? id,
     String? firstName,
@@ -197,6 +200,9 @@ class _UserNinRecordImpl extends UserNinRecord {
           owner: owner,
         );
 
+  /// Returns a shallow copy of this [UserNinRecord]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   UserNinRecord copyWith({
     Object? id = _Undefined,

@@ -61,12 +61,27 @@ class PostHelperFunctions {
     WidgetRef ref,
     PostState postState,
     int id,
-    ownerId,
+    Post post,
+    Project? project,
   ) async {
-    await ref.read(sendPostProvider.notifier).send(
+    await ref.read(regularPostProvider(
+      post,
+    ).notifier).send(
           post: id != 0
-              ? postToSend(id, ownerId, postState, ref)
-              : postToSend(null, ownerId, postState, ref),
+              ? postToSend(
+                  id,
+                  post.owner!.id!,
+                  postState,
+                  ref,
+                  project,
+                )
+              : postToSend(
+                  null,
+                  post.owner!.id!,
+                  postState,
+                  ref,
+                  project,
+                ),
         );
   }
 
@@ -174,12 +189,12 @@ class PostHelperFunctions {
 
   static Post createPostFromDraftPost(
     DraftPost draftPost,
-    UserRecord owner,
+    Ref ref,
   ) {
+    final userId = ref.watch(localStorageProvider).getInt('userId');
     return Post(
-      ownerId: owner.userInfo!.id!,
+      ownerId: userId!,
       postType: PostType.none,
-      owner: owner,
       text: draftPost.text,
       imageUrls: draftPost.imagesPath,
       videoUrl: draftPost.videoPath,
@@ -252,6 +267,7 @@ class PostHelperFunctions {
     int ownerId,
     PostState postState,
     WidgetRef ref,
+    Project? project,
   ) {
     return Post(
       id: id,
@@ -264,6 +280,9 @@ class PostHelperFunctions {
       locations: postState.locations,
       mentions: ref.watch(selectedMentionsProvider),
       tags: ref.watch(hashtagsProvider(postState.text)),
+      projectId: project?.id,
+      project: project,
+      isProjectRepost: project != null,
     );
   }
 }

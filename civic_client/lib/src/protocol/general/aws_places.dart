@@ -38,6 +38,9 @@ abstract class AWSPlaces implements _i1.SerializableModel {
 
   double longitude;
 
+  /// Returns a shallow copy of this [AWSPlaces]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   AWSPlaces copyWith({
     String? place,
     double? latitude,
@@ -69,6 +72,9 @@ class _AWSPlacesImpl extends AWSPlaces {
           longitude: longitude,
         );
 
+  /// Returns a shallow copy of this [AWSPlaces]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   AWSPlaces copyWith({
     String? place,

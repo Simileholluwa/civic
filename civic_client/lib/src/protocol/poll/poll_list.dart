@@ -56,6 +56,9 @@ abstract class PollList implements _i1.SerializableModel {
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [PollList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PollList copyWith({
     List<_i2.Poll>? results,
     int? count,
@@ -99,6 +102,9 @@ class _PollListImpl extends PollList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [PollList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PollList copyWith({
     List<_i2.Poll>? results,

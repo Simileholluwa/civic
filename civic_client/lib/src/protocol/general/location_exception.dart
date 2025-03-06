@@ -23,6 +23,9 @@ abstract class LocationException
 
   String message;
 
+  /// Returns a shallow copy of this [LocationException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   LocationException copyWith({String? message});
   @override
   Map<String, dynamic> toJson() {
@@ -38,6 +41,9 @@ abstract class LocationException
 class _LocationExceptionImpl extends LocationException {
   _LocationExceptionImpl({required String message}) : super._(message: message);
 
+  /// Returns a shallow copy of this [LocationException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   LocationException copyWith({String? message}) {
     return LocationException(message: message ?? this.message);

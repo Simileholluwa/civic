@@ -57,6 +57,9 @@ abstract class ProjectList
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [ProjectList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectList copyWith({
     List<_i2.Project>? results,
     int? count,
@@ -112,6 +115,9 @@ class _ProjectListImpl extends ProjectList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [ProjectList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectList copyWith({
     List<_i2.Project>? results,

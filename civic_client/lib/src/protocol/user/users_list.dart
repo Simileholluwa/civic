@@ -56,6 +56,9 @@ abstract class UsersList implements _i1.SerializableModel {
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [UsersList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   UsersList copyWith({
     List<_i2.UserRecord>? results,
     int? count,
@@ -99,6 +102,9 @@ class _UsersListImpl extends UsersList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [UsersList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   UsersList copyWith({
     List<_i2.UserRecord>? results,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewsScreen extends ConsumerWidget {
   const ProjectReviewsScreen({
@@ -141,7 +140,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                 projectReview,
               ),
             );
-            
+
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
@@ -286,8 +285,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
                                 title: '',
                                 icon: Icons.thumb_down_rounded,
                                 backgroundColor: Colors.transparent,
-                                textColor: reactToReviewState.isLiked ==
-                                            false &&
+                                textColor: reactToReviewState.isDisliked &&
                                         reactToReviewState.isDeleted == false
                                     ? Theme.of(context).colorScheme.secondary
                                     : Theme.of(context).colorScheme.onSurface,
@@ -309,23 +307,19 @@ class ProjectReviewsScreen extends ConsumerWidget {
           },
           onRefresh: pagingControllerNotifier.refresh,
           noItemsFound: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              20,
-              50,
-              20,
-              0,
-            ),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Iconsax.search_zoom_in_1,
-                  size: 100,
+                Image(
+                  height: 250,
+                  image: AssetImage(
+                    TImageTexts.noData,
+                  ),
                 ),
                 Text(
                   projectReviewState.rating != null
-                      ? "There are no items matching your query."
-                      : "Be the first to review this project! Tap on the review button to get started.",
+                      ? "There are no items matching your query. Try another query or clear the filters."
+                      : "There are no reviews... yet. Be the first! Tap on the review button to get started.",
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -344,11 +338,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(
               top: 50,
             ),
-            child: AppLoadingWidget(
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.dark
-                  : TColors.light,
-            ),
+            child: AppLoadingWidget(),
           ),
         ),
       ],

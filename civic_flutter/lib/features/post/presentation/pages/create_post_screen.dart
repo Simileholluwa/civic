@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
@@ -12,15 +11,20 @@ class CreatePostScreen extends ConsumerWidget {
   const CreatePostScreen({
     super.key,
     required this.id,
+    required this.project,
     required this.draft,
   });
 
   final int id;
+  final Project? project;
   final DraftPost? draft;
+
+  static String routePath([int? id]) => '${id ?? ':id'}/create';
+  static String routeName() => 'post/create';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = THelperFunctions.isDarkMode(context);
+   
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final data = ref.watch(
@@ -34,7 +38,7 @@ class CreatePostScreen extends ConsumerWidget {
     final draftsData = id == 0 ? ref.watch(postDraftsProvider) : [];
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
-        postState.videoUrl.isNotEmpty;
+        postState.videoUrl.isNotEmpty || project != null;
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
@@ -61,6 +65,8 @@ class CreatePostScreen extends ConsumerWidget {
       },
       child: AppAndroidBottomNav(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(
               60,
@@ -81,10 +87,12 @@ class CreatePostScreen extends ConsumerWidget {
                       ref,
                       postState,
                       id,
-                      data.value!.ownerId,
+                      data.value!,
+                      project,                 
                     ),
                   );
                 },
+                isRepost: project != null,
                 onCanSendPost: () async {
                   final shouldPop = id == 0
                       ? await savePostDraftDialog(
@@ -146,6 +154,7 @@ class CreatePostScreen extends ConsumerWidget {
               }
               return CreatePostWidget(
                 post: post,
+                project: project,
               );
             },
             error: (error, st) {
@@ -157,7 +166,7 @@ class CreatePostScreen extends ConsumerWidget {
             },
             loading: () {
               return AppLoadingWidget(
-                backgroundColor: isDark ? TColors.dark : TColors.light,
+               
               );
             },
           ),

@@ -16,3 +16,5 @@ fields:
     likedBy: List<int>?
     commentBy: List<int>?
     repostBy: List<int>?
+    project: Project?, relation(optional)
+    isProjectRepost: bool?

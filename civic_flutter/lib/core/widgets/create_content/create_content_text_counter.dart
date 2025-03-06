@@ -21,9 +21,7 @@ class CreatContentTextCounter extends ConsumerWidget {
           width: 25,
           child: CircularProgressIndicator(
             value: currentTextLength / maxLength,
-            backgroundColor: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+            backgroundColor: Theme.of(context).cardColor,
             valueColor: AlwaysStoppedAnimation<Color>(
               currentTextLength / maxLength <= 0.8
                   ? TColors.primary

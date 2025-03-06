@@ -9,11 +9,13 @@ class ContentExpandableText extends StatelessWidget {
     this.hasVideo = false,
     this.hasImage = false,
     this.noMaxLines = false,
+    this.maxLines,
   });
 
   final String text;
   final bool hasVideo;
   final bool hasImage;
+  final int? maxLines;
   final bool noMaxLines;
 
   @override
@@ -60,7 +62,7 @@ class ContentExpandableText extends StatelessWidget {
           .labelMedium!.copyWith(
             fontSize: 17,
           ),
-      maxLines: noMaxLines ? 100 : (hasVideo || hasImage ? 3 : 6),
+      maxLines: maxLines ?? (noMaxLines ? 100 : (hasVideo || hasImage ? 3 : 6)),
     );
   }
 }

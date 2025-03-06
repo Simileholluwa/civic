@@ -20,13 +20,13 @@ enum PoliticalStatus implements _i1.SerializableModel {
   static PoliticalStatus fromJson(int index) {
     switch (index) {
       case 0:
-        return current;
+        return PoliticalStatus.current;
       case 1:
-        return former;
+        return PoliticalStatus.former;
       case 2:
-        return aspiring;
+        return PoliticalStatus.aspiring;
       case 3:
-        return none;
+        return PoliticalStatus.none;
       default:
         throw ArgumentError(
             'Value "$index" cannot be converted to "PoliticalStatus"');

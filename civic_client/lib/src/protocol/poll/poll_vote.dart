@@ -50,6 +50,9 @@ abstract class PollVote implements _i1.SerializableModel {
 
   int voterId;
 
+  /// Returns a shallow copy of this [PollVote]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PollVote copyWith({
     int? id,
     int? pollId,
@@ -87,6 +90,9 @@ class _PollVoteImpl extends PollVote {
           voterId: voterId,
         );
 
+  /// Returns a shallow copy of this [PollVote]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PollVote copyWith({
     Object? id = _Undefined,

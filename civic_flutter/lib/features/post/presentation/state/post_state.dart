@@ -1,16 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
 class PostState {
   PostState({
-    required this.text,
+    required this.controller,
     required this.imageUrls,
-    required this.videoUrl,
-    required this.taggedUsers,
     required this.locations,
     required this.mentions,
+    required this.taggedUsers,
     required this.tags,
-    required this.controller,
+    required this.text,
+    required this.videoUrl,
+    required this.isRepost,
+    required this.isProjectRepost,
   });
 
   factory PostState.empty() {
@@ -22,6 +25,8 @@ class PostState {
       locations: [],
       mentions: [],
       tags: [],
+      isRepost: false,
+      isProjectRepost: false,
       controller: MentionHashtagLinkTextEditingController(),
     );
   }
@@ -35,6 +40,8 @@ class PostState {
       locations: post.locations ?? [],
       mentions: post.mentions ?? [],
       tags: post.tags ?? [],
+      isRepost: post.project != null,
+      isProjectRepost: post.isProjectRepost ?? false,
       controller: MentionHashtagLinkTextEditingController(text: post.text),
     );
   }
@@ -47,6 +54,8 @@ class PostState {
   final List<String> tags;
   final String text;
   final String videoUrl;
+  final bool isRepost;
+  final bool isProjectRepost;
 
   PostState copyWith({
     String? text,
@@ -56,6 +65,8 @@ class PostState {
     List<AWSPlaces>? locations,
     List<UserRecord>? mentions,
     List<String>? tags,
+    bool? isRepost,
+    bool? isProjectRepost,
     MentionHashtagLinkTextEditingController? controller,
   }) {
     return PostState(
@@ -67,6 +78,8 @@ class PostState {
       mentions: mentions ?? this.mentions,
       tags: tags ?? this.tags,
       controller: controller ?? this.controller,
+      isRepost: isRepost ?? this.isRepost,
+      isProjectRepost: isProjectRepost ?? this.isProjectRepost,
     );
   }
 }

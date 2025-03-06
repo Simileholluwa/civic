@@ -34,6 +34,9 @@ abstract class ProjectToggleLikeResponse implements _i1.SerializableModel {
 
   int likes;
 
+  /// Returns a shallow copy of this [ProjectToggleLikeResponse]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectToggleLikeResponse copyWith({
     bool? likedByUser,
     int? likes,
@@ -61,6 +64,9 @@ class _ProjectToggleLikeResponseImpl extends ProjectToggleLikeResponse {
           likes: likes,
         );
 
+  /// Returns a shallow copy of this [ProjectToggleLikeResponse]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectToggleLikeResponse copyWith({
     bool? likedByUser,

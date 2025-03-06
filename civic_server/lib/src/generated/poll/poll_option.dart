@@ -44,6 +44,9 @@ abstract class PollOption
 
   List<_i2.UserRecord> voters;
 
+  /// Returns a shallow copy of this [PollOption]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PollOption copyWith({
     List<String>? option,
     List<int>? votes,
@@ -84,6 +87,9 @@ class _PollOptionImpl extends PollOption {
           voters: voters,
         );
 
+  /// Returns a shallow copy of this [PollOption]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PollOption copyWith({
     List<String>? option,

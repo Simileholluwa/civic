@@ -10,7 +10,6 @@ class ProjectCreationState {
     required this.scrollController,
     required this.titleController,
     required this.quillController,
-    required this.completionRateController,
     required this.startDateController,
     required this.endDateController,
     required this.projectCostController,
@@ -50,7 +49,6 @@ class ProjectCreationState {
       endDateController: TextEditingController(),
       projectCostController: TextEditingController(),
       fundingNoteController: TextEditingController(),
-      completionRateController: TextEditingController(),
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
       canAddLocations: true,
@@ -91,7 +89,6 @@ class ProjectCreationState {
       fundingNote: project.fundingNote,
       projectImageAttachments: project.projectImageAttachments,
       projectPDFAttachments: project.projectPDFAttachments,
-      completionRate: project.completionRate,
       virtualLocations: project.virtualLocations,
       physicalLocations: project.physicalLocations,
       fundingCategory: project.fundingCategory,
@@ -100,9 +97,6 @@ class ProjectCreationState {
       projectCategory: project.projectCategory,
       projectSubCategory: project.projectSubCategory,
       manualLocations: project.manualLocations,
-      completionRateController: TextEditingController(
-        text: project.completionRate?.toString(),
-      ),
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
       canAddLocations: [
@@ -119,7 +113,6 @@ class ProjectCreationState {
 
   final double? completionRate;
   final String? currency;
-  final TextEditingController completionRateController;
   final String? description;
   final DateTime? endDate;
   final TextEditingController endDateController;
@@ -177,7 +170,6 @@ class ProjectCreationState {
     List<AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
-    TextEditingController? completionRateController,
     TextEditingController? manualLocationController,
     TextEditingController? virtualLocationController,
     bool? canAddLocations,
@@ -215,8 +207,6 @@ class ProjectCreationState {
       physicalLocations: physicalLocations ?? this.physicalLocations,
       virtualLocations: virtualLocations ?? this.virtualLocations,
       manualLocations: manualLocations ?? this.manualLocations,
-      completionRateController:
-          completionRateController ?? this.completionRateController,
       manualLocationController:
           manualLocationController ?? this.manualLocationController,
       virtualLocationController:

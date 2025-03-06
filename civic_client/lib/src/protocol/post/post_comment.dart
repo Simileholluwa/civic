@@ -120,6 +120,9 @@ abstract class PostComment implements _i1.SerializableModel {
 
   _i4.PostComment? parent;
 
+  /// Returns a shallow copy of this [PostComment]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostComment copyWith({
     int? id,
     int? postId,
@@ -197,6 +200,9 @@ class _PostCommentImpl extends PostComment {
           parent: parent,
         );
 
+  /// Returns a shallow copy of this [PostComment]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostComment copyWith({
     Object? id = _Undefined,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -183,15 +185,19 @@ class ProjectHelperFunctions {
     return formatter.format(number);
   }
 
-  static Future<bool?> selectLocationBottomSheet({
+  static selectLocationBottomSheet({
     required BuildContext context,
     required Project project,
   }) {
-    return showModalBottomSheet<bool>(
+    return showModalBottomSheet(
       context: context,
-      useSafeArea: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * .7,
+        minHeight: MediaQuery.of(context).size.height * .5,
+      ),
       isScrollControlled: true,
-      showDragHandle: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0,
       builder: (context) {
         return ProjectLocationsScreen(
           project: project,
@@ -226,7 +232,6 @@ class ProjectHelperFunctions {
       currency: projectCreationSate.currency,
       projectCost: projectCreationSate.projectCost,
       fundingNote: projectCreationSate.fundingNote,
-      completionRate: projectCreationSate.completionRate,
       dateCreated: DateTime.now(),
     );
   }
@@ -252,6 +257,58 @@ class ProjectHelperFunctions {
         selectLocationBottomSheet(context: context, project: project);
       }
     }
+  }
+
+  static Future<Position> getDevicePosition() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      TToastMessages.infoToast('Location services are disabled on your device');
+      throw Exception("Location services are disabled.");
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        TToastMessages.infoToast('Please enable location services.');
+        throw Exception("Location permissions are denied.");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Geolocator.openLocationSettings();
+      throw Exception("Location services are denied forever.");
+    }
+
+    return await Geolocator.getCurrentPosition(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+      ),
+    );
+  }
+
+  static double calculateDistance(
+    double lat1,
+    double lon1,
+    double lat2,
+    double lon2,
+  ) {
+    const earthRadius = 6371000;
+    double dLat = _degreesToRadians(lat2 - lat1);
+    double dLon = _degreesToRadians(lon2 - lon1);
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(_degreesToRadians(lat1)) *
+            cos(_degreesToRadians(lat2)) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return earthRadius * c;
+  }
+
+  static double _degreesToRadians(double degrees) {
+    return degrees * pi / 180;
   }
 
   static void scrollToActiveIndicator(

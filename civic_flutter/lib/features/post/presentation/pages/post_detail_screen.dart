@@ -183,9 +183,7 @@ class PostDetailScreen extends ConsumerWidget {
         },
         loading: () {
           return AppLoadingWidget(
-            backgroundColor: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+            
           );
         },
       ),

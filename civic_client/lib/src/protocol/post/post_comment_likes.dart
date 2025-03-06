@@ -67,6 +67,9 @@ abstract class PostCommentLikes implements _i1.SerializableModel {
 
   DateTime? dateCreated;
 
+  /// Returns a shallow copy of this [PostCommentLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostCommentLikes copyWith({
     int? id,
     int? postCommentId,
@@ -112,6 +115,9 @@ class _PostCommentLikesImpl extends PostCommentLikes {
           dateCreated: dateCreated,
         );
 
+  /// Returns a shallow copy of this [PostCommentLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostCommentLikes copyWith({
     Object? id = _Undefined,

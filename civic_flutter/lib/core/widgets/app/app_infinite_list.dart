@@ -53,9 +53,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
             return firstPageProgressIndicator ?? AppLoadingWidget(
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.dark
-                  : TColors.light,
+              
             );
           },
           noItemsFoundIndicatorBuilder: (context) {

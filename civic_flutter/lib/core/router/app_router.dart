@@ -8,7 +8,6 @@ import 'package:civic_flutter/features/learn/learn.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
-import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
@@ -186,17 +185,6 @@ GoRouter router(Ref ref) {
         builder: (context, state, navigationShell) {
           return AppWrapper(
             navigatorShell: navigationShell,
-          );
-        },
-      ),
-
-      GoRoute(
-        path: AppRoutes.createPost,
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return CreatePostScreen(
-            id: data['id'],
-            draft: data['draft'],
           );
         },
       ),

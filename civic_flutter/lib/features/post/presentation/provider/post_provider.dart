@@ -1,3 +1,5 @@
+//ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
@@ -9,34 +11,6 @@ class RegularPost extends _$RegularPost {
   static final imageHelper = ImageHelper();
   static const int maxImageCount = 10;
   static const int maxVideoSizeInMb = 10;
-  @override
-  PostState build(Post? post) {
-    if (post == null) {
-      final postState = PostState.empty();
-      postState.controller.addListener(
-        () {
-          setText(postState.controller.text);
-        },
-      );
-      return postState;
-    } else {
-      final postState = PostState.populate(post);
-      postState.controller.addListener(() {
-        setText(postState.controller.text);
-      });
-
-      if (post.videoUrl != null) {
-        if (post.videoUrl!.isNotEmpty) {
-          ref.read(
-            mediaVideoPlayerProvider(
-              postState.videoUrl,
-            ),
-          );
-        }
-      }
-      return postState;
-    }
-  }
 
   void addUser(UserRecord userRecord) {
     if (state.taggedUsers.length < 10) {
@@ -203,6 +177,212 @@ class RegularPost extends _$RegularPost {
       return '$username, caption your video';
     } else {
       return "$username, what's happening in politics? Tap here to start typing.";
+    }
+  }
+
+  Future<void> saveFailedPostAsDraft(
+    Post post,
+    String errorMessage,
+  ) async {
+    final draftPost = PostHelperFunctions.createDraftPostFromPost(
+      post,
+    );
+    final draftPostProvider = ref.read(postDraftsProvider.notifier);
+    final result = await draftPostProvider.saveDraftPost(
+      draftPost,
+    );
+    if (result) {
+      TToastMessages.errorToast(
+        '$errorMessage. Your post was saved to drafts.',
+      );
+    }
+  }
+
+  Future<List<String>> sendMediaImages(Post post) async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (post.imageUrls!.isNotEmpty) {
+      for (final image in post.imageUrls!) {
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (regex.hasMatch(image)) {
+          existingUpload.add(image);
+        } else {
+          newUpload.add(image);
+        }
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+            newUpload,
+            'posts',
+            'images',
+          );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        await saveFailedPostAsDraft(
+          post,
+          error,
+        );
+
+        return [];
+      }, (mediaUrls) {
+        return mediaUrls + existingUpload;
+      });
+    }
+    return [];
+  }
+
+  Future<String> sendMediaVideo(Post post) async {
+    if (post.videoUrl!.isNotEmpty) {
+      final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+      if (regex.hasMatch(post.videoUrl!)) {
+        return post.videoUrl!;
+      }
+      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+        [post.videoUrl!],
+        'posts',
+        'videos',
+      );
+
+      return result.fold((error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        log(error);
+        await saveFailedPostAsDraft(
+          post,
+          error,
+        );
+
+        return '';
+      }, (videoUrl) {
+        return videoUrl.first;
+      });
+    }
+    return '';
+  }
+
+  Future<Post?> sendPost(
+    Post post,
+  ) async {
+    final savePost = ref.read(savePostProvider);
+
+    final saveResult = await savePost(
+      SavePostParams(
+        post,
+      ),
+    );
+    return saveResult.fold((error) async {
+      log(error.message);
+      await saveFailedPostAsDraft(
+        post,
+        error.message,
+      );
+
+      return null;
+    }, (data) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      if (data == null) {
+        await saveFailedPostAsDraft(
+          post,
+          'Something went wrong',
+        );
+        return null;
+      }
+      ref.read(paginatedPostListProvider.notifier).addPost(data);
+      TToastMessages.successToast(
+        'Your post was sent.',
+      );
+      return data;
+    });
+  }
+
+  Future<void> saveInFuture(
+    Post post,
+    DateTime dateTime,
+  ) async {
+    final saveInFuture = ref.read(schedulePostProvider);
+    final scheduledDateTimeProvider = ref.read(
+      postScheduledDateTimeProvider.notifier,
+    );
+    final result = await saveInFuture(
+      SchedulePostParams(post, dateTime),
+    );
+    return result.fold(
+      (error) async {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        await saveFailedPostAsDraft(
+          post,
+          error.message,
+        );
+      },
+      (r) {
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        TToastMessages.successToast(
+          'Your post will be sent on ${scheduledDateTimeProvider.humanizeDateTimeForSend()}',
+        );
+      },
+    );
+  }
+
+  Future<void> send({
+    required Post post,
+  }) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
+    final scheduledDateTimeProvider = ref.read(
+      postScheduledDateTimeProvider.notifier,
+    );
+    final uploadedImages = await sendMediaImages(post);
+    if (post.imageUrls!.isNotEmpty && uploadedImages.isEmpty) {
+      return;
+    }
+    final uploadedVideo = await sendMediaVideo(post);
+    if (post.videoUrl!.isNotEmpty && uploadedVideo.isEmpty) {
+      return;
+    }
+    final postTosend = post.copyWith(
+      imageUrls: uploadedImages,
+      videoUrl: uploadedVideo,
+    );
+    if (scheduledDateTime == null &&
+        !scheduledDateTimeProvider.canSendLater()) {
+      await sendPost(
+        postTosend,
+      );
+    } else {
+      await saveInFuture(
+        postTosend,
+        scheduledDateTime!,
+      );
+    }
+    return;
+  }
+
+  @override
+  PostState build(Post? post) {
+    if (post == null) {
+      final postState = PostState.empty();
+      postState.controller.addListener(
+        () {
+          setText(postState.controller.text);
+        },
+      );
+      return postState;
+    } else {
+      final postState = PostState.populate(post);
+      postState.controller.addListener(() {
+        setText(postState.controller.text);
+      });
+
+      if (post.videoUrl != null) {
+        if (post.videoUrl!.isNotEmpty) {
+          ref.read(
+            mediaVideoPlayerProvider(
+              postState.videoUrl,
+            ),
+          );
+        }
+      }
+      return postState;
     }
   }
 }

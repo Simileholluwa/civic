@@ -72,6 +72,9 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   _i1.Table get table => t;
 
+  /// Returns a shallow copy of this [ProjectLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectLikes copyWith({
     int? id,
     int? projectId,
@@ -159,6 +162,9 @@ class _ProjectLikesImpl extends ProjectLikes {
           dateCreated: dateCreated,
         );
 
+  /// Returns a shallow copy of this [ProjectLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectLikes copyWith({
     Object? id = _Undefined,
@@ -299,6 +305,28 @@ class ProjectLikesRepository {
 
   final attachRow = const ProjectLikesAttachRowRepository._();
 
+  /// Returns a list of [ProjectLikes]s matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order of the items use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// The maximum number of items can be set by [limit]. If no limit is set,
+  /// all items matching the query will be returned.
+  ///
+  /// [offset] defines how many items to skip, after which [limit] (or all)
+  /// items are read from the database.
+  ///
+  /// ```dart
+  /// var persons = await Persons.db.find(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.firstName,
+  ///   limit: 100,
+  /// );
+  /// ```
   Future<List<ProjectLikes>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
@@ -322,6 +350,23 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Returns the first matching [ProjectLikes] matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// [offset] defines how many items to skip, after which the next one will be picked.
+  ///
+  /// ```dart
+  /// var youngestPerson = await Persons.db.findFirstRow(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.age,
+  /// );
+  /// ```
   Future<ProjectLikes?> findFirstRow(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
@@ -343,6 +388,7 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Finds a single [ProjectLikes] by its [id] or null if no such row exists.
   Future<ProjectLikes?> findById(
     _i1.Session session,
     int id, {
@@ -356,6 +402,12 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Inserts all [ProjectLikes]s in the list and returns the inserted rows.
+  ///
+  /// The returned [ProjectLikes]s will have their `id` fields set.
+  ///
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// insert, none of the rows will be inserted.
   Future<List<ProjectLikes>> insert(
     _i1.Session session,
     List<ProjectLikes> rows, {
@@ -367,6 +419,9 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Inserts a single [ProjectLikes] and returns the inserted row.
+  ///
+  /// The returned [ProjectLikes] will have its `id` field set.
   Future<ProjectLikes> insertRow(
     _i1.Session session,
     ProjectLikes row, {
@@ -378,6 +433,11 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Updates all [ProjectLikes]s in the list and returns the updated rows. If
+  /// [columns] is provided, only those columns will be updated. Defaults to
+  /// all columns.
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// update, none of the rows will be updated.
   Future<List<ProjectLikes>> update(
     _i1.Session session,
     List<ProjectLikes> rows, {
@@ -391,6 +451,9 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Updates a single [ProjectLikes]. The row needs to have its id set.
+  /// Optionally, a list of [columns] can be provided to only update those
+  /// columns. Defaults to all columns.
   Future<ProjectLikes> updateRow(
     _i1.Session session,
     ProjectLikes row, {
@@ -404,6 +467,9 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Deletes all [ProjectLikes]s in the list and returns the deleted rows.
+  /// This is an atomic operation, meaning that if one of the rows fail to
+  /// be deleted, none of the rows will be deleted.
   Future<List<ProjectLikes>> delete(
     _i1.Session session,
     List<ProjectLikes> rows, {
@@ -415,6 +481,7 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Deletes a single [ProjectLikes].
   Future<ProjectLikes> deleteRow(
     _i1.Session session,
     ProjectLikes row, {
@@ -426,6 +493,7 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Deletes all rows matching the [where] expression.
   Future<List<ProjectLikes>> deleteWhere(
     _i1.Session session, {
     required _i1.WhereExpressionBuilder<ProjectLikesTable> where,
@@ -437,6 +505,8 @@ class ProjectLikesRepository {
     );
   }
 
+  /// Counts the number of rows matching the [where] expression. If omitted,
+  /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectLikesTable>? where,
@@ -454,6 +524,8 @@ class ProjectLikesRepository {
 class ProjectLikesAttachRowRepository {
   const ProjectLikesAttachRowRepository._();
 
+  /// Creates a relation between the given [ProjectLikes] and [Project]
+  /// by setting the [ProjectLikes]'s foreign key `projectId` to refer to the [Project].
   Future<void> project(
     _i1.Session session,
     ProjectLikes projectLikes,
@@ -475,6 +547,8 @@ class ProjectLikesAttachRowRepository {
     );
   }
 
+  /// Creates a relation between the given [ProjectLikes] and [UserRecord]
+  /// by setting the [ProjectLikes]'s foreign key `ownerId` to refer to the [UserRecord].
   Future<void> owner(
     _i1.Session session,
     ProjectLikes projectLikes,

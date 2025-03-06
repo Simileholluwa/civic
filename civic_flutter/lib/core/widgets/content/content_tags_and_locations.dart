@@ -10,18 +10,12 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
     required this.locations,
     this.hasTags = false,
     this.hasLocations = false,
-    required this.numberOfLikes,
-    required this.numberOfComments,
-    required this.numberOfReposts,
   });
 
   final List<UserRecord> tags;
   final List<AWSPlaces> locations;
   final bool hasTags;
   final bool hasLocations;
-  final String numberOfLikes;
-  final String numberOfComments;
-  final String numberOfReposts;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +27,6 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
-          ProjectQuickDetailWidget(
-            icon: Iconsax.chart_15,
-            title:
-                '$numberOfLikes ${numberOfLikes == '1' ? 'Like' : 'Likes'} • $numberOfComments ${numberOfComments == '1' ? 'Comment' : 'Comments'} • $numberOfReposts ${numberOfReposts == '1' ? 'Repost' : 'Reposts'}',
-            color: Colors.purple,
-            textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontSize: 12,
-                ),
-          ),
           if (hasTags)
             ProjectQuickDetailWidget(
               icon: Iconsax.tag5,

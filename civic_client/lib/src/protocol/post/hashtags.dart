@@ -49,6 +49,9 @@ abstract class Hashtag implements _i1.SerializableModel {
 
   List<_i2.PostsHashtags>? hashtags;
 
+  /// Returns a shallow copy of this [Hashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Hashtag copyWith({
     int? id,
     String? tag,
@@ -87,6 +90,9 @@ class _HashtagImpl extends Hashtag {
           hashtags: hashtags,
         );
 
+  /// Returns a shallow copy of this [Hashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Hashtag copyWith({
     Object? id = _Undefined,

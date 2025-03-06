@@ -13,6 +13,7 @@ class CreateContentAppbar extends StatelessWidget {
     required this.draftPressed,
     required this.onCanSendPost,
     this.title,
+    this.isRepost = false,
   });
 
   final bool canSend;
@@ -21,6 +22,7 @@ class CreateContentAppbar extends StatelessWidget {
   final VoidCallback draftPressed;
   final VoidCallback onCanSendPost;
   final Widget? title;
+  final bool isRepost;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class CreateContentAppbar extends StatelessWidget {
             child: TextButton(
               onPressed: !canSend ? null : sendPressed,
               child: Text(
-                'SEND',
+                isRepost ? 'REPOST' : 'SEND',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: !canSend

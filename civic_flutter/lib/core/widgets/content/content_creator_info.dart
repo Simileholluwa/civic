@@ -10,26 +10,32 @@ class ContentCreatorInfo extends StatelessWidget {
     super.key,
     required this.creator,
     required this.timeAgo,
+    this.radius = 25,
+    this.showPoliticalStatus = true,
   });
 
   final UserRecord creator;
   final String timeAgo;
+  final double radius;
+  final bool showPoliticalStatus;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 15,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          radius: 25,
+          radius: radius,
           backgroundImage: CachedNetworkImageProvider(
             creator.userInfo!.imageUrl!,
           ),
         ),
-        const SizedBox(
-          width: 15,
+        CreatorNameAndAccountInfo(
+          creator: creator,
+          timeAgo: timeAgo,
+          showPoliticalStatus: showPoliticalStatus,
         ),
-        CreatorNameAndAccountInfo(creator: creator, timeAgo: timeAgo),
       ],
     );
   }
@@ -40,10 +46,12 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
     super.key,
     required this.creator,
     required this.timeAgo,
+    this.showPoliticalStatus = true,
   });
 
   final UserRecord creator;
   final String timeAgo;
+  final bool showPoliticalStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -57,70 +65,70 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-               Flexible(
-                 child: Text(
-                      creator.userInfo!.fullName ?? creator.userInfo!.userName!,
-                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-               ),           
-                Text(
-                    ' • $timeAgo',
-                    style: Theme.of(context).textTheme.labelMedium,
+                Flexible(
+                  child: Text(
+                    creator.userInfo!.fullName ?? creator.userInfo!.userName!,
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                Text(
+                  ' • $timeAgo',
+                  style: Theme.of(context).textTheme.labelMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
-            Row(
-              spacing: 10,
-              children: [
-                ProjectQuickDetailWidget(
-                  size: 20,
-                  icon: Iconsax.shield_security2,
-                  title: creator.politicalStatus.index == 0
-                      ? 'Current Leader'
-                      : creator.politicalStatus.index == 1
-                          ? 'Former Leader'
-                          : creator.politicalStatus.index == 2
-                              ? 'Aspiring Leader'
-                              : 'Concerned Citizen',
-                  color: TColors.primary,
-                  textStyle:
-                      Theme.of(context).textTheme.labelMedium!.copyWith(
-                            fontSize: 12,
-                          ),
-                ),
-              
-                if (creator.verifiedAccount)
+            if (showPoliticalStatus)
+              Row(
+                spacing: 10,
+                children: [
                   ProjectQuickDetailWidget(
                     size: 20,
-                    icon: Iconsax.verify5,
-                    title: 'Verified',
+                    icon: Iconsax.shield_security2,
+                    title: creator.politicalStatus.index == 0
+                        ? 'Current Leader'
+                        : creator.politicalStatus.index == 1
+                            ? 'Former Leader'
+                            : creator.politicalStatus.index == 2
+                                ? 'Aspiring Leader'
+                                : 'Concerned Citizen',
                     color: TColors.primary,
                     textStyle:
                         Theme.of(context).textTheme.labelMedium!.copyWith(
                               fontSize: 12,
-                              color: TColors.primary,
-                            ),
-                  )
-                else
-                  ProjectQuickDetailWidget(
-                    size: 20,
-                    icon: Iconsax.verify5,
-                    title: 'Unverified',
-                    color: TColors.secondary,
-                    textStyle:
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                              fontSize: 12,
                             ),
                   ),
-              ],
-            ),
+                  if (creator.verifiedAccount)
+                    ProjectQuickDetailWidget(
+                      size: 20,
+                      icon: Iconsax.verify5,
+                      title: 'Verified',
+                      color: TColors.primary,
+                      textStyle:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: TColors.primary,
+                              ),
+                    )
+                  else
+                    ProjectQuickDetailWidget(
+                      size: 20,
+                      icon: Iconsax.verify5,
+                      title: 'Unverified',
+                      color: TColors.secondary,
+                      textStyle:
+                          Theme.of(context).textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                              ),
+                    ),
+                ],
+              ),
           ],
         ),
       ),

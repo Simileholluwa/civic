@@ -25,6 +25,8 @@ class PostCardState {
     required this.hasReposts,
     required this.hasComments,
     required this.hasLikes,
+    this.isProjectRepost = false,
+    this.isProjectQuote = false,
   });
 
   factory PostCardState.populate(
@@ -37,13 +39,13 @@ class PostCardState {
         post.dateCreated ?? DateTime.now(),
       ),
       numberOfLikes: THelperFunctions.humanizeNumber(
-        post.likedBy!.length,
+        post.likedBy?.length ?? 0,
       ),
       numberOfComments: THelperFunctions.humanizeNumber(
-        post.commentBy!.length,
+        post.commentBy?.length ?? 0,
       ),
       numberOfReposts: THelperFunctions.humanizeNumber(
-        post.repostBy!.length,
+        post.repostBy?.length ?? 0,
       ),
       text: post.text!,
       hasText: post.text?.isNotEmpty ?? false,
@@ -64,6 +66,10 @@ class PostCardState {
       hasReposts: post.repostBy?.isNotEmpty ?? false,
       hasComments: post.commentBy?.isNotEmpty ?? false,
       hasLikes: post.likedBy?.isNotEmpty ?? false,
+      isProjectRepost: post.project != null,
+      isProjectQuote: post.project != null &&
+          ((post.text?.isNotEmpty ?? false) ||
+              (post.imageUrls?.isNotEmpty ?? false)),
     );
   }
 
@@ -87,6 +93,8 @@ class PostCardState {
   final bool hasReposts;
   final bool hasComments;
   final bool hasLikes;
+  final bool isProjectRepost;
+  final bool isProjectQuote;
 
   @override
   String toString() {
@@ -114,6 +122,8 @@ class PostCardState {
     bool? hasReposts,
     bool? hasComments,
     bool? hasLikes,
+    bool? isProjectRepost,
+    bool? isProjectQuote,
   }) {
     return PostCardState(
       timeAgo: timeAgo ?? this.timeAgo,
@@ -136,6 +146,8 @@ class PostCardState {
       hasReposts: hasReposts ?? this.hasReposts,
       hasComments: hasComments ?? this.hasComments,
       hasLikes: hasLikes ?? this.hasLikes,
+      isProjectRepost: isProjectRepost ?? this.isProjectRepost,
+      isProjectQuote: isProjectQuote ?? this.isProjectQuote,
     );
   }
 

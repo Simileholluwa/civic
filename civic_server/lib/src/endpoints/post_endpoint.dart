@@ -8,60 +8,86 @@ class PostEndpoint extends Endpoint {
     Session session,
     Post post,
   ) async {
-    try {
-      final user = await authUser(
-        session,
-      );
-      if (post.id != null) {
-        await validatePostOwnership(
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(
           session,
-          post.id!,
-          user,
         );
-        final sentPost = await Post.db.updateRow(
-          session,
-          post.copyWith(
-            updatedAt: DateTime.now(),
-          ),
-        );
-        await HashtagEndpoint().sendPostHashtags(
-          session,
-          post.tags ?? [],
-          post.id!,
-        );
-        return sentPost;
-      } else {
-        final sentPost = await Post.db.insertRow(
-          session,
-          post.copyWith(
-            ownerId: user.id,
-            owner: user,
-            dateCreated: DateTime.now(),
-            repostBy: [],
-            likedBy: [],
-            commentBy: [],
-          ),
-        );
-        if (sentPost.id == null) {
-          throw Exception('Post ID is null after insert');
-        } else {
+        if (post.id != null) {
+          await validatePostOwnership(
+            session,
+            post.id!,
+            user,
+          );
+          final sentPost = await Post.db.updateRow(
+            session,
+            post.copyWith(
+              updatedAt: DateTime.now(),
+            ),
+            transaction: transaction,
+          );
           await HashtagEndpoint().sendPostHashtags(
             session,
             post.tags ?? [],
-            sentPost.id!,
+            post.id!,
           );
+          return sentPost;
+        } else {
+          if (post.project != null) {
+            final project = await Project.db.findById(
+              session,
+              post.project!.id!,
+            );
+            if (project == null) {
+              throw PostException(
+                message: 'Project not found',
+              );
+            }
+          }
+          final sentPost = await Post.db.insertRow(
+            session,
+            post.copyWith(
+              ownerId: user.id,
+              owner: user,
+              dateCreated: DateTime.now(),
+              repostBy: [],
+              likedBy: [],
+              commentBy: [],
+            ),
+            transaction: transaction,
+          );
+          if (sentPost.id == null) {
+            throw Exception('Post ID is null after insert');
+          } else {
+            await HashtagEndpoint().sendPostHashtags(
+              session,
+              post.tags ?? [],
+              sentPost.id!,
+            );
+            await Project.db.updateRow(
+              session,
+              post.project!.copyWith(
+                numberOfReposts: post.project!.numberOfReposts! + 1,
+                repostedBy: <int>{
+                  ...post.project!.repostedBy ?? [],
+                  user.userInfoId
+                }.toList(),
+              ),
+              transaction: transaction,
+            );
+          }
+          return sentPost;
         }
-        return sentPost;
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in savePost: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        return null;
       }
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in savePost: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-      return null;
-    }
+    });
   }
 
   Future<void> schedulePost(
@@ -83,6 +109,16 @@ class PostEndpoint extends Endpoint {
     final result = await Post.db.findById(
       session,
       id,
+      include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+        project: Project.include(
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+        ),
+      ),
     );
     return result;
   }
@@ -103,10 +139,14 @@ class PostEndpoint extends Endpoint {
       limit: limit,
       offset: (page * limit) - limit,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
-      ),
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+          project: Project.include(
+            owner: UserRecord.include(
+              userInfo: UserInfo.include(),
+            ),
+          )),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );
@@ -193,8 +233,7 @@ class PostEndpoint extends Endpoint {
         await PostLikes.db.deleteWhere(
           session,
           where: (t) =>
-              t.postId.equals(postId) &
-              t.ownerId.equals(user.userInfoId),
+              t.postId.equals(postId) & t.ownerId.equals(user.userInfoId),
           transaction: transaction,
         );
       } else {

@@ -47,4 +47,11 @@ class PaginatedProjectList extends _$PaginatedProjectList {
   void refresh() {
     pagingController.refresh();
   }
+
+  void addProject(Project project) {
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: [project, ...pagingController.itemList ?? []],
+    );
+  }
 }

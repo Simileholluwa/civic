@@ -33,7 +33,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
-    this.completionRate,
     this.physicalLocations,
     this.virtualLocations,
     this.manualLocations,
@@ -41,8 +40,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.dateCreated,
     this.updatedAt,
     this.likedBy,
-    this.commentBy,
-    this.repostBy,
+    this.repostedBy,
+    this.reviewedBy,
+    this.verifiedBy,
     this.overallRating,
     this.overallLocationRating,
     this.overallDescriptionRating,
@@ -50,8 +50,14 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.overallAttachmentsRating,
     this.overAllCategoryRating,
     this.overallFundingRating,
-    this.numberOfReviews,
-  });
+    int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
+  })  : numberOfReviews = numberOfReviews ?? 0,
+        numberOfReposts = numberOfReposts ?? 0,
+        numberOfVerifies = numberOfVerifies ?? 0,
+        numberOfLikes = numberOfLikes ?? 0;
 
   factory Project({
     int? id,
@@ -72,7 +78,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -80,8 +85,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -90,6 +96,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -125,7 +134,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
           (jsonSerialization['projectPDFAttachments'] as List?)
               ?.map((e) => e as String)
               .toList(),
-      completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
       physicalLocations: (jsonSerialization['physicalLocations'] as List?)
           ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -146,10 +154,13 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      commentBy: (jsonSerialization['commentBy'] as List?)
+      repostedBy: (jsonSerialization['repostedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      repostBy: (jsonSerialization['repostBy'] as List?)
+      reviewedBy: (jsonSerialization['reviewedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      verifiedBy: (jsonSerialization['verifiedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
@@ -166,6 +177,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       overallFundingRating:
           (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
       numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
+      numberOfReposts: jsonSerialization['numberOfReposts'] as int?,
+      numberOfVerifies: jsonSerialization['numberOfVerifies'] as int?,
+      numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
     );
   }
 
@@ -210,8 +224,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<String>? projectPDFAttachments;
 
-  double? completionRate;
-
   List<_i3.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
@@ -226,9 +238,11 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<int>? likedBy;
 
-  List<int>? commentBy;
+  List<int>? repostedBy;
 
-  List<int>? repostBy;
+  List<int>? reviewedBy;
+
+  List<int>? verifiedBy;
 
   double? overallRating;
 
@@ -246,9 +260,18 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int? numberOfReviews;
 
+  int? numberOfReposts;
+
+  int? numberOfVerifies;
+
+  int? numberOfLikes;
+
   @override
   _i1.Table get table => t;
 
+  /// Returns a shallow copy of this [Project]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Project copyWith({
     int? id,
     int? ownerId,
@@ -268,7 +291,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -276,8 +298,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -286,6 +309,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -310,7 +336,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
         'projectImageAttachments': projectImageAttachments?.toJson(),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
-      if (completionRate != null) 'completionRate': completionRate,
       if (physicalLocations != null)
         'physicalLocations':
             physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
@@ -321,8 +346,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentBy != null) 'commentBy': commentBy?.toJson(),
-      if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
+      if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
+      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -336,6 +362,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
+      if (numberOfReposts != null) 'numberOfReposts': numberOfReposts,
+      if (numberOfVerifies != null) 'numberOfVerifies': numberOfVerifies,
+      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
     };
   }
 
@@ -362,7 +391,6 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
         'projectImageAttachments': projectImageAttachments?.toJson(),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
-      if (completionRate != null) 'completionRate': completionRate,
       if (physicalLocations != null)
         'physicalLocations': physicalLocations?.toJson(
             valueToJson: (v) => v.toJsonForProtocol()),
@@ -373,8 +401,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentBy != null) 'commentBy': commentBy?.toJson(),
-      if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
+      if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
+      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -388,6 +417,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
+      if (numberOfReposts != null) 'numberOfReposts': numberOfReposts,
+      if (numberOfVerifies != null) 'numberOfVerifies': numberOfVerifies,
+      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
     };
   }
 
@@ -443,7 +475,6 @@ class _ProjectImpl extends Project {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -451,8 +482,9 @@ class _ProjectImpl extends Project {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -461,6 +493,9 @@ class _ProjectImpl extends Project {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -480,7 +515,6 @@ class _ProjectImpl extends Project {
           fundingNote: fundingNote,
           projectImageAttachments: projectImageAttachments,
           projectPDFAttachments: projectPDFAttachments,
-          completionRate: completionRate,
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
           manualLocations: manualLocations,
@@ -488,8 +522,9 @@ class _ProjectImpl extends Project {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           likedBy: likedBy,
-          commentBy: commentBy,
-          repostBy: repostBy,
+          repostedBy: repostedBy,
+          reviewedBy: reviewedBy,
+          verifiedBy: verifiedBy,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
           overallDescriptionRating: overallDescriptionRating,
@@ -498,8 +533,14 @@ class _ProjectImpl extends Project {
           overAllCategoryRating: overAllCategoryRating,
           overallFundingRating: overallFundingRating,
           numberOfReviews: numberOfReviews,
+          numberOfReposts: numberOfReposts,
+          numberOfVerifies: numberOfVerifies,
+          numberOfLikes: numberOfLikes,
         );
 
+  /// Returns a shallow copy of this [Project]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Project copyWith({
     Object? id = _Undefined,
@@ -520,7 +561,6 @@ class _ProjectImpl extends Project {
     Object? fundingNote = _Undefined,
     Object? projectImageAttachments = _Undefined,
     Object? projectPDFAttachments = _Undefined,
-    Object? completionRate = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? manualLocations = _Undefined,
@@ -528,8 +568,9 @@ class _ProjectImpl extends Project {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? likedBy = _Undefined,
-    Object? commentBy = _Undefined,
-    Object? repostBy = _Undefined,
+    Object? repostedBy = _Undefined,
+    Object? reviewedBy = _Undefined,
+    Object? verifiedBy = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
     Object? overallDescriptionRating = _Undefined,
@@ -538,6 +579,9 @@ class _ProjectImpl extends Project {
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
     Object? numberOfReviews = _Undefined,
+    Object? numberOfReposts = _Undefined,
+    Object? numberOfVerifies = _Undefined,
+    Object? numberOfLikes = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -568,8 +612,6 @@ class _ProjectImpl extends Project {
       projectPDFAttachments: projectPDFAttachments is List<String>?
           ? projectPDFAttachments
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
-      completionRate:
-          completionRate is double? ? completionRate : this.completionRate,
       physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
@@ -586,12 +628,15 @@ class _ProjectImpl extends Project {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
-      commentBy: commentBy is List<int>?
-          ? commentBy
-          : this.commentBy?.map((e0) => e0).toList(),
-      repostBy: repostBy is List<int>?
-          ? repostBy
-          : this.repostBy?.map((e0) => e0).toList(),
+      repostedBy: repostedBy is List<int>?
+          ? repostedBy
+          : this.repostedBy?.map((e0) => e0).toList(),
+      reviewedBy: reviewedBy is List<int>?
+          ? reviewedBy
+          : this.reviewedBy?.map((e0) => e0).toList(),
+      verifiedBy: verifiedBy is List<int>?
+          ? verifiedBy
+          : this.verifiedBy?.map((e0) => e0).toList(),
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
       overallLocationRating: overallLocationRating is double?
@@ -614,6 +659,11 @@ class _ProjectImpl extends Project {
           : this.overallFundingRating,
       numberOfReviews:
           numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
+      numberOfReposts:
+          numberOfReposts is int? ? numberOfReposts : this.numberOfReposts,
+      numberOfVerifies:
+          numberOfVerifies is int? ? numberOfVerifies : this.numberOfVerifies,
+      numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
     );
   }
 }
@@ -684,10 +734,6 @@ class ProjectTable extends _i1.Table {
       'projectPDFAttachments',
       this,
     );
-    completionRate = _i1.ColumnDouble(
-      'completionRate',
-      this,
-    );
     physicalLocations = _i1.ColumnSerializable(
       'physicalLocations',
       this,
@@ -716,12 +762,16 @@ class ProjectTable extends _i1.Table {
       'likedBy',
       this,
     );
-    commentBy = _i1.ColumnSerializable(
-      'commentBy',
+    repostedBy = _i1.ColumnSerializable(
+      'repostedBy',
       this,
     );
-    repostBy = _i1.ColumnSerializable(
-      'repostBy',
+    reviewedBy = _i1.ColumnSerializable(
+      'reviewedBy',
+      this,
+    );
+    verifiedBy = _i1.ColumnSerializable(
+      'verifiedBy',
       this,
     );
     overallRating = _i1.ColumnDouble(
@@ -755,6 +805,22 @@ class ProjectTable extends _i1.Table {
     numberOfReviews = _i1.ColumnInt(
       'numberOfReviews',
       this,
+      hasDefault: true,
+    );
+    numberOfReposts = _i1.ColumnInt(
+      'numberOfReposts',
+      this,
+      hasDefault: true,
+    );
+    numberOfVerifies = _i1.ColumnInt(
+      'numberOfVerifies',
+      this,
+      hasDefault: true,
+    );
+    numberOfLikes = _i1.ColumnInt(
+      'numberOfLikes',
+      this,
+      hasDefault: true,
     );
   }
 
@@ -792,8 +858,6 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnSerializable projectPDFAttachments;
 
-  late final _i1.ColumnDouble completionRate;
-
   late final _i1.ColumnSerializable physicalLocations;
 
   late final _i1.ColumnSerializable virtualLocations;
@@ -808,9 +872,11 @@ class ProjectTable extends _i1.Table {
 
   late final _i1.ColumnSerializable likedBy;
 
-  late final _i1.ColumnSerializable commentBy;
+  late final _i1.ColumnSerializable repostedBy;
 
-  late final _i1.ColumnSerializable repostBy;
+  late final _i1.ColumnSerializable reviewedBy;
+
+  late final _i1.ColumnSerializable verifiedBy;
 
   late final _i1.ColumnDouble overallRating;
 
@@ -827,6 +893,12 @@ class ProjectTable extends _i1.Table {
   late final _i1.ColumnDouble overallFundingRating;
 
   late final _i1.ColumnInt numberOfReviews;
+
+  late final _i1.ColumnInt numberOfReposts;
+
+  late final _i1.ColumnInt numberOfVerifies;
+
+  late final _i1.ColumnInt numberOfLikes;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -860,7 +932,6 @@ class ProjectTable extends _i1.Table {
         fundingNote,
         projectImageAttachments,
         projectPDFAttachments,
-        completionRate,
         physicalLocations,
         virtualLocations,
         manualLocations,
@@ -868,8 +939,9 @@ class ProjectTable extends _i1.Table {
         dateCreated,
         updatedAt,
         likedBy,
-        commentBy,
-        repostBy,
+        repostedBy,
+        reviewedBy,
+        verifiedBy,
         overallRating,
         overallLocationRating,
         overallDescriptionRating,
@@ -878,6 +950,9 @@ class ProjectTable extends _i1.Table {
         overAllCategoryRating,
         overallFundingRating,
         numberOfReviews,
+        numberOfReposts,
+        numberOfVerifies,
+        numberOfLikes,
       ];
 
   @override
@@ -928,6 +1003,28 @@ class ProjectRepository {
 
   final attachRow = const ProjectAttachRowRepository._();
 
+  /// Returns a list of [Project]s matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order of the items use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// The maximum number of items can be set by [limit]. If no limit is set,
+  /// all items matching the query will be returned.
+  ///
+  /// [offset] defines how many items to skip, after which [limit] (or all)
+  /// items are read from the database.
+  ///
+  /// ```dart
+  /// var persons = await Persons.db.find(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.firstName,
+  ///   limit: 100,
+  /// );
+  /// ```
   Future<List<Project>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectTable>? where,
@@ -951,6 +1048,23 @@ class ProjectRepository {
     );
   }
 
+  /// Returns the first matching [Project] matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// [offset] defines how many items to skip, after which the next one will be picked.
+  ///
+  /// ```dart
+  /// var youngestPerson = await Persons.db.findFirstRow(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.age,
+  /// );
+  /// ```
   Future<Project?> findFirstRow(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectTable>? where,
@@ -972,6 +1086,7 @@ class ProjectRepository {
     );
   }
 
+  /// Finds a single [Project] by its [id] or null if no such row exists.
   Future<Project?> findById(
     _i1.Session session,
     int id, {
@@ -985,6 +1100,12 @@ class ProjectRepository {
     );
   }
 
+  /// Inserts all [Project]s in the list and returns the inserted rows.
+  ///
+  /// The returned [Project]s will have their `id` fields set.
+  ///
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// insert, none of the rows will be inserted.
   Future<List<Project>> insert(
     _i1.Session session,
     List<Project> rows, {
@@ -996,6 +1117,9 @@ class ProjectRepository {
     );
   }
 
+  /// Inserts a single [Project] and returns the inserted row.
+  ///
+  /// The returned [Project] will have its `id` field set.
   Future<Project> insertRow(
     _i1.Session session,
     Project row, {
@@ -1007,6 +1131,11 @@ class ProjectRepository {
     );
   }
 
+  /// Updates all [Project]s in the list and returns the updated rows. If
+  /// [columns] is provided, only those columns will be updated. Defaults to
+  /// all columns.
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// update, none of the rows will be updated.
   Future<List<Project>> update(
     _i1.Session session,
     List<Project> rows, {
@@ -1020,6 +1149,9 @@ class ProjectRepository {
     );
   }
 
+  /// Updates a single [Project]. The row needs to have its id set.
+  /// Optionally, a list of [columns] can be provided to only update those
+  /// columns. Defaults to all columns.
   Future<Project> updateRow(
     _i1.Session session,
     Project row, {
@@ -1033,6 +1165,9 @@ class ProjectRepository {
     );
   }
 
+  /// Deletes all [Project]s in the list and returns the deleted rows.
+  /// This is an atomic operation, meaning that if one of the rows fail to
+  /// be deleted, none of the rows will be deleted.
   Future<List<Project>> delete(
     _i1.Session session,
     List<Project> rows, {
@@ -1044,6 +1179,7 @@ class ProjectRepository {
     );
   }
 
+  /// Deletes a single [Project].
   Future<Project> deleteRow(
     _i1.Session session,
     Project row, {
@@ -1055,6 +1191,7 @@ class ProjectRepository {
     );
   }
 
+  /// Deletes all rows matching the [where] expression.
   Future<List<Project>> deleteWhere(
     _i1.Session session, {
     required _i1.WhereExpressionBuilder<ProjectTable> where,
@@ -1066,6 +1203,8 @@ class ProjectRepository {
     );
   }
 
+  /// Counts the number of rows matching the [where] expression. If omitted,
+  /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<ProjectTable>? where,
@@ -1083,6 +1222,8 @@ class ProjectRepository {
 class ProjectAttachRowRepository {
   const ProjectAttachRowRepository._();
 
+  /// Creates a relation between the given [Project] and [UserRecord]
+  /// by setting the [Project]'s foreign key `ownerId` to refer to the [UserRecord].
   Future<void> owner(
     _i1.Session session,
     Project project,

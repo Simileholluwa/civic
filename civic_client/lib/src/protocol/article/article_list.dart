@@ -56,6 +56,9 @@ abstract class ArticleList implements _i1.SerializableModel {
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [ArticleList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ArticleList copyWith({
     List<_i2.Article>? results,
     int? count,
@@ -99,6 +102,9 @@ class _ArticleListImpl extends ArticleList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [ArticleList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ArticleList copyWith({
     List<_i2.Article>? results,

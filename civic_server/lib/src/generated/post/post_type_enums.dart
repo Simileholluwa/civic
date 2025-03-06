@@ -24,21 +24,21 @@ enum PostType implements _i1.SerializableModel {
   static PostType fromJson(int index) {
     switch (index) {
       case 0:
-        return text;
+        return PostType.text;
       case 1:
-        return video;
+        return PostType.video;
       case 2:
-        return textWithVideo;
+        return PostType.textWithVideo;
       case 3:
-        return textWithImages;
+        return PostType.textWithImages;
       case 4:
-        return images;
+        return PostType.images;
       case 5:
-        return image;
+        return PostType.image;
       case 6:
-        return textWithImage;
+        return PostType.textWithImage;
       case 7:
-        return none;
+        return PostType.none;
       default:
         throw ArgumentError('Value "$index" cannot be converted to "PostType"');
     }

@@ -19,9 +19,13 @@ class ProjectCardState {
   final String completionRate;
   final String duration;
   final String numberOfLikes;
-  final String numberOfComments;
+  final String numberOfReviews;
   final String numberOfReposts;
+  final String numberOfVerifies;
   final bool hasLiked;
+  final bool hasReviewed;
+  final bool hasReposted;
+  final bool hasVerified;
   final UserRecord creator;
   final bool canVet;
   String? startDateISO;
@@ -50,9 +54,13 @@ class ProjectCardState {
     required this.completionRate,
     required this.duration,
     required this.numberOfLikes,
-    required this.numberOfComments,
+    required this.numberOfReviews,
     required this.numberOfReposts,
+    required this.numberOfVerifies,
     this.hasLiked = false,
+    required this.hasReviewed,
+    required this.hasReposted,
+    required this.hasVerified,
     required this.creator,
     required this.canVet,
     this.startDateISO,
@@ -65,8 +73,8 @@ class ProjectCardState {
     this.fundingCategory,
     this.fundingSubCategory,
     this.rawDescription,
-    this.hasPdf,
     this.pdfAttachments,
+    this.hasPdf,
     this.locations,
     this.hasLocation,
     this.toggleFilter = false,
@@ -83,9 +91,13 @@ class ProjectCardState {
     String? completionRate,
     String? duration,
     String? numberOfLikes,
-    String? numberOfComments,
+    String? numberOfReviews,
     String? numberOfReposts,
+    String? numberOfVerifies,
     bool? hasLiked,
+    bool? hasReviewed,
+    bool? hasReposted,
+    bool? hasVerified,
     UserRecord? creator,
     bool? canVet,
     String? startDateISO,
@@ -115,15 +127,21 @@ class ProjectCardState {
       completionRate: completionRate ?? this.completionRate,
       duration: duration ?? this.duration,
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
-      numberOfComments: numberOfComments ?? this.numberOfComments,
+      numberOfReviews: numberOfReviews ?? this.numberOfReviews,
       numberOfReposts: numberOfReposts ?? this.numberOfReposts,
+      numberOfVerifies: numberOfVerifies ?? this.numberOfVerifies,
       hasLiked: hasLiked ?? this.hasLiked,
+      hasReviewed: hasReviewed ?? this.hasReviewed,
+      hasReposted: hasReposted ?? this.hasReposted,
+      hasVerified: hasVerified ?? this.hasVerified,
       creator: creator ?? this.creator,
       canVet: canVet ?? this.canVet,
       startDateISO: startDateISO ?? this.startDateISO,
       endDateISO: endDateISO ?? this.endDateISO,
-      percentageElapsedInDouble: percentageElapsedInDouble ?? this.percentageElapsedInDouble,
-      percentageElapsedInString: percentageElapsedInString ?? this.percentageElapsedInString,
+      percentageElapsedInDouble:
+          percentageElapsedInDouble ?? this.percentageElapsedInDouble,
+      percentageElapsedInString:
+          percentageElapsedInString ?? this.percentageElapsedInString,
       category: category ?? this.category,
       subCategory: subCategory ?? this.subCategory,
       fundingAmount: fundingAmount ?? this.fundingAmount,
@@ -140,7 +158,7 @@ class ProjectCardState {
 
   @override
   String toString() {
-    return 'ProjectCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments)';
+    return 'ProjectCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfReviews)';
   }
 
   factory ProjectCardState.populate(
@@ -179,14 +197,26 @@ class ProjectCardState {
       numberOfLikes: THelperFunctions.humanizeNumber(
         project.likedBy!.length,
       ),
-      numberOfComments: THelperFunctions.humanizeNumber(
-        project.commentBy!.length,
+      numberOfReviews: THelperFunctions.humanizeNumber(
+        project.numberOfReviews!,
+      ),
+      numberOfVerifies: THelperFunctions.humanizeNumber(
+        project.numberOfVerifies!,
       ),
       hasLiked: project.likedBy!.contains(
-            userId,
-          ),
+        userId,
+      ),
+      hasReposted: project.repostedBy!.contains(
+        userId,
+      ),
+      hasReviewed: project.reviewedBy !.contains(
+        userId,
+      ),
+      hasVerified: project.verifiedBy!.contains(
+        userId,
+      ),
       numberOfReposts: THelperFunctions.humanizeNumber(
-        project.repostBy!.length,
+        project.numberOfReposts!,
       ),
       canVet: ProjectHelperFunctions.canVet(
         project.startDate!,

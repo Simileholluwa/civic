@@ -67,6 +67,9 @@ abstract class ProjectLikes implements _i1.SerializableModel {
 
   DateTime? dateCreated;
 
+  /// Returns a shallow copy of this [ProjectLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectLikes copyWith({
     int? id,
     int? projectId,
@@ -112,6 +115,9 @@ class _ProjectLikesImpl extends ProjectLikes {
           dateCreated: dateCreated,
         );
 
+  /// Returns a shallow copy of this [ProjectLikes]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectLikes copyWith({
     Object? id = _Undefined,

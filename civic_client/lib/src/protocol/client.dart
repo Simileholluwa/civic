@@ -514,23 +514,6 @@ class EndpointProject extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<void> updateCount(
-    int projectId,
-    int userId,
-    String field,
-    bool isAdding,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'updateCount',
-        {
-          'projectId': projectId,
-          'userId': userId,
-          'field': field,
-          'isAdding': isAdding,
-        },
-      );
-
   _i2.Future<_i18.ProjectToggleLikeResponse> toggleLike(int projectId) =>
       caller.callServerEndpoint<_i18.ProjectToggleLikeResponse>(
         'project',

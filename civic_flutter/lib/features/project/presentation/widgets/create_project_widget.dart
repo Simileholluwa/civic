@@ -39,7 +39,10 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const ProjectProgressIndicator(),
-        const Divider(height: 0),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4,),
+          child: const Divider(height: 0),
+        ),
         Expanded(
           child: PageView(
             controller: pageController,

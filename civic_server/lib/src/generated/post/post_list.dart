@@ -57,6 +57,9 @@ abstract class PostList
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [PostList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostList copyWith({
     List<_i2.Post>? results,
     int? count,
@@ -112,6 +115,9 @@ class _PostListImpl extends PostList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [PostList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostList copyWith({
     List<_i2.Post>? results,

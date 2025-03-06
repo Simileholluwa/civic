@@ -125,6 +125,9 @@ abstract class PostComment implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   _i1.Table get table => t;
 
+  /// Returns a shallow copy of this [PostComment]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostComment copyWith({
     int? id,
     int? postId,
@@ -254,6 +257,9 @@ class _PostCommentImpl extends PostComment {
           parent: parent,
         );
 
+  /// Returns a shallow copy of this [PostComment]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostComment copyWith({
     Object? id = _Undefined,
@@ -490,6 +496,28 @@ class PostCommentRepository {
 
   final detachRow = const PostCommentDetachRowRepository._();
 
+  /// Returns a list of [PostComment]s matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order of the items use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// The maximum number of items can be set by [limit]. If no limit is set,
+  /// all items matching the query will be returned.
+  ///
+  /// [offset] defines how many items to skip, after which [limit] (or all)
+  /// items are read from the database.
+  ///
+  /// ```dart
+  /// var persons = await Persons.db.find(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.firstName,
+  ///   limit: 100,
+  /// );
+  /// ```
   Future<List<PostComment>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostCommentTable>? where,
@@ -513,6 +541,23 @@ class PostCommentRepository {
     );
   }
 
+  /// Returns the first matching [PostComment] matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// [offset] defines how many items to skip, after which the next one will be picked.
+  ///
+  /// ```dart
+  /// var youngestPerson = await Persons.db.findFirstRow(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.age,
+  /// );
+  /// ```
   Future<PostComment?> findFirstRow(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostCommentTable>? where,
@@ -534,6 +579,7 @@ class PostCommentRepository {
     );
   }
 
+  /// Finds a single [PostComment] by its [id] or null if no such row exists.
   Future<PostComment?> findById(
     _i1.Session session,
     int id, {
@@ -547,6 +593,12 @@ class PostCommentRepository {
     );
   }
 
+  /// Inserts all [PostComment]s in the list and returns the inserted rows.
+  ///
+  /// The returned [PostComment]s will have their `id` fields set.
+  ///
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// insert, none of the rows will be inserted.
   Future<List<PostComment>> insert(
     _i1.Session session,
     List<PostComment> rows, {
@@ -558,6 +610,9 @@ class PostCommentRepository {
     );
   }
 
+  /// Inserts a single [PostComment] and returns the inserted row.
+  ///
+  /// The returned [PostComment] will have its `id` field set.
   Future<PostComment> insertRow(
     _i1.Session session,
     PostComment row, {
@@ -569,6 +624,11 @@ class PostCommentRepository {
     );
   }
 
+  /// Updates all [PostComment]s in the list and returns the updated rows. If
+  /// [columns] is provided, only those columns will be updated. Defaults to
+  /// all columns.
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// update, none of the rows will be updated.
   Future<List<PostComment>> update(
     _i1.Session session,
     List<PostComment> rows, {
@@ -582,6 +642,9 @@ class PostCommentRepository {
     );
   }
 
+  /// Updates a single [PostComment]. The row needs to have its id set.
+  /// Optionally, a list of [columns] can be provided to only update those
+  /// columns. Defaults to all columns.
   Future<PostComment> updateRow(
     _i1.Session session,
     PostComment row, {
@@ -595,6 +658,9 @@ class PostCommentRepository {
     );
   }
 
+  /// Deletes all [PostComment]s in the list and returns the deleted rows.
+  /// This is an atomic operation, meaning that if one of the rows fail to
+  /// be deleted, none of the rows will be deleted.
   Future<List<PostComment>> delete(
     _i1.Session session,
     List<PostComment> rows, {
@@ -606,6 +672,7 @@ class PostCommentRepository {
     );
   }
 
+  /// Deletes a single [PostComment].
   Future<PostComment> deleteRow(
     _i1.Session session,
     PostComment row, {
@@ -617,6 +684,7 @@ class PostCommentRepository {
     );
   }
 
+  /// Deletes all rows matching the [where] expression.
   Future<List<PostComment>> deleteWhere(
     _i1.Session session, {
     required _i1.WhereExpressionBuilder<PostCommentTable> where,
@@ -628,6 +696,8 @@ class PostCommentRepository {
     );
   }
 
+  /// Counts the number of rows matching the [where] expression. If omitted,
+  /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostCommentTable>? where,
@@ -645,6 +715,8 @@ class PostCommentRepository {
 class PostCommentAttachRowRepository {
   const PostCommentAttachRowRepository._();
 
+  /// Creates a relation between the given [PostComment] and [Post]
+  /// by setting the [PostComment]'s foreign key `postId` to refer to the [Post].
   Future<void> post(
     _i1.Session session,
     PostComment postComment,
@@ -666,6 +738,8 @@ class PostCommentAttachRowRepository {
     );
   }
 
+  /// Creates a relation between the given [PostComment] and [UserRecord]
+  /// by setting the [PostComment]'s foreign key `ownerId` to refer to the [UserRecord].
   Future<void> owner(
     _i1.Session session,
     PostComment postComment,
@@ -687,6 +761,8 @@ class PostCommentAttachRowRepository {
     );
   }
 
+  /// Creates a relation between the given [PostComment] and [PostComment]
+  /// by setting the [PostComment]'s foreign key `parentId` to refer to the [PostComment].
   Future<void> parent(
     _i1.Session session,
     PostComment postComment,
@@ -712,6 +788,11 @@ class PostCommentAttachRowRepository {
 class PostCommentDetachRowRepository {
   const PostCommentDetachRowRepository._();
 
+  /// Detaches the relation between this [PostComment] and the [PostComment] set in `parent`
+  /// by setting the [PostComment]'s foreign key `parentId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
   Future<void> parent(
     _i1.Session session,
     PostComment postcomment, {

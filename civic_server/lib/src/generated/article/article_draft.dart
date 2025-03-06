@@ -56,6 +56,9 @@ abstract class ArticleDraft
 
   DateTime? createdAt;
 
+  /// Returns a shallow copy of this [ArticleDraft]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ArticleDraft copyWith({
     int? draftId,
     int? ownerId,
@@ -113,6 +116,9 @@ class _ArticleDraftImpl extends ArticleDraft {
           createdAt: createdAt,
         );
 
+  /// Returns a shallow copy of this [ArticleDraft]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ArticleDraft copyWith({
     Object? draftId = _Undefined,

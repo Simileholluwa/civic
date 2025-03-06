@@ -14,6 +14,7 @@ import '../user/user_record.dart' as _i2;
 import '../post/post_type_enums.dart' as _i3;
 import '../general/aws_places.dart' as _i4;
 import '../post/posts_hashtags.dart' as _i5;
+import '../project/project.dart' as _i6;
 
 abstract class Post implements _i1.SerializableModel {
   Post._({
@@ -34,6 +35,9 @@ abstract class Post implements _i1.SerializableModel {
     this.likedBy,
     this.commentBy,
     this.repostBy,
+    this.projectId,
+    this.project,
+    this.isProjectRepost,
   });
 
   factory Post({
@@ -54,6 +58,9 @@ abstract class Post implements _i1.SerializableModel {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -103,6 +110,12 @@ abstract class Post implements _i1.SerializableModel {
       repostBy: (jsonSerialization['repostBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      projectId: jsonSerialization['projectId'] as int?,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i6.Project.fromJson(
+              (jsonSerialization['project'] as Map<String, dynamic>)),
+      isProjectRepost: jsonSerialization['isProjectRepost'] as bool?,
     );
   }
 
@@ -143,6 +156,15 @@ abstract class Post implements _i1.SerializableModel {
 
   List<int>? repostBy;
 
+  int? projectId;
+
+  _i6.Project? project;
+
+  bool? isProjectRepost;
+
+  /// Returns a shallow copy of this [Post]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Post copyWith({
     int? id,
     int? ownerId,
@@ -161,6 +183,9 @@ abstract class Post implements _i1.SerializableModel {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -186,6 +211,9 @@ abstract class Post implements _i1.SerializableModel {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
+      if (isProjectRepost != null) 'isProjectRepost': isProjectRepost,
     };
   }
 
@@ -216,6 +244,9 @@ class _PostImpl extends Post {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -234,8 +265,14 @@ class _PostImpl extends Post {
           likedBy: likedBy,
           commentBy: commentBy,
           repostBy: repostBy,
+          projectId: projectId,
+          project: project,
+          isProjectRepost: isProjectRepost,
         );
 
+  /// Returns a shallow copy of this [Post]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Post copyWith({
     Object? id = _Undefined,
@@ -255,6 +292,9 @@ class _PostImpl extends Post {
     Object? likedBy = _Undefined,
     Object? commentBy = _Undefined,
     Object? repostBy = _Undefined,
+    Object? projectId = _Undefined,
+    Object? project = _Undefined,
+    Object? isProjectRepost = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -290,6 +330,10 @@ class _PostImpl extends Post {
       repostBy: repostBy is List<int>?
           ? repostBy
           : this.repostBy?.map((e0) => e0).toList(),
+      projectId: projectId is int? ? projectId : this.projectId,
+      project: project is _i6.Project? ? project : this.project?.copyWith(),
+      isProjectRepost:
+          isProjectRepost is bool? ? isProjectRepost : this.isProjectRepost,
     );
   }
 }

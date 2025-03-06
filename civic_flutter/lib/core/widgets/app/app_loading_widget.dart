@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class AppLoadingWidget extends StatelessWidget {
   const AppLoadingWidget({
-    required this.backgroundColor,
     this.size = 100,
+    this.textWidget,
     super.key,
   });
 
-  final Color backgroundColor;
   final double size;
+  final Widget? textWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,9 @@ class AppLoadingWidget extends StatelessWidget {
                 width: size,
                 child: CircularProgressIndicator(
                   color: TColors.primary,
-                  backgroundColor: backgroundColor,
+                  backgroundColor:THelperFunctions.isDarkMode(context)
+                ? TColors.dark
+                : TColors.light,
                   strokeWidth: 6,
                 ),
               ),
@@ -43,6 +45,7 @@ class AppLoadingWidget extends StatelessWidget {
               ),
             ],
           ),
+          textWidget ?? const SizedBox.shrink(),
         ],
       ),
     );

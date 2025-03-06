@@ -19,7 +19,7 @@ class CreatePollScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = THelperFunctions.isDarkMode(context);
+    
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final data = ref.watch(pollDetailProvider(draft, id));
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
@@ -125,7 +125,7 @@ class CreatePollScreen extends ConsumerWidget {
             },
             loading: () {
               return AppLoadingWidget(
-                backgroundColor: isDark ? TColors.dark : TColors.light,
+                
               );
             },
           ),

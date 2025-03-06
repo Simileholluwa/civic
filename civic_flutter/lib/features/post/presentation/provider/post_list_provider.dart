@@ -47,4 +47,11 @@ class PaginatedPostList extends _$PaginatedPostList {
   void refresh() {
     pagingController.refresh();
   }
+
+  void addPost(Post post) {
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: [post, ...pagingController.itemList ?? []],
+    );
+  }
 }

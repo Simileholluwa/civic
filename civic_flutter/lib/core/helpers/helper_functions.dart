@@ -12,14 +12,14 @@ import 'package:intl/intl.dart';
 class THelperFunctions {
   THelperFunctions._();
 
-  static Timer? _debounce;
-
   static const colorizeColors = [
     TColors.primary,
     Colors.blue,
     Colors.yellow,
     Colors.red,
   ];
+
+  static Timer? _debounce;
 
   static Widget animatedText(
     String text,
@@ -209,16 +209,6 @@ class THelperFunctions {
     return wrappedList;
   }
 
-  static bool? _isEmpty(dynamic value) {
-    if (value is String) {
-      return value.toString().trim().isEmpty;
-    }
-    if (value is Iterable || value is Map) {
-      return value.isEmpty as bool?;
-    }
-    return false;
-  }
-
   static bool isNull(dynamic value) => value == null;
 
   static bool? isBlank(dynamic value) {
@@ -308,6 +298,79 @@ class THelperFunctions {
         <String>[],
       );
     }
+  }
+
+  static void onTextChanged(
+    WidgetRef ref,
+    String text,
+    MentionHashtagLinkTextEditingController controller,
+  ) {
+    if (text.isEmpty) {
+      ref
+          .read(
+        mentionSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <UserRecord>[],
+      );
+      ref
+          .read(
+        hashtagsSuggestionsProvider.notifier,
+      )
+          .setSuggestions(
+        <String>[],
+      );
+      return;
+    }
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
+      final lastWord = _getLastWord(
+        ref,
+        text,
+        controller,
+      );
+      if (lastWord.startsWith('@')) {
+        _fetchMentionSuggestions(ref, lastWord);
+      } else if (lastWord.startsWith('#')) {
+        _fetchHashtags(ref, lastWord);
+      } else {
+        ref
+            .read(mentionSuggestionsProvider.notifier)
+            .setSuggestions(<UserRecord>[]);
+      }
+    });
+    _handleMentions(ref, text);
+  }
+
+  static String humanizeDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds}s';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()}w';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()}mo';
+    } else {
+      return '${(difference.inDays / 365).floor()}yr';
+    }
+  }
+
+  static bool? _isEmpty(dynamic value) {
+    if (value is String) {
+      return value.toString().trim().isEmpty;
+    }
+    if (value is Iterable || value is Map) {
+      return value.isEmpty as bool?;
+    }
+    return false;
   }
 
   static void _handleMentions(WidgetRef ref, String text) {
@@ -417,64 +480,4 @@ class THelperFunctions {
       );
     }
   }
-
-  static void onTextChanged(
-    WidgetRef ref,
-    String text,
-    MentionHashtagLinkTextEditingController controller,
-  ) {
-    if (text.isEmpty) {
-      ref
-          .read(
-        mentionSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <UserRecord>[],
-      );
-      ref
-          .read(
-        hashtagsSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <String>[],
-      );
-      return;
-    }
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () {
-      final lastWord = _getLastWord(ref, text, controller,);
-      if (lastWord.startsWith('@')) {
-        _fetchMentionSuggestions(ref, lastWord);
-      } else if (lastWord.startsWith('#')) {
-        _fetchHashtags(ref, lastWord);
-      } else {
-        ref
-            .read(mentionSuggestionsProvider.notifier)
-            .setSuggestions(<UserRecord>[]);
-      }
-    });
-    _handleMentions(ref, text);
-  }
-
-  static String humanizeDateTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inSeconds < 60) {
-      return '${difference.inSeconds}s';
-    } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}d';
-    } else if (difference.inDays < 30) {
-      return '${(difference.inDays / 7).floor()}w';
-    } else if (difference.inDays < 365) {
-      return '${(difference.inDays / 30).floor()}mo';
-    } else {
-      return '${(difference.inDays / 365).floor()}yr';
-    }
-  }
- 
 }

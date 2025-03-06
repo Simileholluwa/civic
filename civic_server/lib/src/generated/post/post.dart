@@ -14,6 +14,7 @@ import '../user/user_record.dart' as _i2;
 import '../post/post_type_enums.dart' as _i3;
 import '../general/aws_places.dart' as _i4;
 import '../post/posts_hashtags.dart' as _i5;
+import '../project/project.dart' as _i6;
 
 abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
   Post._({
@@ -34,6 +35,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     this.likedBy,
     this.commentBy,
     this.repostBy,
+    this.projectId,
+    this.project,
+    this.isProjectRepost,
   });
 
   factory Post({
@@ -54,6 +58,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -103,6 +110,12 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       repostBy: (jsonSerialization['repostBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      projectId: jsonSerialization['projectId'] as int?,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i6.Project.fromJson(
+              (jsonSerialization['project'] as Map<String, dynamic>)),
+      isProjectRepost: jsonSerialization['isProjectRepost'] as bool?,
     );
   }
 
@@ -145,9 +158,18 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<int>? repostBy;
 
+  int? projectId;
+
+  _i6.Project? project;
+
+  bool? isProjectRepost;
+
   @override
   _i1.Table get table => t;
 
+  /// Returns a shallow copy of this [Post]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Post copyWith({
     int? id,
     int? ownerId,
@@ -166,6 +188,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -191,6 +216,9 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
+      if (isProjectRepost != null) 'isProjectRepost': isProjectRepost,
     };
   }
 
@@ -220,16 +248,21 @@ abstract class Post implements _i1.TableRow, _i1.ProtocolSerialization {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (commentBy != null) 'commentBy': commentBy?.toJson(),
       if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJsonForProtocol(),
+      if (isProjectRepost != null) 'isProjectRepost': isProjectRepost,
     };
   }
 
   static PostInclude include({
     _i2.UserRecordInclude? owner,
     _i5.PostsHashtagsIncludeList? hashtags,
+    _i6.ProjectInclude? project,
   }) {
     return PostInclude._(
       owner: owner,
       hashtags: hashtags,
+      project: project,
     );
   }
 
@@ -280,6 +313,9 @@ class _PostImpl extends Post {
     List<int>? likedBy,
     List<int>? commentBy,
     List<int>? repostBy,
+    int? projectId,
+    _i6.Project? project,
+    bool? isProjectRepost,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -298,8 +334,14 @@ class _PostImpl extends Post {
           likedBy: likedBy,
           commentBy: commentBy,
           repostBy: repostBy,
+          projectId: projectId,
+          project: project,
+          isProjectRepost: isProjectRepost,
         );
 
+  /// Returns a shallow copy of this [Post]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Post copyWith({
     Object? id = _Undefined,
@@ -319,6 +361,9 @@ class _PostImpl extends Post {
     Object? likedBy = _Undefined,
     Object? commentBy = _Undefined,
     Object? repostBy = _Undefined,
+    Object? projectId = _Undefined,
+    Object? project = _Undefined,
+    Object? isProjectRepost = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -354,6 +399,10 @@ class _PostImpl extends Post {
       repostBy: repostBy is List<int>?
           ? repostBy
           : this.repostBy?.map((e0) => e0).toList(),
+      projectId: projectId is int? ? projectId : this.projectId,
+      project: project is _i6.Project? ? project : this.project?.copyWith(),
+      isProjectRepost:
+          isProjectRepost is bool? ? isProjectRepost : this.isProjectRepost,
     );
   }
 }
@@ -417,6 +466,14 @@ class PostTable extends _i1.Table {
       'repostBy',
       this,
     );
+    projectId = _i1.ColumnInt(
+      'projectId',
+      this,
+    );
+    isProjectRepost = _i1.ColumnBool(
+      'isProjectRepost',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -453,6 +510,12 @@ class PostTable extends _i1.Table {
 
   late final _i1.ColumnSerializable repostBy;
 
+  late final _i1.ColumnInt projectId;
+
+  _i6.ProjectTable? _project;
+
+  late final _i1.ColumnBool isProjectRepost;
+
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
@@ -477,6 +540,19 @@ class PostTable extends _i1.Table {
           _i5.PostsHashtagsTable(tableRelation: foreignTableRelation),
     );
     return ___hashtags!;
+  }
+
+  _i6.ProjectTable get project {
+    if (_project != null) return _project!;
+    _project = _i1.createRelationTable(
+      relationFieldName: 'project',
+      field: Post.t.projectId,
+      foreignField: _i6.Project.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i6.ProjectTable(tableRelation: foreignTableRelation),
+    );
+    return _project!;
   }
 
   _i1.ManyRelation<_i5.PostsHashtagsTable> get hashtags {
@@ -514,6 +590,8 @@ class PostTable extends _i1.Table {
         likedBy,
         commentBy,
         repostBy,
+        projectId,
+        isProjectRepost,
       ];
 
   @override
@@ -524,6 +602,9 @@ class PostTable extends _i1.Table {
     if (relationField == 'hashtags') {
       return __hashtags;
     }
+    if (relationField == 'project') {
+      return project;
+    }
     return null;
   }
 }
@@ -532,19 +613,24 @@ class PostInclude extends _i1.IncludeObject {
   PostInclude._({
     _i2.UserRecordInclude? owner,
     _i5.PostsHashtagsIncludeList? hashtags,
+    _i6.ProjectInclude? project,
   }) {
     _owner = owner;
     _hashtags = hashtags;
+    _project = project;
   }
 
   _i2.UserRecordInclude? _owner;
 
   _i5.PostsHashtagsIncludeList? _hashtags;
 
+  _i6.ProjectInclude? _project;
+
   @override
   Map<String, _i1.Include?> get includes => {
         'owner': _owner,
         'hashtags': _hashtags,
+        'project': _project,
       };
 
   @override
@@ -582,6 +668,28 @@ class PostRepository {
 
   final detachRow = const PostDetachRowRepository._();
 
+  /// Returns a list of [Post]s matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order of the items use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// The maximum number of items can be set by [limit]. If no limit is set,
+  /// all items matching the query will be returned.
+  ///
+  /// [offset] defines how many items to skip, after which [limit] (or all)
+  /// items are read from the database.
+  ///
+  /// ```dart
+  /// var persons = await Persons.db.find(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.firstName,
+  ///   limit: 100,
+  /// );
+  /// ```
   Future<List<Post>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostTable>? where,
@@ -605,6 +713,23 @@ class PostRepository {
     );
   }
 
+  /// Returns the first matching [Post] matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// [offset] defines how many items to skip, after which the next one will be picked.
+  ///
+  /// ```dart
+  /// var youngestPerson = await Persons.db.findFirstRow(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.age,
+  /// );
+  /// ```
   Future<Post?> findFirstRow(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostTable>? where,
@@ -626,6 +751,7 @@ class PostRepository {
     );
   }
 
+  /// Finds a single [Post] by its [id] or null if no such row exists.
   Future<Post?> findById(
     _i1.Session session,
     int id, {
@@ -639,6 +765,12 @@ class PostRepository {
     );
   }
 
+  /// Inserts all [Post]s in the list and returns the inserted rows.
+  ///
+  /// The returned [Post]s will have their `id` fields set.
+  ///
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// insert, none of the rows will be inserted.
   Future<List<Post>> insert(
     _i1.Session session,
     List<Post> rows, {
@@ -650,6 +782,9 @@ class PostRepository {
     );
   }
 
+  /// Inserts a single [Post] and returns the inserted row.
+  ///
+  /// The returned [Post] will have its `id` field set.
   Future<Post> insertRow(
     _i1.Session session,
     Post row, {
@@ -661,6 +796,11 @@ class PostRepository {
     );
   }
 
+  /// Updates all [Post]s in the list and returns the updated rows. If
+  /// [columns] is provided, only those columns will be updated. Defaults to
+  /// all columns.
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// update, none of the rows will be updated.
   Future<List<Post>> update(
     _i1.Session session,
     List<Post> rows, {
@@ -674,6 +814,9 @@ class PostRepository {
     );
   }
 
+  /// Updates a single [Post]. The row needs to have its id set.
+  /// Optionally, a list of [columns] can be provided to only update those
+  /// columns. Defaults to all columns.
   Future<Post> updateRow(
     _i1.Session session,
     Post row, {
@@ -687,6 +830,9 @@ class PostRepository {
     );
   }
 
+  /// Deletes all [Post]s in the list and returns the deleted rows.
+  /// This is an atomic operation, meaning that if one of the rows fail to
+  /// be deleted, none of the rows will be deleted.
   Future<List<Post>> delete(
     _i1.Session session,
     List<Post> rows, {
@@ -698,6 +844,7 @@ class PostRepository {
     );
   }
 
+  /// Deletes a single [Post].
   Future<Post> deleteRow(
     _i1.Session session,
     Post row, {
@@ -709,6 +856,7 @@ class PostRepository {
     );
   }
 
+  /// Deletes all rows matching the [where] expression.
   Future<List<Post>> deleteWhere(
     _i1.Session session, {
     required _i1.WhereExpressionBuilder<PostTable> where,
@@ -720,6 +868,8 @@ class PostRepository {
     );
   }
 
+  /// Counts the number of rows matching the [where] expression. If omitted,
+  /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PostTable>? where,
@@ -737,6 +887,8 @@ class PostRepository {
 class PostAttachRepository {
   const PostAttachRepository._();
 
+  /// Creates a relation between this [Post] and the given [PostsHashtags]s
+  /// by setting each [PostsHashtags]'s foreign key `postId` to refer to this [Post].
   Future<void> hashtags(
     _i1.Session session,
     Post post,
@@ -763,6 +915,8 @@ class PostAttachRepository {
 class PostAttachRowRepository {
   const PostAttachRowRepository._();
 
+  /// Creates a relation between the given [Post] and [UserRecord]
+  /// by setting the [Post]'s foreign key `ownerId` to refer to the [UserRecord].
   Future<void> owner(
     _i1.Session session,
     Post post,
@@ -784,6 +938,31 @@ class PostAttachRowRepository {
     );
   }
 
+  /// Creates a relation between the given [Post] and [Project]
+  /// by setting the [Post]'s foreign key `projectId` to refer to the [Project].
+  Future<void> project(
+    _i1.Session session,
+    Post post,
+    _i6.Project project, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+
+    var $post = post.copyWith(projectId: project.id);
+    await session.db.updateRow<Post>(
+      $post,
+      columns: [Post.t.projectId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [Post] and the given [PostsHashtags]
+  /// by setting the [PostsHashtags]'s foreign key `postId` to refer to this [Post].
   Future<void> hashtags(
     _i1.Session session,
     Post post,
@@ -809,6 +988,11 @@ class PostAttachRowRepository {
 class PostDetachRepository {
   const PostDetachRepository._();
 
+  /// Detaches the relation between this [Post] and the given [PostsHashtags]
+  /// by setting the [PostsHashtags]'s foreign key `postId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
   Future<void> hashtags(
     _i1.Session session,
     List<_i5.PostsHashtags> postsHashtags, {
@@ -831,6 +1015,33 @@ class PostDetachRepository {
 class PostDetachRowRepository {
   const PostDetachRowRepository._();
 
+  /// Detaches the relation between this [Post] and the [Project] set in `project`
+  /// by setting the [Post]'s foreign key `projectId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> project(
+    _i1.Session session,
+    Post post, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+
+    var $post = post.copyWith(projectId: null);
+    await session.db.updateRow<Post>(
+      $post,
+      columns: [Post.t.projectId],
+      transaction: transaction,
+    );
+  }
+
+  /// Detaches the relation between this [Post] and the given [PostsHashtags]
+  /// by setting the [PostsHashtags]'s foreign key `postId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
   Future<void> hashtags(
     _i1.Session session,
     _i5.PostsHashtags postsHashtags, {

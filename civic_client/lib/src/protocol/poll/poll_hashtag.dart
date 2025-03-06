@@ -49,6 +49,9 @@ abstract class PollHashtag implements _i1.SerializableModel {
 
   List<_i2.PollsHashtags>? hashtags;
 
+  /// Returns a shallow copy of this [PollHashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PollHashtag copyWith({
     int? id,
     String? tag,
@@ -87,6 +90,9 @@ class _PollHashtagImpl extends PollHashtag {
           hashtags: hashtags,
         );
 
+  /// Returns a shallow copy of this [PollHashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PollHashtag copyWith({
     Object? id = _Undefined,

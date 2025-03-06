@@ -23,19 +23,19 @@ enum ProjectStatus implements _i1.SerializableModel {
   static ProjectStatus fromJson(int index) {
     switch (index) {
       case 0:
-        return ongoing;
+        return ProjectStatus.ongoing;
       case 1:
-        return completed;
+        return ProjectStatus.completed;
       case 2:
-        return cancelled;
+        return ProjectStatus.cancelled;
       case 3:
-        return paused;
+        return ProjectStatus.paused;
       case 4:
-        return archived;
+        return ProjectStatus.archived;
       case 5:
-        return pending;
+        return ProjectStatus.pending;
       case 6:
-        return abandoned;
+        return ProjectStatus.abandoned;
       default:
         throw ArgumentError(
             'Value "$index" cannot be converted to "ProjectStatus"');

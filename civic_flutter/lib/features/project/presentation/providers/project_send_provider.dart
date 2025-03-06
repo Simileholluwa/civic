@@ -116,18 +116,25 @@ class SendProject extends _$SendProject {
     return result.fold((error) async {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       log(error.message);
-      
+
       TToastMessages.errorToast(error.message);
       return null;
     }, (project) {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       if (project == null) {
-        // save to drafts
+        //TODO: save failed project to draft
         return null;
       }
       TToastMessages.successToast(
         'Your project was sent.',
       );
+      ref
+          .watch(
+            paginatedProjectListProvider.notifier,
+          )
+          .addProject(
+            project,
+          );
       return project;
     });
   }

@@ -20,7 +20,7 @@ class ProjectLocationOptions extends StatelessWidget {
       onTap: onTap,
       child: Ink(
         height: 50,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
             TSizes.sm,

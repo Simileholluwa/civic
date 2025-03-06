@@ -15,14 +15,16 @@ class ProjectLocationPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(_project));
-    final manualLocation = projectCreationSate.manualLocations ?? [];
-    final virtualLocation = projectCreationSate.virtualLocations ?? [];
-    final physicalLocation = projectCreationSate.physicalLocations ?? [];
+    final projectCreationSate = ref.watch(
+      projectProviderProvider(
+        _project,
+      ),
+    );
     return Column(
+      spacing: 20,
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Text(
             'Make it effortless to find where this project is located. Whether physical or virtual or both.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -31,93 +33,58 @@ class ProjectLocationPageView extends ConsumerWidget {
                 ),
           ),
         ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            spacing: 10,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ProjectLocationOptions(
-                onTap: projectCreationSate.canAddLocations
-                    ? () {
-                        ProjectHelperFunctions.selectLocation(
-                          context,
-                          _project,
-                        );
-                      }
-                    : () => TToastMessages.infoToast(
-                          'Maximum location entries reached.',
-                        ),
-                text: 'Search location ',
-                icon: Iconsax.location,
+              Expanded(
+                child: ProjectLocationOptions(
+                  onTap: projectCreationSate.canAddLocations
+                      ? () {
+                          ProjectHelperFunctions.selectLocation(
+                            context,
+                            _project,
+                          );
+                        }
+                      : () => TToastMessages.infoToast(
+                            'Maximum location entries reached.',
+                          ),
+                  text: 'Search location ',
+                  icon: Iconsax.location,
+                ),
               ),
-              const SizedBox(width: 10),
-              ProjectLocationOptions(
-                onTap: projectCreationSate.canAddLocations
-                    ? () {
-                        virtualLinkDialog(
-                          context: context,
-                          project: _project,
-                        );
-                      }
-                    : () => TToastMessages.infoToast(
-                          'Maximum location entries reached.',
-                        ),
-                text: 'Virtual location',
-                icon: Iconsax.link,
-              ),
-              const SizedBox(width: 10),
-              ProjectLocationOptions(
-                onTap: projectCreationSate.canAddLocations
-                    ? () {
-                        manualLocationDialog(
-                          context: context,
-                          project: _project,
-                        );
-                      }
-                    : () => TToastMessages.infoToast(
-                          'Maximum location entries reached.',
-                        ),
-                text: "Input location",
-                icon: Iconsax.edit,
+              Expanded(
+                child: ProjectLocationOptions(
+                  onTap: projectCreationSate.canAddLocations
+                      ? () {
+                          virtualLinkDialog(
+                            context: context,
+                            project: _project,
+                          );
+                        }
+                      : () => TToastMessages.infoToast(
+                            'Maximum location entries reached.',
+                          ),
+                  text: 'Virtual location',
+                  icon: Iconsax.link,
+                ),
               ),
             ],
           ),
         ),
-        if (manualLocation.isNotEmpty ||
-            virtualLocation.isNotEmpty ||
-            physicalLocation.isNotEmpty)
-          const SizedBox(
-            height: 20,
-          ),
-        if (manualLocation.isNotEmpty)
-          ProjectSelectedLocations(
-            project: _project,
-            isManual: true,
-            isVirtual: false,
-            isPhysical: false,
-          ),
-        if (manualLocation.isNotEmpty &&
-            (virtualLocation.isNotEmpty || physicalLocation.isNotEmpty))
-          const SizedBox(
-            height: TSizes.md,
-          ),
         if (projectCreationSate.virtualLocations != null)
           ProjectSelectedLocations(
             project: _project,
-            isManual: false,
             isVirtual: true,
             isPhysical: false,
-          ),
-        if (virtualLocation.isNotEmpty &&
-            physicalLocation.isNotEmpty)
-          const SizedBox(
-            height: TSizes.md,
           ),
         if (projectCreationSate.physicalLocations != null)
           ProjectSelectedLocations(
             project: _project,
-            isManual: false,
             isVirtual: false,
             isPhysical: true,
           ),

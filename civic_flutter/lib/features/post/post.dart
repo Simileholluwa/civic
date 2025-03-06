@@ -26,7 +26,6 @@ export './presentation/provider/post_detail_provider.dart';
 export './presentation/provider/post_draft_provider.dart';
 export './presentation/provider/post_list_provider.dart';
 export './presentation/provider/post_provider.dart';
-export './presentation/provider/post_send_provider.dart';
 export './presentation/provider/post_service_provider.dart';
 export './presentation/provider/post_card_provider.dart';
 export './presentation/provider/post_scroll_controller_provider.dart';

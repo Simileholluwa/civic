@@ -54,6 +54,9 @@ abstract class PollHashtag implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   _i1.Table get table => t;
 
+  /// Returns a shallow copy of this [PollHashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PollHashtag copyWith({
     int? id,
     String? tag,
@@ -127,6 +130,9 @@ class _PollHashtagImpl extends PollHashtag {
           hashtags: hashtags,
         );
 
+  /// Returns a shallow copy of this [PollHashtag]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PollHashtag copyWith({
     Object? id = _Undefined,
@@ -257,6 +263,28 @@ class PollHashtagRepository {
 
   final detachRow = const PollHashtagDetachRowRepository._();
 
+  /// Returns a list of [PollHashtag]s matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order of the items use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// The maximum number of items can be set by [limit]. If no limit is set,
+  /// all items matching the query will be returned.
+  ///
+  /// [offset] defines how many items to skip, after which [limit] (or all)
+  /// items are read from the database.
+  ///
+  /// ```dart
+  /// var persons = await Persons.db.find(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.firstName,
+  ///   limit: 100,
+  /// );
+  /// ```
   Future<List<PollHashtag>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PollHashtagTable>? where,
@@ -280,6 +308,23 @@ class PollHashtagRepository {
     );
   }
 
+  /// Returns the first matching [PollHashtag] matching the given query parameters.
+  ///
+  /// Use [where] to specify which items to include in the return value.
+  /// If none is specified, all items will be returned.
+  ///
+  /// To specify the order use [orderBy] or [orderByList]
+  /// when sorting by multiple columns.
+  ///
+  /// [offset] defines how many items to skip, after which the next one will be picked.
+  ///
+  /// ```dart
+  /// var youngestPerson = await Persons.db.findFirstRow(
+  ///   session,
+  ///   where: (t) => t.lastName.equals('Jones'),
+  ///   orderBy: (t) => t.age,
+  /// );
+  /// ```
   Future<PollHashtag?> findFirstRow(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PollHashtagTable>? where,
@@ -301,6 +346,7 @@ class PollHashtagRepository {
     );
   }
 
+  /// Finds a single [PollHashtag] by its [id] or null if no such row exists.
   Future<PollHashtag?> findById(
     _i1.Session session,
     int id, {
@@ -314,6 +360,12 @@ class PollHashtagRepository {
     );
   }
 
+  /// Inserts all [PollHashtag]s in the list and returns the inserted rows.
+  ///
+  /// The returned [PollHashtag]s will have their `id` fields set.
+  ///
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// insert, none of the rows will be inserted.
   Future<List<PollHashtag>> insert(
     _i1.Session session,
     List<PollHashtag> rows, {
@@ -325,6 +377,9 @@ class PollHashtagRepository {
     );
   }
 
+  /// Inserts a single [PollHashtag] and returns the inserted row.
+  ///
+  /// The returned [PollHashtag] will have its `id` field set.
   Future<PollHashtag> insertRow(
     _i1.Session session,
     PollHashtag row, {
@@ -336,6 +391,11 @@ class PollHashtagRepository {
     );
   }
 
+  /// Updates all [PollHashtag]s in the list and returns the updated rows. If
+  /// [columns] is provided, only those columns will be updated. Defaults to
+  /// all columns.
+  /// This is an atomic operation, meaning that if one of the rows fails to
+  /// update, none of the rows will be updated.
   Future<List<PollHashtag>> update(
     _i1.Session session,
     List<PollHashtag> rows, {
@@ -349,6 +409,9 @@ class PollHashtagRepository {
     );
   }
 
+  /// Updates a single [PollHashtag]. The row needs to have its id set.
+  /// Optionally, a list of [columns] can be provided to only update those
+  /// columns. Defaults to all columns.
   Future<PollHashtag> updateRow(
     _i1.Session session,
     PollHashtag row, {
@@ -362,6 +425,9 @@ class PollHashtagRepository {
     );
   }
 
+  /// Deletes all [PollHashtag]s in the list and returns the deleted rows.
+  /// This is an atomic operation, meaning that if one of the rows fail to
+  /// be deleted, none of the rows will be deleted.
   Future<List<PollHashtag>> delete(
     _i1.Session session,
     List<PollHashtag> rows, {
@@ -373,6 +439,7 @@ class PollHashtagRepository {
     );
   }
 
+  /// Deletes a single [PollHashtag].
   Future<PollHashtag> deleteRow(
     _i1.Session session,
     PollHashtag row, {
@@ -384,6 +451,7 @@ class PollHashtagRepository {
     );
   }
 
+  /// Deletes all rows matching the [where] expression.
   Future<List<PollHashtag>> deleteWhere(
     _i1.Session session, {
     required _i1.WhereExpressionBuilder<PollHashtagTable> where,
@@ -395,6 +463,8 @@ class PollHashtagRepository {
     );
   }
 
+  /// Counts the number of rows matching the [where] expression. If omitted,
+  /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<PollHashtagTable>? where,
@@ -412,6 +482,8 @@ class PollHashtagRepository {
 class PollHashtagAttachRepository {
   const PollHashtagAttachRepository._();
 
+  /// Creates a relation between this [PollHashtag] and the given [PollsHashtags]s
+  /// by setting each [PollsHashtags]'s foreign key `hashtagId` to refer to this [PollHashtag].
   Future<void> hashtags(
     _i1.Session session,
     PollHashtag pollHashtag,
@@ -439,6 +511,8 @@ class PollHashtagAttachRepository {
 class PollHashtagAttachRowRepository {
   const PollHashtagAttachRowRepository._();
 
+  /// Creates a relation between this [PollHashtag] and the given [PollsHashtags]
+  /// by setting the [PollsHashtags]'s foreign key `hashtagId` to refer to this [PollHashtag].
   Future<void> hashtags(
     _i1.Session session,
     PollHashtag pollHashtag,
@@ -464,6 +538,11 @@ class PollHashtagAttachRowRepository {
 class PollHashtagDetachRepository {
   const PollHashtagDetachRepository._();
 
+  /// Detaches the relation between this [PollHashtag] and the given [PollsHashtags]
+  /// by setting the [PollsHashtags]'s foreign key `hashtagId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
   Future<void> hashtags(
     _i1.Session session,
     List<_i2.PollsHashtags> pollsHashtags, {
@@ -486,6 +565,11 @@ class PollHashtagDetachRepository {
 class PollHashtagDetachRowRepository {
   const PollHashtagDetachRowRepository._();
 
+  /// Detaches the relation between this [PollHashtag] and the given [PollsHashtags]
+  /// by setting the [PollsHashtags]'s foreign key `hashtagId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
   Future<void> hashtags(
     _i1.Session session,
     _i2.PollsHashtags pollsHashtags, {

@@ -83,9 +83,7 @@ class PollLocationsScreen extends ConsumerWidget {
       ),
       body: data.isLoading
           ? AppLoadingWidget(
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.dark
-                  : TColors.light,
+             
             )
           : data.when(
               data: (data) {
@@ -140,9 +138,7 @@ class PollLocationsScreen extends ConsumerWidget {
               },
               loading: () {
                 return AppLoadingWidget(
-                  backgroundColor: THelperFunctions.isDarkMode(context)
-                      ? TColors.dark
-                      : TColors.light,
+                  
                 );
               },
             ),

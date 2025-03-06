@@ -95,7 +95,12 @@ class PostDrafts extends _$PostDrafts {
   ) async {
     await ref
         .read(
-          sendPostProvider.notifier,
+          regularPostProvider(
+            PostHelperFunctions.createPostFromDraftPost(
+              draftPost,
+              ref,
+            ),
+          ).notifier,
         )
         .send(
           post: PostHelperFunctions.sendPostFromDraft(

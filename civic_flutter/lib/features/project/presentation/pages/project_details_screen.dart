@@ -45,7 +45,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
               ref.watch(projectReviewListQueryProvider.notifier);
           final projectReviewState = ref.watch(projectReviewListQueryProvider);
           final pagingControllerNotifier =
-        ref.watch(paginatedProjectReviewListProvider(id).notifier);
+              ref.watch(paginatedProjectReviewListProvider(id).notifier);
           final defaultTextStyle = DefaultTextStyle.of(context);
           return CustomScrollView(
             slivers: [
@@ -163,17 +163,25 @@ class ProjectDetailsScreen extends ConsumerWidget {
                       spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (projectCardState.canVet)
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
-                            child: Row(
-                              spacing: 10,
-                              children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
+                          child: Row(
+                            spacing: 10,
+                            children: [
+                              if (projectCardState.canVet)
                                 Expanded(
                                   child: SizedBox(
                                     height: 50,
                                     child: ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          ProjectVerifyScreen.routeName(),
+                                          pathParameters: {
+                                            'id': id.toString(),
+                                          },
+                                          extra: project.physicalLocations,
+                                        );
+                                      },
                                       label: Text(
                                         'Verify',
                                       ),
@@ -191,77 +199,38 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 50,
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        context.pushNamed(
-                                          ProjectReviewScreen.routeName(),
-                                          pathParameters: {
-                                            'id': id.toString(),
-                                          },
-                                        );
-                                      },
-                                      label: Text(
-                                        'Review',
-                                      ),
-                                      icon: Icon(
-                                        Iconsax.magic_star5,
-                                        color: TColors.textWhite,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blue,
-                                        foregroundColor: TColors.textWhite,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      context.pushNamed(
+                                        ProjectReviewScreen.routeName(),
+                                        pathParameters: {
+                                          'id': id.toString(),
+                                        },
+                                      );
+                                    },
+                                    label: Text(
+                                      'Review',
+                                    ),
+                                    icon: Icon(
+                                      Iconsax.magic_star5,
+                                      color: TColors.textWhite,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      foregroundColor: TColors.textWhite,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        else
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 50,
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        context.pushNamed(
-                                          ProjectReviewScreen.routeName(),
-                                          pathParameters: {
-                                            'id': id.toString(),
-                                          },
-                                        );
-                                      },
-                                      label: Text(
-                                        'Review project',
-                                        style: const TextStyle().copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      icon: Icon(
-                                        Iconsax.magic_star5,
-                                        color: TColors.textWhite,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blue,
-                                        foregroundColor: TColors.textWhite,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -311,13 +280,14 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                            if (currentPageState == 1 && project.overAllCategoryRating != null)
+                            if (currentPageState == 1 &&
+                                project.overAllCategoryRating != null)
                               Row(
                                 spacing: 10,
                                 children: [
                                   if (projectReviewState.cardinal != null)
                                     GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         projectReviewStateNotifier.clearQuery();
                                         pagingControllerNotifier.refresh();
                                       },
@@ -347,7 +317,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-                                  
                                 ],
                               ),
                           ],
@@ -902,11 +871,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget(
-            backgroundColor: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
-          );
+          return AppLoadingWidget();
         },
       ),
     );
@@ -1156,7 +1121,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                       onTapSkipButton: context.pop,
                                       activeButtonText: 'Apply filter',
                                       onTapActiveButton: () {
-                                        if (projectReviewState.cardinal == null) {
+                                        if (projectReviewState.cardinal ==
+                                            null) {
                                           TToastMessages.errorToast(
                                             'Please select a cardinal to apply filter.',
                                           );

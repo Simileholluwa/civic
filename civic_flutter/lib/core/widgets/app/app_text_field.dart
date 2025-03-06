@@ -1,5 +1,6 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextField extends StatelessWidget {
   const AppTextField({
@@ -24,6 +25,8 @@ class AppTextField extends StatelessWidget {
     this.style,
     this.onChanged,
     this.focusedBorder,
+    this.inputFormatters,
+    this.textCapitalization = TextCapitalization.sentences,
     super.key,
   });
 
@@ -48,6 +51,8 @@ class AppTextField extends StatelessWidget {
   final void Function()? onTap;
   final int? maxLines;
   final InputBorder? focusedBorder;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization textCapitalization;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +84,8 @@ class AppTextField extends StatelessWidget {
           onSaved: onSave,
           onTap: onTap,
           onChanged: onChanged,
-          textCapitalization: TextCapitalization.sentences,
+          inputFormatters: inputFormatters,
+          textCapitalization: textCapitalization,
           decoration: InputDecoration(
             prefixIcon: showPrefixIcon
                 ? Icon(

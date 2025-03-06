@@ -1,3 +1,4 @@
+import 'package:civic_flutter/features/project/presentation/helpers/number_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -49,7 +50,8 @@ class ProjectFundingPageView extends ConsumerWidget {
               Expanded(
                 child: AppTextField(
                   textController: projectCreationSate.projectCostController,
-                  prefixIcon: Iconsax.calendar5,
+                  prefixIcon: Iconsax.moneys5,
+                  inputFormatters: [NumberInputFormatter(),],
                   hintText: "Enter the project's cost",
                   validator: (value) => TValidator.validateEmptyText(
                     'Project cost',

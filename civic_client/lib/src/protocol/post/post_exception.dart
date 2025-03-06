@@ -23,6 +23,9 @@ abstract class PostException
 
   String message;
 
+  /// Returns a shallow copy of this [PostException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostException copyWith({String? message});
   @override
   Map<String, dynamic> toJson() {
@@ -38,6 +41,9 @@ abstract class PostException
 class _PostExceptionImpl extends PostException {
   _PostExceptionImpl({required String message}) : super._(message: message);
 
+  /// Returns a shallow copy of this [PostException]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostException copyWith({String? message}) {
     return PostException(message: message ?? this.message);

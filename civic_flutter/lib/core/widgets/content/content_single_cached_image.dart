@@ -9,12 +9,14 @@ class ContentSingleCachedImage extends StatelessWidget {
     required this.imageUrl,
     this.useMargin = true,
     this.isUrl = true,
+    this.maxHeight = 300,
     super.key,
   });
 
   final dynamic imageUrl;
   final bool useMargin;
   final bool isUrl;
+  final double maxHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,8 @@ class ContentSingleCachedImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(TSizes.md),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxHeight: 400,
+          constraints: BoxConstraints(
+            maxHeight: maxHeight,
           ),
           child: isUrl
               ? ContentCachedImage(url: imageUrl as String)

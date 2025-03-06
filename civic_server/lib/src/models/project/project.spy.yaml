@@ -17,7 +17,6 @@ fields:
     fundingNote: String?
     projectImageAttachments: List<String>?
     projectPDFAttachments: List<String>?
-    completionRate: double?
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
     manualLocations: List<String>?
@@ -25,8 +24,9 @@ fields:
     dateCreated: DateTime?
     updatedAt: DateTime?
     likedBy: List<int>?
-    commentBy: List<int>?
-    repostBy: List<int>?
+    repostedBy: List<int>?
+    reviewedBy: List<int>?
+    verifiedBy: List<int>?
     overallRating: double?
     overallLocationRating: double?
     overallDescriptionRating: double?
@@ -34,4 +34,7 @@ fields:
     overallAttachmentsRating: double?
     overAllCategoryRating: double?
     overallFundingRating: double?
-    numberOfReviews: int?
+    numberOfReviews: int?, default=0
+    numberOfReposts: int?, default=0
+    numberOfVerifies: int?, default=0
+    numberOfLikes: int?, default=0

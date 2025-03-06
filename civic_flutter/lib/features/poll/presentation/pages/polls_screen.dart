@@ -133,15 +133,12 @@ class PollsScreen extends ConsumerWidget {
                 },
               ),
             ),
-              //TODO: Implement ContentTagsAndLocations
+            if (pollCardState.hasTags || pollCardState.hasLocations)
               ContentEngagementTagsAndLocations(
                 tags: pollCardState.tags,
                 locations: pollCardState.locations,
                 hasTags: pollCardState.hasTags,
                 hasLocations: pollCardState.hasLocations,
-                numberOfLikes: '0',
-                numberOfComments: '0',
-                numberOfReposts: '0',
               ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),

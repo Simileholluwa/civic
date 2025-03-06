@@ -9,15 +9,13 @@ class ProjectSelectedLocations extends ConsumerWidget {
   const ProjectSelectedLocations({
     super.key,
     required this.project,
-    required this.isManual,
     required this.isVirtual,
     required this.isPhysical,
   });
 
-  final Project project;
-  final bool isManual;
-  final bool isVirtual;
   final bool isPhysical;
+  final bool isVirtual;
+  final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +23,6 @@ class ProjectSelectedLocations extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     List<dynamic>? locations;
-    if (isManual) locations = projectCreationSate.manualLocations ?? <String>[];
     if (isVirtual) locations = projectCreationSate.virtualLocations ?? <String>[];
     if (isPhysical) locations = projectCreationSate.physicalLocations ?? <AWSPlaces>[];
     return Flexible(
@@ -43,9 +40,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         ? locations![index].place
                         : locations![index],
                   ),
-                  prefixIcon: isManual
-                      ? Iconsax.edit
-                      : isVirtual
+                  prefixIcon: isVirtual
                           ? Iconsax.link
                           : Iconsax.location,
                   maxLines: 1,
@@ -65,7 +60,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
               ),
               Row(
                 children: [
-                  if (isManual || isVirtual)
+                  if (isVirtual)
                     Container(
                       height: 60,
                       width: 60,
@@ -79,14 +74,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                           Icons.edit,
                         ),
                         onPressed: () {
-                          if (isManual) {
-                            manualLocationDialog(
-                              context: context,
-                              project: project,
-                              index: index,
-                              location: locations![index],
-                            );
-                          }
+                          
                           if (isVirtual) {
                             virtualLinkDialog(
                               context: context,
@@ -98,7 +86,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         },
                       ),
                     ),
-                  if (isManual || isVirtual)
+                  if (isVirtual)
                     const SizedBox(
                       width: TSizes.md,
                     ),
@@ -116,11 +104,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         color: TColors.secondary,
                       ),
                       onPressed: () {
-                        if (isManual) {
-                          projectNotifier.removeManualLocation(
-                            projectCreationSate.manualLocations![index],
-                          );
-                        }
+                       
                         if (isVirtual) {
                           projectNotifier.removeVirtualLocation(
                             projectCreationSate.virtualLocations![index],

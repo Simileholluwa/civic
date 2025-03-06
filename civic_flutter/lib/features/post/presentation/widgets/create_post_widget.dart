@@ -1,34 +1,22 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CreatePostWidget extends ConsumerStatefulWidget {
+class CreatePostWidget extends ConsumerWidget {
   const CreatePostWidget({
     super.key,
     required this.post,
+    this.project,
   });
 
   final Post post;
+  final Project? project;
 
   @override
-  ConsumerState<CreatePostWidget> createState() => _CreatePostWidgetState();
-}
-
-class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
-  late Post post;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      post = widget.post;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(
       regularPostProvider(post),
     );
@@ -43,9 +31,14 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
           const SizedBox(
             height: TSizes.md,
           ),
-          AppUserInfoWidget(
-            userRecord: post.owner!,
-            onTap: () {},
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: ContentCreatorInfo(
+              creator: post.owner!,
+              timeAgo: '',
+            ),
           ),
           PostTextField(
             userName: post.owner!.userInfo!.userName!,
@@ -57,9 +50,30 @@ class _CreatePostWidgetState extends ConsumerState<CreatePostWidget> {
               post: post,
             ),
           if (postState.videoUrl.isNotEmpty)
-             PostVideoPost(
+            PostVideoPost(
               post: post,
-             )
+            ),
+          if (project != null)
+            Container(
+              margin: const EdgeInsets.fromLTRB(
+                16, 8, 16, 16
+              ),
+              padding: const EdgeInsets.only(bottom: 16,),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  TSizes.md,
+                ),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
+              child: ProjectCard(
+                project: project!,
+                canTap: false,
+                showInteractions: false,
+                maxHeight: 200,
+              ),
+            ),
         ],
       ),
     );

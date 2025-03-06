@@ -26,13 +26,7 @@ class CreateProjectScreen extends ConsumerWidget {
       canPop: true,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
-        ref
-            .read(
-              mediaVideoPlayerProvider(
-                projectCreationState.projectVideoUrl,
-              ).notifier,
-            )
-            .dispose();
+        context.pop();
       },
       child: AppAndroidBottomNav(
         child: Scaffold(
@@ -46,13 +40,6 @@ class CreateProjectScreen extends ConsumerWidget {
               draftData: const [],
               sendPressed: () {
                 if (!projectNotifier.validateProject()) return;
-                ref
-                    .read(
-                      mediaVideoPlayerProvider(
-                        projectCreationState.projectVideoUrl,
-                      ).notifier,
-                    )
-                    .dispose();
                 context.go(
                   FeedRoutes.namespace,
                   extra: () => ProjectHelperFunctions.sendProject(
@@ -89,9 +76,7 @@ class CreateProjectScreen extends ConsumerWidget {
             },
             loading: () {
               return AppLoadingWidget(
-                backgroundColor: THelperFunctions.isDarkMode(context)
-                    ? TColors.dark
-                    : TColors.light,
+               
               );
             },
           ),

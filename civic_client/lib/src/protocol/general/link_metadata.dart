@@ -43,6 +43,9 @@ abstract class LinkMetadata implements _i1.SerializableModel {
 
   String url;
 
+  /// Returns a shallow copy of this [LinkMetadata]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   LinkMetadata copyWith({
     String? title,
     String? description,
@@ -78,6 +81,9 @@ class _LinkMetadataImpl extends LinkMetadata {
           url: url,
         );
 
+  /// Returns a shallow copy of this [LinkMetadata]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   LinkMetadata copyWith({
     String? title,

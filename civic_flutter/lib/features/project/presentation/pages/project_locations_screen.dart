@@ -24,11 +24,12 @@ class ProjectLocationsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
-          70,
+          75,
         ),
         child: Center(
           child: Container(
             margin: const EdgeInsets.only(
+              top: TSizes.sm - 2,
               bottom: TSizes.sm - 2,
             ),
             decoration: BoxDecoration(
@@ -84,9 +85,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
       ),
       body: data.isLoading
           ? AppLoadingWidget(
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.dark
-                  : TColors.light,
+              
             )
           : data.when(
               data: (data) {
@@ -141,9 +140,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
               },
               loading: () {
                 return AppLoadingWidget(
-                  backgroundColor: THelperFunctions.isDarkMode(context)
-                      ? TColors.dark
-                      : TColors.light,
+                  
                 );
               },
             ),

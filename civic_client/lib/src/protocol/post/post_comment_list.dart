@@ -56,6 +56,9 @@ abstract class PostCommentList implements _i1.SerializableModel {
 
   bool canLoadMore;
 
+  /// Returns a shallow copy of this [PostCommentList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   PostCommentList copyWith({
     List<_i2.PostComment>? results,
     int? count,
@@ -99,6 +102,9 @@ class _PostCommentListImpl extends PostCommentList {
           canLoadMore: canLoadMore,
         );
 
+  /// Returns a shallow copy of this [PostCommentList]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   PostCommentList copyWith({
     List<_i2.PostComment>? results,

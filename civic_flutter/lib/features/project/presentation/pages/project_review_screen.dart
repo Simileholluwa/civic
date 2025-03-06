@@ -58,12 +58,21 @@ class ProjectReviewScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
               ),
-              child: Center(
-                child: Text(
-                  'You have already reviewed this project. You can make changes to your review below.',
-                  style: Theme.of(context).textTheme.labelMedium,
-                  textAlign: TextAlign.center,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image(
+                    height: 300,
+                    image: AssetImage(
+                      TImageTexts.completed,
+                    ),
+                  ),
+                  Text(
+                    'You have already reviewed this project. You can make changes to your review below.',
+                    style: Theme.of(context).textTheme.labelMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             );
           } else {
@@ -188,11 +197,7 @@ class ProjectReviewScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget(
-            backgroundColor: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
-          );
+          return AppLoadingWidget();
         },
       ),
       bottomNavigationBar: data.when(
@@ -228,9 +233,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                   SizedBox(
                     width: double.maxFinite,
                     child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () {},
                       child: Text(
                         'Delete review',
                         style: const TextStyle().copyWith(
@@ -238,8 +241,8 @@ class ProjectReviewScreen extends ConsumerWidget {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade200,
-                        foregroundColor: TColors.secondary,
+                        backgroundColor: Colors.red.shade400,
+                        foregroundColor: TColors.textWhite,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
                     ).withLoading(
@@ -278,7 +281,8 @@ class ProjectReviewScreen extends ConsumerWidget {
                           child: ElevatedButton(
                             onPressed: projectReviewState.isValid
                                 ? () async {
-                                    final result = await projectReviewNotifier.sendReview(
+                                    final result =
+                                        await projectReviewNotifier.sendReview(
                                       id,
                                       data.value?.id,
                                     );

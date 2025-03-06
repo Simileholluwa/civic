@@ -33,7 +33,6 @@ abstract class Project implements _i1.SerializableModel {
     this.fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
-    this.completionRate,
     this.physicalLocations,
     this.virtualLocations,
     this.manualLocations,
@@ -41,8 +40,9 @@ abstract class Project implements _i1.SerializableModel {
     this.dateCreated,
     this.updatedAt,
     this.likedBy,
-    this.commentBy,
-    this.repostBy,
+    this.repostedBy,
+    this.reviewedBy,
+    this.verifiedBy,
     this.overallRating,
     this.overallLocationRating,
     this.overallDescriptionRating,
@@ -50,8 +50,14 @@ abstract class Project implements _i1.SerializableModel {
     this.overallAttachmentsRating,
     this.overAllCategoryRating,
     this.overallFundingRating,
-    this.numberOfReviews,
-  });
+    int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
+  })  : numberOfReviews = numberOfReviews ?? 0,
+        numberOfReposts = numberOfReposts ?? 0,
+        numberOfVerifies = numberOfVerifies ?? 0,
+        numberOfLikes = numberOfLikes ?? 0;
 
   factory Project({
     int? id,
@@ -72,7 +78,6 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -80,8 +85,9 @@ abstract class Project implements _i1.SerializableModel {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -90,6 +96,9 @@ abstract class Project implements _i1.SerializableModel {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -125,7 +134,6 @@ abstract class Project implements _i1.SerializableModel {
           (jsonSerialization['projectPDFAttachments'] as List?)
               ?.map((e) => e as String)
               .toList(),
-      completionRate: (jsonSerialization['completionRate'] as num?)?.toDouble(),
       physicalLocations: (jsonSerialization['physicalLocations'] as List?)
           ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -146,10 +154,13 @@ abstract class Project implements _i1.SerializableModel {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      commentBy: (jsonSerialization['commentBy'] as List?)
+      repostedBy: (jsonSerialization['repostedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      repostBy: (jsonSerialization['repostBy'] as List?)
+      reviewedBy: (jsonSerialization['reviewedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      verifiedBy: (jsonSerialization['verifiedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
@@ -166,6 +177,9 @@ abstract class Project implements _i1.SerializableModel {
       overallFundingRating:
           (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
       numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
+      numberOfReposts: jsonSerialization['numberOfReposts'] as int?,
+      numberOfVerifies: jsonSerialization['numberOfVerifies'] as int?,
+      numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
     );
   }
 
@@ -208,8 +222,6 @@ abstract class Project implements _i1.SerializableModel {
 
   List<String>? projectPDFAttachments;
 
-  double? completionRate;
-
   List<_i3.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
@@ -224,9 +236,11 @@ abstract class Project implements _i1.SerializableModel {
 
   List<int>? likedBy;
 
-  List<int>? commentBy;
+  List<int>? repostedBy;
 
-  List<int>? repostBy;
+  List<int>? reviewedBy;
+
+  List<int>? verifiedBy;
 
   double? overallRating;
 
@@ -244,6 +258,15 @@ abstract class Project implements _i1.SerializableModel {
 
   int? numberOfReviews;
 
+  int? numberOfReposts;
+
+  int? numberOfVerifies;
+
+  int? numberOfLikes;
+
+  /// Returns a shallow copy of this [Project]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Project copyWith({
     int? id,
     int? ownerId,
@@ -263,7 +286,6 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -271,8 +293,9 @@ abstract class Project implements _i1.SerializableModel {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -281,6 +304,9 @@ abstract class Project implements _i1.SerializableModel {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -305,7 +331,6 @@ abstract class Project implements _i1.SerializableModel {
         'projectImageAttachments': projectImageAttachments?.toJson(),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
-      if (completionRate != null) 'completionRate': completionRate,
       if (physicalLocations != null)
         'physicalLocations':
             physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
@@ -316,8 +341,9 @@ abstract class Project implements _i1.SerializableModel {
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentBy != null) 'commentBy': commentBy?.toJson(),
-      if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
+      if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
+      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -331,6 +357,9 @@ abstract class Project implements _i1.SerializableModel {
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
+      if (numberOfReposts != null) 'numberOfReposts': numberOfReposts,
+      if (numberOfVerifies != null) 'numberOfVerifies': numberOfVerifies,
+      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
     };
   }
 
@@ -362,7 +391,6 @@ class _ProjectImpl extends Project {
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     List<String>? manualLocations,
@@ -370,8 +398,9 @@ class _ProjectImpl extends Project {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? repostedBy,
+    List<int>? reviewedBy,
+    List<int>? verifiedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -380,6 +409,9 @@ class _ProjectImpl extends Project {
     double? overAllCategoryRating,
     double? overallFundingRating,
     int? numberOfReviews,
+    int? numberOfReposts,
+    int? numberOfVerifies,
+    int? numberOfLikes,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -399,7 +431,6 @@ class _ProjectImpl extends Project {
           fundingNote: fundingNote,
           projectImageAttachments: projectImageAttachments,
           projectPDFAttachments: projectPDFAttachments,
-          completionRate: completionRate,
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
           manualLocations: manualLocations,
@@ -407,8 +438,9 @@ class _ProjectImpl extends Project {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           likedBy: likedBy,
-          commentBy: commentBy,
-          repostBy: repostBy,
+          repostedBy: repostedBy,
+          reviewedBy: reviewedBy,
+          verifiedBy: verifiedBy,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
           overallDescriptionRating: overallDescriptionRating,
@@ -417,8 +449,14 @@ class _ProjectImpl extends Project {
           overAllCategoryRating: overAllCategoryRating,
           overallFundingRating: overallFundingRating,
           numberOfReviews: numberOfReviews,
+          numberOfReposts: numberOfReposts,
+          numberOfVerifies: numberOfVerifies,
+          numberOfLikes: numberOfLikes,
         );
 
+  /// Returns a shallow copy of this [Project]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Project copyWith({
     Object? id = _Undefined,
@@ -439,7 +477,6 @@ class _ProjectImpl extends Project {
     Object? fundingNote = _Undefined,
     Object? projectImageAttachments = _Undefined,
     Object? projectPDFAttachments = _Undefined,
-    Object? completionRate = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? manualLocations = _Undefined,
@@ -447,8 +484,9 @@ class _ProjectImpl extends Project {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? likedBy = _Undefined,
-    Object? commentBy = _Undefined,
-    Object? repostBy = _Undefined,
+    Object? repostedBy = _Undefined,
+    Object? reviewedBy = _Undefined,
+    Object? verifiedBy = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
     Object? overallDescriptionRating = _Undefined,
@@ -457,6 +495,9 @@ class _ProjectImpl extends Project {
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
     Object? numberOfReviews = _Undefined,
+    Object? numberOfReposts = _Undefined,
+    Object? numberOfVerifies = _Undefined,
+    Object? numberOfLikes = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -487,8 +528,6 @@ class _ProjectImpl extends Project {
       projectPDFAttachments: projectPDFAttachments is List<String>?
           ? projectPDFAttachments
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
-      completionRate:
-          completionRate is double? ? completionRate : this.completionRate,
       physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
@@ -505,12 +544,15 @@ class _ProjectImpl extends Project {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
-      commentBy: commentBy is List<int>?
-          ? commentBy
-          : this.commentBy?.map((e0) => e0).toList(),
-      repostBy: repostBy is List<int>?
-          ? repostBy
-          : this.repostBy?.map((e0) => e0).toList(),
+      repostedBy: repostedBy is List<int>?
+          ? repostedBy
+          : this.repostedBy?.map((e0) => e0).toList(),
+      reviewedBy: reviewedBy is List<int>?
+          ? reviewedBy
+          : this.reviewedBy?.map((e0) => e0).toList(),
+      verifiedBy: verifiedBy is List<int>?
+          ? verifiedBy
+          : this.verifiedBy?.map((e0) => e0).toList(),
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
       overallLocationRating: overallLocationRating is double?
@@ -533,6 +575,11 @@ class _ProjectImpl extends Project {
           : this.overallFundingRating,
       numberOfReviews:
           numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
+      numberOfReposts:
+          numberOfReposts is int? ? numberOfReposts : this.numberOfReposts,
+      numberOfVerifies:
+          numberOfVerifies is int? ? numberOfVerifies : this.numberOfVerifies,
+      numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
     );
   }
 }

@@ -48,7 +48,6 @@ project:
   - getProjectReviews:
   - reactToReview:
   - deleteProject:
-  - updateCount:
   - toggleLike:
   - authUser:
   - validateProjectOwnership:

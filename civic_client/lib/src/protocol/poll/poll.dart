@@ -142,6 +142,9 @@ abstract class Poll implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
+  /// Returns a shallow copy of this [Poll]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   Poll copyWith({
     int? id,
     int? ownerId,
@@ -239,6 +242,9 @@ class _PollImpl extends Poll {
           updatedAt: updatedAt,
         );
 
+  /// Returns a shallow copy of this [Poll]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   Poll copyWith({
     Object? id = _Undefined,

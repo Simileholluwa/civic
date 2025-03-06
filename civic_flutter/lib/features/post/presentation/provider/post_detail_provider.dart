@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/core/usecases/usecase.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'post_detail_provider.g.dart';
@@ -15,25 +16,33 @@ Future<Post?> postDetail(
   int id,
 ) async {
   if (id == 0 && draftPost == null) {
-    final me = ref.read(meUseCaseProvider);
-    final result = await me(NoParams());
-    return result.fold((error) {
+    final userRecord = ref.watch(getUserRecordProvider);
+    final result = userRecord(NoParams());
+    return result.fold((l) {
+      log('Error in postDetail: ${l.message}');
       return null;
-    }, (currentUser) async {
+    }, (record) {
+      if (record == null) {
+        return null;
+      }
       return Post(
-        ownerId: currentUser.userInfo!.id!,
-        owner: currentUser,
+        ownerId: record.id!,
+        owner: record,
       );
     });
   } else if (id == 0 && draftPost != null) {
-    final me = ref.read(meUseCaseProvider);
-    final result = await me(NoParams());
-    return result.fold((error) {
+    final userRecord = ref.watch(getUserRecordProvider).call(
+          NoParams(),
+        );
+    return userRecord.fold((l) {
       return null;
-    }, (currentUser) async {
+    }, (record) {
+      if (record == null) {
+        return null;
+      }
       return PostHelperFunctions.createPostFromDraftPost(
         draftPost,
-        currentUser,
+        ref,
       );
     });
   } else {
@@ -46,17 +55,11 @@ Future<Post?> postDetail(
 
     return result.fold(
       (error) => null,
-      (post) async {
+      (post) {
         if (post == null) {
           return null;
         }
-        final me = ref.read(meUseCaseProvider);
-        final userRecord = await me(NoParams());
-        final owner = userRecord.fold((error) => null, (user) => user);
-        if (owner == null) return null;
-        return post.copyWith(
-          owner: owner,
-        );
+        return post;
       },
     );
   }

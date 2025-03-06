@@ -8,11 +8,15 @@ class ContentInteractionButton extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.color,
+    this.showText = true,
+    this.text = '',
   });
 
   final IconData icon;
   final VoidCallback onTap;
   final Color color;
+  final String text;
+  final bool showText;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +36,19 @@ class ContentInteractionButton extends StatelessWidget {
                 Icon(
                   icon,
                   color: color,
-
                 ),
+                if (showText)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      ' $text',
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            color: color,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ),
               ],
             ),
           ),

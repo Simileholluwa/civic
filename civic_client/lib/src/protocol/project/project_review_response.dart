@@ -49,6 +49,9 @@ abstract class ProjectReviewResponse implements _i1.SerializableModel {
 
   bool isDeleted;
 
+  /// Returns a shallow copy of this [ProjectReviewResponse]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   ProjectReviewResponse copyWith({
     int? likes,
     int? dislikes,
@@ -88,6 +91,9 @@ class _ProjectReviewResponseImpl extends ProjectReviewResponse {
           isDeleted: isDeleted,
         );
 
+  /// Returns a shallow copy of this [ProjectReviewResponse]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   ProjectReviewResponse copyWith({
     int? likes,

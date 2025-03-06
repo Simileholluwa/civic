@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -24,6 +25,7 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
       await _prefs.setString('userRecord', jsonString);
       await _prefs.setInt('userId', userRecord.id!);
     } catch (e) {
+      log(e.toString());
       throw CacheException(message: 'Something went wrong');
     }
   }
@@ -33,12 +35,13 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
     final userRecord = _prefs.getString('userRecord');
     try {
       if (userRecord != null) {
-        return jsonDecode(userRecord);
+        final decoded = jsonDecode(userRecord.toString());
+        return UserRecord.fromJson(decoded);
       } else {
         return null;
       }
     } catch (e) {
-      throw CacheException(message: 'User record not found');
+      throw CacheException(message: e.toString());
     }
   }
   

@@ -89,6 +89,9 @@ abstract class DraftPoll
 
   List<String> tags;
 
+  /// Returns a shallow copy of this [DraftPoll]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   DraftPoll copyWith({
     int? draftId,
     int? ownerId,
@@ -167,6 +170,9 @@ class _DraftPollImpl extends DraftPoll {
           tags: tags,
         );
 
+  /// Returns a shallow copy of this [DraftPoll]
+  /// with some or all fields replaced by the given arguments.
+  @_i1.useResult
   @override
   DraftPoll copyWith({
     Object? draftId = _Undefined,

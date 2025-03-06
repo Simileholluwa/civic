@@ -103,6 +103,7 @@ Future<bool?> virtualLinkDialog({
                                         textController: projectCreationSate
                                             .virtualLocationController,
                                         prefixIcon: Iconsax.link,
+                                        textCapitalization: TextCapitalization.none,
                                         hintText: 'E.g. https://nelf.gov.ng',
                                         maxLines: 1,
                                         hintStyle: Theme.of(context)
