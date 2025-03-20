@@ -1,9 +1,0 @@
-enum: ProjectStatus
-values:
-    - ongoing
-    - completed
-    - cancelled
-    - paused
-    - archived
-    - pending
-    - abandoned

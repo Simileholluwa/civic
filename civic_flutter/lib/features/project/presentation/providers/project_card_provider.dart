@@ -10,13 +10,23 @@ class ProjectCardWidget extends _$ProjectCardWidget {
   @override
   ProjectCardState build(Project project) {
     return ProjectCardState.populate(
-      project, ref,
+      project,
+      ref,
     );
   }
 
   void toggleFilter() {
     state = state.copyWith(
-      toggleFilter: !state.toggleFilter!,
+      toggleFilter: !state.toggleFilter,
+    );
+  }
+
+  void setProjectReview(int numberOfReviews) {
+    state = state.copyWith(
+      numberOfReviews: THelperFunctions.humanizeNumber(
+            numberOfReviews,
+          ),
+      hasReviewed: true,
     );
   }
 
@@ -28,11 +38,24 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     return result.fold((error) {
       log(error.message);
       return;
-    }, (response) async {
-      state = state.copyWith(
-          numberOfLikes: THelperFunctions.humanizeNumber(response.likes),
-          hasLiked: response.likedByUser,
-        );
+    }, (_) async {
+      return;
+    });
+  }
+
+  Future<void> toggleBookmarkStatus(
+    int projectId,
+  ) async {
+    final toggleBookmark = ref.read(toggleBookmarkProvider);
+    final result = await toggleBookmark(
+      ToggleBookmarkParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) {
+      log(error.message);
+      return;
+    }, (_) async {
       return;
     });
   }

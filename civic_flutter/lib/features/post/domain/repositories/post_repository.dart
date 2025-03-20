@@ -3,7 +3,11 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract class PostRepository {
-  Future<Either<Failure, Post?>> savePost({required Post post});
+  Future<Either<Failure, Post?>> savePost({
+    required Post post,
+    bool isProjectRepost = false,
+    int? projectId,
+  });
   Future<Either<Failure, void>> schedulePost({
     required Post post,
     required DateTime dateTime,

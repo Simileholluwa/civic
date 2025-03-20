@@ -13,7 +13,11 @@ class PostRepositoryImpl implements PostRepository {
   final PostRemoteDatabaseImpl _remoteDatabase;
   final PostLocalDatabaseImpl _localDatabase;
   @override
-  Future<Either<Failure, Post?>> savePost({required Post post}) async {
+  Future<Either<Failure, Post?>> savePost({
+    required Post post,
+    bool isProjectRepost = false,
+    int? projectId,
+  }) async {
     try {
       final result = await _remoteDatabase.savePost(post: post);
       return Right(result);

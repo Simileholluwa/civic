@@ -113,7 +113,6 @@ class AuthState {
       newAccountPasswordFormKey: newAccountPasswordFormKey ?? this.newAccountPasswordFormKey,
       resetPasswordEmailFormKey: resetPasswordEmailFormKey ?? this.resetPasswordEmailFormKey,
       acceptTerms: acceptTerms ?? this.acceptTerms,
-      
     );
   }
 

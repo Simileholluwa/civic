@@ -1,0 +1,11 @@
+class: ProjectBookmarks
+table: project_bookmarks
+fields:
+    project: Project?, relation
+    owner: UserRecord?, relation
+    dateCreated: DateTime, default=now
+
+indexes:
+  project_bookmarks_id_unique_idx:
+    fields: projectId, ownerId
+    unique: true

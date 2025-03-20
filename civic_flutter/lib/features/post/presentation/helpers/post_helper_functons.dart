@@ -280,8 +280,6 @@ class PostHelperFunctions {
       locations: postState.locations,
       mentions: ref.watch(selectedMentionsProvider),
       tags: ref.watch(hashtagsProvider(postState.text)),
-      projectId: project?.id,
-      project: project,
       isProjectRepost: project != null,
     );
   }

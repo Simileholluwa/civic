@@ -24,7 +24,7 @@ class PaginatedPostList extends _$PaginatedPostList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int page, {int limit = 10}) async {
+  Future<void> fetchPage(int page, {int limit = 50}) async {
     final listPostUseCase = ref.read(getPostsProvider);
     final result = await listPostUseCase(
       GetPostsParams(
@@ -49,9 +49,11 @@ class PaginatedPostList extends _$PaginatedPostList {
   }
 
   void addPost(Post post) {
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: [post, ...pagingController.itemList ?? []],
-    );
+    if (pagingController.itemList != null) {
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: [post, ...pagingController.itemList ?? []],
+      );
+    }
   }
 }

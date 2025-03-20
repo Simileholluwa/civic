@@ -12,6 +12,8 @@ class SavePostUseCase implements UseCase<Post?, SavePostParams> {
   Future<Either<Failure, Post?>> call(SavePostParams params) async {
     final result = await _postRepository.savePost(
       post: params.post,
+      isProjectRepost: params.isProjectRepost,
+      projectId: params.projectId,
     );
     return result;
   }
@@ -20,6 +22,10 @@ class SavePostUseCase implements UseCase<Post?, SavePostParams> {
 class SavePostParams {
   SavePostParams(
     this.post,
+    this.isProjectRepost,
+    this.projectId,
   );
   final Post post;
+  final bool isProjectRepost;
+  final int? projectId;
 }

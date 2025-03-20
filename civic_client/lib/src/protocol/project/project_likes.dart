@@ -20,8 +20,8 @@ abstract class ProjectLikes implements _i1.SerializableModel {
     this.project,
     required this.ownerId,
     this.owner,
-    this.dateCreated,
-  });
+    DateTime? dateCreated,
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectLikes({
     int? id,

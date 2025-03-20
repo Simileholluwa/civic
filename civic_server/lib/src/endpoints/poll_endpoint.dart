@@ -213,7 +213,7 @@ class PollEndpoint extends Endpoint {
 
   Future<PollList> getPolls(
     Session session, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     final count = await Poll.db.count(session);

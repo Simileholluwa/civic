@@ -24,7 +24,7 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int postId, int page, {int limit = 10}) async {
+  Future<void> fetchPage(int postId, int page, {int limit = 50}) async {
     final listPostCommentUseCase = ref.read(getPostCommentsProvider);
     final result = await listPostCommentUseCase(
       GetPostCommentsParams(

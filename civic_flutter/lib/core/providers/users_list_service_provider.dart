@@ -35,7 +35,7 @@ class PaginatedUsersList extends _$PaginatedUsersList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int page, {int limit = 10}) async {
+  Future<void> fetchPage(int page, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 1000);
     final completer = Completer<List<UserRecord>?>();
     if (_debounce?.isActive ?? false) _debounce!.cancel();

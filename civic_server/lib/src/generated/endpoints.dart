@@ -669,7 +669,17 @@ class Endpoints extends _i1.EndpointDispatch {
               name: 'post',
               type: _i1.getType<_i17.Post>(),
               nullable: false,
-            )
+            ),
+            'isProjectRepost': _i1.ParameterDescription(
+              name: 'isProjectRepost',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int?>(),
+              nullable: true,
+            ),
           },
           call: (
             _i1.Session session,
@@ -678,6 +688,8 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['post'] as _i8.PostEndpoint).savePost(
             session,
             params['post'],
+            isProjectRepost: params['isProjectRepost'],
+            projectId: params['projectId'],
           ),
         ),
         'schedulePost': _i1.MethodConnector(
@@ -1035,6 +1047,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'toggleBookmark': _i1.MethodConnector(
+          name: 'toggleBookmark',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).toggleBookmark(
+            session,
+            params['projectId'],
+          ),
+        ),
         'toggleLike': _i1.MethodConnector(
           name: 'toggleLike',
           params: {
@@ -1110,6 +1140,85 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['projectReviewId'],
             params['user'],
+          ),
+        ),
+        'updateProject': _i1.MethodConnector(
+          name: 'updateProject',
+          params: {
+            'project': _i1.ParameterDescription(
+              name: 'project',
+              type: _i1.getType<_i18.Project>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).updateProject(
+            session,
+            params['project'],
+          ),
+        ),
+        'updateProjectReview': _i1.MethodConnector(
+          name: 'updateProjectReview',
+          params: {
+            'projectReview': _i1.ParameterDescription(
+              name: 'projectReview',
+              type: _i1.getType<_i19.ProjectReview>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).updateProjectReview(
+            session,
+            params['projectReview'],
+          ),
+        ),
+        'projectUpdates': _i1.MethodStreamConnector(
+          name: 'projectUpdates',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['project'] as _i9.ProjectEndpoint).projectUpdates(
+            session,
+            params['projectId'],
+          ),
+        ),
+        'projectReviewUpdates': _i1.MethodStreamConnector(
+          name: 'projectReviewUpdates',
+          params: {
+            'reviewId': _i1.ParameterDescription(
+              name: 'reviewId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['project'] as _i9.ProjectEndpoint)
+                  .projectReviewUpdates(
+            session,
+            params['reviewId'],
           ),
         ),
       },

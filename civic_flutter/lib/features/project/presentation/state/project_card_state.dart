@@ -22,27 +22,29 @@ class ProjectCardState {
   final String numberOfReviews;
   final String numberOfReposts;
   final String numberOfVerifies;
+  final String numberOfBookmarks;
   final bool hasLiked;
   final bool hasReviewed;
   final bool hasReposted;
   final bool hasVerified;
   final UserRecord creator;
   final bool canVet;
-  String? startDateISO;
-  String? endDateISO;
-  double? percentageElapsedInDouble;
-  String? percentageElapsedInString;
-  String? category;
-  String? subCategory;
-  String? fundingAmount;
-  String? fundingCategory;
-  String? fundingSubCategory;
-  Document? rawDescription;
-  List<String>? pdfAttachments;
-  bool? hasPdf;
-  List<AWSPlaces>? locations;
-  bool? hasLocation;
-  bool? toggleFilter;
+  final bool isBookmarked;
+  final String startDateISO;
+  final String endDateISO;
+  final double percentageElapsedInDouble;
+  final String percentageElapsedInString;
+  final String category;
+  final String subCategory;
+  final String fundingAmount;
+  final String fundingCategory;
+  final String fundingSubCategory;
+  final Document rawDescription;
+  final List<String> pdfAttachments;
+  final bool hasPdf;
+  final List<AWSPlaces> locations;
+  final bool hasLocation;
+  final bool toggleFilter;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -57,26 +59,28 @@ class ProjectCardState {
     required this.numberOfReviews,
     required this.numberOfReposts,
     required this.numberOfVerifies,
+    required this.numberOfBookmarks,
     this.hasLiked = false,
     required this.hasReviewed,
     required this.hasReposted,
     required this.hasVerified,
     required this.creator,
     required this.canVet,
-    this.startDateISO,
-    this.endDateISO,
-    this.percentageElapsedInDouble,
-    this.percentageElapsedInString,
-    this.category,
-    this.subCategory,
-    this.fundingAmount,
-    this.fundingCategory,
-    this.fundingSubCategory,
-    this.rawDescription,
-    this.pdfAttachments,
-    this.hasPdf,
-    this.locations,
-    this.hasLocation,
+    this.isBookmarked = false,
+    required this.startDateISO,
+    required this.endDateISO,
+    required this.percentageElapsedInDouble,
+    required this.percentageElapsedInString,
+    required this.category,
+    required this.subCategory,
+    required this.fundingAmount,
+    required this.fundingCategory,
+    required this.fundingSubCategory,
+    required this.rawDescription,
+    required this.pdfAttachments,
+    required this.hasPdf,
+    required this.locations,
+    required this.hasLocation,
     this.toggleFilter = false,
   });
 
@@ -94,12 +98,14 @@ class ProjectCardState {
     String? numberOfReviews,
     String? numberOfReposts,
     String? numberOfVerifies,
+    String? numberOfBookmarks,
     bool? hasLiked,
     bool? hasReviewed,
     bool? hasReposted,
     bool? hasVerified,
     UserRecord? creator,
     bool? canVet,
+    bool? isBookmarked,
     String? startDateISO,
     String? endDateISO,
     double? percentageElapsedInDouble,
@@ -130,18 +136,18 @@ class ProjectCardState {
       numberOfReviews: numberOfReviews ?? this.numberOfReviews,
       numberOfReposts: numberOfReposts ?? this.numberOfReposts,
       numberOfVerifies: numberOfVerifies ?? this.numberOfVerifies,
+      numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
       hasLiked: hasLiked ?? this.hasLiked,
       hasReviewed: hasReviewed ?? this.hasReviewed,
       hasReposted: hasReposted ?? this.hasReposted,
       hasVerified: hasVerified ?? this.hasVerified,
       creator: creator ?? this.creator,
       canVet: canVet ?? this.canVet,
+      isBookmarked: isBookmarked ?? this.isBookmarked,
       startDateISO: startDateISO ?? this.startDateISO,
       endDateISO: endDateISO ?? this.endDateISO,
-      percentageElapsedInDouble:
-          percentageElapsedInDouble ?? this.percentageElapsedInDouble,
-      percentageElapsedInString:
-          percentageElapsedInString ?? this.percentageElapsedInString,
+      percentageElapsedInDouble: percentageElapsedInDouble ?? this.percentageElapsedInDouble,
+      percentageElapsedInString: percentageElapsedInString ?? this.percentageElapsedInString,
       category: category ?? this.category,
       subCategory: subCategory ?? this.subCategory,
       fundingAmount: fundingAmount ?? this.fundingAmount,
@@ -158,7 +164,7 @@ class ProjectCardState {
 
   @override
   String toString() {
-    return 'ProjectCardState( timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfReviews)';
+    return 'ProjectCardState(timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfReviews: $numberOfReviews, numberOfReposts: $numberOfReposts, numberOfVerifies: $numberOfVerifies, numberOfBookmarks: $numberOfBookmarks, hasLiked: $hasLiked, hasReviewed: $hasReviewed, hasReposted: $hasReposted, hasVerified: $hasVerified, creator: $creator, canVet: $canVet, isBookmarked: $isBookmarked, startDateISO: $startDateISO, endDateISO: $endDateISO, percentageElapsedInDouble: $percentageElapsedInDouble, percentageElapsedInString: $percentageElapsedInString, category: $category, subCategory: $subCategory, fundingAmount: $fundingAmount, fundingCategory: $fundingCategory, fundingSubCategory: $fundingSubCategory, rawDescription: $rawDescription, pdfAttachments: $pdfAttachments, hasPdf: $hasPdf, locations: $locations, hasLocation: $hasLocation, toggleFilter: $toggleFilter)';
   }
 
   factory ProjectCardState.populate(
@@ -166,6 +172,7 @@ class ProjectCardState {
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
+    
     return ProjectCardState(
       creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -198,10 +205,13 @@ class ProjectCardState {
         project.likedBy!.length,
       ),
       numberOfReviews: THelperFunctions.humanizeNumber(
-        project.numberOfReviews!,
+        project.reviewedBy!.length,
       ),
       numberOfVerifies: THelperFunctions.humanizeNumber(
-        project.numberOfVerifies!,
+        project.verifiedBy!.length,
+      ),
+      numberOfBookmarks: THelperFunctions.humanizeNumber(
+        project.bookmarkedBy!.length,
       ),
       hasLiked: project.likedBy!.contains(
         userId,
@@ -215,8 +225,11 @@ class ProjectCardState {
       hasVerified: project.verifiedBy!.contains(
         userId,
       ),
+      isBookmarked: project.bookmarkedBy!.contains(
+        userId,
+      ),
       numberOfReposts: THelperFunctions.humanizeNumber(
-        project.numberOfReposts!,
+        project.repostedBy!.length,
       ),
       canVet: ProjectHelperFunctions.canVet(
         project.startDate!,
@@ -234,17 +247,18 @@ class ProjectCardState {
         project.startDate!,
         project.endDate!,
       ),
-      category: project.projectCategory,
-      subCategory: project.projectSubCategory,
+      category: project.projectCategory!,
+      subCategory: project.projectSubCategory!,
       fundingAmount: '${project.currency} ${ProjectHelperFunctions.formatNumber(
         project.projectCost!,
       )}',
-      fundingCategory: project.fundingCategory,
-      fundingSubCategory: project.fundingSubCategory,
+      fundingCategory: project.fundingCategory!,
+      fundingSubCategory: project.fundingSubCategory!,
       hasPdf: project.projectPDFAttachments?.isNotEmpty ?? false,
-      pdfAttachments: project.projectPDFAttachments,
-      locations: project.physicalLocations,
+      pdfAttachments: project.projectPDFAttachments ?? [],
+      locations: project.physicalLocations ?? [],
       hasLocation: project.physicalLocations?.isNotEmpty ?? false,
+      
     );
   }
 }

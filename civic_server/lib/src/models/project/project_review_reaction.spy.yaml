@@ -3,7 +3,7 @@ table: project_review_reaction
 fields:
     owner: UserRecord?, relation
     review: ProjectReview?, relation
-    dateCreated: DateTime?
+    dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     isLike: bool?
     isDeleted: bool?

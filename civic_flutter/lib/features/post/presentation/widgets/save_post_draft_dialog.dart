@@ -22,10 +22,7 @@ Future<bool?> savePostDraftDialog(
             .dispose();
       }
       context.pop();
-      context.go(
-        FeedRoutes.namespace,
-        extra: null,
-      );
+      context.pop();
     },
     activeButtonText: 'Save as draft',
     activeButtonLoading: false,

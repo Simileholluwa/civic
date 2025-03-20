@@ -7,17 +7,15 @@ import 'package:civic_flutter/features/project/project.dart';
 class ProjectReviewsScreen extends ConsumerWidget {
   const ProjectReviewsScreen({
     super.key,
-    required this.projectId,
     required this.project,
   });
 
   final Project project;
-  final int projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingControllerNotifier =
-        ref.watch(paginatedProjectReviewListProvider(projectId).notifier);
+        ref.watch(paginatedProjectReviewListProvider(project.id!).notifier);
     final projectReviewStateNotifier =
         ref.watch(projectReviewListQueryProvider.notifier);
     final projectReviewState = ref.watch(projectReviewListQueryProvider);
@@ -129,6 +127,7 @@ class ProjectReviewsScreen extends ConsumerWidget {
           shrinkWrap: true,
           scrollPhysics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, projectReview, index) {
+
             final reactToReviewNotifier = ref.watch(
               reviewReactionProvider(
                 projectReview,

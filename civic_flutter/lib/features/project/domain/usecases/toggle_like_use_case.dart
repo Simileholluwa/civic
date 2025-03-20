@@ -1,17 +1,16 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
-class ToggleLikeUseCase implements UseCase<ProjectToggleLikeResponse, ToggleLikeParams> {
+class ToggleLikeUseCase implements UseCase<void, ToggleLikeParams> {
   ToggleLikeUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
   final ProjectRepository _projectRepository;
 
   @override
-  Future<Either<Failure, ProjectToggleLikeResponse>> call(ToggleLikeParams params) async {
+  Future<Either<Failure, void>> call(ToggleLikeParams params) async {
     final result = await _projectRepository.toggleLike(
-      id: params.id,
+      projectId: params.projectId,
     );
     return result;
   }
@@ -19,7 +18,7 @@ class ToggleLikeUseCase implements UseCase<ProjectToggleLikeResponse, ToggleLike
 
 class ToggleLikeParams {
   ToggleLikeParams(
-    this.id,
+    this.projectId,
   );
-  final int id;
+  final int projectId;
 }

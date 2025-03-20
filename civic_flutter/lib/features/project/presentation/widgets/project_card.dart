@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
@@ -7,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ProjectCard extends ConsumerWidget {
+class ProjectCard extends ConsumerStatefulWidget {
   const ProjectCard({
     super.key,
     required this.project,
@@ -26,27 +28,78 @@ class ProjectCard extends ConsumerWidget {
   final bool showPolitcalStatus;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends ConsumerState<ProjectCard> {
+  Project? newProject;
+
+  @override
+  void initState() {
+    _listenToUpdates();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _listenToUpdates() async {
+    while (true) {
+      try {
+        final projectUpdates = ref
+            .read(
+              clientProvider,
+            )
+            .project
+            .projectUpdates(
+              widget.project.id!,
+            );
+        await for (final update in projectUpdates) {
+          setState(() {
+            newProject = update.copyWith(
+              owner: widget.project.owner,
+            );
+          });
+        }
+      } on MethodStreamException catch (e) {
+        log(e.toString());
+        setState(() {
+          newProject = widget.project;
+        });
+      }
+      await Future.delayed(
+        Duration(
+          seconds: 5,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
-        project,
+        newProject ?? widget.project,
       ),
     );
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
-        project,
+        newProject ?? widget.project,
       ).notifier,
     );
     final isVisibleNotifier = ref.watch(
       appScrollVisibilityProvider.notifier,
     );
+
     return InkWell(
-      onTap: canTap
+      onTap: widget.canTap
           ? () {
               context.pushNamed(
                 ProjectDetailsScreen.routeName(),
                 pathParameters: {
-                  'id': project.id.toString(),
+                  'id': widget.project.id.toString(),
                 },
               );
               isVisibleNotifier.hide();
@@ -61,21 +114,21 @@ class ProjectCard extends ConsumerWidget {
             child: ContentCreatorInfo(
               creator: projectCardState.creator,
               timeAgo: projectCardState.timeAgo,
-              radius: creatorAvatarRadius,
-              showPoliticalStatus: showPolitcalStatus,
+              radius: widget.creatorAvatarRadius,
+              showPoliticalStatus: widget.showPolitcalStatus,
             ),
           ),
           projectCardState.imagesUrl.length == 1
               ? ContentSingleCachedImage(
                   imageUrl: projectCardState.imagesUrl.first,
-                  maxHeight: maxHeight,
+                  maxHeight: widget.maxHeight,
                 )
               : ContentMultipleCachedImage(
                   imageUrls: projectCardState.imagesUrl,
-                  maxHeight: maxHeight,
+                  maxHeight: widget.maxHeight,
                 ),
           ProjectQuickDetails(
-            project: project,
+            project: widget.project,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -99,54 +152,67 @@ class ProjectCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (showInteractions)
+          if (widget.showInteractions)
             Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ContentInteractionButton(
-                    icon: projectCardState.hasLiked == true
+                    icon: projectCardState.hasLiked
                         ? Iconsax.heart5
                         : Iconsax.heart,
                     onTap: () async {
                       await projectCardNotifier.toggleLikeStatus(
-                        project.id!,
+                        widget.project.id!,
                       );
                     },
                     text: projectCardState.numberOfLikes,
-                    color: projectCardState.hasLiked == true
+                    color: projectCardState.hasLiked
                         ? TColors.primary
                         : Theme.of(context).iconTheme.color!,
                   ),
                   ContentInteractionButton(
-                    icon: projectCardState.hasReposted == true
+                    icon: projectCardState.hasReposted
                         ? Iconsax.repeate_music5
                         : Iconsax.repeate_music,
                     onTap: () {
-                      context.pushNamed(
-                        CreatePostScreen.routeName(),
-                        extra: {
-                          'draft': null,
-                          'project': project,
-                        },
-                        pathParameters: {
-                          'id': '0',
+                      if (projectCardState.hasReposted) {
+                        TToastMessages.infoToast('User has reposted');
+                        return;
+                      }
+                      showModalBottomSheet(
+                        context: context,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * .7,
+                          minHeight: MediaQuery.of(context).size.height * .5,
+                        ),
+                        isScrollControlled: true,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        elevation: 0,
+                        builder: (ctx) {
+                          return CreatePostScreen(
+                            id: 0,
+                            draft: null,
+                            project: widget.project,
+                          );
                         },
                       );
+
                       isVisibleNotifier.hide();
                     },
                     text: projectCardState.numberOfReposts,
-                    color: projectCardState.hasReposted == true
+                    color: projectCardState.hasReposted
                         ? TColors.primary
                         : Theme.of(context).iconTheme.color!,
                   ),
                   ContentInteractionButton(
-                    icon: projectCardState.hasReviewed == true
-                        ? Iconsax.magic_star5
-                        : Iconsax.magic_star,
-                    
-                    text: (project.numberOfReviews.toString()),
+                    icon: projectCardState.hasReviewed
+                        ? Icons.star
+                        : Icons.star_border_outlined,
+                    iconSize: 22,
+                    text: projectCardState.numberOfReviews,
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
@@ -160,19 +226,20 @@ class ProjectCard extends ConsumerWidget {
                         elevation: 0,
                         builder: (ctx) {
                           return ProjectReviewScreen(
-                            id: project.id!,
+                            id: widget.project.id!,
+                            fromDetails: false,
                           );
                         },
                       );
                       isVisibleNotifier.hide();
                     },
-                    color: projectCardState.hasReviewed == true
+                    color: projectCardState.hasReviewed
                         ? TColors.primary
                         : Theme.of(context).iconTheme.color!,
                   ),
                   if (projectCardState.canVet)
                     ContentInteractionButton(
-                      icon: projectCardState.hasVerified == true
+                      icon: projectCardState.hasVerified
                           ? Iconsax.medal_star5
                           : Iconsax.medal_star,
                       text: projectCardState.numberOfVerifies,
@@ -189,23 +256,32 @@ class ProjectCard extends ConsumerWidget {
                           elevation: 0,
                           builder: (ctx) {
                             return ProjectVerifyScreen(
-                              id: project.id!,
-                              projectLocations:
-                                  projectCardState.locations ?? [],
+                              id: widget.project.id!,
+                              projectLocations: projectCardState.locations,
+                              fromDetails: false,
                             );
                           },
                         );
                         isVisibleNotifier.hide();
                       },
-                      color: projectCardState.hasVerified == true
+                      color: projectCardState.hasVerified
                           ? TColors.primary
                           : Theme.of(context).iconTheme.color!,
                     ),
                   if (!projectCardState.canVet)
                     ContentInteractionButton(
-                      icon: Iconsax.bookmark,
-                      onTap: () {},
-                      color: Theme.of(context).textTheme.labelMedium!.color!,
+                      icon: projectCardState.isBookmarked
+                          ? Icons.bookmark
+                          : Icons.bookmark_add_outlined,
+                      text: projectCardState.numberOfBookmarks,
+                      onTap: () async {
+                        await projectCardNotifier.toggleBookmarkStatus(
+                          widget.project.id!,
+                        );
+                      },
+                      color: projectCardState.isBookmarked
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                   ContentInteractionButton(
                     icon: Iconsax.more_2,

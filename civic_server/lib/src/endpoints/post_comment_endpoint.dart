@@ -66,7 +66,7 @@ class PostCommentEndpoint extends Endpoint {
   Future<PostCommentList> getPostComments(
     Session session,
     int postId, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
@@ -107,7 +107,7 @@ class PostCommentEndpoint extends Endpoint {
     Session session,
     int commentId,
     int postId, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {

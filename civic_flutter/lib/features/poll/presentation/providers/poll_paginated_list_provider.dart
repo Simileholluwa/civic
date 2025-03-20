@@ -24,7 +24,7 @@ class PaginatedPollList extends _$PaginatedPollList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int page, {int limit = 10}) async {
+  Future<void> fetchPage(int page, {int limit = 50}) async {
     final listPollUseCase = ref.read(getPollsProvider);
     final result = await listPollUseCase(
       GetPollsParams(

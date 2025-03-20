@@ -15,18 +15,26 @@ abstract class ProjectRepository {
     String? cardinal,
   });
 
-  Future<Either<Failure, ProjectReviewResponse?>> reactToReview({
+  Future<Either<Failure, void>> reactToReview({
     required int reviewId,
     required bool isLike,
   });
 
-  Future<Either<String, Project?>> getProject({required int id});
+  Future<Either<String, Project?>> getProject({
+    required int id,
+  });
 
-  Future<Either<Failure, Project?>> saveProject({required Project project});
+  Future<Either<Failure, Project?>> saveProject({
+    required Project project,
+  });
 
-  Future<Either<String, ProjectReview?>> getProjectReview({required int id});
+  Future<Either<String, ProjectReview?>> getProjectReview({
+    required int id,
+  });
 
-  Future<Either<Failure, ProjectReview?>> saveProjectReview({required ProjectReview projectReview,});
+  Future<Either<Failure, ProjectReview?>> saveProjectReview({
+    required ProjectReview projectReview,
+  });
 
   Future<Either<Failure, void>> scheduleProject({
     required Project project,
@@ -35,5 +43,12 @@ abstract class ProjectRepository {
 
   Future<Either<Failure, void>> deleteProject({required int id});
 
-  Future<Either<Failure, ProjectToggleLikeResponse>> toggleLike({required int id});
+  Future<Either<Failure, void>> toggleLike({
+    required int projectId,
+  });
+
+  Future<Either<Failure, void>> toggleBookmark({
+    required int projectId,
+    
+  });
 }

@@ -44,6 +44,7 @@ export './theme/theme.dart';
 export './toasts_messages/toast_messages.dart';
 export './usecases/usecase.dart';
 export './validators/validation.dart';
+export './extensions/user_extension.dart';
 export './widgets/app/app_android_bottom_nav.dart';
 export './widgets/app/app_app_bar.dart';
 export './widgets/app/app_button.dart';

@@ -6,7 +6,7 @@ part of 'post_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedPostListHash() => r'0b055ea0e004cc43cd93c7bbc6176d2aa38a5923';
+String _$paginatedPostListHash() => r'4abf48181cf9e665b8c5d3ff7873f7fac82160f9';
 
 /// See also [PaginatedPostList].
 @ProviderFor(PaginatedPostList)

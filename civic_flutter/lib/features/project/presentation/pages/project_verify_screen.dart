@@ -10,10 +10,12 @@ class ProjectVerifyScreen extends ConsumerWidget {
     super.key,
     required this.projectLocations,
     required this.id,
+    this.fromDetails = true,
   });
 
   final List<AWSPlaces> projectLocations;
   final int id;
+  final bool fromDetails;
 
   static String routePath([int? id]) => '${id ?? ':id'}/verify';
   static String routeName() => 'project/verify';
@@ -29,6 +31,7 @@ class ProjectVerifyScreen extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
         child: Container(
+          margin: EdgeInsets.only(top: fromDetails ? 0 : 4),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(

@@ -29,13 +29,13 @@ abstract class ProjectReview
     this.fundingRating,
     this.datesRating,
     this.overallRating,
-    this.dateCreated,
+    DateTime? dateCreated,
     this.updatedAt,
-    this.likes,
-    this.dislikes,
     this.likedBy,
     this.dislikedBy,
-  });
+    int? numberOfReviews,
+  })  : dateCreated = dateCreated ?? DateTime.now(),
+        numberOfReviews = numberOfReviews ?? 0;
 
   factory ProjectReview({
     int? id,
@@ -53,10 +53,9 @@ abstract class ProjectReview
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likes,
-    int? dislikes,
     List<int>? likedBy,
     List<int>? dislikedBy,
+    int? numberOfReviews,
   }) = _ProjectReviewImpl;
 
   factory ProjectReview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -89,14 +88,13 @@ abstract class ProjectReview
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likes: jsonSerialization['likes'] as int?,
-      dislikes: jsonSerialization['dislikes'] as int?,
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       dislikedBy: (jsonSerialization['dislikedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
     );
   }
 
@@ -135,13 +133,11 @@ abstract class ProjectReview
 
   DateTime? updatedAt;
 
-  int? likes;
-
-  int? dislikes;
-
   List<int>? likedBy;
 
   List<int>? dislikedBy;
+
+  int? numberOfReviews;
 
   @override
   _i1.Table get table => t;
@@ -165,10 +161,9 @@ abstract class ProjectReview
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likes,
-    int? dislikes,
     List<int>? likedBy,
     List<int>? dislikedBy,
+    int? numberOfReviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -188,10 +183,9 @@ abstract class ProjectReview
       if (overallRating != null) 'overallRating': overallRating,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likes != null) 'likes': likes,
-      if (dislikes != null) 'dislikes': dislikes,
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
+      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -213,10 +207,9 @@ abstract class ProjectReview
       if (overallRating != null) 'overallRating': overallRating,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likes != null) 'likes': likes,
-      if (dislikes != null) 'dislikes': dislikes,
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
+      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -275,10 +268,9 @@ class _ProjectReviewImpl extends ProjectReview {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    int? likes,
-    int? dislikes,
     List<int>? likedBy,
     List<int>? dislikedBy,
+    int? numberOfReviews,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -295,10 +287,9 @@ class _ProjectReviewImpl extends ProjectReview {
           overallRating: overallRating,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          likes: likes,
-          dislikes: dislikes,
           likedBy: likedBy,
           dislikedBy: dislikedBy,
+          numberOfReviews: numberOfReviews,
         );
 
   /// Returns a shallow copy of this [ProjectReview]
@@ -321,10 +312,9 @@ class _ProjectReviewImpl extends ProjectReview {
     Object? overallRating = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likes = _Undefined,
-    Object? dislikes = _Undefined,
     Object? likedBy = _Undefined,
     Object? dislikedBy = _Undefined,
+    Object? numberOfReviews = _Undefined,
   }) {
     return ProjectReview(
       id: id is int? ? id : this.id,
@@ -350,14 +340,14 @@ class _ProjectReviewImpl extends ProjectReview {
           overallRating is double? ? overallRating : this.overallRating,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likes: likes is int? ? likes : this.likes,
-      dislikes: dislikes is int? ? dislikes : this.dislikes,
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
       dislikedBy: dislikedBy is List<int>?
           ? dislikedBy
           : this.dislikedBy?.map((e0) => e0).toList(),
+      numberOfReviews:
+          numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
     );
   }
 }
@@ -408,17 +398,10 @@ class ProjectReviewTable extends _i1.Table {
     dateCreated = _i1.ColumnDateTime(
       'dateCreated',
       this,
+      hasDefault: true,
     );
     updatedAt = _i1.ColumnDateTime(
       'updatedAt',
-      this,
-    );
-    likes = _i1.ColumnInt(
-      'likes',
-      this,
-    );
-    dislikes = _i1.ColumnInt(
-      'dislikes',
       this,
     );
     likedBy = _i1.ColumnSerializable(
@@ -428,6 +411,11 @@ class ProjectReviewTable extends _i1.Table {
     dislikedBy = _i1.ColumnSerializable(
       'dislikedBy',
       this,
+    );
+    numberOfReviews = _i1.ColumnInt(
+      'numberOfReviews',
+      this,
+      hasDefault: true,
     );
   }
 
@@ -459,13 +447,11 @@ class ProjectReviewTable extends _i1.Table {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  late final _i1.ColumnInt likes;
-
-  late final _i1.ColumnInt dislikes;
-
   late final _i1.ColumnSerializable likedBy;
 
   late final _i1.ColumnSerializable dislikedBy;
+
+  late final _i1.ColumnInt numberOfReviews;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -508,10 +494,9 @@ class ProjectReviewTable extends _i1.Table {
         overallRating,
         dateCreated,
         updatedAt,
-        likes,
-        dislikes,
         likedBy,
         dislikedBy,
+        numberOfReviews,
       ];
 
   @override

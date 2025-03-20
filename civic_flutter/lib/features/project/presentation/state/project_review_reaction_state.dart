@@ -9,7 +9,6 @@ class ProjectReviewReactionState {
   final bool isLiked;
   final bool isDisliked;
   final bool isDeleted;
-
   ProjectReviewReactionState({
     required this.likesCount,
     required this.dislikesCount,
@@ -40,8 +39,8 @@ class ProjectReviewReactionState {
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectReviewReactionState(
-      likesCount: projectReview.likes ?? 0,
-      dislikesCount: projectReview.dislikes ?? 0,
+      likesCount: projectReview.likedBy?.length ?? 0,
+      dislikesCount: projectReview.dislikedBy?.length ?? 0,
       isLiked: projectReview.likedBy!.contains(userId),
       isDisliked: projectReview.dislikedBy!.contains(userId),
       isDeleted: false,

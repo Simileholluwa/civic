@@ -2,7 +2,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +23,6 @@ class CreatePostScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final data = ref.watch(
@@ -38,7 +36,8 @@ class CreatePostScreen extends ConsumerWidget {
     final draftsData = id == 0 ? ref.watch(postDraftsProvider) : [];
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
-        postState.videoUrl.isNotEmpty || project != null;
+        postState.videoUrl.isNotEmpty ||
+        project != null;
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
@@ -81,16 +80,14 @@ class CreatePostScreen extends ConsumerWidget {
                             .notifier)
                         .dispose();
                   }
-                  context.go(
-                    FeedRoutes.namespace,
-                    extra: () => PostHelperFunctions.sendPost(
-                      ref,
-                      postState,
-                      id,
-                      data.value!,
-                      project,                 
-                    ),
+                  PostHelperFunctions.sendPost(
+                    ref,
+                    postState,
+                    id,
+                    data.value!,
+                    project,
                   );
+                  context.pop();
                 },
                 isRepost: project != null,
                 onCanSendPost: () async {
@@ -165,9 +162,7 @@ class CreatePostScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget(
-               
-              );
+              return AppLoadingWidget();
             },
           ),
         ),

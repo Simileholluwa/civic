@@ -38,14 +38,14 @@ import 'post/post_list.dart' as _i26;
 import 'post/post_type_enums.dart' as _i27;
 import 'post/posts_hashtags.dart' as _i28;
 import 'project/project.dart' as _i29;
-import 'project/project_likes.dart' as _i30;
-import 'project/project_list.dart' as _i31;
-import 'project/project_review.dart' as _i32;
-import 'project/project_review_list.dart' as _i33;
-import 'project/project_review_reaction.dart' as _i34;
-import 'project/project_review_response.dart' as _i35;
-import 'project/project_status.dart' as _i36;
-import 'project/project_toggle_like.dart' as _i37;
+import 'project/project_bookmarks.dart' as _i30;
+import 'project/project_likes.dart' as _i31;
+import 'project/project_list.dart' as _i32;
+import 'project/project_repost.dart' as _i33;
+import 'project/project_review.dart' as _i34;
+import 'project/project_review_list.dart' as _i35;
+import 'project/project_review_reaction.dart' as _i36;
+import 'project/project_review_response.dart' as _i37;
 import 'project/project_vetting.dart' as _i38;
 import 'user/political_status_enum.dart' as _i39;
 import 'user/user_exception.dart' as _i40;
@@ -80,14 +80,14 @@ export 'post/post_list.dart';
 export 'post/post_type_enums.dart';
 export 'post/posts_hashtags.dart';
 export 'project/project.dart';
+export 'project/project_bookmarks.dart';
 export 'project/project_likes.dart';
 export 'project/project_list.dart';
+export 'project/project_repost.dart';
 export 'project/project_review.dart';
 export 'project/project_review_list.dart';
 export 'project/project_review_reaction.dart';
 export 'project/project_review_response.dart';
-export 'project/project_status.dart';
-export 'project/project_toggle_like.dart';
 export 'project/project_vetting.dart';
 export 'user/political_status_enum.dart';
 export 'user/user_exception.dart';
@@ -971,7 +971,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -1053,7 +1053,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -1063,7 +1063,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
       ],
@@ -1271,6 +1271,12 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
+          name: 'bookmarkedBy',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
           name: 'overallRating',
           columnType: _i2.ColumnType.doublePrecision,
           isNullable: true,
@@ -1312,34 +1318,6 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'double?',
         ),
-        _i2.ColumnDefinition(
-          name: 'numberOfReviews',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-          columnDefault: '0',
-        ),
-        _i2.ColumnDefinition(
-          name: 'numberOfReposts',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-          columnDefault: '0',
-        ),
-        _i2.ColumnDefinition(
-          name: 'numberOfVerifies',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-          columnDefault: '0',
-        ),
-        _i2.ColumnDefinition(
-          name: 'numberOfLikes',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-          columnDefault: '0',
-        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -1367,6 +1345,95 @@ class Protocol extends _i1.SerializationManagerServer {
           isUnique: true,
           isPrimary: true,
         )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'project_bookmarks',
+      dartName: 'ProjectBookmarks',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'project_bookmarks_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'ownerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'dateCreated',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'CURRENT_TIMESTAMP',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_bookmarks_fk_0',
+          columns: ['projectId'],
+          referenceTable: 'project',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_bookmarks_fk_1',
+          columns: ['ownerId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'project_bookmarks_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'project_bookmarks_id_unique_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'projectId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'ownerId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
       ],
       managed: true,
     ),
@@ -1400,6 +1467,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
       ],
       foreignKeys: [
@@ -1449,6 +1517,115 @@ class Protocol extends _i1.SerializationManagerServer {
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
               definition: 'ownerId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'project_reposts',
+      dartName: 'ProjectRepost',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'project_reposts_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'ownerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'projectId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'postId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'repostedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_reposts_fk_0',
+          columns: ['ownerId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_reposts_fk_1',
+          columns: ['projectId'],
+          referenceTable: 'project',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'project_reposts_fk_2',
+          columns: ['postId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'project_reposts_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'project_reposts_id_unique_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'ownerId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'projectId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'postId',
             ),
           ],
           type: 'btree',
@@ -1536,24 +1713,13 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
         _i2.ColumnDefinition(
           name: 'updatedAt',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'likes',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'dislikes',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
         ),
         _i2.ColumnDefinition(
           name: 'likedBy',
@@ -1566,6 +1732,13 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'numberOfReviews',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+          columnDefault: '0',
         ),
       ],
       foreignKeys: [
@@ -1638,6 +1811,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
         _i2.ColumnDefinition(
           name: 'updatedAt',
@@ -2129,29 +2303,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i29.Project) {
       return _i29.Project.fromJson(data) as T;
     }
-    if (t == _i30.ProjectLikes) {
-      return _i30.ProjectLikes.fromJson(data) as T;
+    if (t == _i30.ProjectBookmarks) {
+      return _i30.ProjectBookmarks.fromJson(data) as T;
     }
-    if (t == _i31.ProjectList) {
-      return _i31.ProjectList.fromJson(data) as T;
+    if (t == _i31.ProjectLikes) {
+      return _i31.ProjectLikes.fromJson(data) as T;
     }
-    if (t == _i32.ProjectReview) {
-      return _i32.ProjectReview.fromJson(data) as T;
+    if (t == _i32.ProjectList) {
+      return _i32.ProjectList.fromJson(data) as T;
     }
-    if (t == _i33.ProjectReviewList) {
-      return _i33.ProjectReviewList.fromJson(data) as T;
+    if (t == _i33.ProjectRepost) {
+      return _i33.ProjectRepost.fromJson(data) as T;
     }
-    if (t == _i34.ProjectReviewReaction) {
-      return _i34.ProjectReviewReaction.fromJson(data) as T;
+    if (t == _i34.ProjectReview) {
+      return _i34.ProjectReview.fromJson(data) as T;
     }
-    if (t == _i35.ProjectReviewResponse) {
-      return _i35.ProjectReviewResponse.fromJson(data) as T;
+    if (t == _i35.ProjectReviewList) {
+      return _i35.ProjectReviewList.fromJson(data) as T;
     }
-    if (t == _i36.ProjectStatus) {
-      return _i36.ProjectStatus.fromJson(data) as T;
+    if (t == _i36.ProjectReviewReaction) {
+      return _i36.ProjectReviewReaction.fromJson(data) as T;
     }
-    if (t == _i37.ProjectToggleLikeResponse) {
-      return _i37.ProjectToggleLikeResponse.fromJson(data) as T;
+    if (t == _i37.ProjectReviewResponse) {
+      return _i37.ProjectReviewResponse.fromJson(data) as T;
     }
     if (t == _i38.ProjectVetting) {
       return _i38.ProjectVetting.fromJson(data) as T;
@@ -2249,33 +2423,31 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i29.Project?>()) {
       return (data != null ? _i29.Project.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i30.ProjectLikes?>()) {
-      return (data != null ? _i30.ProjectLikes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i30.ProjectBookmarks?>()) {
+      return (data != null ? _i30.ProjectBookmarks.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i31.ProjectList?>()) {
-      return (data != null ? _i31.ProjectList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i31.ProjectLikes?>()) {
+      return (data != null ? _i31.ProjectLikes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.ProjectReview?>()) {
-      return (data != null ? _i32.ProjectReview.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i32.ProjectList?>()) {
+      return (data != null ? _i32.ProjectList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i33.ProjectReviewList?>()) {
-      return (data != null ? _i33.ProjectReviewList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.ProjectRepost?>()) {
+      return (data != null ? _i33.ProjectRepost.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i34.ProjectReviewReaction?>()) {
-      return (data != null ? _i34.ProjectReviewReaction.fromJson(data) : null)
+    if (t == _i1.getType<_i34.ProjectReview?>()) {
+      return (data != null ? _i34.ProjectReview.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i35.ProjectReviewList?>()) {
+      return (data != null ? _i35.ProjectReviewList.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i36.ProjectReviewReaction?>()) {
+      return (data != null ? _i36.ProjectReviewReaction.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i35.ProjectReviewResponse?>()) {
-      return (data != null ? _i35.ProjectReviewResponse.fromJson(data) : null)
+    if (t == _i1.getType<_i37.ProjectReviewResponse?>()) {
+      return (data != null ? _i37.ProjectReviewResponse.fromJson(data) : null)
           as T;
-    }
-    if (t == _i1.getType<_i36.ProjectStatus?>()) {
-      return (data != null ? _i36.ProjectStatus.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<_i37.ProjectToggleLikeResponse?>()) {
-      return (data != null
-          ? _i37.ProjectToggleLikeResponse.fromJson(data)
-          : null) as T;
     }
     if (t == _i1.getType<_i38.ProjectVetting?>()) {
       return (data != null ? _i38.ProjectVetting.fromJson(data) : null) as T;
@@ -2457,6 +2629,18 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
+    if (t == _i1.getType<List<_i33.ProjectRepost>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i33.ProjectRepost>(e))
+              .toList()
+          : null) as T;
+    }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as T;
+    }
     if (t == _i1.getType<List<int>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<int>(e)).toList()
@@ -2491,9 +2675,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
-    if (t == List<_i32.ProjectReview>) {
+    if (t == List<_i34.ProjectReview>) {
       return (data as List)
-          .map((e) => deserialize<_i32.ProjectReview>(e))
+          .map((e) => deserialize<_i34.ProjectReview>(e))
           .toList() as T;
     }
     if (t == List<String>) {
@@ -2604,29 +2788,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i29.Project) {
       return 'Project';
     }
-    if (data is _i30.ProjectLikes) {
+    if (data is _i30.ProjectBookmarks) {
+      return 'ProjectBookmarks';
+    }
+    if (data is _i31.ProjectLikes) {
       return 'ProjectLikes';
     }
-    if (data is _i31.ProjectList) {
+    if (data is _i32.ProjectList) {
       return 'ProjectList';
     }
-    if (data is _i32.ProjectReview) {
+    if (data is _i33.ProjectRepost) {
+      return 'ProjectRepost';
+    }
+    if (data is _i34.ProjectReview) {
       return 'ProjectReview';
     }
-    if (data is _i33.ProjectReviewList) {
+    if (data is _i35.ProjectReviewList) {
       return 'ProjectReviewList';
     }
-    if (data is _i34.ProjectReviewReaction) {
+    if (data is _i36.ProjectReviewReaction) {
       return 'ProjectReviewReaction';
     }
-    if (data is _i35.ProjectReviewResponse) {
+    if (data is _i37.ProjectReviewResponse) {
       return 'ProjectReviewResponse';
-    }
-    if (data is _i36.ProjectStatus) {
-      return 'ProjectStatus';
-    }
-    if (data is _i37.ProjectToggleLikeResponse) {
-      return 'ProjectToggleLikeResponse';
     }
     if (data is _i38.ProjectVetting) {
       return 'ProjectVetting';
@@ -2741,29 +2925,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Project') {
       return deserialize<_i29.Project>(data['data']);
     }
+    if (dataClassName == 'ProjectBookmarks') {
+      return deserialize<_i30.ProjectBookmarks>(data['data']);
+    }
     if (dataClassName == 'ProjectLikes') {
-      return deserialize<_i30.ProjectLikes>(data['data']);
+      return deserialize<_i31.ProjectLikes>(data['data']);
     }
     if (dataClassName == 'ProjectList') {
-      return deserialize<_i31.ProjectList>(data['data']);
+      return deserialize<_i32.ProjectList>(data['data']);
+    }
+    if (dataClassName == 'ProjectRepost') {
+      return deserialize<_i33.ProjectRepost>(data['data']);
     }
     if (dataClassName == 'ProjectReview') {
-      return deserialize<_i32.ProjectReview>(data['data']);
+      return deserialize<_i34.ProjectReview>(data['data']);
     }
     if (dataClassName == 'ProjectReviewList') {
-      return deserialize<_i33.ProjectReviewList>(data['data']);
+      return deserialize<_i35.ProjectReviewList>(data['data']);
     }
     if (dataClassName == 'ProjectReviewReaction') {
-      return deserialize<_i34.ProjectReviewReaction>(data['data']);
+      return deserialize<_i36.ProjectReviewReaction>(data['data']);
     }
     if (dataClassName == 'ProjectReviewResponse') {
-      return deserialize<_i35.ProjectReviewResponse>(data['data']);
-    }
-    if (dataClassName == 'ProjectStatus') {
-      return deserialize<_i36.ProjectStatus>(data['data']);
-    }
-    if (dataClassName == 'ProjectToggleLikeResponse') {
-      return deserialize<_i37.ProjectToggleLikeResponse>(data['data']);
+      return deserialize<_i37.ProjectReviewResponse>(data['data']);
     }
     if (dataClassName == 'ProjectVetting') {
       return deserialize<_i38.ProjectVetting>(data['data']);
@@ -2833,12 +3017,16 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i28.PostsHashtags.t;
       case _i29.Project:
         return _i29.Project.t;
-      case _i30.ProjectLikes:
-        return _i30.ProjectLikes.t;
-      case _i32.ProjectReview:
-        return _i32.ProjectReview.t;
-      case _i34.ProjectReviewReaction:
-        return _i34.ProjectReviewReaction.t;
+      case _i30.ProjectBookmarks:
+        return _i30.ProjectBookmarks.t;
+      case _i31.ProjectLikes:
+        return _i31.ProjectLikes.t;
+      case _i33.ProjectRepost:
+        return _i33.ProjectRepost.t;
+      case _i34.ProjectReview:
+        return _i34.ProjectReview.t;
+      case _i36.ProjectReviewReaction:
+        return _i36.ProjectReviewReaction.t;
       case _i38.ProjectVetting:
         return _i38.ProjectVetting.t;
       case _i41.UserNinRecord:

@@ -5,7 +5,7 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 class ArticleEndpoint extends Endpoint {
   Future<ArticleList> getArticles(
     Session session, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     final count = await Article.db.count(session);

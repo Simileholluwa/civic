@@ -20,11 +20,11 @@ abstract class ProjectReviewReaction implements _i1.SerializableModel {
     this.owner,
     required this.reviewId,
     this.review,
-    this.dateCreated,
+    DateTime? dateCreated,
     this.updatedAt,
     this.isLike,
     this.isDeleted,
-  });
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectReviewReaction({
     int? id,

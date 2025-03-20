@@ -84,3 +84,10 @@ ReactToProjectReviewUseCase reactToProjectReview(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+ToggleBookmarkUseCase toggleBookmark(Ref ref) {
+  return ToggleBookmarkUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

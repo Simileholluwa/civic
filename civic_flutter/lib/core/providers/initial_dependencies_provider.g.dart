@@ -6,7 +6,7 @@ part of 'initial_dependencies_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bootStrapHash() => r'0aa6e0a5003e8b4fe7b0875a975db9de3b22375b';
+String _$bootStrapHash() => r'284e11bd6c0792be8878386f049dc044663ff525';
 
 /// See also [BootStrap].
 @ProviderFor(BootStrap)

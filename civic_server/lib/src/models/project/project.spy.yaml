@@ -23,10 +23,12 @@ fields:
     projectVideoUrl: String?
     dateCreated: DateTime?
     updatedAt: DateTime?
+    repost: List<ProjectRepost>?, relation(name=project_repostOnProject)
     likedBy: List<int>?
     repostedBy: List<int>?
     reviewedBy: List<int>?
     verifiedBy: List<int>?
+    bookmarkedBy: List<int>?
     overallRating: double?
     overallLocationRating: double?
     overallDescriptionRating: double?
@@ -34,7 +36,3 @@ fields:
     overallAttachmentsRating: double?
     overAllCategoryRating: double?
     overallFundingRating: double?
-    numberOfReviews: int?, default=0
-    numberOfReposts: int?, default=0
-    numberOfVerifies: int?, default=0
-    numberOfLikes: int?, default=0

@@ -24,7 +24,7 @@ class PaginatedArticleList extends _$PaginatedArticleList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int page, {int limit = 10}) async {
+  Future<void> fetchPage(int page, {int limit = 50}) async {
     final listArticleUseCase = ref.read(getArticlesProvider);
     final result = await listArticleUseCase(
       GetArticlesParams(

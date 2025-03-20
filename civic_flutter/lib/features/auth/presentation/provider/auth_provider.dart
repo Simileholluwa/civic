@@ -67,7 +67,7 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return false;
       }, (r) {
-      ref.read(authUserProvider.notifier).setValue(false);
+      //ref.read(authUserProvider.notifier).setValue(false);
       ref.invalidate(paginatedProjectListProvider);
       ref.invalidate(paginatedPostListProvider);
       ref.invalidate(paginatedPollListProvider);
@@ -90,7 +90,7 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return null;
     }, (userRecord) {
-      ref.read(authUserProvider.notifier).setValue(true);
+      //ref.read(authUserProvider.notifier).setValue(true);
       return userRecord;
     });
   }

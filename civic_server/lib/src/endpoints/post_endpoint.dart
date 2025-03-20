@@ -1,4 +1,5 @@
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
+import 'package:civic_server/src/endpoints/project_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
@@ -6,8 +7,10 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 class PostEndpoint extends Endpoint {
   Future<Post?> savePost(
     Session session,
-    Post post,
-  ) async {
+    Post post, {
+    bool isProjectRepost = false,
+    int? projectId,
+  }) async {
     return await session.db.transaction((transaction) async {
       try {
         final user = await authUser(
@@ -33,17 +36,6 @@ class PostEndpoint extends Endpoint {
           );
           return sentPost;
         } else {
-          if (post.project != null) {
-            final project = await Project.db.findById(
-              session,
-              post.project!.id!,
-            );
-            if (project == null) {
-              throw PostException(
-                message: 'Project not found',
-              );
-            }
-          }
           final sentPost = await Post.db.insertRow(
             session,
             post.copyWith(
@@ -56,26 +48,47 @@ class PostEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          if (sentPost.id == null) {
-            throw Exception('Post ID is null after insert');
-          } else {
-            await HashtagEndpoint().sendPostHashtags(
+
+          await HashtagEndpoint().sendPostHashtags(
+            session,
+            post.tags ?? [],
+            sentPost.id!,
+          );
+
+          if (isProjectRepost) {
+            if (projectId == null) {
+              throw PostException(
+                message: 'Project is required for repost',
+              );
+            }
+            final project = await ProjectEndpoint().getProject(
               session,
-              post.tags ?? [],
-              sentPost.id!,
+              projectId,
             );
-            await Project.db.updateRow(
+            if (project == null) {
+              throw PostException(
+                message: 'Project not found',
+              );
+            }
+            await ProjectRepost.db.insertRow(
               session,
-              post.project!.copyWith(
-                numberOfReposts: post.project!.numberOfReposts! + 1,
-                repostedBy: <int>{
-                  ...post.project!.repostedBy ?? [],
-                  user.userInfoId
-                }.toList(),
+              ProjectRepost(
+                projectId: project.id!,
+                ownerId: user.userInfoId,
+                postId: sentPost.id!,
               ),
               transaction: transaction,
             );
+            final updatedProject = project.copyWith(
+              repostedBy:
+                  <int>{...project.repostedBy ?? [], user.userInfoId}.toList(),
+            );
+            await ProjectEndpoint().updateProject(
+              session,
+              updatedProject,
+            );
           }
+
           return sentPost;
         }
       } catch (e, stackTrace) {
@@ -125,7 +138,7 @@ class PostEndpoint extends Endpoint {
 
   Future<PostList> getPosts(
     Session session, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
@@ -139,14 +152,15 @@ class PostEndpoint extends Endpoint {
       limit: limit,
       offset: (page * limit) - limit,
       include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+        project: Project.include(
           owner: UserRecord.include(
             userInfo: UserInfo.include(),
           ),
-          project: Project.include(
-            owner: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
-          )),
+        ),
+      ),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );

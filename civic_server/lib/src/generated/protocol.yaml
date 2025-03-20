@@ -48,10 +48,15 @@ project:
   - getProjectReviews:
   - reactToReview:
   - deleteProject:
+  - toggleBookmark:
   - toggleLike:
   - authUser:
   - validateProjectOwnership:
   - validateProjectReviewOwnership:
+  - projectUpdates:
+  - updateProject:
+  - projectReviewUpdates:
+  - updateProjectReview:
 sendEmail:
   - sendEmail:
 userNin:

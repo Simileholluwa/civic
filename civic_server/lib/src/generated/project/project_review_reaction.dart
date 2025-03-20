@@ -21,11 +21,11 @@ abstract class ProjectReviewReaction
     this.owner,
     required this.reviewId,
     this.review,
-    this.dateCreated,
+    DateTime? dateCreated,
     this.updatedAt,
     this.isLike,
     this.isDeleted,
-  });
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectReviewReaction({
     int? id,
@@ -239,6 +239,7 @@ class ProjectReviewReactionTable extends _i1.Table {
     dateCreated = _i1.ColumnDateTime(
       'dateCreated',
       this,
+      hasDefault: true,
     );
     updatedAt = _i1.ColumnDateTime(
       'updatedAt',

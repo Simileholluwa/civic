@@ -7,7 +7,7 @@ part of 'article_paginated_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedArticleListHash() =>
-    r'b756afddaf141c7f7c8c89a41d89b84f5bd48fc3';
+    r'3af39b88e78d494584bf90335f779d6ac2c44bfd';
 
 /// See also [PaginatedArticleList].
 @ProviderFor(PaginatedArticleList)

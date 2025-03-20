@@ -49,12 +49,15 @@ class ProjectEndpoint extends Endpoint {
           project.id!,
           user,
         );
-        return await Project.db.updateRow(
-          session,
-          project.copyWith(
-            updatedAt: DateTime.now(),
-          ),
+
+        final updatedProject = project.copyWith(
+          updatedAt: DateTime.now(),
         );
+        await updateProject(
+          session,
+          updatedProject,
+        );
+        return updatedProject;
       } else {
         return await Project.db.insertRow(
           session,
@@ -66,6 +69,7 @@ class ProjectEndpoint extends Endpoint {
             repostedBy: [],
             reviewedBy: [],
             verifiedBy: [],
+            bookmarkedBy: [],
           ),
         );
       }
@@ -106,7 +110,7 @@ class ProjectEndpoint extends Endpoint {
             transaction: transaction,
           );
           if (existingReview == null) {
-            throw Exception('Review not found');
+            throw PostException(message: 'Review not found');
           }
           await validateProjectReviewOwnership(
             session,
@@ -114,9 +118,8 @@ class ProjectEndpoint extends Endpoint {
             user,
           );
 
-          if (project.numberOfReviews != null &&
-              (project.numberOfReviews ?? 1) > 0) {
-            final count = project.numberOfReviews ?? 1;
+          if ((project.reviewedBy?.length ?? 1) > 0) {
+            final count = project.reviewedBy?.length ?? 1;
 
             final newOverallLocation = (project.overallLocationRating ??
                     1 * count -
@@ -158,23 +161,12 @@ class ProjectEndpoint extends Endpoint {
               overallFundingRating: newOverallFunding,
               reviewedBy: <int>{...project.reviewedBy ?? [], user.id!}.toList(),
             );
-            await Project.db.updateRow(
-              session,
-              project,
-              transaction: transaction,
-            );
+            await updateProject(session, project);
           }
-
-          return await ProjectReview.db.updateRow(
-            session,
-            projectReview.copyWith(
-              updatedAt: DateTime.now(),
-              ownerId: user.id,
-            ),
-            transaction: transaction,
-          );
+          await updateProjectReview(session, projectReview);
+          return projectReview;
         } else {
-          final oldCount = project.numberOfReviews ?? 0;
+          final oldCount = project.reviewedBy?.length ?? 0;
           final newCount = oldCount + 1;
 
           final newOverallLocation =
@@ -203,7 +195,6 @@ class ProjectEndpoint extends Endpoint {
                   newCount;
 
           project = project.copyWith(
-            numberOfReviews: newCount,
             overallLocationRating: newOverallLocation,
             overallDescriptionRating: newOverallDescription,
             overallDatesRating: newOverallDates,
@@ -213,19 +204,13 @@ class ProjectEndpoint extends Endpoint {
             reviewedBy: <int>{...project.reviewedBy ?? [], user.id!}.toList(),
           );
 
-          await Project.db.updateRow(
-            session,
-            project,
-            transaction: transaction,
-          );
+          await updateProject(session, project);
           return await ProjectReview.db.insertRow(
             session,
             projectReview.copyWith(
               ownerId: user.id,
               owner: user,
               dateCreated: DateTime.now(),
-              likes: 0,
-              dislikes: 0,
               likedBy: [],
               dislikedBy: [],
             ),
@@ -258,7 +243,7 @@ class ProjectEndpoint extends Endpoint {
 
   Future<ProjectList> getProjects(
     Session session, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
@@ -294,7 +279,7 @@ class ProjectEndpoint extends Endpoint {
   Future<ProjectReviewList> getProjectReviews(
     Session session,
     int projectId, {
-    int limit = 10,
+    int limit = 50,
     int page = 1,
     double? rating,
     String? cardinal,
@@ -364,7 +349,7 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-  Future<ProjectReviewResponse?> reactToReview(
+  Future<void> reactToReview(
     Session session,
     int reviewId,
     bool isLike,
@@ -382,7 +367,7 @@ class ProjectEndpoint extends Endpoint {
           transaction: transaction,
         );
         if (review == null) {
-          throw UserException(message: 'Review not found');
+          throw PostException(message: 'Review not found');
         }
 
         // Check for an existing reaction
@@ -403,9 +388,6 @@ class ProjectEndpoint extends Endpoint {
               transaction: transaction,
             );
             isLike
-                ? review!.likes = (review!.likes ?? 0) + 1
-                : review!.dislikes = (review!.dislikes ?? 0) + 1;
-            isLike
                 ? review!.likedBy?.add(user.id!)
                 : review!.dislikedBy?.add(user.id!);
           } else if (existingReaction!.isLike == isLike) {
@@ -415,9 +397,6 @@ class ProjectEndpoint extends Endpoint {
               existingReaction!,
               transaction: transaction,
             );
-            isLike
-                ? review!.likes = (review!.likes ?? 0) - 1
-                : review!.dislikes = (review!.dislikes ?? 0) - 1;
             isLike
                 ? review!.likedBy?.remove(user.id!)
                 : review!.dislikedBy?.remove(user.id!);
@@ -430,15 +409,11 @@ class ProjectEndpoint extends Endpoint {
               transaction: transaction,
             );
             if (isLike) {
-              review!.likes = (review!.likes ?? 0) + 1;
               review!.likedBy?.add(user.id!);
               review!.dislikedBy?.remove(user.id);
-              review!.dislikes = (review!.dislikes ?? 0) - 1;
             } else {
-              review!.likes = (review!.likes ?? 0) - 1;
               review!.likedBy?.remove(user.id);
               review!.dislikedBy?.add(user.id!);
-              review!.dislikes = (review!.dislikes ?? 0) + 1;
             }
           }
         } else {
@@ -455,19 +430,12 @@ class ProjectEndpoint extends Endpoint {
             transaction: transaction,
           );
           isLike
-              ? review!.likes = (review!.likes ?? 0) + 1
-              : review!.dislikes = (review!.dislikes ?? 0) + 1;
-          isLike
               ? review!.likedBy?.add(user.id!)
               : review!.dislikedBy?.add(user.id!);
         }
 
         // Update the like/dislike count on the review
-        await ProjectReview.db.updateRow(
-          session,
-          review!,
-          transaction: transaction,
-        );
+        await updateProjectReview(session, review!);
       } catch (e, stackTrace) {
         session.log(
           'Error in reactToReview: $e',
@@ -478,13 +446,6 @@ class ProjectEndpoint extends Endpoint {
         return null;
       }
     });
-    return ProjectReviewResponse(
-      likes: review!.likes ?? 0,
-      dislikes: review!.dislikes ?? 0,
-      isLiked: review!.likedBy!.contains(user.id!),
-      isDisliked: review!.dislikedBy!.contains(user.id!),
-      isDeleted: existingReaction?.isDeleted ?? newReaction?.isDeleted ?? false,
-    );
   }
 
   Future<void> deleteProject(
@@ -509,68 +470,128 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-  Future<ProjectToggleLikeResponse> toggleLike(
+  Future<void> toggleBookmark(
+    Session session,
+    int projectId,
+  ) async {
+    Project? project;
+    final user = await authUser(session);
+
+    await session.db.transaction((transaction) async {
+      try {
+        project = await Project.db.findById(
+          session,
+          projectId,
+          transaction: transaction,
+        );
+        if (project == null) {
+          throw PostException(
+            message: "Project not found",
+          );
+        }
+
+        final existingBookmark = await ProjectBookmarks.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.projectId.equals(
+                projectId,
+              ) &
+              t.ownerId.equals(
+                user.userInfoId,
+              ),
+          transaction: transaction,
+        );
+
+        if (existingBookmark != null) {
+          await ProjectBookmarks.db.deleteRow(
+            session,
+            existingBookmark,
+            transaction: transaction,
+          );
+          project!.bookmarkedBy?.remove(user.id!);
+        } else {
+          await ProjectBookmarks.db.insertRow(
+            session,
+            ProjectBookmarks(
+              projectId: projectId,
+              ownerId: user.userInfoId,
+            ),
+            transaction: transaction,
+          );
+          project!.bookmarkedBy?.add(user.id!);
+        }
+        await updateProject(session, project!);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in toggleBookmark: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+      }
+    });
+  }
+
+  Future<void> toggleLike(
     Session session,
     int projectId,
   ) async {
     Project? project;
     final user = await authUser(session);
     await session.db.transaction((transaction) async {
-      project = await Project.db.findById(
-        session,
-        projectId,
-        transaction: transaction,
-      );
-      if (project == null) {
-        throw PostException(
-          message: "Project not found",
+      try {
+        project = await Project.db.findById(
+          session,
+          projectId,
+          transaction: transaction,
         );
-      }
+        if (project == null) {
+          throw PostException(
+            message: "Project not found",
+          );
+        }
 
-      final existingLike = await ProjectLikes.db.findFirstRow(
-        session,
-        where: (t) =>
-            t.projectId.equals(
-              projectId,
-            ) &
-            t.ownerId.equals(
-              user.userInfoId,
+        final existingLike = await ProjectLikes.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.projectId.equals(
+                projectId,
+              ) &
+              t.ownerId.equals(
+                user.userInfoId,
+              ),
+          transaction: transaction,
+        );
+
+        if (existingLike != null) {
+          await ProjectLikes.db.deleteRow(
+            session,
+            existingLike,
+            transaction: transaction,
+          );
+          project!.likedBy?.remove(user.id!);
+        } else {
+          await ProjectLikes.db.insertRow(
+            session,
+            ProjectLikes(
+              projectId: projectId,
+              ownerId: user.userInfoId,
+              dateCreated: DateTime.now(),
             ),
-        transaction: transaction,
-      );
-
-      if (existingLike != null) {
-        await ProjectLikes.db.deleteRow(
-          session,
-          existingLike,
-          transaction: transaction,
+            transaction: transaction,
+          );
+          project!.likedBy?.add(user.id!);
+        }
+        await updateProject(session, project!);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in toggleLike: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
         );
-        project!.likedBy?.remove(user.id!);
-      } else {
-        await ProjectLikes.db.insertRow(
-          session,
-          ProjectLikes(
-            projectId: projectId,
-            ownerId: user.userInfoId,
-            dateCreated: DateTime.now(),
-          ),
-          transaction: transaction,
-        );
-        project!.likedBy?.add(user.id!);
       }
-      await Project.db.updateRow(
-        session,
-        project!,
-        transaction: transaction,
-      );
     });
-    return ProjectToggleLikeResponse(
-      likedByUser: project!.likedBy?.contains(
-            user.id!,
-          ) ??
-          false,
-      likes: project!.likedBy?.length ?? 0,
-    );
   }
 
   Future<UserRecord> authUser(
@@ -642,5 +663,81 @@ class ProjectEndpoint extends Endpoint {
         message: 'Unauthorised operation',
       );
     }
+  }
+
+  Stream<Project> projectUpdates(Session session, int projectId) async* {
+    // Create a message stream for this project
+    var updateStream =
+        session.messages.createStream<Project>('project_$projectId');
+
+    // Yield the latest project details when the client subscribes
+    var project = await Project.db.findById(
+      session,
+      projectId,
+      include: Project.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+    if (project != null) {
+      yield project;
+    }
+
+    // Send updates when changes occur
+    await for (var projectUpdate in updateStream) {
+      yield projectUpdate;
+    }
+  }
+
+  Future<void> updateProject(Session session, Project project) async {
+    // Update the project in the database
+    await Project.db.updateRow(session, project);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'project_${project.id}',
+      project,
+    );
+  }
+
+  Stream<ProjectReview> projectReviewUpdates(
+    Session session,
+    int reviewId,
+  ) async* {
+    // Create a message stream for this project
+    var updateStream =
+        session.messages.createStream<ProjectReview>('review_$reviewId');
+
+    // Yield the latest project details when the client subscribes
+    var projectReview = await ProjectReview.db.findById(
+      session,
+      reviewId,
+      include: ProjectReview.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+    if (projectReview != null) {
+      yield projectReview;
+    }
+
+    // Send updates when changes occur
+    await for (var projectReviewUpdate in updateStream) {
+      yield projectReviewUpdate;
+    }
+  }
+
+  Future<void> updateProjectReview(
+      Session session, ProjectReview projectReview) async {
+    // Update the project in the database
+    await ProjectReview.db.updateRow(session, projectReview);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'review_${projectReview.id}',
+      projectReview,
+    );
   }
 }

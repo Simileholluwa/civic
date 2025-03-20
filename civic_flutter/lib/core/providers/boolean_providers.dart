@@ -53,10 +53,6 @@ final showPasswordProvider = StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),
 );
 
-final authUserProvider = StateNotifierProvider<BooleanNotifier, bool>(
-  (ref) => BooleanNotifier(),
-);
-
 final verifiedUserProvider = StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),
 );

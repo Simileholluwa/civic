@@ -24,7 +24,7 @@ class PaginatedProjectList extends _$PaginatedProjectList {
     return PagingStatus.loadingFirstPage;
   }
 
-  Future<void> fetchPage(int page, {int limit = 10}) async {
+  Future<void> fetchPage(int page, {int limit = 50}) async {
     final listProjectUseCase = ref.read(getProjectsProvider);
     final result = await listProjectUseCase(
       GetProjectsParams(

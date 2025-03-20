@@ -2,7 +2,7 @@ class: PostComment
 table: post_comment
 
 fields:
-    post: Post?, relation
+    post: Post?, relation(onDelete=NoAction)
     owner: UserRecord?, relation
     text: String?
     dateCreated: DateTime?
@@ -11,4 +11,4 @@ fields:
     videoUrl: String?
     likedBy: List<int>?
     replyBy: List<int>?
-    parent: PostComment?, relation(optional)
+    parent: PostComment?, relation(optional, onDelete=NoAction)

@@ -20,8 +20,8 @@ abstract class ProjectLikes implements _i1.TableRow, _i1.ProtocolSerialization {
     this.project,
     required this.ownerId,
     this.owner,
-    this.dateCreated,
-  });
+    DateTime? dateCreated,
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectLikes({
     int? id,
@@ -198,6 +198,7 @@ class ProjectLikesTable extends _i1.Table {
     dateCreated = _i1.ColumnDateTime(
       'dateCreated',
       this,
+      hasDefault: true,
     );
   }
 

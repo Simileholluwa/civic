@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -22,7 +23,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(projectDetailProvider(id));
-    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: data.when(
         data: (project) {
@@ -108,8 +108,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           ),
                           QuillEditor.basic(
                             controller: QuillController(
-                              document:
-                                  projectCardState.rawDescription ?? Document(),
+                              document: projectCardState.rawDescription,
                               selection: const TextSelection.collapsed(
                                 offset: 0,
                               ),
@@ -303,7 +302,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     ),
                                   GestureDetector(
                                     onTap: () async {
-                                      await projectReviewsFIlterDialog(
+                                      await projectReviewsFilterDialog(
                                         context,
                                         id,
                                       );
@@ -332,528 +331,21 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * .82,
                     child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.maxFinite,
-                            margin: const EdgeInsets.fromLTRB(18, 20, 18, 20),
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              border: Border(
-                                top: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 5,
-                                ),
-                                left: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                right: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                bottom: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                TSizes.md,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(context)
-                                      .primaryColor
-                                      .withAlpha(30),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: SingleChildScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 20,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ProjectDetailTitleAndSubtitle(
-                                            title: 'Start Date',
-                                            subtitle:
-                                                projectCardState.startDateISO!,
-                                          ),
-                                          Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: 100,
-                                                child: VerticalDivider(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  Container(
-                                                    height: 70,
-                                                    width: 70,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Theme.of(context)
-                                                          .scaffoldBackgroundColor,
-                                                    ),
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      value: projectCardState
-                                                          .percentageElapsedInDouble,
-                                                      strokeWidth: 4,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .primaryColor
-                                                              .withAlpha(
-                                                                50,
-                                                              ),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        projectCardState
-                                                            .percentageElapsedInString!,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headlineLarge!
-                                                            .copyWith(
-                                                              fontSize: 20,
-                                                            ),
-                                                      ),
-                                                      Text(
-                                                        'complete',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .labelMedium!
-                                                            .copyWith(
-                                                              fontSize: 9,
-                                                            ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          ProjectDetailTitleAndSubtitle(
-                                            title: 'End Date',
-                                            subtitle:
-                                                projectCardState.endDateISO!,
-                                          ),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        height: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  ProjectDetailTitleAndSubtitle(
-                                    title: 'Category',
-                                    subtitle: projectCardState.category!,
-                                  ),
-                                  ProjectDetailTitleAndSubtitle(
-                                    title: 'Sub-Category',
-                                    subtitle: projectCardState.subCategory!,
-                                  ),
-                                  const Divider(
-                                    height: 0,
-                                  ),
-                                  ProjectDetailTitleAndSubtitle(
-                                    title: 'Funding',
-                                    subtitle: projectCardState.fundingAmount!,
-                                  ),
-                                  ProjectDetailTitleAndSubtitle(
-                                    title: 'Funding Category',
-                                    subtitle: projectCardState.fundingCategory!,
-                                  ),
-                                  ProjectDetailTitleAndSubtitle(
-                                    title: 'Funding Sub-Category',
-                                    subtitle:
-                                        projectCardState.fundingSubCategory!,
-                                  ),
-                                  if (projectCardState.hasPdf!)
-                                    const Divider(
-                                      height: 0,
-                                    ),
-                                  if (projectCardState.hasPdf!)
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      spacing: 2,
-                                      children: [
-                                        ProjectDetailTitleAndSubtitle(
-                                          title: 'Attachments',
-                                          subtitle:
-                                              '${projectCardState.pdfAttachments!.length} PDF ${projectCardState.pdfAttachments!.length == 1 ? 'Attachment' : 'Attachments'} ',
-                                        ),
-                                        SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            spacing: 10,
-                                            children: projectCardState
-                                                .pdfAttachments!
-                                                .asMap()
-                                                .entries
-                                                .map(
-                                              (entry) {
-                                                final index = entry.key;
-                                                return GestureDetector(
-                                                  onTap: () async {
-                                                    await launchUrl(
-                                                      Uri.parse(
-                                                        projectCardState
-                                                                .pdfAttachments![
-                                                            index],
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Stack(
-                                                    alignment:
-                                                        Alignment.bottomRight,
-                                                    children: [
-                                                      Container(
-                                                        height: 70,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            .82,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                0, 6, 10, 6),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                            TSizes.sm,
-                                                          ),
-                                                          border: Border.all(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .dividerColor,
-                                                          ),
-                                                        ),
-                                                        child: Row(
-                                                          children: [
-                                                            FadeInImage(
-                                                              image: AssetImage(
-                                                                'assets/images/pdf.png',
-                                                              ),
-                                                              placeholder:
-                                                                  MemoryImage(
-                                                                kTransparentImage,
-                                                              ),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                            Flexible(
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    projectCardState
-                                                                        .pdfAttachments![
-                                                                            index]
-                                                                        .split(
-                                                                            '/')
-                                                                        .last,
-                                                                    style: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .labelMedium,
-                                                                    maxLines: 2,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 20,
-                                                        width: 40,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                              TSizes.sm,
-                                                            ),
-                                                            topLeft:
-                                                                Radius.circular(
-                                                              TSizes.sm,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            '${index + 1}/${projectCardState.pdfAttachments!.length}',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .labelMedium!
-                                                                .copyWith(
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: ProjectOverviewScreen(
+                        project: project,
                       ),
                     ),
                   ),
                 ),
               if (currentPageState == 1)
                 SliverToBoxAdapter(
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .82,
-                        child: SingleChildScrollView(
-                          child: ProjectReviewsScreen(
-                            projectId: project.id!,
-                            project: project,
-                          ),
-                        ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * .82,
+                    child: SingleChildScrollView(
+                      child: ProjectReviewsScreen(
+                        project: project,
                       ),
-                      AnimatedPositioned(
-                        top: projectCardState.toggleFilter! ? 0 : -screenHeight,
-                        right: 0,
-                        left: 0,
-                        duration: const Duration(milliseconds: 500),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          width: MediaQuery.of(context).size.width,
-                          height: projectReviewState.rating == null ? 186 : 259,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                            ),
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Theme.of(context).dividerColor,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SingleChildScrollView(
-                                padding:
-                                    const EdgeInsets.fromLTRB(18, 5, 18, 0),
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  spacing: 15,
-                                  children: [
-                                    ...['All', 5, 4, 3, 2, 1]
-                                        .asMap()
-                                        .entries
-                                        .map(
-                                      (filter) {
-                                        final text = filter.value;
-                                        final index = filter.key;
-                                        return FilterChip(
-                                          label: Row(
-                                            spacing: 5,
-                                            children: [
-                                              Text(
-                                                text.toString(),
-                                              ),
-                                              if (index > 0)
-                                                Icon(
-                                                  Iconsax.magic_star5,
-                                                  size: 16,
-                                                ),
-                                            ],
-                                          ),
-                                          selected:
-                                              projectReviewState.rating != null
-                                                  ? projectReviewState.rating ==
-                                                      text
-                                                  : index == 0,
-                                          onSelected: (value) {
-                                            if (index == 0) {
-                                              projectReviewStateNotifier
-                                                  .setRatingQuery(
-                                                null,
-                                              );
-                                              return;
-                                            }
-                                            projectReviewStateNotifier
-                                                .setRatingQuery(
-                                              (text as int).toDouble(),
-                                            );
-                                            ref
-                                                .watch(
-                                                    paginatedProjectReviewListProvider(
-                                                  id,
-                                                ).notifier)
-                                                .refresh();
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if (projectReviewState.rating != null)
-                                SingleChildScrollView(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(18, 15, 18, 5),
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    spacing: 15,
-                                    children: [
-                                      ...[
-                                        'All',
-                                        'Location',
-                                        'Description',
-                                        'Attachments',
-                                        'Category',
-                                        'Funding',
-                                        'Dates'
-                                      ].asMap().entries.map(
-                                        (filter) {
-                                          final text = filter.value;
-                                          // final index = filter.key;
-                                          return FilterChip(
-                                            label: Text(
-                                              text,
-                                            ),
-                                            selected:
-                                                projectReviewState.cardinal ==
-                                                    text,
-                                            onSelected: (value) {
-                                              projectReviewStateNotifier
-                                                  .setCardinalQuery(
-                                                text,
-                                              );
-                                              ref
-                                                  .watch(
-                                                      paginatedProjectReviewListProvider(
-                                                    id,
-                                                  ).notifier)
-                                                  .refresh();
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              Column(
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      'Most recent',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                                    trailing: SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: Radio(
-                                        value: 0,
-                                        groupValue: 0,
-                                        onChanged: (value) {},
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 0,
-                                    indent: 20,
-                                    endIndent: 23,
-                                  ),
-                                  ListTile(
-                                    title: Text(
-                                      'Most liked',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.fromLTRB(18, 0, 18, 0),
-                                    trailing: SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: Radio(
-                                        value: 1,
-                                        groupValue: 0,
-                                        onChanged: (value) {},
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               if (currentPageState == 2)
@@ -877,7 +369,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Future<dynamic> projectReviewsFIlterDialog(
+  Future<dynamic> projectReviewsFilterDialog(
     BuildContext context,
     int id,
   ) {
@@ -1148,6 +640,296 @@ class ProjectDetailsScreen extends ConsumerWidget {
           },
         );
       },
+    );
+  }
+}
+
+class ProjectOverviewScreen extends ConsumerWidget {
+  const ProjectOverviewScreen({
+    super.key,
+    required this.project,
+  });
+
+  final Project project;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final projectCardState = ref.watch(
+      projectCardWidgetProvider(project),
+    );
+    return Column(
+      children: [
+        Container(
+          width: double.maxFinite,
+          margin: const EdgeInsets.fromLTRB(18, 20, 18, 20),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 25),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            border: Border(
+              top: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: 5,
+              ),
+              left: BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+              right: BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+              bottom: BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            borderRadius: BorderRadius.circular(
+              TSizes.md,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor.withAlpha(30),
+                blurRadius: 5,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 20,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ProjectDetailTitleAndSubtitle(
+                          title: 'Start Date',
+                          subtitle: projectCardState.startDateISO,
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              height: 100,
+                              child: VerticalDivider(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  height: 70,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  child: CircularProgressIndicator(
+                                    value: projectCardState
+                                        .percentageElapsedInDouble,
+                                    strokeWidth: 4,
+                                    color: Theme.of(context).primaryColor,
+                                    backgroundColor: Theme.of(context)
+                                        .primaryColor
+                                        .withAlpha(
+                                          50,
+                                        ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      projectCardState
+                                          .percentageElapsedInString,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge!
+                                          .copyWith(
+                                            fontSize: 20,
+                                          ),
+                                    ),
+                                    Text(
+                                      'complete',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(
+                                            fontSize: 9,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        ProjectDetailTitleAndSubtitle(
+                          title: 'End Date',
+                          subtitle: projectCardState.endDateISO,
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      height: 0,
+                    ),
+                  ],
+                ),
+                ProjectDetailTitleAndSubtitle(
+                  title: 'Category',
+                  subtitle: projectCardState.category,
+                ),
+                ProjectDetailTitleAndSubtitle(
+                  title: 'Sub-Category',
+                  subtitle: projectCardState.subCategory,
+                ),
+                const Divider(
+                  height: 0,
+                ),
+                ProjectDetailTitleAndSubtitle(
+                  title: 'Funding',
+                  subtitle: projectCardState.fundingAmount,
+                ),
+                ProjectDetailTitleAndSubtitle(
+                  title: 'Funding Category',
+                  subtitle: projectCardState.fundingCategory,
+                ),
+                ProjectDetailTitleAndSubtitle(
+                  title: 'Funding Sub-Category',
+                  subtitle: projectCardState.fundingSubCategory,
+                ),
+                if (projectCardState.hasPdf)
+                  const Divider(
+                    height: 0,
+                  ),
+                if (projectCardState.hasPdf)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 2,
+                    children: [
+                      ProjectDetailTitleAndSubtitle(
+                        title: 'Attachments',
+                        subtitle:
+                            '${projectCardState.pdfAttachments.length} PDF ${projectCardState.pdfAttachments.length == 1 ? 'Attachment' : 'Attachments'} ',
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 10,
+                          children: projectCardState.pdfAttachments
+                              .asMap()
+                              .entries
+                              .map(
+                            (entry) {
+                              final index = entry.key;
+                              return GestureDetector(
+                                onTap: () async {
+                                  await launchUrl(
+                                    Uri.parse(
+                                      projectCardState.pdfAttachments[index],
+                                    ),
+                                  );
+                                },
+                                child: Stack(
+                                  alignment: Alignment.bottomRight,
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      width: MediaQuery.of(context).size.width *
+                                          .82,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 6, 10, 6),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          TSizes.sm,
+                                        ),
+                                        border: Border.all(
+                                          color: Theme.of(context).dividerColor,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          FadeInImage(
+                                            image: AssetImage(
+                                              'assets/images/pdf.png',
+                                            ),
+                                            placeholder: MemoryImage(
+                                              kTransparentImage,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Flexible(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  projectCardState
+                                                      .pdfAttachments[index]
+                                                      .split('/')
+                                                      .last,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelMedium,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(
+                                            TSizes.sm,
+                                          ),
+                                          topLeft: Radius.circular(
+                                            TSizes.sm,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${index + 1}/${projectCardState.pdfAttachments.length}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium!
+                                              .copyWith(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

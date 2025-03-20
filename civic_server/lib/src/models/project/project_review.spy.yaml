@@ -11,9 +11,8 @@ fields:
     fundingRating: double?
     datesRating: double?
     overallRating: double?
-    dateCreated: DateTime?
+    dateCreated: DateTime?, default=now
     updatedAt: DateTime?
-    likes: int?
-    dislikes: int?
     likedBy: List<int>?
     dislikedBy: List<int>?
+    numberOfReviews: int?, default=0

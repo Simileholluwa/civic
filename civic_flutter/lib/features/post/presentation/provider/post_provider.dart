@@ -261,13 +261,17 @@ class RegularPost extends _$RegularPost {
   }
 
   Future<Post?> sendPost(
-    Post post,
-  ) async {
+    Post post, {
+    bool isProjectRepost = false,
+    int? projectId,
+  }) async {
     final savePost = ref.read(savePostProvider);
 
     final saveResult = await savePost(
       SavePostParams(
         post,
+        isProjectRepost,
+        projectId,
       ),
     );
     return saveResult.fold((error) async {

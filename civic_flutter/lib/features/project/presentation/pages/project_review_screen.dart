@@ -8,8 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ProjectReviewScreen extends ConsumerWidget {
-  const ProjectReviewScreen({super.key, required this.id});
+  const ProjectReviewScreen({
+    super.key,
+    required this.id,
+    this.fromDetails = true,
+  });
   final int id;
+  final bool fromDetails;
   static String routePath([int? id]) => '${id ?? ':id'}/review';
   static String routeName() => 'project/review';
 
@@ -26,6 +31,9 @@ class ProjectReviewScreen extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
         child: Container(
+          margin: EdgeInsets.only(
+            top: fromDetails ? 0 : 4,
+          ),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -285,6 +293,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                                         await projectReviewNotifier.sendReview(
                                       id,
                                       data.value?.id,
+                                      fromDetails,
                                     );
                                     if (result) {
                                       context.pop();

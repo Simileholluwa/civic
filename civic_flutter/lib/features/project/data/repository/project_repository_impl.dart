@@ -100,12 +100,12 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectToggleLikeResponse>> toggleLike({
-    required int id,
+  Future<Either<Failure, void>> toggleLike({
+    required int projectId,
   }) async {
     try {
       final result = await _remoteDatasource.toggleLike(
-        id: id,
+        projectId: projectId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -178,13 +178,36 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, ProjectReviewResponse?>> reactToReview({required int reviewId, required bool isLike,}) async {
+  Future<Either<Failure, void>> reactToReview({
+    required int reviewId,
+    required bool isLike,
+  }) async {
     try {
       final result = await _remoteDatasource.reactToReview(
         reviewId: reviewId,
         isLike: isLike,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleBookmark({
+    required int projectId,
+    
+  }) async {
+    try {
+      final result = await _remoteDatasource.toggleBookmark(
+        projectId: projectId,
+        
       );
       return Right(result);
     } on ServerException catch (e) {

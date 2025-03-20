@@ -1,7 +1,7 @@
 class: PostCommentLikes
 table: post_comment_likes
 fields:
-    postComment: PostComment?, relation
+    postComment: PostComment?, relation(onDelete=NoAction)
     owner: UserRecord?, relation
     dateCreated: DateTime?
 

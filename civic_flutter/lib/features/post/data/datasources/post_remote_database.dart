@@ -4,7 +4,11 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
 abstract class PostRemoteDatabase {
-  Future<Post?> savePost({required Post post});
+  Future<Post?> savePost({
+    required Post post,
+    bool isProjectRepost = false,
+    int? projectId,
+  });
   Future<PostList> getPosts({
     required int page,
     required int limit,
@@ -49,6 +53,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   @override
   Future<Post?> savePost({
     required Post post,
+    bool isProjectRepost = false,
+    int? projectId,
   }) async {
     try {
       final isConnected = await TDeviceUtils.hasInternetConnection();
@@ -61,6 +67,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       final result = await _client.post
           .savePost(
             post,
+            isProjectRepost: isProjectRepost,
+            projectId: projectId,
           )
           .timeout(
             const Duration(

@@ -202,5 +202,23 @@ final reactToProjectReviewProvider =
 // ignore: unused_element
 typedef ReactToProjectReviewRef
     = AutoDisposeProviderRef<ReactToProjectReviewUseCase>;
+String _$toggleBookmarkHash() => r'fd9ae908bd8bf0829edc5f463e5ea18cd68a05e3';
+
+/// See also [toggleBookmark].
+@ProviderFor(toggleBookmark)
+final toggleBookmarkProvider =
+    AutoDisposeProvider<ToggleBookmarkUseCase>.internal(
+  toggleBookmark,
+  name: r'toggleBookmarkProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$toggleBookmarkHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ToggleBookmarkRef = AutoDisposeProviderRef<ToggleBookmarkUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -15,15 +15,20 @@ class CreateContentButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPage = ref.watch(feedCurrentPageProvider);
     final isVisible = ref.watch(appScrollVisibilityProvider);
+    final isVisibleNotifier = ref.watch(
+      appScrollVisibilityProvider.notifier,
+    );
 
     void invalidateProviders() {
       ref.invalidate(postScheduledDateTimeProvider);
       ref.invalidate(tagSelectionsProvider);
       ref.invalidate(selectedMentionsProvider);
       ref.invalidate(hashtagsProvider);
+      ref.invalidate(selectLocationsProvider);
     }
 
     void navigate() {
+      isVisibleNotifier.hide();
       switch (currentPage) {
         case 1:
           invalidateProviders();

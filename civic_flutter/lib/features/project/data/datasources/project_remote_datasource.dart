@@ -23,7 +23,7 @@ abstract class ProjectRemoteDataSource {
 
   Future<ProjectReview?> getProjectReview({required int id});
 
-  Future<ProjectReviewResponse?> reactToReview({
+  Future<void> reactToReview({
     required int reviewId,
     required bool isLike,
   });
@@ -39,8 +39,13 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> deleteProject({required int id});
 
-  Future<ProjectToggleLikeResponse> toggleLike({
-    required int id,
+  Future<void> toggleLike({
+    required int projectId,
+  });
+
+  Future<void> toggleBookmark({
+    required int projectId,
+    
   });
 }
 
@@ -198,12 +203,12 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectToggleLikeResponse> toggleLike({
-    required int id,
+  Future<void> toggleLike({
+    required int projectId,
   }) async {
     try {
       return await _client.project.toggleLike(
-        id,
+        projectId,
       );
     } on UserException catch (e) {
       throw ServerException(message: e.message);
@@ -320,7 +325,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectReviewResponse?> reactToReview({
+  Future<void> reactToReview({
     required int reviewId,
     required bool isLike,
   }) async {
@@ -342,12 +347,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
               seconds: 60,
             ),
           );
-
-      if (result == null) {
-        throw const ServerException(
-          message: 'Failed to react to review',
-        );
-      }
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
@@ -359,6 +358,25 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
       rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<void> toggleBookmark({required int projectId, }) async {
+    try {
+      final result = await _client.project.toggleBookmark(
+        projectId,
+        
+      );
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
         message: e.toString(),

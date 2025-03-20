@@ -10,6 +10,7 @@ class ContentInteractionButton extends StatelessWidget {
     required this.color,
     this.showText = true,
     this.text = '',
+    this.iconSize = 24,
   });
 
   final IconData icon;
@@ -17,6 +18,7 @@ class ContentInteractionButton extends StatelessWidget {
   final Color color;
   final String text;
   final bool showText;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class ContentInteractionButton extends StatelessWidget {
                 Icon(
                   icon,
                   color: color,
+                  size: iconSize,
                 ),
                 if (showText)
                   Padding(
