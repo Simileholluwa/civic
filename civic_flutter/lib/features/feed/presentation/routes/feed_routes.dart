@@ -17,10 +17,7 @@ class FeedRoutes {
       GoRoute(
         path: namespace,
         builder: (_, state) {
-          final sendPost = state.extra as VoidCallback?;
-          return FeedScreen(
-            sendPost: sendPost,
-          );
+          return FeedScreen();
         },
         routes: [
           GoRoute(

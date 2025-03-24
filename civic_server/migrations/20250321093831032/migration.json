@@ -1,0 +1,70 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "status",
+          "zeroCost"
+        ],
+        "modifyColumns": [
+          {
+            "columnName": "dateCreated",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "CURRENT_TIMESTAMP"
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"status\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "status"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"zeroCost\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "zeroCost"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"status\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "status"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"zeroCost\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "zeroCost"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

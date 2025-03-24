@@ -36,7 +36,9 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
 
   @override
   void initState() {
-    _listenToUpdates();
+    if (context.mounted) {
+      _listenToUpdates();
+    }
     super.initState();
   }
 
@@ -178,7 +180,11 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                         : Iconsax.repeate_music,
                     onTap: () {
                       if (projectCardState.hasReposted) {
-                        TToastMessages.infoToast('User has reposted');
+                        ProjectHelperFunctions.undoRepostDialog(
+                          context,
+                          ref,
+                          widget.project.id!,
+                        );
                         return;
                       }
                       showModalBottomSheet(
@@ -286,7 +292,7 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                   ContentInteractionButton(
                     icon: Iconsax.more_2,
                     onTap: () {},
-                    color: Theme.of(context).textTheme.labelMedium!.color!,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ],
               ),

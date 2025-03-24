@@ -91,3 +91,10 @@ ToggleBookmarkUseCase toggleBookmark(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+UndoRepostUseCase undoRepost(Ref ref) {
+  return UndoRepostUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

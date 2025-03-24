@@ -43,6 +43,7 @@ project:
   - getProjectReview:
   - saveProject:
   - saveProjectReview:
+  - undoRepost:
   - scheduleProject:
   - getProjects:
   - getProjectReviews:

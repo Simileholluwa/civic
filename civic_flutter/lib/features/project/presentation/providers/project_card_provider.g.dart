@@ -6,7 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectCardWidgetHash() => r'8dffea0d8d08a4bcbe971609de0c8caf36b907b7';
+String _$projectCardWidgetHash() => r'529e163c51142bec8ff60caba961a1bfdfee14c8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,8 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$ProjectCardWidget
-    extends BuildlessAutoDisposeNotifier<ProjectCardState> {
+abstract class _$ProjectCardWidget extends BuildlessNotifier<ProjectCardState> {
   late final Project project;
 
   ProjectCardState build(
@@ -81,8 +80,8 @@ class ProjectCardWidgetFamily extends Family<ProjectCardState> {
 }
 
 /// See also [ProjectCardWidget].
-class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
-    ProjectCardWidget, ProjectCardState> {
+class ProjectCardWidgetProvider
+    extends NotifierProviderImpl<ProjectCardWidget, ProjectCardState> {
   /// See also [ProjectCardWidget].
   ProjectCardWidgetProvider(
     Project project,
@@ -138,8 +137,7 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ProjectCardWidget, ProjectCardState>
-      createElement() {
+  NotifierProviderElement<ProjectCardWidget, ProjectCardState> createElement() {
     return _ProjectCardWidgetProviderElement(this);
   }
 
@@ -159,14 +157,14 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectCardWidgetRef on AutoDisposeNotifierProviderRef<ProjectCardState> {
+mixin ProjectCardWidgetRef on NotifierProviderRef<ProjectCardState> {
   /// The parameter `project` of this provider.
   Project get project;
 }
 
 class _ProjectCardWidgetProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectCardWidget,
-        ProjectCardState> with ProjectCardWidgetRef {
+    extends NotifierProviderElement<ProjectCardWidget, ProjectCardState>
+    with ProjectCardWidgetRef {
   _ProjectCardWidgetProviderElement(super.provider);
 
   @override

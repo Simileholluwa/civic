@@ -50,9 +50,22 @@ class PaginatedPostList extends _$PaginatedPostList {
 
   void addPost(Post post) {
     if (pagingController.itemList != null) {
+      final updatedList = List<Post>.from(pagingController.itemList ?? []);
+      updatedList.insert(0, post);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
-        itemList: [post, ...pagingController.itemList ?? []],
+        itemList: updatedList,
+      );
+    }
+  }
+
+  void removeProjectRepostById(int? projectId) {
+    if (pagingController.itemList != null && projectId != null) {
+      final updatedList = List<Post>.from(pagingController.itemList ?? []);
+      updatedList.removeWhere((element) => element.projectId == projectId);
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: updatedList,
       );
     }
   }

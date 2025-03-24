@@ -883,7 +883,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -1145,12 +1145,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'status',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
           name: 'startDate',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
@@ -1187,12 +1181,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'double?',
         ),
         _i2.ColumnDefinition(
-          name: 'zeroCost',
-          columnType: _i2.ColumnType.boolean,
-          isNullable: true,
-          dartType: 'bool?',
-        ),
-        _i2.ColumnDefinition(
           name: 'fundingNote',
           columnType: _i2.ColumnType.text,
           isNullable: true,
@@ -1223,12 +1211,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
-          name: 'manualLocations',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'projectVideoUrl',
           columnType: _i2.ColumnType.text,
           isNullable: true,
@@ -1239,6 +1221,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
         _i2.ColumnDefinition(
           name: 'updatedAt',
@@ -1593,7 +1576,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
       ],
@@ -2121,8 +2104,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'bio',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'nin',
@@ -2145,26 +2128,26 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'verifiedAccount',
           columnType: _i2.ColumnType.boolean,
-          isNullable: false,
-          dartType: 'bool',
+          isNullable: true,
+          dartType: 'bool?',
         ),
         _i2.ColumnDefinition(
           name: 'following',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<int>',
+          isNullable: true,
+          dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
           name: 'followers',
           columnType: _i2.ColumnType.json,
-          isNullable: false,
-          dartType: 'List<int>',
+          isNullable: true,
+          dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
           name: 'politicalStatus',
           columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'protocol:PoliticalStatus',
+          isNullable: true,
+          dartType: 'protocol:PoliticalStatus?',
         ),
         _i2.ColumnDefinition(
           name: 'credibilityScore',
@@ -2624,11 +2607,6 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as T;
-    }
     if (t == _i1.getType<List<_i33.ProjectRepost>?>()) {
       return (data != null
           ? (data as List)
@@ -2679,6 +2657,16 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List)
           .map((e) => deserialize<_i34.ProjectReview>(e))
           .toList() as T;
+    }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as T;
+    }
+    if (t == _i1.getType<List<int>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<int>(e)).toList()
+          : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;

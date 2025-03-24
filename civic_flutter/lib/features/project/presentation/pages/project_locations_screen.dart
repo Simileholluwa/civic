@@ -84,9 +84,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
         ),
       ),
       body: data.isLoading
-          ? AppLoadingWidget(
-              
-            )
+          ? AppLoadingWidget()
           : data.when(
               data: (data) {
                 if (data == null || data.isEmpty) {
@@ -140,7 +138,10 @@ class ProjectLocationsScreen extends ConsumerWidget {
               },
               loading: () {
                 return AppLoadingWidget(
-                  
+                  textWidget: Padding(
+              padding: const EdgeInsets.only(top: 10,),
+              child: const Text('Searching nearby location...'),
+            ),
                 );
               },
             ),

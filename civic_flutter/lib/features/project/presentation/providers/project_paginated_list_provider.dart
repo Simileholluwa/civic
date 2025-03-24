@@ -54,4 +54,22 @@ class PaginatedProjectList extends _$PaginatedProjectList {
       itemList: [project, ...pagingController.itemList ?? []],
     );
   }
+
+  void removeProject(Project project) {
+    final updatedList = List<Project>.from(pagingController.itemList ?? []);
+    updatedList.remove(project);
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: updatedList,
+    );
+  }
+
+  void removeProjectById(int projectId) {
+    final updatedList = List<Project>.from(pagingController.itemList ?? []);
+    updatedList.removeWhere((element) => element.id == projectId);
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: updatedList,
+    );
+  }
 }

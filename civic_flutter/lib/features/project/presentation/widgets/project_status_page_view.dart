@@ -23,7 +23,7 @@ class ProjectStatusPageView extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            "Select the start and end date of the project. It's status will be automatically determined.",
+            "Select the start and end date of the project. Its status will be automatically determined.",
             style: Theme.of(context).textTheme.bodyMedium!,
           ),
           const SizedBox(height: 20),

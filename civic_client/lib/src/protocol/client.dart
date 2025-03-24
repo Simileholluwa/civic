@@ -454,6 +454,12 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectReview': projectReview},
       );
 
+  _i2.Future<void> undoRepost(int projectId) => caller.callServerEndpoint<void>(
+        'project',
+        'undoRepost',
+        {'projectId': projectId},
+      );
+
   _i2.Future<void> scheduleProject(
     _i13.Project project,
     DateTime dateTime,

@@ -346,7 +346,9 @@ class THelperFunctions {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
-    if (difference.inSeconds < 60) {
+    if (difference.inSeconds <= 0) {
+      return 'Just now';
+    } else if (difference.inSeconds < 60) {
       return '${difference.inSeconds}s';
     } else if (difference.inMinutes < 60) {
       return '${difference.inMinutes}m';

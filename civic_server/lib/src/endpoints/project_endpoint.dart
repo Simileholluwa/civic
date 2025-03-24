@@ -4,9 +4,9 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class ProjectEndpoint extends Endpoint {
   Future<Project?> getProject(Session session, int id) async {
-    final result = await Project.db.findFirstRow(
+    final result = await Project.db.findById(
       session,
-      where: (row) => row.id.equals(id),
+      id,
       include: Project.include(
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
@@ -225,6 +225,81 @@ class ProjectEndpoint extends Endpoint {
           stackTrace: stackTrace,
         );
         return null;
+      }
+    });
+  }
+
+  Future<void> undoRepost(
+    Session session,
+    int projectId,
+  ) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+        final repost = await ProjectRepost.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.ownerId.equals(
+                user.userInfoId,
+              ) &
+              t.projectId.equals(
+                projectId,
+              ),
+          transaction: transaction,
+        );
+
+        if (repost == null) {
+          throw PostException(
+            message: 'Repost not found',
+          );
+        }
+        final project = await Project.db.findById(
+          session,
+          projectId,
+          transaction: transaction,
+        );
+
+        if (project == null) {
+          throw PostException(
+            message: 'Project not found',
+          );
+        }
+
+        await ProjectRepost.db.deleteRow(
+          session,
+          repost,
+          transaction: transaction,
+        );
+
+        final post = await Post.db.findFirstRow(
+          session,
+          where: (t) => t.id.equals(
+            repost.postId,
+          ),
+          transaction: transaction,
+        );
+
+        if (post == null) {
+          throw PostException(
+            message: 'Post not found',
+          );
+        }
+
+        await Post.db.deleteRow(
+          session,
+          post,
+          transaction: transaction,
+        );
+
+        project.repostedBy?.remove(user.id!);
+        await updateProject(session, project);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in undoRepost: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
       }
     });
   }

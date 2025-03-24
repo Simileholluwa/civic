@@ -39,33 +39,6 @@ class ContentCachedImage extends StatelessWidget {
           ),
         );
       },
-      progressIndicatorBuilder: (context, child, progress) {
-        return Center(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: 70,
-                width: 70,
-                child: CircularProgressIndicator(
-                  value: progress.totalSize != null
-                      ? progress.downloaded /
-                          progress.totalSize!
-                      : null,
-                  backgroundColor:
-                      THelperFunctions.isDarkMode(context)
-                          ? TColors.dark
-                          : TColors.light,
-                ),
-              ),
-              const Icon(
-                Iconsax.image,
-                size: 40,
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

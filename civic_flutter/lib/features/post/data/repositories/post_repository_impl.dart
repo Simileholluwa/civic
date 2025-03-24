@@ -19,7 +19,11 @@ class PostRepositoryImpl implements PostRepository {
     int? projectId,
   }) async {
     try {
-      final result = await _remoteDatabase.savePost(post: post);
+      final result = await _remoteDatabase.savePost(
+        post: post,
+        isProjectRepost: isProjectRepost,
+        projectId: projectId,
+      );
       return Right(result);
     } on ServerException catch (e) {
       return Left(

@@ -11,6 +11,7 @@ export './domain/usecases/save_project_review_use_case.dart';
 export './domain/usecases/schedule_project_use_case.dart';
 export './domain/usecases/toggle_like_use_case.dart';
 export './domain/usecases/toggle_bookmark_use_case.dart';
+export './domain/usecases/undo_repost_use_case.dart';
 export './domain/usecases/react_to_project_review_use_case.dart';
 export './presentation/helpers/project_data.dart';
 export './presentation/helpers/project_helper_functions.dart';

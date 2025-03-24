@@ -3,11 +3,10 @@ import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_card_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class PostCardWidget extends _$PostCardWidget {
   @override
   PostCardState build(Post? post) {
@@ -42,20 +41,4 @@ class PostCardWidget extends _$PostCardWidget {
       return;
     });
   }
-}
-
-@riverpod
-Future<List<int>> getLikedProjects(
-  Ref ref,
-) async {
-  final likedProjects = ref.read(getUserLikedPostsProvider);
-  final result = await likedProjects(
-    NoParams(),
-  );
-  return result.fold((error) {
-    log(error.message);
-    return <int>[];
-  }, (isLiked) {
-    return isLiked;
-  });
 }

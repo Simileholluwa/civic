@@ -3,7 +3,7 @@ table: project_reposts
 fields:
     owner: UserRecord?, relation
     project: Project?, relation(name=project_repostOnProject)   
-    post: Post?, relation
+    post: Post?, relation(onDelete=Cascade)
     repostedAt: DateTime?, default=now
 
 indexes:

@@ -23,7 +23,10 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
     try {
       final jsonString = jsonEncode(userRecord);
       await _prefs.setString('userRecord', jsonString);
-      await _prefs.setInt('userId', userRecord.id!);
+      await _prefs.setInt(
+        'userId',
+        userRecord.userInfoId,
+      );
     } catch (e) {
       log(e.toString());
       throw CacheException(message: 'Something went wrong');
@@ -44,7 +47,7 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
       throw CacheException(message: e.toString());
     }
   }
-  
+
   @override
   Future<void> removeUserRecord() {
     return _prefs.remove('userRecord');

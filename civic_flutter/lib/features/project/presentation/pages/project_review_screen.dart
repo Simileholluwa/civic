@@ -70,7 +70,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image(
-                    height: 300,
+                    height: 250,
                     image: AssetImage(
                       TImageTexts.completed,
                     ),
@@ -213,12 +213,11 @@ class ProjectReviewScreen extends ConsumerWidget {
           if (projectReviewState.isEditing) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 5),
-              child: Column(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 spacing: 15,
                 children: [
-                  SizedBox(
-                    width: double.maxFinite,
+                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         projectReviewNotifier.setEditing(false);
@@ -238,8 +237,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                       loading: false,
                     ),
                   ),
-                  SizedBox(
-                    width: double.maxFinite,
+                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {},
                       child: Text(

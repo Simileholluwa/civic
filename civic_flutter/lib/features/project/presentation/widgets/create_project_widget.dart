@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreateProjectWidget extends ConsumerStatefulWidget {
+class CreateProjectWidget extends ConsumerWidget {
   const CreateProjectWidget({
     super.key,
     required this.project,
@@ -15,23 +15,7 @@ class CreateProjectWidget extends ConsumerStatefulWidget {
   final Project project;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _CreateProjectWidgetState();
-}
-
-class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
-  late Project _project;
-
-  @override
-  void initState() {
-    setState(() {
-      _project = widget.project;
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref,) {
     final pageController = ref.watch(projectPageControllerProvider);
     final currentPageNotifier = ref.watch(projectCurrentPageProvider.notifier);
     final currentPageState = ref.watch(projectCurrentPageProvider);
@@ -52,22 +36,22 @@ class _CreateProjectWidgetState extends ConsumerState<CreateProjectWidget> {
             physics: const ClampingScrollPhysics(),
             children: [
               ProjectOverviewPageView(
-                project: _project,
+                project: project,
               ),
               ProjectCategoryPageView(
-                project: _project,
+                project: project,
               ),
               ProjectStatusPageView(
-                project: _project,
+                project: project,
               ),
               ProjectFundingPageView(
-                project: _project,
+                project: project,
               ),
               ProjectLocationPageView(
-                project: _project,
+                project: project,
               ),
               ProjectAttachmentsPageView(
-                project: _project,
+                project: project,
               ),
             ],
           ),

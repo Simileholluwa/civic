@@ -91,11 +91,11 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
                   ProjectQuickDetailWidget(
                     size: 20,
                     icon: Iconsax.shield_security2,
-                    title: creator.politicalStatus.index == 0
+                    title: creator.politicalStatus!.index == 0
                         ? 'Current Leader'
-                        : creator.politicalStatus.index == 1
+                        : creator.politicalStatus!.index == 1
                             ? 'Former Leader'
-                            : creator.politicalStatus.index == 2
+                            : creator.politicalStatus!.index == 2
                                 ? 'Aspiring Leader'
                                 : 'Concerned Citizen',
                     color: TColors.primary,
@@ -104,7 +104,7 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
                               fontSize: 12,
                             ),
                   ),
-                  if (creator.verifiedAccount)
+                  if (creator.verifiedAccount!)
                     ProjectQuickDetailWidget(
                       size: 20,
                       icon: Iconsax.verify5,

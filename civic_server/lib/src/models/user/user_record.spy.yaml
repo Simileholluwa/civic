@@ -2,14 +2,14 @@
 class: UserRecord
 table: user_record
 fields:
-  bio: String
+  bio: String?
   nin: String?
   phoneNumber: String?
   userInfo: module:auth:UserInfo?, relation
-  verifiedAccount: bool
-  following: List<int>
-  followers: List<int>
-  politicalStatus: PoliticalStatus
+  verifiedAccount: bool?
+  following: List<int>?
+  followers: List<int>?
+  politicalStatus: PoliticalStatus?
   credibilityScore: double?
 
 indexes:

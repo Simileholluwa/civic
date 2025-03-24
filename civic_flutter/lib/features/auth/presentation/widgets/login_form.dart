@@ -65,11 +65,11 @@ class LoginForm extends ConsumerWidget {
                 if (!isValid) return;
                 final userRecord =
                     await authNotifier.signInWithEmailAndPassword();
-                if (userRecord != null && userRecord.verifiedAccount) {
+                if (userRecord != null && userRecord.verifiedAccount!) {
                   ref.read(verifiedUserProvider.notifier).setValue(true);
                   context.goNamed(FeedRoutes.namespace);
                   ref.invalidate(authProvider);
-                } else if (userRecord != null && !userRecord.verifiedAccount) {
+                } else if (userRecord != null && !userRecord.verifiedAccount!) {
                   context.goNamed(AppRoutes.verifyAccount);
                 } else {
                   return;

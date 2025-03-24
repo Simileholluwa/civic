@@ -23,22 +23,19 @@ abstract class Project implements _i1.SerializableModel {
     this.description,
     this.projectCategory,
     this.projectSubCategory,
-    this.status,
     this.startDate,
     this.endDate,
     this.currency,
     this.fundingCategory,
     this.fundingSubCategory,
     this.projectCost,
-    this.zeroCost,
     this.fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
     this.physicalLocations,
     this.virtualLocations,
-    this.manualLocations,
     this.projectVideoUrl,
-    this.dateCreated,
+    DateTime? dateCreated,
     this.updatedAt,
     this.repost,
     this.likedBy,
@@ -53,7 +50,7 @@ abstract class Project implements _i1.SerializableModel {
     this.overallAttachmentsRating,
     this.overAllCategoryRating,
     this.overallFundingRating,
-  });
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory Project({
     int? id,
@@ -63,20 +60,17 @@ abstract class Project implements _i1.SerializableModel {
     String? description,
     String? projectCategory,
     String? projectSubCategory,
-    String? status,
     DateTime? startDate,
     DateTime? endDate,
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
     double? projectCost,
-    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    List<String>? manualLocations,
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
@@ -107,7 +101,6 @@ abstract class Project implements _i1.SerializableModel {
       description: jsonSerialization['description'] as String?,
       projectCategory: jsonSerialization['projectCategory'] as String?,
       projectSubCategory: jsonSerialization['projectSubCategory'] as String?,
-      status: jsonSerialization['status'] as String?,
       startDate: jsonSerialization['startDate'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['startDate']),
@@ -118,7 +111,6 @@ abstract class Project implements _i1.SerializableModel {
       fundingCategory: jsonSerialization['fundingCategory'] as String?,
       fundingSubCategory: jsonSerialization['fundingSubCategory'] as String?,
       projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
-      zeroCost: jsonSerialization['zeroCost'] as bool?,
       fundingNote: jsonSerialization['fundingNote'] as String?,
       projectImageAttachments:
           (jsonSerialization['projectImageAttachments'] as List?)
@@ -132,9 +124,6 @@ abstract class Project implements _i1.SerializableModel {
           ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
           .toList(),
       virtualLocations: (jsonSerialization['virtualLocations'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
-      manualLocations: (jsonSerialization['manualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
       projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
@@ -196,8 +185,6 @@ abstract class Project implements _i1.SerializableModel {
 
   String? projectSubCategory;
 
-  String? status;
-
   DateTime? startDate;
 
   DateTime? endDate;
@@ -210,8 +197,6 @@ abstract class Project implements _i1.SerializableModel {
 
   double? projectCost;
 
-  bool? zeroCost;
-
   String? fundingNote;
 
   List<String>? projectImageAttachments;
@@ -221,8 +206,6 @@ abstract class Project implements _i1.SerializableModel {
   List<_i3.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
-
-  List<String>? manualLocations;
 
   String? projectVideoUrl;
 
@@ -267,20 +250,17 @@ abstract class Project implements _i1.SerializableModel {
     String? description,
     String? projectCategory,
     String? projectSubCategory,
-    String? status,
     DateTime? startDate,
     DateTime? endDate,
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
     double? projectCost,
-    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    List<String>? manualLocations,
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
@@ -308,14 +288,12 @@ abstract class Project implements _i1.SerializableModel {
       if (description != null) 'description': description,
       if (projectCategory != null) 'projectCategory': projectCategory,
       if (projectSubCategory != null) 'projectSubCategory': projectSubCategory,
-      if (status != null) 'status': status,
       if (startDate != null) 'startDate': startDate?.toJson(),
       if (endDate != null) 'endDate': endDate?.toJson(),
       if (currency != null) 'currency': currency,
       if (fundingCategory != null) 'fundingCategory': fundingCategory,
       if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
       if (projectCost != null) 'projectCost': projectCost,
-      if (zeroCost != null) 'zeroCost': zeroCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
       if (projectImageAttachments != null)
         'projectImageAttachments': projectImageAttachments?.toJson(),
@@ -326,7 +304,6 @@ abstract class Project implements _i1.SerializableModel {
             physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
-      if (manualLocations != null) 'manualLocations': manualLocations?.toJson(),
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
@@ -369,20 +346,17 @@ class _ProjectImpl extends Project {
     String? description,
     String? projectCategory,
     String? projectSubCategory,
-    String? status,
     DateTime? startDate,
     DateTime? endDate,
     String? currency,
     String? fundingCategory,
     String? fundingSubCategory,
     double? projectCost,
-    bool? zeroCost,
     String? fundingNote,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    List<String>? manualLocations,
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
@@ -407,20 +381,17 @@ class _ProjectImpl extends Project {
           description: description,
           projectCategory: projectCategory,
           projectSubCategory: projectSubCategory,
-          status: status,
           startDate: startDate,
           endDate: endDate,
           currency: currency,
           fundingCategory: fundingCategory,
           fundingSubCategory: fundingSubCategory,
           projectCost: projectCost,
-          zeroCost: zeroCost,
           fundingNote: fundingNote,
           projectImageAttachments: projectImageAttachments,
           projectPDFAttachments: projectPDFAttachments,
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
-          manualLocations: manualLocations,
           projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
@@ -451,20 +422,17 @@ class _ProjectImpl extends Project {
     Object? description = _Undefined,
     Object? projectCategory = _Undefined,
     Object? projectSubCategory = _Undefined,
-    Object? status = _Undefined,
     Object? startDate = _Undefined,
     Object? endDate = _Undefined,
     Object? currency = _Undefined,
     Object? fundingCategory = _Undefined,
     Object? fundingSubCategory = _Undefined,
     Object? projectCost = _Undefined,
-    Object? zeroCost = _Undefined,
     Object? fundingNote = _Undefined,
     Object? projectImageAttachments = _Undefined,
     Object? projectPDFAttachments = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
-    Object? manualLocations = _Undefined,
     Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
@@ -493,7 +461,6 @@ class _ProjectImpl extends Project {
       projectSubCategory: projectSubCategory is String?
           ? projectSubCategory
           : this.projectSubCategory,
-      status: status is String? ? status : this.status,
       startDate: startDate is DateTime? ? startDate : this.startDate,
       endDate: endDate is DateTime? ? endDate : this.endDate,
       currency: currency is String? ? currency : this.currency,
@@ -503,7 +470,6 @@ class _ProjectImpl extends Project {
           ? fundingSubCategory
           : this.fundingSubCategory,
       projectCost: projectCost is double? ? projectCost : this.projectCost,
-      zeroCost: zeroCost is bool? ? zeroCost : this.zeroCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
       projectImageAttachments: projectImageAttachments is List<String>?
           ? projectImageAttachments
@@ -517,9 +483,6 @@ class _ProjectImpl extends Project {
       virtualLocations: virtualLocations is List<String>?
           ? virtualLocations
           : this.virtualLocations?.map((e0) => e0).toList(),
-      manualLocations: manualLocations is List<String>?
-          ? manualLocations
-          : this.manualLocations?.map((e0) => e0).toList(),
       projectVideoUrl:
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,

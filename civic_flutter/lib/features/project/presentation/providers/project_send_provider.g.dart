@@ -6,7 +6,7 @@ part of 'project_send_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sendProjectHash() => r'ba76ead509f013ceb4920e3a42f5a3872514a69b';
+String _$sendProjectHash() => r'c9939161417dd09563639e2b8a3a417931ec3c47';
 
 /// See also [SendProject].
 @ProviderFor(SendProject)

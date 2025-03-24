@@ -25,6 +25,7 @@ class CreatePostScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
+    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
     final data = ref.watch(
       postDetailProvider(draft, id),
     );
@@ -58,6 +59,12 @@ class CreatePostScreen extends ConsumerWidget {
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
+            if (postState.videoUrl.isNotEmpty) {
+              ref
+                  .read(mediaVideoPlayerProvider(postState.videoUrl).notifier)
+                  .dispose();
+            }
+            isVisibleNotifier.show();
             context.pop();
           }
         }
@@ -65,7 +72,6 @@ class CreatePostScreen extends ConsumerWidget {
       child: AppAndroidBottomNav(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          extendBody: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(
               60,
@@ -85,8 +91,9 @@ class CreatePostScreen extends ConsumerWidget {
                     postState,
                     id,
                     data.value!,
-                    project,
+                    project?.id,
                   );
+                  isVisibleNotifier.show();
                   context.pop();
                 },
                 isRepost: project != null,
@@ -110,6 +117,7 @@ class CreatePostScreen extends ConsumerWidget {
                                 .notifier)
                             .dispose();
                       }
+                      isVisibleNotifier.show();
                       context.pop();
                     }
                   }

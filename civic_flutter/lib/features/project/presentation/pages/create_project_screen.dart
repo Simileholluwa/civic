@@ -1,5 +1,4 @@
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,10 +21,12 @@ class CreateProjectScreen extends ConsumerWidget {
     final projectCreationState = ref.watch(projectProviderProvider(data.value));
     final projectNotifier =
         ref.watch(projectProviderProvider(data.value).notifier);
+    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier,);
     return PopScope(
       canPop: true,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
+        isVisibleNotifier.show();
         context.pop();
       },
       child: AppAndroidBottomNav(
@@ -40,17 +41,18 @@ class CreateProjectScreen extends ConsumerWidget {
               draftData: const [],
               sendPressed: () {
                 if (!projectNotifier.validateProject()) return;
-                context.go(
-                  FeedRoutes.namespace,
-                  extra: () => ProjectHelperFunctions.sendProject(
-                    ref,
-                    projectCreationState,
-                    id,
-                    data.value!.ownerId,
-                  ),
-                );
+                ProjectHelperFunctions.sendProject(
+                  ref,
+                  projectCreationState,
+                  id,
+                  data.value!.ownerId,
+                );                     
+                isVisibleNotifier.show();
+                context.pop();
               },
-              onCanSendPost: () async {},
+              onCanSendPost: () async {
+                
+              },
               draftPressed: () {},
             ),
           ),
@@ -75,9 +77,7 @@ class CreateProjectScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget(
-               
-              );
+              return AppLoadingWidget();
             },
           ),
         ),

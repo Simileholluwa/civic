@@ -48,7 +48,10 @@ abstract class ProjectRepository {
   });
 
   Future<Either<Failure, void>> toggleBookmark({
-    required int projectId,
-    
+    required int projectId,   
+  });
+
+  Future<Either<Failure, void>> undoRepost({
+    required int projectId,   
   });
 }

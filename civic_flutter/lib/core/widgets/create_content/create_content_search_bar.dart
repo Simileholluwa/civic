@@ -7,7 +7,8 @@ class CreateContentSearchBar extends StatelessWidget {
     super.key,
     required this.onChanged,
     this.height = 50,
-    this.hintText = 'Search for places', required this.trailingWidget,
+    this.hintText = 'Tap here to search for places',
+    required this.trailingWidget,
   });
 
   final void Function(String) onChanged;
@@ -30,26 +31,24 @@ class CreateContentSearchBar extends StatelessWidget {
             0,
           ),
           backgroundColor: WidgetStatePropertyAll(
-            THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+            Colors.transparent,
           ),
           hintText: hintText,
           leading: Padding(
-            padding: const EdgeInsets.only(right: 8,),
+            padding: const EdgeInsets.only(
+              right: TSizes.md,
+            ),
             child: GestureDetector(
-              onTap: context.pop,
-              child: Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                child: const Icon(
-                  Icons.clear,
-                ),
+              onTap: () {
+                context.pop();
+              },
+              child: const Icon(
+                Icons.clear,
+                color: TColors.secondary,
               ),
             ),
           ),
+          trailing: trailingWidget,
           hintStyle: WidgetStatePropertyAll(
             Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Theme.of(context).hintColor,
@@ -61,22 +60,10 @@ class CreateContentSearchBar extends StatelessWidget {
                 ),
           ),
           padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(
-              horizontal: TSizes.xs,
+            EdgeInsets.only(
+              right: TSizes.xs,
+              left: 0,
             ),
-          ),
-        ),
-        Container(
-          height: 43,
-          width: 107,
-          margin: const EdgeInsets.only(right: 3,),
-          padding: const EdgeInsets.only(left: 8,),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100,),
-            color: Theme.of(context).scaffoldBackgroundColor,
-          ),
-          child: Row(
-            children: trailingWidget,
           ),
         ),
       ],

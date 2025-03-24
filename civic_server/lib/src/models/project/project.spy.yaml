@@ -6,22 +6,19 @@ fields:
     description: String?
     projectCategory: String?
     projectSubCategory: String?
-    status: String?
     startDate: DateTime?
     endDate: DateTime?
     currency: String?
     fundingCategory: String?
     fundingSubCategory: String?
     projectCost: double?
-    zeroCost: bool?
     fundingNote: String?
     projectImageAttachments: List<String>?
     projectPDFAttachments: List<String>?
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
-    manualLocations: List<String>?
     projectVideoUrl: String?
-    dateCreated: DateTime?
+    dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     repost: List<ProjectRepost>?, relation(name=project_repostOnProject)
     likedBy: List<int>?

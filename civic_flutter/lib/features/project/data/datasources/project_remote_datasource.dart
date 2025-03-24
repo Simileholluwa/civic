@@ -45,7 +45,10 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> toggleBookmark({
     required int projectId,
-    
+  });
+
+  Future<void> undoRepost({
+    required int projectId,
   });
 }
 
@@ -364,13 +367,34 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       );
     }
   }
-  
+
   @override
-  Future<void> toggleBookmark({required int projectId, }) async {
+  Future<void> toggleBookmark({
+    required int projectId,
+  }) async {
     try {
       final result = await _client.project.toggleBookmark(
         projectId,
-        
+      );
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> undoRepost({
+    required int projectId,
+  }) async {
+    try {
+      final result = await _client.project.undoRepost(
+        projectId,
       );
       return result;
     } on UserException catch (e) {

@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_send_provider.g.dart';
@@ -94,7 +94,29 @@ class SendProject extends _$SendProject {
     }
   }
 
-  Future<Project?> sendProject(Project project) async {
+  Future<void> undoProjectRepost(int projectId,) async {
+    final undoRepost = ref.read(undoRepostProvider);
+    final result = await undoRepost(
+      UndoRepostParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) async {
+      log('Undo error: ${error.message}');
+      return;
+    }, (_) {
+      ref
+          .watch(
+            paginatedPostListProvider.notifier,
+          )
+          .removeProjectRepostById(
+            projectId,
+          );
+      return;
+    });
+  }
+
+  Future<void> sendProject(Project project) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final imageUrls = await sendImageAttachments(project);
     final pdfUrls = await sendPDFAttachments(project);
@@ -118,10 +140,10 @@ class SendProject extends _$SendProject {
       log(error.message);
 
       TToastMessages.errorToast(error.message);
-      return null;
-    }, (project) {
+      return;
+    }, (response) {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      if (project == null) {
+      if (response == null) {
         //TODO: save failed project to draft
         return null;
       }
@@ -133,9 +155,9 @@ class SendProject extends _$SendProject {
             paginatedProjectListProvider.notifier,
           )
           .addProject(
-            project,
+            response,
           );
-      return project;
+      return;
     });
   }
 }

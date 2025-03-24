@@ -218,4 +218,20 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> undoRepost({required int projectId,}) async {
+    try {
+      final result = await _remoteDatasource.undoRepost(
+        projectId: projectId,      
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

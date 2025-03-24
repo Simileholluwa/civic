@@ -19,8 +19,7 @@ class ToggleBookmarkUseCase implements UseCase<void, ToggleBookmarkParams> {
 
 class ToggleBookmarkParams {
   ToggleBookmarkParams(
-    this.projectId,
-    
+    this.projectId, 
   );
   final int projectId;
 

@@ -14,6 +14,7 @@ class PostState {
     required this.videoUrl,
     required this.isRepost,
     required this.isProjectRepost,
+    this.showBottomNav = true,
   });
 
   factory PostState.empty() {
@@ -28,6 +29,7 @@ class PostState {
       isRepost: false,
       isProjectRepost: false,
       controller: MentionHashtagLinkTextEditingController(),
+      showBottomNav: true,
     );
   }
 
@@ -43,6 +45,7 @@ class PostState {
       isRepost: post.project != null,
       isProjectRepost: post.isProjectRepost ?? false,
       controller: MentionHashtagLinkTextEditingController(text: post.text),
+      showBottomNav: true,
     );
   }
 
@@ -56,6 +59,7 @@ class PostState {
   final String videoUrl;
   final bool isRepost;
   final bool isProjectRepost;
+  final bool showBottomNav;
 
   PostState copyWith({
     String? text,
@@ -68,6 +72,7 @@ class PostState {
     bool? isRepost,
     bool? isProjectRepost,
     MentionHashtagLinkTextEditingController? controller,
+    bool? showBottomNav,
   }) {
     return PostState(
       text: text ?? this.text,
@@ -80,6 +85,7 @@ class PostState {
       controller: controller ?? this.controller,
       isRepost: isRepost ?? this.isRepost,
       isProjectRepost: isProjectRepost ?? this.isProjectRepost,
+      showBottomNav: showBottomNav ?? this.showBottomNav,
     );
   }
 }

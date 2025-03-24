@@ -57,7 +57,7 @@ class AppUserInfoWidget extends StatelessWidget {
                       const SizedBox(
                         width: TSizes.xs,
                       ),
-                      userRecord.verifiedAccount
+                      userRecord.verifiedAccount!
                           ? const Icon(
                               Iconsax.verify5,
                               color: TColors.primary,
@@ -69,14 +69,14 @@ class AppUserInfoWidget extends StatelessWidget {
                               size: 19,
                             ),
                       AppUserPLStatusIcon(
-                        plStatusIndex: userRecord.politicalStatus.index,
+                        plStatusIndex: userRecord.politicalStatus!.index,
                       ),
                     ],
                   ),
                   Row(
                     children: [
                       Text(
-                        '${THelperFunctions.humanizeNumber(userRecord.followers.length)} followers',
+                        '${THelperFunctions.humanizeNumber(userRecord.followers!.length)} followers',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,
@@ -97,7 +97,7 @@ class AppUserInfoWidget extends StatelessWidget {
                         width: TSizes.sm,
                       ),
                       Text(
-                        '${THelperFunctions.humanizeNumber(userRecord.following.length)} following',
+                        '${THelperFunctions.humanizeNumber(userRecord.following!.length)} following',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,

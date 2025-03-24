@@ -110,7 +110,12 @@ class ProjectProvider extends _$ProjectProvider {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
-      projectCost: double.tryParse(projectCost!,),
+      projectCost: double.tryParse(
+        projectCost!.replaceAll(
+          RegExp(r','),
+          '',
+        ),
+      ),
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
@@ -560,8 +565,20 @@ class ProjectProvider extends _$ProjectProvider {
 
     if (!validateDates()) {
       TToastMessages.infoToast('End date must be after start date.');
+    } else if (!validateOverview()) {
+      TToastMessages.infoToast('Title and description are required.');
+    } else if (!validateCategory()) {
+      TToastMessages.infoToast('Category is required.');
+    } else if (!validateStatus()) {
+      TToastMessages.infoToast('Status is required.');
+    } else if (!validateFunding()) {
+      TToastMessages.infoToast('Funding details are required.');
+    } else if (!validateLocation()) {
+      TToastMessages.infoToast('Location is required.');
+    } else if (!validateAttachment()) {
+      TToastMessages.infoToast('Attachment is required.');
     } else {
-      TToastMessages.infoToast('Please fill all required fields.');
+      TToastMessages.infoToast('Please fill in all required fields.');
     }
 
     return false;
@@ -585,12 +602,7 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   bool validateStatus() {
-    if (state.status == null ||
-        state.startDate == null ||
-        state.endDate == null) {
-      return false;
-    }
-    if (state.status == 'Ongoing' && state.completionRate != null) {
+    if (state.startDate == null || state.endDate == null) {
       return false;
     }
     return true;
@@ -613,7 +625,6 @@ class ProjectProvider extends _$ProjectProvider {
         manualLocations.isNotEmpty;
   }
 
-  
   bool validateAttachment() {
     final hasImages = state.projectImageAttachments?.isNotEmpty ?? false;
     final hasPDFs = state.projectPDFAttachments?.isNotEmpty ?? false;

@@ -915,6 +915,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['projectReview'],
           ),
         ),
+        'undoRepost': _i1.MethodConnector(
+          name: 'undoRepost',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).undoRepost(
+            session,
+            params['projectId'],
+          ),
+        ),
         'scheduleProject': _i1.MethodConnector(
           name: 'scheduleProject',
           params: {

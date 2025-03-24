@@ -6,24 +6,7 @@ part of 'post_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getLikedProjectsHash() => r'eebda2b30e8fef5ea7dbeb8713fecff0bab8e105';
-
-/// See also [getLikedProjects].
-@ProviderFor(getLikedProjects)
-final getLikedProjectsProvider = AutoDisposeFutureProvider<List<int>>.internal(
-  getLikedProjects,
-  name: r'getLikedProjectsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getLikedProjectsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetLikedProjectsRef = AutoDisposeFutureProviderRef<List<int>>;
-String _$postCardWidgetHash() => r'3b9a3423287050feb6809496ee06283ff4fd9550';
+String _$postCardWidgetHash() => r'66e87153cfa3e420b09a99614c60680445dfa70c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -46,7 +29,8 @@ class _SystemHash {
   }
 }
 
-abstract class _$PostCardWidget extends BuildlessNotifier<PostCardState> {
+abstract class _$PostCardWidget
+    extends BuildlessAutoDisposeNotifier<PostCardState> {
   late final Post? post;
 
   PostCardState build(
@@ -98,7 +82,7 @@ class PostCardWidgetFamily extends Family<PostCardState> {
 
 /// See also [PostCardWidget].
 class PostCardWidgetProvider
-    extends NotifierProviderImpl<PostCardWidget, PostCardState> {
+    extends AutoDisposeNotifierProviderImpl<PostCardWidget, PostCardState> {
   /// See also [PostCardWidget].
   PostCardWidgetProvider(
     Post? post,
@@ -154,7 +138,8 @@ class PostCardWidgetProvider
   }
 
   @override
-  NotifierProviderElement<PostCardWidget, PostCardState> createElement() {
+  AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
+      createElement() {
     return _PostCardWidgetProviderElement(this);
   }
 
@@ -174,13 +159,13 @@ class PostCardWidgetProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PostCardWidgetRef on NotifierProviderRef<PostCardState> {
+mixin PostCardWidgetRef on AutoDisposeNotifierProviderRef<PostCardState> {
   /// The parameter `post` of this provider.
   Post? get post;
 }
 
 class _PostCardWidgetProviderElement
-    extends NotifierProviderElement<PostCardWidget, PostCardState>
+    extends AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
     with PostCardWidgetRef {
   _PostCardWidgetProviderElement(super.provider);
 

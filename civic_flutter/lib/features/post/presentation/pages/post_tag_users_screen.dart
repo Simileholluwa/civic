@@ -77,7 +77,7 @@ class PostTagUsersScreen extends ConsumerWidget {
                       ),
                     ),
                   ],
-                  hintText: 'Search for users',
+                  hintText: 'Tap here to search for users',
                 ),
               ),
             ),

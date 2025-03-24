@@ -7,7 +7,11 @@ class UserRecordEndpoint extends Endpoint {
     // Save the user record to the database
     await UserRecord.db.insertRow(
       session,
-      userRecord,
+      userRecord.copyWith(
+        followers: [],
+        following: [],
+        verifiedAccount: false,
+      ),
     );
   }
 
@@ -106,7 +110,7 @@ class UserRecordEndpoint extends Endpoint {
       session,
       where: (u) =>
           u.userInfo.id.inSet(
-            currentUser.followers.toSet(),
+            currentUser.followers!.toSet(),
           ) &
           u.userInfo.userName.ilike('%${query.trim()}%'),
       include: UserRecord.include(
@@ -176,7 +180,7 @@ class UserRecordEndpoint extends Endpoint {
       session,
       where: (u) =>
           u.userInfo.id.inSet(
-            currentUser.followers.toSet(),
+            currentUser.followers!.toSet(),
           ) &
           u.userInfo.userName.ilike('%${query.trim()}%'),
       include: UserRecord.include(
@@ -231,15 +235,15 @@ class UserRecordEndpoint extends Endpoint {
     }
 
     // Check if the current user is already following the target user
-    if (currentUser.following.contains(followedUserId)) {
+    if (currentUser.following!.contains(followedUserId)) {
       // Unfollow the user
-      currentUser.following.remove(followedUserId);
-      followedUser.followers.remove(authInfo.userId);
+      currentUser.following!.remove(followedUserId);
+      followedUser.followers!.remove(authInfo.userId);
       print('User ${authInfo.userId} has unfollowed $followedUserId');
     } else {
       // Follow the user
-      currentUser.following.add(followedUserId);
-      followedUser.followers.add(authInfo.userId);
+      currentUser.following!.add(followedUserId);
+      followedUser.followers!.add(authInfo.userId);
       print('User ${authInfo.userId} has followed $followedUserId');
     }
 

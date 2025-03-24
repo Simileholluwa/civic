@@ -28,15 +28,13 @@ class PostHelperFunctions {
   }) {
     return showModalBottomSheet<bool>(
       context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.85,
-        minWidth: double.maxFinite,
+        maxHeight: MediaQuery.of(context).size.height * .7,
+        minHeight: MediaQuery.of(context).size.height * .5,
       ),
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0,
       builder: (context) {
         return PostLocationsScreen(
           post: post,
@@ -62,7 +60,7 @@ class PostHelperFunctions {
     PostState postState,
     int id,
     Post post,
-    Project? project,
+    int? projectId,
   ) async {
     await ref.read(regularPostProvider(
       post,
@@ -73,15 +71,17 @@ class PostHelperFunctions {
                   post.owner!.id!,
                   postState,
                   ref,
-                  project,
+                  projectId,
                 )
               : postToSend(
                   null,
                   post.owner!.id!,
                   postState,
                   ref,
-                  project,
+                  projectId,
                 ),
+          isProjectRepost: projectId != null,
+          projectId: projectId,
         );
   }
 
@@ -143,9 +143,13 @@ class PostHelperFunctions {
   ) {
     return showModalBottomSheet<bool>(
       context: context,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * .7,
+        minHeight: MediaQuery.of(context).size.height * .5,
+      ),
       isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0,
       builder: (context) {
         return PostTagUsersScreen(
           post: post,
@@ -267,7 +271,7 @@ class PostHelperFunctions {
     int ownerId,
     PostState postState,
     WidgetRef ref,
-    Project? project,
+    int? projectId,
   ) {
     return Post(
       id: id,
@@ -280,7 +284,8 @@ class PostHelperFunctions {
       locations: postState.locations,
       mentions: ref.watch(selectedMentionsProvider),
       tags: ref.watch(hashtagsProvider(postState.text)),
-      isProjectRepost: project != null,
+      isProjectRepost: projectId != null,
+      projectId: projectId,
     );
   }
 }

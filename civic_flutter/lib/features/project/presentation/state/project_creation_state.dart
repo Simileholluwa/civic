@@ -93,14 +93,11 @@ class ProjectCreationState {
       physicalLocations: project.physicalLocations,
       fundingCategory: project.fundingCategory,
       fundingSubCategory: project.fundingSubCategory,
-      status: project.status,
       projectCategory: project.projectCategory,
       projectSubCategory: project.projectSubCategory,
-      manualLocations: project.manualLocations,
       manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
       canAddLocations: [
-            ...?project.manualLocations,
             ...?project.virtualLocations,
             ...?project.physicalLocations?.map(
               (locations) => locations.place,

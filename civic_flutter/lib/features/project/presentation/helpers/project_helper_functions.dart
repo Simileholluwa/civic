@@ -6,6 +6,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ProjectHelperFunctions {
@@ -206,6 +207,36 @@ class ProjectHelperFunctions {
     );
   }
 
+  static Future<bool?> undoRepostDialog(
+    BuildContext context,
+    WidgetRef ref,
+    int projectId,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Undo repost?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Undo',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        await ref
+            .read(
+              sendProjectProvider.notifier,
+            )
+            .undoProjectRepost(
+              projectId,
+            );
+        if (context.mounted) {
+          context.pop();
+        }
+      },
+    );
+  }
+
   static Project projectToSend(
     int? postId,
     int ownerId,
@@ -223,12 +254,10 @@ class ProjectHelperFunctions {
       startDate: projectCreationSate.startDate,
       endDate: projectCreationSate.endDate,
       physicalLocations: projectCreationSate.physicalLocations,
-      manualLocations: projectCreationSate.manualLocations,
       virtualLocations: projectCreationSate.virtualLocations,
       projectVideoUrl: projectCreationSate.projectVideoUrl,
       projectPDFAttachments: projectCreationSate.projectPDFAttachments,
       projectImageAttachments: projectCreationSate.projectImageAttachments,
-      status: projectCreationSate.status,
       currency: projectCreationSate.currency,
       projectCost: projectCreationSate.projectCost,
       fundingNote: projectCreationSate.fundingNote,

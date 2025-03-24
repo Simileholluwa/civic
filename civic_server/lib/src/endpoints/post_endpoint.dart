@@ -13,6 +13,7 @@ class PostEndpoint extends Endpoint {
   }) async {
     return await session.db.transaction((transaction) async {
       try {
+        Project? project;
         final user = await authUser(
           session,
         );
@@ -58,10 +59,10 @@ class PostEndpoint extends Endpoint {
           if (isProjectRepost) {
             if (projectId == null) {
               throw PostException(
-                message: 'Project is required for repost',
+                message: 'Project is required for project repost',
               );
             }
-            final project = await ProjectEndpoint().getProject(
+            project = await ProjectEndpoint().getProject(
               session,
               projectId,
             );
@@ -89,7 +90,11 @@ class PostEndpoint extends Endpoint {
             );
           }
 
-          return sentPost;
+          return project == null
+              ? sentPost
+              : sentPost.copyWith(
+                  project: project,
+                );
         }
       } catch (e, stackTrace) {
         session.log(

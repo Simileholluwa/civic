@@ -1,4 +1,3 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
@@ -11,19 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({
-    required this.sendPost,
     super.key,
   });
-  final VoidCallback? sendPost;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (sendPost != null) {
-      Future.delayed(
-        Duration.zero,
-        () => sendPost!(),
-      );
-    }
     final pageController = ref.watch(feedPageControllerProvider);
     final pageControllerNotifier =
         ref.watch(feedPageControllerProvider.notifier);

@@ -8,16 +8,15 @@ import 'package:iconsax/iconsax.dart';
 class ProjectLocationPageView extends ConsumerWidget {
   const ProjectLocationPageView({
     super.key,
-    required Project project,
-  }) : _project = project;
-
-  final Project _project;
+    required this.project,
+  });
+  final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectCreationSate = ref.watch(
       projectProviderProvider(
-        _project,
+        project,
       ),
     );
     return Column(
@@ -47,7 +46,7 @@ class ProjectLocationPageView extends ConsumerWidget {
                       ? () {
                           ProjectHelperFunctions.selectLocation(
                             context,
-                            _project,
+                            project,
                           );
                         }
                       : () => TToastMessages.infoToast(
@@ -63,7 +62,7 @@ class ProjectLocationPageView extends ConsumerWidget {
                       ? () {
                           virtualLinkDialog(
                             context: context,
-                            project: _project,
+                            project: project,
                           );
                         }
                       : () => TToastMessages.infoToast(
@@ -78,13 +77,13 @@ class ProjectLocationPageView extends ConsumerWidget {
         ),
         if (projectCreationSate.virtualLocations != null)
           ProjectSelectedLocations(
-            project: _project,
+            project: project,
             isVirtual: true,
             isPhysical: false,
           ),
         if (projectCreationSate.physicalLocations != null)
           ProjectSelectedLocations(
-            project: _project,
+            project: project,
             isVirtual: false,
             isPhysical: true,
           ),

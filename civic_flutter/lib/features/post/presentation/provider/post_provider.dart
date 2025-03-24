@@ -291,7 +291,9 @@ class RegularPost extends _$RegularPost {
         );
         return null;
       }
-      ref.read(paginatedPostListProvider.notifier).addPost(data);
+      ref.read(paginatedPostListProvider.notifier).addPost(
+            data,
+          );
       TToastMessages.successToast(
         'Your post was sent.',
       );
@@ -329,6 +331,8 @@ class RegularPost extends _$RegularPost {
 
   Future<void> send({
     required Post post,
+    bool isProjectRepost = false,
+    int? projectId,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
@@ -351,6 +355,8 @@ class RegularPost extends _$RegularPost {
         !scheduledDateTimeProvider.canSendLater()) {
       await sendPost(
         postTosend,
+        isProjectRepost: isProjectRepost,
+        projectId: projectId,
       );
     } else {
       await saveInFuture(
