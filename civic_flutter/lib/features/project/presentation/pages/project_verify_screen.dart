@@ -17,14 +17,16 @@ class ProjectVerifyScreen extends ConsumerWidget {
   final int id;
   final bool fromDetails;
 
-  static String routePath([int? id]) => '${id ?? ':id'}/verify';
-  static String routeName() => 'project/verify';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final verifyUserProximity = ref.watch(
       verifyUserProximityProvider(
         projectLocations: projectLocations,
+      ),
+    );
+    ref.watch(
+      appScrollVisibilityProvider(
+        false,
       ),
     );
     return Scaffold(
@@ -43,7 +45,7 @@ class ProjectVerifyScreen extends ConsumerWidget {
             titleSpacing: 4,
             title: Text(
               'Verify Project',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 20,
                   ),
             ),
@@ -68,7 +70,9 @@ class ProjectVerifyScreen extends ConsumerWidget {
           },
           loading: () => AppLoadingWidget(
             textWidget: Padding(
-              padding: const EdgeInsets.only(top: 10,),
+              padding: const EdgeInsets.only(
+                top: 10,
+              ),
               child: const Text('Verifying your location...'),
             ),
           ),

@@ -50,7 +50,9 @@ abstract class Project implements _i1.SerializableModel {
     this.overallAttachmentsRating,
     this.overAllCategoryRating,
     this.overallFundingRating,
-  }) : dateCreated = dateCreated ?? DateTime.now();
+    bool? isDeleted,
+  })  : dateCreated = dateCreated ?? DateTime.now(),
+        isDeleted = isDeleted ?? false;
 
   factory Project({
     int? id,
@@ -87,6 +89,7 @@ abstract class Project implements _i1.SerializableModel {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -165,6 +168,7 @@ abstract class Project implements _i1.SerializableModel {
           (jsonSerialization['overAllCategoryRating'] as num?)?.toDouble(),
       overallFundingRating:
           (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
+      isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
 
@@ -239,6 +243,8 @@ abstract class Project implements _i1.SerializableModel {
 
   double? overallFundingRating;
 
+  bool? isDeleted;
+
   /// Returns a shallow copy of this [Project]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -277,6 +283,7 @@ abstract class Project implements _i1.SerializableModel {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -326,6 +333,7 @@ abstract class Project implements _i1.SerializableModel {
         'overAllCategoryRating': overAllCategoryRating,
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
+      if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
 
@@ -373,6 +381,7 @@ class _ProjectImpl extends Project {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -408,6 +417,7 @@ class _ProjectImpl extends Project {
           overallAttachmentsRating: overallAttachmentsRating,
           overAllCategoryRating: overAllCategoryRating,
           overallFundingRating: overallFundingRating,
+          isDeleted: isDeleted,
         );
 
   /// Returns a shallow copy of this [Project]
@@ -449,6 +459,7 @@ class _ProjectImpl extends Project {
     Object? overallAttachmentsRating = _Undefined,
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
+    Object? isDeleted = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -525,6 +536,7 @@ class _ProjectImpl extends Project {
       overallFundingRating: overallFundingRating is double?
           ? overallFundingRating
           : this.overallFundingRating,
+      isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
     );
   }
 }

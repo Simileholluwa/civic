@@ -11,15 +11,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({
     super.key,
+    this.tabName,
   });
+  final String? tabName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageController = ref.watch(feedPageControllerProvider);
-    final pageControllerNotifier =
-        ref.watch(feedPageControllerProvider.notifier);
-    final currentPageNotifier = ref.watch(feedCurrentPageProvider.notifier);
-    final currentPageState = ref.watch(feedCurrentPageProvider);
+    final pageController = ref.watch(
+      feedPageControllerProvider(
+        tabName,
+      ),
+    );
+    final pageControllerNotifier = ref.watch(
+      feedPageControllerProvider(
+        tabName,
+      ).notifier,
+    );
+    final currentPageNotifier = ref.watch(
+      feedCurrentPageProvider(
+        tabName,
+      ).notifier,
+    );
+    final currentPageState = ref.watch(
+      feedCurrentPageProvider(
+        tabName,
+      ),
+    );
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: true,
@@ -107,7 +124,7 @@ class FeedScreen extends ConsumerWidget {
               currentPageNotifier.setCurrentPage(index);
             },
             physics: const ClampingScrollPhysics(),
-            children: [         
+            children: [
               ContentKeepAliveWrapper(
                 child: const ProjectsScreen(),
               ),

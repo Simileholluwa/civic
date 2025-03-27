@@ -15,8 +15,6 @@ class ProjectReviewScreen extends ConsumerWidget {
   });
   final int id;
   final bool fromDetails;
-  static String routePath([int? id]) => '${id ?? ':id'}/review';
-  static String routeName() => 'project/review';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

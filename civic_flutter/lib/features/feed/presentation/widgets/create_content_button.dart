@@ -13,10 +13,20 @@ class CreateContentButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPage = ref.watch(feedCurrentPageProvider);
-    final isVisible = ref.watch(appScrollVisibilityProvider);
+    final currentPage = ref.watch(
+      feedCurrentPageProvider(
+        null,
+      ),
+    );
+    final isVisible = ref.watch(
+      appScrollVisibilityProvider(
+        true,
+      ),
+    );
     final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider.notifier,
+      appScrollVisibilityProvider(
+        true,
+      ).notifier,
     );
 
     void invalidateProviders() {

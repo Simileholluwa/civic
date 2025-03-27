@@ -27,7 +27,6 @@ class PostCard extends ConsumerWidget {
     final postCardNotifier = ref.watch(
       postCardWidgetProvider(post).notifier,
     );
-    log('hi');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,

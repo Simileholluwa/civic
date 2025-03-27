@@ -33,3 +33,4 @@ fields:
     overallAttachmentsRating: double?
     overAllCategoryRating: double?
     overallFundingRating: double?
+    isDeleted: bool?, default=false

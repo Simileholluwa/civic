@@ -12,6 +12,7 @@ Future<bool?> postDialog({
   required bool skipButtonLoading,
   required VoidCallback onTapActiveButton,
   required String skipText,
+  double height = 283,
 }) {
   return showDialog<bool>(
       context: context,
@@ -24,7 +25,7 @@ Future<bool?> postDialog({
           ),
           elevation: 8,
           content: SizedBox(
-            height: 283,
+            height: height,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               

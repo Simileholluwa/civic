@@ -98,3 +98,10 @@ UndoRepostUseCase undoRepost(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+DeleteProjectUseCase deleteProject(Ref ref) {
+  return DeleteProjectUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

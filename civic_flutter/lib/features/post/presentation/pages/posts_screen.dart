@@ -12,13 +12,15 @@ class PostsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingControllerNotifier =
         ref.watch(paginatedPostListProvider.notifier);
-    
+
     return AppInfiniteList<Post>(
       pagingController: pagingControllerNotifier.pagingController,
       scrollController: ref.read(postScrollControllerProvider),
       itemBuilder: (context, post, index) {
         final isVisibleNotifier = ref.watch(
-          appScrollVisibilityProvider.notifier,
+          appScrollVisibilityProvider(
+            true,
+          ).notifier,
         );
         return PostCard(
           onTap: () {

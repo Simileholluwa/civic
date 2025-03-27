@@ -21,7 +21,11 @@ class CreateProjectScreen extends ConsumerWidget {
     final projectCreationState = ref.watch(projectProviderProvider(data.value));
     final projectNotifier =
         ref.watch(projectProviderProvider(data.value).notifier);
-    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier,);
+    final isVisibleNotifier = ref.watch(
+      appScrollVisibilityProvider(
+        true,
+      ).notifier,
+    );
     return PopScope(
       canPop: true,
       // ignore: deprecated_member_use
@@ -41,18 +45,16 @@ class CreateProjectScreen extends ConsumerWidget {
               draftData: const [],
               sendPressed: () {
                 if (!projectNotifier.validateProject()) return;
+                context.pop();
+                isVisibleNotifier.show();
                 ProjectHelperFunctions.sendProject(
                   ref,
                   projectCreationState,
                   id,
                   data.value!.ownerId,
-                );                     
-                isVisibleNotifier.show();
-                context.pop();
+                );
               },
-              onCanSendPost: () async {
-                
-              },
+              onCanSendPost: () async {},
               draftPressed: () {},
             ),
           ),

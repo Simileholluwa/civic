@@ -35,16 +35,16 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
   Project? newProject;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     if (context.mounted) {
       _listenToUpdates();
     }
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future<void> _listenToUpdates() async {
@@ -92,17 +92,14 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
       ).notifier,
     );
     final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider.notifier,
+      appScrollVisibilityProvider(true).notifier,
     );
 
     return InkWell(
       onTap: widget.canTap
           ? () {
-              context.pushNamed(
-                ProjectDetailsScreen.routeName(),
-                pathParameters: {
-                  'id': widget.project.id.toString(),
-                },
+              context.push(
+                '/feed/project/${widget.project.id}',
               );
               isVisibleNotifier.hide();
             }
@@ -120,40 +117,82 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
               showPoliticalStatus: widget.showPolitcalStatus,
             ),
           ),
-          projectCardState.imagesUrl.length == 1
-              ? ContentSingleCachedImage(
-                  imageUrl: projectCardState.imagesUrl.first,
-                  maxHeight: widget.maxHeight,
-                )
-              : ContentMultipleCachedImage(
-                  imageUrls: projectCardState.imagesUrl,
-                  maxHeight: widget.maxHeight,
+          !projectCardState.isDeleted
+              ? projectCardState.imagesUrl.length == 1
+                  ? ContentSingleCachedImage(
+                      imageUrl: projectCardState.imagesUrl.first,
+                      maxHeight: widget.maxHeight,
+                    )
+                  : ContentMultipleCachedImage(
+                      imageUrls: projectCardState.imagesUrl,
+                      maxHeight: widget.maxHeight,
+                    )
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  height: 300,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      TSizes.md,
+                    ),
+                    color: Theme.of(context).cardColor,
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 5,
+                      children: [
+                        Icon(
+                          Iconsax.trash,
+                          size: 70,
+                          color: Theme.of(context).disabledColor,
+                        ),
+                        Text(
+                          'This project has been removed by the author, preventing further interaction. However, you can still view and engage with existing reviews and vettings.',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-          ProjectQuickDetails(
-            project: widget.project,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
+          if (!projectCardState.isDeleted)
+            ProjectQuickDetails(
+              project: widget.project,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 5,
-              children: [
-                Text(
-                  projectCardState.title,
-                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontSize: 23,
-                      ),
-                ),
-                ContentExpandableText(
-                  text: projectCardState.description,
-                  hasImage: true,
-                  maxLines: 4,
-                ),
-              ],
+          if (!projectCardState.isDeleted)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 5,
+                children: [
+                  Text(
+                    projectCardState.title,
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 23,
+                        ),
+                  ),
+                  ContentExpandableText(
+                    text: projectCardState.description,
+                    hasImage: true,
+                    maxLines: 4,
+                  ),
+                ],
+              ),
             ),
-          ),
           if (widget.showInteractions)
             Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -164,54 +203,64 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                     icon: projectCardState.hasLiked
                         ? Iconsax.heart5
                         : Iconsax.heart,
-                    onTap: () async {
-                      await projectCardNotifier.toggleLikeStatus(
-                        widget.project.id!,
-                      );
-                    },
+                    onTap: projectCardState.isDeleted
+                        ? null
+                        : () async {
+                            await projectCardNotifier.toggleLikeStatus(
+                              widget.project.id!,
+                            );
+                          },
                     text: projectCardState.numberOfLikes,
-                    color: projectCardState.hasLiked
-                        ? TColors.primary
-                        : Theme.of(context).iconTheme.color!,
+                    color: projectCardState.isDeleted
+                        ? Theme.of(context).disabledColor
+                        : projectCardState.hasLiked
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color!,
                   ),
                   ContentInteractionButton(
                     icon: projectCardState.hasReposted
                         ? Iconsax.repeate_music5
                         : Iconsax.repeate_music,
-                    onTap: () {
-                      if (projectCardState.hasReposted) {
-                        ProjectHelperFunctions.undoRepostDialog(
-                          context,
-                          ref,
-                          widget.project.id!,
-                        );
-                        return;
-                      }
-                      showModalBottomSheet(
-                        context: context,
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * .7,
-                          minHeight: MediaQuery.of(context).size.height * .5,
-                        ),
-                        isScrollControlled: true,
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        elevation: 0,
-                        builder: (ctx) {
-                          return CreatePostScreen(
-                            id: 0,
-                            draft: null,
-                            project: widget.project,
-                          );
-                        },
-                      );
+                    onTap: projectCardState.isDeleted
+                        ? null
+                        : () {
+                            if (projectCardState.hasReposted) {
+                              ProjectHelperFunctions.undoRepostDialog(
+                                context,
+                                ref,
+                                widget.project.id!,
+                              );
+                              return;
+                            }
+                            showModalBottomSheet(
+                              context: context,
+                              constraints: BoxConstraints(
+                                maxHeight:
+                                    MediaQuery.of(context).size.height * .7,
+                                minHeight:
+                                    MediaQuery.of(context).size.height * .5,
+                              ),
+                              isScrollControlled: true,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              elevation: 0,
+                              builder: (ctx) {
+                                return CreatePostScreen(
+                                  id: 0,
+                                  draft: null,
+                                  project: widget.project,
+                                );
+                              },
+                            );
 
-                      isVisibleNotifier.hide();
-                    },
+                            isVisibleNotifier.hide();
+                          },
                     text: projectCardState.numberOfReposts,
-                    color: projectCardState.hasReposted
-                        ? TColors.primary
-                        : Theme.of(context).iconTheme.color!,
+                    color: projectCardState.isDeleted
+                        ? Theme.of(context).disabledColor
+                        : projectCardState.hasReposted
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color!,
                   ),
                   ContentInteractionButton(
                     icon: projectCardState.hasReviewed
@@ -219,29 +268,35 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                         : Icons.star_border_outlined,
                     iconSize: 22,
                     text: projectCardState.numberOfReviews,
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * .7,
-                          minHeight: MediaQuery.of(context).size.height * .5,
-                        ),
-                        isScrollControlled: true,
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        elevation: 0,
-                        builder: (ctx) {
-                          return ProjectReviewScreen(
-                            id: widget.project.id!,
-                            fromDetails: false,
-                          );
-                        },
-                      );
-                      isVisibleNotifier.hide();
-                    },
-                    color: projectCardState.hasReviewed
-                        ? TColors.primary
-                        : Theme.of(context).iconTheme.color!,
+                    onTap: projectCardState.isDeleted
+                        ? null
+                        : () {
+                            showModalBottomSheet(
+                              context: context,
+                              constraints: BoxConstraints(
+                                maxHeight:
+                                    MediaQuery.of(context).size.height * .7,
+                                minHeight:
+                                    MediaQuery.of(context).size.height * .5,
+                              ),
+                              isScrollControlled: true,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              elevation: 0,
+                              builder: (ctx) {
+                                return ProjectReviewScreen(
+                                  id: widget.project.id!,
+                                  fromDetails: false,
+                                );
+                              },
+                            );
+                            isVisibleNotifier.hide();
+                          },
+                    color: projectCardState.isDeleted
+                        ? Theme.of(context).disabledColor
+                        : projectCardState.hasReviewed
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color!,
                   ),
                   if (projectCardState.canVet)
                     ContentInteractionButton(
@@ -249,30 +304,37 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                           ? Iconsax.medal_star5
                           : Iconsax.medal_star,
                       text: projectCardState.numberOfVerifies,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height * .7,
-                            minHeight: MediaQuery.of(context).size.height * .5,
-                          ),
-                          isScrollControlled: true,
-                          backgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          elevation: 0,
-                          builder: (ctx) {
-                            return ProjectVerifyScreen(
-                              id: widget.project.id!,
-                              projectLocations: projectCardState.locations,
-                              fromDetails: false,
-                            );
-                          },
-                        );
-                        isVisibleNotifier.hide();
-                      },
-                      color: projectCardState.hasVerified
-                          ? TColors.primary
-                          : Theme.of(context).iconTheme.color!,
+                      onTap: projectCardState.isDeleted
+                          ? null
+                          : () {
+                              showModalBottomSheet(
+                                context: context,
+                                constraints: BoxConstraints(
+                                  maxHeight:
+                                      MediaQuery.of(context).size.height * .7,
+                                  minHeight:
+                                      MediaQuery.of(context).size.height * .5,
+                                ),
+                                isScrollControlled: true,
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                elevation: 0,
+                                builder: (ctx) {
+                                  return ProjectVerifyScreen(
+                                    id: widget.project.id!,
+                                    projectLocations:
+                                        projectCardState.locations,
+                                    fromDetails: false,
+                                  );
+                                },
+                              );
+                              isVisibleNotifier.hide();
+                            },
+                      color: projectCardState.isDeleted
+                          ? Theme.of(context).disabledColor
+                          : projectCardState.hasVerified
+                              ? TColors.primary
+                              : Theme.of(context).iconTheme.color!,
                     ),
                   if (!projectCardState.canVet)
                     ContentInteractionButton(
@@ -280,25 +342,266 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                           ? Icons.bookmark
                           : Icons.bookmark_add_outlined,
                       text: projectCardState.numberOfBookmarks,
-                      onTap: () async {
-                        await projectCardNotifier.toggleBookmarkStatus(
-                          widget.project.id!,
-                        );
-                      },
-                      color: projectCardState.isBookmarked
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).colorScheme.onSurface,
+                      onTap: projectCardState.isDeleted
+                          ? null
+                          : () async {
+                              await projectCardNotifier.toggleBookmarkStatus(
+                                widget.project.id!,
+                              );
+                            },
+                      color: projectCardState.isDeleted
+                          ? Theme.of(context).disabledColor
+                          : projectCardState.isBookmarked
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).colorScheme.onSurface,
                     ),
                   ContentInteractionButton(
-                    icon: Iconsax.more_2,
-                    onTap: () {},
-                    color: Theme.of(context).colorScheme.onSurface,
+                    icon: Iconsax.more_circle,
+                    onTap: projectCardState.isDeleted
+                        ? null
+                        : () {
+                            showModalBottomSheet(
+                              context: context,
+                              constraints: BoxConstraints(
+                                maxHeight: projectCardState.isOwner
+                                    ? projectCardState.canVet
+                                        ? 350
+                                        : 300
+                                    : 475,
+                              ),
+                              builder: (ctx) {
+                                return Scaffold(
+                                  appBar: PreferredSize(
+                                    preferredSize: Size.fromHeight(65),
+                                    child: Container(
+                                      margin: EdgeInsets.only(top: 4),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color:
+                                                Theme.of(context).dividerColor,
+                                          ),
+                                        ),
+                                      ),
+                                      child: AppBar(
+                                        titleSpacing: 4,
+                                        title: Text(
+                                          'More actions',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineLarge!
+                                              .copyWith(
+                                                fontSize: 20,
+                                              ),
+                                        ),
+                                        automaticallyImplyLeading: false,
+                                        leading: IconButton(
+                                          icon: Icon(Icons.clear),
+                                          onPressed: () {
+                                            context.pop();
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  body: Column(
+                                    children: [
+                                      if (projectCardState.canVet)
+                                        ListTile(
+                                          leading: Icon(
+                                            projectCardState.isBookmarked
+                                                ? Icons.bookmark
+                                                : Icons.bookmark_add_outlined,
+                                          ),
+                                          title: Text(
+                                            projectCardState.isBookmarked
+                                                ? 'Remove Bookmark'
+                                                : 'Bookmark',
+                                          ),
+                                          onTap: () async {
+                                            if (context.mounted) {
+                                              context.pop();
+                                            }
+                                            final result =
+                                                await projectCardNotifier
+                                                    .toggleBookmarkStatus(
+                                              widget.project.id!,
+                                            );
+                                            if (result) {
+                                              if (!projectCardState
+                                                  .isBookmarked) {
+                                                TToastMessages.infoToast(
+                                                    'Project has been bookmarked');
+                                              } else {
+                                                TToastMessages.infoToast(
+                                                    'Project has been removed from bookmarks');
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ListTile(
+                                        leading: Icon(Icons.share),
+                                        title: Text(
+                                          'Share',
+                                        ),
+                                        trailing: Icon(
+                                          Iconsax.arrow_right_3,
+                                        ),
+                                        onTap: () {},
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Iconsax.copy),
+                                        title: Text(
+                                          'Copy link',
+                                        ),
+                                        onTap: () {},
+                                      ),
+                                      if (projectCardState.isOwner)
+                                        ListTile(
+                                          leading: Icon(Iconsax.edit),
+                                          title: Text(
+                                            'Edit',
+                                          ),
+                                          onTap: () {
+                                            context.pop();
+                                            isVisibleNotifier.hide();
+                                            context.push(
+                                              AppRoutes.createProject,
+                                              extra: {
+                                                'id': widget.project.id,
+                                              },
+                                            );
+                                          },
+                                          trailing: Icon(
+                                            Iconsax.arrow_right_3,
+                                          ),
+                                        ),
+                                      if (!projectCardState.isOwner)
+                                        ListTile(
+                                          leading: Icon(Iconsax.eye_slash),
+                                          title: Text(
+                                            'Not interested',
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      if (!projectCardState.isOwner)
+                                        ListTile(
+                                          leading: Icon(Iconsax.flag),
+                                          title: Text(
+                                            'Report',
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      if (projectCardState.isOwner)
+                                        ListTile(
+                                          leading: Icon(
+                                            Iconsax.trash,
+                                            color: Colors.red,
+                                          ),
+                                          title: Text(
+                                            'Delete',
+                                            style: TextStyle().copyWith(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            if (context.mounted) {
+                                              context.pop();
+                                            }
+                                            ProjectHelperFunctions
+                                                .deleteProjectBottomSheet(
+                                              context,
+                                              newProject ?? widget.project,
+                                            );
+                                          },
+                                        ),
+                                      if (!projectCardState.isOwner)
+                                        const Divider(
+                                          indent: 20,
+                                          endIndent: 30,
+                                        ),
+                                      if (!projectCardState.isOwner)
+                                        Column(
+                                          children: [
+                                            ListTile(
+                                              leading: Icon(
+                                                projectCardState.isFollower
+                                                    ? Iconsax.user_remove
+                                                    : Iconsax.user_cirlce_add,
+                                              ),
+                                              title: Text(
+                                                projectCardState.isFollower
+                                                    ? 'Unfollow'
+                                                    : 'Follow',
+                                              ),
+                                              onTap: () {},
+                                            ),
+                                            ListTile(
+                                              leading: Icon(Icons.block_sharp),
+                                              title: Text(
+                                                'Block',
+                                              ),
+                                              onTap: () {},
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                    color: projectCardState.isDeleted
+                        ? Theme.of(context).disabledColor
+                        : Theme.of(context).colorScheme.onSurface,
                   ),
                 ],
               ),
             ),
         ],
       ),
+    );
+  }
+}
+
+class ProjectDeleteConsequences extends StatelessWidget {
+  const ProjectDeleteConsequences({
+    super.key,
+    required this.consequence,
+    required this.number,
+  });
+
+  final String number;
+  final String consequence;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 15,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          number,
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                fontSize: 20,
+                color: TColors.secondary,
+              ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 3,
+            ),
+            child: Text(
+              consequence,
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -45,6 +45,10 @@ class ProjectCardState {
   final List<AWSPlaces> locations;
   final bool hasLocation;
   final bool toggleFilter;
+  final bool isOwner;
+  final bool isFollower;
+  final bool isDeleted;
+  final bool canDelete;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -81,7 +85,11 @@ class ProjectCardState {
     required this.hasPdf,
     required this.locations,
     required this.hasLocation,
+    required this.isOwner,
+    required this.isFollower,
+    this.isDeleted = false,
     this.toggleFilter = false,
+    this.canDelete = false,
   });
 
   ProjectCardState copyWith({
@@ -121,6 +129,9 @@ class ProjectCardState {
     List<AWSPlaces>? locations,
     bool? hasLocation,
     bool? toggleFilter,
+    bool? isOwner,
+    bool? isFollower,
+    bool? canDelete,
   }) {
     return ProjectCardState(
       timeAgo: timeAgo ?? this.timeAgo,
@@ -146,8 +157,10 @@ class ProjectCardState {
       isBookmarked: isBookmarked ?? this.isBookmarked,
       startDateISO: startDateISO ?? this.startDateISO,
       endDateISO: endDateISO ?? this.endDateISO,
-      percentageElapsedInDouble: percentageElapsedInDouble ?? this.percentageElapsedInDouble,
-      percentageElapsedInString: percentageElapsedInString ?? this.percentageElapsedInString,
+      percentageElapsedInDouble:
+          percentageElapsedInDouble ?? this.percentageElapsedInDouble,
+      percentageElapsedInString:
+          percentageElapsedInString ?? this.percentageElapsedInString,
       category: category ?? this.category,
       subCategory: subCategory ?? this.subCategory,
       fundingAmount: fundingAmount ?? this.fundingAmount,
@@ -159,6 +172,9 @@ class ProjectCardState {
       locations: locations ?? this.locations,
       hasLocation: hasLocation ?? this.hasLocation,
       toggleFilter: toggleFilter ?? this.toggleFilter,
+      isOwner: isOwner ?? this.isOwner,
+      isFollower: isFollower ?? this.isFollower,
+      canDelete: canDelete ?? this.canDelete,
     );
   }
 
@@ -172,7 +188,7 @@ class ProjectCardState {
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
-    
+
     return ProjectCardState(
       creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -219,7 +235,7 @@ class ProjectCardState {
       hasReposted: project.repostedBy!.contains(
         userId,
       ),
-      hasReviewed: project.reviewedBy !.contains(
+      hasReviewed: project.reviewedBy!.contains(
         userId,
       ),
       hasVerified: project.verifiedBy!.contains(
@@ -258,7 +274,12 @@ class ProjectCardState {
       pdfAttachments: project.projectPDFAttachments ?? [],
       locations: project.physicalLocations ?? [],
       hasLocation: project.physicalLocations?.isNotEmpty ?? false,
-      
+      isOwner: userId == project.ownerId,
+      isFollower: userId != project.ownerId &&
+          project.owner!.followers!.contains(
+            userId,
+          ),
+      isDeleted: project.isDeleted!,
     );
   }
 }

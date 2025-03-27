@@ -16,7 +16,11 @@ class PostScrollController extends _$PostScrollController {
   }
 
   void _scrollListener() {
-    final visibilityNotifier = ref.read(appScrollVisibilityProvider.notifier);
+    final visibilityNotifier = ref.read(
+      appScrollVisibilityProvider(
+        true,
+      ).notifier,
+    );
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       visibilityNotifier.hide();

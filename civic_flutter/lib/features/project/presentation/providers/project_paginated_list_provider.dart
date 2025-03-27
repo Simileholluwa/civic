@@ -49,10 +49,13 @@ class PaginatedProjectList extends _$PaginatedProjectList {
   }
 
   void addProject(Project project) {
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: [project, ...pagingController.itemList ?? []],
-    );
+    if (pagingController.itemList != null) {
+      final currentList = pagingController.itemList ?? [];
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: [project, ...currentList],
+      );
+    }
   }
 
   void removeProject(Project project) {

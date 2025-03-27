@@ -25,7 +25,11 @@ class CreatePostScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final isVisibleNotifier = ref.watch(appScrollVisibilityProvider.notifier);
+    final isVisibleNotifier = ref.watch(
+      appScrollVisibilityProvider(
+        true,
+      ).notifier,
+    );
     final data = ref.watch(
       postDetailProvider(draft, id),
     );

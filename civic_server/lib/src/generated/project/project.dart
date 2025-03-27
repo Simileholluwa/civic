@@ -50,7 +50,9 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     this.overallAttachmentsRating,
     this.overAllCategoryRating,
     this.overallFundingRating,
-  }) : dateCreated = dateCreated ?? DateTime.now();
+    bool? isDeleted,
+  })  : dateCreated = dateCreated ?? DateTime.now(),
+        isDeleted = isDeleted ?? false;
 
   factory Project({
     int? id,
@@ -87,6 +89,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -165,6 +168,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
           (jsonSerialization['overAllCategoryRating'] as num?)?.toDouble(),
       overallFundingRating:
           (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
+      isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
 
@@ -241,6 +245,8 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
 
   double? overallFundingRating;
 
+  bool? isDeleted;
+
   @override
   _i1.Table get table => t;
 
@@ -282,6 +288,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -331,6 +338,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
         'overAllCategoryRating': overAllCategoryRating,
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
+      if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
 
@@ -382,6 +390,7 @@ abstract class Project implements _i1.TableRow, _i1.ProtocolSerialization {
         'overAllCategoryRating': overAllCategoryRating,
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
+      if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
 
@@ -459,6 +468,7 @@ class _ProjectImpl extends Project {
     double? overallAttachmentsRating,
     double? overAllCategoryRating,
     double? overallFundingRating,
+    bool? isDeleted,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -494,6 +504,7 @@ class _ProjectImpl extends Project {
           overallAttachmentsRating: overallAttachmentsRating,
           overAllCategoryRating: overAllCategoryRating,
           overallFundingRating: overallFundingRating,
+          isDeleted: isDeleted,
         );
 
   /// Returns a shallow copy of this [Project]
@@ -535,6 +546,7 @@ class _ProjectImpl extends Project {
     Object? overallAttachmentsRating = _Undefined,
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
+    Object? isDeleted = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -611,6 +623,7 @@ class _ProjectImpl extends Project {
       overallFundingRating: overallFundingRating is double?
           ? overallFundingRating
           : this.overallFundingRating,
+      isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
     );
   }
 }
@@ -742,6 +755,11 @@ class ProjectTable extends _i1.Table {
       'overallFundingRating',
       this,
     );
+    isDeleted = _i1.ColumnBool(
+      'isDeleted',
+      this,
+      hasDefault: true,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -811,6 +829,8 @@ class ProjectTable extends _i1.Table {
   late final _i1.ColumnDouble overAllCategoryRating;
 
   late final _i1.ColumnDouble overallFundingRating;
+
+  late final _i1.ColumnBool isDeleted;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -890,6 +910,7 @@ class ProjectTable extends _i1.Table {
         overallAttachmentsRating,
         overAllCategoryRating,
         overallFundingRating,
+        isDeleted,
       ];
 
   @override

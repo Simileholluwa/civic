@@ -17,7 +17,9 @@ class FeedRoutes {
       GoRoute(
         path: namespace,
         builder: (_, state) {
-          return FeedScreen();
+          return FeedScreen(
+            tabName: state.pathParameters['tabName'],
+          );
         },
         routes: [
           GoRoute(
@@ -40,32 +42,31 @@ class FeedRoutes {
             },
           ),
           GoRoute(
-            path: ProjectDetailsScreen.routePath(),
-            name: ProjectDetailsScreen.routeName(),
+            path: ':tabName/:id',
             builder: (_, state) {
               return ProjectDetailsScreen(
                 id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
               );
             },
-          ),
-          GoRoute(
-            path: ProjectReviewScreen.routePath(),
-            name: ProjectReviewScreen.routeName(),
-            builder: (_, state) {
-              return ProjectReviewScreen(
-                id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-              );
-            },
-          ),
-          GoRoute(
-            path: ProjectVerifyScreen.routePath(),
-            name: ProjectVerifyScreen.routeName(),
-            builder: (_, state) {
-              return ProjectVerifyScreen(
-                id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-                projectLocations: state.extra as List<AWSPlaces>,
-              );
-            },
+            routes: [
+              GoRoute(
+                path: 'review',
+                builder: (_, state) {
+                  return ProjectReviewScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'verify',
+                builder: (_, state) {
+                  return ProjectVerifyScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+                    projectLocations: state.extra as List<AWSPlaces>,
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

@@ -236,5 +236,23 @@ final undoRepostProvider = AutoDisposeProvider<UndoRepostUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UndoRepostRef = AutoDisposeProviderRef<UndoRepostUseCase>;
+String _$deleteProjectHash() => r'b877c510c65d1a2eb25340af7864d168b1172672';
+
+/// See also [deleteProject].
+@ProviderFor(deleteProject)
+final deleteProjectProvider =
+    AutoDisposeProvider<DeleteProjectUseCase>.internal(
+  deleteProject,
+  name: r'deleteProjectProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteProjectHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeleteProjectRef = AutoDisposeProviderRef<DeleteProjectUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

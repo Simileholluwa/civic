@@ -13,47 +13,53 @@ class AppWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isVisible = ref.watch(appScrollVisibilityProvider);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
         ),
-        bottomNavigationBar: AnimatedSlide(
-          duration: const Duration(milliseconds: 300),
-          offset: isVisible ? Offset.zero : const Offset(0, 1),
-          child: SizedBox(
-            height: isVisible ? 65 : 0,
-            child: BottomNavigationBar(
-              currentIndex: navigatorShell.currentIndex,
-              onTap: (index) {
-                navigatorShell.goBranch(
-                  index,
-                  initialLocation: index == navigatorShell.currentIndex,
-                );
-              },
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              items: [
-                BottomNavigationBarItem(
-                    activeIcon: Icon(Iconsax.airdrop5),
-                    icon: Icon(Iconsax.airdrop),
-                    label: 'Home'),
-                BottomNavigationBarItem(
-                    activeIcon: Icon(Iconsax.search_normal4),
-                    icon: Icon(Iconsax.search_normal),
-                    label: 'Discover'),
-                BottomNavigationBarItem(
-                    activeIcon: Icon(Iconsax.notification5),
-                    icon: Icon(Iconsax.notification),
-                    label: 'Updates'),
-                BottomNavigationBarItem(
-                    activeIcon: Icon(Iconsax.receipt_15),
-                    icon: Icon(Iconsax.receipt),
-                    label: 'Learn'),
-              ],
+        bottomNavigationBar: Consumer(builder: (context, ref, child) {
+          final isVisible = ref.watch(
+            appScrollVisibilityProvider(
+              true,
             ),
-          ),
-        ),
+          );
+          return AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: isVisible ? Offset.zero : const Offset(0, 1),
+            child: SizedBox(
+              height: isVisible ? 65 : 0,
+              child: BottomNavigationBar(
+                currentIndex: navigatorShell.currentIndex,
+                onTap: (index) {
+                  navigatorShell.goBranch(
+                    index,
+                    initialLocation: index == navigatorShell.currentIndex,
+                  );
+                },
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                items: [
+                  BottomNavigationBarItem(
+                      activeIcon: Icon(Iconsax.airdrop5),
+                      icon: Icon(Iconsax.airdrop),
+                      label: 'Home'),
+                  BottomNavigationBarItem(
+                      activeIcon: Icon(Iconsax.search_normal4),
+                      icon: Icon(Iconsax.search_normal),
+                      label: 'Discover'),
+                  BottomNavigationBarItem(
+                      activeIcon: Icon(Iconsax.notification5),
+                      icon: Icon(Iconsax.notification),
+                      label: 'Updates'),
+                  BottomNavigationBarItem(
+                      activeIcon: Icon(Iconsax.receipt_15),
+                      icon: Icon(Iconsax.receipt),
+                      label: 'Learn'),
+                ],
+              ),
+            ),
+          );
+        }),
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [

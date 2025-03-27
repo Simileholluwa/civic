@@ -35,7 +35,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshIndicator(
-      onRefresh: () => onRefresh(),
+      onRefresh: () => Future.sync(
+        () => onRefresh(),
+      ),
       child: PagedListView.separated(
         pagingController: pagingController,
         scrollController: scrollController,
@@ -50,6 +52,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
         },
         shrinkWrap: shrinkWrap ?? false,
         builderDelegate: PagedChildBuilderDelegate<T>(
+          animateTransitions: true,
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
             return firstPageProgressIndicator ?? AppLoadingWidget(

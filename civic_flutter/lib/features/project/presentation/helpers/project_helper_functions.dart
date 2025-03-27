@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 class ProjectHelperFunctions {
@@ -233,6 +233,155 @@ class ProjectHelperFunctions {
         if (context.mounted) {
           context.pop();
         }
+      },
+    );
+  }
+
+  static Future<dynamic> deleteProjectBottomSheet(
+    BuildContext context,
+    Project project,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      constraints: BoxConstraints(
+        maxHeight: 700,
+      ),
+      builder: (ctx) {
+        return Consumer(builder: (context, ref, child) {
+          final projectCardState = ref.watch(
+            projectCardWidgetProvider(
+              project,
+            ),
+          );
+          final projectCardNotifier = ref.watch(
+            projectCardWidgetProvider(
+              project,
+            ).notifier,
+          );
+          return Scaffold(
+            body: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 15,
+                  children: [
+                    Icon(
+                      Iconsax.trash,
+                      color: Colors.red,
+                      size: 50,
+                    ),
+                    Text(
+                      'Delete this Project?',
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 30,
+                              ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'Kindly take note of the following information associated with deleting a project.',
+                      style: Theme.of(context).textTheme.labelMedium!,
+                      textAlign: TextAlign.center,
+                    ),
+                    Divider(
+                      height: 0,
+                    ),
+                    Column(
+                      spacing: 15,
+                      children: [
+                        ProjectDeleteConsequences(
+                          number: '1.',
+                          consequence:
+                              "Deleting a project can impact your credibility score based on users' engagement level.",
+                        ),
+                        ProjectDeleteConsequences(
+                          number: '2.',
+                          consequence:
+                              "All user engagements will be retained, but no further interactions will be allowed.",
+                        ),
+                        ProjectDeleteConsequences(
+                          number: '3.',
+                          consequence:
+                              "Deleted projects will be visible on the feed. Permanent deletion requires a fee and a popular vote.",
+                        ),
+                        ProjectDeleteConsequences(
+                          number: '4.',
+                          consequence:
+                              "To restore a deleted project, a fee will be required.",
+                        ),
+                      ],
+                    ),
+                    Row(
+                      spacing: 15,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: Checkbox(
+                            value: projectCardState.canDelete,
+                            onChanged: (_) {
+                              projectCardNotifier.toggleCanDelete();
+                            },
+                          ),
+                        ),
+                        Text(
+                          'I understand and confirm the above',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            child: FilledButton(
+                              onPressed: projectCardState.canDelete
+                                  ? () {
+                                      context.pop();
+                                      ref
+                                          .read(
+                                            sendProjectProvider.notifier,
+                                          )
+                                          .deleteProject(
+                                            project.id!,
+                                          );
+                                    }
+                                  : null,
+                              style: ButtonStyle().copyWith(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  projectCardState.canDelete
+                                      ? Colors.red
+                                      : Theme.of(context).disabledColor,
+                                ),
+                              ),
+                              child: const Text(
+                                'Delete',
+                              ),
+                            ).withLoading(
+                              loading: false,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: context.pop,
+                            child: Text(
+                              'Cancel',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
       },
     );
   }

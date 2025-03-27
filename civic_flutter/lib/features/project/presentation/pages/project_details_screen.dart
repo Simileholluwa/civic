@@ -17,12 +17,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
 
   final int id;
 
-  static String routePath([int? id]) => '${id ?? ':id'}';
-  static String routeName() => 'project/details';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(projectDetailProvider(id));
+
     return Scaffold(
       body: data.when(
         data: (project) {
@@ -50,7 +48,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
           return CustomScrollView(
             slivers: [
               SliverAppBar(
-                expandedHeight: MediaQuery.of(context).size.height * .84,
+                expandedHeight: projectCardState.isDeleted
+                    ? 0
+                    : MediaQuery.of(context).size.height * .84,
                 automaticallyImplyLeading: false,
                 pinned: true,
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -60,136 +60,166 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   icon: Icon(Iconsax.arrow_left_2),
                   onPressed: context.pop,
                 ),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.share),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.save),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Iconsax.more_circle),
-                    onPressed: () {},
-                  ),
-                  const SizedBox(width: 10),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    margin: const EdgeInsets.fromLTRB(18, 61, 18, 0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        spacing: 10,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          projectCardState.imagesUrl.length == 1
-                              ? ContentSingleCachedImage(
-                                  imageUrl: projectCardState.imagesUrl.first,
-                                  useMargin: false,
-                                )
-                              : ContentMultipleCachedImage(
-                                  imageUrls: projectCardState.imagesUrl,
-                                  useMargin: false,
-                                ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 5,
-                            ),
-                            child: Text(
-                              projectCardState.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .copyWith(
-                                    fontSize: 23,
+                actions: projectCardState.isDeleted
+                    ? []
+                    : [
+                        IconButton(
+                          icon: Icon(Icons.share),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.save),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(Iconsax.more_circle),
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 10),
+                      ],
+                flexibleSpace: projectCardState.isDeleted
+                    ? FlexibleSpaceBar()
+                    : FlexibleSpaceBar(
+                        background: Container(
+                          margin: const EdgeInsets.fromLTRB(18, 61, 18, 0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              spacing: 10,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                projectCardState.imagesUrl.length == 1
+                                    ? ContentSingleCachedImage(
+                                        imageUrl:
+                                            projectCardState.imagesUrl.first,
+                                        useMargin: false,
+                                      )
+                                    : ContentMultipleCachedImage(
+                                        imageUrls: projectCardState.imagesUrl,
+                                        useMargin: false,
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 5,
                                   ),
+                                  child: Text(
+                                    projectCardState.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(
+                                          fontSize: 23,
+                                        ),
+                                  ),
+                                ),
+                                QuillEditor.basic(
+                                  controller: QuillController(
+                                    document: projectCardState.rawDescription,
+                                    selection: const TextSelection.collapsed(
+                                      offset: 0,
+                                    ),
+                                    readOnly: true,
+                                  ),
+                                  configurations: QuillEditorConfigurations(
+                                    customStyles: THelperFunctions
+                                        .articleTextEditorStyles(
+                                      context,
+                                      defaultTextStyle,
+                                    ),
+                                    scrollPhysics:
+                                        const NeverScrollableScrollPhysics(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          QuillEditor.basic(
-                            controller: QuillController(
-                              document: projectCardState.rawDescription,
-                              selection: const TextSelection.collapsed(
-                                offset: 0,
-                              ),
-                              readOnly: true,
-                            ),
-                            configurations: QuillEditorConfigurations(
-                              customStyles:
-                                  THelperFunctions.articleTextEditorStyles(
-                                context,
-                                defaultTextStyle,
-                              ),
-                              scrollPhysics:
-                                  const NeverScrollableScrollPhysics(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 8,
-                      width: 70,
-                      margin: const EdgeInsets.only(
-                        top: 15,
-                        bottom: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).dividerColor,
-                        borderRadius: BorderRadius.circular(
-                          TSizes.sm,
                         ),
                       ),
-                    ),
-                  ],
-                ),
               ),
+              if (!projectCardState.isDeleted)
+                SliverToBoxAdapter(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 8,
+                        width: 70,
+                        margin: const EdgeInsets.only(
+                          top: 15,
+                          bottom: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).dividerColor,
+                          borderRadius: BorderRadius.circular(
+                            TSizes.sm,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: ProjectDetailHeader(
-                  maxHeight: 98,
-                  minHeight: 98,
+                  maxHeight: projectCardState.isDeleted ? 40 : 98,
+                  minHeight: projectCardState.isDeleted ? 40 : 98,
                   delegate: ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: Column(
                       spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
-                          child: Row(
-                            spacing: 10,
-                            children: [
-                              if (projectCardState.canVet)
+                        if (!projectCardState.isDeleted)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
+                            child: Row(
+                              spacing: 10,
+                              children: [
+                                if (projectCardState.canVet)
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          context.push(
+                                            '/feed/project/$id/verify',
+                                            extra: project.physicalLocations,
+                                          );
+                                        },
+                                        label: Text(
+                                          'Verify',
+                                        ),
+                                        icon: Icon(
+                                          Iconsax.medal_star5,
+                                          color: TColors.textWhite,
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: TColors.primary,
+                                          foregroundColor: TColors.textWhite,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 Expanded(
                                   child: SizedBox(
                                     height: 50,
                                     child: ElevatedButton.icon(
                                       onPressed: () {
-                                        context.pushNamed(
-                                          ProjectVerifyScreen.routeName(),
-                                          pathParameters: {
-                                            'id': id.toString(),
-                                          },
-                                          extra: project.physicalLocations,
+                                        context.push(
+                                          '/feed/project/$id/review',
                                         );
                                       },
                                       label: Text(
-                                        'Verify',
+                                        'Review',
                                       ),
                                       icon: Icon(
-                                        Iconsax.medal_star5,
+                                        Iconsax.magic_star5,
                                         color: TColors.textWhite,
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: TColors.primary,
+                                        backgroundColor: Colors.blue,
                                         foregroundColor: TColors.textWhite,
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 10,
@@ -198,38 +228,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      context.pushNamed(
-                                        ProjectReviewScreen.routeName(),
-                                        pathParameters: {
-                                          'id': id.toString(),
-                                        },
-                                      );
-                                    },
-                                    label: Text(
-                                      'Review',
-                                    ),
-                                    icon: Icon(
-                                      Iconsax.magic_star5,
-                                      color: TColors.textWhite,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: TColors.textWhite,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 10,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -240,7 +241,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 spacing: 15,
                                 children: [
-                                  ...['OVERVIEW', 'REVIEWS', 'VETTINGS']
+                                  ...(projectCardState.isDeleted
+                                          ? ['REVIEWS', 'VETTINGS']
+                                          : ['OVERVIEW', 'REVIEWS', 'VETTINGS'])
                                       .asMap()
                                       .entries
                                       .map(
@@ -279,8 +282,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                            if (currentPageState == 1 &&
-                                project.overAllCategoryRating != null)
+                            if (projectCardState.isDeleted
+                                ? currentPageState == 0
+                                : currentPageState == 1 &&
+                                    project.overAllCategoryRating != null)
                               Row(
                                 spacing: 10,
                                 children: [
@@ -300,22 +305,23 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                         ),
                                       ),
                                     ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await projectReviewsFilterDialog(
-                                        context,
-                                        id,
-                                      );
-                                    },
-                                    child: SizedBox(
-                                      height: 22,
-                                      width: 50,
-                                      child: Icon(
-                                        Iconsax.filter5,
-                                        size: 22,
+                                  if (project.overAllCategoryRating != null)
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await projectReviewsFilterDialog(
+                                          context,
+                                          id,
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        height: 22,
+                                        width: 50,
+                                        child: Icon(
+                                          Iconsax.filter5,
+                                          size: 22,
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                           ],
@@ -326,29 +332,38 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              if (currentPageState == 0)
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * .82,
-                    child: SingleChildScrollView(
-                      child: ProjectOverviewScreen(
-                        project: project,
+              if (!projectCardState.isDeleted)
+                if (currentPageState == 0)
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * .82,
+                      child: SingleChildScrollView(
+                        child: ProjectOverviewScreen(
+                          project: project,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              if (currentPageState == 1)
+              if (projectCardState.isDeleted
+                  ? currentPageState == 0
+                  : currentPageState == 1)
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * .82,
                     child: SingleChildScrollView(
                       child: ProjectReviewsScreen(
                         project: project,
+                        text: projectCardState.isDeleted &&
+                                project.overAllCategoryRating == null
+                            ? 'There are no reviews available for this project'
+                            : null,
                       ),
                     ),
                   ),
                 ),
-              if (currentPageState == 2)
+              if (projectCardState.isDeleted
+                  ? currentPageState == 1
+                  : currentPageState == 2)
                 SliverToBoxAdapter(
                   child: SizedBox(),
                 ),

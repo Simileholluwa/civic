@@ -5,7 +5,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_card_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class ProjectCardWidget extends _$ProjectCardWidget {
   @override
   ProjectCardState build(Project project) {
@@ -18,6 +18,12 @@ class ProjectCardWidget extends _$ProjectCardWidget {
   void toggleFilter() {
     state = state.copyWith(
       toggleFilter: !state.toggleFilter,
+    );
+  }
+
+  void toggleCanDelete () {
+    state = state.copyWith(
+      canDelete: !state.canDelete,
     );
   }
 
@@ -43,7 +49,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     });
   }
 
-  Future<void> toggleBookmarkStatus(
+  Future<bool> toggleBookmarkStatus(
     int projectId,
   ) async {
     final toggleBookmark = ref.read(toggleBookmarkProvider);
@@ -54,8 +60,25 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     );
     return result.fold((error) {
       log(error.message);
-      return;
+      return false;
     }, (_) async {
+      return true;
+    });
+  }
+
+  Future<void> deleteProject(
+    int projectId,
+  ) async {
+    final deleteProject = ref.read(deleteProjectProvider);
+    final result = await deleteProject(
+      DeleteProjectParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) async {
+      log('Delete error: ${error.message}');
+      return;
+    }, (_) {
       return;
     });
   }

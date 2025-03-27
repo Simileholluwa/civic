@@ -16,7 +16,11 @@ class ArticleScrollController extends _$ArticleScrollController {
   }
 
   void _scrollListener() {
-    final visibilityNotifier = ref.read(appScrollVisibilityProvider.notifier);
+    final visibilityNotifier = ref.read(
+      appScrollVisibilityProvider(
+        true,
+      ).notifier,
+    );
     if (_scrollController.position.userScrollDirection ==
         ScrollDirection.reverse) {
       visibilityNotifier.hide();

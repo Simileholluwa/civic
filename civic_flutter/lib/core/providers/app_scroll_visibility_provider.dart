@@ -4,7 +4,7 @@ part 'app_scroll_visibility_provider.g.dart';
 @riverpod
 class AppScrollVisibility extends _$AppScrollVisibility {
   @override
-  bool build() => true;
+  bool build(bool? value) => value ?? true;
 
   void toggleVisibility() {
     state = !state;

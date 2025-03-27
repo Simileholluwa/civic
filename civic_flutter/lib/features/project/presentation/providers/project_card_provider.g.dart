@@ -6,7 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectCardWidgetHash() => r'529e163c51142bec8ff60caba961a1bfdfee14c8';
+String _$projectCardWidgetHash() => r'8dc0820e7b9d6e16b04155898a04bebd3791a9b2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,7 +29,8 @@ class _SystemHash {
   }
 }
 
-abstract class _$ProjectCardWidget extends BuildlessNotifier<ProjectCardState> {
+abstract class _$ProjectCardWidget
+    extends BuildlessAutoDisposeNotifier<ProjectCardState> {
   late final Project project;
 
   ProjectCardState build(
@@ -80,8 +81,8 @@ class ProjectCardWidgetFamily extends Family<ProjectCardState> {
 }
 
 /// See also [ProjectCardWidget].
-class ProjectCardWidgetProvider
-    extends NotifierProviderImpl<ProjectCardWidget, ProjectCardState> {
+class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
+    ProjectCardWidget, ProjectCardState> {
   /// See also [ProjectCardWidget].
   ProjectCardWidgetProvider(
     Project project,
@@ -137,7 +138,8 @@ class ProjectCardWidgetProvider
   }
 
   @override
-  NotifierProviderElement<ProjectCardWidget, ProjectCardState> createElement() {
+  AutoDisposeNotifierProviderElement<ProjectCardWidget, ProjectCardState>
+      createElement() {
     return _ProjectCardWidgetProviderElement(this);
   }
 
@@ -157,14 +159,14 @@ class ProjectCardWidgetProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectCardWidgetRef on NotifierProviderRef<ProjectCardState> {
+mixin ProjectCardWidgetRef on AutoDisposeNotifierProviderRef<ProjectCardState> {
   /// The parameter `project` of this provider.
   Project get project;
 }
 
 class _ProjectCardWidgetProviderElement
-    extends NotifierProviderElement<ProjectCardWidget, ProjectCardState>
-    with ProjectCardWidgetRef {
+    extends AutoDisposeNotifierProviderElement<ProjectCardWidget,
+        ProjectCardState> with ProjectCardWidgetRef {
   _ProjectCardWidgetProviderElement(super.provider);
 
   @override

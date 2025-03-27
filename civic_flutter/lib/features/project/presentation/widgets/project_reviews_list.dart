@@ -8,9 +8,11 @@ class ProjectReviewsScreen extends ConsumerWidget {
   const ProjectReviewsScreen({
     super.key,
     required this.project,
+    this.text,
   });
 
   final Project project;
+  final String? text;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,7 +129,6 @@ class ProjectReviewsScreen extends ConsumerWidget {
           shrinkWrap: true,
           scrollPhysics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, projectReview, index) {
-
             final reactToReviewNotifier = ref.watch(
               reviewReactionProvider(
                 projectReview,
@@ -316,9 +317,10 @@ class ProjectReviewsScreen extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  projectReviewState.rating != null
-                      ? "There are no items matching your query. Try another query or clear the filters."
-                      : "There are no reviews... yet. Be the first! Tap on the review button to get started.",
+                  text ??
+                      (projectReviewState.rating != null
+                          ? "There are no items matching your query. Try another query or clear the filters."
+                          : "There are no reviews... yet. Be the first! Tap on the review button to get started."),
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),

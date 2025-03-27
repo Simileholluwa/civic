@@ -94,7 +94,9 @@ class SendProject extends _$SendProject {
     }
   }
 
-  Future<void> undoProjectRepost(int projectId,) async {
+  Future<void> undoProjectRepost(
+    int projectId,
+  ) async {
     final undoRepost = ref.read(undoRepostProvider);
     final result = await undoRepost(
       UndoRepostParams(
@@ -157,6 +159,23 @@ class SendProject extends _$SendProject {
           .addProject(
             response,
           );
+      return;
+    });
+  }
+
+  Future<void> deleteProject(
+    int projectId,
+  ) async {
+    final deleteProject = ref.read(deleteProjectProvider);
+    final result = await deleteProject(
+      DeleteProjectParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) async {
+      log('Delete error: ${error.message}');
+      return;
+    }, (_) {
       return;
     });
   }

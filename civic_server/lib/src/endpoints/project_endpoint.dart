@@ -536,13 +536,18 @@ class ProjectEndpoint extends Endpoint {
       user,
     );
 
-    await Project.db.deleteRow(
-      session,
-      Project(
-        id: id,
-        ownerId: user.userInfoId,
-      ),
+    final project = await Project.db.findById(session, id);
+
+    if (project == null) {
+      throw PostException(message: 'Project not found');
+    }
+
+    final newProject = project.copyWith(
+      isDeleted: true,
+
     );
+
+    await updateProject(session, newProject);
   }
 
   Future<void> toggleBookmark(

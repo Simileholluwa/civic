@@ -26,44 +26,67 @@ final feedScreenTabProvider = Provider<TabController>(
 @riverpod
 class FeedCurrentPage extends _$FeedCurrentPage {
   @override
-  int build() => 0;
+  int build(String? tabName) {
+    if (tabName == null) return 0;
+    switch (tabName) {
+      case 'project':
+        return 0;
+      case 'post':
+        return 1;
+      case 'poll':
+        return 2;
+      case 'article':
+        return 3;
+      default:
+        return 0;
+    }
+  }
 
   void setCurrentPage(int index) {
     state = index;
-  }
-
-  void subtract() {
-    state = state - 1;
-  }
-
-  void add() {
-    state = state + 1;
   }
 }
 
 @riverpod
 class FeedPageController extends _$FeedPageController {
   @override
-  Raw<PageController> build() => PageController();
-
-  void nextPage() {
-    ref.watch(feedCurrentPageProvider.notifier).add();
-    state.nextPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void previousPage() {
-    ref.watch(feedCurrentPageProvider.notifier).subtract();
-    state.previousPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+  Raw<PageController> build(String? tabName) {
+    int initialPage;
+    if (tabName == null) {
+      initialPage = 0;
+    }
+    switch (tabName) {
+      case 'project':
+        initialPage = 0;
+        break;
+      case 'post':
+        initialPage = 1;
+        break;
+      case 'poll':
+        initialPage = 2;
+        break;
+      case 'article':
+        initialPage = 3;
+        break;
+      default:
+        initialPage = 0;
+        break;
+    }
+    return PageController(
+      initialPage: initialPage,
     );
   }
 
   void gotoPage(int index) {
-    ref.watch(feedCurrentPageProvider.notifier).setCurrentPage(index);
+    ref
+        .watch(
+          feedCurrentPageProvider(
+            tabName,
+          ).notifier,
+        )
+        .setCurrentPage(
+          index,
+        );
     state.jumpToPage(
       index,
     );

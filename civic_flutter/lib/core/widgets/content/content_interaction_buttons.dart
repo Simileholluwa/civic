@@ -14,8 +14,8 @@ class ContentInteractionButton extends StatelessWidget {
   });
 
   final IconData icon;
-  final VoidCallback onTap;
-  final Color color;
+  final VoidCallback? onTap;
+  final Color? color;
   final String text;
   final bool showText;
   final double iconSize;
