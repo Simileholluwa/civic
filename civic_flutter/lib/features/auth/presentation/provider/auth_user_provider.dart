@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 part 'auth_user_provider.g.dart';
 
 @riverpod
@@ -20,7 +20,7 @@ class AuthUser extends _$AuthUser {
   }
 
   Future<void> fetchUser() async {
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final result = await me(
       NoParams(),
     );
@@ -32,7 +32,6 @@ class AuthUser extends _$AuthUser {
       state = AuthUserStateSuccess(
         userRecord: response,
       );
-      log(response.toString());
       return;
     });
   }

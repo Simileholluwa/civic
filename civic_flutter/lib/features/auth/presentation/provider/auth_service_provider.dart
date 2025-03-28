@@ -105,13 +105,6 @@ ResetUserPasswordUseCase resetUserPassword(Ref ref) {
 }
 
 @riverpod
-CurrentUserUseCase currentUser(Ref ref) {
-  return CurrentUserUseCase(
-    authRepository: ref.read(authRepositoryProvider),
-  );
-}
-
-@riverpod
 SaveUserRecordUserUseCase saveUserRecord(Ref ref) {
   return SaveUserRecordUserUseCase(
     authRepository: ref.read(authRepositoryProvider),

@@ -7,7 +7,7 @@ part of 'project_scroll_controller_provider.dart';
 // **************************************************************************
 
 String _$projectScrollControllerHash() =>
-    r'0575f6dd6914b6a240a4ef44a1701705f43898df';
+    r'd6d68e76d56bfeebc22dcfc2407f4f30e8af2412';
 
 /// See also [ProjectScrollController].
 @ProviderFor(ProjectScrollController)

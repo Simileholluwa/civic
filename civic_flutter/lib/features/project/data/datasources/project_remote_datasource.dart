@@ -60,13 +60,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   @override
   Future<void> deleteProject({required int id}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-
       return await _client.project.deleteProject(
         id,
       );
@@ -88,12 +81,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   @override
   Future<Project?> getProject({required int id}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       final result = await _client.project.getProject(
         id,
       );
@@ -117,12 +104,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required int page,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       final result = _client.project.getProjects(
         limit: limit,
         page: page,
@@ -144,21 +125,9 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   @override
   Future<Project?> saveProject({required Project project}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-
       final result = await _client.project
           .saveProject(
             project,
-          )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
           );
 
       if (result == null) {
@@ -188,12 +157,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required DateTime dateTime,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       await _client.project.scheduleProject(
         project,
         dateTime,
@@ -225,12 +188,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   @override
   Future<ProjectReview?> getProjectReview({required int id}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       final result = await _client.project.getProjectReview(
         id,
       );
@@ -257,12 +214,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     String? cardinal,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       final result = _client.project.getProjectReviews(
         projectId,
         limit: limit,
@@ -289,13 +240,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required ProjectReview projectReview,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-
       final result = await _client.project
           .saveProjectReview(
             projectReview,
@@ -333,13 +277,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required bool isLike,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-
       final result = await _client.project
           .reactToReview(
             reviewId,

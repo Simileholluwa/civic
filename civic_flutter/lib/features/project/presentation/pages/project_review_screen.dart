@@ -18,7 +18,7 @@ class ProjectReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(projectReviewDetailProvider(id));
+    final data = ref.watch(projectReviewDetailProvider(id,),);
     final projectReviewState = ref.watch(
       projectReviewProviderProvider(data.value),
     );

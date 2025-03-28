@@ -67,7 +67,6 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return false;
       }, (r) {
-      //ref.read(authUserProvider.notifier).setValue(false);
       ref.invalidate(paginatedProjectListProvider);
       ref.invalidate(paginatedPostListProvider);
       ref.invalidate(paginatedPollListProvider);

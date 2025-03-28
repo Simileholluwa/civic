@@ -209,20 +209,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserRecord?>> currentUser() async {
-    try {
-      final result = await _remoteDatabase.currentUser();
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
   Either<Failure, UserRecord> getUserRecord() {
     try {
       final result = _localDatabase.getUserRecord();

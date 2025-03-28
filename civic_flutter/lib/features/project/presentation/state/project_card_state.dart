@@ -188,7 +188,6 @@ class ProjectCardState {
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
-
     return ProjectCardState(
       creator: project.owner!,
       timeAgo: THelperFunctions.humanizeDateTime(

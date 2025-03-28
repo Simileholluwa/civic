@@ -5,7 +5,6 @@ export './domain/entities/political_status_card_entity.dart';
 export './domain/repository/auth_repository.dart';
 export './domain/usecases/check_if_new_user_use_case.dart';
 export './domain/usecases/create_account_request_usecase.dart';
-export './domain/usecases/current_user_use_case.dart';
 export './domain/usecases/fetch_all_usernames_use_case.dart';
 export './domain/usecases/initiate_password_reset_use_case.dart';
 export './domain/usecases/logout_use_case.dart';

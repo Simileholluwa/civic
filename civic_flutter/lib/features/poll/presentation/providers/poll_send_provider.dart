@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'poll_send_provider.g.dart';
 
@@ -91,7 +91,7 @@ class SendPoll extends _$SendPoll {
     required Poll poll,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final userRecord = await me(NoParams());
 
     return userRecord.fold((error) async {

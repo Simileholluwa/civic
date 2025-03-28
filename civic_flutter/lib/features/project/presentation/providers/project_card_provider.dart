@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_card_provider.g.dart';
@@ -21,18 +20,15 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     );
   }
 
-  void toggleCanDelete () {
+  void toggleCanDelete() {
     state = state.copyWith(
       canDelete: !state.canDelete,
     );
   }
 
-  void setProjectReview(int numberOfReviews) {
+  void setIsFollower() {
     state = state.copyWith(
-      numberOfReviews: THelperFunctions.humanizeNumber(
-            numberOfReviews,
-          ),
-      hasReviewed: true,
+      isFollower: !state.isFollower,
     );
   }
 

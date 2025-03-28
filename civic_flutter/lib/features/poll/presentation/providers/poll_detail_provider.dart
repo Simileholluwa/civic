@@ -2,7 +2,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'poll_detail_provider.g.dart';
@@ -14,7 +14,7 @@ Future<Poll?> pollDetail(
   int id,
 ) async {
   if (id == 0 && draftPoll == null) {
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final result = await me(NoParams());
     return result.fold((error) {
       return null;
@@ -25,7 +25,7 @@ Future<Poll?> pollDetail(
       );
     });
   } else if (id == 0 && draftPoll != null) {
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final result = await me(NoParams());
     return result.fold((error) {
       return null;
@@ -49,7 +49,7 @@ Future<Poll?> pollDetail(
         if (poll == null) {
           return null;
         }
-        final me = ref.read(meUseCaseProvider);
+        final me = ref.read(fetchUserProvider);
         final userRecord = await me(NoParams());
         final owner = userRecord.fold((error) => null, (user) => user);
         if (owner == null) return null;

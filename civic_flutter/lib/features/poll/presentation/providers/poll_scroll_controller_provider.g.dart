@@ -7,7 +7,7 @@ part of 'poll_scroll_controller_provider.dart';
 // **************************************************************************
 
 String _$pollScrollControllerHash() =>
-    r'8c1ccd5e70df55f2c3f4db9b2c8d792f2ab2f230';
+    r'a5450600b441cbbd22a91882135c0c1ac2852c23';
 
 /// See also [PollScrollController].
 @ProviderFor(PollScrollController)

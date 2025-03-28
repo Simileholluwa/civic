@@ -209,7 +209,7 @@ class UserRecordEndpoint extends Endpoint {
 
   Future<void> followUnfollowUser(
     Session session,
-    int followedUserId,
+    int userId,
   ) async {
     // Fetch the authenticated user
     final authInfo = await session.authenticated;
@@ -226,7 +226,7 @@ class UserRecordEndpoint extends Endpoint {
     );
     final followedUser = await UserRecord.db.findById(
       session,
-      followedUserId,
+      userId,
     );
 
     // If either user does not exist, throw an exception
@@ -235,16 +235,16 @@ class UserRecordEndpoint extends Endpoint {
     }
 
     // Check if the current user is already following the target user
-    if (currentUser.following!.contains(followedUserId)) {
+    if (currentUser.following!.contains(userId)) {
       // Unfollow the user
-      currentUser.following!.remove(followedUserId);
+      currentUser.following!.remove(userId);
       followedUser.followers!.remove(authInfo.userId);
-      print('User ${authInfo.userId} has unfollowed $followedUserId');
+      print('User ${authInfo.userId} has unfollowed $userId');
     } else {
       // Follow the user
-      currentUser.following!.add(followedUserId);
+      currentUser.following!.add(userId);
       followedUser.followers!.add(authInfo.userId);
-      print('User ${authInfo.userId} has followed $followedUserId');
+      print('User ${authInfo.userId} has followed $userId');
     }
 
     // Save changes to both users

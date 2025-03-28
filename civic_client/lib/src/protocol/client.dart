@@ -707,11 +707,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> followUnfollowUser(int followedUserId) =>
+  _i2.Future<void> followUnfollowUser(int userId) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'followUnfollowUser',
-        {'followedUserId': followedUserId},
+        {'userId': userId},
       );
 }
 

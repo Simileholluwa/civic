@@ -7,7 +7,7 @@ part of 'article_scroll_controller_provider.dart';
 // **************************************************************************
 
 String _$articleScrollControllerHash() =>
-    r'e5c40739d224f512ca999516e7c0a069bc48b66a';
+    r'858d2038fab0a031ca05067a6e922f622a043c55';
 
 /// See also [ArticleScrollController].
 @ProviderFor(ArticleScrollController)

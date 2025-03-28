@@ -2,9 +2,10 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../user/presentation/providers/user_services_provider.dart';
 part 'article_send_provider.g.dart';
 
 @riverpod
@@ -89,7 +90,7 @@ class SendArticle extends _$SendArticle {
     required Article article,
   }) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final userRecord = await me(NoParams());
     return userRecord.fold((error) {
       log(error.message);

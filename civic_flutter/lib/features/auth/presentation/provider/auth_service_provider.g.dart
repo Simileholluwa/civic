@@ -246,22 +246,6 @@ final resetUserPasswordProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ResetUserPasswordRef = AutoDisposeProviderRef<ResetUserPasswordUseCase>;
-String _$currentUserHash() => r'9d686e517b132f624f85293754159daaa76d8106';
-
-/// See also [currentUser].
-@ProviderFor(currentUser)
-final currentUserProvider = AutoDisposeProvider<CurrentUserUseCase>.internal(
-  currentUser,
-  name: r'currentUserProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$currentUserHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentUserRef = AutoDisposeProviderRef<CurrentUserUseCase>;
 String _$saveUserRecordHash() => r'1e54d32b3a67d45c48fc62b95a40b3ed4556161b';
 
 /// See also [saveUserRecord].

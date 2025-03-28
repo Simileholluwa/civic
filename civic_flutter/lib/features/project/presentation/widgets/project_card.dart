@@ -4,6 +4,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -127,45 +128,7 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                       imageUrls: projectCardState.imagesUrl,
                       maxHeight: widget.maxHeight,
                     )
-              : Container(
-                  margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  height: 300,
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      TSizes.md,
-                    ),
-                    color: Theme.of(context).cardColor,
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 5,
-                      children: [
-                        Icon(
-                          Iconsax.trash,
-                          size: 70,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                        Text(
-                          'This project has been removed by the author, preventing further interaction. However, you can still view and engage with existing reviews and vettings.',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).disabledColor,
-                                  ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              : DeletedProjectPlaceholder(),
           if (!projectCardState.isDeleted)
             ProjectQuickDetails(
               project: widget.project,
@@ -367,186 +330,13 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                                     ? projectCardState.canVet
                                         ? 350
                                         : 300
-                                    : 475,
+                                    : projectCardState.canVet
+                                        ? 480
+                                        : 430,
                               ),
                               builder: (ctx) {
-                                return Scaffold(
-                                  appBar: PreferredSize(
-                                    preferredSize: Size.fromHeight(65),
-                                    child: Container(
-                                      margin: EdgeInsets.only(top: 4),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color:
-                                                Theme.of(context).dividerColor,
-                                          ),
-                                        ),
-                                      ),
-                                      child: AppBar(
-                                        titleSpacing: 4,
-                                        title: Text(
-                                          'More actions',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineLarge!
-                                              .copyWith(
-                                                fontSize: 20,
-                                              ),
-                                        ),
-                                        automaticallyImplyLeading: false,
-                                        leading: IconButton(
-                                          icon: Icon(Icons.clear),
-                                          onPressed: () {
-                                            context.pop();
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  body: Column(
-                                    children: [
-                                      if (projectCardState.canVet)
-                                        ListTile(
-                                          leading: Icon(
-                                            projectCardState.isBookmarked
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_add_outlined,
-                                          ),
-                                          title: Text(
-                                            projectCardState.isBookmarked
-                                                ? 'Remove Bookmark'
-                                                : 'Bookmark',
-                                          ),
-                                          onTap: () async {
-                                            if (context.mounted) {
-                                              context.pop();
-                                            }
-                                            final result =
-                                                await projectCardNotifier
-                                                    .toggleBookmarkStatus(
-                                              widget.project.id!,
-                                            );
-                                            if (result) {
-                                              if (!projectCardState
-                                                  .isBookmarked) {
-                                                TToastMessages.infoToast(
-                                                    'Project has been bookmarked');
-                                              } else {
-                                                TToastMessages.infoToast(
-                                                    'Project has been removed from bookmarks');
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ListTile(
-                                        leading: Icon(Icons.share),
-                                        title: Text(
-                                          'Share',
-                                        ),
-                                        trailing: Icon(
-                                          Iconsax.arrow_right_3,
-                                        ),
-                                        onTap: () {},
-                                      ),
-                                      ListTile(
-                                        leading: Icon(Iconsax.copy),
-                                        title: Text(
-                                          'Copy link',
-                                        ),
-                                        onTap: () {},
-                                      ),
-                                      if (projectCardState.isOwner)
-                                        ListTile(
-                                          leading: Icon(Iconsax.edit),
-                                          title: Text(
-                                            'Edit',
-                                          ),
-                                          onTap: () {
-                                            context.pop();
-                                            isVisibleNotifier.hide();
-                                            context.push(
-                                              AppRoutes.createProject,
-                                              extra: {
-                                                'id': widget.project.id,
-                                              },
-                                            );
-                                          },
-                                          trailing: Icon(
-                                            Iconsax.arrow_right_3,
-                                          ),
-                                        ),
-                                      if (!projectCardState.isOwner)
-                                        ListTile(
-                                          leading: Icon(Iconsax.eye_slash),
-                                          title: Text(
-                                            'Not interested',
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      if (!projectCardState.isOwner)
-                                        ListTile(
-                                          leading: Icon(Iconsax.flag),
-                                          title: Text(
-                                            'Report',
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      if (projectCardState.isOwner)
-                                        ListTile(
-                                          leading: Icon(
-                                            Iconsax.trash,
-                                            color: Colors.red,
-                                          ),
-                                          title: Text(
-                                            'Delete',
-                                            style: TextStyle().copyWith(
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                          onTap: () async {
-                                            if (context.mounted) {
-                                              context.pop();
-                                            }
-                                            ProjectHelperFunctions
-                                                .deleteProjectBottomSheet(
-                                              context,
-                                              newProject ?? widget.project,
-                                            );
-                                          },
-                                        ),
-                                      if (!projectCardState.isOwner)
-                                        const Divider(
-                                          indent: 20,
-                                          endIndent: 30,
-                                        ),
-                                      if (!projectCardState.isOwner)
-                                        Column(
-                                          children: [
-                                            ListTile(
-                                              leading: Icon(
-                                                projectCardState.isFollower
-                                                    ? Iconsax.user_remove
-                                                    : Iconsax.user_cirlce_add,
-                                              ),
-                                              title: Text(
-                                                projectCardState.isFollower
-                                                    ? 'Unfollow'
-                                                    : 'Follow',
-                                              ),
-                                              onTap: () {},
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.block_sharp),
-                                              title: Text(
-                                                'Block',
-                                              ),
-                                              onTap: () {},
-                                            ),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
+                                return ShowProjectActions(
+                                  project: newProject ?? widget.project,
                                 );
                               },
                             );
@@ -557,6 +347,267 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                   ),
                 ],
               ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class DeletedProjectPlaceholder extends StatelessWidget {
+  const DeletedProjectPlaceholder({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+        height: 300,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            TSizes.md,
+          ),
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 5,
+            children: [
+              Icon(
+                Iconsax.trash,
+                size: 70,
+                color: Theme.of(context).disabledColor,
+              ),
+              Text(
+                'This project has been removed by the author, preventing further interaction. '
+                'However, you can still view and engage with existing reviews and vettings.',
+                style:
+                    Theme.of(context).textTheme.labelMedium!.copyWith(
+                          color: Theme.of(context).disabledColor,
+                        ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+  }
+}
+
+class ShowProjectActions extends ConsumerWidget {
+  const ShowProjectActions({
+    super.key,
+    required this.project,
+  });
+  final Project project;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userNotifier = ref.watch(currentActiveUserProvider.notifier);
+    final projectCardState = ref.watch(
+      projectCardWidgetProvider(
+        project,
+      ),
+    );
+    final projectCardNotifier = ref.watch(
+      projectCardWidgetProvider(
+        project,
+      ).notifier,
+    );
+    final isVisibleNotifier = ref.watch(
+      appScrollVisibilityProvider(true).notifier,
+    );
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(65),
+        child: Container(
+          margin: EdgeInsets.only(top: 4),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+          ),
+          child: AppBar(
+            titleSpacing: 4,
+            title: Text(
+              'More actions',
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 20,
+                  ),
+            ),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                context.pop();
+              },
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          if (projectCardState.canVet)
+            ListTile(
+              leading: Icon(
+                projectCardState.isBookmarked
+                    ? Icons.bookmark
+                    : Icons.bookmark_add_outlined,
+              ),
+              title: Text(
+                projectCardState.isBookmarked ? 'Remove Bookmark' : 'Bookmark',
+              ),
+              onTap: () async {
+                if (context.mounted) {
+                  context.pop();
+                }
+                final result = await projectCardNotifier.toggleBookmarkStatus(
+                  project.id!,
+                );
+                if (result) {
+                  if (!projectCardState.isBookmarked) {
+                    TToastMessages.infoToast('Project has been bookmarked');
+                  } else {
+                    TToastMessages.infoToast(
+                        'Project has been removed from bookmarks');
+                  }
+                }
+              },
+            ),
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text(
+              'Share',
+            ),
+            trailing: Icon(
+              Iconsax.arrow_right_3,
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Iconsax.copy),
+            title: Text(
+              'Copy link',
+            ),
+            onTap: () {},
+          ),
+          if (projectCardState.isOwner)
+            ListTile(
+              leading: Icon(Iconsax.edit),
+              title: Text(
+                'Edit',
+              ),
+              onTap: () {
+                context.pop();
+                isVisibleNotifier.hide();
+                context.push(
+                  AppRoutes.createProject,
+                  extra: {
+                    'id': project.id,
+                  },
+                );
+              },
+              trailing: Icon(
+                Iconsax.arrow_right_3,
+              ),
+            ),
+          if (!projectCardState.isOwner)
+            ListTile(
+              leading: Icon(Iconsax.eye_slash),
+              title: Text(
+                'Not interested',
+              ),
+              onTap: () {},
+            ),
+          if (!projectCardState.isOwner)
+            ListTile(
+              leading: Icon(Iconsax.flag),
+              title: Text(
+                'Report',
+              ),
+              onTap: () {},
+            ),
+          if (projectCardState.isOwner)
+            ListTile(
+              leading: Icon(
+                Iconsax.trash,
+                color: Colors.red,
+              ),
+              title: Text(
+                'Delete',
+                style: TextStyle().copyWith(
+                  color: Colors.red,
+                ),
+              ),
+              onTap: () async {
+                if (context.mounted) {
+                  context.pop();
+                }
+                ProjectHelperFunctions.deleteProjectBottomSheet(
+                  context,
+                  project,
+                );
+              },
+            ),
+          if (!projectCardState.isOwner)
+            const Divider(
+              indent: 20,
+              endIndent: 30,
+            ),
+          if (!projectCardState.isOwner)
+            Column(
+              children: [
+                ListTile(
+                  leading: Icon(
+                    projectCardState.isFollower
+                        ? Iconsax.user_remove
+                        : Iconsax.user_cirlce_add,
+                  ),
+                  title: Text(
+                    projectCardState.isFollower ? 'Unfollow' : 'Follow',
+                  ),
+                  onTap: () async {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                    final result = await userNotifier.toggleFollow(
+                      project.ownerId,
+                    );
+
+                    if (result) {
+                      projectCardNotifier.setIsFollower();
+                      if (!projectCardState.isFollower) {
+                        TToastMessages.infoToast(
+                          'You are now following ${project.owner!.userInfo!.userName}',
+                        );
+                      } else {
+                        TToastMessages.infoToast(
+                          'You are no longer following ${project.owner!.userInfo!.userName}',
+                        );
+                      }
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.block_sharp),
+                  title: Text(
+                    'Block',
+                  ),
+                  onTap: () {},
+                ),
+              ],
             ),
         ],
       ),

@@ -1431,8 +1431,8 @@ class Endpoints extends _i1.EndpointDispatch {
         'followUnfollowUser': _i1.MethodConnector(
           name: 'followUnfollowUser',
           params: {
-            'followedUserId': _i1.ParameterDescription(
-              name: 'followedUserId',
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
               type: _i1.getType<int>(),
               nullable: false,
             )
@@ -1444,7 +1444,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['userRecord'] as _i12.UserRecordEndpoint)
                   .followUnfollowUser(
             session,
-            params['followedUserId'],
+            params['userId'],
           ),
         ),
       },

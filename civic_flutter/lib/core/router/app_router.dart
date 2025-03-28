@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
@@ -30,32 +31,25 @@ GoRouter router(Ref ref) {
         redirect: (context, state) async {
           final firstTimer =
               ref.read(localStorageProvider).getBool('first_timer') ?? true;
-          try {
-            if (firstTimer) {
-              FlutterNativeSplash.remove();
-              return AppRoutes.initial;
-            } else {
-              final currentUser =
-                  await ref.read(clientProvider).userRecord.getUser();
-              if (currentUser == null) {
-                FlutterNativeSplash.remove();
-                return AppRoutes.auth;
-              } else {
-                ref.read(localStorageProvider).setInt(
-                      'userId',
-                      currentUser.userInfo!.id!,
-                    );
-                FlutterNativeSplash.remove();
-                return FeedRoutes.namespace;
-              }
+          if (firstTimer) {
+            FlutterNativeSplash.remove();
+            return AppRoutes.initial;
+          } else {
+            UserRecord? currentUser;
+            final authState = ref.watch(authUserProvider);
+            if (authState is AuthUserStateSuccess) {
+              currentUser = authState.userRecord;
             }
-          } catch (_) {
-            if (firstTimer) {
-              FlutterNativeSplash.remove();
-              return AppRoutes.initial;
-            } else {
+            if (currentUser == null) {
               FlutterNativeSplash.remove();
               return AppRoutes.auth;
+            } else {
+              ref.read(localStorageProvider).setInt(
+                    'userId',
+                    currentUser.userInfo!.id!,
+                  );
+              FlutterNativeSplash.remove();
+              return FeedRoutes.namespace;
             }
           }
         },

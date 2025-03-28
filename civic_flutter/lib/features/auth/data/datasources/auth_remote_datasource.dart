@@ -48,8 +48,6 @@ abstract interface class AuthRemoteDatabase {
   Future<bool> uploadProfileImage({required String imagePath});
 
   Future<UserNinRecord?> searchNinDetails({required String ninNumber});
-
-  Future<UserRecord?> currentUser();
 }
 
 class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
@@ -442,30 +440,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         );
       }
 
-      return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
-    } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<UserRecord?> currentUser() async {
-    try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
-      final result = await _client.userRecord.getUser();
       return result;
     } on TimeoutException catch (_) {
       throw const ServerException(message: 'Request timed out.');

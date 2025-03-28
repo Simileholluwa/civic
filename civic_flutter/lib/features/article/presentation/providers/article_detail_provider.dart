@@ -2,7 +2,7 @@
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:civic_flutter/features/profile/presentation/provider/profile_provider.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +15,7 @@ Future<Article?> articleDetail(
   int id,
 ) async {
   if (id == 0 && articleDraft == null) {
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final result = await me(NoParams());
     return result.fold((error) {
       return null;
@@ -25,7 +25,7 @@ Future<Article?> articleDetail(
       );
     });
   } else if(id == 0 && articleDraft != null) {
-    final me = ref.read(meUseCaseProvider);
+    final me = ref.read(fetchUserProvider);
     final result = await me(NoParams());
     return result.fold((error) {
       return null;
