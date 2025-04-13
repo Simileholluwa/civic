@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class AppUserInfoWidget extends StatelessWidget {
   const AppUserInfoWidget({
@@ -53,24 +52,7 @@ class AppUserInfoWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                      ),
-                      const SizedBox(
-                        width: TSizes.xs,
-                      ),
-                      userRecord.verifiedAccount!
-                          ? const Icon(
-                              Iconsax.verify5,
-                              color: TColors.primary,
-                              size: 19,
-                            )
-                          : const Icon(
-                              Iconsax.verify,
-                              color: TColors.primary,
-                              size: 19,
-                            ),
-                      AppUserPLStatusIcon(
-                        plStatusIndex: userRecord.politicalStatus!.index,
-                      ),
+                      ),                    
                     ],
                   ),
                   Row(

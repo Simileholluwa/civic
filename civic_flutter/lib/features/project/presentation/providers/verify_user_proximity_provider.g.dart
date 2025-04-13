@@ -7,7 +7,7 @@ part of 'verify_user_proximity_provider.dart';
 // **************************************************************************
 
 String _$verifyUserProximityHash() =>
-    r'f52dafc17062f7779b913160fa22161df739598a';
+    r'49bd94d249ea06b36bd2aa7458fba816f9e1f5fe';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,7 +35,8 @@ class _SystemHash {
 const verifyUserProximityProvider = VerifyUserProximityFamily();
 
 /// See also [verifyUserProximity].
-class VerifyUserProximityFamily extends Family<AsyncValue<bool>> {
+class VerifyUserProximityFamily
+    extends Family<AsyncValue<Map<String, dynamic>>> {
   /// See also [verifyUserProximity].
   const VerifyUserProximityFamily();
 
@@ -76,7 +77,8 @@ class VerifyUserProximityFamily extends Family<AsyncValue<bool>> {
 }
 
 /// See also [verifyUserProximity].
-class VerifyUserProximityProvider extends AutoDisposeFutureProvider<bool> {
+class VerifyUserProximityProvider
+    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
   /// See also [verifyUserProximity].
   VerifyUserProximityProvider({
     double maxDistance = 1000,
@@ -116,7 +118,8 @@ class VerifyUserProximityProvider extends AutoDisposeFutureProvider<bool> {
 
   @override
   Override overrideWith(
-    FutureOr<bool> Function(VerifyUserProximityRef provider) create,
+    FutureOr<Map<String, dynamic>> Function(VerifyUserProximityRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -134,7 +137,7 @@ class VerifyUserProximityProvider extends AutoDisposeFutureProvider<bool> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<bool> createElement() {
+  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
     return _VerifyUserProximityProviderElement(this);
   }
 
@@ -157,7 +160,8 @@ class VerifyUserProximityProvider extends AutoDisposeFutureProvider<bool> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin VerifyUserProximityRef on AutoDisposeFutureProviderRef<bool> {
+mixin VerifyUserProximityRef
+    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `maxDistance` of this provider.
   double get maxDistance;
 
@@ -166,7 +170,8 @@ mixin VerifyUserProximityRef on AutoDisposeFutureProviderRef<bool> {
 }
 
 class _VerifyUserProximityProviderElement
-    extends AutoDisposeFutureProviderElement<bool> with VerifyUserProximityRef {
+    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    with VerifyUserProximityRef {
   _VerifyUserProximityProviderElement(super.provider);
 
   @override

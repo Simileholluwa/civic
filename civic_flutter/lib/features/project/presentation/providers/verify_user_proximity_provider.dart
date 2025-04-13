@@ -5,13 +5,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'verify_user_proximity_provider.g.dart';
 
 @riverpod
-Future<bool> verifyUserProximity(
+Future<Map<String, dynamic>> verifyUserProximity(
   Ref ref, {
   double maxDistance = 1000,
   required List<AWSPlaces> projectLocations,
 }) async {
   if (projectLocations.isEmpty) {
-    return false;
+    return {};
   }
   final userPosition = await ProjectHelperFunctions.getDevicePosition();
   for (final location in projectLocations) {
@@ -22,8 +22,17 @@ Future<bool> verifyUserProximity(
       location.longitude,
     );
     if (distance <= maxDistance) {
-      return true;
+      return {
+        'canVet': true,
+        'distance': distance,
+      };
+    } else {
+      return {
+        'canVet': false,
+        'distance': (distance / 1000).toStringAsFixed(2),
+      };
     }
+    
   }
-  return false;
+  return {};
 }

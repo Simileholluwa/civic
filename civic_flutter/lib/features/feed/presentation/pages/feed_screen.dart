@@ -1,12 +1,12 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
-import 'package:civic_flutter/features/feed/presentation/provider/feed_screen_provider.dart';
-import 'package:civic_flutter/features/feed/presentation/widgets/create_content_button.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({
@@ -48,38 +48,50 @@ class FeedScreen extends ConsumerWidget {
           onPressed: () {},
         ),
         titleSpacing: 0,
-        title: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 8,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 15,
-              children: [
-                ...['PROJECTS', 'POSTS', 'POLLS', 'ARTICLES']
-                    .asMap()
-                    .entries
-                    .map(
-                  (filter) {
-                    final text = filter.value;
-                    final index = filter.key;
-                    return GestureDetector(
-                      onTap: () {
-                        pageControllerNotifier.gotoPage(
-                          index,
-                        );
-                      },
-                      child: Text(
-                        text,
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
+        bottomHeight: 30,
+        centerTitle: true,
+        title: Text(
+          'CIVIC',
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                fontSize: 30,
+                fontWeight: FontWeight.w900,
+                color: Theme.of(context).primaryColor,
+              ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 15,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 15,
+                  children: [
+                    ...['PROJECTS', 'POSTS', 'POLLS', 'ARTICLES']
+                        .asMap()
+                        .entries
+                        .map(
+                      (filter) {
+                        final text = filter.value;
+                        final index = filter.key;
+                        return GestureDetector(
+                          onTap: () {
+                            pageControllerNotifier.gotoPage(
+                              index,
+                            );
+                          },
+                          child: Text(
+                            text,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(
                                   color: currentPageState == index
                                       ? Theme.of(context)
                                           .textTheme
@@ -91,19 +103,22 @@ class FeedScreen extends ConsumerWidget {
                                       : FontWeight.normal,
                                   fontSize: 15,
                                 ),
-                      ),
-                    );
-                  },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.filter_list_rounded,
-              size: 32,
+            icon: Icon(
+              Iconsax.filter5,
+              size: 26,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             onPressed: () {
               if (currentPageState == 0) {
@@ -114,8 +129,6 @@ class FeedScreen extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: const CreateContentButton(),
       body: Stack(
         children: [
           PageView(

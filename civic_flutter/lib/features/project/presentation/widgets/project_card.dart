@@ -42,9 +42,8 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
 
   @override
   void initState() {
-    if (context.mounted) {
-      _listenToUpdates();
-    }
+    //_listenToUpdates();
+    
     super.initState();
   }
 
@@ -60,17 +59,19 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
               widget.project.id!,
             );
         await for (final update in projectUpdates) {
+          if (context.mounted){
           setState(() {
             newProject = update.copyWith(
               owner: widget.project.owner,
             );
-          });
+          });}
         }
       } on MethodStreamException catch (e) {
         log(e.toString());
+        if (context.mounted){
         setState(() {
           newProject = widget.project;
-        });
+        });}
       }
       await Future.delayed(
         Duration(
@@ -197,12 +198,6 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                             }
                             showModalBottomSheet(
                               context: context,
-                              constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height * .7,
-                                minHeight:
-                                    MediaQuery.of(context).size.height * .5,
-                              ),
                               isScrollControlled: true,
                               backgroundColor:
                                   Theme.of(context).scaffoldBackgroundColor,
@@ -225,43 +220,63 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                             ? TColors.primary
                             : Theme.of(context).iconTheme.color!,
                   ),
-                  ContentInteractionButton(
-                    icon: projectCardState.hasReviewed
-                        ? Icons.star
-                        : Icons.star_border_outlined,
-                    iconSize: 22,
-                    text: projectCardState.numberOfReviews,
-                    onTap: projectCardState.isDeleted
-                        ? null
-                        : () {
-                            showModalBottomSheet(
-                              context: context,
-                              constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height * .7,
-                                minHeight:
-                                    MediaQuery.of(context).size.height * .5,
-                              ),
-                              isScrollControlled: true,
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              elevation: 0,
-                              builder: (ctx) {
-                                return ProjectReviewScreen(
-                                  id: widget.project.id!,
-                                  fromDetails: false,
-                                );
-                              },
-                            );
-                            isVisibleNotifier.hide();
-                          },
-                    color: projectCardState.isDeleted
-                        ? Theme.of(context).disabledColor
-                        : projectCardState.hasReviewed
-                            ? TColors.primary
-                            : Theme.of(context).iconTheme.color!,
-                  ),
-                  if (projectCardState.canVet)
+                  if (!projectCardState.isOwner)
+                    ContentInteractionButton(
+                      icon: projectCardState.hasReviewed
+                          ? Icons.star
+                          : Icons.star_border_outlined,
+                      iconSize: 22,
+                      text: projectCardState.numberOfReviews,
+                      onTap: projectCardState.isDeleted
+                          ? null
+                          : () {
+                              showModalBottomSheet(
+                                context: context,
+                                constraints: BoxConstraints(
+                                  maxHeight:
+                                      MediaQuery.of(context).size.height * .7,
+                                  minHeight:
+                                      MediaQuery.of(context).size.height * .5,
+                                ),
+                                isScrollControlled: true,
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                elevation: 0,
+                                builder: (ctx) {
+                                  return ProjectReviewScreen(
+                                    id: widget.project.id!,
+                                    fromDetails: false,
+                                  );
+                                },
+                              );
+                              isVisibleNotifier.hide();
+                            },
+                      color: projectCardState.isDeleted
+                          ? Theme.of(context).disabledColor
+                          : projectCardState.hasReviewed
+                              ? TColors.primary
+                              : Theme.of(context).iconTheme.color!,
+                    )
+                  else
+                    ContentInteractionButton(
+                      icon: projectCardState.isBookmarked
+                          ? Icons.bookmark
+                          : Icons.bookmark_add_outlined,
+                      text: projectCardState.numberOfBookmarks,
+                      onTap: projectCardState.isDeleted
+                          ? null
+                          : () async {
+                              await projectCardNotifier.toggleBookmarkStatus(
+                                widget.project.id!,
+                              );
+                            },
+                      color: projectCardState.isDeleted
+                          ? Theme.of(context).disabledColor
+                          : projectCardState.isBookmarked
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).colorScheme.onSurface,
+                    ),
+                  if (projectCardState.canVet && !projectCardState.isOwner)
                     ContentInteractionButton(
                       icon: projectCardState.hasVerified
                           ? Iconsax.medal_star5
@@ -298,6 +313,29 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                           : projectCardState.hasVerified
                               ? TColors.primary
                               : Theme.of(context).iconTheme.color!,
+                    )
+                  else
+                    ContentInteractionButton(
+                      icon: Iconsax.edit,
+                      text: '',
+                      showText: false,
+                      color: projectCardState.isDeleted
+                          ? Theme.of(context).disabledColor
+                          : projectCardState.hasVerified
+                              ? TColors.primary
+                              : Theme.of(context).iconTheme.color!,
+                      onTap: projectCardState.isDeleted
+                          ? null
+                          : () {
+                              context.pop();
+                              isVisibleNotifier.hide();
+                              context.push(
+                                AppRoutes.createProject,
+                                extra: {
+                                  'id': widget.project.id,
+                                },
+                              );
+                            },
                     ),
                   if (!projectCardState.canVet)
                     ContentInteractionButton(
@@ -327,9 +365,7 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
                               context: context,
                               constraints: BoxConstraints(
                                 maxHeight: projectCardState.isOwner
-                                    ? projectCardState.canVet
-                                        ? 350
-                                        : 300
+                                    ? 240
                                     : projectCardState.canVet
                                         ? 480
                                         : 430,
@@ -362,45 +398,44 @@ class DeletedProjectPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-        height: 300,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            TSizes.md,
-          ),
-          color: Theme.of(context).cardColor,
-          border: Border.all(
-            color: Theme.of(context).dividerColor,
-          ),
+      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      height: 300,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          TSizes.md,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 5,
-            children: [
-              Icon(
-                Iconsax.trash,
-                size: 70,
-                color: Theme.of(context).disabledColor,
-              ),
-              Text(
-                'This project has been removed by the author, preventing further interaction. '
-                'However, you can still view and engage with existing reviews and vettings.',
-                style:
-                    Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: Theme.of(context).disabledColor,
-                        ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+        color: Theme.of(context).cardColor,
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
         ),
-      );
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 5,
+          children: [
+            Icon(
+              Iconsax.trash,
+              size: 70,
+              color: Theme.of(context).disabledColor,
+            ),
+            Text(
+              'This project has been removed by the author, preventing further interaction. '
+              'However, you can still view and engage with existing reviews and vettings.',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    color: Theme.of(context).disabledColor,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -423,9 +458,6 @@ class ShowProjectActions extends ConsumerWidget {
       projectCardWidgetProvider(
         project,
       ).notifier,
-    );
-    final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider(true).notifier,
     );
     return Scaffold(
       appBar: PreferredSize(
@@ -459,7 +491,7 @@ class ShowProjectActions extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          if (projectCardState.canVet)
+          if (projectCardState.canVet && !projectCardState.isOwner)
             ListTile(
               leading: Icon(
                 projectCardState.isBookmarked
@@ -486,16 +518,16 @@ class ShowProjectActions extends ConsumerWidget {
                 }
               },
             ),
-          ListTile(
-            leading: Icon(Icons.share),
-            title: Text(
-              'Share',
+            ListTile(
+              leading: Icon(Icons.share),
+              title: Text(
+                'Share',
+              ),
+              trailing: Icon(
+                Iconsax.arrow_right_3,
+              ),
+              onTap: () {},
             ),
-            trailing: Icon(
-              Iconsax.arrow_right_3,
-            ),
-            onTap: () {},
-          ),
           ListTile(
             leading: Icon(Iconsax.copy),
             title: Text(
@@ -503,26 +535,6 @@ class ShowProjectActions extends ConsumerWidget {
             ),
             onTap: () {},
           ),
-          if (projectCardState.isOwner)
-            ListTile(
-              leading: Icon(Iconsax.edit),
-              title: Text(
-                'Edit',
-              ),
-              onTap: () {
-                context.pop();
-                isVisibleNotifier.hide();
-                context.push(
-                  AppRoutes.createProject,
-                  extra: {
-                    'id': project.id,
-                  },
-                );
-              },
-              trailing: Icon(
-                Iconsax.arrow_right_3,
-              ),
-            ),
           if (!projectCardState.isOwner)
             ListTile(
               leading: Icon(Iconsax.eye_slash),
@@ -533,9 +545,15 @@ class ShowProjectActions extends ConsumerWidget {
             ),
           if (!projectCardState.isOwner)
             ListTile(
-              leading: Icon(Iconsax.flag),
+              leading: Icon(
+                Iconsax.flag,
+                color: Colors.red,
+              ),
               title: Text(
                 'Report',
+                style: TextStyle().copyWith(
+                  color: Colors.red,
+                ),
               ),
               onTap: () {},
             ),
@@ -601,9 +619,15 @@ class ShowProjectActions extends ConsumerWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.block_sharp),
+                  leading: Icon(
+                    Icons.block_sharp,
+                    color: Colors.red,
+                  ),
                   title: Text(
                     'Block',
+                    style: TextStyle().copyWith(
+                      color: Colors.red,
+                    ),
                   ),
                   onTap: () {},
                 ),

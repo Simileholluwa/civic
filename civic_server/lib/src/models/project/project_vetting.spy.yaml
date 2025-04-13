@@ -4,5 +4,7 @@ fields:
     project: Project?, relation
     owner: UserRecord?, relation
     images: List<String>? images
-    text: String?
+    comment: String?
+    status: String?
+    created_at: DateTime?, default=now
     

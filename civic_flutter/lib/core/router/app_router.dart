@@ -3,12 +3,11 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:civic_flutter/features/discover/presentation/routes/discover_routes.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_flutter/features/learn/learn.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
@@ -29,8 +28,9 @@ GoRouter router(Ref ref) {
           return const InitialOnBoardingScreen();
         },
         redirect: (context, state) async {
+          final localStorage = ref.read(localStorageProvider);
           final firstTimer =
-              ref.read(localStorageProvider).getBool('first_timer') ?? true;
+              localStorage.getBool('first_timer') ?? true;
           if (firstTimer) {
             FlutterNativeSplash.remove();
             return AppRoutes.initial;
@@ -44,7 +44,7 @@ GoRouter router(Ref ref) {
               FlutterNativeSplash.remove();
               return AppRoutes.auth;
             } else {
-              ref.read(localStorageProvider).setInt(
+              localStorage.setInt(
                     'userId',
                     currentUser.userInfo!.id!,
                   );
@@ -172,9 +172,7 @@ GoRouter router(Ref ref) {
       StatefulShellRoute.indexedStack(
         branches: [
           FeedRoutes.branch,
-          DiscoverRoutes.branch,
           NotificationsRoutes.branch,
-          LearnRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
           return AppWrapper(
@@ -192,6 +190,18 @@ GoRouter router(Ref ref) {
             draft: data['draft'],
           );
         },
+      ),
+
+      GoRoute(
+        path: AppRoutes.createPost,
+        builder: (context, state) {
+              final data = state.extra as Map<String, dynamic>;
+              return CreatePostScreen(
+                id: data['id'],
+                draft: data['draft'],
+                project: data['project'],
+              );
+            },
       ),
 
       GoRoute(

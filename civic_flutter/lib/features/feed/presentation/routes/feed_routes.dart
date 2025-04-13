@@ -30,18 +30,6 @@ class FeedRoutes {
             ),
           ),
           GoRoute(
-            path: CreatePostScreen.routePath(),
-            name: CreatePostScreen.routeName(),
-            builder: (context, state) {
-              final data = state.extra as Map<String, dynamic>;
-              return CreatePostScreen(
-                id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
-                draft: data['draft'],
-                project: data['project'],
-              );
-            },
-          ),
-          GoRoute(
             path: ':tabName/:id',
             builder: (_, state) {
               return ProjectDetailsScreen(

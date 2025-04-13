@@ -16,7 +16,7 @@ Future<bool?> postSelectMediaDialog(
         final postNotifier = ref.watch(
           regularPostProvider(post).notifier,
         );
-
+        
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(

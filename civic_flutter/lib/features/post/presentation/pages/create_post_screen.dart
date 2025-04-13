@@ -25,11 +25,6 @@ class CreatePostScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider(
-        true,
-      ).notifier,
-    );
     final data = ref.watch(
       postDetailProvider(draft, id),
     );
@@ -68,7 +63,6 @@ class CreatePostScreen extends ConsumerWidget {
                   .read(mediaVideoPlayerProvider(postState.videoUrl).notifier)
                   .dispose();
             }
-            isVisibleNotifier.show();
             context.pop();
           }
         }
@@ -97,7 +91,6 @@ class CreatePostScreen extends ConsumerWidget {
                     data.value!,
                     project?.id,
                   );
-                  isVisibleNotifier.show();
                   context.pop();
                 },
                 isRepost: project != null,
@@ -121,7 +114,6 @@ class CreatePostScreen extends ConsumerWidget {
                                 .notifier)
                             .dispose();
                       }
-                      isVisibleNotifier.show();
                       context.pop();
                     }
                   }

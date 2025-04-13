@@ -31,14 +31,9 @@ class CreatePostWidget extends ConsumerWidget {
           const SizedBox(
             height: TSizes.md,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: ContentCreatorInfo(
-              creator: post.owner!,
-              timeAgo: '',
-            ),
+          AppUserInfoWidget(
+            userRecord: post.owner!,
+            onTap: (){},
           ),
           PostTextField(
             userName: post.owner!.userInfo!.userName!,

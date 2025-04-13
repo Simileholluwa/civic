@@ -244,7 +244,7 @@ class ProjectHelperFunctions {
     return showModalBottomSheet(
       context: context,
       constraints: BoxConstraints(
-        maxHeight: 700,
+        minHeight: 700,
       ),
       builder: (ctx) {
         return Consumer(builder: (context, ref, child) {
