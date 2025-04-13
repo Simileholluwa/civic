@@ -14,7 +14,7 @@ import '../poll/poll.dart' as _i2;
 import '../poll/poll_hashtag.dart' as _i3;
 
 abstract class PollsHashtags
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   PollsHashtags._({
     this.id,
     required this.pollId,
@@ -63,7 +63,7 @@ abstract class PollsHashtags
   _i3.PollHashtag? hashtag;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [PollsHashtags]
   /// with some or all fields replaced by the given arguments.
@@ -171,7 +171,7 @@ class _PollsHashtagsImpl extends PollsHashtags {
   }
 }
 
-class PollsHashtagsTable extends _i1.Table {
+class PollsHashtagsTable extends _i1.Table<int> {
   PollsHashtagsTable({super.tableRelation})
       : super(tableName: 'pollshashtags') {
     pollId = _i1.ColumnInt(
@@ -257,7 +257,7 @@ class PollsHashtagsInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => PollsHashtags.t;
+  _i1.Table<int> get table => PollsHashtags.t;
 }
 
 class PollsHashtagsIncludeList extends _i1.IncludeList {
@@ -277,7 +277,7 @@ class PollsHashtagsIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => PollsHashtags.t;
+  _i1.Table<int> get table => PollsHashtags.t;
 }
 
 class PollsHashtagsRepository {

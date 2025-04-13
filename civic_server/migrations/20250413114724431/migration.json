@@ -1,0 +1,159 @@
+{
+  "actions": [
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "project_not_interested",
+        "dartName": "ProjectNotInterested",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('project_not_interested_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "userId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "projectId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "dateMarked",
+            "columnType": 4,
+            "isNullable": true,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "project_not_interested_fk_0",
+            "columns": [
+              "userId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "project_not_interested_fk_1",
+            "columns": [
+              "projectId"
+            ],
+            "referenceTable": "project",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "project_not_interested_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "project_not_interested_id_unique_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "userId"
+              },
+              {
+                "type": 0,
+                "definition": "projectId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project_vetting",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "comment",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "status",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": true,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime?"
+          }
+        ],
+        "deleteColumns": [
+          "text"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"text\" of table \"project_vetting\" will be dropped.",
+            "table": "project_vetting",
+            "columns": [
+              "text"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"text\" of table \"project_vetting\" will be dropped.",
+      "table": "project_vetting",
+      "columns": [
+        "text"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

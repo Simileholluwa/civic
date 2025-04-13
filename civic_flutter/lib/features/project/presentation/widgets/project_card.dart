@@ -43,7 +43,7 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
   @override
   void initState() {
     //_listenToUpdates();
-    
+
     super.initState();
   }
 
@@ -59,19 +59,21 @@ class _ProjectCardState extends ConsumerState<ProjectCard> {
               widget.project.id!,
             );
         await for (final update in projectUpdates) {
-          if (context.mounted){
-          setState(() {
-            newProject = update.copyWith(
-              owner: widget.project.owner,
-            );
-          });}
+          if (context.mounted) {
+            setState(() {
+              newProject = update.copyWith(
+                owner: widget.project.owner,
+              );
+            });
+          }
         }
       } on MethodStreamException catch (e) {
         log(e.toString());
-        if (context.mounted){
-        setState(() {
-          newProject = widget.project;
-        });}
+        if (context.mounted) {
+          setState(() {
+            newProject = widget.project;
+          });
+        }
       }
       await Future.delayed(
         Duration(
@@ -518,16 +520,16 @@ class ShowProjectActions extends ConsumerWidget {
                 }
               },
             ),
-            ListTile(
-              leading: Icon(Icons.share),
-              title: Text(
-                'Share',
-              ),
-              trailing: Icon(
-                Iconsax.arrow_right_3,
-              ),
-              onTap: () {},
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text(
+              'Share',
             ),
+            trailing: Icon(
+              Iconsax.arrow_right_3,
+            ),
+            onTap: () {},
+          ),
           ListTile(
             leading: Icon(Iconsax.copy),
             title: Text(
@@ -541,7 +543,20 @@ class ShowProjectActions extends ConsumerWidget {
               title: Text(
                 'Not interested',
               ),
-              onTap: () {},
+              onTap: () async {
+                if (context.mounted) {
+                  context.pop();
+                }
+                final result =
+                    await projectCardNotifier.markProjectNotInterested(
+                  project.id!,
+                );
+                if (result) {
+                  TToastMessages.infoToast(
+                    'You will no longer see this project in your feed',
+                  );
+                }
+              },
             ),
           if (!projectCardState.isOwner)
             ListTile(

@@ -12,7 +12,7 @@ class ProjectTextEditor extends StatelessWidget {
   });
 
   final QuillController controller;
-  final QuillEditorConfigurations configurations;
+  final QuillEditorConfig configurations;
   final ScrollController scrollController;
   final FocusNode focusNode;
 
@@ -23,16 +23,7 @@ class ProjectTextEditor extends StatelessWidget {
       scrollController: scrollController,
       focusNode: focusNode,
       controller: controller,
-      configurations: configurations.copyWith(
-        elementOptions: const QuillEditorElementOptions(
-          codeBlock: QuillEditorCodeBlockElementOptions(
-            enableLineNumbers: true,
-          ),
-          orderedList: QuillEditorOrderedListElementOptions(),
-          unorderedList: QuillEditorUnOrderedListElementOptions(
-            useTextColorForDot: true,
-          ),
-        ),
+      config: configurations.copyWith(
         customStyles: THelperFunctions.articleTextEditorStyles(
           context,
           defaultTextStyle,

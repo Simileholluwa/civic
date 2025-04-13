@@ -105,3 +105,10 @@ DeleteProjectUseCase deleteProject(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+MarkNotInterestedUseCase notInterestedProject(Ref ref) {
+  return MarkNotInterestedUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

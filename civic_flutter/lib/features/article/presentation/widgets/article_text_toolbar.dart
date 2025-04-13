@@ -1,9 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io' as io show File;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/flutter_quill_internal.dart';
+import 'package:flutter_quill/internal.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path/path.dart' as path;
@@ -68,16 +69,13 @@ class ArticleTextToolbar extends StatelessWidget {
     if (newImage == null) {
       return;
     }
-    if (kIsWeb) {
-      controller.insertImageBlock(imageSource: newImage);
-      return;
-    }
     final newSavedImage = await saveImage(io.File(newImage));
     controller.insertImageBlock(imageSource: newSavedImage);
   }
 
   Future<void> onImageInsert(String image, QuillController controller) async {
-    if (kIsWeb || isHttpBasedUrl(image)) {
+    if (image.startsWith('http://') ||
+                      image.startsWith('https://')) {
       controller.insertImageBlock(imageSource: image);
       return;
     }
@@ -99,11 +97,12 @@ class ArticleTextToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QuillToolbar.simple(
+    return QuillSimpleToolbar(
       controller: controller,
-
-      configurations: QuillSimpleToolbarConfigurations(
-        
+      config: QuillSimpleToolbarConfig(  
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),     
         multiRowsDisplay: false,
         showSearchButton: false,
         showFontFamily: false,
@@ -113,19 +112,12 @@ class ArticleTextToolbar extends StatelessWidget {
         showClipboardCopy: false,
         showClipboardPaste: false,
         showClipboardCut: false,
-        
-        fontSizesValues: const {
-          '17': '17.0',
-          '18': '18.0',
-          '19': '19.0',
-          '20': '20.0',
-          '22': '22.0',
-          '24': '24.0',
-        },
         embedButtons: FlutterQuillEmbeds.toolbarButtons(
+          videoButtonOptions: null,
+          cameraButtonOptions: null,
           imageButtonOptions: QuillToolbarImageButtonOptions(
-            imageButtonConfigurations: QuillToolbarImageConfigurations(
-              onImageInsertCallback: isAndroidApp || isIosApp || kIsWeb
+            imageButtonConfig: QuillToolbarImageConfig(
+              onImageInsertCallback: isAndroidApp || isIosApp
                   ? (image, controller) =>
                       onImageInsertWithCropping(image, controller, context)
                   : onImageInsert,

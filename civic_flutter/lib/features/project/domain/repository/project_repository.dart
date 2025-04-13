@@ -54,4 +54,8 @@ abstract class ProjectRepository {
   Future<Either<Failure, void>> undoRepost({
     required int projectId,   
   });
+
+  Future<Either<Failure, void>> markNotInterested({
+    required int projectId,   
+  });
 }

@@ -254,5 +254,25 @@ final deleteProjectProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DeleteProjectRef = AutoDisposeProviderRef<DeleteProjectUseCase>;
+String _$notInterestedProjectHash() =>
+    r'92aea445fa33ab0605be36d8fbc78160e7822f61';
+
+/// See also [notInterestedProject].
+@ProviderFor(notInterestedProject)
+final notInterestedProjectProvider =
+    AutoDisposeProvider<MarkNotInterestedUseCase>.internal(
+  notInterestedProject,
+  name: r'notInterestedProjectProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$notInterestedProjectHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NotInterestedProjectRef
+    = AutoDisposeProviderRef<MarkNotInterestedUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

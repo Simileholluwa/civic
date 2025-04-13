@@ -119,7 +119,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                     ),
                                     readOnly: true,
                                   ),
-                                  configurations: QuillEditorConfigurations(
+                                  config: QuillEditorConfig(
                                     customStyles: THelperFunctions
                                         .articleTextEditorStyles(
                                       context,

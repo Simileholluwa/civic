@@ -234,4 +234,20 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> markNotInterested({required int projectId,}) async {
+    try {
+      final result = await _remoteDatasource.markNotInterested(
+        projectId: projectId,      
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

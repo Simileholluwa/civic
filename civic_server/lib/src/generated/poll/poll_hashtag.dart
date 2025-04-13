@@ -12,7 +12,8 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../poll/poll_hashtags.dart' as _i2;
 
-abstract class PollHashtag implements _i1.TableRow, _i1.ProtocolSerialization {
+abstract class PollHashtag
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   PollHashtag._({
     this.id,
     required this.tag,
@@ -52,7 +53,7 @@ abstract class PollHashtag implements _i1.TableRow, _i1.ProtocolSerialization {
   List<_i2.PollsHashtags>? hashtags;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [PollHashtag]
   /// with some or all fields replaced by the given arguments.
@@ -151,7 +152,7 @@ class _PollHashtagImpl extends PollHashtag {
   }
 }
 
-class PollHashtagTable extends _i1.Table {
+class PollHashtagTable extends _i1.Table<int> {
   PollHashtagTable({super.tableRelation}) : super(tableName: 'pollhashtag') {
     tag = _i1.ColumnString(
       'tag',
@@ -229,7 +230,7 @@ class PollHashtagInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'hashtags': _hashtags};
 
   @override
-  _i1.Table get table => PollHashtag.t;
+  _i1.Table<int> get table => PollHashtag.t;
 }
 
 class PollHashtagIncludeList extends _i1.IncludeList {
@@ -249,7 +250,7 @@ class PollHashtagIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => PollHashtag.t;
+  _i1.Table<int> get table => PollHashtag.t;
 }
 
 class PollHashtagRepository {

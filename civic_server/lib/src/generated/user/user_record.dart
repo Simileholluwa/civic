@@ -13,7 +13,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
 import '../user/political_status_enum.dart' as _i3;
 
-abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
+abstract class UserRecord
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   UserRecord._({
     this.id,
     this.bio,
@@ -97,7 +98,7 @@ abstract class UserRecord implements _i1.TableRow, _i1.ProtocolSerialization {
   double? credibilityScore;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [UserRecord]
   /// with some or all fields replaced by the given arguments.
@@ -251,7 +252,7 @@ class _UserRecordImpl extends UserRecord {
   }
 }
 
-class UserRecordTable extends _i1.Table {
+class UserRecordTable extends _i1.Table<int> {
   UserRecordTable({super.tableRelation}) : super(tableName: 'user_record') {
     bio = _i1.ColumnString(
       'bio',
@@ -359,7 +360,7 @@ class UserRecordInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'userInfo': _userInfo};
 
   @override
-  _i1.Table get table => UserRecord.t;
+  _i1.Table<int> get table => UserRecord.t;
 }
 
 class UserRecordIncludeList extends _i1.IncludeList {
@@ -379,7 +380,7 @@ class UserRecordIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => UserRecord.t;
+  _i1.Table<int> get table => UserRecord.t;
 }
 
 class UserRecordRepository {

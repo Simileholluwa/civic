@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:civic_flutter/core/core.dart';
@@ -32,6 +33,11 @@ class AuthUser extends _$AuthUser {
       state = AuthUserStateSuccess(
         userRecord: response,
       );
+      final jsonString = jsonEncode(response);
+      ref.read(localStorageProvider).setString(
+            'userRecord',
+            jsonString,
+          );
       return;
     });
   }

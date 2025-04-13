@@ -1,0 +1,10 @@
+class: ProjectNotInterested
+table: project_not_interested
+fields:
+  user: UserRecord?, relation
+  project: Project?, relation
+  dateMarked: DateTime?, default=now
+indexes:
+    project_not_interested_id_unique_idx:
+        fields: userId, projectId
+        unique: true

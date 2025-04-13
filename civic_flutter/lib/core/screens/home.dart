@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:toastification/toastification.dart';
@@ -14,6 +15,7 @@ class Home extends ConsumerWidget {
     return Portal(
       child: ToastificationWrapper(
         child: MaterialApp.router(
+          localizationsDelegates: FlutterQuillLocalizations.localizationsDelegates,
           title: TTexts.appName,
           theme: TAppTheme.lightTheme,
           darkTheme: TAppTheme.darkTheme,

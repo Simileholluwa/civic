@@ -50,6 +50,10 @@ abstract class ProjectRemoteDataSource {
   Future<void> undoRepost({
     required int projectId,
   });
+
+  Future<void> markNotInterested({
+    required int projectId,
+  });
 }
 
 class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
@@ -125,10 +129,9 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   @override
   Future<Project?> saveProject({required Project project}) async {
     try {
-      final result = await _client.project
-          .saveProject(
-            project,
-          );
+      final result = await _client.project.saveProject(
+        project,
+      );
 
       if (result == null) {
         return null;
@@ -331,6 +334,26 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }) async {
     try {
       final result = await _client.project.undoRepost(
+        projectId,
+      );
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> markNotInterested({
+    required int projectId,
+  }) async {
+    try {
+      final result = await _client.project.markNotInterested(
         projectId,
       );
       return result;

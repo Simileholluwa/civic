@@ -62,7 +62,7 @@ class _CreateArticleWidgetState extends ConsumerState<CreateArticleWidget> {
                   controller: articleWriter.controller,
                   scrollController: articleWriter.scrollController,
                   focusNode: articleWriter.focusNode,
-                  configurations: const QuillEditorConfigurations(),
+                  configurations: const QuillEditorConfig(),
                 ),
               ],
             ),

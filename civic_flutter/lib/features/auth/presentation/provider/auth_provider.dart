@@ -89,7 +89,6 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return null;
     }, (userRecord) {
-      //ref.read(authUserProvider.notifier).setValue(true);
       return userRecord;
     });
   }

@@ -13,10 +13,9 @@ class ProjectTextToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QuillToolbar.simple(
+    return QuillSimpleToolbar(
       controller: controller,
-
-      configurations: const QuillSimpleToolbarConfigurations(
+      config: const QuillSimpleToolbarConfig(
         decoration: BoxDecoration(
           color: Colors.transparent,
         ),
@@ -29,15 +28,6 @@ class ProjectTextToolbar extends StatelessWidget {
         showClipboardCopy: false,
         showClipboardPaste: false,
         showClipboardCut: false,
-        
-        fontSizesValues: {
-          '17': '17.0',
-          '18': '18.0',
-          '19': '19.0',
-          '20': '20.0',
-          '22': '22.0',
-          '24': '24.0',
-        },
       ),
     );
   }

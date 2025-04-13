@@ -62,6 +62,26 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     });
   }
 
+  Future<bool> markProjectNotInterested(
+    int projectId,
+  ) async {
+    final notInterested = ref.read(notInterestedProjectProvider);
+    final result = await notInterested(
+      MarkNotInterestedParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) {
+      log(error.message);
+      return false;
+    }, (_) async {
+      ref.read(paginatedProjectListProvider.notifier).removeProjectById(
+            projectId,
+          );
+      return true;
+    });
+  }
+
   Future<void> deleteProject(
     int projectId,
   ) async {

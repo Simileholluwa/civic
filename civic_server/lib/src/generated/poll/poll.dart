@@ -15,7 +15,7 @@ import '../general/aws_places.dart' as _i3;
 import '../poll/poll_option.dart' as _i4;
 import '../poll/poll_hashtags.dart' as _i5;
 
-abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
+abstract class Poll implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   Poll._({
     this.id,
     required this.ownerId,
@@ -145,7 +145,7 @@ abstract class Poll implements _i1.TableRow, _i1.ProtocolSerialization {
   DateTime? updatedAt;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [Poll]
   /// with some or all fields replaced by the given arguments.
@@ -365,7 +365,7 @@ class _PollImpl extends Poll {
   }
 }
 
-class PollTable extends _i1.Table {
+class PollTable extends _i1.Table<int> {
   PollTable({super.tableRelation}) : super(tableName: 'poll') {
     ownerId = _i1.ColumnInt(
       'ownerId',
@@ -561,7 +561,7 @@ class PollInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => Poll.t;
+  _i1.Table<int> get table => Poll.t;
 }
 
 class PollIncludeList extends _i1.IncludeList {
@@ -581,7 +581,7 @@ class PollIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => Poll.t;
+  _i1.Table<int> get table => Poll.t;
 }
 
 class PollRepository {

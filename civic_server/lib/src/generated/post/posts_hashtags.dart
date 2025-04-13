@@ -14,7 +14,7 @@ import '../post/post.dart' as _i2;
 import '../post/hashtags.dart' as _i3;
 
 abstract class PostsHashtags
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   PostsHashtags._({
     this.id,
     required this.postId,
@@ -63,7 +63,7 @@ abstract class PostsHashtags
   _i3.Hashtag? hashtag;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [PostsHashtags]
   /// with some or all fields replaced by the given arguments.
@@ -171,7 +171,7 @@ class _PostsHashtagsImpl extends PostsHashtags {
   }
 }
 
-class PostsHashtagsTable extends _i1.Table {
+class PostsHashtagsTable extends _i1.Table<int> {
   PostsHashtagsTable({super.tableRelation}) : super(tableName: 'posthashtags') {
     postId = _i1.ColumnInt(
       'postId',
@@ -256,7 +256,7 @@ class PostsHashtagsInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => PostsHashtags.t;
+  _i1.Table<int> get table => PostsHashtags.t;
 }
 
 class PostsHashtagsIncludeList extends _i1.IncludeList {
@@ -276,7 +276,7 @@ class PostsHashtagsIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => PostsHashtags.t;
+  _i1.Table<int> get table => PostsHashtags.t;
 }
 
 class PostsHashtagsRepository {

@@ -21,8 +21,10 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     required this.ownerId,
     this.owner,
     required this.images,
-    this.text,
-  });
+    this.comment,
+    this.status,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory ProjectVetting({
     int? id,
@@ -31,7 +33,9 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     required int ownerId,
     _i3.UserRecord? owner,
     required List<String> images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -50,7 +54,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       images: (jsonSerialization['images'] as List)
           .map((e) => e as String)
           .toList(),
-      text: jsonSerialization['text'] as String?,
+      comment: jsonSerialization['comment'] as String?,
+      status: jsonSerialization['status'] as String?,
+      createdAt: jsonSerialization['createdAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
   }
 
@@ -69,7 +77,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
 
   List<String> images;
 
-  String? text;
+  String? comment;
+
+  String? status;
+
+  DateTime? createdAt;
 
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
@@ -81,7 +93,9 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     int? ownerId,
     _i3.UserRecord? owner,
     List<String>? images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -92,7 +106,9 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       'images': images.toJson(),
-      if (text != null) 'text': text,
+      if (comment != null) 'comment': comment,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -112,7 +128,9 @@ class _ProjectVettingImpl extends ProjectVetting {
     required int ownerId,
     _i3.UserRecord? owner,
     required List<String> images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   }) : super._(
           id: id,
           projectId: projectId,
@@ -120,7 +138,9 @@ class _ProjectVettingImpl extends ProjectVetting {
           ownerId: ownerId,
           owner: owner,
           images: images,
-          text: text,
+          comment: comment,
+          status: status,
+          createdAt: createdAt,
         );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -134,7 +154,9 @@ class _ProjectVettingImpl extends ProjectVetting {
     int? ownerId,
     Object? owner = _Undefined,
     List<String>? images,
-    Object? text = _Undefined,
+    Object? comment = _Undefined,
+    Object? status = _Undefined,
+    Object? createdAt = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -143,7 +165,9 @@ class _ProjectVettingImpl extends ProjectVetting {
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
       images: images ?? this.images.map((e0) => e0).toList(),
-      text: text is String? ? text : this.text,
+      comment: comment is String? ? comment : this.comment,
+      status: status is String? ? status : this.status,
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
     );
   }
 }

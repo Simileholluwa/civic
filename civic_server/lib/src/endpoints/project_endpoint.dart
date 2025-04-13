@@ -326,8 +326,17 @@ class ProjectEndpoint extends Endpoint {
         message: 'Invalid pagination parameters',
       );
     }
+    final user = await authUser(session);
+    final ignored = await ProjectNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.projectId).toSet();
 
-    final count = await Project.db.count(session);
+    final count = await Project.db.count(
+      session,
+      where: (t) => t.id.notInSet(ignoredIds),
+    );
     final results = await Project.db.find(
       session,
       limit: limit,
@@ -337,6 +346,7 @@ class ProjectEndpoint extends Endpoint {
           userInfo: UserInfo.include(),
         ),
       ),
+      where: (t) => t.id.notInSet(ignoredIds),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );
@@ -544,7 +554,6 @@ class ProjectEndpoint extends Endpoint {
 
     final newProject = project.copyWith(
       isDeleted: true,
-
     );
 
     await updateProject(session, newProject);
@@ -672,6 +681,31 @@ class ProjectEndpoint extends Endpoint {
         );
       }
     });
+  }
+
+  Future<void> markNotInterested(
+    Session session,
+    int projectId,
+  ) async {
+    try {
+      final user = await authUser(session);
+      final entry = ProjectNotInterested(
+        userId: user.id!,
+        projectId: projectId,
+      );
+
+      await ProjectNotInterested.db.insertRow(
+        session,
+        entry,
+      );
+    } catch (e, stackTrace) {
+      session.log(
+        'Error in markNotInterested: $e',
+        level: LogLevel.error,
+        exception: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   Future<UserRecord> authUser(

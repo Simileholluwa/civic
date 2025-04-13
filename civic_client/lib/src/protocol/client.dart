@@ -537,6 +537,13 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
+  _i2.Future<void> markNotInterested(int projectId) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'markNotInterested',
+        {'projectId': projectId},
+      );
+
   _i2.Future<_i10.UserRecord> authUser() =>
       caller.callServerEndpoint<_i10.UserRecord>(
         'project',

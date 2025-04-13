@@ -13,7 +13,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
 import '../user/user_record.dart' as _i3;
 
-abstract class PostLikes implements _i1.TableRow, _i1.ProtocolSerialization {
+abstract class PostLikes
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   PostLikes._({
     this.id,
     required this.postId,
@@ -70,7 +71,7 @@ abstract class PostLikes implements _i1.TableRow, _i1.ProtocolSerialization {
   DateTime? dateCreated;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [PostLikes]
   /// with some or all fields replaced by the given arguments.
@@ -185,7 +186,7 @@ class _PostLikesImpl extends PostLikes {
   }
 }
 
-class PostLikesTable extends _i1.Table {
+class PostLikesTable extends _i1.Table<int> {
   PostLikesTable({super.tableRelation}) : super(tableName: 'post_likes') {
     postId = _i1.ColumnInt(
       'postId',
@@ -277,7 +278,7 @@ class PostLikesInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => PostLikes.t;
+  _i1.Table<int> get table => PostLikes.t;
 }
 
 class PostLikesIncludeList extends _i1.IncludeList {
@@ -297,7 +298,7 @@ class PostLikesIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => PostLikes.t;
+  _i1.Table<int> get table => PostLikes.t;
 }
 
 class PostLikesRepository {

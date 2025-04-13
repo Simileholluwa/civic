@@ -51,6 +51,7 @@ project:
   - deleteProject:
   - toggleBookmark:
   - toggleLike:
+  - markNotInterested:
   - authUser:
   - validateProjectOwnership:
   - validateProjectReviewOwnership:

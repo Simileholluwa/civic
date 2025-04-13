@@ -13,7 +13,7 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
 
 abstract class UserNinRecord
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   UserNinRecord._({
     this.id,
     this.firstName,
@@ -115,7 +115,7 @@ abstract class UserNinRecord
   _i2.UserInfo? owner;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [UserNinRecord]
   /// with some or all fields replaced by the given arguments.
@@ -301,7 +301,7 @@ class _UserNinRecordImpl extends UserNinRecord {
   }
 }
 
-class UserNinRecordTable extends _i1.Table {
+class UserNinRecordTable extends _i1.Table<int> {
   UserNinRecordTable({super.tableRelation})
       : super(tableName: 'user_nin_record') {
     firstName = _i1.ColumnString(
@@ -444,7 +444,7 @@ class UserNinRecordInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'owner': _owner};
 
   @override
-  _i1.Table get table => UserNinRecord.t;
+  _i1.Table<int> get table => UserNinRecord.t;
 }
 
 class UserNinRecordIncludeList extends _i1.IncludeList {
@@ -464,7 +464,7 @@ class UserNinRecordIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => UserNinRecord.t;
+  _i1.Table<int> get table => UserNinRecord.t;
 }
 
 class UserNinRecordRepository {

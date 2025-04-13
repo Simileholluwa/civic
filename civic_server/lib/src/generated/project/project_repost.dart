@@ -15,7 +15,7 @@ import '../project/project.dart' as _i3;
 import '../post/post.dart' as _i4;
 
 abstract class ProjectRepost
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   ProjectRepost._({
     this.id,
     required this.ownerId,
@@ -84,7 +84,7 @@ abstract class ProjectRepost
   DateTime? repostedAt;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [ProjectRepost]
   /// with some or all fields replaced by the given arguments.
@@ -215,7 +215,7 @@ class _ProjectRepostImpl extends ProjectRepost {
   }
 }
 
-class ProjectRepostTable extends _i1.Table {
+class ProjectRepostTable extends _i1.Table<int> {
   ProjectRepostTable({super.tableRelation})
       : super(tableName: 'project_reposts') {
     ownerId = _i1.ColumnInt(
@@ -339,7 +339,7 @@ class ProjectRepostInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => ProjectRepost.t;
+  _i1.Table<int> get table => ProjectRepost.t;
 }
 
 class ProjectRepostIncludeList extends _i1.IncludeList {
@@ -359,7 +359,7 @@ class ProjectRepostIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => ProjectRepost.t;
+  _i1.Table<int> get table => ProjectRepost.t;
 }
 
 class ProjectRepostRepository {

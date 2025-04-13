@@ -14,7 +14,7 @@ import '../project/project.dart' as _i2;
 import '../user/user_record.dart' as _i3;
 
 abstract class ProjectBookmarks
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   ProjectBookmarks._({
     this.id,
     required this.projectId,
@@ -69,7 +69,7 @@ abstract class ProjectBookmarks
   DateTime dateCreated;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [ProjectBookmarks]
   /// with some or all fields replaced by the given arguments.
@@ -184,7 +184,7 @@ class _ProjectBookmarksImpl extends ProjectBookmarks {
   }
 }
 
-class ProjectBookmarksTable extends _i1.Table {
+class ProjectBookmarksTable extends _i1.Table<int> {
   ProjectBookmarksTable({super.tableRelation})
       : super(tableName: 'project_bookmarks') {
     projectId = _i1.ColumnInt(
@@ -278,7 +278,7 @@ class ProjectBookmarksInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => ProjectBookmarks.t;
+  _i1.Table<int> get table => ProjectBookmarks.t;
 }
 
 class ProjectBookmarksIncludeList extends _i1.IncludeList {
@@ -298,7 +298,7 @@ class ProjectBookmarksIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => ProjectBookmarks.t;
+  _i1.Table<int> get table => ProjectBookmarks.t;
 }
 
 class ProjectBookmarksRepository {

@@ -12,7 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 
-abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
+abstract class Article implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   Article._({
     this.id,
     required this.ownerId,
@@ -93,7 +93,7 @@ abstract class Article implements _i1.TableRow, _i1.ProtocolSerialization {
   int? numberOfViews;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [Article]
   /// with some or all fields replaced by the given arguments.
@@ -238,7 +238,7 @@ class _ArticleImpl extends Article {
   }
 }
 
-class ArticleTable extends _i1.Table {
+class ArticleTable extends _i1.Table<int> {
   ArticleTable({super.tableRelation}) : super(tableName: 'article') {
     ownerId = _i1.ColumnInt(
       'ownerId',
@@ -345,7 +345,7 @@ class ArticleInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'owner': _owner};
 
   @override
-  _i1.Table get table => Article.t;
+  _i1.Table<int> get table => Article.t;
 }
 
 class ArticleIncludeList extends _i1.IncludeList {
@@ -365,7 +365,7 @@ class ArticleIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => Article.t;
+  _i1.Table<int> get table => Article.t;
 }
 
 class ArticleRepository {

@@ -14,7 +14,7 @@ import '../project/project.dart' as _i2;
 import '../user/user_record.dart' as _i3;
 
 abstract class ProjectVetting
-    implements _i1.TableRow, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   ProjectVetting._({
     this.id,
     required this.projectId,
@@ -22,8 +22,10 @@ abstract class ProjectVetting
     required this.ownerId,
     this.owner,
     required this.images,
-    this.text,
-  });
+    this.comment,
+    this.status,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory ProjectVetting({
     int? id,
@@ -32,7 +34,9 @@ abstract class ProjectVetting
     required int ownerId,
     _i3.UserRecord? owner,
     required List<String> images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -51,7 +55,11 @@ abstract class ProjectVetting
       images: (jsonSerialization['images'] as List)
           .map((e) => e as String)
           .toList(),
-      text: jsonSerialization['text'] as String?,
+      comment: jsonSerialization['comment'] as String?,
+      status: jsonSerialization['status'] as String?,
+      createdAt: jsonSerialization['createdAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
     );
   }
 
@@ -72,10 +80,14 @@ abstract class ProjectVetting
 
   List<String> images;
 
-  String? text;
+  String? comment;
+
+  String? status;
+
+  DateTime? createdAt;
 
   @override
-  _i1.Table get table => t;
+  _i1.Table<int> get table => t;
 
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
@@ -87,7 +99,9 @@ abstract class ProjectVetting
     int? ownerId,
     _i3.UserRecord? owner,
     List<String>? images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -98,7 +112,9 @@ abstract class ProjectVetting
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       'images': images.toJson(),
-      if (text != null) 'text': text,
+      if (comment != null) 'comment': comment,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -111,7 +127,9 @@ abstract class ProjectVetting
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
       'images': images.toJson(),
-      if (text != null) 'text': text,
+      if (comment != null) 'comment': comment,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
     };
   }
 
@@ -161,7 +179,9 @@ class _ProjectVettingImpl extends ProjectVetting {
     required int ownerId,
     _i3.UserRecord? owner,
     required List<String> images,
-    String? text,
+    String? comment,
+    String? status,
+    DateTime? createdAt,
   }) : super._(
           id: id,
           projectId: projectId,
@@ -169,7 +189,9 @@ class _ProjectVettingImpl extends ProjectVetting {
           ownerId: ownerId,
           owner: owner,
           images: images,
-          text: text,
+          comment: comment,
+          status: status,
+          createdAt: createdAt,
         );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -183,7 +205,9 @@ class _ProjectVettingImpl extends ProjectVetting {
     int? ownerId,
     Object? owner = _Undefined,
     List<String>? images,
-    Object? text = _Undefined,
+    Object? comment = _Undefined,
+    Object? status = _Undefined,
+    Object? createdAt = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -192,12 +216,14 @@ class _ProjectVettingImpl extends ProjectVetting {
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
       images: images ?? this.images.map((e0) => e0).toList(),
-      text: text is String? ? text : this.text,
+      comment: comment is String? ? comment : this.comment,
+      status: status is String? ? status : this.status,
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
     );
   }
 }
 
-class ProjectVettingTable extends _i1.Table {
+class ProjectVettingTable extends _i1.Table<int> {
   ProjectVettingTable({super.tableRelation})
       : super(tableName: 'project_vetting') {
     projectId = _i1.ColumnInt(
@@ -212,9 +238,18 @@ class ProjectVettingTable extends _i1.Table {
       'images',
       this,
     );
-    text = _i1.ColumnString(
-      'text',
+    comment = _i1.ColumnString(
+      'comment',
       this,
+    );
+    status = _i1.ColumnString(
+      'status',
+      this,
+    );
+    createdAt = _i1.ColumnDateTime(
+      'createdAt',
+      this,
+      hasDefault: true,
     );
   }
 
@@ -228,7 +263,11 @@ class ProjectVettingTable extends _i1.Table {
 
   late final _i1.ColumnSerializable images;
 
-  late final _i1.ColumnString text;
+  late final _i1.ColumnString comment;
+
+  late final _i1.ColumnString status;
+
+  late final _i1.ColumnDateTime createdAt;
 
   _i2.ProjectTable get project {
     if (_project != null) return _project!;
@@ -262,7 +301,9 @@ class ProjectVettingTable extends _i1.Table {
         projectId,
         ownerId,
         images,
-        text,
+        comment,
+        status,
+        createdAt,
       ];
 
   @override
@@ -297,7 +338,7 @@ class ProjectVettingInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table get table => ProjectVetting.t;
+  _i1.Table<int> get table => ProjectVetting.t;
 }
 
 class ProjectVettingIncludeList extends _i1.IncludeList {
@@ -317,7 +358,7 @@ class ProjectVettingIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => ProjectVetting.t;
+  _i1.Table<int> get table => ProjectVetting.t;
 }
 
 class ProjectVettingRepository {

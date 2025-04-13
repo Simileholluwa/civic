@@ -83,16 +83,7 @@ class ArticleDraftWidget extends StatelessWidget {
                 ),
                 readOnly: true,
               ),
-              configurations: QuillEditorConfigurations(
-                elementOptions: const QuillEditorElementOptions(
-                  codeBlock: QuillEditorCodeBlockElementOptions(
-                    enableLineNumbers: true,
-                  ),
-                  orderedList: QuillEditorOrderedListElementOptions(),
-                  unorderedList: QuillEditorUnOrderedListElementOptions(
-                    useTextColorForDot: true,
-                  ),
-                ),
+              config: QuillEditorConfig(
                 customStyles: THelperFunctions.articleTextEditorStyles(
                   context,
                   defaultTextStyle,

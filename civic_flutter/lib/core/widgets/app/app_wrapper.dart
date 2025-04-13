@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
@@ -6,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class AppWrapper extends ConsumerStatefulWidget {
   const AppWrapper({
@@ -34,11 +35,15 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
       ).notifier,
     );
 
-    final authState = ref.watch(authUserProvider);
-    UserRecord? authUser;
-    if (authState is AuthUserStateSuccess) {
-      authUser = authState.userRecord;
-    }
+    final savedRecordString = ref
+        .read(
+          localStorageProvider,
+        )
+        .getString(
+          'userRecord',
+        );
+    final decoded = jsonDecode(savedRecordString.toString());
+    final userRecord = UserRecord.fromJson(decoded);
 
     return Stack(
       children: [
@@ -107,7 +112,7 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
                               child: Column(
                                 spacing: 15,
                                 children: [
-                                  if (authUser!.politicalStatus!.index != 3)
+                                  if (userRecord.politicalStatus!.index != 3)
                                     CreateContentItems(
                                       itemName: 'Project',
                                       icon: Iconsax.note,
@@ -262,7 +267,6 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
                               ),
                               icon: Icon(
                                 Iconsax.magicpen,
-                                
                               ),
                               label: 'Create'),
                           BottomNavigationBarItem(

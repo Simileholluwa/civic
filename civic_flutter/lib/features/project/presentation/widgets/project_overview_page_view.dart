@@ -48,7 +48,7 @@ class ProjectOverviewPageView extends ConsumerWidget {
                   controller: projectCreationSate.quillController,
                   scrollController: projectCreationSate.scrollController,
                   focusNode: projectCreationSate.focusNode,
-                  configurations: const QuillEditorConfigurations(),
+                  configurations: const QuillEditorConfig(),
                 ),
               ],
             ),
