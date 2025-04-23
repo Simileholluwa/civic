@@ -237,15 +237,287 @@ class ProjectHelperFunctions {
     );
   }
 
+  static Future<dynamic> projectReviewsFilterDialog(
+    BuildContext context,
+    int id,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final projectReviewState =
+                ref.watch(projectReviewListQueryProvider);
+            final projectReviewStateNotifier =
+                ref.watch(projectReviewListQueryProvider.notifier);
+            final pagingControllerNotifier =
+                ref.watch(paginatedProjectReviewListProvider(id).notifier);
+            return LayoutBuilder(
+              builder: (ctx, constraints) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: constraints.maxHeight * 0.9,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              TSizes.sm,
+                            ),
+                          ),
+                          elevation: 8,
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Filter reviews',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.pop();
+                                    },
+                                    child: const Icon(
+                                      Icons.clear,
+                                      color: TColors.secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: TSizes.md,
+                              ),
+                              const Divider(
+                                height: 0,
+                              ),
+                              SingleChildScrollView(
+                                padding: const EdgeInsets.only(
+                                  top: TSizes.sm + 4,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: const EdgeInsets.only(
+                                        top: 2,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        spacing: 15,
+                                        children: [
+                                          ...['All', 5, 4, 3, 2, 1]
+                                              .asMap()
+                                              .entries
+                                              .map(
+                                            (filter) {
+                                              final text = filter.value;
+                                              final index = filter.key;
+                                              return FilterChip(
+                                                label: Row(
+                                                  spacing: 5,
+                                                  children: [
+                                                    Text(
+                                                      text.toString(),
+                                                    ),
+                                                    if (index > 0)
+                                                      Icon(
+                                                        Iconsax.magic_star5,
+                                                        size: 16,
+                                                      ),
+                                                  ],
+                                                ),
+                                                selected: projectReviewState
+                                                            .rating !=
+                                                        null
+                                                    ? projectReviewState
+                                                            .rating ==
+                                                        text
+                                                    : index == 0,
+                                                onSelected: (value) {
+                                                  if (index == 0) {
+                                                    projectReviewStateNotifier
+                                                        .setRatingQuery(
+                                                      null,
+                                                    );
+                                                    return;
+                                                  }
+                                                  projectReviewStateNotifier
+                                                      .setRatingQuery(
+                                                    (text as int).toDouble(),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    if (projectReviewState.rating != null)
+                                      SingleChildScrollView(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 15, 0, 5),
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          spacing: 15,
+                                          children: [
+                                            ...[
+                                              'All',
+                                              'Location',
+                                              'Description',
+                                              'Attachments',
+                                              'Category',
+                                              'Funding',
+                                              'Dates'
+                                            ].asMap().entries.map(
+                                              (filter) {
+                                                final text = filter.value;
+                                                final index = filter.key;
+                                                return FilterChip(
+                                                  label: Text(
+                                                    text,
+                                                  ),
+                                                  selected: projectReviewState
+                                                              .cardinal !=
+                                                          null
+                                                      ? projectReviewState
+                                                              .cardinal ==
+                                                          text
+                                                      : index == 0,
+                                                  onSelected: (value) {
+                                                    if (index == 0) {
+                                                      projectReviewStateNotifier
+                                                          .setCardinalQuery(
+                                                        null,
+                                                      );
+                                                      return;
+                                                    }
+                                                    projectReviewStateNotifier
+                                                        .setCardinalQuery(
+                                                      text,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    Column(
+                                      children: [
+                                        ListTile(
+                                          title: Text(
+                                            'Most recent',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  3, 0, 0, 0),
+                                          trailing: SizedBox(
+                                            width: 20,
+                                            height: 24,
+                                            child: Radio(
+                                              value: 0,
+                                              groupValue: 0,
+                                              onChanged: (value) {},
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 0,
+                                          indent: 3,
+                                          endIndent: 3,
+                                        ),
+                                        ListTile(
+                                          title: Text(
+                                            'Most liked',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  3, 0, 0, 0),
+                                          trailing: SizedBox(
+                                            width: 20,
+                                            height: 24,
+                                            child: Radio(
+                                              value: 1,
+                                              groupValue: 0,
+                                              onChanged: (value) {},
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    AppDualButton(
+                                      onTapSkipButton: context.pop,
+                                      activeButtonText: 'Apply filter',
+                                      onTapActiveButton: () {
+                                        if (projectReviewState.cardinal ==
+                                            null) {
+                                          TToastMessages.errorToast(
+                                            'Please select a cardinal to apply filter.',
+                                          );
+                                          return;
+                                        }
+                                        pagingControllerNotifier.refresh();
+                                        context.pop();
+                                      },
+                                      activeButtonLoading: false,
+                                      skipButtonLoading: false,
+                                      skipText: 'Cancel',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   static Future<dynamic> deleteProjectBottomSheet(
     BuildContext context,
     Project project,
   ) {
     return showModalBottomSheet(
       context: context,
-      constraints: BoxConstraints(
-        minHeight: 700,
-      ),
+      isScrollControlled: true,
       builder: (ctx) {
         return Consumer(builder: (context, ref, child) {
           final projectCardState = ref.watch(
@@ -259,125 +531,133 @@ class ProjectHelperFunctions {
             ).notifier,
           );
           return Scaffold(
-            body: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 15,
-                  children: [
-                    Icon(
-                      Iconsax.trash,
-                      color: Colors.red,
-                      size: 50,
-                    ),
-                    Text(
-                      'Delete this Project?',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 30,
-                              ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      'Kindly take note of the following information associated with deleting a project.',
-                      style: Theme.of(context).textTheme.labelMedium!,
-                      textAlign: TextAlign.center,
-                    ),
-                    Divider(
-                      height: 0,
-                    ),
-                    Column(
-                      spacing: 15,
-                      children: [
-                        ProjectDeleteConsequences(
-                          number: '1.',
-                          consequence:
-                              "Deleting a project can impact your credibility score based on users' engagement level.",
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 15,
+                children: [
+                  Icon(
+                    Iconsax.trash,
+                    color: Colors.red,
+                    size: 50,
+                  ),
+                  Text(
+                    'Delete this Project?',
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 30,
                         ),
-                        ProjectDeleteConsequences(
-                          number: '2.',
-                          consequence:
-                              "All user engagements will be retained, but no further interactions will be allowed.",
-                        ),
-                        ProjectDeleteConsequences(
-                          number: '3.',
-                          consequence:
-                              "Deleted projects will be visible on the feed. Permanent deletion requires a fee and a popular vote.",
-                        ),
-                        ProjectDeleteConsequences(
-                          number: '4.',
-                          consequence:
-                              "To restore a deleted project, a fee will be required.",
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 15,
-                      children: [
-                        SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: Checkbox(
-                            value: projectCardState.canDelete,
-                            onChanged: (_) {
-                              projectCardNotifier.toggleCanDelete();
-                            },
-                          ),
-                        ),
-                        Text(
-                          'I understand and confirm the above',
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 10,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'Kindly take note of the following information associated with deleting a project.',
+                    style: Theme.of(context).textTheme.labelMedium!,
+                    textAlign: TextAlign.center,
+                  ),
+                  Divider(
+                    height: 0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 15,
+                    children: [
+                      ProjectDeleteConsequences(
+                        number: '1.',
+                        consequence:
+                            "Deleting a project can impact your credibility score based on users' engagement level.",
                       ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 50,
-                            child: FilledButton(
-                              onPressed: projectCardState.canDelete
-                                  ? () {
-                                      context.pop();
-                                      ref
-                                          .read(
-                                            sendProjectProvider.notifier,
-                                          )
-                                          .deleteProject(
-                                            project.id!,
-                                          );
-                                    }
-                                  : null,
-                              style: ButtonStyle().copyWith(
-                                backgroundColor: WidgetStatePropertyAll(
-                                  projectCardState.canDelete
-                                      ? Colors.red
-                                      : Theme.of(context).disabledColor,
-                                ),
-                              ),
-                              child: const Text(
-                                'Delete',
-                              ),
-                            ).withLoading(
-                              loading: false,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: context.pop,
-                            child: Text(
-                              'Cancel',
-                            ),
-                          ),
-                        ],
+                      ProjectDeleteConsequences(
+                        number: '2.',
+                        consequence:
+                            "All user engagements will be retained, but no further interactions will be allowed.",
                       ),
+                      ProjectDeleteConsequences(
+                        number: '3.',
+                        consequence:
+                            "Deleted projects will be visible on the feed.",
+                      ),
+                      ProjectDeleteConsequences(
+                        number: '4.',
+                        consequence:
+                            "To restore a deleted project, a fee will be required.",
+                      ),
+                      ProjectDeleteConsequences(
+                        number: '5.',
+                        consequence:
+                            "Permanent deletion requires a fee and a popular vote.",
+                      ),
+                      GestureDetector(
+                        onTap:() {
+                          projectCardNotifier.toggleCanDelete();
+                        },
+                        child: Row(
+                          spacing: 15,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Checkbox(
+                                value: projectCardState.canDelete,
+                                onChanged: (_) {
+                                  projectCardNotifier.toggleCanDelete();
+                                },
+                              ),
+                            ),
+                            Text(
+                              'I understand and confirm the above',
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: FilledButton(
+                      onPressed: projectCardState.canDelete
+                          ? () {
+                              context.pop();
+                              ref
+                                  .read(
+                                    sendProjectProvider.notifier,
+                                  )
+                                  .deleteProject(
+                                    project.id!,
+                                  );
+                            }
+                          : null,
+                      style: ButtonStyle().copyWith(
+                        backgroundColor: WidgetStatePropertyAll(
+                          projectCardState.canDelete
+                              ? Colors.red
+                              : Theme.of(context).disabledColor,
+                        ),
+                      ),
+                      child: const Text(
+                        'Delete',
+                      ),
+                    ).withLoading(
+                      loading: false,
                     ),
-                  ],
-                ),
+                  ),
+                  TextButton(
+                    onPressed: context.pop,
+                    child: Text(
+                      'Cancel',
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -561,5 +841,34 @@ class ProjectHelperFunctions {
     if (days > 0) parts.add('$days day${days > 1 ? 's' : ''}');
 
     return parts.isEmpty ? 'just now' : parts.join(', ');
+  }
+
+  static Future<bool?> deleteProjectReviewDialog(
+    BuildContext context,
+    ProjectReviewProvider projectReviewNotifier,
+    int projectId,
+    int reviewId,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Delete review?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {
+        context.pop();
+        final result = await projectReviewNotifier.deleteReview(
+          projectId,
+          reviewId,
+        );
+        if (result) {
+          if (context.mounted) context.pop();
+        }
+      },
+    );
   }
 }

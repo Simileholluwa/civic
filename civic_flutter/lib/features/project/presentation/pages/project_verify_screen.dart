@@ -9,12 +9,12 @@ class ProjectVerifyScreen extends ConsumerWidget {
   const ProjectVerifyScreen({
     super.key,
     required this.projectLocations,
-    required this.id,
+    required this.projectId,
     this.fromDetails = true,
   });
 
   final List<AWSPlaces> projectLocations;
-  final int id;
+  final int projectId;
   final bool fromDetails;
 
   @override
@@ -44,7 +44,7 @@ class ProjectVerifyScreen extends ConsumerWidget {
           child: AppBar(
             titleSpacing: 4,
             title: Text(
-              'Verify Project',
+              'Vet Project',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 20,
                   ),

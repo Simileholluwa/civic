@@ -9,6 +9,7 @@ class ContentExpandableText extends StatelessWidget {
     this.hasVideo = false,
     this.hasImage = false,
     this.noMaxLines = false,
+    required this.onToggleTextTap,
     this.maxLines,
   });
 
@@ -17,12 +18,13 @@ class ContentExpandableText extends StatelessWidget {
   final bool hasImage;
   final int? maxLines;
   final bool noMaxLines;
+  final VoidCallback? onToggleTextTap;
 
   @override
   Widget build(BuildContext context) {
     return ExpandableRichText(
       text,
-      onToggleTextTap: (){},
+      onToggleTextTap: onToggleTextTap,
       expandText: noMaxLines ? '' : 'see more',
       collapseText: 'see less',
       mentionStyle: Theme.of(context)

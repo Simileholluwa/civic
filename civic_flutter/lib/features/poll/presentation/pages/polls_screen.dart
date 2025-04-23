@@ -34,6 +34,7 @@ class PollsScreen extends ConsumerWidget {
                 ),
                 child: ContentExpandableText(
                   text: pollCardState.question,
+                  onToggleTextTap: (){},
                 ),
               ),
             Container(

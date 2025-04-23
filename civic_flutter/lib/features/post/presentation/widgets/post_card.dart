@@ -79,6 +79,7 @@ class PostCard extends ConsumerWidget {
                     hasImage: postCardState.hasImage,
                     hasVideo: postCardState.hasVideo,
                     noMaxLines: noMaxLines,
+                    onToggleTextTap: (){},
                   ),
                 ),
               if (postCardState.hasImage)

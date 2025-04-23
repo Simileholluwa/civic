@@ -70,49 +70,38 @@ class ProjectTabController extends _$ProjectTabController {
     length: 2,
     vsync: ref.watch(vsyncProvider),
   );
-
-  void setTabIndex(int index) {
-    state.index = index;
-    state.animateTo(index);
-  }
 }
 
 @riverpod
-class ProjectDetailPageController extends _$ProjectDetailPageController {
+class ProjectDetailsTabController extends _$ProjectDetailsTabController {
   @override
-  Raw<PageController> build() => PageController();
-
-  void nextPage() {
-    ref.watch(projectDetailCurrentPageProvider.notifier).add();
-    state.nextPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void previousPage() {
-    ref.watch(projectDetailCurrentPageProvider.notifier).subtract();
-    state.previousPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void gotoPage(int index) {
-    ref.watch(projectDetailCurrentPageProvider.notifier).setCurrentPage(index);
-    state.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void jumpToPage(int index) {
-    ref.watch(projectDetailCurrentPageProvider.notifier).setCurrentPage(index);
-    state.jumpToPage(
-      index,
-    );
-  }
+  Raw<TabController> build(String? tabName) { 
+    int initialPage;
+    if (tabName == null) {
+      initialPage = 0;
+    }
+    switch (tabName) {
+      case 'details':
+        initialPage = 0;
+        break;
+      case 'overview':
+        initialPage = 1;
+        break;
+      case 'reviews':
+        initialPage = 2;
+        break;
+      case 'vettings':
+        initialPage = 3;
+        break;
+      default:
+        initialPage = 0;
+        break;
+    }
+    return TabController(
+    length: 4,
+    vsync: ref.watch(vsyncProvider),
+    initialIndex: initialPage,
+  );}
 }
 
 @riverpod
@@ -122,13 +111,5 @@ class ProjectDetailCurrentPage extends _$ProjectDetailCurrentPage {
 
   void setCurrentPage(int index) {
     state = index;
-  }
-
-  void subtract() {
-    state = state - 1;
-  }
-
-  void add() {
-    state = state + 1;
   }
 }

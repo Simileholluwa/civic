@@ -12,28 +12,6 @@ class ReviewReaction extends _$ReviewReaction {
     return ProjectReviewReactionState.initial(projectReview, ref);
   }
 
-  Future<ProjectReview> _listenToUpdates(int projectReviewId) async {
-    while (true) {
-      try {
-        final projectReviewUpdates = ref
-            .read(
-              clientProvider,
-            )
-            .project
-            .projectReviewUpdates(
-              projectReviewId,
-            );
-        await for (final update in projectReviewUpdates) {
-          return update;
-        }
-      } on MethodStreamException catch (e) {
-        log(e.toString());
-        return projectReview;
-      } 
-      await Future.delayed(Duration(seconds: 5));
-    }
-  }
-
   Future<void> reactToReview(bool isLike) async {
     final react = ref.read(reactToProjectReviewProvider);
     final result = await react(
@@ -48,13 +26,12 @@ class ReviewReaction extends _$ReviewReaction {
       );
       return;
     }, (r) async{
-      final updatedReview = await _listenToUpdates(projectReview.id!);
       final userId = ref.read(localStorageProvider).getInt('userId');
       state = state.copyWith(
-        likesCount: updatedReview.likedBy!.length,
-        dislikesCount: updatedReview.dislikedBy!.length,
-        isLiked: updatedReview.likedBy!.contains(userId),
-        isDisliked: updatedReview.dislikedBy!.contains(userId),
+        likesCount: r.likedBy!.length,
+        dislikesCount: r.dislikedBy!.length,
+        isLiked: r.likedBy!.contains(userId),
+        isDisliked: r.dislikedBy!.contains(userId),
       );
       return;
     });

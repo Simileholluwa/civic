@@ -41,7 +41,7 @@ final projectPageControllerProvider = AutoDisposeNotifierProvider<
 
 typedef _$ProjectPageController = AutoDisposeNotifier<Raw<PageController>>;
 String _$projectTabControllerHash() =>
-    r'267fa0c20bf661d9c64f054c5856a4de63a64ff3';
+    r'6ea2f06e38261e90691973b4b5f55899a4f865a0';
 
 /// See also [ProjectTabController].
 @ProviderFor(ProjectTabController)
@@ -57,26 +57,180 @@ final projectTabControllerProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$ProjectTabController = AutoDisposeNotifier<Raw<TabController>>;
-String _$projectDetailPageControllerHash() =>
-    r'5b66ff30e1360f6a45b7155281ccc707dbc5f20b';
+String _$projectDetailsTabControllerHash() =>
+    r'45dac648e3020293da6190f682a4e778a5c635da';
 
-/// See also [ProjectDetailPageController].
-@ProviderFor(ProjectDetailPageController)
-final projectDetailPageControllerProvider = AutoDisposeNotifierProvider<
-    ProjectDetailPageController, Raw<PageController>>.internal(
-  ProjectDetailPageController.new,
-  name: r'projectDetailPageControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectDetailPageControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
 
-typedef _$ProjectDetailPageController
-    = AutoDisposeNotifier<Raw<PageController>>;
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+abstract class _$ProjectDetailsTabController
+    extends BuildlessAutoDisposeNotifier<Raw<TabController>> {
+  late final String? tabName;
+
+  Raw<TabController> build(
+    String? tabName,
+  );
+}
+
+/// See also [ProjectDetailsTabController].
+@ProviderFor(ProjectDetailsTabController)
+const projectDetailsTabControllerProvider = ProjectDetailsTabControllerFamily();
+
+/// See also [ProjectDetailsTabController].
+class ProjectDetailsTabControllerFamily extends Family<Raw<TabController>> {
+  /// See also [ProjectDetailsTabController].
+  const ProjectDetailsTabControllerFamily();
+
+  /// See also [ProjectDetailsTabController].
+  ProjectDetailsTabControllerProvider call(
+    String? tabName,
+  ) {
+    return ProjectDetailsTabControllerProvider(
+      tabName,
+    );
+  }
+
+  @override
+  ProjectDetailsTabControllerProvider getProviderOverride(
+    covariant ProjectDetailsTabControllerProvider provider,
+  ) {
+    return call(
+      provider.tabName,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'projectDetailsTabControllerProvider';
+}
+
+/// See also [ProjectDetailsTabController].
+class ProjectDetailsTabControllerProvider
+    extends AutoDisposeNotifierProviderImpl<ProjectDetailsTabController,
+        Raw<TabController>> {
+  /// See also [ProjectDetailsTabController].
+  ProjectDetailsTabControllerProvider(
+    String? tabName,
+  ) : this._internal(
+          () => ProjectDetailsTabController()..tabName = tabName,
+          from: projectDetailsTabControllerProvider,
+          name: r'projectDetailsTabControllerProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$projectDetailsTabControllerHash,
+          dependencies: ProjectDetailsTabControllerFamily._dependencies,
+          allTransitiveDependencies:
+              ProjectDetailsTabControllerFamily._allTransitiveDependencies,
+          tabName: tabName,
+        );
+
+  ProjectDetailsTabControllerProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.tabName,
+  }) : super.internal();
+
+  final String? tabName;
+
+  @override
+  Raw<TabController> runNotifierBuild(
+    covariant ProjectDetailsTabController notifier,
+  ) {
+    return notifier.build(
+      tabName,
+    );
+  }
+
+  @override
+  Override overrideWith(ProjectDetailsTabController Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: ProjectDetailsTabControllerProvider._internal(
+        () => create()..tabName = tabName,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        tabName: tabName,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeNotifierProviderElement<ProjectDetailsTabController,
+      Raw<TabController>> createElement() {
+    return _ProjectDetailsTabControllerProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProjectDetailsTabControllerProvider &&
+        other.tabName == tabName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, tabName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ProjectDetailsTabControllerRef
+    on AutoDisposeNotifierProviderRef<Raw<TabController>> {
+  /// The parameter `tabName` of this provider.
+  String? get tabName;
+}
+
+class _ProjectDetailsTabControllerProviderElement
+    extends AutoDisposeNotifierProviderElement<ProjectDetailsTabController,
+        Raw<TabController>> with ProjectDetailsTabControllerRef {
+  _ProjectDetailsTabControllerProviderElement(super.provider);
+
+  @override
+  String? get tabName =>
+      (origin as ProjectDetailsTabControllerProvider).tabName;
+}
+
 String _$projectDetailCurrentPageHash() =>
-    r'b46ff347e3b19b562661985c4637290751e056d8';
+    r'a0ceaa7d102a7b23b0b0d4614f740fbea9f736e8';
 
 /// See also [ProjectDetailCurrentPage].
 @ProviderFor(ProjectDetailCurrentPage)

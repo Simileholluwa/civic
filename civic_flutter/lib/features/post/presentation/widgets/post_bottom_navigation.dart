@@ -48,9 +48,6 @@ class PostBottomNavigation extends ConsumerWidget {
                   ? const SizedBox.shrink()
                   : const CreateContentSchedule(),
               const CreateContentPrivacy(),
-              PostBottomOptions(
-                post: post,
-              ),
             ],
           ),
         ),

@@ -15,7 +15,7 @@ abstract class ProjectRepository {
     String? cardinal,
   });
 
-  Future<Either<Failure, void>> reactToReview({
+  Future<Either<Failure, ProjectReview>> reactToReview({
     required int reviewId,
     required bool isLike,
   });
@@ -29,6 +29,10 @@ abstract class ProjectRepository {
   });
 
   Future<Either<String, ProjectReview?>> getProjectReview({
+    required int id,
+  });
+
+  Future<Either<Failure, void>> deleteProjectReview({
     required int id,
   });
 

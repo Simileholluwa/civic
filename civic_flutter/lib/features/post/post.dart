@@ -45,7 +45,6 @@ export './presentation/widgets/post_bottom_navigation.dart';
 export './presentation/widgets/post_bottom_options.dart';
 export './presentation/widgets/post_image_options.dart';
 export './presentation/widgets/post_image_post.dart';
-export './presentation/widgets/post_select_media_dialog.dart';
 export './presentation/widgets/post_selected_locations.dart';
 export './presentation/widgets/post_selected_tags.dart';
 export './presentation/widgets/post_text_field.dart';

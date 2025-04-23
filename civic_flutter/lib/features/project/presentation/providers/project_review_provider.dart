@@ -97,14 +97,18 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     state = state.copyWith(
       isLoading: true,
     );
+
     setOverallRating();
+
     final saveReview = ref.read(saveProjectReviewProvider);
+    final userId = ref.read(localStorageProvider).getInt('userId');
     final result = await saveReview(
+      
       SaveProjectReviewParams(
         ProjectReview(
           id: projectReviewId,
           projectId: projectId,
-          ownerId: 0,
+          ownerId: userId!,
           review: state.review,
           locationRating: state.locationRating,
           descriptionRating: state.descriptionRating,
@@ -116,6 +120,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
         ),
       ),
     );
+
     state = state.copyWith(
       isLoading: false,
     );
@@ -125,16 +130,56 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
         return false;
       },
       (success) async {
+
+        if (success == null) {
+          TToastMessages.errorToast(
+            'Your review was not submitted successfully',
+          );
+          return false;
+        }
         TToastMessages.successToast(
-          'Your review was sent successfully',
-        );
-        if (addToList) {
+            'Your review has been submitted successfully',
+          );
+        if (addToList && projectReviewId == null) {
           ref
               .read(
                 paginatedProjectReviewListProvider(projectId).notifier,
               )
-              .addReview(success!);
+              .addReview(success);
         }
+
+        return true;
+      },
+    );
+  }
+
+  Future<bool> deleteReview(int projectId, int reviewId) async {
+    state = state.copyWith(
+      isDeleting: true,
+    );
+    final deleteReview = ref.read(deleteProjectReviewProvider);
+    final result = await deleteReview(
+      DeleteProjectReviewParams(
+        reviewId,
+      ),
+    );
+    state = state.copyWith(
+      isDeleting: false,
+    );
+    return result.fold(
+      (failure) {
+        TToastMessages.errorToast(failure.message);
+        return false;
+      },
+      (_) async {
+        TToastMessages.successToast(
+          'Your review was deleted successfully',
+        );
+        ref
+            .read(
+              paginatedProjectReviewListProvider(projectId).notifier,
+            )
+            .deleteReview(reviewId);
         return true;
       },
     );

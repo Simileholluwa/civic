@@ -13,6 +13,7 @@ class ProjectReviewState {
   final double overallRating;
   final bool isValid;
   final bool isLoading;
+  final bool isDeleting;
   final bool isEditing;
   final TextEditingController reviewController;
 
@@ -28,6 +29,7 @@ class ProjectReviewState {
     this.isValid = false,
     this.isLoading = false,
     this.isEditing = false,
+    this.isDeleting = false,
     required this.reviewController,
   });
 
@@ -43,6 +45,7 @@ class ProjectReviewState {
     bool? isValid,
     bool? isLoading,
     bool? isEditing,
+    bool? isDeleting,
     TextEditingController? reviewController,
   }) {
     return ProjectReviewState(
@@ -57,6 +60,7 @@ class ProjectReviewState {
       isValid: isValid ?? this.isValid,
       isLoading: isLoading ?? this.isLoading,
       isEditing: isEditing ?? this.isEditing,
+      isDeleting: isDeleting ?? this.isDeleting,
       reviewController: reviewController ?? this.reviewController,
     );
   }

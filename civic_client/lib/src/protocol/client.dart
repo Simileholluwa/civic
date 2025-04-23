@@ -454,6 +454,13 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectReview': projectReview},
       );
 
+  _i2.Future<bool> deleteProjectReview(int reviewId) =>
+      caller.callServerEndpoint<bool>(
+        'project',
+        'deleteProjectReview',
+        {'reviewId': reviewId},
+      );
+
   _i2.Future<void> undoRepost(int projectId) => caller.callServerEndpoint<void>(
         'project',
         'undoRepost',
@@ -505,11 +512,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> reactToReview(
+  _i2.Future<_i14.ProjectReview?> reactToReview(
     int reviewId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<void>(
+      caller.callServerEndpoint<_i14.ProjectReview?>(
         'project',
         'reactToReview',
         {

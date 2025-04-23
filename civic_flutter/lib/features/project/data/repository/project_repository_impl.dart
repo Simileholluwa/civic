@@ -180,7 +180,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, void>> reactToReview({
+  Future<Either<Failure, ProjectReview>> reactToReview({
     required int reviewId,
     required bool isLike,
   }) async {
@@ -240,6 +240,22 @@ class ProjectRepositoryImpl extends ProjectRepository {
     try {
       final result = await _remoteDatasource.markNotInterested(
         projectId: projectId,      
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+  
+  @override
+  Future<Either<Failure, void>> deleteProjectReview({required int id,}) async {
+    try {
+      final result = await _remoteDatasource.deleteProjectReview(
+        id: id,      
       );
       return Right(result);
     } on ServerException catch (e) {

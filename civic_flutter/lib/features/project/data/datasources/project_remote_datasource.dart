@@ -23,7 +23,9 @@ abstract class ProjectRemoteDataSource {
 
   Future<ProjectReview?> getProjectReview({required int id});
 
-  Future<void> reactToReview({
+  Future<void> deleteProjectReview({required int id});
+
+  Future<ProjectReview> reactToReview({
     required int reviewId,
     required bool isLike,
   });
@@ -275,7 +277,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<void> reactToReview({
+  Future<ProjectReview> reactToReview({
     required int reviewId,
     required bool isLike,
   }) async {
@@ -290,6 +292,10 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
               seconds: 60,
             ),
           );
+
+      if (result == null) {
+        throw const ServerException(message: 'Failed to react to review');
+      }
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
@@ -361,6 +367,30 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<void> deleteProjectReview({required int id}) async {
+    try {
+      final result = await _client.project.deleteProjectReview(
+        id,
+      );
+      if (result) {
+        return;
+      } else {
+        throw const ServerException(message: 'Failed to delete project review');
+      }
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),

@@ -320,6 +320,7 @@ class PostCommentAndReplyContent extends StatelessWidget {
           ContentExpandableText(
             text: replyOrComment.text!,
             noMaxLines: true,
+            onToggleTextTap: () {},
           ),
         if (replyOrComment.imageUrls?.isNotEmpty ?? false)
           replyOrComment.imageUrls!.length == 1

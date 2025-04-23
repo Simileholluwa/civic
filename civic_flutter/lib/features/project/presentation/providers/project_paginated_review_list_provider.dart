@@ -35,8 +35,6 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
     _debounce = Timer(debounceDuration, () async {
       final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);
       final projectReviewStateQuery = ref.watch(projectReviewListQueryProvider);
-      
-      log(projectReviewStateQuery.cardinal.toString());
       final result = await listReviewProjectUseCase(
         GetProjectReviewsParams(
           projectId,
@@ -69,9 +67,19 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
   }
 
   void addReview(ProjectReview projectReview) {
+    if (pagingController.itemList == null) return;
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: [projectReview, ...pagingController.itemList ?? []],
+    );
+  }
+
+  void deleteReview(int reviewId) {
+    final updatedList = List<ProjectReview>.from(pagingController.itemList ?? []);
+    updatedList.removeWhere((element) => element.id == reviewId);
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: updatedList,
     );
   }
 }

@@ -915,6 +915,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['projectReview'],
           ),
         ),
+        'deleteProjectReview': _i1.MethodConnector(
+          name: 'deleteProjectReview',
+          params: {
+            'reviewId': _i1.ParameterDescription(
+              name: 'reviewId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).deleteProjectReview(
+            session,
+            params['reviewId'],
+          ),
+        ),
         'undoRepost': _i1.MethodConnector(
           name: 'undoRepost',
           params: {

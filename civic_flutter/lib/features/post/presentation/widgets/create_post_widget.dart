@@ -21,56 +21,62 @@ class CreatePostWidget extends ConsumerWidget {
       regularPostProvider(post),
     );
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + TSizes.md,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: TSizes.md,
-          ),
-          AppUserInfoWidget(
-            userRecord: post.owner!,
-            onTap: (){},
-          ),
-          PostTextField(
-            userName: post.owner!.userInfo!.userName!,
-            controller: postState.controller,
-            post: post,
-          ),
-          if (postState.imageUrls.isNotEmpty)
-            PostImagePost(
-              post: post,
+    return Column(
+      children: [
+        PostBottomOptions(
+          post: post,
+        ),
+        const Divider(
+          height: 0,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom + TSizes.md,
             ),
-          if (postState.videoUrl.isNotEmpty)
-            PostVideoPost(
-              post: post,
-            ),
-          if (project != null)
-            Container(
-              margin: const EdgeInsets.fromLTRB(
-                16, 8, 16, 16
-              ),
-              padding: const EdgeInsets.only(bottom: 16,),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                PostTextField(
+                  userName: post.owner!.userInfo!.userName!,
+                  controller: postState.controller,
+                  post: post,
                 ),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              child: ProjectCard(
-                project: project!,
-                canTap: false,
-                showInteractions: false,
-                maxHeight: 200,
-              ),
+                if (postState.imageUrls.isNotEmpty)
+                  PostImagePost(
+                    post: post,
+                  ),
+                if (postState.videoUrl.isNotEmpty)
+                  PostVideoPost(
+                    post: post,
+                  ),
+                if (project != null)
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    padding: const EdgeInsets.only(
+                      bottom: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        TSizes.md,
+                      ),
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                    child: ProjectCard(
+                      project: project!,
+                      canTap: false,
+                      showInteractions: false,
+                      maxHeight: 200,
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

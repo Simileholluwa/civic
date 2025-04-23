@@ -2,7 +2,7 @@ class: ProjectReviewReaction
 table: project_review_reaction
 fields:
     owner: UserRecord?, relation
-    review: ProjectReview?, relation
+    review: ProjectReview?, relation(onDelete=Cascade)
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     isLike: bool?

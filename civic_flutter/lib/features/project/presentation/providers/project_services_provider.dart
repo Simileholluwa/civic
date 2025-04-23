@@ -112,3 +112,10 @@ MarkNotInterestedUseCase notInterestedProject(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+DeleteProjectReviewUseCase deleteProjectReview(Ref ref) {
+  return DeleteProjectReviewUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

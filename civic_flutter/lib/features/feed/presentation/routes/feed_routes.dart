@@ -17,9 +17,7 @@ class FeedRoutes {
       GoRoute(
         path: namespace,
         builder: (_, state) {
-          return FeedScreen(
-            tabName: state.pathParameters['tabName'],
-          );
+          return FeedScreen();
         },
         routes: [
           GoRoute(
@@ -30,10 +28,11 @@ class FeedRoutes {
             ),
           ),
           GoRoute(
-            path: ':tabName/:id',
+            path: ':projectId/:tab',
             builder: (_, state) {
               return ProjectDetailsScreen(
-                id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
+                projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
+                tab: state.pathParameters['tab'],
               );
             },
             routes: [
@@ -41,7 +40,7 @@ class FeedRoutes {
                 path: 'review',
                 builder: (_, state) {
                   return ProjectReviewScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
                   );
                 },
               ),
@@ -49,7 +48,7 @@ class FeedRoutes {
                 path: 'verify',
                 builder: (_, state) {
                   return ProjectVerifyScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
                     projectLocations: state.extra as List<AWSPlaces>,
                   );
                 },

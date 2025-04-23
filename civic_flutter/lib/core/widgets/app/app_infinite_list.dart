@@ -60,12 +60,12 @@ class AppInfiniteList<T> extends ConsumerWidget {
             );
           },
           noItemsFoundIndicatorBuilder: (context) {
-            return noItemsFound ??
+            return 
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),
-                  child: Column(
+                  child: noItemsFound ?? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(

@@ -41,8 +41,8 @@ class ProjectReviewReactionState {
     return ProjectReviewReactionState(
       likesCount: projectReview.likedBy?.length ?? 0,
       dislikesCount: projectReview.dislikedBy?.length ?? 0,
-      isLiked: projectReview.likedBy!.contains(userId),
-      isDisliked: projectReview.dislikedBy!.contains(userId),
+      isLiked: projectReview.likedBy?.contains(userId) ?? false,
+      isDisliked: projectReview.dislikedBy?.contains(userId) ?? false,
       isDeleted: false,
     );
   }

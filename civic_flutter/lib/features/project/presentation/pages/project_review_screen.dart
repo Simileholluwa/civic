@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/core/widgets/create_content/create_content_rating_bar.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -10,15 +12,19 @@ import 'package:go_router/go_router.dart';
 class ProjectReviewScreen extends ConsumerWidget {
   const ProjectReviewScreen({
     super.key,
-    required this.id,
+    required this.projectId,
     this.fromDetails = true,
   });
-  final int id;
+  final int projectId;
   final bool fromDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(projectReviewDetailProvider(id,),);
+    final data = ref.watch(
+      projectReviewDetailProvider(
+        projectId,
+      ),
+    );
     final projectReviewState = ref.watch(
       projectReviewProviderProvider(data.value),
     );
@@ -178,7 +184,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                         validator: (value) {
                           if (value?.isEmpty ?? true) {
                             return 'Please write a review';
-                          }
+                          } 
                           return null;
                         },
                         textController: projectReviewState.reviewController,
@@ -187,6 +193,9 @@ class ProjectReviewScreen extends ConsumerWidget {
                           projectReviewNotifier.setReview(value ?? '');
                         },
                         hintText: 'Write your review here',
+                        maxLength: 400,
+                        maxLines: 4,
+                        minLines: 1,
                       ),
                     ],
                   ),
@@ -208,7 +217,7 @@ class ProjectReviewScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (review) {
-          if (projectReviewState.isEditing) {
+          if (projectReviewState.isEditing && review != null) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 5),
               child: Row(
@@ -237,7 +246,14 @@ class ProjectReviewScreen extends ConsumerWidget {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: projectReviewState.isDeleting ? null : () async {
+                        ProjectHelperFunctions.deleteProjectReviewDialog(
+                            context, 
+                            projectReviewNotifier,
+                            projectId,
+                            review.id!,
+                            );
+                      },
                       child: Text(
                         'Delete review',
                         style: const TextStyle().copyWith(
@@ -250,7 +266,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
                     ).withLoading(
-                      loading: false,
+                      loading: projectReviewState.isDeleting,
                     ),
                   ),
                 ],
@@ -285,9 +301,10 @@ class ProjectReviewScreen extends ConsumerWidget {
                           child: ElevatedButton(
                             onPressed: projectReviewState.isValid
                                 ? () async {
+                                  log (projectReviewState.locationRating.toString());
                                     final result =
                                         await projectReviewNotifier.sendReview(
-                                      id,
+                                      projectId,
                                       data.value?.id,
                                       fromDetails,
                                     );

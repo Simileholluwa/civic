@@ -15,18 +15,12 @@ class PostBottomOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(regularPostProvider(post));
+    final postNotifier = ref.watch(regularPostProvider(post).notifier);
     return Container(
       height: 55,
       padding: const EdgeInsets.only(
         left: TSizes.xs,
         right: TSizes.sm,
-      ),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).dividerColor,
-          ),
-        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,12 +36,7 @@ class PostBottomOptions extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Iconsax.tag_user5,
-                  size: 27,
-                  color: TColors.primary,
                 ),
-              ),
-              const SizedBox(
-                width: TSizes.xs,
               ),
               IconButton(
                 onPressed: () => PostHelperFunctions.selectLocation(
@@ -56,12 +45,7 @@ class PostBottomOptions extends ConsumerWidget {
                 ),
                 icon: const Icon(
                   Iconsax.location5,
-                  size: 27,
-                  color: TColors.primary,
                 ),
-              ),
-              const SizedBox(
-                width: TSizes.xs,
               ),
               IconButton(
                 onPressed: () {
@@ -71,22 +55,30 @@ class PostBottomOptions extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Icons.timer,
-                  size: 27,
-                  color: TColors.primary,
                 ),
               ),
-              const SizedBox(
-                width: TSizes.xs,
-              ),
                 IconButton(
-                  onPressed: () => PostHelperFunctions.showSelectMediaDialog(
-                    context,
-                    post,
-                  ),
+                  onPressed: postNotifier.pickPicture,
                   icon: const Icon(
                     Iconsax.gallery5,
-                    color: TColors.primary,
-                    size: 27,
+                  ),
+                ),
+                IconButton(
+                  onPressed: postNotifier.takePicture,
+                  icon: const Icon(
+                    Iconsax.camera5,
+                  ),
+                ),
+                IconButton(
+                  onPressed: postNotifier.takeVideo,
+                  icon: const Icon(
+                    Icons.video_camera_front_rounded,
+                  ),
+                ),
+                IconButton(
+                  onPressed: postNotifier.pickVideo,
+                  icon: const Icon(
+                    Icons.video_file_rounded,
                   ),
                 ),
             ],

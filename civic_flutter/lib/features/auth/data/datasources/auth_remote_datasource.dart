@@ -239,19 +239,8 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
 
       if (!result) {
-        await _auth
-            .createAccountRequest(
-              userName,
-              email,
-              password,
-            )
-            .timeout(
-              const Duration(
-                seconds: 60,
-              ),
-            );
         throw const ServerException(
-          message: 'Failed to create account. Retrying...',
+          message: 'Failed to create account. Please try again.',
         );
       }
       return result;

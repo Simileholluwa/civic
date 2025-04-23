@@ -26,6 +26,8 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.focusedBorder,
     this.inputFormatters,
+    this.maxLength,
+    this.minLines,
     this.textCapitalization = TextCapitalization.sentences,
     super.key,
   });
@@ -53,6 +55,8 @@ class AppTextField extends StatelessWidget {
   final InputBorder? focusedBorder;
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
+  final int? maxLength;
+  final int? minLines;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +90,7 @@ class AppTextField extends StatelessWidget {
           onChanged: onChanged,
           inputFormatters: inputFormatters,
           textCapitalization: textCapitalization,
+          maxLength: maxLength,
           decoration: InputDecoration(
             prefixIcon: showPrefixIcon
                 ? Icon(

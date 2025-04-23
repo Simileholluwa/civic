@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,12 +28,6 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider(
-        true,
-      ).notifier,
-    );
-
     final savedRecordString = ref
         .read(
           localStorageProvider,
@@ -45,271 +38,233 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
     final decoded = jsonDecode(savedRecordString.toString());
     final userRecord = UserRecord.fromJson(decoded);
 
-    return Stack(
-      children: [
-        AppAndroidBottomNav(
-          child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 0,
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-                statusBarIconBrightness: THelperFunctions.isDarkMode(context)
-                    ? Brightness.light
-                    : Brightness.dark,
-              ),
-            ),
-            bottomNavigationBar: PortalTarget(
-              visible: _isOpen,
-              anchor: Aligned(
-                follower: Alignment.bottomCenter,
-                target: Alignment.bottomCenter,
-              ),
-              portalFollower: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 60,
+    return AppAndroidBottomNav(
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 0,
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 60,
+          child: BottomNavigationBar(
+            currentIndex: widget.navigatorShell.currentIndex == 0
+                ? 0
+                : widget.navigatorShell.currentIndex == 1
+                    ? 2
+                    : 1,
+            onTap: (index) {
+              if (index == 1) {
+                togglePopup();
+              } else if (index == 0) {
+                widget.navigatorShell.goBranch(
+                  index,
+                  initialLocation:
+                      index == widget.navigatorShell.currentIndex,
+                );
+              } else if (index == 2) {
+                widget.navigatorShell.goBranch(
+                  index - 1,
+                  initialLocation:
+                      (index - 1) == widget.navigatorShell.currentIndex,
+                );
+              }
+            },
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            items: [
+              BottomNavigationBarItem(
+                  activeIcon: Icon(Iconsax.airdrop5),
+                  icon: Icon(Iconsax.airdrop),
+                  label: 'Home'),
+              BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.add,
+                  ),
+                  icon: Icon(
+                    Iconsax.magicpen,
+                  ),
+                  label: 'Create'),
+              BottomNavigationBarItem(
+                  activeIcon: Icon(Iconsax.notification5),
+                  icon: Icon(Iconsax.notification),
+                  label: 'Updates'),
+            ],
+          ),
+        ),
+        body: PortalTarget(
+          visible: _isOpen,
+          anchor: Aligned(
+            follower: Alignment.center,
+            target: Alignment.center,
+          ),
+          portalFollower: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.bottomCenter,
+            children: [
+              CustomPaint(
+                painter: TrueBumpPainter(
+                  color: Theme.of(context).cardColor,
                 ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    CustomPaint(
-                      painter: TrueBumpPainter(
-                        color: Theme.of(context).cardColor,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(top: 24, bottom: 56),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 15,
+                    children: [
+                      Icon(
+                        Iconsax.magicpen,
+                        size: 50,
+                        color: Theme.of(context).primaryColor,
                       ),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(top: 24, bottom: 56),
+                      Padding(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          'What would you like to create?',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                fontSize: 30,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const Divider(
+                        height: 0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
                           spacing: 15,
                           children: [
-                            Icon(
-                              Iconsax.magicpen,
-                              size: 50,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                'What would you like to create?',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineLarge!
-                                    .copyWith(
-                                      fontSize: 30,
-                                    ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            const Divider(
-                              height: 0,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              child: Column(
-                                spacing: 15,
-                                children: [
-                                  if (userRecord.politicalStatus!.index != 3)
-                                    CreateContentItems(
-                                      itemName: 'Project',
-                                      icon: Iconsax.note,
-                                      onTap: () {
-                                        togglePopup();
-                                        isVisibleNotifier.toggleVisibility();
-                                        context.push(
-                                          AppRoutes.createProject,
-                                          extra: {
-                                            'id': 0,
-                                          },
-                                        );
-                                      },
-                                      itemCaption:
-                                          'New, existing, completed or planned. Keep your constituents updated.',
-                                    ),
-                                  CreateContentItems(
-                                    itemName: 'Post',
-                                    icon: Iconsax.calendar,
-                                    onTap: () {
-                                      togglePopup();
-                                      isVisibleNotifier.toggleVisibility();
-                                      context.push(
-                                        AppRoutes.createPost,
-                                        extra: {
-                                          'draft': null,
-                                          'project': null,
-                                          'id': 0,
-                                        },
-                                      );
+                            if (userRecord.politicalStatus!.index != 3)
+                              CreateContentItems(
+                                itemName: 'Project',
+                                icon: Iconsax.note,
+                                onTap: () {
+                                  togglePopup();
+                                  context.push(
+                                    AppRoutes.createProject,
+                                    extra: {
+                                      'id': 0,
                                     },
-                                    itemCaption:
-                                        'Share your thoughts, ideas, and opinions with everyone.',
-                                  ),
-                                  CreateContentItems(
-                                    itemName: 'Poll',
-                                    icon: Iconsax.chart,
-                                    onTap: () {
-                                      togglePopup();
-                                      isVisibleNotifier.toggleVisibility();
-                                      context.push(
-                                        AppRoutes.createPoll,
-                                        extra: {
-                                          'id': 0,
-                                          'draft': null,
-                                        },
-                                      );
-                                    },
-                                    itemCaption:
-                                        'Engage your audience with quick questions and gather instant feedback.',
-                                  ),
-                                  CreateContentItems(
-                                    itemName: 'Article',
-                                    icon: Iconsax.document,
-                                    onTap: () {
-                                      togglePopup();
-                                      isVisibleNotifier.toggleVisibility();
-                                      context.push(
-                                        AppRoutes.createArticle,
-                                        extra: {
-                                          'id': 0,
-                                          'draft': null,
-                                        },
-                                      );
-                                    },
-                                    itemCaption:
-                                        'Share in-depth insights, stories, or research with your audience.',
-                                  ),
-                                ],
+                                  );
+                                },
+                                itemCaption:
+                                    'New, existing, completed or planned. Keep your constituents updated.',
                               ),
+                            CreateContentItems(
+                              itemName: 'Post',
+                              icon: Iconsax.calendar,
+                              onTap: () {
+                                togglePopup();
+                                context.push(
+                                  AppRoutes.createPost,
+                                  extra: {
+                                    'draft': null,
+                                    'project': null,
+                                    'id': 0,
+                                  },
+                                );
+                              },
+                              itemCaption:
+                                  'Share your thoughts, ideas, and opinions with everyone.',
+                            ),
+                            CreateContentItems(
+                              itemName: 'Poll',
+                              icon: Iconsax.chart,
+                              onTap: () {
+                                togglePopup();
+                                context.push(
+                                  AppRoutes.createPoll,
+                                  extra: {
+                                    'id': 0,
+                                    'draft': null,
+                                  },
+                                );
+                              },
+                              itemCaption:
+                                  'Engage your audience with quick questions and gather instant feedback.',
+                            ),
+                            CreateContentItems(
+                              itemName: 'Article',
+                              icon: Iconsax.document,
+                              onTap: () {
+                                togglePopup();
+                                context.push(
+                                  AppRoutes.createArticle,
+                                  extra: {
+                                    'id': 0,
+                                    'draft': null,
+                                  },
+                                );
+                              },
+                              itemCaption:
+                                  'Share in-depth insights, stories, or research with your audience.',
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    // Close Button
-                    Positioned(
-                      bottom: -30,
-                      child: InkWell(
-                        onTap: () {
-                          togglePopup();
-                          isVisibleNotifier.toggleVisibility();
-                        },
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Theme.of(context).cardColor,
-                              width: 5,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.close,
-                            size: 28,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final isVisible = ref.watch(
-                    appScrollVisibilityProvider(
-                      true,
-                    ),
-                  );
-
-                  return AnimatedSlide(
-                    duration: const Duration(milliseconds: 300),
-                    offset: isVisible ? Offset.zero : const Offset(0, 1),
-                    child: SizedBox(
-                      height: isVisible ? 65 : 0,
-                      child: BottomNavigationBar(
-                        currentIndex: widget.navigatorShell.currentIndex == 0
-                            ? 0
-                            : widget.navigatorShell.currentIndex == 1
-                                ? 2
-                                : 1,
-                        onTap: (index) {
-                          if (index == 1) {
-                            togglePopup();
-                            isVisibleNotifier.toggleVisibility();
-                          } else if (index == 0) {
-                            widget.navigatorShell.goBranch(
-                              index,
-                              initialLocation:
-                                  index == widget.navigatorShell.currentIndex,
-                            );
-                          } else if (index == 2) {
-                            widget.navigatorShell.goBranch(
-                              index - 1,
-                              initialLocation: (index - 1) ==
-                                  widget.navigatorShell.currentIndex,
-                            );
-                          }
-                        },
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        items: [
-                          BottomNavigationBarItem(
-                              activeIcon: Icon(Iconsax.airdrop5),
-                              icon: Icon(Iconsax.airdrop),
-                              label: 'Home'),
-                          BottomNavigationBarItem(
-                              activeIcon: Icon(
-                                Icons.add,
-                              ),
-                              icon: Icon(
-                                Iconsax.magicpen,
-                              ),
-                              label: 'Create'),
-                          BottomNavigationBarItem(
-                              activeIcon: Icon(Iconsax.notification5),
-                              icon: Icon(Iconsax.notification),
-                              label: 'Updates'),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            body: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                widget.navigatorShell,
-                Visibility(
-                  visible: ref.watch(sendPostLoadingProvider),
-                  child: LinearProgressIndicator(
-                    color: TColors.primary,
-                    backgroundColor: THelperFunctions.isDarkMode(context)
-                        ? TColors.dark
-                        : TColors.light,
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Positioned(
+                bottom: -30,
+                child: InkWell(
+                  onTap: () {
+                    togglePopup();
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context).cardColor,
+                        width: 5,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              widget.navigatorShell,
+              Visibility(
+                visible: ref.watch(sendPostLoadingProvider),
+                child: LinearProgressIndicator(
+                  color: TColors.primary,
+                  backgroundColor: THelperFunctions.isDarkMode(context)
+                      ? TColors.dark
+                      : TColors.light,
+                ),
+              ),
+              if (_isOpen)
+                GestureDetector(
+                  onTap: () {
+                    togglePopup();
+                  },
+                  child: Container(
+                    color: Colors.black.withValues(alpha: .5),
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                ),
+            ],
           ),
         ),
-        if (_isOpen)
-          GestureDetector(
-            onTap: () {
-              togglePopup();
-              isVisibleNotifier.toggleVisibility();
-            },
-            child: Container(
-              color: Colors.black.withValues(alpha: .5),
-              width: double.infinity,
-              height: double.infinity,
-            ),
-          ),
-      ],
+      ),
     );
   }
 }

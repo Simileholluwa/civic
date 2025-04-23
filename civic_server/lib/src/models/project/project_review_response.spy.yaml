@@ -1,7 +1,0 @@
-class: ProjectReviewResponse
-fields:
-    likes: int
-    dislikes: int
-    isLiked: bool
-    isDisliked: bool
-    isDeleted: bool

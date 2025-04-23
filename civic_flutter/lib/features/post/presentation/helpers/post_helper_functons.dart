@@ -14,12 +14,12 @@ class PostHelperFunctions {
     List<AWSPlaces> selectedLocations,
   ) {
     return scheduledDateTimeState == null && selectedLocations.isEmpty
-        ? 105
+        ? 55
         : scheduledDateTimeState == null && selectedLocations.isNotEmpty
-            ? 155
+            ? 105
             : scheduledDateTimeState != null && selectedLocations.isNotEmpty
-                ? 205
-                : 155;
+                ? 155
+                : 105;
   }
 
   static Future<bool?> selectLocationBottomSheet({
@@ -179,16 +179,6 @@ class PostHelperFunctions {
         selectLocationBottomSheet(context: context, post: post);
       }
     }
-  }
-
-  static Future<bool?> showSelectMediaDialog(
-    BuildContext context,
-    Post post,
-  ) {
-    return postSelectMediaDialog(
-      context,
-      post,
-    );
   }
 
   static Post createPostFromDraftPost(

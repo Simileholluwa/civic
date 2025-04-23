@@ -11,35 +11,24 @@ import 'package:iconsax/iconsax.dart';
 class FeedScreen extends ConsumerWidget {
   const FeedScreen({
     super.key,
-    this.tabName,
   });
-  final String? tabName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageController = ref.watch(
-      feedPageControllerProvider(
-        tabName,
-      ),
-    );
-    final pageControllerNotifier = ref.watch(
-      feedPageControllerProvider(
-        tabName,
-      ).notifier,
-    );
-    final currentPageNotifier = ref.watch(
-      feedCurrentPageProvider(
-        tabName,
-      ).notifier,
-    );
     final currentPageState = ref.watch(
-      feedCurrentPageProvider(
-        tabName,
+      feedCurrentPageProvider,
+    );
+    final tabController = ref.watch(
+      feedScreenTabControllerProvider,
+    );
+    final isVisible = ref.watch(
+      appScrollVisibilityProvider(
+        true,
       ),
     );
     return Scaffold(
       appBar: ContentAppBar(
-        isVisible: true,
+        isVisible: isVisible,
         leading: IconButton(
           icon: const Icon(
             Icons.apps,
@@ -48,7 +37,8 @@ class FeedScreen extends ConsumerWidget {
           onPressed: () {},
         ),
         titleSpacing: 0,
-        bottomHeight: 30,
+        height: 45,
+        bottomHeight: 54,
         centerTitle: true,
         title: Text(
           'CIVIC',
@@ -60,56 +50,24 @@ class FeedScreen extends ConsumerWidget {
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 15,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 15,
-                  children: [
-                    ...['PROJECTS', 'POSTS', 'POLLS', 'ARTICLES']
-                        .asMap()
-                        .entries
-                        .map(
-                      (filter) {
-                        final text = filter.value;
-                        final index = filter.key;
-                        return GestureDetector(
-                          onTap: () {
-                            pageControllerNotifier.gotoPage(
-                              index,
-                            );
-                          },
-                          child: Text(
-                            text,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                  color: currentPageState == index
-                                      ? Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .color
-                                      : Theme.of(context).hintColor,
-                                  fontWeight: currentPageState == index
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  fontSize: 15,
-                                ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+          child: AppTabBarDesign(
+            dividerColor: Colors.transparent,
+            tabController: tabController,
+            tabs: [
+              Tab(
+                text: 'PROJECTS'
+                
               ),
+              Tab(
+                text: 'POSTS'
+                
+              ),
+              Tab(
+                text: 'POLLS'
+              ),
+              Tab(
+                text: 'ARTICLES'
+              )
             ],
           ),
         ),
@@ -131,12 +89,8 @@ class FeedScreen extends ConsumerWidget {
       ),
       body: Stack(
         children: [
-          PageView(
-            controller: pageController,
-            onPageChanged: (index) {
-              currentPageNotifier.setCurrentPage(index);
-            },
-            physics: const ClampingScrollPhysics(),
+          TabBarView(
+            controller: tabController,
             children: [
               ContentKeepAliveWrapper(
                 child: const ProjectsScreen(),
