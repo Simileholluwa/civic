@@ -3,10 +3,10 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class ProjectEndpoint extends Endpoint {
-  Future<Project?> getProject(Session session, int id) async {
+  Future<Project?> getProject(Session session, int projectId) async {
     final result = await Project.db.findById(
       session,
-      id,
+      projectId,
       include: Project.include(
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
@@ -70,6 +70,7 @@ class ProjectEndpoint extends Endpoint {
             reviewedBy: [],
             verifiedBy: [],
             bookmarkedBy: [],
+            vettedBy: [],
           ),
         );
       }
@@ -84,179 +85,171 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
-Future<ProjectReview?> saveProjectReview(
-  Session session,
-  ProjectReview projectReview,
-) async {
-  return session.db.transaction((transaction) async {
-    try {
-      // Get authenticated user
-      final user = await authUser(session);
-      
-      // Verify project exists
-      final project = await Project.db.findById(
-        session,
-        projectReview.projectId,
-        transaction: transaction,
-      );
-      if (project == null) {
-        throw PostException(message: 'Project not found');
-      }
+  Future<ProjectReview?> saveProjectReview(
+    Session session,
+    ProjectReview projectReview,
+  ) async {
+    return session.db.transaction((transaction) async {
+      try {
+        // Get authenticated user
+        final user = await authUser(session);
 
-      // Helper function for rating calculations
-      double calculateNewOverallRating({
-        required double? currentOverall,
-        required double? existingRating,
-        required double? newRating,
-        required int count,
-      }) {
-        final current = currentOverall ?? 0;
-        final existing = existingRating ?? 0;
-        final updated = newRating ?? 0;
-        
-        return (current * count - existing + updated) / count;
-      }
-
-      if (projectReview.id != null) {
-        // Update existing review
-        final existingReview = await ProjectReview.db.findById(
+        // Verify project exists
+        final project = await Project.db.findById(
           session,
-          projectReview.id!,
+          projectReview.projectId,
           transaction: transaction,
         );
-        if (existingReview == null) {
-          throw PostException(message: 'Review not found');
+        if (project == null) {
+          throw PostException(message: 'Project not found');
         }
 
-        await validateProjectReviewOwnership(session, projectReview.id!, user);
+        // Helper function for rating calculations
+        double calculateNewOverallRating({
+          required double? currentOverall,
+          required double? existingRating,
+          required double? newRating,
+          required int count,
+        }) {
+          final current = currentOverall ?? 0;
+          final existing = existingRating ?? 0;
+          final updated = newRating ?? 0;
 
-        if (project.reviewedBy?.isNotEmpty ?? false) {
-          final count = project.reviewedBy!.length;
+          return (current * count - existing + updated) / count;
+        }
+
+        if (projectReview.id != null) {
+          // Update existing review
+          final existingReview = await ProjectReview.db.findById(
+            session,
+            projectReview.id!,
+            transaction: transaction,
+          );
+          if (existingReview == null) {
+            throw PostException(message: 'Review not found');
+          }
+
+          await validateProjectReviewOwnership(
+              session, projectReview.id!, user);
+
+          if (project.reviewedBy?.isNotEmpty ?? false) {
+            final count = project.reviewedBy!.length;
+
+            final updatedProject = project.copyWith(
+              overallLocationRating: calculateNewOverallRating(
+                currentOverall: project.overallLocationRating,
+                existingRating: existingReview.locationRating,
+                newRating: projectReview.locationRating,
+                count: count,
+              ),
+              overallDescriptionRating: calculateNewOverallRating(
+                currentOverall: project.overallDescriptionRating,
+                existingRating: existingReview.descriptionRating,
+                newRating: projectReview.descriptionRating,
+                count: count,
+              ),
+              overallDatesRating: calculateNewOverallRating(
+                currentOverall: project.overallDatesRating,
+                existingRating: existingReview.datesRating,
+                newRating: projectReview.datesRating,
+                count: count,
+              ),
+              overallAttachmentsRating: calculateNewOverallRating(
+                currentOverall: project.overallAttachmentsRating,
+                existingRating: existingReview.attachmentsRating,
+                newRating: projectReview.attachmentsRating,
+                count: count,
+              ),
+              overAllCategoryRating: calculateNewOverallRating(
+                currentOverall: project.overAllCategoryRating,
+                existingRating: existingReview.categoryRating,
+                newRating: projectReview.categoryRating,
+                count: count,
+              ),
+              overallFundingRating: calculateNewOverallRating(
+                currentOverall: project.overallFundingRating,
+                existingRating: existingReview.fundingRating,
+                newRating: projectReview.fundingRating,
+                count: count,
+              ),
+              reviewedBy: project.reviewedBy,
+            );
+
+            await updateProject(session, updatedProject);
+          }
+
+          final updatedReview = projectReview.copyWith(
+            likedBy: existingReview.likedBy,
+            dislikedBy: existingReview.dislikedBy,
+            dateCreated: existingReview.dateCreated,
+            updatedAt: DateTime.now(),
+          );
+          await updateProjectReview(session, updatedReview);
+          return updatedReview;
+        } else {
+          final oldCount = project.reviewedBy?.length ?? 0;
 
           final updatedProject = project.copyWith(
-            overallLocationRating: calculateNewOverallRating(
-              currentOverall: project.overallLocationRating,
-              existingRating: existingReview.locationRating,
-              newRating: projectReview.locationRating,
-              count: count,
+            overallLocationRating: _calculateNewAverage(
+              current: project.overallLocationRating,
+              currentCount: oldCount,
+              newValue: projectReview.locationRating,
             ),
-            overallDescriptionRating: calculateNewOverallRating(
-              currentOverall: project.overallDescriptionRating,
-              existingRating: existingReview.descriptionRating,
-              newRating: projectReview.descriptionRating,
-              count: count,
+            overallDescriptionRating: _calculateNewAverage(
+              current: project.overallDescriptionRating,
+              currentCount: oldCount,
+              newValue: projectReview.descriptionRating,
             ),
-            overallDatesRating: calculateNewOverallRating(
-              currentOverall: project.overallDatesRating,
-              existingRating: existingReview.datesRating,
-              newRating: projectReview.datesRating,
-              count: count,
+            overallDatesRating: _calculateNewAverage(
+              current: project.overallDatesRating,
+              currentCount: oldCount,
+              newValue: projectReview.datesRating,
             ),
-            overallAttachmentsRating: calculateNewOverallRating(
-              currentOverall: project.overallAttachmentsRating,
-              existingRating: existingReview.attachmentsRating,
-              newRating: projectReview.attachmentsRating,
-              count: count,
+            overallAttachmentsRating: _calculateNewAverage(
+              current: project.overallAttachmentsRating,
+              currentCount: oldCount,
+              newValue: projectReview.attachmentsRating,
             ),
-            overAllCategoryRating: calculateNewOverallRating(
-              currentOverall: project.overAllCategoryRating,
-              existingRating: existingReview.categoryRating,
-              newRating: projectReview.categoryRating,
-              count: count,
+            overAllCategoryRating: _calculateNewAverage(
+              current: project.overAllCategoryRating,
+              currentCount: oldCount,
+              newValue: projectReview.categoryRating,
             ),
-            overallFundingRating: calculateNewOverallRating(
-              currentOverall: project.overallFundingRating,
-              existingRating: existingReview.fundingRating,
-              newRating: projectReview.fundingRating,
-              count: count,
+            overallFundingRating: _calculateNewAverage(
+              current: project.overallFundingRating,
+              currentCount: oldCount,
+              newValue: projectReview.fundingRating,
             ),
-            reviewedBy: project.reviewedBy,
+            reviewedBy: [...project.reviewedBy ?? [], user.id!],
           );
 
           await updateProject(session, updatedProject);
+
+          return await ProjectReview.db.insertRow(
+            session,
+            projectReview.copyWith(
+              ownerId: user.id,
+              owner: user,
+              dateCreated: DateTime.now(),
+              likedBy: [],
+              dislikedBy: [],
+            ),
+            transaction: transaction,
+          );
         }
-
-        final updatedReview = projectReview.copyWith(
-          likedBy: existingReview.likedBy,
-          dislikedBy: existingReview.dislikedBy,
-          updatedAt: DateTime.now(),
+      } on PostException {
+        rethrow;
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in saveProjectReview: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
         );
-        await updateProjectReview(session, updatedReview);
-        return updatedReview;
-      } else {
-        final oldCount = project.reviewedBy?.length ?? 0;
-
-        final updatedProject = project.copyWith(
-          overallLocationRating: _calculateNewAverage(
-            current: project.overallLocationRating,
-            currentCount: oldCount,
-            newValue: projectReview.locationRating,
-          ),
-          overallDescriptionRating: _calculateNewAverage(
-            current: project.overallDescriptionRating,
-            currentCount: oldCount,
-            newValue: projectReview.descriptionRating,
-          ),
-          overallDatesRating: _calculateNewAverage(
-            current: project.overallDatesRating,
-            currentCount: oldCount,
-            newValue: projectReview.datesRating,
-          ),
-          overallAttachmentsRating: _calculateNewAverage(
-            current: project.overallAttachmentsRating,
-            currentCount: oldCount,
-            newValue: projectReview.attachmentsRating,
-          ),
-          overAllCategoryRating: _calculateNewAverage(
-            current: project.overAllCategoryRating,
-            currentCount: oldCount,
-            newValue: projectReview.categoryRating,
-          ),
-          overallFundingRating: _calculateNewAverage(
-            current: project.overallFundingRating,
-            currentCount: oldCount,
-            newValue: projectReview.fundingRating,
-          ),
-          reviewedBy: [...project.reviewedBy ?? [], user.id!],
-        );
-
-        await updateProject(session, updatedProject);
-
-        return await ProjectReview.db.insertRow(
-          session,
-          projectReview.copyWith(
-            ownerId: user.id,
-            owner: user,
-            dateCreated: DateTime.now(),
-            likedBy: [],
-            dislikedBy: [],
-          ),
-          transaction: transaction,
-        );
+        return null;
       }
-    } on PostException {
-      rethrow; // Re-throw known exceptions
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in saveProjectReview: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-      return null;
-    }
-  });
-}
-
-  double _calculateNewAverage({
-  required double? current,
-  required int currentCount,
-  required double? newValue,
-}) {
-  final effectiveCurrent = current ?? 0;
-  final effectiveNew = newValue ?? 0;
-  return (effectiveCurrent * currentCount + effectiveNew) / (currentCount + 1);
-}
+    });
+  }
 
   Future<bool> deleteProjectReview(Session session, int reviewId) async {
     return await session.db.transaction((transaction) async {
@@ -667,18 +660,18 @@ Future<ProjectReview?> saveProjectReview(
 
   Future<void> deleteProject(
     Session session,
-    int id,
+    int projectId,
   ) async {
     final user = await authUser(
       session,
     );
     await validateProjectOwnership(
       session,
-      id,
+      projectId,
       user,
     );
 
-    final project = await Project.db.findById(session, id);
+    final project = await Project.db.findById(session, projectId);
 
     if (project == null) {
       throw PostException(message: 'Project not found');
@@ -840,6 +833,125 @@ Future<ProjectReview?> saveProjectReview(
     }
   }
 
+  Future<ProjectVetting?> vetProject(
+    Session session,
+    ProjectVetting projectVetting,
+  ) async {
+    final user = await authUser(session);
+    return await session.db.transaction((transaction) async {
+      try {
+        final project = await Project.db.findById(
+          session,
+          projectVetting.projectId,
+          transaction: transaction,
+        );
+        if (project == null) {
+          throw PostException(
+            message: 'Project not found',
+          );
+        }
+        final existingVet = await ProjectVetting.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.projectId.equals(projectVetting.projectId) &
+              t.ownerId.equals(
+                user.id,
+              ),
+          transaction: transaction,
+        );
+
+        if (existingVet != null) {
+          final updatedVet = projectVetting.copyWith(
+            updatedAt: DateTime.now(),
+            createdAt: existingVet.createdAt,
+          );
+          await ProjectVetting.db.updateRow(
+            session,
+            updatedVet,
+            transaction: transaction,
+          );
+          return updatedVet;
+        } else {
+          final newProject = project.copyWith(
+            vettedBy: [...project.vettedBy ?? [], user.id!],
+          );
+          await updateProject(session, newProject);
+          await ProjectVetting.db.insertRow(
+            session,
+            projectVetting,
+            transaction: transaction,
+          );
+          return projectVetting;
+        }
+      } on PostException {
+        rethrow;
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in vetProject: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        return null;
+      }
+    });
+  }
+
+  Future<ProjectVetting?> getVettedProject(
+    Session session,
+    int projectId,
+  ) async {
+    final user = await authUser(
+      session,
+    );
+    final result = await ProjectVetting.db.findFirstRow(
+      session,
+      where: (row) =>
+          row.projectId.equals(projectId) &
+          row.ownerId.equals(
+            user.userInfoId,
+          ),
+    );
+    return result;
+  }
+
+  Future<ProjectVetList> getVettedProjects(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    if (limit <= 0 || page <= 0) {
+      throw UserException(
+        message: 'Invalid pagination parameters',
+      );
+    }
+
+    final count = await ProjectVetting.db.count(
+      session,
+    );
+    final results = await ProjectVetting.db.find(
+      session,
+      limit: limit,
+      offset: (page - 1) * limit,
+      include: ProjectVetting.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+      orderBy: (t) => t.createdAt,
+      orderDescending: true,
+    );
+
+    return ProjectVetList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
+  }
+
   Future<UserRecord> authUser(
     Session session,
   ) async {
@@ -989,5 +1101,16 @@ Future<ProjectReview?> saveProjectReview(
       'review_${projectReview.id}',
       projectReview,
     );
+  }
+
+  double _calculateNewAverage({
+    required double? current,
+    required int currentCount,
+    required double? newValue,
+  }) {
+    final effectiveCurrent = current ?? 0;
+    final effectiveNew = newValue ?? 0;
+    return (effectiveCurrent * currentCount + effectiveNew) /
+        (currentCount + 1);
   }
 }

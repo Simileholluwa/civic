@@ -9,6 +9,11 @@ abstract class ProjectRemoteDataSource {
     required int page,
   });
 
+  Future<ProjectVetList> getVettedProjects({
+    required int limit,
+    required int page,
+  });
+
   Future<Project?> getProject({required int id});
 
   Future<Project?> saveProject({required Project project});
@@ -55,6 +60,14 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> markNotInterested({
     required int projectId,
+  });
+
+  Future<ProjectVetting> getVettedProject({
+    required int projectId,
+  });
+
+  Future<ProjectVetting> vetProject({
+    required ProjectVetting projectVetting,
   });
 }
 
@@ -111,6 +124,30 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }) async {
     try {
       final result = _client.project.getProjects(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on TimeoutException catch (_) {
+      throw const ServerException(message: 'Request timed out');
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectVetList> getVettedProjects({
+    required int limit,
+    required int page,
+  }) async {
+    try {
+      final result = _client.project.getVettedProjects(
         limit: limit,
         page: page,
       );
@@ -389,6 +426,52 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<ProjectVetting> vetProject({required ProjectVetting projectVetting}) async {
+    try {
+      final result = await _client.project.vetProject(
+        projectVetting,
+      );
+      if (result == null) {
+        throw const ServerException(message: 'Failed to vet project');
+      }
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+  
+  @override
+  Future<ProjectVetting> getVettedProject({required int projectId}) async {
+    try {
+      final result = await _client.project.getVettedProject(
+        projectId,
+      );
+      if (result == null) {
+        throw const ServerException(message: 'Failed to vet project');
+      }
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on ServerException {
       rethrow;
     } catch (e) {

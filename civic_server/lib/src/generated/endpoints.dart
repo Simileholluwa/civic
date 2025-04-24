@@ -28,7 +28,9 @@ import 'package:civic_server/src/generated/user/user_record.dart' as _i16;
 import 'package:civic_server/src/generated/post/post.dart' as _i17;
 import 'package:civic_server/src/generated/project/project.dart' as _i18;
 import 'package:civic_server/src/generated/project/project_review.dart' as _i19;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i20;
+import 'package:civic_server/src/generated/project/project_vetting.dart'
+    as _i20;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i21;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -846,8 +848,8 @@ class Endpoints extends _i1.EndpointDispatch {
         'getProject': _i1.MethodConnector(
           name: 'getProject',
           params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
               type: _i1.getType<int>(),
               nullable: false,
             )
@@ -858,7 +860,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['project'] as _i9.ProjectEndpoint).getProject(
             session,
-            params['id'],
+            params['projectId'],
           ),
         ),
         'getProjectReview': _i1.MethodConnector(
@@ -1068,8 +1070,8 @@ class Endpoints extends _i1.EndpointDispatch {
         'deleteProject': _i1.MethodConnector(
           name: 'deleteProject',
           params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
               type: _i1.getType<int>(),
               nullable: false,
             )
@@ -1080,7 +1082,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['project'] as _i9.ProjectEndpoint).deleteProject(
             session,
-            params['id'],
+            params['projectId'],
           ),
         ),
         'toggleBookmark': _i1.MethodConnector(
@@ -1135,6 +1137,66 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['project'] as _i9.ProjectEndpoint).markNotInterested(
             session,
             params['projectId'],
+          ),
+        ),
+        'vetProject': _i1.MethodConnector(
+          name: 'vetProject',
+          params: {
+            'projectVetting': _i1.ParameterDescription(
+              name: 'projectVetting',
+              type: _i1.getType<_i20.ProjectVetting>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).vetProject(
+            session,
+            params['projectVetting'],
+          ),
+        ),
+        'getVettedProject': _i1.MethodConnector(
+          name: 'getVettedProject',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).getVettedProject(
+            session,
+            params['projectId'],
+          ),
+        ),
+        'getVettedProjects': _i1.MethodConnector(
+          name: 'getVettedProjects',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).getVettedProjects(
+            session,
+            limit: params['limit'],
+            page: params['page'],
           ),
         ),
         'authUser': _i1.MethodConnector(
@@ -1485,6 +1547,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i20.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i21.Endpoints()..initializeEndpoints(server);
   }
 }

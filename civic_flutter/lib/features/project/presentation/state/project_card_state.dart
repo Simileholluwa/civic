@@ -9,46 +9,46 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectCardState {
-  final String timeAgo;
-  final String numberOfViews;
-  final List<String> imagesUrl;
-  final String description;
-  final String title;
-  final String currency;
-  final String amount;
-  final String completionRate;
-  final String duration;
-  final String numberOfLikes;
-  final String numberOfReviews;
-  final String numberOfReposts;
-  final String numberOfVerifies;
-  final String numberOfBookmarks;
-  final bool hasLiked;
-  final bool hasReviewed;
-  final bool hasReposted;
-  final bool hasVerified;
-  final UserRecord creator;
-  final bool canVet;
-  final bool isBookmarked;
-  final String startDateISO;
-  final String endDateISO;
-  final double percentageElapsedInDouble;
-  final String percentageElapsedInString;
-  final String category;
-  final String subCategory;
-  final String fundingAmount;
-  final String fundingCategory;
-  final String fundingSubCategory;
-  final Document rawDescription;
-  final List<String> pdfAttachments;
-  final bool hasPdf;
-  final List<AWSPlaces> locations;
-  final bool hasLocation;
-  final bool toggleFilter;
-  final bool isOwner;
-  final bool isFollower;
-  final bool isDeleted;
-  final bool canDelete;
+  final String? timeAgo;
+  final String? numberOfViews;
+  final List<String>? imagesUrl;
+  final String? description;
+  final String? title;
+  final String? currency;
+  final String? amount;
+  final String? completionRate;
+  final String? duration;
+  final String? numberOfLikes;
+  final String? numberOfReviews;
+  final String? numberOfReposts;
+  final String? numberOfVerifies;
+  final String? numberOfBookmarks;
+  final bool? hasLiked;
+  final bool? hasReviewed;
+  final bool? hasReposted;
+  final bool? hasVerified;
+  final UserRecord? creator;
+  final bool? canVet;
+  final bool? isBookmarked;
+  final String? startDateISO;
+  final String? endDateISO;
+  final double? percentageElapsedInDouble;
+  final String? percentageElapsedInString;
+  final String? category;
+  final String? subCategory;
+  final String? fundingAmount;
+  final String? fundingCategory;
+  final String? fundingSubCategory;
+  final Document? rawDescription;
+  final List<String>? pdfAttachments;
+  final bool? hasPdf;
+  final List<AWSPlaces>? locations;
+  final bool? hasLocation;
+  final bool? toggleFilter;
+  final bool? isOwner;
+  final bool? isFollower;
+  final bool? isDeleted;
+  final bool? canDelete;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -279,6 +279,46 @@ class ProjectCardState {
             userId,
           ),
       isDeleted: project.isDeleted!,
+    );
+  }
+
+  factory ProjectCardState.empty() {
+    return ProjectCardState(
+      timeAgo: null,
+      numberOfViews: null,
+      imagesUrl: null,
+      description: null,
+      title: null,
+      currency: null,
+      amount: null,
+      completionRate: null,
+      duration: null,
+      numberOfLikes: null,
+      numberOfReviews: null,
+      numberOfReposts: null,
+      numberOfVerifies: null,
+      numberOfBookmarks: null,
+      hasReviewed: null,
+      hasReposted: null,
+      hasVerified: null,
+      creator: null,
+      canVet: null,
+      startDateISO: null,
+      endDateISO: null,
+      percentageElapsedInDouble: null,
+      percentageElapsedInString: null,
+      category: null,
+      subCategory: null,
+      fundingAmount: null,
+      fundingCategory: null,
+      fundingSubCategory: null,
+      rawDescription: null,
+      pdfAttachments: null,
+      hasPdf: null,
+      locations: null,
+      hasLocation: null,
+      isOwner: null,
+      isFollower: null,
     );
   }
 }

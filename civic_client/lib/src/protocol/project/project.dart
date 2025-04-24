@@ -43,6 +43,7 @@ abstract class Project implements _i1.SerializableModel {
     this.reviewedBy,
     this.verifiedBy,
     this.bookmarkedBy,
+    this.vettedBy,
     this.overallRating,
     this.overallLocationRating,
     this.overallDescriptionRating,
@@ -82,6 +83,7 @@ abstract class Project implements _i1.SerializableModel {
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
+    List<int>? vettedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -153,6 +155,9 @@ abstract class Project implements _i1.SerializableModel {
           ?.map((e) => e as int)
           .toList(),
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      vettedBy: (jsonSerialization['vettedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
@@ -229,6 +234,8 @@ abstract class Project implements _i1.SerializableModel {
 
   List<int>? bookmarkedBy;
 
+  List<int>? vettedBy;
+
   double? overallRating;
 
   double? overallLocationRating;
@@ -276,6 +283,7 @@ abstract class Project implements _i1.SerializableModel {
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
+    List<int>? vettedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -321,6 +329,7 @@ abstract class Project implements _i1.SerializableModel {
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
       if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -374,6 +383,7 @@ class _ProjectImpl extends Project {
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
+    List<int>? vettedBy,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -410,6 +420,7 @@ class _ProjectImpl extends Project {
           reviewedBy: reviewedBy,
           verifiedBy: verifiedBy,
           bookmarkedBy: bookmarkedBy,
+          vettedBy: vettedBy,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
           overallDescriptionRating: overallDescriptionRating,
@@ -452,6 +463,7 @@ class _ProjectImpl extends Project {
     Object? reviewedBy = _Undefined,
     Object? verifiedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
+    Object? vettedBy = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
     Object? overallDescriptionRating = _Undefined,
@@ -516,6 +528,9 @@ class _ProjectImpl extends Project {
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
+      vettedBy: vettedBy is List<int>?
+          ? vettedBy
+          : this.vettedBy?.map((e0) => e0).toList(),
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
       overallLocationRating: overallLocationRating is double?

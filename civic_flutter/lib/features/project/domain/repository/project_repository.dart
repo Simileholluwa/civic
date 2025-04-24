@@ -7,6 +7,12 @@ abstract class ProjectRepository {
     required int page,
     required int limit,
   });
+
+  Future<Either<Failure, ProjectVetList>> getVettedProjects({
+    required int page,
+    required int limit,
+  });
+
   Future<Either<Failure, ProjectReviewList>> getProjectReviews({
     required int projectId,
     required int page,
@@ -62,4 +68,14 @@ abstract class ProjectRepository {
   Future<Either<Failure, void>> markNotInterested({
     required int projectId,   
   });
+
+  Future<Either<Failure, ProjectVetting>> getVettedProject({
+    required int projectId,   
+  });
+
+  Future<Either<Failure, ProjectVetting>> vetProject({
+    required ProjectVetting projectVetting,   
+  });
+
+
 }

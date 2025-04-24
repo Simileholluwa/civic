@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_delete_consequences.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -625,7 +626,7 @@ class ProjectHelperFunctions {
                   SizedBox(
                     height: 50,
                     child: FilledButton(
-                      onPressed: projectCardState.canDelete
+                      onPressed: projectCardState.canDelete!
                           ? () {
                               context.pop();
                               ref
@@ -639,7 +640,7 @@ class ProjectHelperFunctions {
                           : null,
                       style: ButtonStyle().copyWith(
                         backgroundColor: WidgetStatePropertyAll(
-                          projectCardState.canDelete
+                          projectCardState.canDelete!
                               ? Colors.red
                               : Theme.of(context).disabledColor,
                         ),

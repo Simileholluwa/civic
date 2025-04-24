@@ -53,6 +53,9 @@ project:
   - toggleBookmark:
   - toggleLike:
   - markNotInterested:
+  - vetProject:
+  - getVettedProject:
+  - getVettedProjects:
   - authUser:
   - validateProjectOwnership:
   - validateProjectReviewOwnership:

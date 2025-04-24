@@ -294,5 +294,57 @@ final deleteProjectReviewProvider =
 // ignore: unused_element
 typedef DeleteProjectReviewRef
     = AutoDisposeProviderRef<DeleteProjectReviewUseCase>;
+String _$vetProjectHash() => r'2d819f29e6abd9622c251523f9b445a2cb85ed39';
+
+/// See also [vetProject].
+@ProviderFor(vetProject)
+final vetProjectProvider = AutoDisposeProvider<VetProjectUseCase>.internal(
+  vetProject,
+  name: r'vetProjectProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$vetProjectHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef VetProjectRef = AutoDisposeProviderRef<VetProjectUseCase>;
+String _$getVettedProjectHash() => r'50a007e5e425e0c0e2b53c1dc643d69126170eed';
+
+/// See also [getVettedProject].
+@ProviderFor(getVettedProject)
+final getVettedProjectProvider =
+    AutoDisposeProvider<GetVettedProjectUseCase>.internal(
+  getVettedProject,
+  name: r'getVettedProjectProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getVettedProjectHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetVettedProjectRef = AutoDisposeProviderRef<GetVettedProjectUseCase>;
+String _$getVettedProjectsHash() => r'69fc9fc2808164019bbc294f5128432453e0f567';
+
+/// See also [getVettedProjects].
+@ProviderFor(getVettedProjects)
+final getVettedProjectsProvider =
+    AutoDisposeProvider<GetVettedProjectsUseCase>.internal(
+  getVettedProjects,
+  name: r'getVettedProjectsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getVettedProjectsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetVettedProjectsRef = AutoDisposeProviderRef<GetVettedProjectsUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

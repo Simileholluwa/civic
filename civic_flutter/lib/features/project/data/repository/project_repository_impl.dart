@@ -61,6 +61,26 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
+  Future<Either<Failure, ProjectVetList>> getVettedProjects({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatasource.getVettedProjects(
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, Project?>> saveProject({
     required Project project,
   }) async {
@@ -202,12 +222,10 @@ class ProjectRepositoryImpl extends ProjectRepository {
   @override
   Future<Either<Failure, void>> toggleBookmark({
     required int projectId,
-    
   }) async {
     try {
       final result = await _remoteDatasource.toggleBookmark(
         projectId: projectId,
-        
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -218,12 +236,14 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> undoRepost({required int projectId,}) async {
+  Future<Either<Failure, void>> undoRepost({
+    required int projectId,
+  }) async {
     try {
       final result = await _remoteDatasource.undoRepost(
-        projectId: projectId,      
+        projectId: projectId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -234,12 +254,14 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> markNotInterested({required int projectId,}) async {
+  Future<Either<Failure, void>> markNotInterested({
+    required int projectId,
+  }) async {
     try {
       final result = await _remoteDatasource.markNotInterested(
-        projectId: projectId,      
+        projectId: projectId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -250,12 +272,50 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> deleteProjectReview({required int id,}) async {
+  Future<Either<Failure, void>> deleteProjectReview({
+    required int id,
+  }) async {
     try {
       final result = await _remoteDatasource.deleteProjectReview(
-        id: id,      
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProjectVetting>> vetProject({
+    required ProjectVetting projectVetting,
+  }) async {
+    try {
+      final result = await _remoteDatasource.vetProject(
+        projectVetting: projectVetting,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProjectVetting>> getVettedProject({
+    required int projectId,
+  }) async {
+    try {
+      final result = await _remoteDatasource.getVettedProject(
+        projectId: projectId,
       );
       return Right(result);
     } on ServerException catch (e) {

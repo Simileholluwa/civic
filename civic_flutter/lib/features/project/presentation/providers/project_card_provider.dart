@@ -4,10 +4,13 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_card_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ProjectCardWidget extends _$ProjectCardWidget {
   @override
-  ProjectCardState build(Project project) {
+  ProjectCardState build(Project? project) {
+    if (project == null) {
+      return ProjectCardState.empty();
+    }
     return ProjectCardState.populate(
       project,
       ref,
@@ -16,19 +19,19 @@ class ProjectCardWidget extends _$ProjectCardWidget {
 
   void toggleFilter() {
     state = state.copyWith(
-      toggleFilter: !state.toggleFilter,
+      toggleFilter: !state.toggleFilter!,
     );
   }
 
   void toggleCanDelete() {
     state = state.copyWith(
-      canDelete: !state.canDelete,
+      canDelete: !state.canDelete!,
     );
   }
 
   void setIsFollower() {
     state = state.copyWith(
-      isFollower: !state.isFollower,
+      isFollower: !state.isFollower!,
     );
   }
 

@@ -30,7 +30,7 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
 
   Future<void> fetchPage(int projectId, int page, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 1000);
-    final completer = Completer<List<UserRecord>?>();
+    final completer = Completer<List<ProjectReview>?>();
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(debounceDuration, () async {
       final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);

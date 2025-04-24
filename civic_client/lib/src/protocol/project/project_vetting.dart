@@ -20,10 +20,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     this.project,
     required this.ownerId,
     this.owner,
-    required this.images,
+    this.images,
     this.comment,
     this.status,
     DateTime? createdAt,
+    this.updatedAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
   factory ProjectVetting({
@@ -32,10 +33,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     _i2.Project? project,
     required int ownerId,
     _i3.UserRecord? owner,
-    required List<String> images,
+    List<String>? images,
     String? comment,
     String? status,
     DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -51,14 +53,17 @@ abstract class ProjectVetting implements _i1.SerializableModel {
           ? null
           : _i3.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      images: (jsonSerialization['images'] as List)
-          .map((e) => e as String)
+      images: (jsonSerialization['images'] as List?)
+          ?.map((e) => e as String)
           .toList(),
       comment: jsonSerialization['comment'] as String?,
       status: jsonSerialization['status'] as String?,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      updatedAt: jsonSerialization['updatedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -75,13 +80,15 @@ abstract class ProjectVetting implements _i1.SerializableModel {
 
   _i3.UserRecord? owner;
 
-  List<String> images;
+  List<String>? images;
 
   String? comment;
 
   String? status;
 
   DateTime? createdAt;
+
+  DateTime? updatedAt;
 
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
@@ -96,6 +103,7 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     String? comment,
     String? status,
     DateTime? createdAt,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -105,10 +113,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       if (project != null) 'project': project?.toJson(),
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      'images': images.toJson(),
+      if (images != null) 'images': images?.toJson(),
       if (comment != null) 'comment': comment,
       if (status != null) 'status': status,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
     };
   }
 
@@ -127,10 +136,11 @@ class _ProjectVettingImpl extends ProjectVetting {
     _i2.Project? project,
     required int ownerId,
     _i3.UserRecord? owner,
-    required List<String> images,
+    List<String>? images,
     String? comment,
     String? status,
     DateTime? createdAt,
+    DateTime? updatedAt,
   }) : super._(
           id: id,
           projectId: projectId,
@@ -141,6 +151,7 @@ class _ProjectVettingImpl extends ProjectVetting {
           comment: comment,
           status: status,
           createdAt: createdAt,
+          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -153,10 +164,11 @@ class _ProjectVettingImpl extends ProjectVetting {
     Object? project = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    List<String>? images,
+    Object? images = _Undefined,
     Object? comment = _Undefined,
     Object? status = _Undefined,
     Object? createdAt = _Undefined,
+    Object? updatedAt = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -164,10 +176,13 @@ class _ProjectVettingImpl extends ProjectVetting {
       project: project is _i2.Project? ? project : this.project?.copyWith(),
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
-      images: images ?? this.images.map((e0) => e0).toList(),
+      images: images is List<String>?
+          ? images
+          : this.images?.map((e0) => e0).toList(),
       comment: comment is String? ? comment : this.comment,
       status: status is String? ? status : this.status,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
+      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
     );
   }
 }

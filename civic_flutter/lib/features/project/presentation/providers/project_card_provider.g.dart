@@ -6,7 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectCardWidgetHash() => r'a27e69e92a2ddd17427dbb8ce8fc08bce3055d63';
+String _$projectCardWidgetHash() => r'79c5ff3d5f5bfacd1b6825684a3f4c1f62efc5a8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$ProjectCardWidget
-    extends BuildlessAutoDisposeNotifier<ProjectCardState> {
-  late final Project project;
+abstract class _$ProjectCardWidget extends BuildlessNotifier<ProjectCardState> {
+  late final Project? project;
 
   ProjectCardState build(
-    Project project,
+    Project? project,
   );
 }
 
@@ -49,7 +48,7 @@ class ProjectCardWidgetFamily extends Family<ProjectCardState> {
 
   /// See also [ProjectCardWidget].
   ProjectCardWidgetProvider call(
-    Project project,
+    Project? project,
   ) {
     return ProjectCardWidgetProvider(
       project,
@@ -81,11 +80,11 @@ class ProjectCardWidgetFamily extends Family<ProjectCardState> {
 }
 
 /// See also [ProjectCardWidget].
-class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
-    ProjectCardWidget, ProjectCardState> {
+class ProjectCardWidgetProvider
+    extends NotifierProviderImpl<ProjectCardWidget, ProjectCardState> {
   /// See also [ProjectCardWidget].
   ProjectCardWidgetProvider(
-    Project project,
+    Project? project,
   ) : this._internal(
           () => ProjectCardWidget()..project = project,
           from: projectCardWidgetProvider,
@@ -110,7 +109,7 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
     required this.project,
   }) : super.internal();
 
-  final Project project;
+  final Project? project;
 
   @override
   ProjectCardState runNotifierBuild(
@@ -138,8 +137,7 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ProjectCardWidget, ProjectCardState>
-      createElement() {
+  NotifierProviderElement<ProjectCardWidget, ProjectCardState> createElement() {
     return _ProjectCardWidgetProviderElement(this);
   }
 
@@ -159,18 +157,18 @@ class ProjectCardWidgetProvider extends AutoDisposeNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectCardWidgetRef on AutoDisposeNotifierProviderRef<ProjectCardState> {
+mixin ProjectCardWidgetRef on NotifierProviderRef<ProjectCardState> {
   /// The parameter `project` of this provider.
-  Project get project;
+  Project? get project;
 }
 
 class _ProjectCardWidgetProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectCardWidget,
-        ProjectCardState> with ProjectCardWidgetRef {
+    extends NotifierProviderElement<ProjectCardWidget, ProjectCardState>
+    with ProjectCardWidgetRef {
   _ProjectCardWidgetProviderElement(super.provider);
 
   @override
-  Project get project => (origin as ProjectCardWidgetProvider).project;
+  Project? get project => (origin as ProjectCardWidgetProvider).project;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

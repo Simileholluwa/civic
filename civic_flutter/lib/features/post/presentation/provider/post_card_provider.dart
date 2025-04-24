@@ -11,7 +11,7 @@ class PostCardWidget extends _$PostCardWidget {
   @override
   PostCardState build(Post? post) {
     if (post == null) {
-      return PostCardState.initial();
+      return PostCardState.empty();
     }
     return PostCardState.populate(post, ref);
   }

@@ -19,7 +19,7 @@ class UserState {
     );
   }
 
-  factory UserState.initial(Ref ref) {
+  factory UserState.empty(Ref ref) {
     final userRecord = ref
         .read(
           localStorageProvider,

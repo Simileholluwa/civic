@@ -1,0 +1,8 @@
+class: ProjectVetList
+fields:
+    results: List<ProjectVetting>
+    count: int
+    page: int
+    numPages: int
+    limit: int
+    canLoadMore: bool

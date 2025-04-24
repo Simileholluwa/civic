@@ -15,7 +15,7 @@ part 'auth_provider.g.dart';
 class Auth extends _$Auth {
   @override
   AuthState build() {
-    return AuthState.initial();
+    return AuthState.empty();
   }
 
   void setEmail(String email) {

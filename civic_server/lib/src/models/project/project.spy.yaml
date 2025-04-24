@@ -26,6 +26,7 @@ fields:
     reviewedBy: List<int>?
     verifiedBy: List<int>?
     bookmarkedBy: List<int>?
+    vettedBy: List<int>?
     overallRating: double?
     overallLocationRating: double?
     overallDescriptionRating: double?

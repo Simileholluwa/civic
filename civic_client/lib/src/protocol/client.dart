@@ -26,10 +26,13 @@ import 'package:civic_client/src/protocol/project/project_review.dart' as _i14;
 import 'package:civic_client/src/protocol/project/project_list.dart' as _i15;
 import 'package:civic_client/src/protocol/project/project_review_list.dart'
     as _i16;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i17;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i18;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
-import 'protocol.dart' as _i20;
+import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i17;
+import 'package:civic_client/src/protocol/project/project_vet_list.dart'
+    as _i18;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i19;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i20;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i21;
+import 'protocol.dart' as _i22;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -425,11 +428,11 @@ class EndpointProject extends _i1.EndpointRef {
   @override
   String get name => 'project';
 
-  _i2.Future<_i13.Project?> getProject(int id) =>
+  _i2.Future<_i13.Project?> getProject(int projectId) =>
       caller.callServerEndpoint<_i13.Project?>(
         'project',
         'getProject',
-        {'id': id},
+        {'projectId': projectId},
       );
 
   _i2.Future<_i14.ProjectReview?> getProjectReview(int projectId) =>
@@ -525,10 +528,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> deleteProject(int id) => caller.callServerEndpoint<void>(
+  _i2.Future<void> deleteProject(int projectId) =>
+      caller.callServerEndpoint<void>(
         'project',
         'deleteProject',
-        {'id': id},
+        {'projectId': projectId},
       );
 
   _i2.Future<void> toggleBookmark(int projectId) =>
@@ -549,6 +553,34 @@ class EndpointProject extends _i1.EndpointRef {
         'project',
         'markNotInterested',
         {'projectId': projectId},
+      );
+
+  _i2.Future<_i17.ProjectVetting?> vetProject(
+          _i17.ProjectVetting projectVetting) =>
+      caller.callServerEndpoint<_i17.ProjectVetting?>(
+        'project',
+        'vetProject',
+        {'projectVetting': projectVetting},
+      );
+
+  _i2.Future<_i17.ProjectVetting?> getVettedProject(int projectId) =>
+      caller.callServerEndpoint<_i17.ProjectVetting?>(
+        'project',
+        'getVettedProject',
+        {'projectId': projectId},
+      );
+
+  _i2.Future<_i18.ProjectVetList> getVettedProjects({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i18.ProjectVetList>(
+        'project',
+        'getVettedProjects',
+        {
+          'limit': limit,
+          'page': page,
+        },
       );
 
   _i2.Future<_i10.UserRecord> authUser() =>
@@ -650,8 +682,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i17.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i17.UserNinRecord?>(
+  _i2.Future<_i19.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i19.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -693,12 +725,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i18.UsersList> getUsers({
+  _i2.Future<_i20.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i18.UsersList>(
+      caller.callServerEndpoint<_i20.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -731,10 +763,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i19.Caller(client);
+    auth = _i21.Caller(client);
   }
 
-  late final _i19.Caller auth;
+  late final _i21.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -753,7 +785,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i20.Protocol(),
+          _i22.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

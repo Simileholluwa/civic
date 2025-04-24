@@ -119,3 +119,24 @@ DeleteProjectReviewUseCase deleteProjectReview(Ref ref) {
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
+
+@riverpod
+VetProjectUseCase vetProject(Ref ref) {
+  return VetProjectUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetVettedProjectUseCase getVettedProject(Ref ref) {
+  return GetVettedProjectUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetVettedProjectsUseCase getVettedProjects(Ref ref) {
+  return GetVettedProjectsUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}

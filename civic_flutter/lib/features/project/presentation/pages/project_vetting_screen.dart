@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ProjectVerifyScreen extends ConsumerWidget {
-  const ProjectVerifyScreen({
+class ProjectVettingScreen extends ConsumerWidget {
+  const ProjectVettingScreen({
     super.key,
     required this.projectLocations,
     required this.projectId,

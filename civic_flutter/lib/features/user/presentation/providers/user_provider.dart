@@ -8,7 +8,7 @@ part 'user_provider.g.dart';
 class CurrentActiveUser extends _$CurrentActiveUser {
   @override
   UserState build() {
-    return UserState.initial(ref);
+    return UserState.empty(ref);
   }
 
   Future<bool> toggleFollow(int userId) async {

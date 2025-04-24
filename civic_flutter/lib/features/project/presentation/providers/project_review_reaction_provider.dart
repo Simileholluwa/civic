@@ -9,7 +9,7 @@ part 'project_review_reaction_provider.g.dart';
 class ReviewReaction extends _$ReviewReaction {
   @override
   ProjectReviewReactionState build(ProjectReview projectReview) {
-    return ProjectReviewReactionState.initial(projectReview, ref);
+    return ProjectReviewReactionState.empty(projectReview, ref);
   }
 
   Future<void> reactToReview(bool isLike) async {

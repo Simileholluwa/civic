@@ -151,7 +151,7 @@ class PostCardState {
     );
   }
 
-  factory PostCardState.initial() {
+  factory PostCardState.empty() {
     return PostCardState(
       timeAgo: '',
       numberOfReposts: '',

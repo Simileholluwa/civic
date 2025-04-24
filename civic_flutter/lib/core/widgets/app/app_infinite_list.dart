@@ -55,9 +55,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
           animateTransitions: true,
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
-            return firstPageProgressIndicator ?? AppLoadingWidget(
-              
-            );
+            return firstPageProgressIndicator ?? AppLoadingWidget();
           },
           noItemsFoundIndicatorBuilder: (context) {
             return 

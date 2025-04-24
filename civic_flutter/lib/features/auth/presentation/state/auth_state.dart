@@ -116,7 +116,7 @@ class AuthState {
     );
   }
 
-  factory AuthState.initial() {
+  factory AuthState.empty() {
     return AuthState(
       email: '',
       password: '',

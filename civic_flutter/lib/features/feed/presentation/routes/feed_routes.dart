@@ -33,6 +33,7 @@ class FeedRoutes {
               return ProjectDetailsScreen(
                 projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
                 tab: state.pathParameters['tab'],
+                project: state.extra as Project?,
               );
             },
             routes: [
@@ -47,7 +48,7 @@ class FeedRoutes {
               GoRoute(
                 path: 'verify',
                 builder: (_, state) {
-                  return ProjectVerifyScreen(
+                  return ProjectVettingScreen(
                     projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
                     projectLocations: state.extra as List<AWSPlaces>,
                   );
