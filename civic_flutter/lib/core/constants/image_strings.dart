@@ -17,7 +17,8 @@ class TImageTexts {
   static const onBoardingImage5 = '$_baseImage/accountable.png';
   static const onBoardingImage9 = '$_baseImage/verify_projects.png';
   static const verifyProjects = '$_baseImage/verify_projects.png';
-  static const checkList = '$_baseImage/checklist.png';
+  static const disconnected = '$_baseImage/disconnected.png';
+  static const error = '$_baseImage/404.png';
 
   // Logo files
   static const appLogo = '$_baseLogo/logo.png';

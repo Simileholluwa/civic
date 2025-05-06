@@ -33,7 +33,7 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     context.push(
-                      '/feed/${project.id!}/details/verify',
+                      '/feed/${project.id!}/details/vet',
                       extra: project.physicalLocations,
                     );
                   },

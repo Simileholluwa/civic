@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -10,12 +9,12 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
   const CreateProjectReviewBottomNavBar({
     super.key,
     required this.projectId,
-    required this.projectReview,
+    this.projectReview,
     required this.fromDetails,
   });
 
   final int projectId;
-  final ProjectReview projectReview;
+  final ProjectReview? projectReview;
   final bool fromDetails;
 
   @override
@@ -54,11 +53,10 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
                   child: ElevatedButton(
                     onPressed: projectReviewState.isValid
                         ? () async {
-                            log(projectReviewState.locationRating.toString());
                             final result =
                                 await projectReviewNotifier.sendReview(
                               projectId,
-                              projectReview.id,
+                              projectReview?.id,
                               fromDetails,
                             );
                             if (result) {

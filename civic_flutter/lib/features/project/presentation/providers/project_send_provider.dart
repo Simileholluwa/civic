@@ -145,10 +145,6 @@ class SendProject extends _$SendProject {
       return;
     }, (response) {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
-      if (response == null) {
-        //TODO: save failed project to draft
-        return null;
-      }
       TToastMessages.successToast(
         'Your project was sent.',
       );

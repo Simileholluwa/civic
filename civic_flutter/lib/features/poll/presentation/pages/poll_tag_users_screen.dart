@@ -132,8 +132,6 @@ class PollTagUsersScreen extends ConsumerWidget {
           pagingController: pagingController.pagingController,
           itemBuilder: (context, user, index) {
             final isSelected = pollState.taggedUsers.contains(user);
-            final itemLength =
-                pagingController.pagingController.itemList!.length;
             return Column(
               children: [
                 Container(
@@ -157,10 +155,6 @@ class PollTagUsersScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-                if (index != itemLength - 1)
-                  const Divider(
-                    height: 0,
-                  ),
               ],
             );
           },

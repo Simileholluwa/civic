@@ -30,9 +30,7 @@ class ArticleBanner extends ConsumerWidget {
           height: 200,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+            color: Theme.of(context).cardColor,
             image: articleWriter.banner.isNotEmpty
                 ? DecorationImage(
                     image: isUrlImage

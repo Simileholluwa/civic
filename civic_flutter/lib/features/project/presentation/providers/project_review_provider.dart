@@ -14,7 +14,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
       return ProjectReviewState.empty();
     } else {
       return ProjectReviewState.populate(
-        projectReview,
+        projectReview, ref
       );
     }
   }
@@ -130,13 +130,6 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
         return false;
       },
       (success) async {
-
-        if (success == null) {
-          TToastMessages.errorToast(
-            'Your review was not submitted successfully',
-          );
-          return false;
-        }
         TToastMessages.successToast(
             'Your review has been submitted successfully',
           );

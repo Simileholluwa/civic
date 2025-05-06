@@ -26,11 +26,11 @@ abstract class ProjectRepository {
     required bool isLike,
   });
 
-  Future<Either<String, Project?>> getProject({
+  Future<Either<String, Project>> getProject({
     required int id,
   });
 
-  Future<Either<Failure, Project?>> saveProject({
+  Future<Either<Failure, Project>> saveProject({
     required Project project,
   });
 
@@ -42,7 +42,7 @@ abstract class ProjectRepository {
     required int id,
   });
 
-  Future<Either<Failure, ProjectReview?>> saveProjectReview({
+  Future<Either<Failure, ProjectReview>> saveProjectReview({
     required ProjectReview projectReview,
   });
 
@@ -69,7 +69,7 @@ abstract class ProjectRepository {
     required int projectId,   
   });
 
-  Future<Either<Failure, ProjectVetting>> getVettedProject({
+  Future<Either<Failure, ProjectVetting?>> getVettedProject({
     required int projectId,   
   });
 

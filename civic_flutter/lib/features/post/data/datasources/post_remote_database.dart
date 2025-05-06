@@ -84,8 +84,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -114,8 +112,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         page: page,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -140,8 +136,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         id,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {

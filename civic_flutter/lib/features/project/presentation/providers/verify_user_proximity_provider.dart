@@ -1,18 +1,70 @@
+import 'dart:async';
+
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'verify_user_proximity_provider.g.dart';
 
 @riverpod
-Future<Map<String, dynamic>> verifyUserProximity(
-  Ref ref, {
-  double maxDistance = 1000,
+Future<double> verifyUserProximity(
+  Ref ref,
+  List<AWSPlaces>? projectLocations,
+  int? projectId,
+) async {
+  final completer = Completer<double>();
+  if (projectLocations == null) {
+    final retrieveProject = ref.read(getProjectProvider);
+    final result = await retrieveProject(
+      GetProjectParams(
+        projectId!,
+      ),
+    );
+
+    result.fold(
+      (error) {
+        completer.completeError(error);
+      },
+      (project) async {
+        final userId = ref.read(localStorageProvider).getInt('userId');
+        if (project.isDeleted! && project.ownerId == userId) {
+          completer.completeError(
+            'You have deleted this project. Try restoring the project to allow vettings by your constituents.',
+          );
+        } else if (project.ownerId == userId) {
+          completer.completeError(
+            'Project owners can not vet their own projects.',
+          );
+        } else if (!project.endDate!.isBefore(DateTime.now())) {
+          completer.completeError(
+            'This project has not ended. Vettings can not be submitted at this time.',
+          );
+        } else if (project.isDeleted!) {
+          completer.completeError(
+            'This project has been deleted by its owner. Vettings can no longer be submitted.',
+          );
+        } else {
+          final result = await verifyProximity(
+            projectLocations: project.physicalLocations!,
+          );
+          completer.complete(result);
+        }
+      },
+    );
+  } else {
+    final result = await verifyProximity(
+      projectLocations: projectLocations,
+    );
+    completer.complete(result);
+  }
+
+  return completer.future;
+}
+
+Future<double> verifyProximity({
   required List<AWSPlaces> projectLocations,
 }) async {
-  if (projectLocations.isEmpty) {
-    return {};
-  }
   final userPosition = await ProjectHelperFunctions.getDevicePosition();
   for (final location in projectLocations) {
     final distance = ProjectHelperFunctions.calculateDistance(
@@ -21,18 +73,7 @@ Future<Map<String, dynamic>> verifyUserProximity(
       location.latitude,
       location.longitude,
     );
-    if (distance <= maxDistance) {
-      return {
-        'canVet': true,
-        'distance': distance,
-      };
-    } else {
-      return {
-        'canVet': false,
-        'distance': (distance / 1000).toStringAsFixed(2),
-      };
-    }
-    
+    return distance / 1000;
   }
-  return {};
+  return 0.0;
 }

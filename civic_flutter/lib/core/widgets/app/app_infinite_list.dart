@@ -15,6 +15,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     this.scrollPhysics,
     this.shrinkWrap,
     this.showDivider = true,
+    this.showRefresh = true,
     this.firstPageProgressIndicator,
   });
 
@@ -25,6 +26,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     int index,
   ) itemBuilder;
   final Function() onRefresh;
+  final bool showRefresh;
   final Widget? noItemsFound;
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
@@ -45,7 +47,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
         separatorBuilder: (context, index) {
           if (index != pagingController.itemList!.length - 1) {
             return showDivider ? const Divider(
-              height: 0,
+                    height: 0,
             ) : const SizedBox();
           }
           return const SizedBox();
@@ -57,13 +59,25 @@ class AppInfiniteList<T> extends ConsumerWidget {
           firstPageProgressIndicatorBuilder: (context) {
             return firstPageProgressIndicator ?? AppLoadingWidget();
           },
+          firstPageErrorIndicatorBuilder: (context) {
+            return InfiniteListLoadingError(
+              retry: () => Future.sync(
+                () => onRefresh(),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              showRefresh: showRefresh,
+            );
+          },
           noItemsFoundIndicatorBuilder: (context) {
-            return 
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: noItemsFound ?? Column(
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: noItemsFound ??
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
@@ -77,7 +91,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
                       ),
                     ],
                   ),
-                );
+            );
           },
           noMoreItemsIndicatorBuilder: (context) {
             return Padding(
@@ -98,7 +112,10 @@ class AppInfiniteList<T> extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       'END',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .copyWith(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),

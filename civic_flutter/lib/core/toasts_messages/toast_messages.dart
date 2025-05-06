@@ -7,6 +7,7 @@ class TToastMessages {
 
   static ToastificationItem errorToast(
     String message,
+    {int closeDuration = 5,}
   ) {
     return toastification.show(
       description: Text(
@@ -16,8 +17,8 @@ class TToastMessages {
           fontWeight: FontWeight.normal,
         ),
       ),
-      autoCloseDuration: const Duration(
-        seconds: 5,
+      autoCloseDuration: Duration(
+        seconds: closeDuration,
       ),
       margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.error,
@@ -31,6 +32,7 @@ class TToastMessages {
 
   static ToastificationItem infoToast(
     String message,
+    {int closeDuration = 5,}
   ) {
     return toastification.show(
       description: Text(
@@ -40,8 +42,8 @@ class TToastMessages {
           fontWeight: FontWeight.normal,
         ),
       ),
-      autoCloseDuration: const Duration(
-        seconds: 5,
+      autoCloseDuration: Duration(
+        seconds: closeDuration,
       ),
       margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.info,
@@ -55,6 +57,7 @@ class TToastMessages {
 
   static ToastificationItem successToast(
     String message,
+    {int closeDuration = 5,}
   ) {
     return toastification.show(
       description: Text(
@@ -64,8 +67,8 @@ class TToastMessages {
           fontWeight: FontWeight.normal,
         ),
       ),
-      autoCloseDuration: const Duration(
-        seconds: 5,
+      autoCloseDuration: Duration(
+        seconds: closeDuration,
       ),
       margin: const EdgeInsets.only(left: TSizes.md, right: TSizes.md, bottom: TSizes.md,),
       type: ToastificationType.info,
@@ -79,6 +82,7 @@ class TToastMessages {
 
   static ToastificationItem warningToast(
     String message,
+    {int closeDuration = 5,}
   ) {
     return toastification.show(
       description: Text(
@@ -93,8 +97,8 @@ class TToastMessages {
       style: ToastificationStyle.fillColored,
       alignment: Alignment.bottomCenter,
       borderSide: BorderSide.none,
-      autoCloseDuration: const Duration(
-        seconds: 5,
+      autoCloseDuration: Duration(
+        seconds: closeDuration,
       ),
     );
   }

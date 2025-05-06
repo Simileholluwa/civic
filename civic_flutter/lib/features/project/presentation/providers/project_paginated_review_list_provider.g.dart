@@ -7,7 +7,7 @@ part of 'project_paginated_review_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedProjectReviewListHash() =>
-    r'394d6686bce4c43135912145ecd9a59b67fd85a3';
+    r'67219f36ddee80b4614b83f79d46d2b503e82790';
 
 /// Copied from Dart SDK
 class _SystemHash {

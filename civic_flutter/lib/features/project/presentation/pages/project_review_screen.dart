@@ -20,9 +20,6 @@ class ProjectReviewScreen extends ConsumerWidget {
         projectId,
       ),
     );
-    final projectReviewState = ref.watch(
-      projectReviewProviderProvider(data.value),
-    );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
@@ -57,18 +54,26 @@ class ProjectReviewScreen extends ConsumerWidget {
       ),
       body: data.when(
         data: (review) {
+          final projectReviewState = ref.watch(
+            projectReviewProviderProvider(review),
+          );
           if (projectReviewState.isEditing) {
             return ModifyProjectReview();
           } else {
             return CreateProjectReview(
-              projectReview: review!,
+              projectReview: review,
             );
           }
         },
         error: (error, st) {
-          return Center(
-            child: Text(
-              error.toString(),
+          return InfiniteListLoadingError(
+            retry: () {
+              ref.invalidate(projectReviewDetailProvider);
+            },
+            errorMessage: error.toString(),
+            mainAxisAlignment: MainAxisAlignment.center,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
             ),
           );
         },
@@ -78,21 +83,40 @@ class ProjectReviewScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (review) {
-          if (projectReviewState.isEditing && review != null) {
+          final projectReviewState = ref.watch(
+            projectReviewProviderProvider(review),
+          );
+          if (projectReviewState.isEditing) {
             return ModifyProjectReviewBottomNavBar(
               projectId: projectId,
-              projectReview: review,
+              projectReview: review!,
             );
           } else {
             return CreateProjectReviewBottomNavBar(
-              projectReview: review!,
+              projectReview: review,
               projectId: projectId,
               fromDetails: fromDetails,
             );
           }
         },
         error: (error, st) {
-          return const SizedBox.shrink();
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            child: SizedBox(
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(projectReviewDetailProvider);
+                },
+                child: Text(
+                  'Refresh',
+                ),
+              ),
+            ),
+          );
         },
         loading: () {
           return const SizedBox.shrink();

@@ -44,6 +44,9 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       log(error.message);
       return;
     }, (_) async {
+      state = state.copyWith(
+        hasLiked: !state.hasLiked!,
+      );
       return;
     });
   }

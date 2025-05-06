@@ -20,7 +20,6 @@ class ProjectFilterOverlay extends ConsumerWidget {
       left: 0,
       right: 0,
       child: Stack(
-        alignment: Alignment.bottomCenter,
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 500),

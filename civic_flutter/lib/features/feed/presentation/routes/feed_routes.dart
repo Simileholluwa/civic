@@ -46,11 +46,11 @@ class FeedRoutes {
                 },
               ),
               GoRoute(
-                path: 'verify',
+                path: 'vet',
                 builder: (_, state) {
                   return ProjectVettingScreen(
                     projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
-                    projectLocations: state.extra as List<AWSPlaces>,
+                    projectLocations: state.extra as List<AWSPlaces>?,
                   );
                 },
               ),

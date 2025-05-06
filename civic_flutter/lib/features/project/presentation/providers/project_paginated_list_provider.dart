@@ -20,28 +20,45 @@ class PaginatedProjectList extends _$PaginatedProjectList {
 
     pagingController.addStatusListener((status) {
       state = status;
+      log(state.toString(), name: 'PaginatedProjectList');
     });
-    return PagingStatus.loadingFirstPage;
+    return pagingController.value.status;
   }
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
-    final listProjectUseCase = ref.read(getProjectsProvider);
-    final result = await listProjectUseCase(
-      GetProjectsParams(
-        page,
-        limit,
-      ),
-    );
-    result.fold((error) => log(error.message), (data) {
-      if (data.canLoadMore) {
-        pagingController.appendPage(
-          data.results,
-          data.page + 1,
+    try {
+      final listProjectUseCase = ref.read(getProjectsProvider);
+      final result = await listProjectUseCase(
+        GetProjectsParams(
+          page,
+          limit,
+        ),
+      );
+      result.fold((error) {
+        log(error.toString(), name: 'PaginatedProjectList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: error,
         );
-      } else {
-        pagingController.appendLastPage(data.results);
-      }
-    });
+      }, (data) {
+        if (data.canLoadMore) {
+          pagingController.appendPage(
+            data.results,
+            data.page + 1,
+          );
+        } else {
+          pagingController.appendLastPage(data.results);
+        }
+      });
+    } catch (e) {
+      log(e.toString(), name: 'PaginatedProjectList');
+      pagingController.value = PagingState(
+        nextPageKey: null,
+        itemList: null,
+        error: e.toString(),
+      );
+    }
   }
 
   void refresh() {

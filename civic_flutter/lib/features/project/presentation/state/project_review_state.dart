@@ -1,6 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewState {
   final String review;
@@ -15,6 +16,8 @@ class ProjectReviewState {
   final bool isLoading;
   final bool isDeleting;
   final bool isEditing;
+  final bool isDeletedProject;
+  final bool isProjectOwner;
   final TextEditingController reviewController;
 
   ProjectReviewState({
@@ -30,6 +33,8 @@ class ProjectReviewState {
     this.isLoading = false,
     this.isEditing = false,
     this.isDeleting = false,
+    this.isDeletedProject = false,
+    this.isProjectOwner = false,
     required this.reviewController,
   });
 
@@ -79,7 +84,8 @@ class ProjectReviewState {
     );
   }
 
-  factory ProjectReviewState.populate(ProjectReview projectReview) {
+  factory ProjectReviewState.populate(ProjectReview projectReview, Ref ref) {
+    final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectReviewState(
       review: projectReview.review!,
       locationRating: projectReview.locationRating!,
@@ -90,7 +96,10 @@ class ProjectReviewState {
       datesRating: projectReview.datesRating!,
       overallRating: projectReview.overallRating!,
       isValid: false,
-      isEditing: true,
+      isEditing: !projectReview.project!.isDeleted! &&
+          !(projectReview.project!.ownerId == userId),
+      isDeletedProject: projectReview.project!.isDeleted!,
+      isProjectOwner: projectReview.project!.ownerId == userId,
       reviewController: TextEditingController(text: projectReview.review),
     );
   }

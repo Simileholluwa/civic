@@ -33,8 +33,6 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {
@@ -56,8 +54,6 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
         );
       }
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {
@@ -74,8 +70,6 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
         limit: limit,
         page: page,
       );
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {
@@ -109,8 +103,6 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {

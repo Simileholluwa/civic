@@ -1,5 +1,6 @@
 
 import 'package:civic_client/civic_client.dart';
+import 'package:flutter/material.dart';
 
 class VetProjectState {
   final bool isSending;
@@ -7,7 +8,8 @@ class VetProjectState {
   final bool isDeleting;
   final String comment;
   final List<String> images;
-  final String status;
+  final String? status;
+  final TextEditingController commentController;
   VetProjectState({
     this.isSending = false,
    this.isEditing = false,
@@ -15,6 +17,7 @@ class VetProjectState {
    required this.comment,
    required this.images,
    required this.status,
+   required this.commentController,
   });
 
   VetProjectState copyWith({
@@ -24,6 +27,7 @@ class VetProjectState {
     String? comment,
     List<String>? images,
     String? status,
+    TextEditingController? commentController,
   }) {
     return VetProjectState(
       isSending: isSending ?? this.isSending,
@@ -32,6 +36,7 @@ class VetProjectState {
       comment: comment ?? this.comment,
       images: images ?? this.images,
       status: status ?? this.status,
+      commentController: commentController ?? this.commentController,
     );
   }
 
@@ -41,6 +46,7 @@ class VetProjectState {
       images: projectVetting.images ?? <String>[],
       status: projectVetting.status ?? '',
       isEditing: true,
+      commentController: TextEditingController(text: projectVetting.comment),
     );
   }
 
@@ -48,7 +54,8 @@ class VetProjectState {
     return VetProjectState(
       comment: '',
       images: <String>[],
-      status: '',
+      status: null,
+      commentController: TextEditingController(),
     );
   }
 }

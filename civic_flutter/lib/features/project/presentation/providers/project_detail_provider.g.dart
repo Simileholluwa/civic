@@ -6,7 +6,7 @@ part of 'project_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectDetailHash() => r'623b35424b7ef645d89b0615947947ae9c8e0f5c';
+String _$projectDetailHash() => r'f7e0a1cadd5e536d3d2f42563d4ada5dd95fc94a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const projectDetailProvider = ProjectDetailFamily();
 
 /// See also [projectDetail].
-class ProjectDetailFamily extends Family<AsyncValue<Project?>> {
+class ProjectDetailFamily extends Family<AsyncValue<Project>> {
   /// See also [projectDetail].
   const ProjectDetailFamily();
 
@@ -72,7 +72,7 @@ class ProjectDetailFamily extends Family<AsyncValue<Project?>> {
 }
 
 /// See also [projectDetail].
-class ProjectDetailProvider extends AutoDisposeFutureProvider<Project?> {
+class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
   /// See also [projectDetail].
   ProjectDetailProvider(
     int id,
@@ -107,7 +107,7 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project?> {
 
   @override
   Override overrideWith(
-    FutureOr<Project?> Function(ProjectDetailRef provider) create,
+    FutureOr<Project> Function(ProjectDetailRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,7 +124,7 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Project?> createElement() {
+  AutoDisposeFutureProviderElement<Project> createElement() {
     return _ProjectDetailProviderElement(this);
   }
 
@@ -144,13 +144,13 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project?> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProjectDetailRef on AutoDisposeFutureProviderRef<Project?> {
+mixin ProjectDetailRef on AutoDisposeFutureProviderRef<Project> {
   /// The parameter `id` of this provider.
   int get id;
 }
 
 class _ProjectDetailProviderElement
-    extends AutoDisposeFutureProviderElement<Project?> with ProjectDetailRef {
+    extends AutoDisposeFutureProviderElement<Project> with ProjectDetailRef {
   _ProjectDetailProviderElement(super.provider);
 
   @override

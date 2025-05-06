@@ -3,13 +3,13 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
-class SaveProjectUseCase implements UseCase<Project?, SaveProjectParams> {
+class SaveProjectUseCase implements UseCase<Project, SaveProjectParams> {
   SaveProjectUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
   final ProjectRepository _projectRepository;
 
   @override
-  Future<Either<Failure, Project?>> call(SaveProjectParams params) async {
+  Future<Either<Failure, Project>> call(SaveProjectParams params) async {
     final result = await _projectRepository.saveProject(
       project: params.project,
     );

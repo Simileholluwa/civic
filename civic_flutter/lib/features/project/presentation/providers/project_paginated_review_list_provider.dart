@@ -33,21 +33,21 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
     final completer = Completer<List<ProjectReview>?>();
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(debounceDuration, () async {
-      final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);
+        final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);
       final projectReviewStateQuery = ref.watch(projectReviewListQueryProvider);
-      final result = await listReviewProjectUseCase(
-        GetProjectReviewsParams(
-          projectId,
-          page,
-          limit,
-          projectReviewStateQuery.rating,
-          projectReviewStateQuery.cardinal,
-        ),
-      );
-      result.fold((error) {
-        log(error.message);
+        final result = await listReviewProjectUseCase(
+          GetProjectReviewsParams(
+            projectId,
+            page,
+            limit,
+            projectReviewStateQuery.rating,
+            projectReviewStateQuery.cardinal,
+          ),
+        );
+        result.fold((error) {
+          log(error.message, name: 'Project Paginated Review list');
         completer.completeError(error);
-      }, (data) {
+        }, (data) {
         if (data.canLoadMore) {
           pagingController.appendPage(
             data.results, 
@@ -56,8 +56,7 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
         } else {
           pagingController.appendLastPage(data.results);
         }
-        completer.complete();
-        return;
+        return completer.complete();
       });
     });
   }

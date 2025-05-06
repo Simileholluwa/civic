@@ -14,9 +14,9 @@ abstract class ProjectRemoteDataSource {
     required int page,
   });
 
-  Future<Project?> getProject({required int id});
+  Future<Project> getProject({required int id});
 
-  Future<Project?> saveProject({required Project project});
+  Future<Project> saveProject({required Project project});
 
   Future<ProjectReviewList> getProjectReviews({
     required int projectId,
@@ -35,7 +35,7 @@ abstract class ProjectRemoteDataSource {
     required bool isLike,
   });
 
-  Future<ProjectReview?> saveProjectReview({
+  Future<ProjectReview> saveProjectReview({
     required ProjectReview projectReview,
   });
 
@@ -62,7 +62,7 @@ abstract class ProjectRemoteDataSource {
     required int projectId,
   });
 
-  Future<ProjectVetting> getVettedProject({
+  Future<ProjectVetting?> getVettedProject({
     required int projectId,
   });
 
@@ -86,8 +86,6 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } catch (e) {
@@ -98,18 +96,16 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<Project?> getProject({required int id}) async {
+  Future<Project> getProject({required int id}) async {
     try {
       final result = await _client.project.getProject(
         id,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -128,12 +124,12 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         page: page,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -152,12 +148,10 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         page: page,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -166,26 +160,18 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<Project?> saveProject({required Project project}) async {
+  Future<Project> saveProject({required Project project}) async {
     try {
       final result = await _client.project.saveProject(
         project,
       );
-
-      if (result == null) {
-        return null;
-      }
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -220,6 +206,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       );
     } on UserException catch (e) {
       throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -234,12 +222,10 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         id,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -264,12 +250,12 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         cardinal: cardinal,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -278,34 +264,20 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectReview?> saveProjectReview({
+  Future<ProjectReview> saveProjectReview({
     required ProjectReview projectReview,
   }) async {
     try {
-      final result = await _client.project
-          .saveProjectReview(
-            projectReview,
-          )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
-
-      if (result == null) {
-        return null;
-      }
+      final result = await _client.project.saveProjectReview(
+        projectReview,
+      );
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -319,31 +291,17 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required bool isLike,
   }) async {
     try {
-      final result = await _client.project
-          .reactToReview(
-            reviewId,
-            isLike,
-          )
-          .timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
-
-      if (result == null) {
-        throw const ServerException(message: 'Failed to react to review');
-      }
+      final result = await _client.project.reactToReview(
+        reviewId,
+        isLike,
+      );
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -410,70 +368,55 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       );
     }
   }
-  
+
   @override
   Future<void> deleteProjectReview({required int id}) async {
     try {
-      final result = await _client.project.deleteProjectReview(
+      await _client.project.deleteProjectReview(
         id,
       );
-      if (result) {
-        return;
-      } else {
-        throw const ServerException(message: 'Failed to delete project review');
-      }
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
       );
     }
   }
-  
+
   @override
-  Future<ProjectVetting> vetProject({required ProjectVetting projectVetting}) async {
+  Future<ProjectVetting> vetProject({
+    required ProjectVetting projectVetting,
+  }) async {
     try {
       final result = await _client.project.vetProject(
         projectVetting,
       );
-      if (result == null) {
-        throw const ServerException(message: 'Failed to vet project');
-      }
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
       );
     }
   }
-  
+
   @override
-  Future<ProjectVetting> getVettedProject({required int projectId}) async {
+  Future<ProjectVetting?> getVettedProject({required int projectId}) async {
     try {
       final result = await _client.project.getVettedProject(
         projectId,
       );
-      if (result == null) {
-        throw const ServerException(message: 'Failed to vet project');
-      }
       return result;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
       throw ServerException(message: e.message);
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),

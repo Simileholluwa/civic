@@ -40,7 +40,7 @@ GoRouter router(Ref ref) {
               return AppRoutes.auth;
             } else {
               FlutterNativeSplash.remove();
-              return FeedRoutes.namespace;
+              return '/feed/4/details/vet';
             }
           }
         },

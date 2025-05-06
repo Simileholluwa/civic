@@ -7,7 +7,7 @@ part of 'vet_project_detail_provider.dart';
 // **************************************************************************
 
 String _$getVettedProjectDetailHash() =>
-    r'1ac52a0e00f1996d5d247aec9c104396b0b9a24b';
+    r'f5a894dd861bfae370e124a668594f2ef62dab4e';
 
 /// Copied from Dart SDK
 class _SystemHash {

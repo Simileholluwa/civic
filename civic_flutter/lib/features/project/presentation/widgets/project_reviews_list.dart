@@ -36,7 +36,9 @@ class ProjectReviewsList extends ConsumerWidget {
                 project: project,
               );
             }, error: (_, __) {
-              return const SizedBox();
+              return ProjectRatingSummary(
+                project: project,
+              );
             }, loading: () {
               return const SizedBox();
             }),
@@ -56,7 +58,9 @@ class ProjectReviewsList extends ConsumerWidget {
                   projectReview: projectReview,
                 );
               }, error: (_, __) {
-                return const SizedBox();
+                return ProjectReviewCard(
+                  projectReview: review,
+                );
               }, loading: () {
                 return const SizedBox();
               });

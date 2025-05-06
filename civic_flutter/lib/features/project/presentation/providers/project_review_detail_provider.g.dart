@@ -7,7 +7,7 @@ part of 'project_review_detail_provider.dart';
 // **************************************************************************
 
 String _$projectReviewDetailHash() =>
-    r'1482d63891dcac1d5e73208a63c08fecfaac6859';
+    r'42e05abfcd82d9154a2920dc0f1114f332654d0d';
 
 /// Copied from Dart SDK
 class _SystemHash {

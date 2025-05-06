@@ -22,23 +22,25 @@ class ProjectDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = project == null
         ? ref.watch(projectDetailProvider(projectId))
-        : AsyncValue.data(project);
+        : AsyncValue.data(
+            project,
+          );
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
-        data.value,
+        data.hasValue ? data.value : null,
       ),
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider(tab));
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
-        data.value,
+        data.hasValue ? data.value : null,
       ).notifier,
     );
     return Scaffold(
       appBar: ContentAppBar(
         title: const SizedBox(),
         isVisible: true,
-        actions: data.value == null
+        actions: data.hasValue ? data.value == null
             ? []
             : [
                 IconButton(
@@ -122,7 +124,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 const SizedBox(
                   width: 5,
                 ),
-              ],
+              ] : [],
         bottomHeight: 54,
         height: 45,
         bottom: PreferredSize(
@@ -143,23 +145,20 @@ class ProjectDetailsScreen extends ConsumerWidget {
           onPressed: context.pop,
         ),
       ),
-      bottomNavigationBar: projectCardState.isDeleted! ||
-              projectCardState.isOwner! ||
-              data.value == null
+      bottomNavigationBar: data.hasValue ? data.value == null
           ? null
-          : ProjectDetailsBottomNavigationWidget(
-              project: data.value!,
-            ),
+          : projectCardState.isDeleted! || projectCardState.isOwner!
+              ? null
+              : ProjectDetailsBottomNavigationWidget(
+                  project: data.value!,
+                ) : null,
       body: data.when(
         data: (project) {
-          if (project == null) {
-            return ProjectLoadingError();
-          }
           return TabBarView(
             controller: tabController,
             children: [
               ProjectDetailsWidget(
-                project: project,
+                project: project!,
               ),
               ProjectOverviewWidget(
                 project: project,
@@ -175,7 +174,21 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
         error: (error, st) {
-          return ProjectLoadingError();
+          return Center(
+            child: InfiniteListLoadingError(
+              retry: () {
+                ref.invalidate(
+                  projectDetailProvider,
+                );
+              },
+              showRefresh: true,
+              errorMessage: error.toString(),
+              mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+            ),
+          );
         },
         loading: () {
           return AppLoadingWidget();

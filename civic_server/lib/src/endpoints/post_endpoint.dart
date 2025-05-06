@@ -66,11 +66,6 @@ class PostEndpoint extends Endpoint {
               session,
               projectId,
             );
-            if (project == null) {
-              throw PostException(
-                message: 'Project not found',
-              );
-            }
             await ProjectRepost.db.insertRow(
               session,
               ProjectRepost(

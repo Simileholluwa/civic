@@ -45,8 +45,6 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
         pollId, option,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -80,8 +78,6 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
       }
 
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -113,8 +109,6 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
         );
       }
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -140,8 +134,6 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
         scheduledDatetime,
       );
       
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
@@ -170,8 +162,6 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
         page: page,
       );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {

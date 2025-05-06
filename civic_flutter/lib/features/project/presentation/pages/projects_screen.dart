@@ -14,14 +14,14 @@ class ProjectsScreen extends ConsumerWidget {
     final pagingControllerNotifier =
         ref.watch(paginatedProjectListProvider.notifier);
     return AppInfiniteList<Project>(
-      pagingController: pagingControllerNotifier.pagingController,
-      scrollController: ref.read(projectScrollControllerProvider),
-      itemBuilder: (__, project, _) {
-        return ProjectCard(
-          project: project,
+          pagingController: pagingControllerNotifier.pagingController,
+          scrollController: ref.read(projectScrollControllerProvider),
+          itemBuilder: (__, project, _) {
+            return ProjectCard(
+              project: project,
+            );
+          },
+          onRefresh: pagingControllerNotifier.refresh,
         );
-      },
-      onRefresh: pagingControllerNotifier.refresh,
-    );
   }
 }

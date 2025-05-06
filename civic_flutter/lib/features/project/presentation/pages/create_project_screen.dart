@@ -18,9 +18,16 @@ class CreateProjectScreen extends ConsumerWidget {
         id,
       ),
     );
-    final projectCreationState = ref.watch(projectProviderProvider(data.value));
-    final projectNotifier =
-        ref.watch(projectProviderProvider(data.value).notifier);
+    final projectCreationState = ref.watch(
+      projectProviderProvider(
+        data.value,
+      ),
+    );
+    final projectNotifier = ref.watch(
+      projectProviderProvider(
+        data.value,
+      ).notifier,
+    );
     final isVisibleNotifier = ref.watch(
       appScrollVisibilityProvider(
         true,
@@ -60,23 +67,22 @@ class CreateProjectScreen extends ConsumerWidget {
           ),
           body: data.when(
             data: (project) {
-              if (project == null) {
-                return const Center(
-                  child: Text(
-                    'Project not found',
-                  ),
-                );
-              }
               return CreateProjectWidget(
                 project: project,
               );
             },
             error: (error, st) {
-              return Center(
-                child: Text(
-                  error.toString(),
-                ),
-              );
+              return InfiniteListLoadingError(
+                  retry: () {
+                    ref.invalidate(projectDetailProvider);
+                  },
+                  imageString: TImageTexts.error,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  errorMessage: error.toString(),
+                );
             },
             loading: () {
               return AppLoadingWidget();

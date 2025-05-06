@@ -428,8 +428,8 @@ class EndpointProject extends _i1.EndpointRef {
   @override
   String get name => 'project';
 
-  _i2.Future<_i13.Project?> getProject(int projectId) =>
-      caller.callServerEndpoint<_i13.Project?>(
+  _i2.Future<_i13.Project> getProject(int projectId) =>
+      caller.callServerEndpoint<_i13.Project>(
         'project',
         'getProject',
         {'projectId': projectId},
@@ -442,23 +442,23 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
-  _i2.Future<_i13.Project?> saveProject(_i13.Project project) =>
-      caller.callServerEndpoint<_i13.Project?>(
+  _i2.Future<_i13.Project> saveProject(_i13.Project project) =>
+      caller.callServerEndpoint<_i13.Project>(
         'project',
         'saveProject',
         {'project': project},
       );
 
-  _i2.Future<_i14.ProjectReview?> saveProjectReview(
+  _i2.Future<_i14.ProjectReview> saveProjectReview(
           _i14.ProjectReview projectReview) =>
-      caller.callServerEndpoint<_i14.ProjectReview?>(
+      caller.callServerEndpoint<_i14.ProjectReview>(
         'project',
         'saveProjectReview',
         {'projectReview': projectReview},
       );
 
-  _i2.Future<bool> deleteProjectReview(int reviewId) =>
-      caller.callServerEndpoint<bool>(
+  _i2.Future<void> deleteProjectReview(int reviewId) =>
+      caller.callServerEndpoint<void>(
         'project',
         'deleteProjectReview',
         {'reviewId': reviewId},
@@ -515,11 +515,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i14.ProjectReview?> reactToReview(
+  _i2.Future<_i14.ProjectReview> reactToReview(
     int reviewId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i14.ProjectReview?>(
+      caller.callServerEndpoint<_i14.ProjectReview>(
         'project',
         'reactToReview',
         {
@@ -555,9 +555,9 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
-  _i2.Future<_i17.ProjectVetting?> vetProject(
+  _i2.Future<_i17.ProjectVetting> vetProject(
           _i17.ProjectVetting projectVetting) =>
-      caller.callServerEndpoint<_i17.ProjectVetting?>(
+      caller.callServerEndpoint<_i17.ProjectVetting>(
         'project',
         'vetProject',
         {'projectVetting': projectVetting},

@@ -7,7 +7,7 @@ part of 'verify_user_proximity_provider.dart';
 // **************************************************************************
 
 String _$verifyUserProximityHash() =>
-    r'49bd94d249ea06b36bd2aa7458fba816f9e1f5fe';
+    r'4fa1456495774d5816689af08bdd900cb68bb64c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,19 +35,18 @@ class _SystemHash {
 const verifyUserProximityProvider = VerifyUserProximityFamily();
 
 /// See also [verifyUserProximity].
-class VerifyUserProximityFamily
-    extends Family<AsyncValue<Map<String, dynamic>>> {
+class VerifyUserProximityFamily extends Family<AsyncValue<double>> {
   /// See also [verifyUserProximity].
   const VerifyUserProximityFamily();
 
   /// See also [verifyUserProximity].
-  VerifyUserProximityProvider call({
-    double maxDistance = 1000,
-    required List<AWSPlaces> projectLocations,
-  }) {
+  VerifyUserProximityProvider call(
+    List<AWSPlaces>? projectLocations,
+    int? projectId,
+  ) {
     return VerifyUserProximityProvider(
-      maxDistance: maxDistance,
-      projectLocations: projectLocations,
+      projectLocations,
+      projectId,
     );
   }
 
@@ -56,8 +55,8 @@ class VerifyUserProximityFamily
     covariant VerifyUserProximityProvider provider,
   ) {
     return call(
-      maxDistance: provider.maxDistance,
-      projectLocations: provider.projectLocations,
+      provider.projectLocations,
+      provider.projectId,
     );
   }
 
@@ -77,17 +76,16 @@ class VerifyUserProximityFamily
 }
 
 /// See also [verifyUserProximity].
-class VerifyUserProximityProvider
-    extends AutoDisposeFutureProvider<Map<String, dynamic>> {
+class VerifyUserProximityProvider extends AutoDisposeFutureProvider<double> {
   /// See also [verifyUserProximity].
-  VerifyUserProximityProvider({
-    double maxDistance = 1000,
-    required List<AWSPlaces> projectLocations,
-  }) : this._internal(
+  VerifyUserProximityProvider(
+    List<AWSPlaces>? projectLocations,
+    int? projectId,
+  ) : this._internal(
           (ref) => verifyUserProximity(
             ref as VerifyUserProximityRef,
-            maxDistance: maxDistance,
-            projectLocations: projectLocations,
+            projectLocations,
+            projectId,
           ),
           from: verifyUserProximityProvider,
           name: r'verifyUserProximityProvider',
@@ -98,8 +96,8 @@ class VerifyUserProximityProvider
           dependencies: VerifyUserProximityFamily._dependencies,
           allTransitiveDependencies:
               VerifyUserProximityFamily._allTransitiveDependencies,
-          maxDistance: maxDistance,
           projectLocations: projectLocations,
+          projectId: projectId,
         );
 
   VerifyUserProximityProvider._internal(
@@ -109,17 +107,16 @@ class VerifyUserProximityProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.maxDistance,
     required this.projectLocations,
+    required this.projectId,
   }) : super.internal();
 
-  final double maxDistance;
-  final List<AWSPlaces> projectLocations;
+  final List<AWSPlaces>? projectLocations;
+  final int? projectId;
 
   @override
   Override overrideWith(
-    FutureOr<Map<String, dynamic>> Function(VerifyUserProximityRef provider)
-        create,
+    FutureOr<double> Function(VerifyUserProximityRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -130,29 +127,29 @@ class VerifyUserProximityProvider
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        maxDistance: maxDistance,
         projectLocations: projectLocations,
+        projectId: projectId,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<Map<String, dynamic>> createElement() {
+  AutoDisposeFutureProviderElement<double> createElement() {
     return _VerifyUserProximityProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
     return other is VerifyUserProximityProvider &&
-        other.maxDistance == maxDistance &&
-        other.projectLocations == projectLocations;
+        other.projectLocations == projectLocations &&
+        other.projectId == projectId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, maxDistance.hashCode);
     hash = _SystemHash.combine(hash, projectLocations.hashCode);
+    hash = _SystemHash.combine(hash, projectId.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -160,25 +157,24 @@ class VerifyUserProximityProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin VerifyUserProximityRef
-    on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
-  /// The parameter `maxDistance` of this provider.
-  double get maxDistance;
-
+mixin VerifyUserProximityRef on AutoDisposeFutureProviderRef<double> {
   /// The parameter `projectLocations` of this provider.
-  List<AWSPlaces> get projectLocations;
+  List<AWSPlaces>? get projectLocations;
+
+  /// The parameter `projectId` of this provider.
+  int? get projectId;
 }
 
 class _VerifyUserProximityProviderElement
-    extends AutoDisposeFutureProviderElement<Map<String, dynamic>>
+    extends AutoDisposeFutureProviderElement<double>
     with VerifyUserProximityRef {
   _VerifyUserProximityProviderElement(super.provider);
 
   @override
-  double get maxDistance => (origin as VerifyUserProximityProvider).maxDistance;
-  @override
-  List<AWSPlaces> get projectLocations =>
+  List<AWSPlaces>? get projectLocations =>
       (origin as VerifyUserProximityProvider).projectLocations;
+  @override
+  int? get projectId => (origin as VerifyUserProximityProvider).projectId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

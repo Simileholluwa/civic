@@ -27,7 +27,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<String, Project?>> getProject({required int id}) async {
+  Future<Either<String, Project>> getProject({required int id}) async {
     try {
       final result = await _remoteDatasource.getProject(
         id: id,
@@ -81,7 +81,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, Project?>> saveProject({
+  Future<Either<Failure, Project>> saveProject({
     required Project project,
   }) async {
     try {
@@ -181,7 +181,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectReview?>> saveProjectReview({
+  Future<Either<Failure, ProjectReview>> saveProjectReview({
     required ProjectReview projectReview,
   }) async {
     try {
@@ -310,7 +310,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectVetting>> getVettedProject({
+  Future<Either<Failure, ProjectVetting?>> getVettedProject({
     required int projectId,
   }) async {
     try {

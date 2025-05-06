@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CreateProjectReview extends ConsumerWidget {
   const CreateProjectReview({
     super.key,
-    required this.projectReview,
+    this.projectReview,
   });
 
-  final ProjectReview projectReview;
+  final ProjectReview? projectReview;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

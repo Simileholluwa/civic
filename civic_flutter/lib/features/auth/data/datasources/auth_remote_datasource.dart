@@ -83,8 +83,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         return null;
       }
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out');
     } on SocketException catch (_) {
       throw const ServerException(message: 'Failed to connect to server');
     } on ServerException {
