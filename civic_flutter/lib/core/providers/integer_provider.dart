@@ -12,6 +12,16 @@ class PageChanged extends _$PageChanged {
 }
 
 @riverpod
+class VettingImagePageChanged extends _$VettingImagePageChanged {
+  @override
+  int build() => 0;
+
+  void carouselPageChanged(int index, dynamic reason) {
+    state = index;
+  }
+}
+
+@riverpod
 class ProjectImageAttachmentPageChanged extends _$ProjectImageAttachmentPageChanged {
   @override
   int build() => 0;

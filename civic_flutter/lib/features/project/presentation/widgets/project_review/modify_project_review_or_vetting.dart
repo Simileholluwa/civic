@@ -1,10 +1,13 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
-class ModifyProjectReview extends StatelessWidget {
-  const ModifyProjectReview({
+class ModifyProjectReviewOrVetting extends StatelessWidget {
+  const ModifyProjectReviewOrVetting({
     super.key,
+    required this.information,
   });
+
+  final String information;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class ModifyProjectReview extends StatelessWidget {
             ),
           ),
           Text(
-            'You have already reviewed this project. You can make changes to your review below.',
+            information,
             style: Theme.of(context).textTheme.labelMedium,
             textAlign: TextAlign.center,
           ),

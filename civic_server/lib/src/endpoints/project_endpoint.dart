@@ -964,17 +964,11 @@ class ProjectEndpoint extends Endpoint {
       projectId,
     );
 
-    if (project != null) {
-      if (project.isDeleted!) {
-        throw PostException(
-            message:
-                'This project has been deleted by its owner. Vettings are not allowed.');
-      }
-      if (user.userInfoId == project.ownerId) {
-        throw PostException(
-            message:
-                'Projects you create can only be vetted by your constituents. Try sharing this project.');
-      }
+    if (project == null) {
+      throw PostException(
+        message:
+            'This project does not exist. It may have been permanently deleted.',
+      );
     }
 
     final result = await ProjectVetting.db.findFirstRow(
@@ -984,6 +978,9 @@ class ProjectEndpoint extends Endpoint {
           row.ownerId.equals(
             user.userInfoId,
           ),
+      include: ProjectVetting.include(
+        project: Project.include(),
+      ),
     );
     return result;
   }

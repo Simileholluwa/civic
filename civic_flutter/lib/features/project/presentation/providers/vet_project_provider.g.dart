@@ -6,7 +6,7 @@ part of 'vet_project_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectVetHash() => r'8b350d85efcc57fe5ba35ba9c08c830fe27bb92d';
+String _$projectVetHash() => r'c7030ce5af134f078a7938a8fd9bf24792c26562';
 
 /// Copied from Dart SDK
 class _SystemHash {

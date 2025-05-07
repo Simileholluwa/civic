@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_delete_consequences.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -588,7 +587,7 @@ class ProjectHelperFunctions {
                             "Permanent deletion requires a fee and a popular vote.",
                       ),
                       GestureDetector(
-                        onTap:() {
+                        onTap: () {
                           projectCardNotifier.toggleCanDelete();
                         },
                         child: Row(
@@ -870,6 +869,23 @@ class ProjectHelperFunctions {
           if (context.mounted) context.pop();
         }
       },
+    );
+  }
+
+  static Future<bool?> deleteProjectVettingDialog(
+    BuildContext context,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Delete vetting?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: context.pop,
+      activeButtonText: 'Delete',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () async {},
     );
   }
 }

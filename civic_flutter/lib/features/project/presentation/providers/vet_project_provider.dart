@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -24,18 +26,21 @@ class ProjectVet extends _$ProjectVet {
     state = state.copyWith(
       comment: comment,
     );
+    isValid();
   }
 
   void setImages(List<String> images) {
     state = state.copyWith(
       images: images,
     );
+    isValid();
   }
 
   void setStatus(String status) {
     state = state.copyWith(
       status: status,
     );
+    isValid();
   }
 
   void setIsSending(bool isSending) {
@@ -53,6 +58,14 @@ class ProjectVet extends _$ProjectVet {
   void setIsDeleting(bool isDeleting) {
     state = state.copyWith(
       isDeleting: isDeleting,
+    );
+  }
+
+  void isValid() {
+    state = state.copyWith(
+      isValid: state.comment.isNotEmpty &&
+          state.status != null &&
+          state.images.isNotEmpty,
     );
   }
 
@@ -78,8 +91,8 @@ class ProjectVet extends _$ProjectVet {
       state = state.copyWith(
         images: [...state.images, ...imagesPath],
       );
-      return;
     }
+    return;
   }
 
   Future<void> captureImageProof() async {
@@ -110,5 +123,79 @@ class ProjectVet extends _$ProjectVet {
     state = state.copyWith(
       images: [...images],
     );
+  }
+
+  Future<bool> sendVettingImages() async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    for (final image in state.images) {
+      final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+      if (regex.hasMatch(image)) {
+        existingUpload.add(image);
+      } else {
+        newUpload.add(image);
+      }
+    }
+    if (newUpload.isEmpty) {
+      return true;
+    }
+    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+          newUpload,
+          'projects',
+          'images',
+        );
+
+    return result.fold((error) async {
+      log(error, name: 'Vetting images upload failed');
+      return false;
+    }, (imageUrls) {
+      setImages(existingUpload + newUpload);
+      return true;
+    });
+  }
+
+  Future<bool> sendVetting(int projectId, int? vettingId,
+      [bool addToList = true]) async {
+    setIsSending(true);
+    final sendVetting = ref.read(vetProjectProvider);
+    final ownerId = ref.read(localStorageProvider).getInt('userId');
+    final sendImages = await sendVettingImages();
+    if (!sendImages) {
+      TToastMessages.errorToast(
+        'There was a problem uploading images. Please try again.',
+      );
+      return false;
+    }
+    final projectVetting = ProjectVetting(
+      id: vettingId,
+      projectId: projectId,
+      ownerId: ownerId!,
+      images: state.images,
+      comment: state.comment,
+      status: state.status,
+    );
+    final result = await sendVetting(
+      VetProjectParams(
+        projectVetting,
+      ),
+    );
+    return result.fold((error) {
+      TToastMessages.errorToast(
+        error.message,
+      );
+      setIsSending(false);
+      return false;
+    }, (success) {
+      final vettingList =
+          ref.read(paginatedProjectVettingListProvider.notifier);
+      TToastMessages.successToast(
+        'Your vetting has been succesfully submitted.',
+      );
+      if (vettingList.pagingController.itemList != null) {
+        vettingList.addVetting(projectVetting);
+      }
+      setIsSending(false);
+      return true;
+    });
   }
 }

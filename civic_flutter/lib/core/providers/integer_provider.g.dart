@@ -21,6 +21,23 @@ final pageChangedProvider =
 );
 
 typedef _$PageChanged = AutoDisposeNotifier<int>;
+String _$vettingImagePageChangedHash() =>
+    r'7a302734eb54ac2bc079b7655da97d4e6e1cfc63';
+
+/// See also [VettingImagePageChanged].
+@ProviderFor(VettingImagePageChanged)
+final vettingImagePageChangedProvider =
+    AutoDisposeNotifierProvider<VettingImagePageChanged, int>.internal(
+  VettingImagePageChanged.new,
+  name: r'vettingImagePageChangedProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$vettingImagePageChangedHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$VettingImagePageChanged = AutoDisposeNotifier<int>;
 String _$projectImageAttachmentPageChangedHash() =>
     r'810b9376132d535dfc68479d8fcc8f30a0a99a53';
 

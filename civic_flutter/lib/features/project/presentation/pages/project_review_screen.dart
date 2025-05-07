@@ -3,6 +3,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewScreen extends ConsumerWidget {
   const ProjectReviewScreen({
@@ -38,8 +39,8 @@ class ProjectReviewScreen extends ConsumerWidget {
             titleSpacing: 4,
             title: Text(
               'Review Project',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 20,
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 25,
                   ),
             ),
             automaticallyImplyLeading: false,
@@ -58,7 +59,10 @@ class ProjectReviewScreen extends ConsumerWidget {
             projectReviewProviderProvider(review),
           );
           if (projectReviewState.isEditing) {
-            return ModifyProjectReview();
+            return ModifyProjectReviewOrVetting(
+              information:
+                  'You have already reviewed this project. You can make changes to your review below.',
+            );
           } else {
             return CreateProjectReview(
               projectReview: review,
@@ -86,10 +90,29 @@ class ProjectReviewScreen extends ConsumerWidget {
           final projectReviewState = ref.watch(
             projectReviewProviderProvider(review),
           );
+          final projectReviewNotifier = ref.watch(
+            projectReviewProviderProvider(review).notifier,
+          );
           if (projectReviewState.isEditing) {
-            return ModifyProjectReviewBottomNavBar(
-              projectId: projectId,
-              projectReview: review!,
+            return ContentDoubleButton(
+              firstButtonOnPressed: () {
+                projectReviewNotifier.setEditing(false);
+              },
+              firstButtonIcon: Iconsax.edit,
+              firstButtonText: 'Edit review',
+              secondButtonOnPressed: projectReviewState.isDeleting
+                  ? null
+                  : () async {
+                      ProjectHelperFunctions.deleteProjectReviewDialog(
+                        context,
+                        projectReviewNotifier,
+                        projectId,
+                        review!.id!,
+                      );
+                    },
+              secondButtonColor: Colors.red,
+              secondButtonIcon: Iconsax.trash,
+              secondButtonText: 'Delete review',
             );
           } else {
             return CreateProjectReviewBottomNavBar(

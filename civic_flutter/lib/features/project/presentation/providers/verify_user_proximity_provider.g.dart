@@ -7,7 +7,7 @@ part of 'verify_user_proximity_provider.dart';
 // **************************************************************************
 
 String _$verifyUserProximityHash() =>
-    r'4fa1456495774d5816689af08bdd900cb68bb64c';
+    r'bfec131e1fe3ddc06244c3ef5b68504877beca18';
 
 /// Copied from Dart SDK
 class _SystemHash {

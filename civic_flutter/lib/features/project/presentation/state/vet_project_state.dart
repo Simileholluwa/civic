@@ -6,6 +6,7 @@ class VetProjectState {
   final bool isSending;
   final bool isEditing;
   final bool isDeleting;
+  final bool isValid;
   final String comment;
   final List<String> images;
   final String? status;
@@ -14,6 +15,7 @@ class VetProjectState {
     this.isSending = false,
    this.isEditing = false,
    this.isDeleting = false,
+   this.isValid = false,
    required this.comment,
    required this.images,
    required this.status,
@@ -24,6 +26,7 @@ class VetProjectState {
     bool? isSending,
     bool? isEditing,
     bool? isDeleting,
+    bool? isValid,
     String? comment,
     List<String>? images,
     String? status,
@@ -37,6 +40,7 @@ class VetProjectState {
       images: images ?? this.images,
       status: status ?? this.status,
       commentController: commentController ?? this.commentController,
+      isValid: isValid ?? this.isValid,
     );
   }
 
@@ -46,6 +50,7 @@ class VetProjectState {
       images: projectVetting.images ?? <String>[],
       status: projectVetting.status ?? '',
       isEditing: true,
+      isValid: false,
       commentController: TextEditingController(text: projectVetting.comment),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_quick_detail_widget.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_screen/project_quick_detail_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 

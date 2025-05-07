@@ -24,25 +24,41 @@ Future<double> verifyUserProximity(
 
     result.fold(
       (error) {
-        completer.completeError(error);
+        completer.completeError({
+          'message': error,
+          'action': 'retry',
+        });
       },
       (project) async {
         final userId = ref.read(localStorageProvider).getInt('userId');
         if (project.isDeleted! && project.ownerId == userId) {
-          completer.completeError(
-            'You have deleted this project. Try restoring the project to allow vettings by your constituents.',
-          );
+          completer.completeError({
+            'message':
+                'You have deleted this project. Try restoring the project to allow vettings by your constituents.',
+            'action': 'restore',
+          });
         } else if (project.ownerId == userId) {
           completer.completeError(
-            'Project owners can not vet their own projects.',
+            {
+              'message': 'Project owners can not vet their own projects.',
+              'action': 'share',
+            },
           );
         } else if (!project.endDate!.isBefore(DateTime.now())) {
           completer.completeError(
-            'This project has not ended. Vettings can not be submitted at this time.',
+            {
+              'message':
+                  'This project has not ended. Vettings can not be submitted at this time.',
+              'action': 'share',
+            },
           );
         } else if (project.isDeleted!) {
           completer.completeError(
-            'This project has been deleted by its owner. Vettings can no longer be submitted.',
+            {
+              'message':
+                  'This project has been deleted by its owner. Vettings can no longer be submitted.',
+              'action': 'nothing'
+            },
           );
         } else {
           final result = await verifyProximity(
