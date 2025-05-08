@@ -31,7 +31,7 @@ class ProjectVet extends _$ProjectVet {
 
   void setImages(List<String> images) {
     state = state.copyWith(
-      images: images,
+      images: [...state.images, ...images],
     );
     isValid();
   }
@@ -149,13 +149,16 @@ class ProjectVet extends _$ProjectVet {
       log(error, name: 'Vetting images upload failed');
       return false;
     }, (imageUrls) {
-      setImages(existingUpload + newUpload);
+      state = state.copyWith(
+        images: [
+          ...(existingUpload + imageUrls),
+        ],
+      );
       return true;
     });
   }
 
-  Future<bool> sendVetting(int projectId, int? vettingId,
-      [bool addToList = true]) async {
+  Future<bool> sendVetting(int projectId, int? vettingId,) async {
     setIsSending(true);
     final sendVetting = ref.read(vetProjectProvider);
     final ownerId = ref.read(localStorageProvider).getInt('userId');
@@ -191,11 +194,39 @@ class ProjectVet extends _$ProjectVet {
       TToastMessages.successToast(
         'Your vetting has been succesfully submitted.',
       );
-      if (vettingList.pagingController.itemList != null) {
-        vettingList.addVetting(projectVetting);
+      if (vettingList.pagingController.itemList != null && vettingId == null) {
+        vettingList.addVetting(success);
       }
       setIsSending(false);
       return true;
     });
+  }
+
+  Future<bool> deleteVetting(int vettingId) async {
+    setIsDeleting(true);
+    final deleteVetting = ref.read(deleteProjectVettingProvider);
+    final result = await deleteVetting(
+      DeleteProjectVettingParams(
+        vettingId,
+      ),
+    );
+    setIsDeleting(false);
+    return result.fold(
+      (failure) {
+        TToastMessages.errorToast(failure.message);
+        return false;
+      },
+      (_) async {
+        TToastMessages.successToast(
+          'Your vetting was deleted successfully',
+        );
+        ref
+            .read(
+              paginatedProjectVettingListProvider.notifier,
+            )
+            .deleteVetting(vettingId);
+        return true;
+      },
+    );
   }
 }

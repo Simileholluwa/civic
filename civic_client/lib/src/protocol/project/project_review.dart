@@ -32,9 +32,7 @@ abstract class ProjectReview implements _i1.SerializableModel {
     this.updatedAt,
     this.likedBy,
     this.dislikedBy,
-    int? numberOfReviews,
-  })  : dateCreated = dateCreated ?? DateTime.now(),
-        numberOfReviews = numberOfReviews ?? 0;
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectReview({
     int? id,
@@ -54,7 +52,6 @@ abstract class ProjectReview implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   }) = _ProjectReviewImpl;
 
   factory ProjectReview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -93,7 +90,6 @@ abstract class ProjectReview implements _i1.SerializableModel {
       dislikedBy: (jsonSerialization['dislikedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
     );
   }
 
@@ -134,8 +130,6 @@ abstract class ProjectReview implements _i1.SerializableModel {
 
   List<int>? dislikedBy;
 
-  int? numberOfReviews;
-
   /// Returns a shallow copy of this [ProjectReview]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -157,7 +151,6 @@ abstract class ProjectReview implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -179,7 +172,6 @@ abstract class ProjectReview implements _i1.SerializableModel {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
-      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -210,7 +202,6 @@ class _ProjectReviewImpl extends ProjectReview {
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -229,7 +220,6 @@ class _ProjectReviewImpl extends ProjectReview {
           updatedAt: updatedAt,
           likedBy: likedBy,
           dislikedBy: dislikedBy,
-          numberOfReviews: numberOfReviews,
         );
 
   /// Returns a shallow copy of this [ProjectReview]
@@ -254,7 +244,6 @@ class _ProjectReviewImpl extends ProjectReview {
     Object? updatedAt = _Undefined,
     Object? likedBy = _Undefined,
     Object? dislikedBy = _Undefined,
-    Object? numberOfReviews = _Undefined,
   }) {
     return ProjectReview(
       id: id is int? ? id : this.id,
@@ -286,8 +275,6 @@ class _ProjectReviewImpl extends ProjectReview {
       dislikedBy: dislikedBy is List<int>?
           ? dislikedBy
           : this.dislikedBy?.map((e0) => e0).toList(),
-      numberOfReviews:
-          numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
     );
   }
 }

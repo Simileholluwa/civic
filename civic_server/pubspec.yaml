@@ -8,10 +8,10 @@ environment:
 
 dependencies:
   dio: ^5.7.0
-  serverpod: 2.5.1
-  serverpod_auth_server: 2.5.1
-  serverpod_cloud_storage_s3: 2.5.1
-  serverpod_serialization: 2.5.1
+  serverpod: 2.6.0
+  serverpod_auth_server: 2.6.0
+  serverpod_cloud_storage_s3: 2.6.0
+  serverpod_serialization: 2.6.0
   mailer:
   dotenv: ^4.2.0
 

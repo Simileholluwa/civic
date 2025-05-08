@@ -935,6 +935,25 @@ class Endpoints extends _i1.EndpointDispatch {
             params['reviewId'],
           ),
         ),
+        'deleteProjectVetting': _i1.MethodConnector(
+          name: 'deleteProjectVetting',
+          params: {
+            'vettingId': _i1.ParameterDescription(
+              name: 'vettingId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint)
+                  .deleteProjectVetting(
+            session,
+            params['vettingId'],
+          ),
+        ),
         'undoRepost': _i1.MethodConnector(
           name: 'undoRepost',
           params: {
@@ -1064,6 +1083,30 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['project'] as _i9.ProjectEndpoint).reactToReview(
             session,
             params['reviewId'],
+            params['isLike'],
+          ),
+        ),
+        'reactToVetting': _i1.MethodConnector(
+          name: 'reactToVetting',
+          params: {
+            'vettingId': _i1.ParameterDescription(
+              name: 'vettingId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'isLike': _i1.ParameterDescription(
+              name: 'isLike',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint).reactToVetting(
+            session,
+            params['vettingId'],
             params['isLike'],
           ),
         ),
@@ -1294,6 +1337,25 @@ class Endpoints extends _i1.EndpointDispatch {
             params['projectReview'],
           ),
         ),
+        'updateProjectVetting': _i1.MethodConnector(
+          name: 'updateProjectVetting',
+          params: {
+            'projectVetting': _i1.ParameterDescription(
+              name: 'projectVetting',
+              type: _i1.getType<_i20.ProjectVetting>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i9.ProjectEndpoint)
+                  .updateProjectVetting(
+            session,
+            params['projectVetting'],
+          ),
+        ),
         'projectUpdates': _i1.MethodStreamConnector(
           name: 'projectUpdates',
           params: {
@@ -1335,6 +1397,28 @@ class Endpoints extends _i1.EndpointDispatch {
                   .projectReviewUpdates(
             session,
             params['reviewId'],
+          ),
+        ),
+        'projectVettingUpdates': _i1.MethodStreamConnector(
+          name: 'projectVettingUpdates',
+          params: {
+            'vettingId': _i1.ParameterDescription(
+              name: 'vettingId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['project'] as _i9.ProjectEndpoint)
+                  .projectVettingUpdates(
+            session,
+            params['vettingId'],
           ),
         ),
       },

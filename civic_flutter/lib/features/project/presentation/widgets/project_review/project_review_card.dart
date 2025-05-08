@@ -1,16 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewCard extends ConsumerWidget {
   const ProjectReviewCard({
     super.key,
     required this.projectReview,
+    required this.projectId,
   });
 
   final ProjectReview projectReview;
+  final int projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,6 +28,9 @@ class ProjectReviewCard extends ConsumerWidget {
         projectReview,
       ),
     );
+    final projectReviewNotiier =
+        ref.watch(projectReviewProviderProvider(projectReview).notifier);
+    final userId = ref.read(localStorageProvider).getInt('userId');
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 18,
@@ -111,69 +118,33 @@ class ProjectReviewCard extends ConsumerWidget {
             onToggleTextTap: null,
             hasVideo: true,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 5,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  10,
-                ),
-                color: Theme.of(context).cardColor,
-              ),
-              padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Was this review helpful?',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: Theme.of(context).hintColor,
-                        ),
-                  ),
-                  Row(
-                    children: [
-                      ProjectVetButton(
-                        title: THelperFunctions.humanizeNumber(
-                          reactToReviewState.likesCount,
-                        ),
-                        icon: Icons.thumb_up_rounded,
-                        backgroundColor: Colors.transparent,
-                        textColor: reactToReviewState.isLiked &&
-                                reactToReviewState.isDeleted == false
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface,
-                        isApprove: true,
-                        iconSize: 20,
-                        fontSize: 18,
-                        onTap: () {
-                          reactToReviewNotifier.reactToReview(true);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 35,
-                        child: VerticalDivider(),
-                      ),
-                      ProjectVetButton(
-                        title: '',
-                        icon: Icons.thumb_down_rounded,
-                        backgroundColor: Colors.transparent,
-                        textColor: reactToReviewState.isDisliked &&
-                                reactToReviewState.isDeleted == false
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.onSurface,
-                        isDisapprove: true,
-                        iconSize: 20,
-                        onTap: () {
-                          reactToReviewNotifier.reactToReview(false);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          ReactToReviewOrVetting(
+            text: 'Was this review helpful?',
+            likesCount: reactToReviewState.likesCount,
+            likeTextColor: reactToReviewState.isLiked &&
+                    reactToReviewState.isDeleted == false
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurface,
+            dislikeTextColor: reactToReviewState.isDisliked &&
+                    reactToReviewState.isDeleted == false
+                ? Theme.of(context).colorScheme.secondary
+                : Theme.of(context).colorScheme.onSurface,
+            likeTapped: () {
+              reactToReviewNotifier.reactToReview(true);
+            },
+            dislikeTapped: () {
+              reactToReviewNotifier.reactToReview(false);
+            },
+            isOwner: projectReview.ownerId == userId,
+            onDelete: () {
+              ProjectHelperFunctions.deleteProjectReviewDialog(
+                context,
+                projectReviewNotiier,
+                projectId,
+                projectReview.id!,
+                false,
+              );
+            },
           ),
         ],
       ),

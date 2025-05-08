@@ -8,13 +8,16 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../general/aws_places.dart' as _i3;
 import '../project/project_repost.dart' as _i4;
 
-abstract class Project implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+abstract class Project
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Project._({
     this.id,
     required this.ownerId,
@@ -255,7 +258,7 @@ abstract class Project implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   bool? isDeleted;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [Project]
   /// with some or all fields replaced by the given arguments.
@@ -644,7 +647,7 @@ class _ProjectImpl extends Project {
   }
 }
 
-class ProjectTable extends _i1.Table<int> {
+class ProjectTable extends _i1.Table<int?> {
   ProjectTable({super.tableRelation}) : super(tableName: 'project') {
     ownerId = _i1.ColumnInt(
       'ownerId',
@@ -968,7 +971,7 @@ class ProjectInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => Project.t;
+  _i1.Table<int?> get table => Project.t;
 }
 
 class ProjectIncludeList extends _i1.IncludeList {
@@ -988,7 +991,7 @@ class ProjectIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => Project.t;
+  _i1.Table<int?> get table => Project.t;
 }
 
 class ProjectRepository {

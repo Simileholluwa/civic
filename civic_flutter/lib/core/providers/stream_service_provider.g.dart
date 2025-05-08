@@ -323,5 +323,154 @@ class _ProjectReviewStreamProviderElement
   ProjectReview? get projectReview =>
       (origin as ProjectReviewStreamProvider).projectReview;
 }
+
+String _$projectVettingStreamHash() =>
+    r'609f5ae979383fa563f25ace1b2ba9667326a710';
+
+/// See also [projectVettingStream].
+@ProviderFor(projectVettingStream)
+const projectVettingStreamProvider = ProjectVettingStreamFamily();
+
+/// See also [projectVettingStream].
+class ProjectVettingStreamFamily extends Family<AsyncValue<ProjectVetting>> {
+  /// See also [projectVettingStream].
+  const ProjectVettingStreamFamily();
+
+  /// See also [projectVettingStream].
+  ProjectVettingStreamProvider call(
+    int vettingId,
+    ProjectVetting? projectVetting,
+  ) {
+    return ProjectVettingStreamProvider(
+      vettingId,
+      projectVetting,
+    );
+  }
+
+  @override
+  ProjectVettingStreamProvider getProviderOverride(
+    covariant ProjectVettingStreamProvider provider,
+  ) {
+    return call(
+      provider.vettingId,
+      provider.projectVetting,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'projectVettingStreamProvider';
+}
+
+/// See also [projectVettingStream].
+class ProjectVettingStreamProvider extends StreamProvider<ProjectVetting> {
+  /// See also [projectVettingStream].
+  ProjectVettingStreamProvider(
+    int vettingId,
+    ProjectVetting? projectVetting,
+  ) : this._internal(
+          (ref) => projectVettingStream(
+            ref as ProjectVettingStreamRef,
+            vettingId,
+            projectVetting,
+          ),
+          from: projectVettingStreamProvider,
+          name: r'projectVettingStreamProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$projectVettingStreamHash,
+          dependencies: ProjectVettingStreamFamily._dependencies,
+          allTransitiveDependencies:
+              ProjectVettingStreamFamily._allTransitiveDependencies,
+          vettingId: vettingId,
+          projectVetting: projectVetting,
+        );
+
+  ProjectVettingStreamProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.vettingId,
+    required this.projectVetting,
+  }) : super.internal();
+
+  final int vettingId;
+  final ProjectVetting? projectVetting;
+
+  @override
+  Override overrideWith(
+    Stream<ProjectVetting> Function(ProjectVettingStreamRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProjectVettingStreamProvider._internal(
+        (ref) => create(ref as ProjectVettingStreamRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        vettingId: vettingId,
+        projectVetting: projectVetting,
+      ),
+    );
+  }
+
+  @override
+  StreamProviderElement<ProjectVetting> createElement() {
+    return _ProjectVettingStreamProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProjectVettingStreamProvider &&
+        other.vettingId == vettingId &&
+        other.projectVetting == projectVetting;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, vettingId.hashCode);
+    hash = _SystemHash.combine(hash, projectVetting.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ProjectVettingStreamRef on StreamProviderRef<ProjectVetting> {
+  /// The parameter `vettingId` of this provider.
+  int get vettingId;
+
+  /// The parameter `projectVetting` of this provider.
+  ProjectVetting? get projectVetting;
+}
+
+class _ProjectVettingStreamProviderElement
+    extends StreamProviderElement<ProjectVetting> with ProjectVettingStreamRef {
+  _ProjectVettingStreamProviderElement(super.provider);
+
+  @override
+  int get vettingId => (origin as ProjectVettingStreamProvider).vettingId;
+  @override
+  ProjectVetting? get projectVetting =>
+      (origin as ProjectVettingStreamProvider).projectVetting;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

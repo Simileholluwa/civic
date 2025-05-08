@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project_review.dart' as _i3;
 
 abstract class ProjectReviewReaction
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   ProjectReviewReaction._({
     this.id,
     required this.ownerId,
@@ -89,7 +91,7 @@ abstract class ProjectReviewReaction
   bool? isDeleted;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [ProjectReviewReaction]
   /// with some or all fields replaced by the given arguments.
@@ -225,7 +227,7 @@ class _ProjectReviewReactionImpl extends ProjectReviewReaction {
   }
 }
 
-class ProjectReviewReactionTable extends _i1.Table<int> {
+class ProjectReviewReactionTable extends _i1.Table<int?> {
   ProjectReviewReactionTable({super.tableRelation})
       : super(tableName: 'project_review_reaction') {
     ownerId = _i1.ColumnInt(
@@ -340,7 +342,7 @@ class ProjectReviewReactionInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => ProjectReviewReaction.t;
+  _i1.Table<int?> get table => ProjectReviewReaction.t;
 }
 
 class ProjectReviewReactionIncludeList extends _i1.IncludeList {
@@ -360,7 +362,7 @@ class ProjectReviewReactionIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => ProjectReviewReaction.t;
+  _i1.Table<int?> get table => ProjectReviewReaction.t;
 }
 
 class ProjectReviewReactionRepository {

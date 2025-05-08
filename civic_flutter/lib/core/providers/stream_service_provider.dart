@@ -35,3 +35,19 @@ Stream<ProjectReview> projectReviewStream(
     yield update;
   }
 }
+
+@Riverpod(keepAlive: true)
+Stream<ProjectVetting> projectVettingStream(
+  Ref ref,
+  int vettingId,
+  ProjectVetting? projectVetting,
+) async* {
+  if (projectVetting != null) {
+    yield projectVetting;
+  }
+  final updates =
+      ref.read(clientProvider).project.projectVettingUpdates(vettingId);
+  await for (final update in updates) {
+    yield update;
+  }
+}

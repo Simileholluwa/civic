@@ -464,6 +464,13 @@ class EndpointProject extends _i1.EndpointRef {
         {'reviewId': reviewId},
       );
 
+  _i2.Future<void> deleteProjectVetting(int vettingId) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'deleteProjectVetting',
+        {'vettingId': vettingId},
+      );
+
   _i2.Future<void> undoRepost(int projectId) => caller.callServerEndpoint<void>(
         'project',
         'undoRepost',
@@ -524,6 +531,19 @@ class EndpointProject extends _i1.EndpointRef {
         'reactToReview',
         {
           'reviewId': reviewId,
+          'isLike': isLike,
+        },
+      );
+
+  _i2.Future<_i17.ProjectVetting> reactToVetting(
+    int vettingId,
+    bool isLike,
+  ) =>
+      caller.callServerEndpoint<_i17.ProjectVetting>(
+        'project',
+        'reactToVetting',
+        {
+          'vettingId': vettingId,
           'isLike': isLike,
         },
       );
@@ -645,6 +665,22 @@ class EndpointProject extends _i1.EndpointRef {
         'project',
         'updateProjectReview',
         {'projectReview': projectReview},
+      );
+
+  _i2.Stream<_i17.ProjectVetting> projectVettingUpdates(int vettingId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i17.ProjectVetting>,
+          _i17.ProjectVetting>(
+        'project',
+        'projectVettingUpdates',
+        {'vettingId': vettingId},
+        {},
+      );
+
+  _i2.Future<void> updateProjectVetting(_i17.ProjectVetting projectVetting) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'updateProjectVetting',
+        {'projectVetting': projectVetting},
       );
 }
 

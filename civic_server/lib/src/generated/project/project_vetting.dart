@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../project/project.dart' as _i2;
 import '../user/user_record.dart' as _i3;
 
 abstract class ProjectVetting
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   ProjectVetting._({
     this.id,
     required this.projectId,
@@ -26,6 +28,8 @@ abstract class ProjectVetting
     this.status,
     DateTime? createdAt,
     this.updatedAt,
+    this.likedBy,
+    this.dislikedBy,
   }) : createdAt = createdAt ?? DateTime.now();
 
   factory ProjectVetting({
@@ -39,6 +43,8 @@ abstract class ProjectVetting
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -65,6 +71,12 @@ abstract class ProjectVetting
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      dislikedBy: (jsonSerialization['dislikedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -93,8 +105,12 @@ abstract class ProjectVetting
 
   DateTime? updatedAt;
 
+  List<int>? likedBy;
+
+  List<int>? dislikedBy;
+
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
@@ -110,6 +126,8 @@ abstract class ProjectVetting
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -124,6 +142,8 @@ abstract class ProjectVetting
       if (status != null) 'status': status,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
     };
   }
 
@@ -140,6 +160,8 @@ abstract class ProjectVetting
       if (status != null) 'status': status,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
     };
   }
 
@@ -193,6 +215,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) : super._(
           id: id,
           projectId: projectId,
@@ -204,6 +228,8 @@ class _ProjectVettingImpl extends ProjectVetting {
           status: status,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          likedBy: likedBy,
+          dislikedBy: dislikedBy,
         );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -221,6 +247,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     Object? status = _Undefined,
     Object? createdAt = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? dislikedBy = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -235,11 +263,17 @@ class _ProjectVettingImpl extends ProjectVetting {
       status: status is String? ? status : this.status,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      dislikedBy: dislikedBy is List<int>?
+          ? dislikedBy
+          : this.dislikedBy?.map((e0) => e0).toList(),
     );
   }
 }
 
-class ProjectVettingTable extends _i1.Table<int> {
+class ProjectVettingTable extends _i1.Table<int?> {
   ProjectVettingTable({super.tableRelation})
       : super(tableName: 'project_vetting') {
     projectId = _i1.ColumnInt(
@@ -271,6 +305,14 @@ class ProjectVettingTable extends _i1.Table<int> {
       'updatedAt',
       this,
     );
+    likedBy = _i1.ColumnSerializable(
+      'likedBy',
+      this,
+    );
+    dislikedBy = _i1.ColumnSerializable(
+      'dislikedBy',
+      this,
+    );
   }
 
   late final _i1.ColumnInt projectId;
@@ -290,6 +332,10 @@ class ProjectVettingTable extends _i1.Table<int> {
   late final _i1.ColumnDateTime createdAt;
 
   late final _i1.ColumnDateTime updatedAt;
+
+  late final _i1.ColumnSerializable likedBy;
+
+  late final _i1.ColumnSerializable dislikedBy;
 
   _i2.ProjectTable get project {
     if (_project != null) return _project!;
@@ -327,6 +373,8 @@ class ProjectVettingTable extends _i1.Table<int> {
         status,
         createdAt,
         updatedAt,
+        likedBy,
+        dislikedBy,
       ];
 
   @override
@@ -361,7 +409,7 @@ class ProjectVettingInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => ProjectVetting.t;
+  _i1.Table<int?> get table => ProjectVetting.t;
 }
 
 class ProjectVettingIncludeList extends _i1.IncludeList {
@@ -381,7 +429,7 @@ class ProjectVettingIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => ProjectVetting.t;
+  _i1.Table<int?> get table => ProjectVetting.t;
 }
 
 class ProjectVettingRepository {

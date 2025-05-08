@@ -63,7 +63,7 @@ class ProjectVettingScreen extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: verifyUserProximity.when(data: (value) {
-        if (value >= 1.0) {
+        if (value <= 1.0) {
           return vettedProject.when(data: (value) {
             final vettedProjectState = ref.watch(
               projectVetProvider(
@@ -90,11 +90,14 @@ class ProjectVettingScreen extends ConsumerWidget {
                   secondButtonOnPressed: () {
                     ProjectHelperFunctions.deleteProjectVettingDialog(
                       context,
+                      vettedProjectNotifier,
+                      value!.id!,
                     );
                   },
                   secondButtonColor: Colors.red,
                   secondButtonIcon: Iconsax.trash,
                   secondButtonText: 'Delete vetting',
+                  seccondButtonLoading: vettedProjectState.isDeleting,
                 ),
               );
             } else {
@@ -109,12 +112,18 @@ class ProjectVettingScreen extends ConsumerWidget {
             return SizedBox.shrink();
           });
         } else {
-          return ContentSingleButton(
-            onPressed: () {
-              ref.invalidate(verifyUserProximityProvider);
-            },
-            text: 'Retry',
-            buttonIcon: Iconsax.refresh,
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            child: ContentSingleButton(
+              onPressed: () {
+                ref.invalidate(verifyUserProximityProvider);
+              },
+              text: 'Retry',
+              buttonIcon: Iconsax.refresh,
+            ),
           );
         }
       }, error: (error, st) {
@@ -173,7 +182,7 @@ class ProjectVettingScreen extends ConsumerWidget {
       }),
       body: verifyUserProximity.when(
         data: (value) {
-          if (value >= 1.0) {
+          if (value <= 1.0) {
             return vettedProject.when(
               data: (vettedProject) {
                 final vettedProjectState = ref.watch(

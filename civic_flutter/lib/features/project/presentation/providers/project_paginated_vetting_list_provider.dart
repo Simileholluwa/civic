@@ -50,8 +50,7 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
         } else {
           pagingController.appendLastPage(data.results);
         }
-        completer.complete();
-        return;
+        return completer.complete();
       });
     });
   }

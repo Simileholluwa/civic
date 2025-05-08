@@ -40,91 +40,95 @@ class ProjectDetailsScreen extends ConsumerWidget {
       appBar: ContentAppBar(
         title: const SizedBox(),
         isVisible: true,
-        actions: data.hasValue ? data.value == null
-            ? []
-            : [
-                IconButton(
-                  onPressed: projectCardState.isDeleted!
-                      ? null
-                      : () async {
-                          await projectCardNotifier.toggleLikeStatus(
-                            data.value!.id!,
-                          );
-                        },
-                  icon: Icon(
-                    projectCardState.hasLiked! ? Iconsax.heart5 : Iconsax.heart,
-                    color: projectCardState.isDeleted!
-                        ? Theme.of(context).disabledColor
-                        : projectCardState.hasLiked!
-                            ? TColors.primary
-                            : Theme.of(context).iconTheme.color!,
-                  ),
-                ),
-                IconButton(
-                  onPressed: projectCardState.isDeleted!
-                      ? null
-                      : () {
-                          if (projectCardState.hasReposted!) {
-                            ProjectHelperFunctions.undoRepostDialog(
-                              context,
-                              ref,
-                              data.value!.id!,
-                            );
-                            return;
-                          }
-                          context.push(
-                            AppRoutes.createPost,
-                            extra: {
-                              'draft': null,
-                              'project': project,
-                              'id': 0,
-                            },
-                          );
-                        },
-                  icon: Icon(
-                    projectCardState.hasReposted!
-                        ? Iconsax.repeate_music5
-                        : Iconsax.repeate_music,
-                    color: projectCardState.isDeleted!
-                        ? Theme.of(context).disabledColor
-                        : projectCardState.hasReposted!
-                            ? TColors.primary
-                            : Theme.of(context).iconTheme.color!,
-                  ),
-                ),
-                IconButton(
-                  onPressed: projectCardState.isDeleted!
-                      ? null
-                      : () {
-                          showModalBottomSheet(
-                            context: context,
-                            constraints: BoxConstraints(
-                              maxHeight: projectCardState.isOwner!
-                                  ? 240
-                                  : projectCardState.canVet!
-                                      ? 480
-                                      : 430,
-                            ),
-                            builder: (ctx) {
-                              return ShowProjectActions(
-                                project: data.value!,
-                                projectCardNotifier: projectCardNotifier,
-                                fromDetails: true,
+        actions: data.hasValue
+            ? data.value == null
+                ? []
+                : [
+                    IconButton(
+                      onPressed: projectCardState.isDeleted!
+                          ? null
+                          : () async {
+                              await projectCardNotifier.toggleLikeStatus(
+                                data.value!.id!,
                               );
                             },
-                          );
-                        },
-                  icon: Icon(
-                    Iconsax.more_circle,
-                    color: projectCardState.isDeleted!
-                        ? Theme.of(context).disabledColor
-                        : Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-              ] : [],
+                      icon: Icon(
+                        projectCardState.hasLiked!
+                            ? Iconsax.heart5
+                            : Iconsax.heart,
+                        color: projectCardState.isDeleted!
+                            ? Theme.of(context).disabledColor
+                            : projectCardState.hasLiked!
+                                ? TColors.primary
+                                : Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: projectCardState.isDeleted!
+                          ? null
+                          : () {
+                              if (projectCardState.hasReposted!) {
+                                ProjectHelperFunctions.undoRepostDialog(
+                                  context,
+                                  ref,
+                                  data.value!.id!,
+                                );
+                                return;
+                              }
+                              context.push(
+                                AppRoutes.createPost,
+                                extra: {
+                                  'draft': null,
+                                  'project': project,
+                                  'id': 0,
+                                },
+                              );
+                            },
+                      icon: Icon(
+                        projectCardState.hasReposted!
+                            ? Iconsax.repeate_music5
+                            : Iconsax.repeate_music,
+                        color: projectCardState.isDeleted!
+                            ? Theme.of(context).disabledColor
+                            : projectCardState.hasReposted!
+                                ? TColors.primary
+                                : Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: projectCardState.isDeleted!
+                          ? null
+                          : () {
+                              showModalBottomSheet(
+                                context: context,
+                                constraints: BoxConstraints(
+                                  maxHeight: projectCardState.isOwner!
+                                      ? 240
+                                      : projectCardState.canVet!
+                                          ? 480
+                                          : 430,
+                                ),
+                                builder: (ctx) {
+                                  return ShowProjectActions(
+                                    project: data.value!,
+                                    projectCardNotifier: projectCardNotifier,
+                                    fromDetails: true,
+                                  );
+                                },
+                              );
+                            },
+                      icon: Icon(
+                        Iconsax.more_circle,
+                        color: projectCardState.isDeleted!
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                  ]
+            : [],
         bottomHeight: 54,
         height: 45,
         bottom: PreferredSize(
@@ -145,13 +149,31 @@ class ProjectDetailsScreen extends ConsumerWidget {
           onPressed: context.pop,
         ),
       ),
-      bottomNavigationBar: data.hasValue ? data.value == null
-          ? null
-          : projectCardState.isDeleted! || projectCardState.isOwner!
-              ? null
-              : ProjectDetailsBottomNavigationWidget(
-                  project: data.value!,
-                ) : null,
+      bottomNavigationBar: data.when(
+        data: (value) {
+          if (value == null) {
+            return null;
+          } else {
+            return ProjectDetailsBottomNavigationWidget(
+              project: value,
+            );
+          }
+        },
+        error: (error, st) {
+          return ContentSingleButton(
+            onPressed: () {
+                ref.invalidate(
+                  projectDetailProvider,
+                );
+              },
+            text: 'Retry',
+            buttonIcon: Iconsax.refresh,
+          );
+        },
+        loading: () {
+          return null;
+        },
+      ),
       body: data.when(
         data: (project) {
           return TabBarView(
@@ -176,12 +198,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
         error: (error, st) {
           return Center(
             child: InfiniteListLoadingError(
-              retry: () {
-                ref.invalidate(
-                  projectDetailProvider,
-                );
-              },
-              showRefresh: true,
+              retry: null,
               errorMessage: error.toString(),
               mainAxisAlignment: MainAxisAlignment.center,
               padding: const EdgeInsets.symmetric(

@@ -381,6 +381,59 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+  Future<void> deleteProjectVetting(Session session, int vettingId) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+
+        final existingVetting = await ProjectVetting.db.findById(
+          session,
+          vettingId,
+          transaction: transaction,
+        );
+
+        if (existingVetting == null) {
+          throw PostException(
+              message:
+                  'This vetting cannot be found. It may have been permanently deleted.');
+        }
+
+        if (existingVetting.ownerId != user.id) {
+          throw PostException(message: 'Unauthorized to delete this vetting');
+        }
+
+        final project = await Project.db.findById(
+          session,
+          existingVetting.projectId,
+          transaction: transaction,
+        );
+
+        if (project == null) {
+          throw PostException(message: 'Associated project not found');
+        }
+
+        final updatedProject = project.copyWith(
+          vettedBy: project.vettedBy?.where((id) => id != user.id).toList(),
+        );
+        await updateProject(session, updatedProject);
+
+        await ProjectVetting.db.deleteRow(
+          session,
+          existingVetting,
+          transaction: transaction,
+        );
+      } catch (e, stackTrace) {
+        session.log(
+          'Error deleting project vetting: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        throw PostException(message: e.toString());
+      }
+    });
+  }
+
   Future<void> undoRepost(
     Session session,
     int projectId,
@@ -712,6 +765,109 @@ class ProjectEndpoint extends Endpoint {
     return review!;
   }
 
+  Future<ProjectVetting> reactToVetting(
+    Session session,
+    int vettingId,
+    bool isLike,
+  ) async {
+    ProjectVetting? vetting;
+    ProjectVettingReaction? existingReaction;
+    ProjectVettingReaction? newReaction;
+    final user = await authUser(session);
+    await session.db.transaction((transaction) async {
+      try {
+        // Fetch the review
+        vetting = await ProjectVetting.db.findById(
+          session,
+          vettingId,
+          transaction: transaction,
+        );
+        if (vetting == null) {
+          throw PostException(
+              message:
+                  'This review cannot be found. It may have been permanently deleted.');
+        }
+
+        // Check for an existing reaction
+        existingReaction = await ProjectVettingReaction.db.findFirstRow(
+          session,
+          where: (r) =>
+              r.vettingId.equals(vettingId) & r.ownerId.equals(user.id),
+          transaction: transaction,
+        );
+
+        if (existingReaction != null) {
+          if (existingReaction!.isDeleted ?? false) {
+            // Reactivate a soft-deleted reaction
+            existingReaction!.isLike = isLike;
+            existingReaction!.isDeleted = false;
+            await ProjectVettingReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            isLike
+                ? vetting!.likedBy?.add(user.id!)
+                : vetting!.dislikedBy?.add(user.id!);
+          } else if (existingReaction!.isLike == isLike) {
+            existingReaction!.isDeleted = true;
+            await ProjectVettingReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            isLike
+                ? vetting!.likedBy?.remove(user.id!)
+                : vetting!.dislikedBy?.remove(user.id!);
+          } else {
+            // Switch between like and dislike
+            existingReaction!.isLike = isLike;
+            await ProjectVettingReaction.db.updateRow(
+              session,
+              existingReaction!,
+              transaction: transaction,
+            );
+            if (isLike) {
+              vetting!.likedBy?.add(user.id!);
+              vetting!.dislikedBy?.remove(user.id);
+            } else {
+              vetting!.likedBy?.remove(user.id);
+              vetting!.dislikedBy?.add(user.id!);
+            }
+          }
+        } else {
+          // Create a new reaction
+          newReaction = ProjectVettingReaction(
+            ownerId: user.id!,
+            vettingId: vettingId,
+            isLike: isLike,
+            isDeleted: false,
+          );
+          await ProjectVettingReaction.db.insertRow(
+            session,
+            newReaction!,
+            transaction: transaction,
+          );
+          isLike
+              ? vetting!.likedBy?.add(user.id!)
+              : vetting!.dislikedBy?.add(user.id!);
+        }
+
+        // Update the like/dislike count on the vetting
+        await updateProjectVetting(session, vetting!);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in reactToReview: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        throw PostException(message: e.toString());
+      }
+    });
+    return vetting!;
+  }
+
   Future<void> deleteProject(
     Session session,
     int projectId,
@@ -919,23 +1075,21 @@ class ProjectEndpoint extends Endpoint {
             updatedAt: DateTime.now(),
             createdAt: existingVet.createdAt,
           );
-          await ProjectVetting.db.updateRow(
-            session,
-            updatedVet,
-            transaction: transaction,
-          );
+          await updateProjectVetting(session, updatedVet);
           return updatedVet;
         } else {
           final newProject = project.copyWith(
             vettedBy: [...project.vettedBy ?? [], user.id!],
           );
           await updateProject(session, newProject);
-          await ProjectVetting.db.insertRow(
+          return await ProjectVetting.db.insertRow(
             session,
-            projectVetting,
+            projectVetting.copyWith(
+              likedBy: [],
+              dislikedBy: [],
+            ),
             transaction: transaction,
           );
-          return projectVetting;
         }
       } on PostException {
         rethrow;
@@ -1170,6 +1324,48 @@ class ProjectEndpoint extends Endpoint {
     session.messages.postMessage(
       'review_${projectReview.id}',
       projectReview,
+    );
+  }
+
+  Stream<ProjectVetting> projectVettingUpdates(
+    Session session,
+    int vettingId,
+  ) async* {
+    // Create a message stream for this project
+    var updateStream =
+        session.messages.createStream<ProjectVetting>('review_$vettingId');
+
+    // Yield the latest project details when the client subscribes
+    var projectVetting = await ProjectVetting.db.findById(
+      session,
+      vettingId,
+      include: ProjectVetting.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+    if (projectVetting != null) {
+      yield projectVetting;
+    }
+
+    // Send updates when changes occur
+    await for (var projectVettingUpdate in updateStream) {
+      yield projectVettingUpdate.copyWith(
+        owner: projectVetting!.owner,
+      );
+    }
+  }
+
+  Future<void> updateProjectVetting(
+      Session session, ProjectVetting projectVetting) async {
+    // Update the project in the database
+    await ProjectVetting.db.updateRow(session, projectVetting);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'review_${projectVetting.id}',
+      projectVetting,
     );
   }
 

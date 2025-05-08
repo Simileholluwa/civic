@@ -33,7 +33,7 @@ class ProjectReviewReactionState {
     );
   }
 
-  factory ProjectReviewReactionState.empty(
+  factory ProjectReviewReactionState.populate(
     ProjectReview projectReview,
     Ref ref,
   ) {

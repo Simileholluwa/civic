@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post_comment.dart' as _i2;
 import '../user/user_record.dart' as _i3;
 
 abstract class PostCommentLikes
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   PostCommentLikes._({
     this.id,
     required this.postCommentId,
@@ -71,7 +73,7 @@ abstract class PostCommentLikes
   DateTime? dateCreated;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [PostCommentLikes]
   /// with some or all fields replaced by the given arguments.
@@ -188,7 +190,7 @@ class _PostCommentLikesImpl extends PostCommentLikes {
   }
 }
 
-class PostCommentLikesTable extends _i1.Table<int> {
+class PostCommentLikesTable extends _i1.Table<int?> {
   PostCommentLikesTable({super.tableRelation})
       : super(tableName: 'post_comment_likes') {
     postCommentId = _i1.ColumnInt(
@@ -281,7 +283,7 @@ class PostCommentLikesInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => PostCommentLikes.t;
+  _i1.Table<int?> get table => PostCommentLikes.t;
 }
 
 class PostCommentLikesIncludeList extends _i1.IncludeList {
@@ -301,7 +303,7 @@ class PostCommentLikesIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => PostCommentLikes.t;
+  _i1.Table<int?> get table => PostCommentLikes.t;
 }
 
 class PostCommentLikesRepository {

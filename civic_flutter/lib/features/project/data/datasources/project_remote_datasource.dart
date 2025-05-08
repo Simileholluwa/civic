@@ -30,8 +30,15 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> deleteProjectReview({required int id});
 
+  Future<void> deleteProjectVetting({required int vettingId});
+
   Future<ProjectReview> reactToReview({
     required int reviewId,
+    required bool isLike,
+  });
+
+  Future<ProjectVetting> reactToVetting({
+    required int vettingId,
     required bool isLike,
   });
 
@@ -310,6 +317,30 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
+  Future<ProjectVetting> reactToVetting({
+    required int vettingId,
+    required bool isLike,
+  }) async {
+    try {
+      final result = await _client.project.reactToVetting(
+        vettingId,
+        isLike,
+      );
+      return result;
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
   Future<void> toggleBookmark({
     required int projectId,
   }) async {
@@ -374,6 +405,23 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     try {
       await _client.project.deleteProjectReview(
         id,
+      );
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(message: 'Failed to connect to server');
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> deleteProjectVetting({required int vettingId}) async {
+    try {
+      await _client.project.deleteProjectVetting(
+        vettingId,
       );
     } on PostException catch (e) {
       throw ServerException(message: e.message);

@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project.dart' as _i3;
 
 abstract class ProjectReview
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   ProjectReview._({
     this.id,
     required this.ownerId,
@@ -33,9 +35,7 @@ abstract class ProjectReview
     this.updatedAt,
     this.likedBy,
     this.dislikedBy,
-    int? numberOfReviews,
-  })  : dateCreated = dateCreated ?? DateTime.now(),
-        numberOfReviews = numberOfReviews ?? 0;
+  }) : dateCreated = dateCreated ?? DateTime.now();
 
   factory ProjectReview({
     int? id,
@@ -55,7 +55,6 @@ abstract class ProjectReview
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   }) = _ProjectReviewImpl;
 
   factory ProjectReview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -94,7 +93,6 @@ abstract class ProjectReview
       dislikedBy: (jsonSerialization['dislikedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      numberOfReviews: jsonSerialization['numberOfReviews'] as int?,
     );
   }
 
@@ -137,10 +135,8 @@ abstract class ProjectReview
 
   List<int>? dislikedBy;
 
-  int? numberOfReviews;
-
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [ProjectReview]
   /// with some or all fields replaced by the given arguments.
@@ -163,7 +159,6 @@ abstract class ProjectReview
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -185,7 +180,6 @@ abstract class ProjectReview
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
-      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -209,7 +203,6 @@ abstract class ProjectReview
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
-      if (numberOfReviews != null) 'numberOfReviews': numberOfReviews,
     };
   }
 
@@ -270,7 +263,6 @@ class _ProjectReviewImpl extends ProjectReview {
     DateTime? updatedAt,
     List<int>? likedBy,
     List<int>? dislikedBy,
-    int? numberOfReviews,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -289,7 +281,6 @@ class _ProjectReviewImpl extends ProjectReview {
           updatedAt: updatedAt,
           likedBy: likedBy,
           dislikedBy: dislikedBy,
-          numberOfReviews: numberOfReviews,
         );
 
   /// Returns a shallow copy of this [ProjectReview]
@@ -314,7 +305,6 @@ class _ProjectReviewImpl extends ProjectReview {
     Object? updatedAt = _Undefined,
     Object? likedBy = _Undefined,
     Object? dislikedBy = _Undefined,
-    Object? numberOfReviews = _Undefined,
   }) {
     return ProjectReview(
       id: id is int? ? id : this.id,
@@ -346,13 +336,11 @@ class _ProjectReviewImpl extends ProjectReview {
       dislikedBy: dislikedBy is List<int>?
           ? dislikedBy
           : this.dislikedBy?.map((e0) => e0).toList(),
-      numberOfReviews:
-          numberOfReviews is int? ? numberOfReviews : this.numberOfReviews,
     );
   }
 }
 
-class ProjectReviewTable extends _i1.Table<int> {
+class ProjectReviewTable extends _i1.Table<int?> {
   ProjectReviewTable({super.tableRelation})
       : super(tableName: 'project_review') {
     ownerId = _i1.ColumnInt(
@@ -412,11 +400,6 @@ class ProjectReviewTable extends _i1.Table<int> {
       'dislikedBy',
       this,
     );
-    numberOfReviews = _i1.ColumnInt(
-      'numberOfReviews',
-      this,
-      hasDefault: true,
-    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -450,8 +433,6 @@ class ProjectReviewTable extends _i1.Table<int> {
   late final _i1.ColumnSerializable likedBy;
 
   late final _i1.ColumnSerializable dislikedBy;
-
-  late final _i1.ColumnInt numberOfReviews;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -496,7 +477,6 @@ class ProjectReviewTable extends _i1.Table<int> {
         updatedAt,
         likedBy,
         dislikedBy,
-        numberOfReviews,
       ];
 
   @override
@@ -531,7 +511,7 @@ class ProjectReviewInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => ProjectReview.t;
+  _i1.Table<int?> get table => ProjectReview.t;
 }
 
 class ProjectReviewIncludeList extends _i1.IncludeList {
@@ -551,7 +531,7 @@ class ProjectReviewIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => ProjectReview.t;
+  _i1.Table<int?> get table => ProjectReview.t;
 }
 
 class ProjectReviewRepository {

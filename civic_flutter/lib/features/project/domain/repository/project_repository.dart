@@ -26,6 +26,11 @@ abstract class ProjectRepository {
     required bool isLike,
   });
 
+  Future<Either<Failure, ProjectVetting>> reactToVetting({
+    required int vettingId,
+    required bool isLike,
+  });
+
   Future<Either<String, Project>> getProject({
     required int id,
   });
@@ -40,6 +45,10 @@ abstract class ProjectRepository {
 
   Future<Either<Failure, void>> deleteProjectReview({
     required int id,
+  });
+
+  Future<Either<Failure, void>> deleteProjectVetting({
+    required int vettingId,
   });
 
   Future<Either<Failure, ProjectReview>> saveProjectReview({

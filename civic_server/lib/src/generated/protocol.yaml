@@ -44,11 +44,13 @@ project:
   - saveProject:
   - saveProjectReview:
   - deleteProjectReview:
+  - deleteProjectVetting:
   - undoRepost:
   - scheduleProject:
   - getProjects:
   - getProjectReviews:
   - reactToReview:
+  - reactToVetting:
   - deleteProject:
   - toggleBookmark:
   - toggleLike:
@@ -63,6 +65,8 @@ project:
   - updateProject:
   - projectReviewUpdates:
   - updateProjectReview:
+  - projectVettingUpdates:
+  - updateProjectVetting:
 sendEmail:
   - sendEmail:
 userNin:

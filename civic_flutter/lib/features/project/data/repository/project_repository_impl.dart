@@ -220,6 +220,26 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
+  Future<Either<Failure, ProjectVetting>> reactToVetting({
+    required int vettingId,
+    required bool isLike,
+  }) async {
+    try {
+      final result = await _remoteDatasource.reactToVetting(
+        vettingId: vettingId,
+        isLike: isLike,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> toggleBookmark({
     required int projectId,
   }) async {
@@ -280,6 +300,24 @@ class ProjectRepositoryImpl extends ProjectRepository {
     try {
       final result = await _remoteDatasource.deleteProjectReview(
         id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteProjectVetting({
+    required int vettingId,
+  }) async {
+    try {
+      final result = await _remoteDatasource.deleteProjectVetting(
+        vettingId: vettingId,
       );
       return Right(result);
     } on ServerException catch (e) {

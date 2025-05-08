@@ -86,6 +86,13 @@ ReactToProjectReviewUseCase reactToProjectReview(Ref ref) {
 }
 
 @riverpod
+ReactToProjectVettingUseCase reactToProjectVetting(Ref ref) {
+  return ReactToProjectVettingUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
 ToggleBookmarkUseCase toggleBookmark(Ref ref) {
   return ToggleBookmarkUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -116,6 +123,13 @@ MarkNotInterestedUseCase notInterestedProject(Ref ref) {
 @riverpod
 DeleteProjectReviewUseCase deleteProjectReview(Ref ref) {
   return DeleteProjectReviewUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+DeleteProjectVettingUseCase deleteProjectVetting(Ref ref) {
+  return DeleteProjectVettingUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

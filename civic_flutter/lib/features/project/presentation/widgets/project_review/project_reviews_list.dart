@@ -30,18 +30,20 @@ class ProjectReviewsList extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if (project.overAllCategoryRating != null)
-            liveProject.when(data: (project) {
-              return ProjectRatingSummary(
-                project: project,
-              );
-            }, error: (_, __) {
-              return ProjectRatingSummary(
-                project: project,
-              );
-            }, loading: () {
-              return const SizedBox();
-            }),
+          liveProject.when(data: (newProject) {
+            if (newProject.overAllCategoryRating == null) {
+              return const SizedBox.shrink();
+            }
+            return ProjectRatingSummary(
+              project: newProject,
+            );
+          }, error: (_, __) {
+            return ProjectRatingSummary(
+              project: project,
+            );
+          }, loading: () {
+            return const SizedBox();
+          }),
           AppInfiniteList<ProjectReview>(
             pagingController: pagingControllerNotifier.pagingController,
             shrinkWrap: true,
@@ -56,10 +58,12 @@ class ProjectReviewsList extends ConsumerWidget {
               return liveProjectReview.when(data: (projectReview) {
                 return ProjectReviewCard(
                   projectReview: projectReview,
+                  projectId: project.id!,
                 );
               }, error: (_, __) {
                 return ProjectReviewCard(
                   projectReview: review,
+                  projectId: project.id!,
                 );
               }, loading: () {
                 return const SizedBox();

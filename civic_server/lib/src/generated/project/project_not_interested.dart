@@ -8,13 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project.dart' as _i3;
 
 abstract class ProjectNotInterested
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   ProjectNotInterested._({
     this.id,
     required this.userId,
@@ -71,7 +73,7 @@ abstract class ProjectNotInterested
   DateTime? dateMarked;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [ProjectNotInterested]
   /// with some or all fields replaced by the given arguments.
@@ -186,7 +188,7 @@ class _ProjectNotInterestedImpl extends ProjectNotInterested {
   }
 }
 
-class ProjectNotInterestedTable extends _i1.Table<int> {
+class ProjectNotInterestedTable extends _i1.Table<int?> {
   ProjectNotInterestedTable({super.tableRelation})
       : super(tableName: 'project_not_interested') {
     userId = _i1.ColumnInt(
@@ -280,7 +282,7 @@ class ProjectNotInterestedInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => ProjectNotInterested.t;
+  _i1.Table<int?> get table => ProjectNotInterested.t;
 }
 
 class ProjectNotInterestedIncludeList extends _i1.IncludeList {
@@ -300,7 +302,7 @@ class ProjectNotInterestedIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => ProjectNotInterested.t;
+  _i1.Table<int?> get table => ProjectNotInterested.t;
 }
 
 class ProjectNotInterestedRepository {

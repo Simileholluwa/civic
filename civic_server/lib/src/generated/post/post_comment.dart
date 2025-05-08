@@ -8,6 +8,8 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
@@ -15,7 +17,7 @@ import '../user/user_record.dart' as _i3;
 import '../post/post_comment.dart' as _i4;
 
 abstract class PostComment
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   PostComment._({
     this.id,
     required this.postId,
@@ -124,7 +126,7 @@ abstract class PostComment
   _i4.PostComment? parent;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [PostComment]
   /// with some or all fields replaced by the given arguments.
@@ -303,7 +305,7 @@ class _PostCommentImpl extends PostComment {
   }
 }
 
-class PostCommentTable extends _i1.Table<int> {
+class PostCommentTable extends _i1.Table<int?> {
   PostCommentTable({super.tableRelation}) : super(tableName: 'post_comment') {
     postId = _i1.ColumnInt(
       'postId',
@@ -467,7 +469,7 @@ class PostCommentInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => PostComment.t;
+  _i1.Table<int?> get table => PostComment.t;
 }
 
 class PostCommentIncludeList extends _i1.IncludeList {
@@ -487,7 +489,7 @@ class PostCommentIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => PostComment.t;
+  _i1.Table<int?> get table => PostComment.t;
 }
 
 class PostCommentRepository {

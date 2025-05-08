@@ -38,7 +38,6 @@ class AssetService {
         }
         mediaUrls.add('${decodedDescription['url']}/$path');
       }
-      log (mediaUrls.toString());
       return right(mediaUrls);
     } on SocketException catch (_) {
       return left('Failed to connect to server');

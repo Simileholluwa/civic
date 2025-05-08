@@ -1,0 +1,14 @@
+class: ProjectVettingReaction
+table: project_vetting_reaction
+fields:
+    owner: UserRecord?, relation
+    vetting: ProjectVetting?, relation(onDelete=Cascade)
+    dateCreated: DateTime?, default=now
+    updatedAt: DateTime?
+    isLike: bool?
+    isDeleted: bool?
+
+indexes:
+  vetting_id_unique_idx:
+    fields: vettingId, ownerId
+    unique: true

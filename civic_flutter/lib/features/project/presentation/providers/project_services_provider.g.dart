@@ -202,6 +202,26 @@ final reactToProjectReviewProvider =
 // ignore: unused_element
 typedef ReactToProjectReviewRef
     = AutoDisposeProviderRef<ReactToProjectReviewUseCase>;
+String _$reactToProjectVettingHash() =>
+    r'9e8923807419de17779357b2e98713dca75c9a94';
+
+/// See also [reactToProjectVetting].
+@ProviderFor(reactToProjectVetting)
+final reactToProjectVettingProvider =
+    AutoDisposeProvider<ReactToProjectVettingUseCase>.internal(
+  reactToProjectVetting,
+  name: r'reactToProjectVettingProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$reactToProjectVettingHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ReactToProjectVettingRef
+    = AutoDisposeProviderRef<ReactToProjectVettingUseCase>;
 String _$toggleBookmarkHash() => r'fd9ae908bd8bf0829edc5f463e5ea18cd68a05e3';
 
 /// See also [toggleBookmark].
@@ -294,6 +314,26 @@ final deleteProjectReviewProvider =
 // ignore: unused_element
 typedef DeleteProjectReviewRef
     = AutoDisposeProviderRef<DeleteProjectReviewUseCase>;
+String _$deleteProjectVettingHash() =>
+    r'31a81ff881a2909ab7943df3a8fe40b33f05dfa2';
+
+/// See also [deleteProjectVetting].
+@ProviderFor(deleteProjectVetting)
+final deleteProjectVettingProvider =
+    AutoDisposeProvider<DeleteProjectVettingUseCase>.internal(
+  deleteProjectVetting,
+  name: r'deleteProjectVettingProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteProjectVettingHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeleteProjectVettingRef
+    = AutoDisposeProviderRef<DeleteProjectVettingUseCase>;
 String _$vetProjectHash() => r'2d819f29e6abd9622c251523f9b445a2cb85ed39';
 
 /// See also [vetProject].

@@ -14,6 +14,8 @@ class ContentDoubleButton extends StatelessWidget {
     required this.secondButtonColor,
     required this.firstButtonIcon,
     required this.secondButtonIcon,
+    this.firstButtonLoading = false,
+    this.seccondButtonLoading = false,
   });
 
   final VoidCallback? firstButtonOnPressed;
@@ -23,6 +25,8 @@ class ContentDoubleButton extends StatelessWidget {
   final Color secondButtonColor;
   final IconData firstButtonIcon;
   final IconData secondButtonIcon;
+  final bool firstButtonLoading;
+  final bool seccondButtonLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class ContentDoubleButton extends StatelessWidget {
                   vertical: 10,
                 ),
               ),
-            ),
+            ).withLoading(loading: firstButtonLoading,),
           ),
         ),
         Expanded(
@@ -70,7 +74,7 @@ class ContentDoubleButton extends StatelessWidget {
                   vertical: 10,
                 ),
               ),
-            ),
+            ).withLoading(loading: seccondButtonLoading,),
           ),
         ),
       ],

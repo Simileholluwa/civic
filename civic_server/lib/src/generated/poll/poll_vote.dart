@@ -8,12 +8,14 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../poll/poll.dart' as _i2;
 
 abstract class PollVote
-    implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   PollVote._({
     this.id,
     required this.pollId,
@@ -54,7 +56,7 @@ abstract class PollVote
   int voterId;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [PollVote]
   /// with some or all fields replaced by the given arguments.
@@ -149,7 +151,7 @@ class _PollVoteImpl extends PollVote {
   }
 }
 
-class PollVoteTable extends _i1.Table<int> {
+class PollVoteTable extends _i1.Table<int?> {
   PollVoteTable({super.tableRelation}) : super(tableName: 'poll_vote') {
     pollId = _i1.ColumnInt(
       'pollId',
@@ -207,7 +209,7 @@ class PollVoteInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'poll': _poll};
 
   @override
-  _i1.Table<int> get table => PollVote.t;
+  _i1.Table<int?> get table => PollVote.t;
 }
 
 class PollVoteIncludeList extends _i1.IncludeList {
@@ -227,7 +229,7 @@ class PollVoteIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => PollVote.t;
+  _i1.Table<int?> get table => PollVote.t;
 }
 
 class PollVoteRepository {

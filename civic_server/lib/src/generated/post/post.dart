@@ -8,6 +8,8 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
@@ -16,7 +18,7 @@ import '../general/aws_places.dart' as _i4;
 import '../post/posts_hashtags.dart' as _i5;
 import '../project/project.dart' as _i6;
 
-abstract class Post implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Post._({
     this.id,
     required this.ownerId,
@@ -165,7 +167,7 @@ abstract class Post implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   bool? isProjectRepost;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [Post]
   /// with some or all fields replaced by the given arguments.
@@ -407,7 +409,7 @@ class _PostImpl extends Post {
   }
 }
 
-class PostTable extends _i1.Table<int> {
+class PostTable extends _i1.Table<int?> {
   PostTable({super.tableRelation}) : super(tableName: 'post') {
     ownerId = _i1.ColumnInt(
       'ownerId',
@@ -634,7 +636,7 @@ class PostInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => Post.t;
+  _i1.Table<int?> get table => Post.t;
 }
 
 class PostIncludeList extends _i1.IncludeList {
@@ -654,7 +656,7 @@ class PostIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => Post.t;
+  _i1.Table<int?> get table => Post.t;
 }
 
 class PostRepository {

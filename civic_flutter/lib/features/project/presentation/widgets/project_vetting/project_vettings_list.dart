@@ -11,14 +11,34 @@ class ProjectVettingsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedProjectVettingListProvider.notifier);
+    final pagingControllerNotifier = ref.watch(
+      paginatedProjectVettingListProvider.notifier,
+    );
     return AppInfiniteList<ProjectVetting>(
       pagingController: pagingControllerNotifier.pagingController,
       shrinkWrap: true,
-      scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, vetting, index) {
-        return Center(child: Text(vetting.comment ?? 'No comments'));
+        final liveProjectVetting = ref.watch(
+          projectVettingStreamProvider(
+            vetting.id!,
+            vetting,
+          ),
+        );
+        return liveProjectVetting.when(
+          data: (projectVetting) {
+            return ProjectVettingCard(
+              projectVetting: projectVetting,
+            );
+          },
+          error: (_, __) {
+            return ProjectVettingCard(
+              projectVetting: vetting,
+            );
+          },
+          loading: () {
+            return const SizedBox.shrink();
+          },
+        );
       },
       onRefresh: pagingControllerNotifier.refresh,
       noItemsFound: Padding(

@@ -43,9 +43,10 @@ class ProjectReviewScreen extends ConsumerWidget {
                     fontSize: 25,
                   ),
             ),
+            centerTitle: true,
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: Icon(Icons.clear),
+              icon: Icon(Iconsax.arrow_left_2),
               onPressed: () {
                 context.pop();
               },
@@ -94,25 +95,32 @@ class ProjectReviewScreen extends ConsumerWidget {
             projectReviewProviderProvider(review).notifier,
           );
           if (projectReviewState.isEditing) {
-            return ContentDoubleButton(
-              firstButtonOnPressed: () {
-                projectReviewNotifier.setEditing(false);
-              },
-              firstButtonIcon: Iconsax.edit,
-              firstButtonText: 'Edit review',
-              secondButtonOnPressed: projectReviewState.isDeleting
-                  ? null
-                  : () async {
-                      ProjectHelperFunctions.deleteProjectReviewDialog(
-                        context,
-                        projectReviewNotifier,
-                        projectId,
-                        review!.id!,
-                      );
-                    },
-              secondButtonColor: Colors.red,
-              secondButtonIcon: Iconsax.trash,
-              secondButtonText: 'Delete review',
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentDoubleButton(
+                firstButtonOnPressed: () {
+                  projectReviewNotifier.setEditing(false);
+                },
+                firstButtonIcon: Iconsax.edit,
+                firstButtonText: 'Edit review',
+                secondButtonOnPressed: projectReviewState.isDeleting
+                    ? null
+                    : () async {
+                        ProjectHelperFunctions.deleteProjectReviewDialog(
+                          context,
+                          projectReviewNotifier,
+                          projectId,
+                          review!.id!,
+                        );
+                      },
+                secondButtonColor: Colors.red,
+                secondButtonIcon: Iconsax.trash,
+                secondButtonText: 'Delete review',
+                seccondButtonLoading: projectReviewState.isDeleting,
+              ),
             );
           } else {
             return CreateProjectReviewBottomNavBar(

@@ -15,4 +15,3 @@ fields:
     updatedAt: DateTime?
     likedBy: List<int>?
     dislikedBy: List<int>?
-    numberOfReviews: int?, default=0

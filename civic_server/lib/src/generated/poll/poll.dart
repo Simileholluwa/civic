@@ -8,6 +8,8 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
@@ -15,7 +17,7 @@ import '../general/aws_places.dart' as _i3;
 import '../poll/poll_option.dart' as _i4;
 import '../poll/poll_hashtags.dart' as _i5;
 
-abstract class Poll implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Poll._({
     this.id,
     required this.ownerId,
@@ -145,7 +147,7 @@ abstract class Poll implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   DateTime? updatedAt;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [Poll]
   /// with some or all fields replaced by the given arguments.
@@ -365,7 +367,7 @@ class _PollImpl extends Poll {
   }
 }
 
-class PollTable extends _i1.Table<int> {
+class PollTable extends _i1.Table<int?> {
   PollTable({super.tableRelation}) : super(tableName: 'poll') {
     ownerId = _i1.ColumnInt(
       'ownerId',
@@ -561,7 +563,7 @@ class PollInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int> get table => Poll.t;
+  _i1.Table<int?> get table => Poll.t;
 }
 
 class PollIncludeList extends _i1.IncludeList {
@@ -581,7 +583,7 @@ class PollIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => Poll.t;
+  _i1.Table<int?> get table => Poll.t;
 }
 
 class PollRepository {

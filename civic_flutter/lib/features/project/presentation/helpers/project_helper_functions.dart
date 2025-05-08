@@ -843,12 +843,9 @@ class ProjectHelperFunctions {
     return parts.isEmpty ? 'just now' : parts.join(', ');
   }
 
-  static Future<bool?> deleteProjectReviewDialog(
-    BuildContext context,
-    ProjectReviewProvider projectReviewNotifier,
-    int projectId,
-    int reviewId,
-  ) {
+  static Future<bool?> deleteProjectReviewDialog(BuildContext context,
+      ProjectReviewProvider projectReviewNotifier, int projectId, int reviewId,
+      [bool shouldPop = true]) {
     return postDialog(
       context: context,
       title: 'Delete review?',
@@ -865,16 +862,18 @@ class ProjectHelperFunctions {
           projectId,
           reviewId,
         );
-        if (result) {
-          if (context.mounted) context.pop();
+        if (shouldPop) {
+          if (result) {
+            if (context.mounted) context.pop();
+          }
         }
       },
     );
   }
 
   static Future<bool?> deleteProjectVettingDialog(
-    BuildContext context,
-  ) {
+      BuildContext context, ProjectVet projectVettingNotifier, int vettingId,
+      [bool shouldPop = true]) {
     return postDialog(
       context: context,
       title: 'Delete vetting?',
@@ -885,7 +884,17 @@ class ProjectHelperFunctions {
       activeButtonLoading: false,
       skipButtonLoading: false,
       skipText: 'Cancel',
-      onTapActiveButton: () async {},
+      onTapActiveButton: () async {
+        context.pop();
+        final result = await projectVettingNotifier.deleteVetting(
+          vettingId,
+        );
+        if (shouldPop) {
+          if (result) {
+            if (context.mounted) context.pop();
+          }
+        }
+      },
     );
   }
 }

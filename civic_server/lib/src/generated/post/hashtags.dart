@@ -8,11 +8,14 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: unnecessary_null_comparison
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/posts_hashtags.dart' as _i2;
 
-abstract class Hashtag implements _i1.TableRow<int>, _i1.ProtocolSerialization {
+abstract class Hashtag
+    implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Hashtag._({
     this.id,
     required this.tag,
@@ -52,7 +55,7 @@ abstract class Hashtag implements _i1.TableRow<int>, _i1.ProtocolSerialization {
   List<_i2.PostsHashtags>? hashtags;
 
   @override
-  _i1.Table<int> get table => t;
+  _i1.Table<int?> get table => t;
 
   /// Returns a shallow copy of this [Hashtag]
   /// with some or all fields replaced by the given arguments.
@@ -151,7 +154,7 @@ class _HashtagImpl extends Hashtag {
   }
 }
 
-class HashtagTable extends _i1.Table<int> {
+class HashtagTable extends _i1.Table<int?> {
   HashtagTable({super.tableRelation}) : super(tableName: 'hashtag') {
     tag = _i1.ColumnString(
       'tag',
@@ -229,7 +232,7 @@ class HashtagInclude extends _i1.IncludeObject {
   Map<String, _i1.Include?> get includes => {'hashtags': _hashtags};
 
   @override
-  _i1.Table<int> get table => Hashtag.t;
+  _i1.Table<int?> get table => Hashtag.t;
 }
 
 class HashtagIncludeList extends _i1.IncludeList {
@@ -249,7 +252,7 @@ class HashtagIncludeList extends _i1.IncludeList {
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int> get table => Hashtag.t;
+  _i1.Table<int?> get table => Hashtag.t;
 }
 
 class HashtagRepository {

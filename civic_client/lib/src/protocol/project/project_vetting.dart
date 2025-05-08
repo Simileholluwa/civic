@@ -25,6 +25,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     this.status,
     DateTime? createdAt,
     this.updatedAt,
+    this.likedBy,
+    this.dislikedBy,
   }) : createdAt = createdAt ?? DateTime.now();
 
   factory ProjectVetting({
@@ -38,6 +40,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -64,6 +68,12 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      dislikedBy: (jsonSerialization['dislikedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -90,6 +100,10 @@ abstract class ProjectVetting implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
+  List<int>? likedBy;
+
+  List<int>? dislikedBy;
+
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -104,6 +118,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -118,6 +134,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       if (status != null) 'status': status,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
     };
   }
 
@@ -141,6 +159,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<int>? likedBy,
+    List<int>? dislikedBy,
   }) : super._(
           id: id,
           projectId: projectId,
@@ -152,6 +172,8 @@ class _ProjectVettingImpl extends ProjectVetting {
           status: status,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          likedBy: likedBy,
+          dislikedBy: dislikedBy,
         );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -169,6 +191,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     Object? status = _Undefined,
     Object? createdAt = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? dislikedBy = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -183,6 +207,12 @@ class _ProjectVettingImpl extends ProjectVetting {
       status: status is String? ? status : this.status,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      dislikedBy: dislikedBy is List<int>?
+          ? dislikedBy
+          : this.dislikedBy?.map((e0) => e0).toList(),
     );
   }
 }
