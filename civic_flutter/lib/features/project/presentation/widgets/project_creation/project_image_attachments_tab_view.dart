@@ -23,13 +23,14 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
     final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
-    final imageUrls = projectCreationSate.projectImageAttachments ?? <String>[];
+    final imageUrls = projectCreationSate.projectImageAttachments;
     int current = ref.watch(projectImageAttachmentPageChangedProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (imageUrls.isEmpty)
             Container(

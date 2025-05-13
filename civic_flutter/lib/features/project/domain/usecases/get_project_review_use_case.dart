@@ -3,13 +3,13 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetProjectReviewUseCase implements StringUseCase<ProjectReview?, GetProjectReviewParams> {
+class GetProjectReviewUseCase implements UseCase<ProjectReview?, GetProjectReviewParams> {
   GetProjectReviewUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
   final ProjectRepository _projectRepository;
 
   @override
-  Future<Either<String, ProjectReview?>> call(GetProjectReviewParams params) async {
+  Future<Either<Failure, ProjectReview?>> call(GetProjectReviewParams params) async {
     final result = await _projectRepository.getProjectReview(
       id: params.id,
     );

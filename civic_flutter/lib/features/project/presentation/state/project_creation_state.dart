@@ -1,8 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:civic_client/civic_client.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+
+import 'package:civic_client/civic_client.dart';
 
 class ProjectCreationState {
   ProjectCreationState({
@@ -14,12 +17,12 @@ class ProjectCreationState {
     required this.endDateController,
     required this.projectCostController,
     required this.fundingNoteController,
-    required this.manualLocationController,
     required this.virtualLocationController,
     required this.canAddLocations,
+    this.isValid = false,
     this.pdfAttachmentsThumbnail,
-    this.title,
-    this.description,
+    required this.title,
+    required this.description,
     this.projectCategory,
     this.projectSubCategory,
     this.status,
@@ -28,15 +31,12 @@ class ProjectCreationState {
     this.currency,
     this.fundingCategory,
     this.fundingSubCategory,
-    this.projectCost,
+    required this.projectCost,
     this.fundingNote,
-    this.projectImageAttachments,
+    required this.projectImageAttachments,
     this.projectPDFAttachments,
-    this.physicalLocations,
+    required this.physicalLocations,
     this.virtualLocations,
-    this.completionRate,
-    this.manualLocations,
-    this.projectVideoUrl,
   });
 
   factory ProjectCreationState.empty() {
@@ -49,8 +49,12 @@ class ProjectCreationState {
       endDateController: TextEditingController(),
       projectCostController: TextEditingController(),
       fundingNoteController: TextEditingController(),
-      manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
+      title: '',
+      description: '',
+      projectCost: 0.0,
+      projectImageAttachments: [],
+      physicalLocations: [],
       canAddLocations: true,
     );
   }
@@ -65,8 +69,8 @@ class ProjectCreationState {
       document = Document();
     }
     return ProjectCreationState(
-      title: project.title,
-      description: project.description,
+      title: project.title!,
+      description: project.description!,
       focusNode: FocusNode(),
       scrollController: ScrollController(),
       titleController: TextEditingController(text: project.title),
@@ -84,18 +88,17 @@ class ProjectCreationState {
       projectCostController: TextEditingController(
         text: project.projectCost?.toString(),
       ),
-      projectCost: project.projectCost,
+      projectCost: project.projectCost!,
       fundingNoteController: TextEditingController(text: project.fundingNote),
       fundingNote: project.fundingNote,
-      projectImageAttachments: project.projectImageAttachments,
+      projectImageAttachments: project.projectImageAttachments!,
       projectPDFAttachments: project.projectPDFAttachments,
       virtualLocations: project.virtualLocations,
-      physicalLocations: project.physicalLocations,
+      physicalLocations: project.physicalLocations!,
       fundingCategory: project.fundingCategory,
       fundingSubCategory: project.fundingSubCategory,
       projectCategory: project.projectCategory,
       projectSubCategory: project.projectSubCategory,
-      manualLocationController: TextEditingController(),
       virtualLocationController: TextEditingController(),
       canAddLocations: [
             ...?project.virtualLocations,
@@ -104,13 +107,11 @@ class ProjectCreationState {
             ),
           ].length <
           4,
-      projectVideoUrl: project.projectVideoUrl,
     );
   }
 
-  final double? completionRate;
   final String? currency;
-  final String? description;
+  final String description;
   final DateTime? endDate;
   final TextEditingController endDateController;
   final FocusNode focusNode;
@@ -118,11 +119,11 @@ class ProjectCreationState {
   final String? fundingNote;
   final TextEditingController fundingNoteController;
   final String? fundingSubCategory;
-  final List<AWSPlaces>? physicalLocations;
+  final List<AWSPlaces> physicalLocations;
   final String? projectCategory;
-  final double? projectCost;
+  final double projectCost;
   final TextEditingController projectCostController;
-  final List<String>? projectImageAttachments;
+  final List<String> projectImageAttachments;
   final List<String>? projectPDFAttachments;
   final String? projectSubCategory;
   final QuillController quillController;
@@ -130,91 +131,73 @@ class ProjectCreationState {
   final DateTime? startDate;
   final TextEditingController startDateController;
   final String? status;
-  final String? title;
+  final String title;
   final List<Uint8List>? pdfAttachmentsThumbnail;
   final TextEditingController titleController;
   final List<String>? virtualLocations;
-  final List<String>? manualLocations;
-  final TextEditingController manualLocationController;
   final TextEditingController virtualLocationController;
   final bool canAddLocations;
-  final String? projectVideoUrl;
+  final bool isValid;
 
   ProjectCreationState copyWith({
-    String? title,
-    String? description,
-    FocusNode? focusNode,
-    ScrollController? scrollController,
-    TextEditingController? titleController,
-    QuillController? quillController,
-    String? projectCategory,
-    String? projectSubCategory,
-    String? status,
-    TextEditingController? startDateController,
-    TextEditingController? endDateController,
-    DateTime? startDate,
-    DateTime? endDate,
     String? currency,
+    String? description,
+    DateTime? endDate,
+    TextEditingController? endDateController,
+    FocusNode? focusNode,
     String? fundingCategory,
-    String? fundingSubCategory,
-    TextEditingController? projectCostController,
-    double? projectCost,
-    TextEditingController? fundingNoteController,
     String? fundingNote,
+    TextEditingController? fundingNoteController,
+    String? fundingSubCategory,
+    List<AWSPlaces>? physicalLocations,
+    String? projectCategory,
+    double? projectCost,
+    TextEditingController? projectCostController,
     List<String>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    double? completionRate,
-    List<AWSPlaces>? physicalLocations,
+    String? projectSubCategory,
+    QuillController? quillController,
+    ScrollController? scrollController,
+    DateTime? startDate,
+    TextEditingController? startDateController,
+    String? status,
+    String? title,
+    List<Uint8List>? pdfAttachmentsThumbnail,
+    TextEditingController? titleController,
     List<String>? virtualLocations,
-    List<String>? manualLocations,
-    TextEditingController? manualLocationController,
     TextEditingController? virtualLocationController,
     bool? canAddLocations,
-    List<Uint8List>? pdfAttachmentsThumbnail,
-    String? projectVideoUrl,
+    bool? isValid,
   }) {
     return ProjectCreationState(
-      title: title ?? this.title,
-      description: description ?? this.description,
-      focusNode: focusNode ?? this.focusNode,
-      scrollController: scrollController ?? this.scrollController,
-      titleController: titleController ?? this.titleController,
-      quillController: quillController ?? this.quillController,
-      projectCategory: projectCategory ?? this.projectCategory,
-      projectSubCategory: projectSubCategory,
-      status: status ?? this.status,
-      startDateController: startDateController ?? this.startDateController,
-      endDateController: endDateController ?? this.endDateController,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
       currency: currency ?? this.currency,
+      description: description ?? this.description,
+      endDate: endDate ?? this.endDate,
+      endDateController: endDateController ?? this.endDateController,
+      focusNode: focusNode ?? this.focusNode,
       fundingCategory: fundingCategory ?? this.fundingCategory,
-      fundingSubCategory: fundingSubCategory,
-      projectCostController:
-          projectCostController ?? this.projectCostController,
-      projectCost: projectCost ?? this.projectCost,
-      fundingNoteController:
-          fundingNoteController ?? this.fundingNoteController,
       fundingNote: fundingNote ?? this.fundingNote,
-      projectImageAttachments:
-          projectImageAttachments ?? this.projectImageAttachments,
-      projectPDFAttachments:
-          projectPDFAttachments ?? this.projectPDFAttachments,
-      completionRate: completionRate ?? this.completionRate,
+      fundingNoteController: fundingNoteController ?? this.fundingNoteController,
+      fundingSubCategory: fundingSubCategory ?? this.fundingSubCategory,
       physicalLocations: physicalLocations ?? this.physicalLocations,
+      projectCategory: projectCategory ?? this.projectCategory,
+      projectCost: projectCost ?? this.projectCost,
+      projectCostController: projectCostController ?? this.projectCostController,
+      projectImageAttachments: projectImageAttachments ?? this.projectImageAttachments,
+      projectPDFAttachments: projectPDFAttachments ?? this.projectPDFAttachments,
+      projectSubCategory: projectSubCategory ?? this.projectSubCategory,
+      quillController: quillController ?? this.quillController,
+      scrollController: scrollController ?? this.scrollController,
+      startDate: startDate ?? this.startDate,
+      startDateController: startDateController ?? this.startDateController,
+      status: status ?? this.status,
+      title: title ?? this.title,
+      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail ?? this.pdfAttachmentsThumbnail,
+      titleController: titleController ?? this.titleController,
       virtualLocations: virtualLocations ?? this.virtualLocations,
-      manualLocations: manualLocations ?? this.manualLocations,
-      manualLocationController:
-          manualLocationController ?? this.manualLocationController,
-      virtualLocationController:
-          virtualLocationController ?? this.virtualLocationController,
+      virtualLocationController: virtualLocationController ?? this.virtualLocationController,
       canAddLocations: canAddLocations ?? this.canAddLocations,
-      projectVideoUrl: projectVideoUrl ?? this.projectVideoUrl,
+      isValid: isValid ?? this.isValid,
     );
-  }
-
-  @override
-  String toString() {
-    return 'ProjectCreationState(title: $title, description: $description, projectCategory: $projectCategory, projectSubCategory: $projectSubCategory, status: $status, startDate: $startDate, endDate: $endDate, currency: $currency, fundingCategory: $fundingCategory, fundingSubCategory: $fundingSubCategory, projectCost: $projectCost, fundingNote: $fundingNote, projectImageAttachments: $projectImageAttachments, projectPDFAttachments: $projectPDFAttachments, completionRate: $completionRate, physicalLocations: $physicalLocations, virtualLocations: $virtualLocations, manualLocations: $manualLocations, canAddLocations: $canAddLocations, pdfAttachmentsThumbnail: $pdfAttachmentsThumbnail, projectVideoUrl: $projectVideoUrl)';
   }
 }

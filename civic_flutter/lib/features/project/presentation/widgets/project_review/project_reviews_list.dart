@@ -38,6 +38,9 @@ class ProjectReviewsList extends ConsumerWidget {
               project: newProject,
             );
           }, error: (_, __) {
+            if (project.overAllCategoryRating == null) {
+              return const SizedBox.shrink();
+            }
             return ProjectRatingSummary(
               project: project,
             );

@@ -18,7 +18,7 @@ class MentionHashTagLinkServices {
           await client.userRecord.mentionUsers(limit: 10, query: query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } on TimeoutException catch (_) {
       return left('The request timed out.');
     } on LocationException catch (e) {
@@ -36,7 +36,7 @@ class MentionHashTagLinkServices {
           await client.hashtag.fetchHashtags(limit: 10, query: query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } on TimeoutException catch (_) {
       return left('The request timed out.');
     } on LocationException catch (e) {

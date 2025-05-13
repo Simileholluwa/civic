@@ -34,7 +34,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
     } on PostException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -55,7 +55,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
       }
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -71,7 +71,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
         page: page,
       );
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -104,7 +104,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
     } on PostException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } catch (e) {
       throw ServerException(
         message: e.toString(),

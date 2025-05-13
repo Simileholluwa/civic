@@ -18,7 +18,7 @@ class LocationServices {
       final response = await client.location.searchLocation(query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } on TimeoutException catch (_) {
       return left('The request timed out.');
     } on LocationException catch (e) {
@@ -35,7 +35,7 @@ class LocationServices {
       final response = await client.location.searchNearbyLocation(position);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } on TimeoutException catch (_) {
       return left('The request timed out.');
     } on LocationException catch (e) {

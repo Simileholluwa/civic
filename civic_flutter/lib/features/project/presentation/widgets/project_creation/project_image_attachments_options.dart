@@ -89,7 +89,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
                 color: TColors.textWhite,
               ),
             ),
-            if (projectCreationSate.projectImageAttachments!.length < 5)
+            if (projectCreationSate.projectImageAttachments.length < 5)
               Row(
                 children: [
                   IconButton(
@@ -119,7 +119,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${projectCreationSate.projectImageAttachments!.length}',
+                  '$pageIndex/${projectCreationSate.projectImageAttachments.length}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

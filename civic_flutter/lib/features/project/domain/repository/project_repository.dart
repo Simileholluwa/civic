@@ -39,7 +39,7 @@ abstract class ProjectRepository {
     required Project project,
   });
 
-  Future<Either<String, ProjectReview?>> getProjectReview({
+  Future<Either<Failure, ProjectReview?>> getProjectReview({
     required int id,
   });
 

@@ -20,7 +20,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
     final data = ref.watch(searchPlacesProvider);
     final projectCreationSate = ref.watch(projectProviderProvider(project));
     final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
-    final locations = projectCreationSate.physicalLocations ?? [];
+    final locations = projectCreationSate.physicalLocations;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(

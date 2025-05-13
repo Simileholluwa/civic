@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewCard extends ConsumerWidget {
   const ProjectReviewCard({
@@ -28,126 +29,252 @@ class ProjectReviewCard extends ConsumerWidget {
         projectReview,
       ),
     );
-    final projectReviewNotiier =
-        ref.watch(projectReviewProviderProvider(projectReview).notifier);
-    final userId = ref.read(localStorageProvider).getInt('userId');
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 10,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
-        children: [
-          ContentCreatorInfo(
-            timeAgo: THelperFunctions.humanizeDateTime(
-              projectReview.dateCreated ?? DateTime.now(),
-            ),
-            creator: projectReview.owner!,
+    final projectReviewNotiier = ref.watch(
+      projectReviewProviderProvider(
+        projectReview,
+      ).notifier,
+    );
+    final pagingControllerNotifier = ref.watch(
+      paginatedProjectReviewListProvider(
+        projectId,
+      ).notifier,
+    );
+    final projectReviewStateNotifier = ref.watch(
+      projectReviewListQueryProvider.notifier,
+    );
+    final projectReviewState = ref.watch(
+      projectReviewListQueryProvider,
+    );
+    final userId = ref
+        .read(
+          localStorageProvider,
+        )
+        .getInt(
+          'userId',
+        );
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (projectReviewState.cardinal != null)
+                Row(
+                  spacing: 10,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        projectReviewStateNotifier.clearQuery();
+                        pagingControllerNotifier.refresh();
+                      },
+                      child: Ink(
+                        child: Icon(
+                          Iconsax.filter_remove5,
+                          color: TColors.secondary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                  ],
+                ),
+              InkWell(
+                onTap: () {
+                  ProjectHelperFunctions.projectReviewsFilterDialog(
+                    context,
+                    projectId,
+                  );
+                },
+                child: Ink(
+                  child: Text(
+                    'Filter',
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+                child: VerticalDivider(),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Ink(
+                  child: Text(
+                    'By date',
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+                child: VerticalDivider(),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Ink(
+                  child: Text(
+                    'By likes',
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+                child: VerticalDivider(),
+              ),
+              InkWell(
+                onTap: () {},
+                child: const Icon(
+                  Icons.arrow_upward_rounded,
+                ),
+              ),
+              const SizedBox(
+                height: 35,
+                child: VerticalDivider(),
+              ),
+              InkWell(
+                onTap: () {},
+                child: const Icon(
+                  Icons.arrow_downward_rounded,
+                ),
+              ),
+            ],
           ),
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 10,
-              children: [
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      projectReview.locationRating.toString().substring(0, 1),
-                  rating: projectReview.locationRating!,
-                  title: 'Location',
-                ),
-                const SizedBox(
-                  height: 35,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber: projectReview.descriptionRating
-                      .toString()
-                      .substring(0, 1),
-                  rating: projectReview.descriptionRating!,
-                  title: 'Description',
-                ),
-                const SizedBox(
-                  height: 35,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber: projectReview.attachmentsRating
-                      .toString()
-                      .substring(0, 1),
-                  rating: projectReview.attachmentsRating!,
-                  title: 'Attachments',
-                ),
-                const SizedBox(
-                  height: 35,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      projectReview.categoryRating.toString().substring(0, 1),
-                  rating: projectReview.categoryRating!,
-                  title: 'Category',
-                ),
-                const SizedBox(
-                  height: 35,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      projectReview.fundingRating.toString().substring(0, 1),
-                  rating: projectReview.fundingRating!,
-                  title: 'Funding',
-                ),
-                const SizedBox(
-                  height: 35,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      projectReview.datesRating.toString().substring(0, 1),
-                  rating: projectReview.datesRating!,
-                  title: 'Dates',
-                ),
-              ],
-            ),
+        ),
+        const Divider(
+          height: 0,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 10,
           ),
-          ContentExpandableText(
-            text: projectReview.review!,
-            onToggleTextTap: null,
-            hasVideo: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 10,
+            children: [
+              ContentCreatorInfo(
+                timeAgo: THelperFunctions.humanizeDateTime(
+                  projectReview.dateCreated ?? DateTime.now(),
+                ),
+                creator: projectReview.owner!,
+              ),
+              SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    ProjectTitleAndRating(
+                      ratingNumber: projectReview.locationRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: projectReview.locationRating!,
+                      title: 'Location',
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: projectReview.descriptionRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: projectReview.descriptionRating!,
+                      title: 'Description',
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: projectReview.attachmentsRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: projectReview.attachmentsRating!,
+                      title: 'Attachments',
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: projectReview.categoryRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: projectReview.categoryRating!,
+                      title: 'Category',
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: projectReview.fundingRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: projectReview.fundingRating!,
+                      title: 'Funding',
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber:
+                          projectReview.datesRating.toString().substring(0, 1),
+                      rating: projectReview.datesRating!,
+                      title: 'Dates',
+                    ),
+                  ],
+                ),
+              ),
+              ContentExpandableText(
+                text: projectReview.review!,
+                onToggleTextTap: null,
+                hasVideo: true,
+              ),
+              ReactToReviewOrVetting(
+                text: 'Was this review helpful?',
+                likesCount: reactToReviewState.likesCount,
+                likeTextColor: reactToReviewState.isLiked &&
+                        reactToReviewState.isDeleted == false
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
+                dislikeTextColor: reactToReviewState.isDisliked &&
+                        reactToReviewState.isDeleted == false
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.onSurface,
+                likeTapped: () {
+                  reactToReviewNotifier.reactToReview(true);
+                },
+                dislikeTapped: () {
+                  reactToReviewNotifier.reactToReview(false);
+                },
+                isOwner: projectReview.ownerId == userId,
+                onDelete: () {
+                  ProjectHelperFunctions.deleteProjectReviewDialog(
+                    context,
+                    projectReviewNotiier,
+                    projectId,
+                    projectReview.id!,
+                    false,
+                  );
+                },
+              ),
+            ],
           ),
-          ReactToReviewOrVetting(
-            text: 'Was this review helpful?',
-            likesCount: reactToReviewState.likesCount,
-            likeTextColor: reactToReviewState.isLiked &&
-                    reactToReviewState.isDeleted == false
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.onSurface,
-            dislikeTextColor: reactToReviewState.isDisliked &&
-                    reactToReviewState.isDeleted == false
-                ? Theme.of(context).colorScheme.secondary
-                : Theme.of(context).colorScheme.onSurface,
-            likeTapped: () {
-              reactToReviewNotifier.reactToReview(true);
-            },
-            dislikeTapped: () {
-              reactToReviewNotifier.reactToReview(false);
-            },
-            isOwner: projectReview.ownerId == userId,
-            onDelete: () {
-              ProjectHelperFunctions.deleteProjectReviewDialog(
-                context,
-                projectReviewNotiier,
-                projectId,
-                projectReview.id!,
-                false,
-              );
-            },
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

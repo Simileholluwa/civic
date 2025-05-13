@@ -154,6 +154,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
           if (value == null) {
             return null;
           } else {
+            if (projectCardState.isOwner!) {
+              return null;
+            }
             return ProjectDetailsBottomNavigationWidget(
               project: value,
             );

@@ -158,8 +158,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 : projectCardState.hasVerified!
                     ? TColors.primary
                     : Theme.of(context).iconTheme.color!,
-          )
-        else
+          ),
+        if (projectCardState.isOwner!)
           ContentInteractionButton(
             icon: Iconsax.edit,
             text: '',
@@ -181,7 +181,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     );
                   },
           ),
-        if (!projectCardState.canVet!)
+        if (!projectCardState.canVet! && !projectCardState.isOwner!)
           ContentInteractionButton(
             icon: projectCardState.isBookmarked!
                 ? Icons.bookmark

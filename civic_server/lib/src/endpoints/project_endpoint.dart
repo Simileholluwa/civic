@@ -37,12 +37,15 @@ class ProjectEndpoint extends Endpoint {
       if (project.isDeleted!) {
         throw PostException(
             message:
-                'This project has been deleted by its owner. Reviews are not allowed.');
+                'This project has been deleted by its owner. Reviews are not allowed.',
+                );
       }
       if (user.userInfoId == project.ownerId) {
         throw PostException(
             message:
-                'Projects you create can only be reviewed by your constituents. Try sharing this project.');
+                'Projects you create can only be reviewed by your constituents. Try sharing this project.',
+            action: 'share',    
+            );
       }
     }
 

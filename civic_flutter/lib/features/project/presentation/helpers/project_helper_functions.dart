@@ -73,6 +73,8 @@ class ProjectHelperFunctions {
   static Future<DateTime?> pickProjectStartOrDate(
     BuildContext context,
     String helpText,
+    DateTime? initialDate,
+    DateTime? firstDate,
   ) async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -80,8 +82,8 @@ class ProjectHelperFunctions {
         Icons.add,
         color: Colors.transparent,
       ),
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2010),
+      initialDate: initialDate ?? DateTime.now(),
+      firstDate: firstDate ?? DateTime(2010),
       lastDate: DateTime(2050),
       helpText: helpText,
       builder: (context, child) {
@@ -684,7 +686,6 @@ class ProjectHelperFunctions {
       endDate: projectCreationSate.endDate,
       physicalLocations: projectCreationSate.physicalLocations,
       virtualLocations: projectCreationSate.virtualLocations,
-      projectVideoUrl: projectCreationSate.projectVideoUrl,
       projectPDFAttachments: projectCreationSate.projectPDFAttachments,
       projectImageAttachments: projectCreationSate.projectImageAttachments,
       currency: projectCreationSate.currency,

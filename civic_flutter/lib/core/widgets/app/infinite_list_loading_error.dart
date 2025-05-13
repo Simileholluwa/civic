@@ -5,7 +5,7 @@ class InfiniteListLoadingError extends StatelessWidget {
   const InfiniteListLoadingError({
     super.key,
     this.errorMessage =
-        'Something went wrong while tring to load this project. Please try again.',
+        'Something went wrong while fetching data. Please try again.',
     required this.retry,
     this.padding = const EdgeInsets.fromLTRB(20, 20, 20, 0),
     this.imageString = TImageTexts.disconnected,

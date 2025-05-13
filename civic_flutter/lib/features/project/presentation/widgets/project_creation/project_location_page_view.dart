@@ -81,7 +81,7 @@ class ProjectLocationPageView extends ConsumerWidget {
             isVirtual: true,
             isPhysical: false,
           ),
-        if (projectCreationSate.physicalLocations != null)
+        if (projectCreationSate.physicalLocations.isNotEmpty)
           ProjectSelectedLocations(
             project: project,
             isVirtual: false,

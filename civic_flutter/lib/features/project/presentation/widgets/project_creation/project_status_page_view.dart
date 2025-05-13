@@ -37,6 +37,8 @@ class ProjectStatusPageView extends ConsumerWidget {
                   await ProjectHelperFunctions.pickProjectStartOrDate(
                 context,
                 'Select start date',
+                null,
+                null,
               );
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
@@ -53,10 +55,24 @@ class ProjectStatusPageView extends ConsumerWidget {
             hintText: 'End date',
             readOnly: true,
             onTap: () async {
+              if (projectCreationSate.startDateController.text.isEmpty) {
+                TToastMessages.errorToast('Please select a start date first');
+                return;
+              }
               final pickedDate =
                   await ProjectHelperFunctions.pickProjectStartOrDate(
                 context,
                 'Select end date',
+                projectCreationSate.startDate!.add(
+                  Duration(
+                    days: 1,
+                  ),
+                ),
+                projectCreationSate.startDate!.add(
+                  Duration(
+                    days: 1,
+                  ),
+                ),
               );
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);

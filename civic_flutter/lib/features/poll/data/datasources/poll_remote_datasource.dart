@@ -46,7 +46,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -79,7 +79,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
 
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -110,7 +110,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
       }
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -135,7 +135,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
       );
       
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -163,7 +163,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {

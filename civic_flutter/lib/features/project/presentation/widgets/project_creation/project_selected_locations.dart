@@ -24,7 +24,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
         ref.watch(projectProviderProvider(project).notifier);
     List<dynamic>? locations;
     if (isVirtual) locations = projectCreationSate.virtualLocations ?? <String>[];
-    if (isPhysical) locations = projectCreationSate.physicalLocations ?? <AWSPlaces>[];
+    if (isPhysical) locations = projectCreationSate.physicalLocations;
     return Flexible(
       child: ListView.separated(
         shrinkWrap: true,
@@ -112,7 +112,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         }
                         if (isPhysical) {
                           projectNotifier.removePhysicalLocation(
-                            projectCreationSate.physicalLocations![index],
+                            projectCreationSate.physicalLocations[index],
                           );
                         }
                       },

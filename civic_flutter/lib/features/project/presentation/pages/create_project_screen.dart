@@ -33,61 +33,56 @@ class CreateProjectScreen extends ConsumerWidget {
         true,
       ).notifier,
     );
-    return PopScope(
-      canPop: true,
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) async {
-        isVisibleNotifier.show();
-        context.pop();
-      },
-      child: AppAndroidBottomNav(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(
-              60,
-            ),
-            child: CreateContentAppbar(
-              canSend: true,
-              draftData: const [],
-              sendPressed: () {
-                if (!projectNotifier.validateProject()) return;
-                context.pop();
-                isVisibleNotifier.show();
-                ProjectHelperFunctions.sendProject(
-                  ref,
-                  projectCreationState,
-                  id,
-                  data.value!.ownerId,
-                );
-              },
-              onCanSendPost: () async {},
-              draftPressed: () {},
-            ),
+    return AppAndroidBottomNav(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(
+            60,
           ),
-          body: data.when(
-            data: (project) {
-              return CreateProjectWidget(
-                project: project,
+          child: CreateContentAppbar(
+            canSend: projectCreationState.isValid,
+            draftData: const [],
+            title: CreateProjectAppbarTitle(),
+            sendPressed: () {
+              if (!projectNotifier.validateProject()) return;
+              context.pop();
+              isVisibleNotifier.show();
+              ProjectHelperFunctions.sendProject(
+                ref,
+                projectCreationState,
+                id,
+                data.value!.ownerId,
               );
             },
-            error: (error, st) {
-              return InfiniteListLoadingError(
-                  retry: () {
-                    ref.invalidate(projectDetailProvider);
-                  },
-                  imageString: TImageTexts.error,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  errorMessage: error.toString(),
-                );
+            onCanSendPost: () {
+              context.pop();
             },
-            loading: () {
-              return AppLoadingWidget();
-            },
+            draftPressed: () {},
           ),
+        ),
+        body: data.when(
+          data: (project) {
+            return CreateProjectWidget(
+              project: project,
+            );
+          },
+          error: (error, st) {
+            return InfiniteListLoadingError(
+                retry: () {
+                  ref.invalidate(projectDetailProvider);
+                },
+                imageString: TImageTexts.error,
+                mainAxisAlignment: MainAxisAlignment.center,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                errorMessage: error.toString(),
+              );
+          },
+          loading: () {
+            return AppLoadingWidget();
+          },
         ),
       ),
     );

@@ -138,7 +138,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<String, ProjectReview?>> getProjectReview({
+  Future<Either<Failure, ProjectReview?>> getProjectReview({
     required int id,
   }) async {
     try {
@@ -148,7 +148,10 @@ class ProjectRepositoryImpl extends ProjectRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(
-        e.message,
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
       );
     }
   }

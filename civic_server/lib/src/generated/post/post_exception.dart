@@ -16,28 +16,48 @@ abstract class PostException
         _i1.SerializableException,
         _i1.SerializableModel,
         _i1.ProtocolSerialization {
-  PostException._({required this.message});
+  PostException._({
+    required this.message,
+    String? action,
+  }) : action = action ?? 'nothing';
 
-  factory PostException({required String message}) = _PostExceptionImpl;
+  factory PostException({
+    required String message,
+    String? action,
+  }) = _PostExceptionImpl;
 
   factory PostException.fromJson(Map<String, dynamic> jsonSerialization) {
-    return PostException(message: jsonSerialization['message'] as String);
+    return PostException(
+      message: jsonSerialization['message'] as String,
+      action: jsonSerialization['action'] as String?,
+    );
   }
 
   String message;
 
+  String? action;
+
   /// Returns a shallow copy of this [PostException]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
-  PostException copyWith({String? message});
+  PostException copyWith({
+    String? message,
+    String? action,
+  });
   @override
   Map<String, dynamic> toJson() {
-    return {'message': message};
+    return {
+      'message': message,
+      if (action != null) 'action': action,
+    };
   }
 
   @override
   Map<String, dynamic> toJsonForProtocol() {
-    return {'message': message};
+    return {
+      'message': message,
+      if (action != null) 'action': action,
+    };
   }
 
   @override
@@ -46,14 +66,28 @@ abstract class PostException
   }
 }
 
+class _Undefined {}
+
 class _PostExceptionImpl extends PostException {
-  _PostExceptionImpl({required String message}) : super._(message: message);
+  _PostExceptionImpl({
+    required String message,
+    String? action,
+  }) : super._(
+          message: message,
+          action: action,
+        );
 
   /// Returns a shallow copy of this [PostException]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   @override
-  PostException copyWith({String? message}) {
-    return PostException(message: message ?? this.message);
+  PostException copyWith({
+    String? message,
+    Object? action = _Undefined,
+  }) {
+    return PostException(
+      message: message ?? this.message,
+      action: action is String? ? action : this.action,
+    );
   }
 }

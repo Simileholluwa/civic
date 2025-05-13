@@ -59,7 +59,6 @@ export 'presentation/widgets/project_creation/create_project_bottom_navigation_b
 export 'presentation/widgets/project_creation/create_project_widget.dart';
 export 'presentation/widgets/project_creation/project_attachments_page_view.dart';
 export '../../core/widgets/content/content_keep_alive_wrapper.dart';
-export 'presentation/widgets/project_creation/project_attachments_video_options.dart';
 export 'presentation/widgets/project_creation/project_category_dropdown.dart';
 export 'presentation/widgets/project_creation/project_category_page_view.dart';
 export 'presentation/widgets/project_creation/project_funding_page_view.dart';
@@ -67,6 +66,7 @@ export 'presentation/widgets/project_creation/project_image_attachments_options.
 export 'presentation/widgets/project_creation/project_image_attachments_tab_view.dart';
 export 'presentation/widgets/project_creation/project_location_options.dart';
 export 'presentation/widgets/project_creation/project_location_page_view.dart';
+export 'presentation/widgets/project_creation/create_project_appbar_title.dart';
 export 'presentation/widgets/project_vetting/project_vettings_list.dart';
 export 'presentation/widgets/project_vetting/project_vetting_card.dart';
 export 'presentation/widgets/project_creation/project_overview_page_view.dart';
@@ -111,7 +111,7 @@ export 'presentation/widgets/project_details/project_details_widget.dart';
 export 'presentation/widgets/project_creation/project_overview_widget.dart';
 export 'presentation/widgets/project_details/project_detail_title_and_subtitle.dart';
 export 'presentation/widgets/project_review/create_project_review.dart';
-export 'presentation/widgets/project_creation/create_project_review_bottom_nav_bar.dart';
+export 'presentation/widgets/project_review/create_project_review_bottom_nav_bar.dart';
 export 'presentation/widgets/project_review/modify_project_review_or_vetting.dart';
 export 'presentation/widgets/project_review/project_review_section.dart';
 export 'presentation/widgets/project_screen/deleted_project_placeholder.dart';

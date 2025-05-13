@@ -85,7 +85,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     } on PostException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -113,7 +113,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -137,7 +137,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server');
+      throw const ServerException(message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {

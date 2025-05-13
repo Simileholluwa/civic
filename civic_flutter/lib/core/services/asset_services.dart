@@ -40,7 +40,7 @@ class AssetService {
       }
       return right(mediaUrls);
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } on TimeoutException catch (_) {
       return left('The request timed out.');
     } on ServerpodClientException catch (e) {

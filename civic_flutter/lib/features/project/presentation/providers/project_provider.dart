@@ -25,6 +25,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setTitle(String title) {
@@ -35,6 +36,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setStartDate(DateTime startDate) {
@@ -45,6 +47,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setEndDate(DateTime endDate) {
@@ -55,6 +58,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setProjectStatus(String? status) {
@@ -65,18 +69,17 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setCompletionRate(String completionRate) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
-      completionRate: double.tryParse(
-        completionRate,
-      ),
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setProjectSubCategory(String? projectSubCategory) {
@@ -85,6 +88,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
+    setIsValid();
   }
 
   void setProjectCategory(String? projectCategory) {
@@ -94,6 +98,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: null,
       fundingCategory: fundingSubCategory,
     );
+    setIsValid();
   }
 
   void setCurrency(String? currency) {
@@ -104,6 +109,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setProjectCost(String? projectCost) {
@@ -119,6 +125,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setFundingCategory(String? fundingCategory) {
@@ -128,6 +135,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: null,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setFundingSubCategory(String? fundingSubCategory) {
@@ -136,6 +144,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void setFundingNote(String? fundingNote) {
@@ -146,12 +155,13 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
+    setIsValid();
   }
 
   void addPhysicalLocation(List<AWSPlaces> physicalLocations) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
-    if (state.physicalLocations == null) {
+    if (state.physicalLocations.isEmpty) {
       state = state.copyWith(
         physicalLocations: [],
         fundingSubCategory: fundingSubCategory,
@@ -161,13 +171,14 @@ class ProjectProvider extends _$ProjectProvider {
 
     state = state.copyWith(
       physicalLocations: [
-        ...state.physicalLocations!,
+        ...state.physicalLocations,
         ...physicalLocations,
       ],
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
     canAddLocation();
+    setIsValid();
   }
 
   void addVirtualLocations(String virtualLocation) {
@@ -189,6 +200,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     canAddLocation();
+    setIsValid();
   }
 
   void editVirtualLocation(String virtualLocation, int index) {
@@ -207,58 +219,21 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
-  }
-
-  void addManualLocation(String manualLocation) {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    if (state.manualLocations == null) {
-      state = state.copyWith(
-        manualLocations: [],
-        fundingSubCategory: fundingSubCategory,
-        projectSubCategory: projectSubCategory,
-      );
-    }
-    state = state.copyWith(
-      manualLocations: [
-        ...state.manualLocations!,
-        manualLocation,
-      ],
-      fundingSubCategory: fundingSubCategory,
-      projectSubCategory: projectSubCategory,
-    );
-    canAddLocation();
-  }
-
-  void editManualLocation(String manualLocation, int index) {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    if (state.manualLocations == null) {
-      state = state.copyWith(
-        manualLocations: [],
-        fundingSubCategory: fundingSubCategory,
-        projectSubCategory: projectSubCategory,
-      );
-    }
-    state.manualLocations![index] = manualLocation;
-    state = state.copyWith(
-      manualLocations: state.manualLocations,
-      fundingSubCategory: fundingSubCategory,
-      projectSubCategory: projectSubCategory,
-    );
+    setIsValid();
   }
 
   void removePhysicalLocation(AWSPlaces physicalLocation) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
-      physicalLocations: state.physicalLocations!
+      physicalLocations: state.physicalLocations
           .where((element) => element != physicalLocation)
           .toList(),
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
     );
     canAddLocation();
+    setIsValid();
   }
 
   void removeVirtualLocation(String virtualLocation) {
@@ -272,37 +247,14 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     canAddLocation();
-  }
-
-  void clearVideo() {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    state = state.copyWith(
-      projectVideoUrl: '',
-      fundingSubCategory: fundingSubCategory,
-      projectSubCategory: projectSubCategory,
-    );
-  }
-
-  void removeManualLocation(String manualLocation) {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    state = state.copyWith(
-      manualLocations: state.manualLocations!
-          .where((element) => element != manualLocation)
-          .toList(),
-      fundingSubCategory: fundingSubCategory,
-      projectSubCategory: projectSubCategory,
-    );
-    canAddLocation();
+    setIsValid();
   }
 
   void canAddLocation() {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
-    final totalLocations = (state.manualLocations?.length ?? 0) +
-        (state.virtualLocations?.length ?? 0) +
-        (state.physicalLocations?.length ?? 0);
+    final totalLocations = (state.virtualLocations?.length ?? 0) +
+        (state.physicalLocations.length);
     if (totalLocations == 3) {
       state = state.copyWith(
         canAddLocations: false,
@@ -319,48 +271,48 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   int numberOfLocations() {
-    final totalLocations = (state.manualLocations?.length ?? 0) +
-        (state.virtualLocations?.length ?? 0) +
-        (state.physicalLocations?.length ?? 0);
+    final totalLocations = (state.virtualLocations?.length ?? 0) +
+        (state.physicalLocations.length);
     return totalLocations;
   }
 
   Future<void> takePicture() async {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
-    if (state.projectImageAttachments == null) {
+    if (state.projectImageAttachments.isEmpty) {
       state = state.copyWith(
         projectImageAttachments: [],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
-    if (state.projectImageAttachments!.length >= maxImageCount) return;
+    if (state.projectImageAttachments.length >= maxImageCount) return;
     final image = await imageHelper.takeImage();
-    if (image != null && state.projectImageAttachments!.length < 10) {
+    if (image != null && state.projectImageAttachments.length < 10) {
       state = state.copyWith(
         projectImageAttachments: [
-          ...state.projectImageAttachments!,
+          ...state.projectImageAttachments,
           image.path,
         ],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
+    setIsValid();
   }
 
   Future<void> pickPicture() async {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
-    if (state.projectImageAttachments == null) {
+    if (state.projectImageAttachments.isEmpty) {
       state = state.copyWith(
         projectImageAttachments: [],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
-    if (state.projectImageAttachments!.length >= maxImageCount) return;
-    final imageLength = maxImageCount - state.projectImageAttachments!.length;
+    if (state.projectImageAttachments.length >= maxImageCount) return;
+    final imageLength = maxImageCount - state.projectImageAttachments.length;
     final image = await imageHelper.pickImage(
       multipleImages: imageLength > 1 ? true : false,
     );
@@ -371,7 +323,7 @@ class ProjectProvider extends _$ProjectProvider {
       }
       state = state.copyWith(
         projectImageAttachments: [
-          ...state.projectImageAttachments!,
+          ...state.projectImageAttachments,
           ...imagePaths.take(imageLength),
         ],
         projectSubCategory: projectSubCategory,
@@ -383,20 +335,21 @@ class ProjectProvider extends _$ProjectProvider {
         );
       }
     }
+    setIsValid();
   }
 
   void removeImageAtIndex(index) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
-    if (state.projectImageAttachments == null) {
+    if (state.projectImageAttachments.isEmpty) {
       state = state.copyWith(
         projectImageAttachments: [],
         projectSubCategory: projectSubCategory,
         fundingSubCategory: fundingSubCategory,
       );
     }
-    if (state.projectImageAttachments!.isEmpty) return;
-    var images = state.projectImageAttachments!;
+    if (state.projectImageAttachments.isEmpty) return;
+    var images = state.projectImageAttachments;
     if (images.length == 1) {
       state = state.copyWith(
         projectImageAttachments: [],
@@ -410,6 +363,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
+    setIsValid();
   }
 
   void removeAllImages() {
@@ -420,6 +374,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
       fundingSubCategory: fundingSubCategory,
     );
+    setIsValid();
   }
 
   Future<void> pickPDFs() async {
@@ -548,6 +503,23 @@ class ProjectProvider extends _$ProjectProvider {
     );
   }
 
+  void setIsValid() {
+    state = state.copyWith(
+      isValid: state.title.isNotEmpty &&
+          state.description.isNotEmpty &&
+          state.projectCategory != null &&
+          state.projectSubCategory != null &&
+          state.startDate != null &&
+          state.endDate != null &&
+          state.currency != null &&
+          state.projectCost != 0.0 &&
+          state.fundingCategory != null &&
+          state.fundingSubCategory != null &&
+          state.physicalLocations.isNotEmpty &&
+          state.projectImageAttachments.isNotEmpty,
+    );
+  }
+
   bool validateProject() {
     final validations = [
       validateOverview(),
@@ -593,101 +565,46 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   bool validateOverview() {
-    return !(state.title?.isEmpty ?? true) &&
-        !(state.description?.isEmpty ?? true);
+    return state.title.isNotEmpty && state.description.isNotEmpty;
   }
 
   bool validateCategory() {
-    return state.projectCategory != null || state.projectSubCategory != null;
+    return state.projectCategory != null && state.projectSubCategory != null;
   }
 
   bool validateStatus() {
-    if (state.startDate == null || state.endDate == null) {
-      return false;
-    }
-    return true;
+    return state.startDate != null && state.endDate != null;
   }
 
   bool validateFunding() {
     return state.fundingCategory != null &&
         state.fundingSubCategory != null &&
         state.currency != null &&
-        state.projectCost != null;
+        state.projectCost != 0.0;
   }
 
   bool validateLocation() {
-    final physicalLocations = state.physicalLocations ?? [];
-    final virtualLocations = state.virtualLocations ?? [];
-    final manualLocations = state.manualLocations ?? [];
-
-    return physicalLocations.isNotEmpty ||
-        virtualLocations.isNotEmpty ||
-        manualLocations.isNotEmpty;
+    return state.physicalLocations.isNotEmpty ||
+        (state.virtualLocations ?? []).isNotEmpty;
   }
 
   bool validateAttachment() {
-    final hasImages = state.projectImageAttachments?.isNotEmpty ?? false;
-    final hasPDFs = state.projectPDFAttachments?.isNotEmpty ?? false;
-    final hasVideo = state.projectVideoUrl?.isNotEmpty ?? false;
-
-    return hasImages || hasPDFs || hasVideo;
-  }
-
-  Future<void> takeVideo() async {
-    final imageHelper = ImageHelper();
-    final video = await imageHelper.takeVideo();
-    if (video != null) {
-      setVideo(video.path);
-    }
-    TToastMessages.infoToast(
-      'No video taken.',
-    );
-  }
-
-  Future<void> pickVideo() async {
-    final imageHelper = ImageHelper();
-    final video = await imageHelper.pickVideo();
-    if (video != null) {
-      final fileSizeInBytes = await video.length();
-      final fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
-      if (fileSizeInMB > 20) {
-        TToastMessages.infoToast(
-          'Video size must be less than 20MB.',
-        );
-        return;
-      }
-      setVideo(video.path);
-    } else {
-      TToastMessages.infoToast(
-        'No video selected.',
-      );
-    }
-  }
-
-  void setVideo(String video) {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    state = state.copyWith(
-      projectVideoUrl: video,
-      projectSubCategory: projectSubCategory,
-      fundingSubCategory: fundingSubCategory,
-    );
-    ref.read(mediaVideoPlayerProvider(state.projectVideoUrl));
-  }
-
-  void removeVideo() {
-    final fundingSubCategory = state.fundingSubCategory;
-    final projectSubCategory = state.projectSubCategory;
-    state = state.copyWith(
-      projectVideoUrl: null,
-      projectSubCategory: projectSubCategory,
-      fundingSubCategory: fundingSubCategory,
-    );
+    return state.projectImageAttachments.isNotEmpty;
   }
 
   @override
   ProjectCreationState build(Project? project) {
     if (project == null) {
+      final projectCreationSate = ProjectCreationState.empty();
+      projectCreationSate.quillController.addListener(() {
+        setContent(
+          jsonEncode(
+            projectCreationSate.quillController.document.toDelta().toJson(),
+          ),
+        );
+      });
+      return projectCreationSate;
+    } else if (project.title == null || project.description == null) {
       final projectCreationSate = ProjectCreationState.empty();
       projectCreationSate.quillController.addListener(() {
         setContent(

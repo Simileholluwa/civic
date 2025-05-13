@@ -28,30 +28,41 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 1000);
-    final completer = Completer<List<ProjectVetting>?>();
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(debounceDuration, () async {
-      final listVettedProjectUseCase = ref.read(getVettedProjectsProvider);
-      final result = await listVettedProjectUseCase(
-        GetVettedProjectsParams(
-          page,
-          limit,
-        ),
-      );
-      result.fold((error) {
-        log(error.message);
-        completer.completeError(error);
-      }, (data) {
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            data.results, 
-            data.page + 1,
+      try {
+        final listVettedProjectUseCase = ref.read(getVettedProjectsProvider);
+        final result = await listVettedProjectUseCase(
+          GetVettedProjectsParams(
+            page,
+            limit,
+          ),
+        );
+        result.fold((error) {
+          log(error.message, name: 'PaginatedVettingList');
+          pagingController.value = PagingState(
+            nextPageKey: null,
+            itemList: null,
+            error: error,
           );
-        } else {
-          pagingController.appendLastPage(data.results);
-        }
-        return completer.complete();
-      });
+        }, (data) {
+          if (data.canLoadMore) {
+            pagingController.appendPage(
+              data.results,
+              data.page + 1,
+            );
+          } else {
+            pagingController.appendLastPage(data.results);
+          }
+        });
+      } catch (e) {
+        log(e.toString(), name: 'PaginatedVettingList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: e.toString(),
+        );
+      }
     });
   }
 
@@ -68,7 +79,8 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
   }
 
   void deleteVetting(int vettingId) {
-    final updatedList = List<ProjectVetting>.from(pagingController.itemList ?? []);
+    final updatedList =
+        List<ProjectVetting>.from(pagingController.itemList ?? []);
     updatedList.removeWhere((element) => element.id == vettingId);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,

@@ -29,7 +29,7 @@ class UsersListService {
     } on TimeoutException catch (_) {
       return left('Request timed out');
     } on SocketException catch (_) {
-      return left('Failed to connect to server');
+      return left('Failed to connect to server. Please try again.');
     } catch (e) {
       return left(
         e.toString(),

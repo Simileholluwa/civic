@@ -71,11 +71,12 @@ class ProjectReviewScreen extends ConsumerWidget {
           }
         },
         error: (error, st) {
+          final err = error as Map<String, String?>;
           return InfiniteListLoadingError(
             retry: () {
               ref.invalidate(projectReviewDetailProvider);
             },
-            errorMessage: error.toString(),
+            errorMessage: err['message']!,
             mainAxisAlignment: MainAxisAlignment.center,
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -131,23 +132,40 @@ class ProjectReviewScreen extends ConsumerWidget {
           }
         },
         error: (error, st) {
+          final err = error as Map<String, String?>;
+          if (err['action']! == 'retry') {
           return Padding(
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 5,
             ),
-            child: SizedBox(
-              height: 45,
-              child: ElevatedButton(
-                onPressed: () {
-                  ref.invalidate(projectReviewDetailProvider);
-                },
-                child: Text(
-                  'Refresh',
-                ),
-              ),
+            child: ContentSingleButton(
+              onPressed: () {
+                ref.invalidate(projectReviewDetailProvider);
+              },
+              text: 'Retry',
+              buttonIcon: Iconsax.refresh,
             ),
           );
+        } else if (err['action']! == 'share') {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            child: ContentDoubleButton(
+              firstButtonOnPressed: () {},
+              firstButtonIcon: Iconsax.share,
+              firstButtonText: 'Share project',
+              secondButtonOnPressed: () {},
+              secondButtonColor: Colors.blue,
+              secondButtonIcon: Iconsax.copy,
+              secondButtonText: 'Copy link',
+            ),
+          );
+        } else {
+          return null;
+        }
         },
         loading: () {
           return const SizedBox.shrink();
