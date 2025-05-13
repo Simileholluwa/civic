@@ -4,6 +4,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 
 class ProjectStatusPageView extends ConsumerWidget {
   const ProjectStatusPageView({
@@ -43,7 +44,9 @@ class ProjectStatusPageView extends ConsumerWidget {
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
                 projectCreationSate.startDateController.text =
-                    pickedDate.toString().substring(0, 11);
+                    DateFormat('MMM d, y').format(
+                  pickedDate,
+                );
               }
             },
             validator: (value) => null,
@@ -77,7 +80,9 @@ class ProjectStatusPageView extends ConsumerWidget {
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);
                 projectCreationSate.endDateController.text =
-                    pickedDate.toString().substring(0, 11);
+                    DateFormat('MMM d, y').format(
+                  pickedDate,
+                );
               }
             },
             validator: (value) => null,

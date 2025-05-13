@@ -1,0 +1,55 @@
+import 'dart:convert';
+
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
+
+abstract class ProjectLocalDataSource {
+  Future<void> saveProjectDraft({required Project project});
+  Future<Project> getProjectDraft();
+  Future<void> deleteProjectDraft();
+}
+
+class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
+  ProjectLocalDataSourceImpl({
+    required LocalStorage prefs,
+  }) : _prefs = prefs;
+  final LocalStorage _prefs;
+
+  @override
+  Future<void> saveProjectDraft({required Project project}) async {
+    try {
+      final projectDraft = project.toJson();
+      final jsonString = jsonEncode(projectDraft);
+      await _prefs.setString('projectDraft', jsonString);
+    } catch (e) {
+      throw const CacheException(message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future<Project> getProjectDraft() async {
+    try {
+      final projectDraft = _prefs.getString('projectDraft');
+      if (projectDraft != null) {
+        final projectMap =
+            jsonDecode(projectDraft.toString()) as Map<String, dynamic>;
+        return Project.fromJson(projectMap);
+      }
+      final userId = _prefs.getInt('userId');
+      return Project(
+        ownerId: userId!,
+      );
+    } catch (e) {
+      throw const CacheException(message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future<void> deleteProjectDraft() async {
+    try {
+      await _prefs.remove('projectDraft');
+    } catch (e) {
+      throw const CacheException(message: 'Something went wrong');
+    }
+  }
+}

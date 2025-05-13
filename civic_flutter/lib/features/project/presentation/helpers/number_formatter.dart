@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class NumberInputFormatter extends TextInputFormatter {
-  final NumberFormat numberFormat = NumberFormat("#,###.##");
+  final NumberFormat numberFormat = NumberFormat("#,##0.##");
 
   @override
   TextEditingValue formatEditUpdate(
@@ -11,19 +11,26 @@ class NumberInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    // Remove any non-digit characters (to handle backspaces and edits)
-    final cleanedValue = newValue.text.replaceAll(',', '');
-    final intValue = int.tryParse(cleanedValue);
+    // Remove all commas
+    final cleanedText = newValue.text.replaceAll(',', '');
 
-    if (intValue == null) {
-      return oldValue; // Invalid input, ignore the change
+    // Try parsing as double to allow decimals
+    final double? value = double.tryParse(cleanedText);
+    if (value == null) {
+      return oldValue; // Invalid number
     }
 
-    final formattedValue = numberFormat.format(intValue);
+    final newFormatted = numberFormat.format(value);
+
+    // Calculate new selection offset
+    final int newOffset =
+        newFormatted.length - (cleanedText.length - newValue.selection.end);
 
     return TextEditingValue(
-      text: formattedValue,
-      selection: TextSelection.collapsed(offset: formattedValue.length),
+      text: newFormatted,
+      selection: TextSelection.collapsed(
+        offset: newOffset.clamp(0, newFormatted.length),
+      ),
     );
   }
 }

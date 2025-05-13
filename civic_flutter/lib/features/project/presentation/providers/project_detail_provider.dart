@@ -15,10 +15,17 @@ Future<Project> projectDetail(
 ) async {
   final completer = Completer<Project>();
   if (id == 0) {
-    final userId = ref.read(localStorageProvider).getInt('userId');
-    return Project(
-      ownerId: userId!,
+    final getProjectDraft = ref.read(getProjectDraftProvider);
+    final result = await getProjectDraft(NoParams());
+    result.fold(
+      (error) {
+        completer.completeError(error);
+      },
+      (project) async {
+        completer.complete(project);
+      },
     );
+    return completer.future;
   } else {
     final retrieveProject = ref.read(getProjectProvider);
     final result = await retrieveProject(

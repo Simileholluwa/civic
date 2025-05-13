@@ -35,6 +35,12 @@ abstract class ProjectRepository {
     required int id,
   });
 
+  Future<Either<Failure, Project>> getProjectDraft();
+
+  Future<Either<Failure, void>> saveProjectDraft({required Project project,});
+
+  Future<Either<Failure, void>> deleteProjectDraft();
+
   Future<Either<Failure, Project>> saveProject({
     required Project project,
   });

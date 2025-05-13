@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -26,6 +27,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setTitle(String title) {
@@ -37,6 +39,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setStartDate(DateTime startDate) {
@@ -48,6 +51,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setEndDate(DateTime endDate) {
@@ -59,6 +63,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setProjectStatus(String? status) {
@@ -70,6 +75,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setCompletionRate(String completionRate) {
@@ -80,6 +86,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setProjectSubCategory(String? projectSubCategory) {
@@ -89,6 +96,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setProjectCategory(String? projectCategory) {
@@ -99,6 +107,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingCategory: fundingSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setCurrency(String? currency) {
@@ -110,6 +119,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setProjectCost(String? projectCost) {
@@ -126,6 +136,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setFundingCategory(String? fundingCategory) {
@@ -136,6 +147,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setFundingSubCategory(String? fundingSubCategory) {
@@ -145,6 +157,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void setFundingNote(String? fundingNote) {
@@ -156,6 +169,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void addPhysicalLocation(List<AWSPlaces> physicalLocations) {
@@ -179,6 +193,7 @@ class ProjectProvider extends _$ProjectProvider {
     );
     canAddLocation();
     setIsValid();
+    setCanSave();
   }
 
   void addVirtualLocations(String virtualLocation) {
@@ -201,6 +216,7 @@ class ProjectProvider extends _$ProjectProvider {
     );
     canAddLocation();
     setIsValid();
+    setCanSave();
   }
 
   void editVirtualLocation(String virtualLocation, int index) {
@@ -220,6 +236,7 @@ class ProjectProvider extends _$ProjectProvider {
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void removePhysicalLocation(AWSPlaces physicalLocation) {
@@ -234,6 +251,7 @@ class ProjectProvider extends _$ProjectProvider {
     );
     canAddLocation();
     setIsValid();
+    setCanSave();
   }
 
   void removeVirtualLocation(String virtualLocation) {
@@ -248,6 +266,7 @@ class ProjectProvider extends _$ProjectProvider {
     );
     canAddLocation();
     setIsValid();
+    setCanSave();
   }
 
   void canAddLocation() {
@@ -299,6 +318,7 @@ class ProjectProvider extends _$ProjectProvider {
       );
     }
     setIsValid();
+    setCanSave();
   }
 
   Future<void> pickPicture() async {
@@ -336,6 +356,7 @@ class ProjectProvider extends _$ProjectProvider {
       }
     }
     setIsValid();
+    setCanSave();
   }
 
   void removeImageAtIndex(index) {
@@ -364,6 +385,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   void removeAllImages() {
@@ -375,6 +397,7 @@ class ProjectProvider extends _$ProjectProvider {
       fundingSubCategory: fundingSubCategory,
     );
     setIsValid();
+    setCanSave();
   }
 
   Future<void> pickPDFs() async {
@@ -503,6 +526,23 @@ class ProjectProvider extends _$ProjectProvider {
     );
   }
 
+  void setCanSave() {
+    state = state.copyWith(
+    canSave: state.title.isNotEmpty ||
+          state.description.isNotEmpty ||
+          state.projectCategory != null ||
+          state.projectSubCategory != null ||
+          state.startDate != null ||
+          state.endDate != null ||
+          state.currency != null ||
+          state.projectCost != 0.0 ||
+          state.fundingCategory != null ||
+          state.fundingSubCategory != null ||
+          state.physicalLocations.isNotEmpty ||
+          state.projectImageAttachments.isNotEmpty,
+    );
+  }
+
   void setIsValid() {
     state = state.copyWith(
       isValid: state.title.isNotEmpty &&
@@ -590,6 +630,189 @@ class ProjectProvider extends _$ProjectProvider {
 
   bool validateAttachment() {
     return state.projectImageAttachments.isNotEmpty;
+  }
+
+  void setImages(List<String> images) {
+    final fundingSubCategory = state.fundingSubCategory;
+    final projectSubCategory = state.projectSubCategory;
+    state = state.copyWith(
+      fundingSubCategory: fundingSubCategory,
+      projectSubCategory: projectSubCategory,
+      projectImageAttachments: [...images],
+    );
+  }
+
+  void setPDFAttachments(List<String> pdfs) {
+    final fundingSubCategory = state.fundingSubCategory;
+    final projectSubCategory = state.projectSubCategory;
+    state = state.copyWith(
+      fundingSubCategory: fundingSubCategory,
+      projectSubCategory: projectSubCategory,
+      projectPDFAttachments: [...pdfs],
+    );
+  }
+
+  Future<bool> sendImageAttachments() async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (state.projectImageAttachments.isEmpty) return false;
+
+    for (final image in state.projectImageAttachments) {
+      final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+      if (regex.hasMatch(image)) {
+        existingUpload.add(image);
+      } else {
+        newUpload.add(image);
+      }
+    }
+    if (newUpload.isEmpty) return true;
+    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+          newUpload,
+          'projects',
+          'images',
+        );
+
+    return result.fold((error) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      log(error);
+      return false;
+    }, (imageUrls) {
+      setImages(existingUpload + imageUrls);
+      return true;
+    });
+  }
+
+  Future<bool> sendPDFAttachments() async {
+    var existingUpload = <String>[];
+    var newUpload = <String>[];
+    if (state.projectPDFAttachments == null) return true;
+    if ((state.projectPDFAttachments ?? []).isEmpty) return true;
+
+    for (final pdf in state.projectPDFAttachments!) {
+      final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+      if (regex.hasMatch(pdf)) {
+        existingUpload.add(pdf);
+      } else {
+        newUpload.add(pdf);
+      }
+    }
+
+    if (newUpload.isEmpty) return true;
+    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+          newUpload,
+          'projects',
+          'pdfs',
+        );
+
+    return result.fold((error) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      log(error);
+      return false;
+    }, (pdfUrls) {
+      setPDFAttachments(existingUpload + pdfUrls);
+      return true;
+    });
+  }
+
+  Future<void> saveProjectDraft() async {
+    final saveDraft = ref.read(saveProjectDraftProvider);
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    final result = await saveDraft(
+      SaveProjectDraftParams(
+        Project(
+          ownerId: ownerId,
+          title: state.title,
+          description: state.description,
+          projectCategory: state.projectCategory,
+          projectSubCategory: state.projectSubCategory,
+          startDate: state.startDate,
+          endDate: state.endDate,
+          currency: state.currency,
+          projectCost: state.projectCost,
+          fundingCategory: state.fundingCategory,
+          fundingSubCategory: state.fundingSubCategory,
+          fundingNote: state.fundingNote,
+          physicalLocations: state.physicalLocations,
+          virtualLocations: state.virtualLocations,
+          projectImageAttachments: state.projectImageAttachments,
+          projectPDFAttachments: state.projectPDFAttachments,
+        ),
+      ),
+    );
+    result.fold((l) {
+      log(l.message);
+    }, (_) {
+      return;
+    });
+  }
+
+  Future<void> sendProject(int? projectId) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    final imageUrls = await sendImageAttachments();
+    if (!imageUrls) {
+      await saveProjectDraft();
+      TToastMessages.errorToast(
+          'Unable to upload images. Project has been saved as draft.');
+      return;
+    }
+    final pdfUrls = await sendPDFAttachments();
+    if (!pdfUrls) {
+      await saveProjectDraft();
+      TToastMessages.errorToast(
+          'Unable to upload PDFs. Project has been saved as draft.');
+      return;
+    }
+
+    final saveProject = ref.read(saveProjectProvider);
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+
+    final result = await saveProject(
+      SaveProjectParams(
+        Project(
+          id: projectId,
+          ownerId: ownerId,
+          title: state.title,
+          description: state.description,
+          projectCategory: state.projectCategory,
+          projectSubCategory: state.projectSubCategory,
+          startDate: state.startDate,
+          endDate: state.endDate,
+          currency: state.currency,
+          projectCost: state.projectCost,
+          fundingCategory: state.fundingCategory,
+          fundingSubCategory: state.fundingSubCategory,
+          fundingNote: state.fundingNote,
+          physicalLocations: state.physicalLocations,
+          virtualLocations: state.virtualLocations,
+          projectImageAttachments: state.projectImageAttachments,
+          projectPDFAttachments: state.projectPDFAttachments,
+        ),
+      ),
+    );
+
+    return result.fold((error) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      log(error.message);
+      saveProjectDraft();
+      TToastMessages.errorToast(
+          "${error.message}. Project has been saved as draft.");
+      return;
+    }, (response) async {
+      final deleteDraft = ref.read(deleteProjectDraftProvider);
+      await deleteDraft(NoParams());
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      TToastMessages.successToast(
+        'Your project was sent.',
+      );
+      ref
+          .watch(
+            paginatedProjectListProvider.notifier,
+          )
+          .addProject(
+            response,
+          );
+      return;
+    });
   }
 
   @override

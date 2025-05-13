@@ -52,7 +52,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     ProjectHelperFunctions.undoRepostDialog(
                       context,
                       ref,
-                      project.id!,
+                      project,
                     );
                     return;
                   }
@@ -172,7 +172,6 @@ class ProjectInteractionButtons extends ConsumerWidget {
             onTap: projectCardState.isDeleted!
                 ? null
                 : () {
-                    context.pop();
                     context.push(
                       AppRoutes.createProject,
                       extra: {

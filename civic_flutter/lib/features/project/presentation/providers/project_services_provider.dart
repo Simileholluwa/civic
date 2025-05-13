@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
-import 'package:civic_flutter/core/providers/api_client_provider.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,10 +13,20 @@ ProjectRemoteDatasourceImpl projectRemoteDatasource(Ref ref) {
 }
 
 @riverpod
+ProjectLocalDataSourceImpl projectLocalDatasource(Ref ref) {
+  return ProjectLocalDataSourceImpl(
+    prefs: ref.read(localStorageProvider),
+  );
+}
+
+@riverpod
 ProjectRepositoryImpl projectRepositoryImpl(Ref ref) {
   return ProjectRepositoryImpl(
     remoteDatasource: ref.read(
       projectRemoteDatasourceProvider,
+    ),
+    localDatasource: ref.read(
+      projectLocalDatasourceProvider,
     ),
   );
 }
@@ -151,6 +160,27 @@ GetVettedProjectUseCase getVettedProject(Ref ref) {
 @riverpod
 GetVettedProjectsUseCase getVettedProjects(Ref ref) {
   return GetVettedProjectsUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+GetProjectDraftUseCase getProjectDraft(Ref ref) {
+  return GetProjectDraftUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+SaveProjectDraftUseCase saveProjectDraft(Ref ref) {
+  return SaveProjectDraftUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+DeleteProjectDraftUseCase deleteProjectDraft(Ref ref) {
+  return DeleteProjectDraftUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

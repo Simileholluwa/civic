@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:civic_client/civic_client.dart';
+import 'package:intl/intl.dart';
 
 class ProjectCreationState {
   ProjectCreationState({
@@ -20,6 +21,7 @@ class ProjectCreationState {
     required this.virtualLocationController,
     required this.canAddLocations,
     this.isValid = false,
+    this.canSave = false,
     this.pdfAttachmentsThumbnail,
     required this.title,
     required this.description,
@@ -78,15 +80,29 @@ class ProjectCreationState {
         document: document,
         selection: const TextSelection.collapsed(offset: 0),
       ),
-      startDateController:
-          TextEditingController(text: project.startDate?.toString()),
-      endDateController:
-          TextEditingController(text: project.endDate?.toString()),
+      startDateController: TextEditingController(
+        text: project.startDate == null
+            ? null
+            : DateFormat('MMM d, y').format(
+                project.startDate!,
+              ),
+      ),
+      endDateController: TextEditingController(
+        text: project.endDate == null
+            ? null
+            : DateFormat('MMM d, y').format(
+                project.endDate!,
+              ),
+      ),
       startDate: project.startDate,
       endDate: project.endDate,
       currency: project.currency,
       projectCostController: TextEditingController(
-        text: project.projectCost?.toString(),
+        text: project.projectCost == null
+            ? null
+            : NumberFormat("#,##0.##").format(
+                project.projectCost!,
+              ),
       ),
       projectCost: project.projectCost!,
       fundingNoteController: TextEditingController(text: project.fundingNote),
@@ -138,6 +154,7 @@ class ProjectCreationState {
   final TextEditingController virtualLocationController;
   final bool canAddLocations;
   final bool isValid;
+  final bool canSave;
 
   ProjectCreationState copyWith({
     String? currency,
@@ -168,6 +185,7 @@ class ProjectCreationState {
     TextEditingController? virtualLocationController,
     bool? canAddLocations,
     bool? isValid,
+    bool? canSave,
   }) {
     return ProjectCreationState(
       currency: currency ?? this.currency,
@@ -177,14 +195,18 @@ class ProjectCreationState {
       focusNode: focusNode ?? this.focusNode,
       fundingCategory: fundingCategory ?? this.fundingCategory,
       fundingNote: fundingNote ?? this.fundingNote,
-      fundingNoteController: fundingNoteController ?? this.fundingNoteController,
+      fundingNoteController:
+          fundingNoteController ?? this.fundingNoteController,
       fundingSubCategory: fundingSubCategory ?? this.fundingSubCategory,
       physicalLocations: physicalLocations ?? this.physicalLocations,
       projectCategory: projectCategory ?? this.projectCategory,
       projectCost: projectCost ?? this.projectCost,
-      projectCostController: projectCostController ?? this.projectCostController,
-      projectImageAttachments: projectImageAttachments ?? this.projectImageAttachments,
-      projectPDFAttachments: projectPDFAttachments ?? this.projectPDFAttachments,
+      projectCostController:
+          projectCostController ?? this.projectCostController,
+      projectImageAttachments:
+          projectImageAttachments ?? this.projectImageAttachments,
+      projectPDFAttachments:
+          projectPDFAttachments ?? this.projectPDFAttachments,
       projectSubCategory: projectSubCategory ?? this.projectSubCategory,
       quillController: quillController ?? this.quillController,
       scrollController: scrollController ?? this.scrollController,
@@ -192,12 +214,15 @@ class ProjectCreationState {
       startDateController: startDateController ?? this.startDateController,
       status: status ?? this.status,
       title: title ?? this.title,
-      pdfAttachmentsThumbnail: pdfAttachmentsThumbnail ?? this.pdfAttachmentsThumbnail,
+      pdfAttachmentsThumbnail:
+          pdfAttachmentsThumbnail ?? this.pdfAttachmentsThumbnail,
       titleController: titleController ?? this.titleController,
       virtualLocations: virtualLocations ?? this.virtualLocations,
-      virtualLocationController: virtualLocationController ?? this.virtualLocationController,
+      virtualLocationController:
+          virtualLocationController ?? this.virtualLocationController,
       canAddLocations: canAddLocations ?? this.canAddLocations,
       isValid: isValid ?? this.isValid,
+      canSave: canSave ?? this.canSave,
     );
   }
 }

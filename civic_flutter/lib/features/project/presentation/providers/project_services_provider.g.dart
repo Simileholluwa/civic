@@ -26,8 +26,28 @@ final projectRemoteDatasourceProvider =
 // ignore: unused_element
 typedef ProjectRemoteDatasourceRef
     = AutoDisposeProviderRef<ProjectRemoteDatasourceImpl>;
+String _$projectLocalDatasourceHash() =>
+    r'8a6731a4882fb13f2ca1dfd61bc886146d919a48';
+
+/// See also [projectLocalDatasource].
+@ProviderFor(projectLocalDatasource)
+final projectLocalDatasourceProvider =
+    AutoDisposeProvider<ProjectLocalDataSourceImpl>.internal(
+  projectLocalDatasource,
+  name: r'projectLocalDatasourceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$projectLocalDatasourceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProjectLocalDatasourceRef
+    = AutoDisposeProviderRef<ProjectLocalDataSourceImpl>;
 String _$projectRepositoryImplHash() =>
-    r'b28a51fe92164a0c7ab3526d704e1d17d12a5d3a';
+    r'cfece601bff4555142bd2013b70fb0a22ac6a989';
 
 /// See also [projectRepositoryImpl].
 @ProviderFor(projectRepositoryImpl)
@@ -386,5 +406,61 @@ final getVettedProjectsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetVettedProjectsRef = AutoDisposeProviderRef<GetVettedProjectsUseCase>;
+String _$getProjectDraftHash() => r'3cc4c60dbdef5bae77f090179223d58a60b0ef87';
+
+/// See also [getProjectDraft].
+@ProviderFor(getProjectDraft)
+final getProjectDraftProvider =
+    AutoDisposeProvider<GetProjectDraftUseCase>.internal(
+  getProjectDraft,
+  name: r'getProjectDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getProjectDraftHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetProjectDraftRef = AutoDisposeProviderRef<GetProjectDraftUseCase>;
+String _$saveProjectDraftHash() => r'7686d532f63383c0c09fa6242f7f124d1f37ab2d';
+
+/// See also [saveProjectDraft].
+@ProviderFor(saveProjectDraft)
+final saveProjectDraftProvider =
+    AutoDisposeProvider<SaveProjectDraftUseCase>.internal(
+  saveProjectDraft,
+  name: r'saveProjectDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$saveProjectDraftHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SaveProjectDraftRef = AutoDisposeProviderRef<SaveProjectDraftUseCase>;
+String _$deleteProjectDraftHash() =>
+    r'0f24e9c7305d30d7d8d64a0795c66562a338b43e';
+
+/// See also [deleteProjectDraft].
+@ProviderFor(deleteProjectDraft)
+final deleteProjectDraftProvider =
+    AutoDisposeProvider<DeleteProjectDraftUseCase>.internal(
+  deleteProjectDraft,
+  name: r'deleteProjectDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteProjectDraftHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeleteProjectDraftRef
+    = AutoDisposeProviderRef<DeleteProjectDraftUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

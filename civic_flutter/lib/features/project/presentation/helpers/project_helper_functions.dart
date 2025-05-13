@@ -212,7 +212,7 @@ class ProjectHelperFunctions {
   static Future<bool?> undoRepostDialog(
     BuildContext context,
     WidgetRef ref,
-    int projectId,
+    Project project,
   ) {
     return postDialog(
       context: context,
@@ -227,10 +227,10 @@ class ProjectHelperFunctions {
       onTapActiveButton: () async {
         await ref
             .read(
-              sendProjectProvider.notifier,
+              projectCardWidgetProvider(project).notifier,
             )
             .undoProjectRepost(
-              projectId,
+              project.id!,
             );
         if (context.mounted) {
           context.pop();
@@ -632,7 +632,7 @@ class ProjectHelperFunctions {
                               context.pop();
                               ref
                                   .read(
-                                    sendProjectProvider.notifier,
+                                    projectCardWidgetProvider(project).notifier,
                                   )
                                   .deleteProject(
                                     project.id!,
@@ -665,33 +665,6 @@ class ProjectHelperFunctions {
           );
         });
       },
-    );
-  }
-
-  static Project projectToSend(
-    int? postId,
-    int ownerId,
-    ProjectCreationState projectCreationSate,
-  ) {
-    return Project(
-      id: postId,
-      ownerId: ownerId,
-      title: projectCreationSate.title,
-      description: projectCreationSate.description,
-      projectCategory: projectCreationSate.projectCategory,
-      projectSubCategory: projectCreationSate.projectSubCategory,
-      fundingCategory: projectCreationSate.fundingCategory,
-      fundingSubCategory: projectCreationSate.fundingSubCategory,
-      startDate: projectCreationSate.startDate,
-      endDate: projectCreationSate.endDate,
-      physicalLocations: projectCreationSate.physicalLocations,
-      virtualLocations: projectCreationSate.virtualLocations,
-      projectPDFAttachments: projectCreationSate.projectPDFAttachments,
-      projectImageAttachments: projectCreationSate.projectImageAttachments,
-      currency: projectCreationSate.currency,
-      projectCost: projectCreationSate.projectCost,
-      fundingNote: projectCreationSate.fundingNote,
-      dateCreated: DateTime.now(),
     );
   }
 
@@ -792,27 +765,6 @@ class ProjectHelperFunctions {
         }
       }
     });
-  }
-
-  static void sendProject(
-    WidgetRef ref,
-    ProjectCreationState projectCreationSate,
-    int id,
-    int ownerId,
-  ) async {
-    await ref.read(sendProjectProvider.notifier).sendProject(
-          id != 0
-              ? projectToSend(
-                  id,
-                  ownerId,
-                  projectCreationSate,
-                )
-              : projectToSend(
-                  null,
-                  0,
-                  projectCreationSate,
-                ),
-        );
   }
 
   static String humanizeProjectCost(double number) {

@@ -28,47 +28,68 @@ class CreateProjectScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
-    final isVisibleNotifier = ref.watch(
-      appScrollVisibilityProvider(
-        true,
-      ).notifier,
-    );
-    return AppAndroidBottomNav(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            60,
-          ),
-          child: CreateContentAppbar(
-            canSend: projectCreationState.isValid,
-            draftData: const [],
-            title: CreateProjectAppbarTitle(),
-            sendPressed: () {
-              if (!projectNotifier.validateProject()) return;
-              context.pop();
-              isVisibleNotifier.show();
-              ProjectHelperFunctions.sendProject(
+    return PopScope(
+      canPop: false,
+      // ignore: deprecated_member_use
+      onPopInvoked: (bool didPop) async {
+        if (didPop) return;
+        final bool? shouldPop = projectCreationState.canSave
+            ? await saveProjectDraftDialog(
                 ref,
-                projectCreationState,
-                id,
-                data.value!.ownerId,
+                context,
+                data.value!,
+              )
+            : true;
+        if (shouldPop ?? false) {
+          if (context.mounted) {
+            context.pop();
+          }
+        }
+      },
+
+      child: AppAndroidBottomNav(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(
+              60,
+            ),
+            child: CreateContentAppbar(
+              canSend: projectCreationState.isValid,
+              draftData: const [],
+              title: CreateProjectAppbarTitle(),
+              sendPressed: () async {
+                if (!projectNotifier.validateProject()) return;
+                context.pop();
+                await projectNotifier.sendProject(
+                  data.value?.id,
+                );
+              },
+              onCanSendPost: () async {
+                final shouldPop = projectCreationState.canSave
+                    ? await saveProjectDraftDialog(
+                        ref,
+                        context,
+                        data.value!,
+                      )
+                    : true;
+                if (shouldPop ?? false) {
+                  if (context.mounted) {
+                    context.pop();
+                  }
+                }
+              },
+              draftPressed: () {},
+            ),
+          ),
+          body: data.when(
+            data: (project) {
+              return CreateProjectWidget(
+                project: project,
               );
             },
-            onCanSendPost: () {
-              context.pop();
-            },
-            draftPressed: () {},
-          ),
-        ),
-        body: data.when(
-          data: (project) {
-            return CreateProjectWidget(
-              project: project,
-            );
-          },
-          error: (error, st) {
-            return InfiniteListLoadingError(
+            error: (error, st) {
+              return InfiniteListLoadingError(
                 retry: () {
                   ref.invalidate(projectDetailProvider);
                 },
@@ -79,10 +100,11 @@ class CreateProjectScreen extends ConsumerWidget {
                 ),
                 errorMessage: error.toString(),
               );
-          },
-          loading: () {
-            return AppLoadingWidget();
-          },
+            },
+            loading: () {
+              return AppLoadingWidget();
+            },
+          ),
         ),
       ),
     );

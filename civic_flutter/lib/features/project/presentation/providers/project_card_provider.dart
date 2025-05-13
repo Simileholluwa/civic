@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:civic_flutter/features/post/post.dart';
 part 'project_card_provider.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -101,6 +102,30 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       log('Delete error: ${error.message}');
       return;
     }, (_) {
+      return;
+    });
+  }
+
+    Future<void> undoProjectRepost(
+    int projectId,
+  ) async {
+    final undoRepost = ref.read(undoRepostProvider);
+    final result = await undoRepost(
+      UndoRepostParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) async {
+      log('Undo error: ${error.message}');
+      return;
+    }, (_) {
+      ref
+          .watch(
+            paginatedPostListProvider.notifier,
+          )
+          .removeProjectRepostById(
+            projectId,
+          );
       return;
     });
   }

@@ -6,9 +6,12 @@ import 'package:fpdart/fpdart.dart';
 class ProjectRepositoryImpl extends ProjectRepository {
   ProjectRepositoryImpl({
     required ProjectRemoteDataSource remoteDatasource,
-  }) : _remoteDatasource = remoteDatasource;
+    required ProjectLocalDataSource localDatasource,
+  })  : _localDatasource = localDatasource,
+        _remoteDatasource = remoteDatasource;
 
   final ProjectRemoteDataSource _remoteDatasource;
+  final ProjectLocalDataSource _localDatasource;
 
   @override
   Future<Either<Failure, void>> deleteProject({required int id}) async {
@@ -360,6 +363,50 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
       return Right(result);
     } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+  
+  @override
+  Future<Either<Failure, void>> deleteProjectDraft() async {
+    try {
+      final result = await _localDatasource.deleteProjectDraft();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+  
+  @override
+  Future<Either<Failure, Project>> getProjectDraft() async {
+    try {
+      final result = await _localDatasource.getProjectDraft();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+  
+  @override
+  Future<Either<Failure, void>> saveProjectDraft({required Project project,}) async {
+    try {
+      final result = await _localDatasource.saveProjectDraft(
+        project: project,
+      );
+      return Right(result);
+    } on CacheException catch (e) {
       return Left(
         Failure(
           message: e.message,

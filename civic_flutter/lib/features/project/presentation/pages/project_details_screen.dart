@@ -71,7 +71,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 ProjectHelperFunctions.undoRepostDialog(
                                   context,
                                   ref,
-                                  data.value!.id!,
+                                  data.value!,
                                 );
                                 return;
                               }
