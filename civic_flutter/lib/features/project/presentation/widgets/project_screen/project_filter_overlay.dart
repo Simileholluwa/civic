@@ -11,7 +11,7 @@ class ProjectFilterOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
     final tabController = ref.watch(projectScreenTabProvider);
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 500),
@@ -24,9 +24,9 @@ class ProjectFilterOverlay extends ConsumerWidget {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 500),
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.sizeOf(context).width,
             height: projectWidgetsState.isActiveFilter
-                ? MediaQuery.of(context).size.height * .6
+                ? MediaQuery.sizeOf(context).height * .6
                 : 0,
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,

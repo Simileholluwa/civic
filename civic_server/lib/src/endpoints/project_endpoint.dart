@@ -2,7 +2,25 @@ import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
+/// An endpoint for handling project-related API requests.
+/// 
+/// This class extends [Endpoint] and provides methods to manage
+/// project resources, such as: 
+/// Creating, updating, retrieving, and deleting projects.
+/// Creating, updating, retrieving, and deleting project reviews.
+/// Creating, updating, retrieving, and deleting project vettings.
+/// Reacting to projects, project reviews, and project vettings.
+/// Bookmarking and reposting a project.
 class ProjectEndpoint extends Endpoint {
+
+  /// Retrieves a [Project] by its [projectId] from the database, including its owner and associated user info.
+  /// 
+  /// Throws a [PostException] if the project cannot be found, possibly due to deletion.
+  /// 
+  /// Parameters:
+  /// - [projectId]: The unique identifier of the project to retrieve.
+  /// 
+  /// Returns the [Project] if found, otherwise throws an exception.
   Future<Project> getProject(Session session, int projectId) async {
     final result = await Project.db.findById(
       session,
@@ -21,6 +39,16 @@ class ProjectEndpoint extends Endpoint {
     return result;
   }
 
+  /// Retrieves the [ProjectReview] for a given project and the authenticated user.
+  ///
+  /// Throws a [PostException] if:
+  /// - The project has been deleted by its owner.
+  /// - The authenticated user is the owner of the project (owners cannot review their own projects).
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to retrieve the review for.
+  /// 
+  /// Returns the [ProjectReview] if found, otherwise returns `null`.
   Future<ProjectReview?> getProjectReview(
     Session session,
     int projectId,
@@ -63,6 +91,20 @@ class ProjectEndpoint extends Endpoint {
     return result;
   }
 
+  /// Saves a [Project] to the database.
+  ///
+  /// If the [project] has an `id`, it updates the existing project after validating
+  /// that the current user owns the project. The `updatedAt` field is set to the current time.
+  ///
+  /// If the [project] does not have an `id`, it creates a new project with the current user
+  /// as the owner and initializes various list fields (e.g., `likedBy`, `repostedBy`) as empty.
+  ///
+  /// Logs and throws a [PostException] if an error occurs during the process.
+  ///
+  /// Parameters:
+  /// - [project]: The project to save or update.
+  ///
+  /// Returns the saved or updated [Project].
   Future<Project> saveProject(
     Session session,
     Project project,
@@ -114,6 +156,27 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Saves a [ProjectReview] for a given project. This method handles both creating a new review
+  /// and updating an existing one within a database transaction. It performs the following steps:
+  /// 
+  /// 1. Authenticates the user from the session.
+  /// 2. Verifies that the project to be reviewed exists.
+  /// 3. If updating an existing review:
+  ///    - Validates review ownership.
+  ///    - Updates the project's overall ratings by recalculating them based on the new review values.
+  ///    - Updates the review record with new values and timestamps.
+  /// 4. If creating a new review:
+  ///    - Updates the project's overall ratings by including the new review.
+  ///    - Adds the user to the list of reviewers.
+  ///    - Inserts the new review record with initial values and timestamps.
+  /// 5. Handles and logs exceptions, rethrowing known `PostException` errors.
+  /// 
+  /// Throws a [PostException] if the project or review cannot be found, or if any other error occurs.
+  /// 
+  /// Returns the saved [ProjectReview] object (either newly created or updated).
+  /// 
+  /// Parameters:
+  /// - [projectReview]: The review to be saved or updated.
   Future<ProjectReview> saveProjectReview(
     Session session,
     ProjectReview projectReview,
@@ -282,6 +345,24 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+
+
+  /// Deletes a [ProjectReview] by its [reviewId] for the authenticated user.
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// 1. Authenticates the user from the [session].
+  /// 2. Finds the review by [reviewId]. Throws a [PostException] if not found.
+  /// 3. Checks if the authenticated user is the owner of the review. Throws a [PostException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [PostException] if the project is not found.
+  /// 5. Updates the project's overall ratings and `reviewedBy` list:
+  ///    - If this is the only review, resets all ratings and clears the `reviewedBy` list.
+  ///    - Otherwise, recalculates each rating by removing the deleted review's contribution and updates the `reviewedBy` list.
+  /// 6. Deletes the review from the database.
+  /// 
+  /// Throws a [PostException] on any error, including database or authorization failures.
+  /// 
+  /// Parameters:
+  /// - [reviewId]: The id of the review to be deleted.
   Future<void> deleteProjectReview(Session session, int reviewId) async {
     return await session.db.transaction((transaction) async {
       try {
@@ -384,6 +465,25 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+
+
+  /// Deletes a [ProjectVetting] entry by its [vettingId].
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// 1. Authenticates the current user.
+  /// 2. Finds the vetting entry by [vettingId]. Throws a [PostException] if not found.
+  /// 3. Checks that the authenticated user is the owner of the vetting entry.
+  ///    -  Throws a [PostException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [PostException] if not found.
+  /// 5. Updates the project's `vettedBy` list to remove the user's ID.
+  /// 6. Deletes the vetting entry from the database.
+  ///
+  /// If any error occurs during the process, logs the error and throws a [PostException].
+  ///
+  /// Throws a [PostException] for not found, unauthorized, or other errors.
+  /// 
+  /// Parameters:
+  /// - [vettingId]: The id of the vetting to be deleted.
   Future<void> deleteProjectVetting(Session session, int vettingId) async {
     return await session.db.transaction((transaction) async {
       try {
@@ -437,6 +537,24 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+  /// Undo a repost action for a given project by the authenticated user.
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// 1. Retrieves the authenticated user from the session.
+  /// 2. Finds the repost record for the specified project and user.
+  ///    - Throws a [PostException] if the repost is not found.
+  /// 3. Finds the project by its ID.
+  ///    - Throws a [PostException] if the project is not found.
+  /// 4. Deletes the repost record.
+  /// 5. Finds the associated post for the repost.
+  ///    - Throws a [PostException] if the post is not found.
+  /// 6. Deletes the associated post.
+  /// 7. Removes the user's ID from the project's `repostedBy` list and updates the project.
+  ///
+  /// Any errors encountered during the process are logged with error level.
+  ///
+  /// Parameters:
+  /// [projectId] The ID of the project to undo the repost for.
   Future<void> undoRepost(
     Session session,
     int projectId,
@@ -512,6 +630,14 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+
+  /// Schedules a future call to handle the specified [project] at the given [dateTime].
+  ///
+  /// Uses the [session]'s serverpod to schedule a future call named 'scheduleProjectFutureCall'.
+  /// 
+  /// Parameters:
+  /// [project] - The project to be scheduled.
+  /// [dateTime] - The date and time when the future call should be executed.
   Future<void> scheduleProject(
     Session session,
     Project project,
@@ -524,6 +650,24 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
+
+  /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
+  ///
+  /// Throws a [UserException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
+  ///
+  /// The returned [ProjectList] contains:
+  /// - [count]: Total number of projects available (excluding ignored).
+  /// - [limit]: The maximum number of projects per page.
+  /// - [page]: The current page number.
+  /// - [results]: The list of [Project]s for the current page, including their owners and user info.
+  /// - [numPages]: The total number of pages.
+  /// - [canLoadMore]: Whether there are more projects to load.
+  ///
+  /// Logs and throws a [PostException] if an error occurs during fetching.
+  ///
+  /// Parameters:
+  /// - [limit]: Maximum number of projects to return per page (default: 50).
+  /// - [page]: The page number to retrieve (default: 1).
   Future<ProjectList> getProjects(
     Session session, {
     int limit = 50,
@@ -581,6 +725,20 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Retrieves a paginated list of project reviews for a specific project.
+  ///
+  /// Parameters
+  /// [projectId]: The ID of the project to fetch reviews for.
+  /// [limit]: The maximum number of reviews to return per page (default is 50).
+  /// [page]: The page number to retrieve (default is 1).
+  /// [rating]: An optional rating value to filter reviews by a specific rating category.
+  /// [cardinal]: The rating category to filter by (e.g., 'Location', 'Description', etc.).
+  ///
+  /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
+  ///
+  /// Throws a [UserException] if pagination parameters are invalid or if an invalid
+  /// rating category is provided.
+  /// Throws a [PostException] if an error occurs while fetching reviews.
   Future<ProjectReviewList> getProjectReviews(
     Session session,
     int projectId, {
@@ -666,6 +824,24 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Handles user reactions (like/dislike) to a project review.
+  ///
+  /// This method allows an authenticated user to like or dislike a specific project review.
+  /// It manages the following scenarios within a database transaction:
+  /// - If the review does not exist, throws a [PostException].
+  /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
+  /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
+  /// - If the user switches between like and dislike, it updates the reaction accordingly.
+  /// - If the user has not reacted before, it creates a new reaction.
+  /// The method also updates the `likedBy` and `dislikedBy` lists on the review and persists the changes.
+  ///
+  /// Throws a [PostException] if the review cannot be found or if any error occurs during the process.
+  ///
+  /// Parameters:
+  /// - [reviewId]: The ID of the review to react to.
+  /// - [isLike]: `true` for a like, `false` for a dislike.
+  ///
+  /// Returns the updated [ProjectReview] object.
   Future<ProjectReview> reactToReview(
     Session session,
     int reviewId,
@@ -768,6 +944,25 @@ class ProjectEndpoint extends Endpoint {
     return review!;
   }
 
+
+  /// Handles user reactions (like or dislike) to a project vetting.
+  ///
+  /// This method allows an authenticated user to like or dislike a specific project vetting.
+  /// It manages the following scenarios within a database transaction:
+  /// - If the vetting does not exist, throws a [PostException].
+  /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
+  /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
+  /// - If the user switches between like and dislike, it updates the reaction accordingly.
+  /// - If the user has not reacted before, it creates a new reaction.
+  /// The method also updates the `likedBy` and `dislikedBy` lists on the vetting and persists the changes.
+  ///
+  /// Throws a [PostException] if any error occurs during the process.
+  ///
+  /// Returns the updated [ProjectVetting] object.
+  ///
+  /// Parameters:
+  /// - [vettingId]: The ID of the vetting to react to.
+  /// - [isLike]: `true` for a like, `false` for a dislike.
   Future<ProjectVetting> reactToVetting(
     Session session,
     int vettingId,
@@ -871,6 +1066,21 @@ class ProjectEndpoint extends Endpoint {
     return vetting!;
   }
 
+
+  /// Deletes a project by marking it as deleted.
+  ///
+  /// This method performs the following steps:
+  /// 1. Authenticates the user from the session.
+  /// 2. Validates that the authenticated user owns the project with the given [projectId].
+  /// 3. Retrieves the project from the database.
+  /// 4. If the project does not exist, throws a [PostException].
+  /// 5. Marks the project as deleted by setting its `isDeleted` property to `true`.
+  /// 6. Updates the project in the database.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to delete.
   Future<void> deleteProject(
     Session session,
     int projectId,
@@ -897,6 +1107,20 @@ class ProjectEndpoint extends Endpoint {
     await updateProject(session, newProject);
   }
 
+
+  /// Toggles the bookmark status of a project for the authenticated user.
+  ///
+  /// - If the user has already bookmarked the project, this method removes the bookmark.
+  /// - Otherwise, it adds a new bookmark for the project.
+  /// - The operation is performed within a database transaction to ensure consistency.
+  /// - Updates the `bookmarkedBy` field of the project accordingly.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Logs any errors encountered during the process.
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to toggle the bookmark for.
   Future<void> toggleBookmark(
     Session session,
     int projectId,
@@ -959,6 +1183,19 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+
+  /// Toggles the like status for a project by the authenticated user.
+  ///
+  /// - If the user has already liked the project, this method will remove the like.
+  /// - If the user has not liked the project yet, this method will add a like.
+  /// - The operation is performed within a database transaction to ensure consistency.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Logs any errors encountered during the operation.
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to like or unlike.
   Future<void> toggleLike(
     Session session,
     int projectId,
@@ -1021,6 +1258,17 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+  /// Marks a project as "not interested" for the authenticated user.
+  ///
+  /// This method retrieves the authenticated user from the [session] and creates
+  /// a [ProjectNotInterested] entry associating the user with the specified [projectId].
+  /// The entry is then inserted into the database. If an error occurs during the process,
+  /// it is logged with error level, including the exception and stack trace.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to mark as not interested.
+  ///
+  /// Throws an exception if the operation fails.
   Future<void> markNotInterested(
     Session session,
     int projectId,
@@ -1046,6 +1294,24 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Vets a project by either updating an existing vetting record or creating a new one.
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// - Authenticates the user from the session.
+  /// - Checks if the project with the given [projectVetting.projectId] exists.
+  ///   - Throws a [PostException] if the project cannot be found.
+  /// - Checks if the user has already vetted the project.
+  ///   - If an existing vetting record is found, updates its `updatedAt` timestamp and returns the updated record.
+  ///   - If no vetting record exists, adds the user's ID to the project's `vettedBy` list,
+  ///     creates a new vetting record with empty `likedBy` and `dislikedBy` lists, and returns it.
+  /// - Logs and rethrows any [PostException], or wraps other exceptions in a [PostException].
+  ///
+  /// Throws a [PostException] if the project does not exist or if an unexpected error occurs.
+  ///
+  /// Returns the updated or newly created [ProjectVetting] record.
+  /// 
+  /// Parameters:
+  /// - [projectVetting]: The project vetting object to be processed.
   Future<ProjectVetting> vetProject(
     Session session,
     ProjectVetting projectVetting,
@@ -1108,6 +1374,19 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
+  /// Retrieves the vetted project for the authenticated user and specified project ID.
+  ///
+  /// This method first authenticates the user from the provided [session], then attempts to find
+  /// the project with the given [projectId]. If the project does not exist, a [PostException] is thrown.
+  /// If the project exists, it searches for a [ProjectVetting] record associated with both the project
+  /// and the authenticated user. The related [Project] is also included in the result.
+  ///
+  /// Returns a [ProjectVetting] instance if found, or `null` if no matching record exists.
+  ///
+  /// Throws a [PostException] if the project does not exist.
+  /// 
+  /// Parameters:
+  /// - [projectId]: The ID of the project to retrieve.
   Future<ProjectVetting?> getVettedProject(
     Session session,
     int projectId,
@@ -1142,6 +1421,20 @@ class ProjectEndpoint extends Endpoint {
     return result;
   }
 
+  /// Retrieves a paginated list of vetted projects.
+  ///
+  /// Throws a [UserException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
+  ///
+  /// Parameters:
+  /// - [limit]: The maximum number of projects to return per page (default is 50).
+  /// - [page]: The page number to retrieve (default is 1).
+  ///
+  /// Returns a [ProjectVetList] containing:
+  /// - The total count of vetted projects.
+  /// - The current page and limit.
+  /// - The list of vetted project results for the requested page.
+  /// - The total number of pages.
+  /// - Whether more pages can be loaded.
   Future<ProjectVetList> getVettedProjects(
     Session session, {
     int limit = 50,
@@ -1179,6 +1472,19 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
+  /// Authenticates the current user based on the provided [session].
+  ///
+  /// Retrieves authentication information from the [session]. If the user is not
+  /// authenticated, a [UserException] is thrown with an appropriate message.
+  /// If authenticated, attempts to find the corresponding [UserRecord] in the database,
+  /// including related [UserInfo]. If the user record is not found, another [UserException]
+  /// is thrown. Otherwise, returns the authenticated [UserRecord].
+  ///
+  /// Throws:
+  ///   - [UserException] if the user is not logged in or the user record is not found.
+  ///
+  /// Returns:
+  ///   - The authenticated [UserRecord] with included [UserInfo].
   Future<UserRecord> authUser(
     Session session,
   ) async {
@@ -1208,6 +1514,13 @@ class ProjectEndpoint extends Endpoint {
     return user;
   }
 
+  /// Validates that the given [user] is the owner of the project with the specified [projectId].
+  ///
+  /// Throws a [PostException] if the project does not exist or if the user is not the owner.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to validate ownership for.
+  /// [user] - The user attempting the operation.
   Future<void> validateProjectOwnership(
     Session session,
     int projectId,
@@ -1229,6 +1542,13 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Validates that the given [user] is the owner of the project review with the specified [projectReviewId].
+  ///
+  /// Throws a [PostException] if the project review is not found or if the user is not the owner.
+  ///
+  /// Parameters:
+  /// [projectReviewId] - The ID of the project review to validate.
+  /// [user] - The user attempting the operation.
   Future<void> validateProjectReviewOwnership(
     Session session,
     int projectReviewId,
@@ -1250,6 +1570,19 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Returns a stream of [Project] updates for the specified [projectId].
+  ///
+  /// When a client subscribes, this method first yields the latest project details,
+  /// including the owner and their user info. It then listens for further updates
+  /// to the project via a message stream and yields updated [Project] instances
+  /// as they occur. Each update preserves the original owner information.
+  ///
+  /// - [session]: The current session context.
+  /// - [projectId]: The ID of the project to subscribe to updates for.
+  ///
+  /// Yields:
+  ///   - The initial [Project] details.
+  ///   - Subsequent [Project] updates as they occur.
   Stream<Project> projectUpdates(Session session, int projectId) async* {
     // Create a message stream for this project
     var updateStream =
@@ -1277,6 +1610,15 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+
+  /// Updates the given [project] in the database and notifies all clients
+  /// subscribed to this project by sending an update message.
+  ///
+  /// Parameters:
+  /// - [project]: The project instance to be updated.
+  ///
+  /// This method first updates the project in the database, then posts a message
+  /// to all clients subscribed to the project's channel to notify them of the update.
   Future<void> updateProject(Session session, Project project) async {
     // Update the project in the database
     await Project.db.updateRow(session, project);
@@ -1288,6 +1630,20 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
+
+  /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
+  ///
+  /// When a client subscribes, this method first yields the latest [ProjectReview]
+  /// from the database, including its [owner] and associated [UserInfo].
+  /// Then, it listens for real-time updates on the review via the session's message stream,
+  /// yielding each update as it occurs. The [owner] information is preserved in each update.
+  ///
+  /// - [session]: The current user session.
+  /// - [reviewId]: The ID of the project review to subscribe to.
+  ///
+  /// Yields:
+  ///   - The initial [ProjectReview] object (if found).
+  ///   - Subsequent updates to the [ProjectReview] as they occur.
   Stream<ProjectReview> projectReviewUpdates(
     Session session,
     int reviewId,
@@ -1318,9 +1674,17 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Updates a [ProjectReview] in the database and notifies all clients subscribed to this review.
+  ///
+  /// This method performs the following actions:
+  /// - Updates the specified [projectReview] in the database using the provided [session].
+  /// - Sends a message to all clients subscribed to the review channel identified by `'review_${projectReview.id}'`,
+  ///   containing the updated [projectReview] data.
+  ///
+  /// [session]: The current database session.
+  /// [projectReview]: The project review object to update.
   Future<void> updateProjectReview(
       Session session, ProjectReview projectReview) async {
-    // Update the project in the database
     await ProjectReview.db.updateRow(session, projectReview);
 
     // Send an update to all clients subscribed to this project
@@ -1329,7 +1693,20 @@ class ProjectEndpoint extends Endpoint {
       projectReview,
     );
   }
+    
 
+  /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
+  ///
+  /// When a client subscribes, the latest [ProjectVetting] details are yielded first,
+  /// including the owner and related user information. Subsequent updates are streamed
+  /// as they occur, ensuring the owner information remains consistent with the initial fetch.
+  ///
+  /// - [session]: The current [Session] context.
+  /// - [vettingId]: The ID of the project vetting to subscribe to.
+  ///
+  /// Yields:
+  ///   - The initial [ProjectVetting] object if found.
+  ///   - Any subsequent updates to the [ProjectVetting] object.
   Stream<ProjectVetting> projectVettingUpdates(
     Session session,
     int vettingId,
@@ -1360,6 +1737,16 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  /// Updates the given [projectVetting] in the database and notifies all clients
+  /// subscribed to updates for this project.
+  ///
+  /// This method performs the following actions:
+  /// - Updates the [ProjectVetting] record in the database using the provided [session].
+  /// - Posts a message to all clients subscribed to the review channel for the specific project,
+  ///   notifying them of the update.
+  ///
+  /// Parameters:
+  /// [projectVetting]: The project vetting object to update.
   Future<void> updateProjectVetting(
       Session session, ProjectVetting projectVetting) async {
     // Update the project in the database

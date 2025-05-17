@@ -85,8 +85,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     showModalBottomSheet(
                       context: context,
                       constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * .7,
-                        minHeight: MediaQuery.of(context).size.height * .5,
+                        maxHeight: MediaQuery.sizeOf(context).height * .7,
+                        minHeight: MediaQuery.sizeOf(context).height * .5,
                       ),
                       isScrollControlled: true,
                       backgroundColor:
@@ -137,8 +137,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     showModalBottomSheet(
                       context: context,
                       constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * .7,
-                        minHeight: MediaQuery.of(context).size.height * .5,
+                        maxHeight: MediaQuery.sizeOf(context).height * .7,
+                        minHeight: MediaQuery.sizeOf(context).height * .5,
                       ),
                       isScrollControlled: true,
                       backgroundColor:

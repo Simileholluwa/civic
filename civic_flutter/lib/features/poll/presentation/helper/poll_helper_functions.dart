@@ -32,7 +32,7 @@ class PollHelperFunctions {
       showDragHandle: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.8,
+        maxHeight: MediaQuery.sizeOf(context).height * 0.8,
         minWidth: double.maxFinite,
       ),
       builder: (context) {

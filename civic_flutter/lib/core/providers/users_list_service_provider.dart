@@ -32,6 +32,9 @@ class PaginatedUsersList extends _$PaginatedUsersList {
     pagingController.addStatusListener((status) {
       state = status;
     });
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
     return PagingStatus.loadingFirstPage;
   }
 

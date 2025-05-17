@@ -23,6 +23,10 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
     pagingController.addStatusListener((status) {
       state = status;
     });
+
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
     return PagingStatus.loadingFirstPage;
   }
 

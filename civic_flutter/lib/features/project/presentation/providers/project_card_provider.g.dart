@@ -6,7 +6,7 @@ part of 'project_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectCardWidgetHash() => r'1484e6a53882389fc64015d2e273246ff3d8274a';
+String _$projectCardWidgetHash() => r'076a56c680084ee30f1c37e8f16ac9e7aea21f3b';
 
 /// Copied from Dart SDK
 class _SystemHash {

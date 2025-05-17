@@ -7,7 +7,7 @@ part of 'project_paginated_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedProjectListHash() =>
-    r'98bf40d1715761d14608d9adc2d167a1400e5197';
+    r'eb4bdac1e044d82434e76265f14e41988c8174af';
 
 /// See also [PaginatedProjectList].
 @ProviderFor(PaginatedProjectList)

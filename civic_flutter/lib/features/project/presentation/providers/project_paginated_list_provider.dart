@@ -22,6 +22,10 @@ class PaginatedProjectList extends _$PaginatedProjectList {
       state = status;
       log(state.toString(), name: 'PaginatedProjectList');
     });
+
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
     return pagingController.value.status;
   }
 

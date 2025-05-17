@@ -205,7 +205,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                       Container(
                                         height: 70,
                                         width:
-                                            MediaQuery.of(context).size.width *
+                                            MediaQuery.sizeOf(context).width *
                                                 .82,
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 6, 10, 6),

@@ -29,8 +29,8 @@ class PostHelperFunctions {
     return showModalBottomSheet<bool>(
       context: context,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * .7,
-        minHeight: MediaQuery.of(context).size.height * .5,
+        maxHeight: MediaQuery.sizeOf(context).height * .7,
+        minHeight: MediaQuery.sizeOf(context).height * .5,
       ),
       isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -144,8 +144,8 @@ class PostHelperFunctions {
     return showModalBottomSheet<bool>(
       context: context,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * .7,
-        minHeight: MediaQuery.of(context).size.height * .5,
+        maxHeight: MediaQuery.sizeOf(context).height * .7,
+        minHeight: MediaQuery.sizeOf(context).height * .5,
       ),
       isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

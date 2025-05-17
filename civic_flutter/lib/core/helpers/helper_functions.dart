@@ -175,15 +175,15 @@ class THelperFunctions {
   }
 
   static Size screenSize(BuildContext context) {
-    return MediaQuery.of(context).size;
+    return MediaQuery.sizeOf(context);
   }
 
   static double screenHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height;
+    return MediaQuery.sizeOf(context).height;
   }
 
   static double screenWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery.sizeOf(context).width;
   }
 
   static String getFormattedDate(

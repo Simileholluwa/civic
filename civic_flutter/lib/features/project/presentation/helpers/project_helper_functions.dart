@@ -195,8 +195,8 @@ class ProjectHelperFunctions {
     return showModalBottomSheet(
       context: context,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * .7,
-        minHeight: MediaQuery.of(context).size.height * .5,
+        maxHeight: MediaQuery.sizeOf(context).height * .7,
+        minHeight: MediaQuery.sizeOf(context).height * .5,
       ),
       isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -754,7 +754,7 @@ class ProjectHelperFunctions {
             activeIndicatorKey.currentContext!.findRenderObject() as RenderBox;
         final position = renderBox.localToGlobal(Offset.zero);
 
-        final screenWidth = MediaQuery.of(context).size.width;
+        final screenWidth = MediaQuery.sizeOf(context).width;
 
         if (position.dx < 0 || position.dx > screenWidth - 50) {
           scrollController.animateTo(
