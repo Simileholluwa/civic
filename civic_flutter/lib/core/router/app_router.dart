@@ -189,8 +189,8 @@ GoRouter router(Ref ref) {
               final data = state.extra as Map<String, dynamic>;
               return CreatePostScreen(
                 id: data['id'],
-                draft: data['draft'],
                 project: data['project'],
+                parent: data['parent'],
               );
             },
       ),

@@ -12,33 +12,24 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 enum PostType implements _i1.SerializableModel {
-  text,
-  video,
-  textWithVideo,
-  textWithImages,
-  images,
-  image,
-  textWithImage,
-  none;
+  postRepost,
+  regular,
+  comment,
+  projectRepost,
+  commentReply;
 
   static PostType fromJson(int index) {
     switch (index) {
       case 0:
-        return PostType.text;
+        return PostType.postRepost;
       case 1:
-        return PostType.video;
+        return PostType.regular;
       case 2:
-        return PostType.textWithVideo;
+        return PostType.comment;
       case 3:
-        return PostType.textWithImages;
+        return PostType.projectRepost;
       case 4:
-        return PostType.images;
-      case 5:
-        return PostType.image;
-      case 6:
-        return PostType.textWithImage;
-      case 7:
-        return PostType.none;
+        return PostType.commentReply;
       default:
         throw ArgumentError('Value "$index" cannot be converted to "PostType"');
     }

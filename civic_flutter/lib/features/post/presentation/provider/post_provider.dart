@@ -180,29 +180,42 @@ class RegularPost extends _$RegularPost {
     }
   }
 
-  Future<void> saveFailedPostAsDraft(
-    Post post,
-    String errorMessage,
-  ) async {
-    final draftPost = PostHelperFunctions.createDraftPostFromPost(
-      post,
+  Future<void> savePostAsDraft(int? id, String? errorMesage) async {
+    final post = Post(
+      id: id,
+      ownerId: ref.read(localStorageProvider).getInt('userId')!,
+      text: state.text,
+      imageUrls: state.imageUrls,
+      videoUrl: state.videoUrl,
+      taggedUsers: state.taggedUsers,
+      locations: state.locations,
+      mentions: state.mentions,
+      tags: state.tags,
     );
-    final draftPostProvider = ref.read(postDraftsProvider.notifier);
-    final result = await draftPostProvider.saveDraftPost(
-      draftPost,
+    final savePost = ref.read(savePostDraftProvider);
+    final result = await savePost(
+      SavePostDraftParams(
+        post,
+      ),
     );
-    if (result) {
-      TToastMessages.errorToast(
-        '$errorMessage. Your post was saved to drafts.',
-      );
-    }
+    result.fold((error) {
+      log(error.message);
+    }, (data) {
+      errorMesage != null
+          ? TToastMessages.errorToast(
+              '$errorMesage. Your post was saved to draft.',
+            )
+          : TToastMessages.successToast(
+              'Your post was saved to draft.',
+            );
+    });
   }
 
-  Future<List<String>> sendMediaImages(Post post) async {
+  Future<bool> sendMediaImages(int? id) async {
     var existingUpload = <String>[];
     var newUpload = <String>[];
-    if (post.imageUrls!.isNotEmpty) {
-      for (final image in post.imageUrls!) {
+    if (state.imageUrls.isNotEmpty) {
+      for (final image in state.imageUrls) {
         final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
         if (regex.hasMatch(image)) {
           existingUpload.add(image);
@@ -210,6 +223,7 @@ class RegularPost extends _$RegularPost {
           newUpload.add(image);
         }
       }
+      if (newUpload.isEmpty) return true;
       final result = await ref.read(assetServiceProvider).uploadMediaAssets(
             newUpload,
             'posts',
@@ -219,27 +233,29 @@ class RegularPost extends _$RegularPost {
       return result.fold((error) async {
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         log(error);
-        await saveFailedPostAsDraft(
-          post,
+        await savePostAsDraft(
+          id,
           error,
         );
-
-        return [];
+        return false;
       }, (mediaUrls) {
-        return mediaUrls + existingUpload;
+        state = state.copyWith(
+          imageUrls: [...existingUpload, ...mediaUrls],
+        );
+        return true;
       });
+    } else {
+      return true;
     }
-    return [];
   }
 
-  Future<String> sendMediaVideo(Post post) async {
-    if (post.videoUrl!.isNotEmpty) {
+  Future<bool> sendMediaVideo(int? id) async {
+    if (state.videoUrl.isNotEmpty) {
       final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-      if (regex.hasMatch(post.videoUrl!)) {
-        return post.videoUrl!;
-      }
+      if (regex.hasMatch(state.videoUrl)) return true;
+
       final result = await ref.read(assetServiceProvider).uploadMediaAssets(
-        [post.videoUrl!],
+        [state.videoUrl],
         'posts',
         'videos',
       );
@@ -247,37 +263,37 @@ class RegularPost extends _$RegularPost {
       return result.fold((error) async {
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         log(error);
-        await saveFailedPostAsDraft(
-          post,
+        await savePostAsDraft(
+          id,
           error,
         );
 
-        return '';
+        return false;
       }, (videoUrl) {
-        return videoUrl.first;
+        state = state.copyWith(
+          videoUrl: videoUrl.first,
+        );
+        return true;
       });
+    } else {
+      return true;
     }
-    return '';
   }
 
   Future<Post?> sendPost(
-    Post post, {
-    bool isProjectRepost = false,
-    int? projectId,
-  }) async {
+    Post post,
+  ) async {
     final savePost = ref.read(savePostProvider);
 
     final saveResult = await savePost(
       SavePostParams(
         post,
-        isProjectRepost,
-        projectId,
       ),
     );
     return saveResult.fold((error) async {
       log(error.message);
-      await saveFailedPostAsDraft(
-        post,
+      await savePostAsDraft(
+        null,
         error.message,
       );
 
@@ -285,8 +301,8 @@ class RegularPost extends _$RegularPost {
     }, (data) async {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       if (data == null) {
-        await saveFailedPostAsDraft(
-          post,
+        await savePostAsDraft(
+          post.id,
           'Something went wrong',
         );
         return null;
@@ -315,8 +331,8 @@ class RegularPost extends _$RegularPost {
     return result.fold(
       (error) async {
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
-        await saveFailedPostAsDraft(
-          post,
+        await savePostAsDraft(
+          post.id,
           error.message,
         );
       },
@@ -329,42 +345,157 @@ class RegularPost extends _$RegularPost {
     );
   }
 
-  Future<void> send({
-    required Post post,
-    bool isProjectRepost = false,
+  Future<void> repostOrQuote(
+    int? postId,
     int? projectId,
-  }) async {
+  ) async {
+    final repostQuote = ref.read(repostOrQuotePostProvider);
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    final quoteContent = Post(
+      ownerId: ownerId,
+      text: state.text,
+      imageUrls: state.imageUrls,
+      videoUrl: state.videoUrl,
+      taggedUsers: state.taggedUsers,
+      locations: state.locations,
+      mentions: state.mentions,
+      tags: state.tags,
+    );
+    final result = await repostQuote(
+      RepostOrQuoteParams(
+        projectId,
+        quoteContent,
+      ),
+    );
+    return result.fold((error) async {
+      log('Error: ${error.message}');
+      error.action == 'deleted'
+          ? TToastMessages.successToast(
+              error.message,
+            )
+          : TToastMessages.errorToast(
+              error.message,
+            );
+      return;
+    }, (post) {
+      final postListNotifier = ref.watch(
+        paginatedPostListProvider.notifier,
+      );
+      postListNotifier.addPost(
+        post,
+      );
+      TToastMessages.successToast(
+        projectId != null
+            ? 'Project successfully reposted'
+            : 'Post successfully reposted',
+      );
+
+      return;
+    });
+  }
+
+  Future<void> send(
+    int? id,
+  ) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
     final scheduledDateTimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,
     );
-    final uploadedImages = await sendMediaImages(post);
-    if (post.imageUrls!.isNotEmpty && uploadedImages.isEmpty) {
-      return;
+
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    int? postId;
+    if (id != null) {
+      if (id == 0) {
+        postId = null;
+      } else {
+        postId = id;
+      }
     }
-    final uploadedVideo = await sendMediaVideo(post);
-    if (post.videoUrl!.isNotEmpty && uploadedVideo.isEmpty) {
-      return;
-    }
-    final postTosend = post.copyWith(
-      imageUrls: uploadedImages,
-      videoUrl: uploadedVideo,
+
+    final uploadedImages = await sendMediaImages(postId);
+    if (!uploadedImages) return;
+    final uploadedVideo = await sendMediaVideo(postId);
+    if (!uploadedVideo) return;
+    final post = Post(
+      id: postId,
+      ownerId: ownerId,
+      text: state.text,
+      imageUrls: state.imageUrls,
+      videoUrl: state.videoUrl,
+      taggedUsers: state.taggedUsers,
+      postType: PostType.regular,
+      locations: state.locations,
+      mentions: state.mentions,
+      tags: state.tags,
     );
     if (scheduledDateTime == null &&
         !scheduledDateTimeProvider.canSendLater()) {
       await sendPost(
-        postTosend,
-        isProjectRepost: isProjectRepost,
-        projectId: projectId,
+        post,
       );
     } else {
       await saveInFuture(
-        postTosend,
+        post,
         scheduledDateTime!,
       );
     }
     return;
+  }
+
+  Future<void> sendComment(int postId) async {
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    final saveComment = ref.read(savePostCommentProvider);
+    final result = await saveComment(
+      SavePostCommentParams(
+        Post(
+          ownerId: ownerId,
+          text: 'First comment for post $postId',
+          parentId: postId,
+        ),
+        false,
+      ),
+    );
+    result.fold((l) {
+      log(l.message);
+    }, (r) {
+      final commentPagingControllerNotifier = ref.watch(
+        paginatedPostCommentListProvider(postId).notifier,
+      );
+      commentPagingControllerNotifier.addComment(r!);
+    });
+  }
+
+  Future<void> sendReply(
+    int parentId,
+  ) async {
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    final saveReply = ref.read(
+      savePostCommentProvider,
+    );
+    final result = await saveReply(
+      SavePostCommentParams(
+        Post(
+          ownerId: ownerId,
+          text: 'Hello there, I am excited to make this reply again and again!',
+          parentId: parentId,
+        ),
+        true,
+      ),
+    );
+    result.fold(
+      (l) {
+        log(l.message);
+      },
+      (r) {
+        if (r != null) {
+          //TODO: Update the comment replies provider to add the reply
+          // ref
+          //     .read(postCommentRepliesProvider.notifier)
+          //     .addReply(parentId, r);
+        }
+      },
+    );
   }
 
   @override

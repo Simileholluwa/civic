@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "isProjectRepost"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"isProjectRepost\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "isProjectRepost"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"isProjectRepost\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "isProjectRepost"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -11,12 +11,10 @@ class ShowProjectActions extends ConsumerWidget {
   const ShowProjectActions({
     super.key,
     required this.project,
-    required this.projectCardNotifier,
     this.fromDetails = false,
   });
 
   final Project project;
-  final ProjectCardWidget projectCardNotifier;
   final bool fromDetails;
 
   @override
@@ -26,6 +24,11 @@ class ShowProjectActions extends ConsumerWidget {
       projectCardWidgetProvider(
         project,
       ),
+    );
+    final projectCardNotifier = ref.watch(
+      projectCardWidgetProvider(
+        project,
+      ).notifier,
     );
     return Scaffold(
       appBar: PreferredSize(
@@ -160,6 +163,7 @@ class ShowProjectActions extends ConsumerWidget {
                 ProjectHelperFunctions.deleteProjectBottomSheet(
                   context,
                   project,
+                  fromDetails,
                 );
               },
             ),

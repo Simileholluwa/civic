@@ -60,7 +60,7 @@ class CommentChildWidget extends StatelessWidget {
   final Widget? content;
   final bool? isLast;
   final bool hasAvatar;
-  final PostComment? reply;
+  final Post? reply;
 
   const CommentChildWidget({
     required this.isLast,

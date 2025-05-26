@@ -15,14 +15,10 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, Post?>> savePost({
     required Post post,
-    bool isProjectRepost = false,
-    int? projectId,
   }) async {
     try {
       final result = await _remoteDatabase.savePost(
         post: post,
-        isProjectRepost: isProjectRepost,
-        projectId: projectId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -55,7 +51,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<String, Post?>> getPost({required int id}) async {
+  Future<Either<Failure, Post>> getPost({required int id}) async {
     try {
       final result = await _remoteDatabase.getPost(
         id: id,
@@ -63,47 +59,43 @@ class PostRepositoryImpl implements PostRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(
-        e.message,
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
       );
     }
   }
 
   @override
-  Future<Either<Failure, void>> saveDraft({
-    required DraftPost draftPost,
+  Future<Either<Failure, Post>> repostOrQuote({
+    required int? projectId,
+    required Post? quoteContent,
   }) async {
     try {
-      final result = await _localDatabase.saveDraft(draftPost: draftPost);
+      final result = await _remoteDatabase.repostOrQuote(
+        projectId: projectId,
+        quoteContent: quoteContent,
+      );
       return Right(result);
-    } on CacheException catch (e) {
+    } on ServerException catch (e) {
       return Left(
         Failure(
           message: e.message,
+          action: e.action,
         ),
       );
     }
   }
 
   @override
-  Either<Failure, List<DraftPost>?> getDrafts() {
-    try {
-      final result = _localDatabase.retrieveDrafts();
-      return Right(result);
-    } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> deleteDraft({
-    required DraftPost draftPost,
+  Future<Either<Failure, void>> savePostDraft({
+    required Post post,
   }) async {
     try {
-      final result = await _localDatabase.deleteDraftPost(draftPost: draftPost);
+      final result = await _localDatabase.savePostDraft(
+        post: post,
+      );
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -115,9 +107,23 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<DraftPost>>> deleteDrafts() async {
+  Future<Either<Failure, Post>> getPostDraft() async {
     try {
-      final result = await _localDatabase.removeAllDraftPost();
+      final result = await _localDatabase.getPostDraft();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deletePostDraft() async {
+    try {
+      final result = await _localDatabase.deletePostDraft();
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -149,7 +155,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, int>> toggleLike({
+  Future<Either<Failure, void>> toggleLike({
     required int id,
   }) async {
     try {
@@ -167,9 +173,31 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, List<int>>> getUserLikedPosts() async {
+  Future<Either<Failure, void>> toggleBookmark({
+    required int id,
+  }) async {
     try {
-      final result = await _remoteDatabase.getUserLikedProjects();
+      final result = await _remoteDatabase.toggleBookmark(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> markNotInterested({
+    required int id,
+  }) async {
+    try {
+      final result = await _remoteDatabase.markNotInterested(
+        id: id,
+      );
       return Right(result);
     } on ServerException catch (e) {
       return Left(
@@ -213,7 +241,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostCommentList>> getPostComments({
+  Future<Either<Failure, PostList>> getPostComments({
     required int postId,
     required int page,
     required int limit,
@@ -235,14 +263,14 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostComment>> savePostComment({
-    required int postId,
-    required PostComment comment,
+  Future<Either<Failure, Post>> savePostComment({
+    required Post comment,
+    required bool isReply,
   }) async {
     try {
       final result = await _remoteDatabase.savePostComment(
-        postId: postId,
         comment: comment,
+        isReply: isReply,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -271,16 +299,14 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostCommentList>> getPostCommentReplies({
+  Future<Either<Failure, PostList>> getPostCommentReplies({
     required int commentId,
-    required int postId,
     required int page,
     required int limit,
   }) async {
     try {
       final result = await _remoteDatabase.getPostCommentReplies(
         commentId: commentId,
-        postId: postId,
         page: page,
         limit: limit,
       );

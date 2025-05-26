@@ -209,36 +209,6 @@ class ProjectHelperFunctions {
     );
   }
 
-  static Future<bool?> undoRepostDialog(
-    BuildContext context,
-    WidgetRef ref,
-    Project project,
-  ) {
-    return postDialog(
-      context: context,
-      title: 'Undo repost?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
-      onTapSkipButton: context.pop,
-      activeButtonText: 'Undo',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: 'Cancel',
-      onTapActiveButton: () async {
-        await ref
-            .read(
-              projectCardWidgetProvider(project).notifier,
-            )
-            .undoProjectRepost(
-              project.id!,
-            );
-        if (context.mounted) {
-          context.pop();
-        }
-      },
-    );
-  }
-
   static Future<dynamic> projectReviewsFilterDialog(
     BuildContext context,
     int id,
@@ -516,6 +486,7 @@ class ProjectHelperFunctions {
   static Future<dynamic> deleteProjectBottomSheet(
     BuildContext context,
     Project project,
+    bool fromDetails,
   ) {
     return showModalBottomSheet(
       context: context,
@@ -630,6 +601,9 @@ class ProjectHelperFunctions {
                       onPressed: projectCardState.canDelete!
                           ? () {
                               context.pop();
+                              if (fromDetails) {
+                                context.pop();
+                              }
                               ref
                                   .read(
                                     projectCardWidgetProvider(project).notifier,

@@ -72,7 +72,7 @@ class ProjectReviewScreen extends ConsumerWidget {
         },
         error: (error, st) {
           final err = error as Map<String, String?>;
-          return InfiniteListLoadingError(
+          return LoadingError(
             retry: () {
               ref.invalidate(projectReviewDetailProvider);
             },

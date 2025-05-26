@@ -6,39 +6,45 @@ import 'package:civic_flutter/core/core.dart';
 abstract class PostRemoteDatabase {
   Future<Post?> savePost({
     required Post post,
-    bool isProjectRepost = false,
-    int? projectId,
   });
   Future<PostList> getPosts({
     required int page,
     required int limit,
   });
-  Future<Post?> getPost({
+  Future<Post> getPost({
     required int id,
+  });
+  Future<Post> repostOrQuote({
+    required int? projectId,
+    required Post? quoteContent,
   });
   Future<void> schedulePost({
     required Post post,
     required DateTime dateTime,
   });
-  Future<int> toggleLike({
+  Future<void> toggleLike({
     required int id,
   });
-  Future<List<int>> getUserLikedProjects();
+  Future<void> toggleBookmark({
+    required int id,
+  });
+  Future<void> markNotInterested({
+    required int id,
+  });
   Future<void> deletePost({required int id});
   Future<void> deletePostComment({required int id});
   Future<int> toggleCommentLike({required int id});
-  Future<PostComment> savePostComment({
-    required int postId,
-    required PostComment comment,
+  Future<Post> savePostComment({
+    required Post comment,
+    required bool isReply,
   });
-  Future<PostCommentList> getPostComments({
+  Future<PostList> getPostComments({
     required int postId,
     required int page,
     required int limit,
   });
-  Future<PostCommentList> getPostCommentReplies({
+  Future<PostList> getPostCommentReplies({
     required int commentId,
-    required int postId,
     required int page,
     required int limit,
   });
@@ -53,24 +59,11 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   @override
   Future<Post?> savePost({
     required Post post,
-    bool isProjectRepost = false,
-    int? projectId,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
 
-      final result = await _client.post
-          .savePost(
-            post,
-            isProjectRepost: isProjectRepost,
-            projectId: projectId,
-          )
-          .timeout(
+      final result = await _client.post.savePost(post).timeout(
             const Duration(
               seconds: 60,
             ),
@@ -85,7 +78,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     } on PostException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server. Please try again.');
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -101,19 +95,15 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     required int limit,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = _client.post.getPosts(
         limit: limit,
         page: page,
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server. Please try again.');
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -124,25 +114,26 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<Post?> getPost({required int id}) async {
+  Future<Post> getPost({required int id}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
       final result = await _client.post.getPost(
         id,
       );
       return result;
     } on SocketException catch (_) {
-      throw const ServerException(message: 'Failed to connect to server. Please try again.');
-    } on ServerException {
-      rethrow;
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } on PostException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: null,
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
+        action: 'retry',
       );
     }
   }
@@ -153,12 +144,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     required DateTime dateTime,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       await _client.post.schedulePost(
         post,
         dateTime,
@@ -171,7 +157,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<int> toggleLike({
+  Future<void> toggleLike({
     required int id,
   }) async {
     try {
@@ -179,6 +165,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
         id,
       );
     } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -188,10 +176,61 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<List<int>> getUserLikedProjects() async {
+  Future<Post> repostOrQuote({
+    required int? projectId,
+    required Post? quoteContent,
+  }) async {
     try {
-      return await _client.post.getUserLikedPosts();
+      return await _client.post.repostOrQuote(
+        projectId,
+        quoteContent,
+      );
     } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on ServerException {
+      rethrow;
+    } on PostException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: e.action,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> toggleBookmark({
+    required int id,
+  }) async {
+    try {
+      return await _client.post.toggleBookmark(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> markNotInterested({
+    required int id,
+  }) async {
+    try {
+      return await _client.post.markNotInterested(
+        id,
+      );
+    } on UserException catch (e) {
+      throw ServerException(message: e.message);
+    } on PostException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -206,6 +245,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       return await _client.post.deletePost(id);
     } on UserException catch (e) {
       throw ServerException(message: e.message);
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -216,7 +257,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   @override
   Future<void> deletePostComment({required int id}) async {
     try {
-      return await _client.postComment.deletePostComment(id);
+      //return await _client.post.deletePostComment(id);
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
@@ -227,13 +268,13 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<PostCommentList> getPostComments({
+  Future<PostList> getPostComments({
     required int postId,
     required int page,
     required int limit,
   }) async {
     try {
-      return await _client.postComment.getPostComments(
+      return await _client.post.getPostComments(
         postId,
         page: page,
         limit: limit,
@@ -248,14 +289,14 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<PostComment> savePostComment({
-    required int postId,
-    required PostComment comment,
+  Future<Post> savePostComment({
+    required Post comment,
+    required bool isReply,
   }) async {
     try {
-      final result = await _client.postComment.savePostComment(
-        postId,
+      final result = await _client.post.savePostComment(
         comment,
+        isReply,
       );
       if (result == null) {
         throw ServerException(message: 'Failed to save comment');
@@ -275,7 +316,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   @override
   Future<int> toggleCommentLike({required int id}) async {
     try {
-      return await _client.postComment.toggleCommentLike(id);
+      return 1;
+      // return await _client.post.toggleCommentLike(id);
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
@@ -286,16 +328,14 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<PostCommentList> getPostCommentReplies({
+  Future<PostList> getPostCommentReplies({
     required int commentId,
-    required int postId,
     required int page,
     required int limit,
   }) async {
     try {
-      return await _client.postComment.getPostCommentReplies(
+      return await _client.post.getPostCommentReplies(
         commentId,
-        postId,
         page: page,
         limit: limit,
       );

@@ -3,16 +3,17 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:fpdart/fpdart.dart';
 
-class SavePostCommentUseCase implements UseCase<PostComment?, SavePostCommentParams> {
+class SavePostCommentUseCase implements UseCase<Post?, SavePostCommentParams> {
   SavePostCommentUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<Failure, PostComment?>> call(SavePostCommentParams params) async {
+  Future<Either<Failure, Post?>> call(SavePostCommentParams params) async {
     final result = await _postRepository.savePostComment(
-      postId: params.postId,
-      comment: params.postComment,
+
+      comment: params.comment,
+      isReply: params.isReply,
     );
     return result;
   }
@@ -20,9 +21,9 @@ class SavePostCommentUseCase implements UseCase<PostComment?, SavePostCommentPar
 
 class SavePostCommentParams {
   SavePostCommentParams(
-    this.postId,
-    this.postComment,
+    this.comment,
+    this.isReply,
   );
-  final int postId;
-  final PostComment postComment;
+  final Post comment;
+  final bool isReply;
 }

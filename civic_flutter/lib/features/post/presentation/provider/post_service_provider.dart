@@ -53,33 +53,32 @@ GetPostUseCase getPost(Ref ref) {
 }
 
 @riverpod
-SaveDraftUseCase saveDraft(Ref ref) {
-  return SaveDraftUseCase(
+SavePostDraftUseCase savePostDraft(Ref ref) {
+  return SavePostDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetDraftsUseCase getDraft(Ref ref) {
-  return GetDraftsUseCase(
+GetPostDraftUseCase getPostDraft(Ref ref) {
+  return GetPostDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftsUseCase deleteDrafts(Ref ref) {
-  return DeleteDraftsUseCase(
+DeletePostDraftUseCase deletePostDraft(Ref ref) {
+  return DeletePostDraftUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftUseCase deleteDraft(Ref ref) {
-  return DeleteDraftUseCase(
+DeletePostUseCase deletePost(Ref ref) {
+  return DeletePostUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }
-
 
 @riverpod
 SchedulePostUseCase schedulePost(Ref ref) {
@@ -96,8 +95,22 @@ TogglePostLikeUseCase togglePostLike(Ref ref) {
 }
 
 @riverpod
-GetUserLikedPostsUseCase getUserLikedPosts(Ref ref) {
-  return GetUserLikedPostsUseCase(
+RepostOrQuoteUseCase repostOrQuotePost(Ref ref) {
+  return RepostOrQuoteUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+TogglePostBookmarkUseCase togglePostBookmark(Ref ref) {
+  return TogglePostBookmarkUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
+MarkPostNotInterestedUseCase markPostNotInterested(Ref ref) {
+  return MarkPostNotInterestedUseCase(
     postRepository: ref.read(postRepositoryImplProvider),
   );
 }

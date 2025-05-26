@@ -8,18 +8,14 @@ class CreateContentAppbar extends StatelessWidget {
   const CreateContentAppbar({
     super.key,
     required this.canSend,
-    required this.draftData,
     required this.sendPressed,
-    required this.draftPressed,
     required this.onCanSendPost,
     this.title,
     this.isRepost = false,
   });
 
   final bool canSend;
-  final List<dynamic> draftData;
   final VoidCallback sendPressed;
-  final VoidCallback draftPressed;
   final VoidCallback onCanSendPost;
   final Widget? title;
   final bool isRepost;
@@ -46,26 +42,6 @@ class CreateContentAppbar extends StatelessWidget {
         centerTitle: true,
         titleSpacing: 0,
         actions: [
-          Visibility(
-            visible: draftData.isNotEmpty,
-            child: TextButton(
-              onPressed: draftPressed,
-              child: Text(
-                'DRAFTS',
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: TColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-          ),
-          Visibility(
-            visible: draftData.isNotEmpty,
-            child: const SizedBox(
-              height: 20,
-              child: VerticalDivider(),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(
               right: TSizes.sm,

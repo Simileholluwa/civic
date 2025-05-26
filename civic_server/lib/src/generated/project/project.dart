@@ -42,11 +42,12 @@ abstract class Project
     this.updatedAt,
     this.repost,
     this.likedBy,
-    this.repostedBy,
     this.reviewedBy,
     this.verifiedBy,
     this.bookmarkedBy,
     this.vettedBy,
+    this.quotedBy,
+    int? quoteCount,
     this.overallRating,
     this.overallLocationRating,
     this.overallDescriptionRating,
@@ -56,6 +57,7 @@ abstract class Project
     this.overallFundingRating,
     bool? isDeleted,
   })  : dateCreated = dateCreated ?? DateTime.now(),
+        quoteCount = quoteCount ?? 0,
         isDeleted = isDeleted ?? false;
 
   factory Project({
@@ -82,11 +84,12 @@ abstract class Project
     DateTime? updatedAt,
     List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
-    List<int>? repostedBy,
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
+    List<int>? quotedBy,
+    int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -148,9 +151,6 @@ abstract class Project
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      repostedBy: (jsonSerialization['repostedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       reviewedBy: (jsonSerialization['reviewedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
@@ -163,6 +163,10 @@ abstract class Project
       vettedBy: (jsonSerialization['vettedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      quotedBy: (jsonSerialization['quotedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      quoteCount: jsonSerialization['quoteCount'] as int?,
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
       overallLocationRating:
           (jsonSerialization['overallLocationRating'] as num?)?.toDouble(),
@@ -231,8 +235,6 @@ abstract class Project
 
   List<int>? likedBy;
 
-  List<int>? repostedBy;
-
   List<int>? reviewedBy;
 
   List<int>? verifiedBy;
@@ -240,6 +242,10 @@ abstract class Project
   List<int>? bookmarkedBy;
 
   List<int>? vettedBy;
+
+  List<int>? quotedBy;
+
+  int? quoteCount;
 
   double? overallRating;
 
@@ -287,11 +293,12 @@ abstract class Project
     DateTime? updatedAt,
     List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
-    List<int>? repostedBy,
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
+    List<int>? quotedBy,
+    int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -333,11 +340,12 @@ abstract class Project
       if (repost != null)
         'repost': repost?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
       if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
+      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
+      if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -386,11 +394,12 @@ abstract class Project
       if (repost != null)
         'repost': repost?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
       if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
+      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
+      if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -470,11 +479,12 @@ class _ProjectImpl extends Project {
     DateTime? updatedAt,
     List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
-    List<int>? repostedBy,
     List<int>? reviewedBy,
     List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
+    List<int>? quotedBy,
+    int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -507,11 +517,12 @@ class _ProjectImpl extends Project {
           updatedAt: updatedAt,
           repost: repost,
           likedBy: likedBy,
-          repostedBy: repostedBy,
           reviewedBy: reviewedBy,
           verifiedBy: verifiedBy,
           bookmarkedBy: bookmarkedBy,
           vettedBy: vettedBy,
+          quotedBy: quotedBy,
+          quoteCount: quoteCount,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
           overallDescriptionRating: overallDescriptionRating,
@@ -550,11 +561,12 @@ class _ProjectImpl extends Project {
     Object? updatedAt = _Undefined,
     Object? repost = _Undefined,
     Object? likedBy = _Undefined,
-    Object? repostedBy = _Undefined,
     Object? reviewedBy = _Undefined,
     Object? verifiedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
     Object? vettedBy = _Undefined,
+    Object? quotedBy = _Undefined,
+    Object? quoteCount = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
     Object? overallDescriptionRating = _Undefined,
@@ -607,9 +619,6 @@ class _ProjectImpl extends Project {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
-      repostedBy: repostedBy is List<int>?
-          ? repostedBy
-          : this.repostedBy?.map((e0) => e0).toList(),
       reviewedBy: reviewedBy is List<int>?
           ? reviewedBy
           : this.reviewedBy?.map((e0) => e0).toList(),
@@ -622,6 +631,10 @@ class _ProjectImpl extends Project {
       vettedBy: vettedBy is List<int>?
           ? vettedBy
           : this.vettedBy?.map((e0) => e0).toList(),
+      quotedBy: quotedBy is List<int>?
+          ? quotedBy
+          : this.quotedBy?.map((e0) => e0).toList(),
+      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
       overallLocationRating: overallLocationRating is double?
@@ -730,10 +743,6 @@ class ProjectTable extends _i1.Table<int?> {
       'likedBy',
       this,
     );
-    repostedBy = _i1.ColumnSerializable(
-      'repostedBy',
-      this,
-    );
     reviewedBy = _i1.ColumnSerializable(
       'reviewedBy',
       this,
@@ -749,6 +758,15 @@ class ProjectTable extends _i1.Table<int?> {
     vettedBy = _i1.ColumnSerializable(
       'vettedBy',
       this,
+    );
+    quotedBy = _i1.ColumnSerializable(
+      'quotedBy',
+      this,
+    );
+    quoteCount = _i1.ColumnInt(
+      'quoteCount',
+      this,
+      hasDefault: true,
     );
     overallRating = _i1.ColumnDouble(
       'overallRating',
@@ -831,8 +849,6 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnSerializable likedBy;
 
-  late final _i1.ColumnSerializable repostedBy;
-
   late final _i1.ColumnSerializable reviewedBy;
 
   late final _i1.ColumnSerializable verifiedBy;
@@ -840,6 +856,10 @@ class ProjectTable extends _i1.Table<int?> {
   late final _i1.ColumnSerializable bookmarkedBy;
 
   late final _i1.ColumnSerializable vettedBy;
+
+  late final _i1.ColumnSerializable quotedBy;
+
+  late final _i1.ColumnInt quoteCount;
 
   late final _i1.ColumnDouble overallRating;
 
@@ -924,11 +944,12 @@ class ProjectTable extends _i1.Table<int?> {
         dateCreated,
         updatedAt,
         likedBy,
-        repostedBy,
         reviewedBy,
         verifiedBy,
         bookmarkedBy,
         vettedBy,
+        quotedBy,
+        quoteCount,
         overallRating,
         overallLocationRating,
         overallDescriptionRating,

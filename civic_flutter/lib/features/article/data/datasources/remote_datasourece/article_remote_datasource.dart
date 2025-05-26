@@ -19,12 +19,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
   @override
   Future<void> deleteArticle({required int id}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
 
       return await _client.article.deleteArticle(
         id,
@@ -82,12 +77,7 @@ class ArticleRemoteDatasourceImpl extends ArticleRemoteDatasource {
   @override
   Future<Article> saveArticle({required Article article}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
 
       final result = await _client.article.saveArticle(
         article,

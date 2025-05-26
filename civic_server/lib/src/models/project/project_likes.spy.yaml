@@ -1,7 +1,7 @@
 class: ProjectLikes
 table: project_likes
 fields:
-    project: Project?, relation
+    project: Project?, relation(onDelete=Cascade)
     owner: UserRecord?, relation
     dateCreated: DateTime?, default=now
 

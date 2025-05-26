@@ -1,25 +1,25 @@
+import 'package:civic_server/src/endpoints/post_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 /// An endpoint for handling project-related API requests.
-/// 
+///
 /// This class extends [Endpoint] and provides methods to manage
-/// project resources, such as: 
+/// project resources, such as:
 /// Creating, updating, retrieving, and deleting projects.
 /// Creating, updating, retrieving, and deleting project reviews.
 /// Creating, updating, retrieving, and deleting project vettings.
 /// Reacting to projects, project reviews, and project vettings.
 /// Bookmarking and reposting a project.
 class ProjectEndpoint extends Endpoint {
-
   /// Retrieves a [Project] by its [projectId] from the database, including its owner and associated user info.
-  /// 
+  ///
   /// Throws a [PostException] if the project cannot be found, possibly due to deletion.
-  /// 
+  ///
   /// Parameters:
   /// - [projectId]: The unique identifier of the project to retrieve.
-  /// 
+  ///
   /// Returns the [Project] if found, otherwise throws an exception.
   Future<Project> getProject(Session session, int projectId) async {
     final result = await Project.db.findById(
@@ -47,7 +47,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve the review for.
-  /// 
+  ///
   /// Returns the [ProjectReview] if found, otherwise returns `null`.
   Future<ProjectReview?> getProjectReview(
     Session session,
@@ -64,16 +64,16 @@ class ProjectEndpoint extends Endpoint {
     if (project != null) {
       if (project.isDeleted!) {
         throw PostException(
-            message:
-                'This project has been deleted by its owner. Reviews are not allowed.',
-                );
+          message:
+              'This project has been deleted by its owner. Reviews are not allowed.',
+        );
       }
       if (user.userInfoId == project.ownerId) {
         throw PostException(
-            message:
-                'Projects you create can only be reviewed by your constituents. Try sharing this project.',
-            action: 'share',    
-            );
+          message:
+              'Projects you create can only be reviewed by your constituents. Try sharing this project.',
+          action: 'share',
+        );
       }
     }
 
@@ -137,11 +137,11 @@ class ProjectEndpoint extends Endpoint {
             owner: user,
             dateCreated: DateTime.now(),
             likedBy: [],
-            repostedBy: [],
             reviewedBy: [],
             verifiedBy: [],
             bookmarkedBy: [],
             vettedBy: [],
+            quotedBy: [],
           ),
         );
       }
@@ -158,7 +158,7 @@ class ProjectEndpoint extends Endpoint {
 
   /// Saves a [ProjectReview] for a given project. This method handles both creating a new review
   /// and updating an existing one within a database transaction. It performs the following steps:
-  /// 
+  ///
   /// 1. Authenticates the user from the session.
   /// 2. Verifies that the project to be reviewed exists.
   /// 3. If updating an existing review:
@@ -170,11 +170,11 @@ class ProjectEndpoint extends Endpoint {
   ///    - Adds the user to the list of reviewers.
   ///    - Inserts the new review record with initial values and timestamps.
   /// 5. Handles and logs exceptions, rethrowing known `PostException` errors.
-  /// 
+  ///
   /// Throws a [PostException] if the project or review cannot be found, or if any other error occurs.
-  /// 
+  ///
   /// Returns the saved [ProjectReview] object (either newly created or updated).
-  /// 
+  ///
   /// Parameters:
   /// - [projectReview]: The review to be saved or updated.
   Future<ProjectReview> saveProjectReview(
@@ -345,8 +345,6 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
-
-
   /// Deletes a [ProjectReview] by its [reviewId] for the authenticated user.
   ///
   /// This method performs the following steps within a database transaction:
@@ -358,9 +356,9 @@ class ProjectEndpoint extends Endpoint {
   ///    - If this is the only review, resets all ratings and clears the `reviewedBy` list.
   ///    - Otherwise, recalculates each rating by removing the deleted review's contribution and updates the `reviewedBy` list.
   /// 6. Deletes the review from the database.
-  /// 
+  ///
   /// Throws a [PostException] on any error, including database or authorization failures.
-  /// 
+  ///
   /// Parameters:
   /// - [reviewId]: The id of the review to be deleted.
   Future<void> deleteProjectReview(Session session, int reviewId) async {
@@ -465,8 +463,6 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
-
-
   /// Deletes a [ProjectVetting] entry by its [vettingId].
   ///
   /// This method performs the following steps within a database transaction:
@@ -481,7 +477,7 @@ class ProjectEndpoint extends Endpoint {
   /// If any error occurs during the process, logs the error and throws a [PostException].
   ///
   /// Throws a [PostException] for not found, unauthorized, or other errors.
-  /// 
+  ///
   /// Parameters:
   /// - [vettingId]: The id of the vetting to be deleted.
   Future<void> deleteProjectVetting(Session session, int vettingId) async {
@@ -537,104 +533,30 @@ class ProjectEndpoint extends Endpoint {
     });
   }
 
-  /// Undo a repost action for a given project by the authenticated user.
+  /// Undoes a repost action for a given project.
   ///
-  /// This method performs the following steps within a database transaction:
-  /// 1. Retrieves the authenticated user from the session.
-  /// 2. Finds the repost record for the specified project and user.
-  ///    - Throws a [PostException] if the repost is not found.
-  /// 3. Finds the project by its ID.
-  ///    - Throws a [PostException] if the project is not found.
-  /// 4. Deletes the repost record.
-  /// 5. Finds the associated post for the repost.
-  ///    - Throws a [PostException] if the post is not found.
-  /// 6. Deletes the associated post.
-  /// 7. Removes the user's ID from the project's `repostedBy` list and updates the project.
+  /// Calls the [PostEndpoint.repostOrQuote] method with the provided [session] and [projectId],
+  /// effectively reversing a previous repost operation.
   ///
-  /// Any errors encountered during the process are logged with error level.
+  /// [session] - The current user session.
+  /// [projectId] - The ID of the project to undo the repost for.
   ///
-  /// Parameters:
-  /// [projectId] The ID of the project to undo the repost for.
+  /// Throws an exception if the operation fails.  
   Future<void> undoRepost(
     Session session,
     int projectId,
   ) async {
-    return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(session);
-        final repost = await ProjectRepost.db.findFirstRow(
-          session,
-          where: (t) =>
-              t.ownerId.equals(
-                user.userInfoId,
-              ) &
-              t.projectId.equals(
-                projectId,
-              ),
-          transaction: transaction,
-        );
-
-        if (repost == null) {
-          throw PostException(
-            message: 'Repost not found',
-          );
-        }
-        final project = await Project.db.findById(
-          session,
-          projectId,
-          transaction: transaction,
-        );
-
-        if (project == null) {
-          throw PostException(
-            message: 'Project not found',
-          );
-        }
-
-        await ProjectRepost.db.deleteRow(
-          session,
-          repost,
-          transaction: transaction,
-        );
-
-        final post = await Post.db.findFirstRow(
-          session,
-          where: (t) => t.id.equals(
-            repost.postId,
-          ),
-          transaction: transaction,
-        );
-
-        if (post == null) {
-          throw PostException(
-            message: 'Post not found',
-          );
-        }
-
-        await Post.db.deleteRow(
-          session,
-          post,
-          transaction: transaction,
-        );
-
-        project.repostedBy?.remove(user.id!);
-        await updateProject(session, project);
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in undoRepost: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
-        );
-      }
-    });
+    await PostEndpoint().repostOrQuote(
+      session,
+      projectId,
+      null,
+    );
   }
-
 
   /// Schedules a future call to handle the specified [project] at the given [dateTime].
   ///
   /// Uses the [session]'s serverpod to schedule a future call named 'scheduleProjectFutureCall'.
-  /// 
+  ///
   /// Parameters:
   /// [project] - The project to be scheduled.
   /// [dateTime] - The date and time when the future call should be executed.
@@ -649,7 +571,6 @@ class ProjectEndpoint extends Endpoint {
       dateTime,
     );
   }
-
 
   /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
   ///
@@ -944,7 +865,6 @@ class ProjectEndpoint extends Endpoint {
     return review!;
   }
 
-
   /// Handles user reactions (like or dislike) to a project vetting.
   ///
   /// This method allows an authenticated user to like or dislike a specific project vetting.
@@ -1066,7 +986,6 @@ class ProjectEndpoint extends Endpoint {
     return vetting!;
   }
 
-
   /// Deletes a project by marking it as deleted.
   ///
   /// This method performs the following steps:
@@ -1106,7 +1025,6 @@ class ProjectEndpoint extends Endpoint {
 
     await updateProject(session, newProject);
   }
-
 
   /// Toggles the bookmark status of a project for the authenticated user.
   ///
@@ -1182,7 +1100,6 @@ class ProjectEndpoint extends Endpoint {
       }
     });
   }
-
 
   /// Toggles the like status for a project by the authenticated user.
   ///
@@ -1309,7 +1226,7 @@ class ProjectEndpoint extends Endpoint {
   /// Throws a [PostException] if the project does not exist or if an unexpected error occurs.
   ///
   /// Returns the updated or newly created [ProjectVetting] record.
-  /// 
+  ///
   /// Parameters:
   /// - [projectVetting]: The project vetting object to be processed.
   Future<ProjectVetting> vetProject(
@@ -1384,7 +1301,7 @@ class ProjectEndpoint extends Endpoint {
   /// Returns a [ProjectVetting] instance if found, or `null` if no matching record exists.
   ///
   /// Throws a [PostException] if the project does not exist.
-  /// 
+  ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve.
   Future<ProjectVetting?> getVettedProject(
@@ -1610,7 +1527,6 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
-
   /// Updates the given [project] in the database and notifies all clients
   /// subscribed to this project by sending an update message.
   ///
@@ -1629,7 +1545,6 @@ class ProjectEndpoint extends Endpoint {
       project,
     );
   }
-
 
   /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
   ///
@@ -1693,7 +1608,6 @@ class ProjectEndpoint extends Endpoint {
       projectReview,
     );
   }
-    
 
   /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
   ///

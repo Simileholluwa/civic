@@ -69,12 +69,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<String?> checkIfNewUser({required String email}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+
       final result = await _client.userRecord.checkIfNewUser(
         email,
       );
@@ -101,12 +96,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String newPassword,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _auth.resetPassword(
         email,
         verificationCode,
@@ -137,12 +127,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String password,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _client.modules.auth.email.authenticate(
         email,
         password,
@@ -224,12 +209,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String userName,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _auth.createAccountRequest(
         userName,
         email,
@@ -263,12 +243,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String password,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       var bio = 'A Nigerian Citizen';
       final selectedPoliticalStatus = politicalStatus.name;
       final result = await _auth.validateAccount(
@@ -344,12 +319,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<UserNinRecord?> searchNinDetails({required String ninNumber}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _client.userNin.getNinDetails(ninNumber);
       if (result == null) {
         return null;
@@ -378,12 +348,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   @override
   Future<bool> uploadProfileImage({required String imagePath}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final file = File(imagePath);
       final List<int> fileBytes = await file.readAsBytes();
       final byteData = ByteData.view(Uint8List.fromList(fileBytes).buffer);
@@ -412,12 +377,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required String email,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _auth.initiatePasswordReset(
         email,
       );

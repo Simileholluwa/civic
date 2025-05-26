@@ -10,11 +10,16 @@ fields:
     locations: List<AWSPlaces>?
     mentions: List<UserRecord>?
     tags: List<String>?
-    dateCreated: DateTime?
+    dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)
     likedBy: List<int>?
-    commentBy: List<int>?
-    repostBy: List<int>?
-    project: Project?, relation(optional)
-    isProjectRepost: bool?
+    commentedBy: List<int>?
+    bookmarkedBy: List<int>?
+    quotedBy: List<int>?
+    commentCount: int?, default=0
+    quoteCount: int?, default=0
+    project: Project?, relation(optional, onDelete=NoAction)
+    parent: Post?, relation(optional, onDelete=SetNull,)
+    quotedOrRepostedFromUser: UserRecord?, relation(optional)
+    isDeleted: bool?, default=false

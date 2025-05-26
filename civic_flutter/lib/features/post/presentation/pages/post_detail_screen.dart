@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/post/presentation/widgets/post_comment_tree.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,23 +10,32 @@ class PostDetailScreen extends ConsumerWidget {
   const PostDetailScreen({
     super.key,
     required this.id,
+    this.post,
   });
 
   final int id;
-
-  static String routePath([int? id]) => 'posts/${id ?? ':id'}';
-  static String routeName() => 'posts/details';
+  final Post? post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(
-      postDetailProvider(
-        null,
-        id,
+    final data = post == null
+        ? ref.watch(
+            postDetailProvider(
+              id,
+            ),
+          )
+        : AsyncValue.data(
+            post,
+          );
+    final postCardState = ref.watch(
+      postCardWidgetProvider(
+        data.hasValue ? data.value : null,
       ),
     );
-    final commentPagingControllerNotifier = ref.watch(
-      paginatedPostCommentListProvider(id).notifier,
+    final postCardNotifier = ref.watch(
+      postCardWidgetProvider(
+        data.hasValue ? data.value : null,
+      ).notifier,
     );
     return Scaffold(
       appBar: PreferredSize(
@@ -43,7 +49,15 @@ class PostDetailScreen extends ConsumerWidget {
             ),
           ),
           child: AppBar(
-            title: Text('Post'),
+            title: Text(
+              data.hasValue && !data.hasError
+                  ? "${data.value?.owner?.userInfo?.userName}'s Post"
+                  : 'Post',
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 25,
+                  ),
+            ),
+            titleSpacing: 0,
             leading: IconButton(
               icon: const Icon(
                 Iconsax.arrow_left_2,
@@ -52,311 +66,145 @@ class PostDetailScreen extends ConsumerWidget {
                 context.pop();
               },
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Iconsax.sort,
-                  size: 26,
-                ),
-                onPressed: () {},
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-            ],
+            actions: data.hasValue && !data.hasError
+                ? [
+                    IconButton(
+                      onPressed: () async {
+                        await postCardNotifier.togglePostLikeStatus(
+                          data.value!.id!,
+                        );
+                      },
+                      icon: Icon(
+                        postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
+                        color: postCardState.hasLiked
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await postCardNotifier.togglePostBookmarkStatus(
+                          id,
+                        );
+                      },
+                      icon: Icon(
+                        postCardState.hasBookmarked
+                            ? Icons.bookmark
+                            : Icons.bookmark_add_outlined,
+                        color: postCardState.hasBookmarked
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          constraints: BoxConstraints(
+                            maxHeight: postCardState.isOwner ? 180 : 370,
+                          ),
+                          builder: (ctx) {
+                            return ShowPostActions(
+                              post: data.value!,
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Iconsax.more_circle,
+                        color: Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                  ]
+                : [],
           ),
         ),
       ),
       body: data.when(
-        data: (post) {
-          if (post == null) {
+        data: (data) {
+          if (data == null) {
             return const Center(
-              child: Text(
-                'Post not found',
+              child: Text('Post not found'),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 10,
+                children: [
+                  PostCardDetail(
+                    post: data,
+                    showInteractions: false,
+                    hasProject: data.project != null,
+                  ),
+                  const SizedBox(height: 10,),
+                  const Divider(),
+                  const SizedBox(height: 10,),
+                  const Divider(),
+                  PostCommentCard(
+                    postId: data.id!,
+                  ),
+                ],
               ),
             );
           }
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                  ),
-                  child: PostCard(
-                    onTap: null,
-                    post: post,
-                    noMaxLines: true,
-                  ),
-                ),
-                AppInfiniteList<PostComment>(
-                  pagingController:
-                      commentPagingControllerNotifier.pagingController,
-                  scrollPhysics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, postComment, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
-                      child: Column(
-                        children: [
-                          if (index == 0)
-                            const SizedBox(height: 5)
-                          else
-                            const SizedBox(height: 10),
-                          PostCommentTreeWidget(
-                            commentId: postComment.id!,
-                            postId: post.id!,
-                            postComment,
-                            postComment.replyBy?.isNotEmpty ?? false,
-                            contentRoot: (context, comment) {
-                              return PostCommentAndReplyContent(
-                                replyOrComment: comment,
-                                onReply: () async {
-                                  final saveReply = ref.read(
-                                    savePostCommentProvider,
-                                  );
-                                  final result = await saveReply(
-                                    SavePostCommentParams(
-                                      post.id!,
-                                      PostComment(
-                                        postId: post.id!,
-                                        ownerId: post.ownerId,
-                                        text:
-                                            'Hello there, I am excited to make this reply again and again!',
-                                        parentId: postComment.id,
-                                      ),
-                                    ),
-                                  );
-                                  result.fold(
-                                    (l) {
-                                      log(l.message);
-                                    },
-                                    (r) {
-                                      if (r != null) {
-                                        ref
-                                            .read(postCommentRepliesProvider
-                                                .notifier)
-                                            .addReply(
-                                              postComment.id!,
-                                              r,
-                                            );
-                                      }
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            contentChild: (context, reply) {
-                              return PostCommentAndReplyContent(
-                                replyOrComment: reply,
-                                isReply: true,
-                              );
-                            },
-                          ),
-                          if (postComment.replyBy?.isEmpty ?? false)
-                            const SizedBox(height: 10),
-                        ],
-                      ),
-                    );
-                  },
-                  onRefresh: () => commentPagingControllerNotifier.refresh(),
-                  noItemsFound: ContentNoItemsFound(),
-                ),
-              ],
-            ),
-          );
         },
         error: (error, st) {
+          final err = error as Map<String, dynamic>;
           return Center(
-            child: Text(
-              error.toString(),
+            child: LoadingError(
+              retry: null,
+              errorMessage: err['message'] ?? 'Something went wrong',
+              mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
             ),
           );
         },
         loading: () {
-          return AppLoadingWidget(
-            
-          );
+          return AppLoadingWidget();
         },
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(
-          bottom: TSizes.xs,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
+      bottomNavigationBar: data.when(
+        data: (data) {
+          if (data == null) {
+            return null;
+          } else {
+            return PostDetailBottomNavigation();
+          }
+        },
+        error: (error, st) {
+          final err = error as Map<String, dynamic>;
+          if (err['action'] == 'retry') {
+            return Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+                horizontal: 20,
+                vertical: 5,
               ),
-              child: Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 150,
-                  ),
-                  child: TextFormField(
-                    controller: TextEditingController(),
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      errorBorder: UnderlineInputBorder(),
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      hintText: 'Share your opinion...',
-                      errorStyle:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                      hintStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).hintColor,
-                              ),
-                      errorMaxLines: 2,
-                      contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 12),
-                      hintMaxLines: 1,
+              child: ContentSingleButton(
+                onPressed: () {
+                  ref.invalidate(
+                    postDetailProvider(
+                      id,
                     ),
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                ),
+                  );
+                },
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
               ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            return null;
+          }
+        },
+        loading: () {
+          return null;
+        },
       ),
-    );
-  }
-}
-
-class ContentNoItemsFound extends StatelessWidget {
-  const ContentNoItemsFound({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 50, 16, 90),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Iconsax.messages,
-            size: 50,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            "Be the first to share your opinion!",
-            style: Theme.of(context).textTheme.labelMedium,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PostCommentAndReplyContent extends StatelessWidget {
-  const PostCommentAndReplyContent({
-    super.key,
-    required this.replyOrComment,
-    this.onReply,
-    this.onLike,
-    this.isReply = false,
-  });
-
-  final PostComment replyOrComment;
-  final VoidCallback? onReply;
-  final VoidCallback? onLike;
-  final bool isReply;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      spacing: 10,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (!isReply)
-          CreatorNameAndAccountInfo(
-            creator: replyOrComment.owner!,
-            timeAgo: THelperFunctions.humanizeDateTime(
-              replyOrComment.dateCreated ?? DateTime.now(),
-            ),
-          ),
-        if (replyOrComment.text != null)
-          ContentExpandableText(
-            text: replyOrComment.text!,
-            noMaxLines: true,
-            onToggleTextTap: () {},
-          ),
-        if (replyOrComment.imageUrls?.isNotEmpty ?? false)
-          replyOrComment.imageUrls!.length == 1
-              ? ContentSingleCachedImage(
-                  imageUrl: replyOrComment.imageUrls!.first,
-                  useMargin: false,
-                )
-              : ContentMultipleCachedImage(
-                  imageUrls: replyOrComment.imageUrls!,
-                  useMargin: false,
-                ),
-        Row(
-          spacing: 10,
-          children: [
-            GestureDetector(
-              onTap: onLike,
-              child: Text(
-                'Like',
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).primaryColor,
-                    ),
-              ),
-            ),
-            const Text('•'),
-            GestureDetector(
-              onTap: onReply,
-              child: Text(
-                'Reply',
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: Theme.of(context).primaryColor,
-                    ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

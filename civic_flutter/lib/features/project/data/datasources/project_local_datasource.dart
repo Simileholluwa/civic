@@ -29,15 +29,21 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
   @override
   Future<Project> getProjectDraft() async {
     try {
+      final userId = _prefs.getInt('userId')!;
       final projectDraft = _prefs.getString('projectDraft');
       if (projectDraft != null) {
         final projectMap =
             jsonDecode(projectDraft.toString()) as Map<String, dynamic>;
-        return Project.fromJson(projectMap);
+        if (projectMap['ownerId'] == userId) {
+          return Project.fromJson(projectMap);
+        }
+        return Project(
+          ownerId: userId,
+        );
       }
-      final userId = _prefs.getInt('userId');
+
       return Project(
-        ownerId: userId!,
+        ownerId: userId,
       );
     } catch (e) {
       throw const CacheException(message: 'Something went wrong');

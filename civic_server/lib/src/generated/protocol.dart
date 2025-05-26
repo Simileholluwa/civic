@@ -26,36 +26,35 @@ import 'poll/poll_hashtags.dart' as _i14;
 import 'poll/poll_list.dart' as _i15;
 import 'poll/poll_option.dart' as _i16;
 import 'poll/poll_vote.dart' as _i17;
-import 'post/draft_post.dart' as _i18;
-import 'post/hashtags.dart' as _i19;
-import 'post/post.dart' as _i20;
-import 'post/post_comment.dart' as _i21;
-import 'post/post_comment_likes.dart' as _i22;
-import 'post/post_comment_list.dart' as _i23;
-import 'post/post_exception.dart' as _i24;
-import 'post/post_likes.dart' as _i25;
-import 'post/post_list.dart' as _i26;
-import 'post/post_type_enums.dart' as _i27;
-import 'post/posts_hashtags.dart' as _i28;
-import 'project/project.dart' as _i29;
-import 'project/project_bookmarks.dart' as _i30;
-import 'project/project_likes.dart' as _i31;
-import 'project/project_list.dart' as _i32;
-import 'project/project_not_interested.dart' as _i33;
-import 'project/project_repost.dart' as _i34;
-import 'project/project_review.dart' as _i35;
-import 'project/project_review_list.dart' as _i36;
-import 'project/project_review_reaction.dart' as _i37;
-import 'project/project_vet_list.dart' as _i38;
-import 'project/project_vetting.dart' as _i39;
-import 'project/project_vetting_reaction.dart' as _i40;
-import 'user/political_status_enum.dart' as _i41;
-import 'user/user_exception.dart' as _i42;
-import 'user/user_nin_record.dart' as _i43;
-import 'user/user_record.dart' as _i44;
-import 'user/users_list.dart' as _i45;
-import 'package:civic_server/src/generated/general/aws_places.dart' as _i46;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i47;
+import 'post/hashtags.dart' as _i18;
+import 'post/post.dart' as _i19;
+import 'post/post_bookmarks.dart' as _i20;
+import 'post/post_exception.dart' as _i21;
+import 'post/post_likes.dart' as _i22;
+import 'post/post_list.dart' as _i23;
+import 'post/post_not_interested.dart' as _i24;
+import 'post/post_reposts.dart' as _i25;
+import 'post/post_type_enums.dart' as _i26;
+import 'post/posts_hashtags.dart' as _i27;
+import 'project/project.dart' as _i28;
+import 'project/project_bookmarks.dart' as _i29;
+import 'project/project_likes.dart' as _i30;
+import 'project/project_list.dart' as _i31;
+import 'project/project_not_interested.dart' as _i32;
+import 'project/project_repost.dart' as _i33;
+import 'project/project_review.dart' as _i34;
+import 'project/project_review_list.dart' as _i35;
+import 'project/project_review_reaction.dart' as _i36;
+import 'project/project_vet_list.dart' as _i37;
+import 'project/project_vetting.dart' as _i38;
+import 'project/project_vetting_reaction.dart' as _i39;
+import 'user/political_status_enum.dart' as _i40;
+import 'user/user_exception.dart' as _i41;
+import 'user/user_nin_record.dart' as _i42;
+import 'user/user_record.dart' as _i43;
+import 'user/users_list.dart' as _i44;
+import 'package:civic_server/src/generated/general/aws_places.dart' as _i45;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i46;
 export 'article/article.dart';
 export 'article/article_draft.dart';
 export 'article/article_list.dart';
@@ -70,15 +69,14 @@ export 'poll/poll_hashtags.dart';
 export 'poll/poll_list.dart';
 export 'poll/poll_option.dart';
 export 'poll/poll_vote.dart';
-export 'post/draft_post.dart';
 export 'post/hashtags.dart';
 export 'post/post.dart';
-export 'post/post_comment.dart';
-export 'post/post_comment_likes.dart';
-export 'post/post_comment_list.dart';
+export 'post/post_bookmarks.dart';
 export 'post/post_exception.dart';
 export 'post/post_likes.dart';
 export 'post/post_list.dart';
+export 'post/post_not_interested.dart';
+export 'post/post_reposts.dart';
 export 'post/post_type_enums.dart';
 export 'post/posts_hashtags.dart';
 export 'project/project.dart';
@@ -647,6 +645,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
         _i2.ColumnDefinition(
           name: 'updatedAt',
@@ -661,16 +660,36 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'commentBy',
+          name: 'commentedBy',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'repostBy',
+          name: 'bookmarkedBy',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quotedBy',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'commentCount',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+          columnDefault: '0',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quoteCount',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+          columnDefault: '0',
         ),
         _i2.ColumnDefinition(
           name: 'projectId',
@@ -679,10 +698,23 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int?',
         ),
         _i2.ColumnDefinition(
-          name: 'isProjectRepost',
+          name: 'parentId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quotedOrRepostedFromUserId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'isDeleted',
           columnType: _i2.ColumnType.boolean,
           isNullable: true,
           dartType: 'bool?',
+          columnDefault: 'false',
         ),
       ],
       foreignKeys: [
@@ -700,6 +732,26 @@ class Protocol extends _i1.SerializationManagerServer {
           constraintName: 'post_fk_1',
           columns: ['projectId'],
           referenceTable: 'project',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_fk_2',
+          columns: ['parentId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_fk_3',
+          columns: ['quotedOrRepostedFromUserId'],
+          referenceTable: 'user_record',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -725,8 +777,8 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
-      name: 'post_comment',
-      dartName: 'PostComment',
+      name: 'post_bookmarks',
+      dartName: 'PostBookmarks',
       schema: 'public',
       module: 'civic',
       columns: [
@@ -735,7 +787,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int?',
-          columnDefault: 'nextval(\'post_comment_id_seq\'::regclass)',
+          columnDefault: 'nextval(\'post_bookmarks_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
           name: 'postId',
@@ -750,140 +802,18 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'text',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
           name: 'dateCreated',
           columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'dateUpdated',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'imageUrls',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'videoUrl',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'likedBy',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<int>?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'replyBy',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<int>?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'parentId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'CURRENT_TIMESTAMP',
         ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
-          constraintName: 'post_comment_fk_0',
+          constraintName: 'post_bookmarks_fk_0',
           columns: ['postId'],
           referenceTable: 'post',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'post_comment_fk_1',
-          columns: ['ownerId'],
-          referenceTable: 'user_record',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'post_comment_fk_2',
-          columns: ['parentId'],
-          referenceTable: 'post_comment',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-      ],
-      indexes: [
-        _i2.IndexDefinition(
-          indexName: 'post_comment_pkey',
-          tableSpace: null,
-          elements: [
-            _i2.IndexElementDefinition(
-              type: _i2.IndexElementDefinitionType.column,
-              definition: 'id',
-            )
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: true,
-        )
-      ],
-      managed: true,
-    ),
-    _i2.TableDefinition(
-      name: 'post_comment_likes',
-      dartName: 'PostCommentLikes',
-      schema: 'public',
-      module: 'civic',
-      columns: [
-        _i2.ColumnDefinition(
-          name: 'id',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'post_comment_likes_id_seq\'::regclass)',
-        ),
-        _i2.ColumnDefinition(
-          name: 'postCommentId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-        _i2.ColumnDefinition(
-          name: 'ownerId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-        _i2.ColumnDefinition(
-          name: 'dateCreated',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
-        ),
-      ],
-      foreignKeys: [
-        _i2.ForeignKeyDefinition(
-          constraintName: 'post_comment_likes_fk_0',
-          columns: ['postCommentId'],
-          referenceTable: 'post_comment',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -891,7 +821,7 @@ class Protocol extends _i1.SerializationManagerServer {
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
-          constraintName: 'post_comment_likes_fk_1',
+          constraintName: 'post_bookmarks_fk_1',
           columns: ['ownerId'],
           referenceTable: 'user_record',
           referenceTableSchema: 'public',
@@ -903,7 +833,7 @@ class Protocol extends _i1.SerializationManagerServer {
       ],
       indexes: [
         _i2.IndexDefinition(
-          indexName: 'post_comment_likes_pkey',
+          indexName: 'post_bookmarks_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -916,12 +846,12 @@ class Protocol extends _i1.SerializationManagerServer {
           isPrimary: true,
         ),
         _i2.IndexDefinition(
-          indexName: 'post_comment_id_unique_idx',
+          indexName: 'post_bookmarks_id_unique_idx',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
-              definition: 'postCommentId',
+              definition: 'postId',
             ),
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
@@ -1014,6 +944,204 @@ class Protocol extends _i1.SerializationManagerServer {
             _i2.IndexElementDefinition(
               type: _i2.IndexElementDefinitionType.column,
               definition: 'ownerId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'post_not_interested',
+      dartName: 'PostNotInterested',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'post_not_interested_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'userId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'postId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'dateMarked',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_not_interested_fk_0',
+          columns: ['userId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_not_interested_fk_1',
+          columns: ['postId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'post_not_interested_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'post_not_interested_id_unique_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'userId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'postId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'post_reposts',
+      dartName: 'PostReposts',
+      schema: 'public',
+      module: 'civic',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'post_reposts_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'postId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'parentId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'ownerId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'dateCreated',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+          columnDefault: 'CURRENT_TIMESTAMP',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_reposts_fk_0',
+          columns: ['postId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_reposts_fk_1',
+          columns: ['parentId'],
+          referenceTable: 'post',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'post_reposts_fk_2',
+          columns: ['ownerId'],
+          referenceTable: 'user_record',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'post_reposts_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+        _i2.IndexDefinition(
+          indexName: 'post_reposts_id_unique_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'postId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'ownerId',
+            ),
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'parentId',
             ),
           ],
           type: 'btree',
@@ -1240,12 +1368,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'repostedBy',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<int>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'reviewedBy',
           columnType: _i2.ColumnType.json,
           isNullable: true,
@@ -1268,6 +1390,19 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quotedBy',
+          columnType: _i2.ColumnType.json,
+          isNullable: true,
+          dartType: 'List<int>?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quoteCount',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+          columnDefault: '0',
         ),
         _i2.ColumnDefinition(
           name: 'overallRating',
@@ -1389,7 +1524,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -1478,7 +1613,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -1577,7 +1712,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
       ],
@@ -1672,7 +1807,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -2488,89 +2623,86 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i17.PollVote) {
       return _i17.PollVote.fromJson(data) as T;
     }
-    if (t == _i18.DraftPost) {
-      return _i18.DraftPost.fromJson(data) as T;
+    if (t == _i18.Hashtag) {
+      return _i18.Hashtag.fromJson(data) as T;
     }
-    if (t == _i19.Hashtag) {
-      return _i19.Hashtag.fromJson(data) as T;
+    if (t == _i19.Post) {
+      return _i19.Post.fromJson(data) as T;
     }
-    if (t == _i20.Post) {
-      return _i20.Post.fromJson(data) as T;
+    if (t == _i20.PostBookmarks) {
+      return _i20.PostBookmarks.fromJson(data) as T;
     }
-    if (t == _i21.PostComment) {
-      return _i21.PostComment.fromJson(data) as T;
+    if (t == _i21.PostException) {
+      return _i21.PostException.fromJson(data) as T;
     }
-    if (t == _i22.PostCommentLikes) {
-      return _i22.PostCommentLikes.fromJson(data) as T;
+    if (t == _i22.PostLikes) {
+      return _i22.PostLikes.fromJson(data) as T;
     }
-    if (t == _i23.PostCommentList) {
-      return _i23.PostCommentList.fromJson(data) as T;
+    if (t == _i23.PostList) {
+      return _i23.PostList.fromJson(data) as T;
     }
-    if (t == _i24.PostException) {
-      return _i24.PostException.fromJson(data) as T;
+    if (t == _i24.PostNotInterested) {
+      return _i24.PostNotInterested.fromJson(data) as T;
     }
-    if (t == _i25.PostLikes) {
-      return _i25.PostLikes.fromJson(data) as T;
+    if (t == _i25.PostReposts) {
+      return _i25.PostReposts.fromJson(data) as T;
     }
-    if (t == _i26.PostList) {
-      return _i26.PostList.fromJson(data) as T;
+    if (t == _i26.PostType) {
+      return _i26.PostType.fromJson(data) as T;
     }
-    if (t == _i27.PostType) {
-      return _i27.PostType.fromJson(data) as T;
+    if (t == _i27.PostsHashtags) {
+      return _i27.PostsHashtags.fromJson(data) as T;
     }
-    if (t == _i28.PostsHashtags) {
-      return _i28.PostsHashtags.fromJson(data) as T;
+    if (t == _i28.Project) {
+      return _i28.Project.fromJson(data) as T;
     }
-    if (t == _i29.Project) {
-      return _i29.Project.fromJson(data) as T;
+    if (t == _i29.ProjectBookmarks) {
+      return _i29.ProjectBookmarks.fromJson(data) as T;
     }
-    if (t == _i30.ProjectBookmarks) {
-      return _i30.ProjectBookmarks.fromJson(data) as T;
+    if (t == _i30.ProjectLikes) {
+      return _i30.ProjectLikes.fromJson(data) as T;
     }
-    if (t == _i31.ProjectLikes) {
-      return _i31.ProjectLikes.fromJson(data) as T;
+    if (t == _i31.ProjectList) {
+      return _i31.ProjectList.fromJson(data) as T;
     }
-    if (t == _i32.ProjectList) {
-      return _i32.ProjectList.fromJson(data) as T;
+    if (t == _i32.ProjectNotInterested) {
+      return _i32.ProjectNotInterested.fromJson(data) as T;
     }
-    if (t == _i33.ProjectNotInterested) {
-      return _i33.ProjectNotInterested.fromJson(data) as T;
+    if (t == _i33.ProjectRepost) {
+      return _i33.ProjectRepost.fromJson(data) as T;
     }
-    if (t == _i34.ProjectRepost) {
-      return _i34.ProjectRepost.fromJson(data) as T;
+    if (t == _i34.ProjectReview) {
+      return _i34.ProjectReview.fromJson(data) as T;
     }
-    if (t == _i35.ProjectReview) {
-      return _i35.ProjectReview.fromJson(data) as T;
+    if (t == _i35.ProjectReviewList) {
+      return _i35.ProjectReviewList.fromJson(data) as T;
     }
-    if (t == _i36.ProjectReviewList) {
-      return _i36.ProjectReviewList.fromJson(data) as T;
+    if (t == _i36.ProjectReviewReaction) {
+      return _i36.ProjectReviewReaction.fromJson(data) as T;
     }
-    if (t == _i37.ProjectReviewReaction) {
-      return _i37.ProjectReviewReaction.fromJson(data) as T;
+    if (t == _i37.ProjectVetList) {
+      return _i37.ProjectVetList.fromJson(data) as T;
     }
-    if (t == _i38.ProjectVetList) {
-      return _i38.ProjectVetList.fromJson(data) as T;
+    if (t == _i38.ProjectVetting) {
+      return _i38.ProjectVetting.fromJson(data) as T;
     }
-    if (t == _i39.ProjectVetting) {
-      return _i39.ProjectVetting.fromJson(data) as T;
+    if (t == _i39.ProjectVettingReaction) {
+      return _i39.ProjectVettingReaction.fromJson(data) as T;
     }
-    if (t == _i40.ProjectVettingReaction) {
-      return _i40.ProjectVettingReaction.fromJson(data) as T;
+    if (t == _i40.PoliticalStatus) {
+      return _i40.PoliticalStatus.fromJson(data) as T;
     }
-    if (t == _i41.PoliticalStatus) {
-      return _i41.PoliticalStatus.fromJson(data) as T;
+    if (t == _i41.UserException) {
+      return _i41.UserException.fromJson(data) as T;
     }
-    if (t == _i42.UserException) {
-      return _i42.UserException.fromJson(data) as T;
+    if (t == _i42.UserNinRecord) {
+      return _i42.UserNinRecord.fromJson(data) as T;
     }
-    if (t == _i43.UserNinRecord) {
-      return _i43.UserNinRecord.fromJson(data) as T;
+    if (t == _i43.UserRecord) {
+      return _i43.UserRecord.fromJson(data) as T;
     }
-    if (t == _i44.UserRecord) {
-      return _i44.UserRecord.fromJson(data) as T;
-    }
-    if (t == _i45.UsersList) {
-      return _i45.UsersList.fromJson(data) as T;
+    if (t == _i44.UsersList) {
+      return _i44.UsersList.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Article?>()) {
       return (data != null ? _i4.Article.fromJson(data) : null) as T;
@@ -2614,99 +2746,96 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i17.PollVote?>()) {
       return (data != null ? _i17.PollVote.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i18.DraftPost?>()) {
-      return (data != null ? _i18.DraftPost.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i18.Hashtag?>()) {
+      return (data != null ? _i18.Hashtag.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i19.Hashtag?>()) {
-      return (data != null ? _i19.Hashtag.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i19.Post?>()) {
+      return (data != null ? _i19.Post.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i20.Post?>()) {
-      return (data != null ? _i20.Post.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i20.PostBookmarks?>()) {
+      return (data != null ? _i20.PostBookmarks.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i21.PostComment?>()) {
-      return (data != null ? _i21.PostComment.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i21.PostException?>()) {
+      return (data != null ? _i21.PostException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i22.PostCommentLikes?>()) {
-      return (data != null ? _i22.PostCommentLikes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i22.PostLikes?>()) {
+      return (data != null ? _i22.PostLikes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i23.PostCommentList?>()) {
-      return (data != null ? _i23.PostCommentList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i23.PostList?>()) {
+      return (data != null ? _i23.PostList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i24.PostException?>()) {
-      return (data != null ? _i24.PostException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i24.PostNotInterested?>()) {
+      return (data != null ? _i24.PostNotInterested.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i25.PostLikes?>()) {
-      return (data != null ? _i25.PostLikes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i25.PostReposts?>()) {
+      return (data != null ? _i25.PostReposts.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i26.PostList?>()) {
-      return (data != null ? _i26.PostList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i26.PostType?>()) {
+      return (data != null ? _i26.PostType.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i27.PostType?>()) {
-      return (data != null ? _i27.PostType.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i27.PostsHashtags?>()) {
+      return (data != null ? _i27.PostsHashtags.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i28.PostsHashtags?>()) {
-      return (data != null ? _i28.PostsHashtags.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i28.Project?>()) {
+      return (data != null ? _i28.Project.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i29.Project?>()) {
-      return (data != null ? _i29.Project.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i29.ProjectBookmarks?>()) {
+      return (data != null ? _i29.ProjectBookmarks.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i30.ProjectBookmarks?>()) {
-      return (data != null ? _i30.ProjectBookmarks.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i30.ProjectLikes?>()) {
+      return (data != null ? _i30.ProjectLikes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i31.ProjectLikes?>()) {
-      return (data != null ? _i31.ProjectLikes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i31.ProjectList?>()) {
+      return (data != null ? _i31.ProjectList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i32.ProjectList?>()) {
-      return (data != null ? _i32.ProjectList.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<_i33.ProjectNotInterested?>()) {
-      return (data != null ? _i33.ProjectNotInterested.fromJson(data) : null)
+    if (t == _i1.getType<_i32.ProjectNotInterested?>()) {
+      return (data != null ? _i32.ProjectNotInterested.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i34.ProjectRepost?>()) {
-      return (data != null ? _i34.ProjectRepost.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i33.ProjectRepost?>()) {
+      return (data != null ? _i33.ProjectRepost.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i35.ProjectReview?>()) {
-      return (data != null ? _i35.ProjectReview.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i34.ProjectReview?>()) {
+      return (data != null ? _i34.ProjectReview.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i36.ProjectReviewList?>()) {
-      return (data != null ? _i36.ProjectReviewList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i35.ProjectReviewList?>()) {
+      return (data != null ? _i35.ProjectReviewList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i37.ProjectReviewReaction?>()) {
-      return (data != null ? _i37.ProjectReviewReaction.fromJson(data) : null)
+    if (t == _i1.getType<_i36.ProjectReviewReaction?>()) {
+      return (data != null ? _i36.ProjectReviewReaction.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i38.ProjectVetList?>()) {
-      return (data != null ? _i38.ProjectVetList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i37.ProjectVetList?>()) {
+      return (data != null ? _i37.ProjectVetList.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i39.ProjectVetting?>()) {
-      return (data != null ? _i39.ProjectVetting.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i38.ProjectVetting?>()) {
+      return (data != null ? _i38.ProjectVetting.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i40.ProjectVettingReaction?>()) {
-      return (data != null ? _i40.ProjectVettingReaction.fromJson(data) : null)
+    if (t == _i1.getType<_i39.ProjectVettingReaction?>()) {
+      return (data != null ? _i39.ProjectVettingReaction.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i41.PoliticalStatus?>()) {
-      return (data != null ? _i41.PoliticalStatus.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i40.PoliticalStatus?>()) {
+      return (data != null ? _i40.PoliticalStatus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i42.UserException?>()) {
-      return (data != null ? _i42.UserException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i41.UserException?>()) {
+      return (data != null ? _i41.UserException.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i43.UserNinRecord?>()) {
-      return (data != null ? _i43.UserNinRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i42.UserNinRecord?>()) {
+      return (data != null ? _i42.UserNinRecord.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i44.UserRecord?>()) {
-      return (data != null ? _i44.UserRecord.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i43.UserRecord?>()) {
+      return (data != null ? _i43.UserRecord.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i45.UsersList?>()) {
-      return (data != null ? _i45.UsersList.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i44.UsersList?>()) {
+      return (data != null ? _i44.UsersList.fromJson(data) : null) as T;
     }
     if (t == List<_i4.Article>) {
       return (data as List).map((e) => deserialize<_i4.Article>(e)).toList()
           as T;
     }
-    if (t == List<_i44.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i44.UserRecord>(e)).toList()
+    if (t == List<_i43.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i43.UserRecord>(e)).toList()
           as T;
     }
     if (t == List<_i7.AWSPlaces>) {
@@ -2716,9 +2845,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
-    if (t == _i1.getType<List<_i44.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i43.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i44.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i43.UserRecord>(e)).toList()
           : null) as T;
     }
     if (t == _i1.getType<List<_i7.AWSPlaces>?>()) {
@@ -2726,9 +2855,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i7.AWSPlaces>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<_i44.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i43.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i44.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i43.UserRecord>(e)).toList()
           : null) as T;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -2761,10 +2890,10 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<int>) {
       return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
-    if (t == _i1.getType<List<_i28.PostsHashtags>?>()) {
+    if (t == _i1.getType<List<_i27.PostsHashtags>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i28.PostsHashtags>(e))
+              .map((e) => deserialize<_i27.PostsHashtags>(e))
               .toList()
           : null) as T;
     }
@@ -2773,9 +2902,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<_i44.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i43.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i44.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i43.UserRecord>(e)).toList()
           : null) as T;
     }
     if (t == _i1.getType<List<_i7.AWSPlaces>?>()) {
@@ -2783,9 +2912,9 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i7.AWSPlaces>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<_i44.UserRecord>?>()) {
+    if (t == _i1.getType<List<_i43.UserRecord>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i44.UserRecord>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i43.UserRecord>(e)).toList()
           : null) as T;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -2793,10 +2922,10 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<_i28.PostsHashtags>?>()) {
+    if (t == _i1.getType<List<_i27.PostsHashtags>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i28.PostsHashtags>(e))
+              .map((e) => deserialize<_i27.PostsHashtags>(e))
               .toList()
           : null) as T;
     }
@@ -2815,28 +2944,13 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<String>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<String>(e)).toList()
-          : null) as T;
-    }
     if (t == _i1.getType<List<int>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<int>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<int>(e)).toList()
-          : null) as T;
-    }
-    if (t == List<_i21.PostComment>) {
-      return (data as List)
-          .map((e) => deserialize<_i21.PostComment>(e))
-          .toList() as T;
-    }
-    if (t == List<_i20.Post>) {
-      return (data as List).map((e) => deserialize<_i20.Post>(e)).toList() as T;
+    if (t == List<_i19.Post>) {
+      return (data as List).map((e) => deserialize<_i19.Post>(e)).toList() as T;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null
@@ -2858,10 +2972,10 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
-    if (t == _i1.getType<List<_i34.ProjectRepost>?>()) {
+    if (t == _i1.getType<List<_i33.ProjectRepost>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i34.ProjectRepost>(e))
+              .map((e) => deserialize<_i33.ProjectRepost>(e))
               .toList()
           : null) as T;
     }
@@ -2895,8 +3009,8 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
-    if (t == List<_i29.Project>) {
-      return (data as List).map((e) => deserialize<_i29.Project>(e)).toList()
+    if (t == List<_i28.Project>) {
+      return (data as List).map((e) => deserialize<_i28.Project>(e)).toList()
           as T;
     }
     if (t == _i1.getType<List<int>?>()) {
@@ -2909,14 +3023,14 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
-    if (t == List<_i35.ProjectReview>) {
+    if (t == List<_i34.ProjectReview>) {
       return (data as List)
-          .map((e) => deserialize<_i35.ProjectReview>(e))
+          .map((e) => deserialize<_i34.ProjectReview>(e))
           .toList() as T;
     }
-    if (t == List<_i39.ProjectVetting>) {
+    if (t == List<_i38.ProjectVetting>) {
       return (data as List)
-          .map((e) => deserialize<_i39.ProjectVetting>(e))
+          .map((e) => deserialize<_i38.ProjectVetting>(e))
           .toList() as T;
     }
     if (t == _i1.getType<List<String>?>()) {
@@ -2947,18 +3061,15 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
-    if (t == List<_i46.AWSPlaces>) {
-      return (data as List).map((e) => deserialize<_i46.AWSPlaces>(e)).toList()
+    if (t == List<_i45.AWSPlaces>) {
+      return (data as List).map((e) => deserialize<_i45.AWSPlaces>(e)).toList()
           as T;
     }
     if (t == List<double>) {
       return (data as List).map((e) => deserialize<double>(e)).toList() as T;
     }
-    if (t == List<int>) {
-      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
-    }
-    if (t == List<_i47.UserRecord>) {
-      return (data as List).map((e) => deserialize<_i47.UserRecord>(e)).toList()
+    if (t == List<_i46.UserRecord>) {
+      return (data as List).map((e) => deserialize<_i46.UserRecord>(e)).toList()
           as T;
     }
     try {
@@ -3016,88 +3127,85 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i17.PollVote) {
       return 'PollVote';
     }
-    if (data is _i18.DraftPost) {
-      return 'DraftPost';
-    }
-    if (data is _i19.Hashtag) {
+    if (data is _i18.Hashtag) {
       return 'Hashtag';
     }
-    if (data is _i20.Post) {
+    if (data is _i19.Post) {
       return 'Post';
     }
-    if (data is _i21.PostComment) {
-      return 'PostComment';
+    if (data is _i20.PostBookmarks) {
+      return 'PostBookmarks';
     }
-    if (data is _i22.PostCommentLikes) {
-      return 'PostCommentLikes';
-    }
-    if (data is _i23.PostCommentList) {
-      return 'PostCommentList';
-    }
-    if (data is _i24.PostException) {
+    if (data is _i21.PostException) {
       return 'PostException';
     }
-    if (data is _i25.PostLikes) {
+    if (data is _i22.PostLikes) {
       return 'PostLikes';
     }
-    if (data is _i26.PostList) {
+    if (data is _i23.PostList) {
       return 'PostList';
     }
-    if (data is _i27.PostType) {
+    if (data is _i24.PostNotInterested) {
+      return 'PostNotInterested';
+    }
+    if (data is _i25.PostReposts) {
+      return 'PostReposts';
+    }
+    if (data is _i26.PostType) {
       return 'PostType';
     }
-    if (data is _i28.PostsHashtags) {
+    if (data is _i27.PostsHashtags) {
       return 'PostsHashtags';
     }
-    if (data is _i29.Project) {
+    if (data is _i28.Project) {
       return 'Project';
     }
-    if (data is _i30.ProjectBookmarks) {
+    if (data is _i29.ProjectBookmarks) {
       return 'ProjectBookmarks';
     }
-    if (data is _i31.ProjectLikes) {
+    if (data is _i30.ProjectLikes) {
       return 'ProjectLikes';
     }
-    if (data is _i32.ProjectList) {
+    if (data is _i31.ProjectList) {
       return 'ProjectList';
     }
-    if (data is _i33.ProjectNotInterested) {
+    if (data is _i32.ProjectNotInterested) {
       return 'ProjectNotInterested';
     }
-    if (data is _i34.ProjectRepost) {
+    if (data is _i33.ProjectRepost) {
       return 'ProjectRepost';
     }
-    if (data is _i35.ProjectReview) {
+    if (data is _i34.ProjectReview) {
       return 'ProjectReview';
     }
-    if (data is _i36.ProjectReviewList) {
+    if (data is _i35.ProjectReviewList) {
       return 'ProjectReviewList';
     }
-    if (data is _i37.ProjectReviewReaction) {
+    if (data is _i36.ProjectReviewReaction) {
       return 'ProjectReviewReaction';
     }
-    if (data is _i38.ProjectVetList) {
+    if (data is _i37.ProjectVetList) {
       return 'ProjectVetList';
     }
-    if (data is _i39.ProjectVetting) {
+    if (data is _i38.ProjectVetting) {
       return 'ProjectVetting';
     }
-    if (data is _i40.ProjectVettingReaction) {
+    if (data is _i39.ProjectVettingReaction) {
       return 'ProjectVettingReaction';
     }
-    if (data is _i41.PoliticalStatus) {
+    if (data is _i40.PoliticalStatus) {
       return 'PoliticalStatus';
     }
-    if (data is _i42.UserException) {
+    if (data is _i41.UserException) {
       return 'UserException';
     }
-    if (data is _i43.UserNinRecord) {
+    if (data is _i42.UserNinRecord) {
       return 'UserNinRecord';
     }
-    if (data is _i44.UserRecord) {
+    if (data is _i43.UserRecord) {
       return 'UserRecord';
     }
-    if (data is _i45.UsersList) {
+    if (data is _i44.UsersList) {
       return 'UsersList';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -3159,89 +3267,86 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'PollVote') {
       return deserialize<_i17.PollVote>(data['data']);
     }
-    if (dataClassName == 'DraftPost') {
-      return deserialize<_i18.DraftPost>(data['data']);
-    }
     if (dataClassName == 'Hashtag') {
-      return deserialize<_i19.Hashtag>(data['data']);
+      return deserialize<_i18.Hashtag>(data['data']);
     }
     if (dataClassName == 'Post') {
-      return deserialize<_i20.Post>(data['data']);
+      return deserialize<_i19.Post>(data['data']);
     }
-    if (dataClassName == 'PostComment') {
-      return deserialize<_i21.PostComment>(data['data']);
-    }
-    if (dataClassName == 'PostCommentLikes') {
-      return deserialize<_i22.PostCommentLikes>(data['data']);
-    }
-    if (dataClassName == 'PostCommentList') {
-      return deserialize<_i23.PostCommentList>(data['data']);
+    if (dataClassName == 'PostBookmarks') {
+      return deserialize<_i20.PostBookmarks>(data['data']);
     }
     if (dataClassName == 'PostException') {
-      return deserialize<_i24.PostException>(data['data']);
+      return deserialize<_i21.PostException>(data['data']);
     }
     if (dataClassName == 'PostLikes') {
-      return deserialize<_i25.PostLikes>(data['data']);
+      return deserialize<_i22.PostLikes>(data['data']);
     }
     if (dataClassName == 'PostList') {
-      return deserialize<_i26.PostList>(data['data']);
+      return deserialize<_i23.PostList>(data['data']);
+    }
+    if (dataClassName == 'PostNotInterested') {
+      return deserialize<_i24.PostNotInterested>(data['data']);
+    }
+    if (dataClassName == 'PostReposts') {
+      return deserialize<_i25.PostReposts>(data['data']);
     }
     if (dataClassName == 'PostType') {
-      return deserialize<_i27.PostType>(data['data']);
+      return deserialize<_i26.PostType>(data['data']);
     }
     if (dataClassName == 'PostsHashtags') {
-      return deserialize<_i28.PostsHashtags>(data['data']);
+      return deserialize<_i27.PostsHashtags>(data['data']);
     }
     if (dataClassName == 'Project') {
-      return deserialize<_i29.Project>(data['data']);
+      return deserialize<_i28.Project>(data['data']);
     }
     if (dataClassName == 'ProjectBookmarks') {
-      return deserialize<_i30.ProjectBookmarks>(data['data']);
+      return deserialize<_i29.ProjectBookmarks>(data['data']);
     }
     if (dataClassName == 'ProjectLikes') {
-      return deserialize<_i31.ProjectLikes>(data['data']);
+      return deserialize<_i30.ProjectLikes>(data['data']);
     }
     if (dataClassName == 'ProjectList') {
-      return deserialize<_i32.ProjectList>(data['data']);
+      return deserialize<_i31.ProjectList>(data['data']);
     }
     if (dataClassName == 'ProjectNotInterested') {
-      return deserialize<_i33.ProjectNotInterested>(data['data']);
+      return deserialize<_i32.ProjectNotInterested>(data['data']);
     }
     if (dataClassName == 'ProjectRepost') {
-      return deserialize<_i34.ProjectRepost>(data['data']);
+      return deserialize<_i33.ProjectRepost>(data['data']);
     }
     if (dataClassName == 'ProjectReview') {
-      return deserialize<_i35.ProjectReview>(data['data']);
+      return deserialize<_i34.ProjectReview>(data['data']);
     }
     if (dataClassName == 'ProjectReviewList') {
-      return deserialize<_i36.ProjectReviewList>(data['data']);
+      return deserialize<_i35.ProjectReviewList>(data['data']);
     }
     if (dataClassName == 'ProjectReviewReaction') {
-      return deserialize<_i37.ProjectReviewReaction>(data['data']);
+      return deserialize<_i36.ProjectReviewReaction>(data['data']);
     }
     if (dataClassName == 'ProjectVetList') {
-      return deserialize<_i38.ProjectVetList>(data['data']);
+      return deserialize<_i37.ProjectVetList>(data['data']);
     }
     if (dataClassName == 'ProjectVetting') {
-      return deserialize<_i39.ProjectVetting>(data['data']);
+      return deserialize<_i38.ProjectVetting>(data['data']);
     }
     if (dataClassName == 'ProjectVettingReaction') {
-      return deserialize<_i40.ProjectVettingReaction>(data['data']);
+      return deserialize<_i39.ProjectVettingReaction>(data['data']);
     }
     if (dataClassName == 'PoliticalStatus') {
-      return deserialize<_i41.PoliticalStatus>(data['data']);
+      return deserialize<_i40.PoliticalStatus>(data['data']);
     }
     if (dataClassName == 'UserException') {
-      return deserialize<_i42.UserException>(data['data']);
+      return deserialize<_i41.UserException>(data['data']);
     }
     if (dataClassName == 'UserNinRecord') {
-      return deserialize<_i43.UserNinRecord>(data['data']);
+      return deserialize<_i42.UserNinRecord>(data['data']);
     }
     if (dataClassName == 'UserRecord') {
-      return deserialize<_i44.UserRecord>(data['data']);
+      return deserialize<_i43.UserRecord>(data['data']);
     }
     if (dataClassName == 'UsersList') {
-      return deserialize<_i45.UsersList>(data['data']);
+      return deserialize<_i44.UsersList>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -3279,40 +3384,42 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i14.PollsHashtags.t;
       case _i17.PollVote:
         return _i17.PollVote.t;
-      case _i19.Hashtag:
-        return _i19.Hashtag.t;
-      case _i20.Post:
-        return _i20.Post.t;
-      case _i21.PostComment:
-        return _i21.PostComment.t;
-      case _i22.PostCommentLikes:
-        return _i22.PostCommentLikes.t;
-      case _i25.PostLikes:
-        return _i25.PostLikes.t;
-      case _i28.PostsHashtags:
-        return _i28.PostsHashtags.t;
-      case _i29.Project:
-        return _i29.Project.t;
-      case _i30.ProjectBookmarks:
-        return _i30.ProjectBookmarks.t;
-      case _i31.ProjectLikes:
-        return _i31.ProjectLikes.t;
-      case _i33.ProjectNotInterested:
-        return _i33.ProjectNotInterested.t;
-      case _i34.ProjectRepost:
-        return _i34.ProjectRepost.t;
-      case _i35.ProjectReview:
-        return _i35.ProjectReview.t;
-      case _i37.ProjectReviewReaction:
-        return _i37.ProjectReviewReaction.t;
-      case _i39.ProjectVetting:
-        return _i39.ProjectVetting.t;
-      case _i40.ProjectVettingReaction:
-        return _i40.ProjectVettingReaction.t;
-      case _i43.UserNinRecord:
-        return _i43.UserNinRecord.t;
-      case _i44.UserRecord:
-        return _i44.UserRecord.t;
+      case _i18.Hashtag:
+        return _i18.Hashtag.t;
+      case _i19.Post:
+        return _i19.Post.t;
+      case _i20.PostBookmarks:
+        return _i20.PostBookmarks.t;
+      case _i22.PostLikes:
+        return _i22.PostLikes.t;
+      case _i24.PostNotInterested:
+        return _i24.PostNotInterested.t;
+      case _i25.PostReposts:
+        return _i25.PostReposts.t;
+      case _i27.PostsHashtags:
+        return _i27.PostsHashtags.t;
+      case _i28.Project:
+        return _i28.Project.t;
+      case _i29.ProjectBookmarks:
+        return _i29.ProjectBookmarks.t;
+      case _i30.ProjectLikes:
+        return _i30.ProjectLikes.t;
+      case _i32.ProjectNotInterested:
+        return _i32.ProjectNotInterested.t;
+      case _i33.ProjectRepost:
+        return _i33.ProjectRepost.t;
+      case _i34.ProjectReview:
+        return _i34.ProjectReview.t;
+      case _i36.ProjectReviewReaction:
+        return _i36.ProjectReviewReaction.t;
+      case _i38.ProjectVetting:
+        return _i38.ProjectVetting.t;
+      case _i39.ProjectVettingReaction:
+        return _i39.ProjectVettingReaction.t;
+      case _i42.UserNinRecord:
+        return _i42.UserNinRecord.t;
+      case _i43.UserRecord:
+        return _i43.UserRecord.t;
     }
     return null;
   }

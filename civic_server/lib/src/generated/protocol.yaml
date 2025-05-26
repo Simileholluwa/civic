@@ -20,24 +20,25 @@ poll:
   - castVote:
   - getPolls:
   - hasVoted:
-postComment:
+post:
+  - savePost:
   - savePostComment:
   - getPostComments:
   - getPostCommentReplies:
-  - deletePostComment:
-  - getUserLikedComments:
-  - toggleCommentLike:
-  - validatePostCommentOwnership:
-post:
-  - savePost:
   - schedulePost:
+  - getRootPost:
+  - repostOrQuote:
   - getPost:
   - getPosts:
   - deletePost:
-  - getUserLikedPosts:
+  - toggleBookmark:
   - toggleLike:
+  - markNotInterested:
   - authUser:
   - validatePostOwnership:
+  - validateCommentOwnership:
+  - postUpdates:
+  - updatePost:
 project:
   - getProject:
   - getProjectReview:

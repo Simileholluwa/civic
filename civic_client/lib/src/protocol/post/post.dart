@@ -15,6 +15,7 @@ import '../post/post_type_enums.dart' as _i3;
 import '../general/aws_places.dart' as _i4;
 import '../post/posts_hashtags.dart' as _i5;
 import '../project/project.dart' as _i6;
+import '../post/post.dart' as _i7;
 
 abstract class Post implements _i1.SerializableModel {
   Post._({
@@ -29,16 +30,26 @@ abstract class Post implements _i1.SerializableModel {
     this.locations,
     this.mentions,
     this.tags,
-    this.dateCreated,
+    DateTime? dateCreated,
     this.updatedAt,
     this.hashtags,
     this.likedBy,
-    this.commentBy,
-    this.repostBy,
+    this.commentedBy,
+    this.bookmarkedBy,
+    this.quotedBy,
+    int? commentCount,
+    int? quoteCount,
     this.projectId,
     this.project,
-    this.isProjectRepost,
-  });
+    this.parentId,
+    this.parent,
+    this.quotedOrRepostedFromUserId,
+    this.quotedOrRepostedFromUser,
+    bool? isDeleted,
+  })  : dateCreated = dateCreated ?? DateTime.now(),
+        commentCount = commentCount ?? 0,
+        quoteCount = quoteCount ?? 0,
+        isDeleted = isDeleted ?? false;
 
   factory Post({
     int? id,
@@ -56,11 +67,18 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? commentedBy,
+    List<int>? bookmarkedBy,
+    List<int>? quotedBy,
+    int? commentCount,
+    int? quoteCount,
     int? projectId,
     _i6.Project? project,
-    bool? isProjectRepost,
+    int? parentId,
+    _i7.Post? parent,
+    int? quotedOrRepostedFromUserId,
+    _i2.UserRecord? quotedOrRepostedFromUser,
+    bool? isDeleted,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -104,18 +122,36 @@ abstract class Post implements _i1.SerializableModel {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      commentBy: (jsonSerialization['commentBy'] as List?)
+      commentedBy: (jsonSerialization['commentedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      repostBy: (jsonSerialization['repostBy'] as List?)
+      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      quotedBy: (jsonSerialization['quotedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      commentCount: jsonSerialization['commentCount'] as int?,
+      quoteCount: jsonSerialization['quoteCount'] as int?,
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
           : _i6.Project.fromJson(
               (jsonSerialization['project'] as Map<String, dynamic>)),
-      isProjectRepost: jsonSerialization['isProjectRepost'] as bool?,
+      parentId: jsonSerialization['parentId'] as int?,
+      parent: jsonSerialization['parent'] == null
+          ? null
+          : _i7.Post.fromJson(
+              (jsonSerialization['parent'] as Map<String, dynamic>)),
+      quotedOrRepostedFromUserId:
+          jsonSerialization['quotedOrRepostedFromUserId'] as int?,
+      quotedOrRepostedFromUser:
+          jsonSerialization['quotedOrRepostedFromUser'] == null
+              ? null
+              : _i2.UserRecord.fromJson(
+                  (jsonSerialization['quotedOrRepostedFromUser']
+                      as Map<String, dynamic>)),
+      isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
 
@@ -152,15 +188,29 @@ abstract class Post implements _i1.SerializableModel {
 
   List<int>? likedBy;
 
-  List<int>? commentBy;
+  List<int>? commentedBy;
 
-  List<int>? repostBy;
+  List<int>? bookmarkedBy;
+
+  List<int>? quotedBy;
+
+  int? commentCount;
+
+  int? quoteCount;
 
   int? projectId;
 
   _i6.Project? project;
 
-  bool? isProjectRepost;
+  int? parentId;
+
+  _i7.Post? parent;
+
+  int? quotedOrRepostedFromUserId;
+
+  _i2.UserRecord? quotedOrRepostedFromUser;
+
+  bool? isDeleted;
 
   /// Returns a shallow copy of this [Post]
   /// with some or all fields replaced by the given arguments.
@@ -181,11 +231,18 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? commentedBy,
+    List<int>? bookmarkedBy,
+    List<int>? quotedBy,
+    int? commentCount,
+    int? quoteCount,
     int? projectId,
     _i6.Project? project,
-    bool? isProjectRepost,
+    int? parentId,
+    _i7.Post? parent,
+    int? quotedOrRepostedFromUserId,
+    _i2.UserRecord? quotedOrRepostedFromUser,
+    bool? isDeleted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -209,11 +266,20 @@ abstract class Post implements _i1.SerializableModel {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentBy != null) 'commentBy': commentBy?.toJson(),
-      if (repostBy != null) 'repostBy': repostBy?.toJson(),
+      if (commentedBy != null) 'commentedBy': commentedBy?.toJson(),
+      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
+      if (commentCount != null) 'commentCount': commentCount,
+      if (quoteCount != null) 'quoteCount': quoteCount,
       if (projectId != null) 'projectId': projectId,
       if (project != null) 'project': project?.toJson(),
-      if (isProjectRepost != null) 'isProjectRepost': isProjectRepost,
+      if (parentId != null) 'parentId': parentId,
+      if (parent != null) 'parent': parent?.toJson(),
+      if (quotedOrRepostedFromUserId != null)
+        'quotedOrRepostedFromUserId': quotedOrRepostedFromUserId,
+      if (quotedOrRepostedFromUser != null)
+        'quotedOrRepostedFromUser': quotedOrRepostedFromUser?.toJson(),
+      if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
 
@@ -242,11 +308,18 @@ class _PostImpl extends Post {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentBy,
-    List<int>? repostBy,
+    List<int>? commentedBy,
+    List<int>? bookmarkedBy,
+    List<int>? quotedBy,
+    int? commentCount,
+    int? quoteCount,
     int? projectId,
     _i6.Project? project,
-    bool? isProjectRepost,
+    int? parentId,
+    _i7.Post? parent,
+    int? quotedOrRepostedFromUserId,
+    _i2.UserRecord? quotedOrRepostedFromUser,
+    bool? isDeleted,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -263,11 +336,18 @@ class _PostImpl extends Post {
           updatedAt: updatedAt,
           hashtags: hashtags,
           likedBy: likedBy,
-          commentBy: commentBy,
-          repostBy: repostBy,
+          commentedBy: commentedBy,
+          bookmarkedBy: bookmarkedBy,
+          quotedBy: quotedBy,
+          commentCount: commentCount,
+          quoteCount: quoteCount,
           projectId: projectId,
           project: project,
-          isProjectRepost: isProjectRepost,
+          parentId: parentId,
+          parent: parent,
+          quotedOrRepostedFromUserId: quotedOrRepostedFromUserId,
+          quotedOrRepostedFromUser: quotedOrRepostedFromUser,
+          isDeleted: isDeleted,
         );
 
   /// Returns a shallow copy of this [Post]
@@ -290,11 +370,18 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likedBy = _Undefined,
-    Object? commentBy = _Undefined,
-    Object? repostBy = _Undefined,
+    Object? commentedBy = _Undefined,
+    Object? bookmarkedBy = _Undefined,
+    Object? quotedBy = _Undefined,
+    Object? commentCount = _Undefined,
+    Object? quoteCount = _Undefined,
     Object? projectId = _Undefined,
     Object? project = _Undefined,
-    Object? isProjectRepost = _Undefined,
+    Object? parentId = _Undefined,
+    Object? parent = _Undefined,
+    Object? quotedOrRepostedFromUserId = _Undefined,
+    Object? quotedOrRepostedFromUser = _Undefined,
+    Object? isDeleted = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -324,16 +411,28 @@ class _PostImpl extends Post {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
-      commentBy: commentBy is List<int>?
-          ? commentBy
-          : this.commentBy?.map((e0) => e0).toList(),
-      repostBy: repostBy is List<int>?
-          ? repostBy
-          : this.repostBy?.map((e0) => e0).toList(),
+      commentedBy: commentedBy is List<int>?
+          ? commentedBy
+          : this.commentedBy?.map((e0) => e0).toList(),
+      bookmarkedBy: bookmarkedBy is List<int>?
+          ? bookmarkedBy
+          : this.bookmarkedBy?.map((e0) => e0).toList(),
+      quotedBy: quotedBy is List<int>?
+          ? quotedBy
+          : this.quotedBy?.map((e0) => e0).toList(),
+      commentCount: commentCount is int? ? commentCount : this.commentCount,
+      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       projectId: projectId is int? ? projectId : this.projectId,
       project: project is _i6.Project? ? project : this.project?.copyWith(),
-      isProjectRepost:
-          isProjectRepost is bool? ? isProjectRepost : this.isProjectRepost,
+      parentId: parentId is int? ? parentId : this.parentId,
+      parent: parent is _i7.Post? ? parent : this.parent?.copyWith(),
+      quotedOrRepostedFromUserId: quotedOrRepostedFromUserId is int?
+          ? quotedOrRepostedFromUserId
+          : this.quotedOrRepostedFromUserId,
+      quotedOrRepostedFromUser: quotedOrRepostedFromUser is _i2.UserRecord?
+          ? quotedOrRepostedFromUser
+          : this.quotedOrRepostedFromUser?.copyWith(),
+      isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
     );
   }
 }

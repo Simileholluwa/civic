@@ -3,6 +3,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CreateProjectScreen extends ConsumerWidget {
   const CreateProjectScreen({
@@ -56,7 +57,6 @@ class CreateProjectScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: projectCreationState.isValid,
-              draftData: const [],
               title: CreateProjectAppbarTitle(),
               sendPressed: () async {
                 if (!projectNotifier.validateProject()) return;
@@ -79,7 +79,6 @@ class CreateProjectScreen extends ConsumerWidget {
                   }
                 }
               },
-              draftPressed: () {},
             ),
           ),
           body: data.when(
@@ -89,10 +88,8 @@ class CreateProjectScreen extends ConsumerWidget {
               );
             },
             error: (error, st) {
-              return InfiniteListLoadingError(
-                retry: () {
-                  ref.invalidate(projectDetailProvider);
-                },
+              return LoadingError(
+                retry: null,
                 imageString: TImageTexts.error,
                 mainAxisAlignment: MainAxisAlignment.center,
                 padding: const EdgeInsets.symmetric(
@@ -103,6 +100,29 @@ class CreateProjectScreen extends ConsumerWidget {
             },
             loading: () {
               return AppLoadingWidget();
+            },
+          ),
+          bottomNavigationBar: data.when(
+            data: (_) {
+              return null;
+            },
+            error: (err, st) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 5,
+                ),
+                child: ContentSingleButton(
+                  onPressed: () {
+                    ref.invalidate(projectDetailProvider);
+                  },
+                  text: 'Retry',
+                  buttonIcon: Iconsax.refresh,
+                ),
+              );
+            },
+            loading: () {
+              return null;
             },
           ),
         ),

@@ -1,8 +1,8 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
-class InfiniteListLoadingError extends StatelessWidget {
-  const InfiniteListLoadingError({
+class LoadingError extends StatelessWidget {
+  const LoadingError({
     super.key,
     this.errorMessage =
         'Something went wrong while fetching data. Please try again.',

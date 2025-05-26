@@ -35,12 +35,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
     required String option,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _client.poll.castVote(
         pollId, option,
       );
@@ -61,12 +56,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
     required int id,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _client.poll.getPoll(
         id,
       );
@@ -94,12 +84,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
     required Poll poll,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = await _client.poll.savePoll(
         poll,
       );
@@ -123,12 +108,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
   @override
   Future<void> saveInFuture({required Poll poll, required DateTime scheduledDatetime,}) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       return await _client.poll.schedulePoll(
         poll,
         scheduledDatetime,
@@ -151,12 +131,7 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
     required int limit,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        throw const ServerException(
-          message: 'You are not connected to the internet.',
-        );
-      }
+      
       final result = _client.poll.getPolls(
         limit: limit,
         page: page,

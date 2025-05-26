@@ -110,70 +110,74 @@ final getPostProvider = AutoDisposeProvider<GetPostUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetPostRef = AutoDisposeProviderRef<GetPostUseCase>;
-String _$saveDraftHash() => r'22a7c9e0d6b6fbcadb84d19bf46fb28195f44190';
+String _$savePostDraftHash() => r'9568ea4ce53d0859ac1c945766960aff84ae7c02';
 
-/// See also [saveDraft].
-@ProviderFor(saveDraft)
-final saveDraftProvider = AutoDisposeProvider<SaveDraftUseCase>.internal(
-  saveDraft,
-  name: r'saveDraftProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$saveDraftHash,
+/// See also [savePostDraft].
+@ProviderFor(savePostDraft)
+final savePostDraftProvider =
+    AutoDisposeProvider<SavePostDraftUseCase>.internal(
+  savePostDraft,
+  name: r'savePostDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$savePostDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef SaveDraftRef = AutoDisposeProviderRef<SaveDraftUseCase>;
-String _$getDraftHash() => r'2147cc05d39beabe9c16c59620eee3d75ef2fcf2';
+typedef SavePostDraftRef = AutoDisposeProviderRef<SavePostDraftUseCase>;
+String _$getPostDraftHash() => r'0c4f955788d73d9607dfe43c7dfd8f94fdfdba54';
 
-/// See also [getDraft].
-@ProviderFor(getDraft)
-final getDraftProvider = AutoDisposeProvider<GetDraftsUseCase>.internal(
-  getDraft,
-  name: r'getDraftProvider',
+/// See also [getPostDraft].
+@ProviderFor(getPostDraft)
+final getPostDraftProvider = AutoDisposeProvider<GetPostDraftUseCase>.internal(
+  getPostDraft,
+  name: r'getPostDraftProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$getDraftHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getPostDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetDraftRef = AutoDisposeProviderRef<GetDraftsUseCase>;
-String _$deleteDraftsHash() => r'7cb420cc66382df17782ba8119183c86b10677a2';
+typedef GetPostDraftRef = AutoDisposeProviderRef<GetPostDraftUseCase>;
+String _$deletePostDraftHash() => r'43341f3244c5a80ed87badddc576025bf98424fe';
 
-/// See also [deleteDrafts].
-@ProviderFor(deleteDrafts)
-final deleteDraftsProvider = AutoDisposeProvider<DeleteDraftsUseCase>.internal(
-  deleteDrafts,
-  name: r'deleteDraftsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$deleteDraftsHash,
+/// See also [deletePostDraft].
+@ProviderFor(deletePostDraft)
+final deletePostDraftProvider =
+    AutoDisposeProvider<DeletePostDraftUseCase>.internal(
+  deletePostDraft,
+  name: r'deletePostDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deletePostDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef DeleteDraftsRef = AutoDisposeProviderRef<DeleteDraftsUseCase>;
-String _$deleteDraftHash() => r'5b0de143264171c96adf8a7ac71062128fb6d285';
+typedef DeletePostDraftRef = AutoDisposeProviderRef<DeletePostDraftUseCase>;
+String _$deletePostHash() => r'994512ead36789cfabdcdc2c7ba00346e7bdb8c2';
 
-/// See also [deleteDraft].
-@ProviderFor(deleteDraft)
-final deleteDraftProvider = AutoDisposeProvider<DeleteDraftUseCase>.internal(
-  deleteDraft,
-  name: r'deleteDraftProvider',
+/// See also [deletePost].
+@ProviderFor(deletePost)
+final deletePostProvider = AutoDisposeProvider<DeletePostUseCase>.internal(
+  deletePost,
+  name: r'deletePostProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$deleteDraftHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$deletePostHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef DeleteDraftRef = AutoDisposeProviderRef<DeleteDraftUseCase>;
+typedef DeletePostRef = AutoDisposeProviderRef<DeletePostUseCase>;
 String _$schedulePostHash() => r'5ab8fbe75bece777b987d33ce9dae7cb7b1309a6';
 
 /// See also [schedulePost].
@@ -208,24 +212,64 @@ final togglePostLikeProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef TogglePostLikeRef = AutoDisposeProviderRef<TogglePostLikeUseCase>;
-String _$getUserLikedPostsHash() => r'e1f830a8c5034d6ce7aeda0d2699d974d4aab65b';
+String _$repostOrQuotePostHash() => r'0ccca4e6511a1a49250744c9b2e4fa31d19908b8';
 
-/// See also [getUserLikedPosts].
-@ProviderFor(getUserLikedPosts)
-final getUserLikedPostsProvider =
-    AutoDisposeProvider<GetUserLikedPostsUseCase>.internal(
-  getUserLikedPosts,
-  name: r'getUserLikedPostsProvider',
+/// See also [repostOrQuotePost].
+@ProviderFor(repostOrQuotePost)
+final repostOrQuotePostProvider =
+    AutoDisposeProvider<RepostOrQuoteUseCase>.internal(
+  repostOrQuotePost,
+  name: r'repostOrQuotePostProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$getUserLikedPostsHash,
+      : _$repostOrQuotePostHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetUserLikedPostsRef = AutoDisposeProviderRef<GetUserLikedPostsUseCase>;
+typedef RepostOrQuotePostRef = AutoDisposeProviderRef<RepostOrQuoteUseCase>;
+String _$togglePostBookmarkHash() =>
+    r'3304989c674b814bd56f46a812b634a982124cae';
+
+/// See also [togglePostBookmark].
+@ProviderFor(togglePostBookmark)
+final togglePostBookmarkProvider =
+    AutoDisposeProvider<TogglePostBookmarkUseCase>.internal(
+  togglePostBookmark,
+  name: r'togglePostBookmarkProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$togglePostBookmarkHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef TogglePostBookmarkRef
+    = AutoDisposeProviderRef<TogglePostBookmarkUseCase>;
+String _$markPostNotInterestedHash() =>
+    r'a336519e8a86fb817664375ce3bfbf8fc01690bf';
+
+/// See also [markPostNotInterested].
+@ProviderFor(markPostNotInterested)
+final markPostNotInterestedProvider =
+    AutoDisposeProvider<MarkPostNotInterestedUseCase>.internal(
+  markPostNotInterested,
+  name: r'markPostNotInterestedProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$markPostNotInterestedHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MarkPostNotInterestedRef
+    = AutoDisposeProviderRef<MarkPostNotInterestedUseCase>;
 String _$savePostCommentHash() => r'e1fbcd3c60da881421d28543fc979691d24b3346';
 
 /// See also [savePostComment].

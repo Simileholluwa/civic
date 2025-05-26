@@ -6,7 +6,7 @@ part of 'post_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postDetailHash() => r'ffb8815b8ebc86e5868665a044fbb4b080d0ab50';
+String _$postDetailHash() => r'64dca97c6f63edd3a8216ddb5aafdb46895c2d47';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,17 +34,15 @@ class _SystemHash {
 const postDetailProvider = PostDetailFamily();
 
 /// See also [postDetail].
-class PostDetailFamily extends Family<AsyncValue<Post?>> {
+class PostDetailFamily extends Family<AsyncValue<Post>> {
   /// See also [postDetail].
   const PostDetailFamily();
 
   /// See also [postDetail].
   PostDetailProvider call(
-    DraftPost? draftPost,
     int id,
   ) {
     return PostDetailProvider(
-      draftPost,
       id,
     );
   }
@@ -54,7 +52,6 @@ class PostDetailFamily extends Family<AsyncValue<Post?>> {
     covariant PostDetailProvider provider,
   ) {
     return call(
-      provider.draftPost,
       provider.id,
     );
   }
@@ -75,15 +72,13 @@ class PostDetailFamily extends Family<AsyncValue<Post?>> {
 }
 
 /// See also [postDetail].
-class PostDetailProvider extends AutoDisposeFutureProvider<Post?> {
+class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
   /// See also [postDetail].
   PostDetailProvider(
-    DraftPost? draftPost,
     int id,
   ) : this._internal(
           (ref) => postDetail(
             ref as PostDetailRef,
-            draftPost,
             id,
           ),
           from: postDetailProvider,
@@ -95,7 +90,6 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post?> {
           dependencies: PostDetailFamily._dependencies,
           allTransitiveDependencies:
               PostDetailFamily._allTransitiveDependencies,
-          draftPost: draftPost,
           id: id,
         );
 
@@ -106,16 +100,14 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.draftPost,
     required this.id,
   }) : super.internal();
 
-  final DraftPost? draftPost;
   final int id;
 
   @override
   Override overrideWith(
-    FutureOr<Post?> Function(PostDetailRef provider) create,
+    FutureOr<Post> Function(PostDetailRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -126,28 +118,24 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        draftPost: draftPost,
         id: id,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<Post?> createElement() {
+  AutoDisposeFutureProviderElement<Post> createElement() {
     return _PostDetailProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PostDetailProvider &&
-        other.draftPost == draftPost &&
-        other.id == id;
+    return other is PostDetailProvider && other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, draftPost.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
@@ -156,20 +144,15 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post?> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PostDetailRef on AutoDisposeFutureProviderRef<Post?> {
-  /// The parameter `draftPost` of this provider.
-  DraftPost? get draftPost;
-
+mixin PostDetailRef on AutoDisposeFutureProviderRef<Post> {
   /// The parameter `id` of this provider.
   int get id;
 }
 
-class _PostDetailProviderElement extends AutoDisposeFutureProviderElement<Post?>
+class _PostDetailProviderElement extends AutoDisposeFutureProviderElement<Post>
     with PostDetailRef {
   _PostDetailProviderElement(super.provider);
 
-  @override
-  DraftPost? get draftPost => (origin as PostDetailProvider).draftPost;
   @override
   int get id => (origin as PostDetailProvider).id;
 }

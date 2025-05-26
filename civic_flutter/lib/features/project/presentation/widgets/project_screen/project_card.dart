@@ -80,16 +80,11 @@ class ProjectCardItem extends ConsumerWidget {
         project,
       ),
     );
-    final projectCardNotifier = ref.watch(
-      projectCardWidgetProvider(
-        project,
-      ).notifier,
-    );
     return InkWell(
       onTap: canTap
           ? () {
               context.push(
-                '/feed/${project.id}/details',
+                '/feed/project/${project.id}/details',
                 extra: project,
               );
             }
@@ -153,7 +148,6 @@ class ProjectCardItem extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
               child: ProjectInteractionButtons(
-                projectCardNotifier: projectCardNotifier,
                 project: project,
               ),
             ),

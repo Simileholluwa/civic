@@ -39,7 +39,7 @@ class ContentSingleCachedImage extends StatelessWidget {
             maxHeight: maxHeight,
           ),
           child: isUrl
-              ? ContentCachedImage(url: imageUrl as String)
+              ? ContentCachedImage(url: imageUrl as String, height: maxHeight,)
               : FadeInImage(
                   image: MemoryImage(
                     imageUrl as Uint8List,

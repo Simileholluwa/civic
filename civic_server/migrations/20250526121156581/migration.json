@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "post_comment_likes"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "post_comment"
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "Table \"post_comment_likes\" will be dropped.",
+      "table": "post_comment_likes",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"post_comment\" will be dropped.",
+      "table": "post_comment",
+      "columns": [],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

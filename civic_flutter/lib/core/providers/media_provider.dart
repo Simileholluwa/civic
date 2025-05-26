@@ -10,6 +10,9 @@ part 'media_provider.g.dart';
 class MediaVideoPlayer extends _$MediaVideoPlayer {
   @override
   Raw<VideoPlayerController?> build(String? videoUrl) {
+    ref.onDispose(() {
+      state?.dispose();
+    });
     if (videoUrl != null) {
       final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
       final isUrlVideo = regex.hasMatch(videoUrl);

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:civic_flutter/features/post/post.dart';
@@ -99,7 +100,9 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       ),
     );
     return result.fold((error) async {
-      log('Delete error: ${error.message}');
+      TToastMessages.errorToast(
+        error.message,
+      );
       return;
     }, (_) {
       return;

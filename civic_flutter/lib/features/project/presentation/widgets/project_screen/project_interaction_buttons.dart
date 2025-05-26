@@ -9,19 +9,22 @@ import 'package:iconsax/iconsax.dart';
 class ProjectInteractionButtons extends ConsumerWidget {
   const ProjectInteractionButtons({
     super.key,
-    required this.projectCardNotifier,
     required this.project,
   });
-  final ProjectCardWidget projectCardNotifier;
   final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectCardState = ref.watch(
-              projectCardWidgetProvider(
-                project,
-              ),
-            );
+      projectCardWidgetProvider(
+        project,
+      ),
+    );
+    final projectCardNotifier = ref.watch(
+      projectCardWidgetProvider(
+        project,
+      ).notifier,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -42,24 +45,14 @@ class ProjectInteractionButtons extends ConsumerWidget {
                   : Theme.of(context).iconTheme.color!,
         ),
         ContentInteractionButton(
-          icon: projectCardState.hasReposted!
-              ? Iconsax.repeate_music5
-              : Iconsax.repeate_music,
+          icon: Iconsax.repeate_music,
           onTap: projectCardState.isDeleted!
               ? null
               : () {
-                  if (projectCardState.hasReposted!) {
-                    ProjectHelperFunctions.undoRepostDialog(
-                      context,
-                      ref,
-                      project,
-                    );
-                    return;
-                  }
+                 
                   context.push(
                     AppRoutes.createPost,
                     extra: {
-                      'draft': null,
                       'project': project,
                       'id': 0,
                     },
@@ -68,9 +61,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
           text: projectCardState.numberOfReposts!,
           color: projectCardState.isDeleted!
               ? Theme.of(context).disabledColor
-              : projectCardState.hasReposted!
-                  ? TColors.primary
-                  : Theme.of(context).iconTheme.color!,
+              : Theme.of(context).iconTheme.color!,
         ),
         if (!projectCardState.isOwner!)
           ContentInteractionButton(
@@ -216,7 +207,6 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     builder: (ctx) {
                       return ShowProjectActions(
                         project: project,
-                        projectCardNotifier: projectCardNotifier,
                       );
                     },
                   );

@@ -32,7 +32,10 @@ class Home extends ConsumerWidget {
               defaultScale: true,
               breakpoints: [
                 const ResponsiveBreakpoint.autoScale(450, name: MOBILE),
-                const ResponsiveBreakpoint.resize(600, name: TABLET),
+                const ResponsiveBreakpoint.autoScaleDown(600, name: TABLET),
+                const ResponsiveBreakpoint.autoScaleDown(900, name: DESKTOP),
+                const ResponsiveBreakpoint.autoScaleDown(1200,),
+                
               ],
             ),
           ),

@@ -7,7 +7,7 @@ part of 'post_comment_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedPostCommentListHash() =>
-    r'f87df07f9a1761be3a7b71afcd3938bf8b587050';
+    r'80e8b58eb6c3ffddbe0f3f74f74ceca91e5ab738';
 
 /// Copied from Dart SDK
 class _SystemHash {

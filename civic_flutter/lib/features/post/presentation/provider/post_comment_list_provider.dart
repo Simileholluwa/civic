@@ -9,7 +9,7 @@ part 'post_comment_list_provider.g.dart';
 
 @riverpod
 class PaginatedPostCommentList extends _$PaginatedPostCommentList {
-  final PagingController<int, PostComment> pagingController =
+  final PagingController<int, Post> pagingController =
       PagingController(firstPageKey: 1);
 
   @override
@@ -49,7 +49,10 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
     pagingController.refresh();
   }
 
-  void addComment(PostComment comment) {
+  void addComment(Post comment) {
+    if (pagingController.itemList == null) {
+      refresh();
+    }
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: [comment, ...pagingController.itemList ?? []],

@@ -3,16 +3,15 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetPostCommentRepliesUseCase implements UseCase<PostCommentList, GetPostCommentRepliesParams> {
+class GetPostCommentRepliesUseCase implements UseCase<PostList, GetPostCommentRepliesParams> {
   GetPostCommentRepliesUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<Failure, PostCommentList>> call(GetPostCommentRepliesParams params) async {
+  Future<Either<Failure, PostList>> call(GetPostCommentRepliesParams params) async {
     final result = await _postRepository.getPostCommentReplies(
       commentId: params.commentId,
-      postId: params.postId,
       page: params.page,
       limit: params.limit,
       
@@ -23,13 +22,11 @@ class GetPostCommentRepliesUseCase implements UseCase<PostCommentList, GetPostCo
 
 class GetPostCommentRepliesParams {
   GetPostCommentRepliesParams(
-    this.postId,
+    this.commentId,
     this.page,
     this.limit,
-    this.commentId,
   );
   final int commentId;
-  final int postId;
   final int page;
   final int limit;
   

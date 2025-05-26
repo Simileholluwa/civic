@@ -37,58 +37,62 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
         );
     final decoded = jsonDecode(savedRecordString.toString());
     final userRecord = UserRecord.fromJson(decoded);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenHeight = MediaQuery.sizeOf(context).height;
 
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
         ),
-        bottomNavigationBar: SizedBox(
-          height: 60,
-          child: BottomNavigationBar(
-            currentIndex: widget.navigatorShell.currentIndex == 0
-                ? 0
-                : widget.navigatorShell.currentIndex == 1
-                    ? 2
-                    : 1,
-            onTap: (index) {
-              if (index == 1) {
-                togglePopup();
-              } else if (index == 0) {
-                widget.navigatorShell.goBranch(
-                  index,
-                  initialLocation:
-                      index == widget.navigatorShell.currentIndex,
-                );
-              } else if (index == 2) {
-                widget.navigatorShell.goBranch(
-                  index - 1,
-                  initialLocation:
-                      (index - 1) == widget.navigatorShell.currentIndex,
-                );
-              }
-            },
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            items: [
-              BottomNavigationBarItem(
-                  activeIcon: Icon(Iconsax.airdrop5),
-                  icon: Icon(Iconsax.airdrop),
-                  label: 'Home'),
-              BottomNavigationBarItem(
-                  activeIcon: Icon(
-                    Icons.add,
-                  ),
-                  icon: Icon(
-                    Iconsax.magicpen,
-                  ),
-                  label: 'Create'),
-              BottomNavigationBarItem(
-                  activeIcon: Icon(Iconsax.notification5),
-                  icon: Icon(Iconsax.notification),
-                  label: 'Updates'),
-            ],
-          ),
-        ),
+        bottomNavigationBar: screenWidth > 450
+            ? null
+            : SizedBox(
+                height: 60,
+                child: BottomNavigationBar(
+                  currentIndex: widget.navigatorShell.currentIndex == 0
+                      ? 0
+                      : widget.navigatorShell.currentIndex == 1
+                          ? 2
+                          : 1,
+                  onTap: (index) {
+                    if (index == 1) {
+                      togglePopup();
+                    } else if (index == 0) {
+                      widget.navigatorShell.goBranch(
+                        index,
+                        initialLocation:
+                            index == widget.navigatorShell.currentIndex,
+                      );
+                    } else if (index == 2) {
+                      widget.navigatorShell.goBranch(
+                        index - 1,
+                        initialLocation:
+                            (index - 1) == widget.navigatorShell.currentIndex,
+                      );
+                    }
+                  },
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  items: [
+                    BottomNavigationBarItem(
+                        activeIcon: Icon(Iconsax.airdrop5),
+                        icon: Icon(Iconsax.airdrop),
+                        label: 'Home'),
+                    BottomNavigationBarItem(
+                        activeIcon: Icon(
+                          Icons.add,
+                        ),
+                        icon: Icon(
+                          Iconsax.magicpen,
+                        ),
+                        label: 'Create'),
+                    BottomNavigationBarItem(
+                        activeIcon: Icon(Iconsax.notification5),
+                        icon: Icon(Iconsax.notification),
+                        label: 'Updates'),
+                  ],
+                ),
+              ),
         body: PortalTarget(
           visible: _isOpen,
           anchor: Aligned(
@@ -116,8 +120,7 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
                         color: Theme.of(context).primaryColor,
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Text(
                           'What would you like to create?',
                           style: Theme.of(context)
@@ -240,7 +243,190 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              widget.navigatorShell,
+              Row(
+                children: [
+                  if (screenWidth > 450) AppNavigationDrawer(),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Column(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Column(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+
+                  //             SizedBox(
+                  //               height: 170,
+
+                  //               child: NavigationRail(
+                  //                 useIndicator: false,
+                  //                 extended: screenWidth > 600,
+                  //                 backgroundColor: Theme.of(context)
+                  //                     .scaffoldBackgroundColor,
+                  //                 onDestinationSelected: (index) {
+                  //                   if (index == 1) {
+                  //                     togglePopup();
+                  //                   } else if (index == 0) {
+                  //                     widget.navigatorShell.goBranch(
+                  //                       index,
+                  //                       initialLocation: index ==
+                  //                           widget
+                  //                               .navigatorShell.currentIndex,
+                  //                     );
+                  //                   } else if (index == 2) {
+                  //                     widget.navigatorShell.goBranch(
+                  //                       index - 1,
+                  //                       initialLocation: (index - 1) ==
+                  //                           widget
+                  //                               .navigatorShell.currentIndex,
+                  //                     );
+                  //                   }
+                  //                 },
+                  //                 destinations: [
+                  //                   NavigationRailDestination(
+                  //                     selectedIcon: Icon(
+                  //                       Iconsax.airdrop5,
+                  //                       size: 35,
+                  //                       color: TColors.primary,
+                  //                     ),
+                  //                     icon: Icon(
+                  //                       Iconsax.airdrop,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Home'),
+                  //                   ),
+                  //                   NavigationRailDestination(
+                  //                     selectedIcon: Icon(
+                  //                       Iconsax.magicpen5,
+                  //                       size: 35,
+                  //                     ),
+                  //                     icon: Icon(
+                  //                       Iconsax.magicpen,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Create'),
+                  //                   ),
+                  //                   NavigationRailDestination(
+                  //                     selectedIcon: Icon(
+                  //                       Iconsax.notification5,
+                  //                       size: 35,
+                  //                     ),
+                  //                     icon: Icon(
+                  //                       Iconsax.notification,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Updates'),
+                  //                   ),
+                  //                 ],
+                  //                 selectedIndex:
+                  //                     widget.navigatorShell.currentIndex == 0
+                  //                         ? 0
+                  //                         : widget.navigatorShell
+                  //                                     .currentIndex ==
+                  //                                 1
+                  //                             ? 2
+                  //                             : 1,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Column(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             Container(
+                  //               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10,),
+                  //               child: Text('Create',),
+                  //               decoration: BoxDecoration(
+                  //                 color: Theme.of(context).cardColor,
+                  //                 borderRadius: BorderRadius.only(
+                  //                   topLeft: Radius.circular(100,),
+                  //                   bottomLeft: Radius.circular(100,),
+                  //                 )
+                  //               ),
+                  //             ),
+                  //             SizedBox(
+                  //               height: 210,
+                  //               child: NavigationRail(
+                  //                 useIndicator: false,
+                  //                 extended: screenWidth > 600,
+                  //                 backgroundColor: Theme.of(context)
+                  //                     .scaffoldBackgroundColor,
+                  //                 onDestinationSelected: (index) {
+                  //                   if (index == 1) {
+                  //                     togglePopup();
+                  //                   } else if (index == 0) {
+                  //                     widget.navigatorShell.goBranch(
+                  //                       index,
+                  //                       initialLocation: index ==
+                  //                           widget
+                  //                               .navigatorShell.currentIndex,
+                  //                     );
+                  //                   } else if (index == 2) {
+                  //                     widget.navigatorShell.goBranch(
+                  //                       index - 1,
+                  //                       initialLocation: (index - 1) ==
+                  //                           widget
+                  //                               .navigatorShell.currentIndex,
+                  //                     );
+                  //                   }
+                  //                 },
+                  //                 destinations: [
+                  //                   NavigationRailDestination(
+
+                  //                     icon: Icon(
+                  //                       Iconsax.note,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Project'),
+                  //                   ),
+                  //                   NavigationRailDestination(
+
+                  //                     icon: Icon(
+                  //                       Iconsax.calendar,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Post'),
+                  //                   ),
+                  //                   NavigationRailDestination(
+
+                  //                     icon: Icon(
+                  //                       Iconsax.chart,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Poll'),
+                  //                   ),
+                  //                   NavigationRailDestination(
+
+                  //                     icon: Icon(
+                  //                       Iconsax.document,
+                  //                       size: 35,
+                  //                     ),
+                  //                     label: Text('Article'),
+                  //                   ),
+                  //                 ],
+                  //                 selectedIndex: null,
+                  //               ),
+                  //             ),
+                  //             const Divider(),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: screenHeight,
+                    child: VerticalDivider(
+                      width: 1,
+                    ),
+                  ),
+                  Expanded(child: widget.navigatorShell),
+                ],
+              ),
               Visibility(
                 visible: ref.watch(sendPostLoadingProvider),
                 child: LinearProgressIndicator(
@@ -264,6 +450,24 @@ class _AppWrapperState extends ConsumerState<AppWrapper> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AppNavigationDrawer extends StatelessWidget {
+  const AppNavigationDrawer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isCollapsed = true;
+    //final screenWidth = MediaQuery.sizeOf(context).width;
+    return SizedBox(
+      width: isCollapsed == false ? 250 : 70,
+      child: Drawer(
+        child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor),
       ),
     );
   }

@@ -21,10 +21,14 @@ class PaginatedPostList extends _$PaginatedPostList {
     pagingController.addStatusListener((status) {
       state = status;
     });
-    return PagingStatus.loadingFirstPage;
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
+    return pagingController.value.status;
   }
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
+    try {
     final listPostUseCase = ref.read(getPostsProvider);
     final result = await listPostUseCase(
       GetPostsParams(
@@ -32,7 +36,14 @@ class PaginatedPostList extends _$PaginatedPostList {
         limit,
       ),
     );
-    result.fold((error) => log(error.message), (data) {
+    result.fold((error) {
+      log(error.toString(), name: 'PaginatedPostList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: error,
+        );
+    }, (data) {
       if (data.canLoadMore) {
         pagingController.appendPage(
           data.results,
@@ -41,7 +52,14 @@ class PaginatedPostList extends _$PaginatedPostList {
       } else {
         pagingController.appendLastPage(data.results);
       }
-    });
+    });} catch (e) {
+      log(e.toString(), name: 'PaginatedPostList');
+      pagingController.value = PagingState(
+        nextPageKey: null,
+        itemList: null,
+        error: e.toString(),
+      );
+    }
   }
 
   void refresh() {
@@ -63,6 +81,17 @@ class PaginatedPostList extends _$PaginatedPostList {
     if (pagingController.itemList != null && projectId != null) {
       final updatedList = List<Post>.from(pagingController.itemList ?? []);
       updatedList.removeWhere((element) => element.projectId == projectId);
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: updatedList,
+      );
+    }
+  }
+
+  void removePostById(int? postId) {
+    if (pagingController.itemList != null && postId != null) {
+      final updatedList = List<Post>.from(pagingController.itemList ?? []);
+      updatedList.removeWhere((element) => element.id == postId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,

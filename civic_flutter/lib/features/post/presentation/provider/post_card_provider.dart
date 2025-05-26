@@ -6,7 +6,7 @@ import 'package:civic_flutter/features/post/post.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_card_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class PostCardWidget extends _$PostCardWidget {
   @override
   PostCardState build(Post? post) {
@@ -16,6 +16,12 @@ class PostCardWidget extends _$PostCardWidget {
     return PostCardState.populate(post, ref);
   }
 
+  void setIsFollower() {
+    state = state.copyWith(
+      isFollower: !state.isFollower,
+    );
+  }
+  
   Future<void> togglePostLikeStatus(int id) async {
     final toggleLike = ref.read(togglePostLikeProvider);
     final result = await toggleLike(
@@ -23,21 +29,96 @@ class PostCardWidget extends _$PostCardWidget {
     );
     return result.fold((error) {
       log(error.message);
-      return; 
-    }, (likesCount) async {
-      final likedPosts = ref.read(getUserLikedPostsProvider);
-      final result = await likedPosts(
-        NoParams(),
+      return;
+    }, (_) async {
+      state = state.copyWith(
+        hasLiked: !state.hasLiked,
       );
-      result.fold((error) {
-        log(error.message);
-      }, (isLiked) {
-        state = state.copyWith(
-          numberOfLikes: likesCount.toString(),
-          hasLiked: isLiked.contains(id),
-          hasLikes: likesCount > 0,
-        );
-      });
+    });
+  }
+
+  Future<bool> togglePostBookmarkStatus(
+    int postId,
+  ) async {
+    final toggleBookmark = ref.read(togglePostBookmarkProvider);
+    final result = await toggleBookmark(
+      TogglePostBookmarkParams(
+        postId,
+      ),
+    );
+    return result.fold((error) {
+      log(error.message);
+      return false;
+    }, (_) async {
+      state = state.copyWith(
+        hasBookmarked: !state.hasBookmarked,
+      );
+      return true;
+    });
+  }
+
+  Future<bool> markPostNotInterested(
+    int postId,
+  ) async {
+    final notInterested = ref.read(markPostNotInterestedProvider);
+    final result = await notInterested(
+      MarkPostNotInterestedParams(
+        postId,
+      ),
+    );
+    return result.fold((error) {
+      log(error.message);
+      return false;
+    }, (_) async {
+      ref.read(paginatedPostListProvider.notifier).removePostById(
+            postId,
+          );
+      return true;
+    });
+  }
+
+  Future<void> saveComment(Post comment, int postId) async {
+    final saveComment = ref.read(savePostCommentProvider);
+    final result = await saveComment(
+      SavePostCommentParams(
+        comment,
+        false,
+      ),
+    );
+    result.fold((l) {
+      log(l.message);
+    }, (r) {
+      final commentPagingControllerNotifier = ref.watch(
+        paginatedPostCommentListProvider(postId).notifier,
+      );
+      if (commentPagingControllerNotifier.pagingController.itemList != null) {
+        commentPagingControllerNotifier.addComment(r!);
+      }
+    });
+  }
+
+  Future<void> deletePost(
+    int postId,
+  ) async {
+    final deleteProject = ref.read(deletePostProvider);
+    final result = await deleteProject(
+      DeletePostParams(
+        postId,
+      ),
+    );
+    return result.fold((error) async {
+      TToastMessages.errorToast(
+        error.message,
+      );
+      return;
+    }, (_) {
+      ref
+          .watch(
+            paginatedPostListProvider.notifier,
+          )
+          .removePostById(
+            postId,
+          );
       return;
     });
   }

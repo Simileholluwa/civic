@@ -17,20 +17,12 @@ class PostsScreen extends ConsumerWidget {
       pagingController: pagingControllerNotifier.pagingController,
       scrollController: ref.read(postScrollControllerProvider),
       itemBuilder: (context, post, index) {
-        final isVisibleNotifier = ref.watch(
-          appScrollVisibilityProvider(
-            true,
-          ).notifier,
-        );
         return PostCard(
           onTap: () {
-            context.pushNamed(
-              PostDetailScreen.routeName(),
-              pathParameters: {
-                'id': post.id.toString(),
-              },
+            context.push(
+              '/feed/post/${post.id}',
+              extra: post,
             );
-            isVisibleNotifier.hide();
           },
           post: post,
         );

@@ -10,10 +10,12 @@ class CreatePostWidget extends ConsumerWidget {
     super.key,
     required this.post,
     this.project,
+    this.parent,
   });
 
   final Post post;
   final Project? project;
+  final Post? parent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,8 +38,7 @@ class CreatePostWidget extends ConsumerWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                
+              children: [               
                 PostTextField(
                   userName: post.owner!.userInfo!.userName!,
                   controller: postState.controller,
@@ -70,6 +71,27 @@ class CreatePostWidget extends ConsumerWidget {
                       canTap: false,
                       showInteractions: false,
                       maxHeight: 200,
+                    ),
+                  ),
+                if (parent != null)
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    padding: const EdgeInsets.only(
+                      bottom: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        TSizes.md,
+                      ),
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                    child: PostCard(
+                      post: parent!,
+                      onTap: null,
+                      noMaxLines: false,
+                      showInteractions: false,
                     ),
                   ),
               ],

@@ -1,10 +1,7 @@
 enum: PostType
 values:
-    - text
-    - video
-    - textWithVideo
-    - textWithImages
-    - images
-    - image
-    - textWithImage
-    - none
+    - postRepost
+    - regular
+    - comment
+    - projectRepost
+    - commentReply

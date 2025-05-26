@@ -2,7 +2,7 @@ class: ProjectNotInterested
 table: project_not_interested
 fields:
   user: UserRecord?, relation
-  project: Project?, relation
+  project: Project?, relation(onDelete=Cascade)
   dateMarked: DateTime?, default=now
 indexes:
     project_not_interested_id_unique_idx:

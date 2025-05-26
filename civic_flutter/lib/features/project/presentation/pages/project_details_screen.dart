@@ -40,7 +40,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
       appBar: ContentAppBar(
         title: const SizedBox(),
         isVisible: true,
-        actions: data.hasValue
+        actions: data.hasValue && !data.hasError
             ? data.value == null
                 ? []
                 : [
@@ -67,32 +67,20 @@ class ProjectDetailsScreen extends ConsumerWidget {
                       onPressed: projectCardState.isDeleted!
                           ? null
                           : () {
-                              if (projectCardState.hasReposted!) {
-                                ProjectHelperFunctions.undoRepostDialog(
-                                  context,
-                                  ref,
-                                  data.value!,
-                                );
-                                return;
-                              }
+                            
                               context.push(
                                 AppRoutes.createPost,
                                 extra: {
-                                  'draft': null,
                                   'project': project,
                                   'id': 0,
                                 },
                               );
                             },
                       icon: Icon(
-                        projectCardState.hasReposted!
-                            ? Iconsax.repeate_music5
-                            : Iconsax.repeate_music,
+                        Iconsax.repeate_music,
                         color: projectCardState.isDeleted!
                             ? Theme.of(context).disabledColor
-                            : projectCardState.hasReposted!
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color!,
+                            : Theme.of(context).iconTheme.color!,
                       ),
                     ),
                     IconButton(
@@ -111,7 +99,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 builder: (ctx) {
                                   return ShowProjectActions(
                                     project: data.value!,
-                                    projectCardNotifier: projectCardNotifier,
                                     fromDetails: true,
                                   );
                                 },
@@ -151,26 +138,28 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          if (value == null) {
+          if (projectCardState.isOwner!) {
             return null;
-          } else {
-            if (projectCardState.isOwner!) {
-              return null;
-            }
-            return ProjectDetailsBottomNavigationWidget(
-              project: value,
-            );
           }
+          return ProjectDetailsBottomNavigationWidget(
+            project: value!,
+          );
         },
         error: (error, st) {
-          return ContentSingleButton(
-            onPressed: () {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            child: ContentSingleButton(
+              onPressed: () {
                 ref.invalidate(
                   projectDetailProvider,
                 );
               },
-            text: 'Retry',
-            buttonIcon: Iconsax.refresh,
+              text: 'Retry',
+              buttonIcon: Iconsax.refresh,
+            ),
           );
         },
         loading: () {
@@ -179,11 +168,16 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ),
       body: data.when(
         data: (project) {
+          if (project == null) {
+            return const Center(
+              child: Text('Post not found'),
+            );
+          }
           return TabBarView(
             controller: tabController,
             children: [
               ProjectDetailsWidget(
-                project: project!,
+                project: project,
               ),
               ProjectOverviewWidget(
                 project: project,
@@ -200,7 +194,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
         },
         error: (error, st) {
           return Center(
-            child: InfiniteListLoadingError(
+            child: LoadingError(
               retry: null,
               errorMessage: error.toString(),
               mainAxisAlignment: MainAxisAlignment.center,

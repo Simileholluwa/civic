@@ -203,7 +203,7 @@ class ProjectVettingScreen extends ConsumerWidget {
               },
               error: (error, stackTrace) {
                 return Center(
-                  child: InfiniteListLoadingError(
+                  child: LoadingError(
                     retry: null,
                     errorMessage: error.toString(),
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +238,7 @@ class ProjectVettingScreen extends ConsumerWidget {
         ),
         error: (error, stackTrace) {
           final err = error as Map<String, String>;
-          return InfiniteListLoadingError(
+          return LoadingError(
             retry: null,
             errorMessage: err['message']!,
             mainAxisAlignment: MainAxisAlignment.center,

@@ -25,7 +25,6 @@ class ProjectCardState {
   final String? numberOfBookmarks;
   final bool? hasLiked;
   final bool? hasReviewed;
-  final bool? hasReposted;
   final bool? hasVerified;
   final UserRecord? creator;
   final bool? canVet;
@@ -66,7 +65,6 @@ class ProjectCardState {
     required this.numberOfBookmarks,
     this.hasLiked = false,
     required this.hasReviewed,
-    required this.hasReposted,
     required this.hasVerified,
     required this.creator,
     required this.canVet,
@@ -150,7 +148,6 @@ class ProjectCardState {
       numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
       hasLiked: hasLiked ?? this.hasLiked,
       hasReviewed: hasReviewed ?? this.hasReviewed,
-      hasReposted: hasReposted ?? this.hasReposted,
       hasVerified: hasVerified ?? this.hasVerified,
       creator: creator ?? this.creator,
       canVet: canVet ?? this.canVet,
@@ -176,11 +173,6 @@ class ProjectCardState {
       isFollower: isFollower ?? this.isFollower,
       canDelete: canDelete ?? this.canDelete,
     );
-  }
-
-  @override
-  String toString() {
-    return 'ProjectCardState(timeAgo: $timeAgo, numberOfViews: $numberOfViews, imagesUrl: $imagesUrl, description: $description, title: $title, currency: $currency, amount: $amount, completionRate: $completionRate, duration: $duration, numberOfLikes: $numberOfLikes, numberOfReviews: $numberOfReviews, numberOfReposts: $numberOfReposts, numberOfVerifies: $numberOfVerifies, numberOfBookmarks: $numberOfBookmarks, hasLiked: $hasLiked, hasReviewed: $hasReviewed, hasReposted: $hasReposted, hasVerified: $hasVerified, creator: $creator, canVet: $canVet, isBookmarked: $isBookmarked, startDateISO: $startDateISO, endDateISO: $endDateISO, percentageElapsedInDouble: $percentageElapsedInDouble, percentageElapsedInString: $percentageElapsedInString, category: $category, subCategory: $subCategory, fundingAmount: $fundingAmount, fundingCategory: $fundingCategory, fundingSubCategory: $fundingSubCategory, rawDescription: $rawDescription, pdfAttachments: $pdfAttachments, hasPdf: $hasPdf, locations: $locations, hasLocation: $hasLocation, toggleFilter: $toggleFilter)';
   }
 
   factory ProjectCardState.populate(
@@ -231,9 +223,6 @@ class ProjectCardState {
       hasLiked: project.likedBy!.contains(
         userId,
       ),
-      hasReposted: project.repostedBy!.contains(
-        userId,
-      ),
       hasReviewed: project.reviewedBy!.contains(
         userId,
       ),
@@ -244,7 +233,7 @@ class ProjectCardState {
         userId,
       ),
       numberOfReposts: THelperFunctions.humanizeNumber(
-        project.repostedBy!.length,
+        project.quoteCount!,
       ),
       canVet: ProjectHelperFunctions.canVet(
         project.startDate!,
@@ -299,7 +288,6 @@ class ProjectCardState {
       numberOfVerifies: null,
       numberOfBookmarks: null,
       hasReviewed: null,
-      hasReposted: null,
       hasVerified: null,
       creator: null,
       canVet: null,

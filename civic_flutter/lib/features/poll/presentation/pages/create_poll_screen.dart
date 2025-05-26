@@ -24,7 +24,6 @@ class CreatePollScreen extends ConsumerWidget {
     final data = ref.watch(pollDetailProvider(draft, id));
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final pollState = ref.watch(pollsOptionsProvider(data.value));
-    final draftsData = id == 0 ? ref.watch(pollDraftsProvider) : [];
     final canSendPoll = pollState.question.isNotEmpty &&
         pollState.optionText.every((text) => text.isNotEmpty);
     return PopScope(
@@ -54,7 +53,6 @@ class CreatePollScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: canSendPoll,
-              draftData: draftsData,
               sendPressed: () {
                 context.go(
                   FeedRoutes.namespace,
@@ -76,8 +74,6 @@ class CreatePollScreen extends ConsumerWidget {
                   if (context.mounted) context.pop();
                 }
               },
-              draftPressed: () =>
-                  PollHelperFunctions.showPollDraftsScreen(context),
             ),
           ),
           bottomSheet: suggestions.isNotEmpty

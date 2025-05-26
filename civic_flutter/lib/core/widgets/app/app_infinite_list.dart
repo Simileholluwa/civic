@@ -46,9 +46,11 @@ class AppInfiniteList<T> extends ConsumerWidget {
         physics: scrollPhysics,
         separatorBuilder: (context, index) {
           if (index != pagingController.itemList!.length - 1) {
-            return showDivider ? const Divider(
+            return showDivider
+                ? const Divider(
                     height: 0,
-            ) : const SizedBox();
+                  )
+                : const SizedBox();
           }
           return const SizedBox();
         },
@@ -57,10 +59,13 @@ class AppInfiniteList<T> extends ConsumerWidget {
           animateTransitions: true,
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
-            return firstPageProgressIndicator ?? AppLoadingWidget();
+            return firstPageProgressIndicator ??
+                Center(
+                  child: AppLoadingWidget(),
+                );
           },
           firstPageErrorIndicatorBuilder: (context) {
-            return InfiniteListLoadingError(
+            return LoadingError(
               retry: () => Future.sync(
                 () => onRefresh(),
               ),
@@ -112,10 +117,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       'END',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),

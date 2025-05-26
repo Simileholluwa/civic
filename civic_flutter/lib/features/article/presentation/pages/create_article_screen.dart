@@ -28,7 +28,6 @@ class CreateArticleScreen extends ConsumerWidget {
     final articleState = ref.watch(
       articleWriterProvider(data.value),
     );
-    final draftsData = id == 0 ? ref.watch(articleDraftsProvider) : [];
     final canSend = articleState.banner.isNotEmpty &&
         articleState.title.isNotEmpty &&
         !articleState.isEmptyContent;
@@ -64,7 +63,6 @@ class CreateArticleScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: canSend,
-              draftData: draftsData,
               sendPressed: () {
                 context.go(
                   FeedRoutes.namespace,
@@ -93,8 +91,6 @@ class CreateArticleScreen extends ConsumerWidget {
                   }
                 }
               },
-              draftPressed: () =>
-                  ArticleHelperFunctions.showArticleDraftsScreen(context),
             ),
           ),
           bottomNavigationBar: const CreateContentPrivacy(),

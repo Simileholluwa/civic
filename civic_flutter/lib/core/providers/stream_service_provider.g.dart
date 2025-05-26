@@ -174,6 +174,153 @@ class _ProjectStreamProviderElement extends StreamProviderElement<Project>
   Project? get project => (origin as ProjectStreamProvider).project;
 }
 
+String _$postStreamHash() => r'c3fb29534e7c75f021df0affeb31adae528f202e';
+
+/// See also [postStream].
+@ProviderFor(postStream)
+const postStreamProvider = PostStreamFamily();
+
+/// See also [postStream].
+class PostStreamFamily extends Family<AsyncValue<Post>> {
+  /// See also [postStream].
+  const PostStreamFamily();
+
+  /// See also [postStream].
+  PostStreamProvider call(
+    int postId,
+    Post? post,
+  ) {
+    return PostStreamProvider(
+      postId,
+      post,
+    );
+  }
+
+  @override
+  PostStreamProvider getProviderOverride(
+    covariant PostStreamProvider provider,
+  ) {
+    return call(
+      provider.postId,
+      provider.post,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'postStreamProvider';
+}
+
+/// See also [postStream].
+class PostStreamProvider extends StreamProvider<Post> {
+  /// See also [postStream].
+  PostStreamProvider(
+    int postId,
+    Post? post,
+  ) : this._internal(
+          (ref) => postStream(
+            ref as PostStreamRef,
+            postId,
+            post,
+          ),
+          from: postStreamProvider,
+          name: r'postStreamProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$postStreamHash,
+          dependencies: PostStreamFamily._dependencies,
+          allTransitiveDependencies:
+              PostStreamFamily._allTransitiveDependencies,
+          postId: postId,
+          post: post,
+        );
+
+  PostStreamProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.postId,
+    required this.post,
+  }) : super.internal();
+
+  final int postId;
+  final Post? post;
+
+  @override
+  Override overrideWith(
+    Stream<Post> Function(PostStreamRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: PostStreamProvider._internal(
+        (ref) => create(ref as PostStreamRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        postId: postId,
+        post: post,
+      ),
+    );
+  }
+
+  @override
+  StreamProviderElement<Post> createElement() {
+    return _PostStreamProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PostStreamProvider &&
+        other.postId == postId &&
+        other.post == post;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, postId.hashCode);
+    hash = _SystemHash.combine(hash, post.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin PostStreamRef on StreamProviderRef<Post> {
+  /// The parameter `postId` of this provider.
+  int get postId;
+
+  /// The parameter `post` of this provider.
+  Post? get post;
+}
+
+class _PostStreamProviderElement extends StreamProviderElement<Post>
+    with PostStreamRef {
+  _PostStreamProviderElement(super.provider);
+
+  @override
+  int get postId => (origin as PostStreamProvider).postId;
+  @override
+  Post? get post => (origin as PostStreamProvider).post;
+}
+
 String _$projectReviewStreamHash() =>
     r'bc35376124017c77050ad7c9964c56da25a02c1a';
 

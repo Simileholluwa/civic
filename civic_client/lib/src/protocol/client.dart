@@ -16,23 +16,21 @@ import 'package:civic_client/src/protocol/article/article.dart' as _i4;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i5;
 import 'package:civic_client/src/protocol/poll/poll.dart' as _i6;
 import 'package:civic_client/src/protocol/poll/poll_list.dart' as _i7;
-import 'package:civic_client/src/protocol/post/post_comment.dart' as _i8;
-import 'package:civic_client/src/protocol/post/post_comment_list.dart' as _i9;
+import 'package:civic_client/src/protocol/post/post.dart' as _i8;
+import 'package:civic_client/src/protocol/post/post_list.dart' as _i9;
 import 'package:civic_client/src/protocol/user/user_record.dart' as _i10;
-import 'package:civic_client/src/protocol/post/post.dart' as _i11;
-import 'package:civic_client/src/protocol/post/post_list.dart' as _i12;
-import 'package:civic_client/src/protocol/project/project.dart' as _i13;
-import 'package:civic_client/src/protocol/project/project_review.dart' as _i14;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i15;
+import 'package:civic_client/src/protocol/project/project.dart' as _i11;
+import 'package:civic_client/src/protocol/project/project_review.dart' as _i12;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i13;
 import 'package:civic_client/src/protocol/project/project_review_list.dart'
-    as _i16;
-import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i17;
+    as _i14;
+import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i15;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
-    as _i18;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i19;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i20;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i21;
-import 'protocol.dart' as _i22;
+    as _i16;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i17;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i18;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
+import 'protocol.dart' as _i20;
 
 /// {@category Endpoint}
 class EndpointArticle extends _i1.EndpointRef {
@@ -240,32 +238,39 @@ class EndpointPoll extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
-class EndpointPostComment extends _i1.EndpointRef {
-  EndpointPostComment(_i1.EndpointCaller caller) : super(caller);
+class EndpointPost extends _i1.EndpointRef {
+  EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
   @override
-  String get name => 'postComment';
+  String get name => 'post';
 
-  _i2.Future<_i8.PostComment?> savePostComment(
-    int postId,
-    _i8.PostComment postComment,
+  _i2.Future<_i8.Post?> savePost(_i8.Post post) =>
+      caller.callServerEndpoint<_i8.Post?>(
+        'post',
+        'savePost',
+        {'post': post},
+      );
+
+  _i2.Future<_i8.Post?> savePostComment(
+    _i8.Post comment,
+    bool isReply,
   ) =>
-      caller.callServerEndpoint<_i8.PostComment?>(
-        'postComment',
+      caller.callServerEndpoint<_i8.Post?>(
+        'post',
         'savePostComment',
         {
-          'postId': postId,
-          'postComment': postComment,
+          'comment': comment,
+          'isReply': isReply,
         },
       );
 
-  _i2.Future<_i9.PostCommentList> getPostComments(
+  _i2.Future<_i9.PostList> getPostComments(
     int postId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i9.PostCommentList>(
-        'postComment',
+      caller.callServerEndpoint<_i9.PostList>(
+        'post',
         'getPostComments',
         {
           'postId': postId,
@@ -274,82 +279,23 @@ class EndpointPostComment extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i9.PostCommentList> getPostCommentReplies(
-    int commentId,
-    int postId, {
+  _i2.Future<_i9.PostList> getPostCommentReplies(
+    int commentId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i9.PostCommentList>(
-        'postComment',
+      caller.callServerEndpoint<_i9.PostList>(
+        'post',
         'getPostCommentReplies',
         {
           'commentId': commentId,
-          'postId': postId,
           'limit': limit,
           'page': page,
         },
       );
 
-  _i2.Future<void> deletePostComment(int commentId) =>
-      caller.callServerEndpoint<void>(
-        'postComment',
-        'deletePostComment',
-        {'commentId': commentId},
-      );
-
-  _i2.Future<List<int>> getUserLikedComments() =>
-      caller.callServerEndpoint<List<int>>(
-        'postComment',
-        'getUserLikedComments',
-        {},
-      );
-
-  _i2.Future<int> toggleCommentLike(int commentId) =>
-      caller.callServerEndpoint<int>(
-        'postComment',
-        'toggleCommentLike',
-        {'commentId': commentId},
-      );
-
-  _i2.Future<void> validatePostCommentOwnership(
-    int commentId,
-    _i10.UserRecord user,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'postComment',
-        'validatePostCommentOwnership',
-        {
-          'commentId': commentId,
-          'user': user,
-        },
-      );
-}
-
-/// {@category Endpoint}
-class EndpointPost extends _i1.EndpointRef {
-  EndpointPost(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'post';
-
-  _i2.Future<_i11.Post?> savePost(
-    _i11.Post post, {
-    required bool isProjectRepost,
-    int? projectId,
-  }) =>
-      caller.callServerEndpoint<_i11.Post?>(
-        'post',
-        'savePost',
-        {
-          'post': post,
-          'isProjectRepost': isProjectRepost,
-          'projectId': projectId,
-        },
-      );
-
   _i2.Future<void> schedulePost(
-    _i11.Post post,
+    _i8.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -361,18 +307,37 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i11.Post?> getPost(int id) =>
-      caller.callServerEndpoint<_i11.Post?>(
+  _i2.Future<_i8.Post> getRootPost(_i8.Post post) =>
+      caller.callServerEndpoint<_i8.Post>(
+        'post',
+        'getRootPost',
+        {'post': post},
+      );
+
+  _i2.Future<_i8.Post> repostOrQuote(
+    int? projectId,
+    _i8.Post? quoteContent,
+  ) =>
+      caller.callServerEndpoint<_i8.Post>(
+        'post',
+        'repostOrQuote',
+        {
+          'projectId': projectId,
+          'quoteContent': quoteContent,
+        },
+      );
+
+  _i2.Future<_i8.Post> getPost(int id) => caller.callServerEndpoint<_i8.Post>(
         'post',
         'getPost',
         {'id': id},
       );
 
-  _i2.Future<_i12.PostList> getPosts({
+  _i2.Future<_i9.PostList> getPosts({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i12.PostList>(
+      caller.callServerEndpoint<_i9.PostList>(
         'post',
         'getPosts',
         {
@@ -387,16 +352,23 @@ class EndpointPost extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<List<int>> getUserLikedPosts() =>
-      caller.callServerEndpoint<List<int>>(
+  _i2.Future<void> toggleBookmark(int postId) =>
+      caller.callServerEndpoint<void>(
         'post',
-        'getUserLikedPosts',
-        {},
+        'toggleBookmark',
+        {'postId': postId},
       );
 
-  _i2.Future<int> toggleLike(int postId) => caller.callServerEndpoint<int>(
+  _i2.Future<void> toggleLike(int postId) => caller.callServerEndpoint<void>(
         'post',
         'toggleLike',
+        {'postId': postId},
+      );
+
+  _i2.Future<void> markNotInterested(int postId) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'markNotInterested',
         {'postId': postId},
       );
 
@@ -419,8 +391,46 @@ class EndpointPost extends _i1.EndpointRef {
           'user': user,
         },
       );
+
+  _i2.Future<void> validateCommentOwnership(
+    int commentId,
+    int postId,
+    _i10.UserRecord user,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'validateCommentOwnership',
+        {
+          'commentId': commentId,
+          'postId': postId,
+          'user': user,
+        },
+      );
+
+  _i2.Stream<_i8.Post> postUpdates(int postId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i8.Post>, _i8.Post>(
+        'post',
+        'postUpdates',
+        {'postId': postId},
+        {},
+      );
+
+  _i2.Future<void> updatePost(_i8.Post post) => caller.callServerEndpoint<void>(
+        'post',
+        'updatePost',
+        {'post': post},
+      );
 }
 
+/// An endpoint for handling project-related API requests.
+///
+/// This class extends [Endpoint] and provides methods to manage
+/// project resources, such as:
+/// Creating, updating, retrieving, and deleting projects.
+/// Creating, updating, retrieving, and deleting project reviews.
+/// Creating, updating, retrieving, and deleting project vettings.
+/// Reacting to projects, project reviews, and project vettings.
+/// Bookmarking and reposting a project.
 /// {@category Endpoint}
 class EndpointProject extends _i1.EndpointRef {
   EndpointProject(_i1.EndpointCaller caller) : super(caller);
@@ -428,35 +438,104 @@ class EndpointProject extends _i1.EndpointRef {
   @override
   String get name => 'project';
 
-  _i2.Future<_i13.Project> getProject(int projectId) =>
-      caller.callServerEndpoint<_i13.Project>(
+  /// Retrieves a [Project] by its [projectId] from the database, including its owner and associated user info.
+  ///
+  /// Throws a [PostException] if the project cannot be found, possibly due to deletion.
+  ///
+  /// Parameters:
+  /// - [projectId]: The unique identifier of the project to retrieve.
+  ///
+  /// Returns the [Project] if found, otherwise throws an exception.
+  _i2.Future<_i11.Project> getProject(int projectId) =>
+      caller.callServerEndpoint<_i11.Project>(
         'project',
         'getProject',
         {'projectId': projectId},
       );
 
-  _i2.Future<_i14.ProjectReview?> getProjectReview(int projectId) =>
-      caller.callServerEndpoint<_i14.ProjectReview?>(
+  /// Retrieves the [ProjectReview] for a given project and the authenticated user.
+  ///
+  /// Throws a [PostException] if:
+  /// - The project has been deleted by its owner.
+  /// - The authenticated user is the owner of the project (owners cannot review their own projects).
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to retrieve the review for.
+  ///
+  /// Returns the [ProjectReview] if found, otherwise returns `null`.
+  _i2.Future<_i12.ProjectReview?> getProjectReview(int projectId) =>
+      caller.callServerEndpoint<_i12.ProjectReview?>(
         'project',
         'getProjectReview',
         {'projectId': projectId},
       );
 
-  _i2.Future<_i13.Project> saveProject(_i13.Project project) =>
-      caller.callServerEndpoint<_i13.Project>(
+  /// Saves a [Project] to the database.
+  ///
+  /// If the [project] has an `id`, it updates the existing project after validating
+  /// that the current user owns the project. The `updatedAt` field is set to the current time.
+  ///
+  /// If the [project] does not have an `id`, it creates a new project with the current user
+  /// as the owner and initializes various list fields (e.g., `likedBy`, `repostedBy`) as empty.
+  ///
+  /// Logs and throws a [PostException] if an error occurs during the process.
+  ///
+  /// Parameters:
+  /// - [project]: The project to save or update.
+  ///
+  /// Returns the saved or updated [Project].
+  _i2.Future<_i11.Project> saveProject(_i11.Project project) =>
+      caller.callServerEndpoint<_i11.Project>(
         'project',
         'saveProject',
         {'project': project},
       );
 
-  _i2.Future<_i14.ProjectReview> saveProjectReview(
-          _i14.ProjectReview projectReview) =>
-      caller.callServerEndpoint<_i14.ProjectReview>(
+  /// Saves a [ProjectReview] for a given project. This method handles both creating a new review
+  /// and updating an existing one within a database transaction. It performs the following steps:
+  ///
+  /// 1. Authenticates the user from the session.
+  /// 2. Verifies that the project to be reviewed exists.
+  /// 3. If updating an existing review:
+  ///    - Validates review ownership.
+  ///    - Updates the project's overall ratings by recalculating them based on the new review values.
+  ///    - Updates the review record with new values and timestamps.
+  /// 4. If creating a new review:
+  ///    - Updates the project's overall ratings by including the new review.
+  ///    - Adds the user to the list of reviewers.
+  ///    - Inserts the new review record with initial values and timestamps.
+  /// 5. Handles and logs exceptions, rethrowing known `PostException` errors.
+  ///
+  /// Throws a [PostException] if the project or review cannot be found, or if any other error occurs.
+  ///
+  /// Returns the saved [ProjectReview] object (either newly created or updated).
+  ///
+  /// Parameters:
+  /// - [projectReview]: The review to be saved or updated.
+  _i2.Future<_i12.ProjectReview> saveProjectReview(
+          _i12.ProjectReview projectReview) =>
+      caller.callServerEndpoint<_i12.ProjectReview>(
         'project',
         'saveProjectReview',
         {'projectReview': projectReview},
       );
 
+  /// Deletes a [ProjectReview] by its [reviewId] for the authenticated user.
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// 1. Authenticates the user from the [session].
+  /// 2. Finds the review by [reviewId]. Throws a [PostException] if not found.
+  /// 3. Checks if the authenticated user is the owner of the review. Throws a [PostException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [PostException] if the project is not found.
+  /// 5. Updates the project's overall ratings and `reviewedBy` list:
+  ///    - If this is the only review, resets all ratings and clears the `reviewedBy` list.
+  ///    - Otherwise, recalculates each rating by removing the deleted review's contribution and updates the `reviewedBy` list.
+  /// 6. Deletes the review from the database.
+  ///
+  /// Throws a [PostException] on any error, including database or authorization failures.
+  ///
+  /// Parameters:
+  /// - [reviewId]: The id of the review to be deleted.
   _i2.Future<void> deleteProjectReview(int reviewId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -464,6 +543,23 @@ class EndpointProject extends _i1.EndpointRef {
         {'reviewId': reviewId},
       );
 
+  /// Deletes a [ProjectVetting] entry by its [vettingId].
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// 1. Authenticates the current user.
+  /// 2. Finds the vetting entry by [vettingId]. Throws a [PostException] if not found.
+  /// 3. Checks that the authenticated user is the owner of the vetting entry.
+  ///    -  Throws a [PostException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [PostException] if not found.
+  /// 5. Updates the project's `vettedBy` list to remove the user's ID.
+  /// 6. Deletes the vetting entry from the database.
+  ///
+  /// If any error occurs during the process, logs the error and throws a [PostException].
+  ///
+  /// Throws a [PostException] for not found, unauthorized, or other errors.
+  ///
+  /// Parameters:
+  /// - [vettingId]: The id of the vetting to be deleted.
   _i2.Future<void> deleteProjectVetting(int vettingId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -471,14 +567,30 @@ class EndpointProject extends _i1.EndpointRef {
         {'vettingId': vettingId},
       );
 
+  /// Undoes a repost action for a given project.
+  ///
+  /// Calls the [PostEndpoint.repostOrQuote] method with the provided [session] and [projectId],
+  /// effectively reversing a previous repost operation.
+  ///
+  /// [session] - The current user session.
+  /// [projectId] - The ID of the project to undo the repost for.
+  ///
+  /// Throws an exception if the operation fails.
   _i2.Future<void> undoRepost(int projectId) => caller.callServerEndpoint<void>(
         'project',
         'undoRepost',
         {'projectId': projectId},
       );
 
+  /// Schedules a future call to handle the specified [project] at the given [dateTime].
+  ///
+  /// Uses the [session]'s serverpod to schedule a future call named 'scheduleProjectFutureCall'.
+  ///
+  /// Parameters:
+  /// [project] - The project to be scheduled.
+  /// [dateTime] - The date and time when the future call should be executed.
   _i2.Future<void> scheduleProject(
-    _i13.Project project,
+    _i11.Project project,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -490,11 +602,28 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i15.ProjectList> getProjects({
+  /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
+  ///
+  /// Throws a [UserException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
+  ///
+  /// The returned [ProjectList] contains:
+  /// - [count]: Total number of projects available (excluding ignored).
+  /// - [limit]: The maximum number of projects per page.
+  /// - [page]: The current page number.
+  /// - [results]: The list of [Project]s for the current page, including their owners and user info.
+  /// - [numPages]: The total number of pages.
+  /// - [canLoadMore]: Whether there are more projects to load.
+  ///
+  /// Logs and throws a [PostException] if an error occurs during fetching.
+  ///
+  /// Parameters:
+  /// - [limit]: Maximum number of projects to return per page (default: 50).
+  /// - [page]: The page number to retrieve (default: 1).
+  _i2.Future<_i13.ProjectList> getProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i15.ProjectList>(
+      caller.callServerEndpoint<_i13.ProjectList>(
         'project',
         'getProjects',
         {
@@ -503,14 +632,28 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i16.ProjectReviewList> getProjectReviews(
+  /// Retrieves a paginated list of project reviews for a specific project.
+  ///
+  /// Parameters
+  /// [projectId]: The ID of the project to fetch reviews for.
+  /// [limit]: The maximum number of reviews to return per page (default is 50).
+  /// [page]: The page number to retrieve (default is 1).
+  /// [rating]: An optional rating value to filter reviews by a specific rating category.
+  /// [cardinal]: The rating category to filter by (e.g., 'Location', 'Description', etc.).
+  ///
+  /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
+  ///
+  /// Throws a [UserException] if pagination parameters are invalid or if an invalid
+  /// rating category is provided.
+  /// Throws a [PostException] if an error occurs while fetching reviews.
+  _i2.Future<_i14.ProjectReviewList> getProjectReviews(
     int projectId, {
     required int limit,
     required int page,
     double? rating,
     String? cardinal,
   }) =>
-      caller.callServerEndpoint<_i16.ProjectReviewList>(
+      caller.callServerEndpoint<_i14.ProjectReviewList>(
         'project',
         'getProjectReviews',
         {
@@ -522,11 +665,29 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i14.ProjectReview> reactToReview(
+  /// Handles user reactions (like/dislike) to a project review.
+  ///
+  /// This method allows an authenticated user to like or dislike a specific project review.
+  /// It manages the following scenarios within a database transaction:
+  /// - If the review does not exist, throws a [PostException].
+  /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
+  /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
+  /// - If the user switches between like and dislike, it updates the reaction accordingly.
+  /// - If the user has not reacted before, it creates a new reaction.
+  /// The method also updates the `likedBy` and `dislikedBy` lists on the review and persists the changes.
+  ///
+  /// Throws a [PostException] if the review cannot be found or if any error occurs during the process.
+  ///
+  /// Parameters:
+  /// - [reviewId]: The ID of the review to react to.
+  /// - [isLike]: `true` for a like, `false` for a dislike.
+  ///
+  /// Returns the updated [ProjectReview] object.
+  _i2.Future<_i12.ProjectReview> reactToReview(
     int reviewId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i14.ProjectReview>(
+      caller.callServerEndpoint<_i12.ProjectReview>(
         'project',
         'reactToReview',
         {
@@ -535,11 +696,29 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i17.ProjectVetting> reactToVetting(
+  /// Handles user reactions (like or dislike) to a project vetting.
+  ///
+  /// This method allows an authenticated user to like or dislike a specific project vetting.
+  /// It manages the following scenarios within a database transaction:
+  /// - If the vetting does not exist, throws a [PostException].
+  /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
+  /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
+  /// - If the user switches between like and dislike, it updates the reaction accordingly.
+  /// - If the user has not reacted before, it creates a new reaction.
+  /// The method also updates the `likedBy` and `dislikedBy` lists on the vetting and persists the changes.
+  ///
+  /// Throws a [PostException] if any error occurs during the process.
+  ///
+  /// Returns the updated [ProjectVetting] object.
+  ///
+  /// Parameters:
+  /// - [vettingId]: The ID of the vetting to react to.
+  /// - [isLike]: `true` for a like, `false` for a dislike.
+  _i2.Future<_i15.ProjectVetting> reactToVetting(
     int vettingId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i17.ProjectVetting>(
+      caller.callServerEndpoint<_i15.ProjectVetting>(
         'project',
         'reactToVetting',
         {
@@ -548,6 +727,20 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
+  /// Deletes a project by marking it as deleted.
+  ///
+  /// This method performs the following steps:
+  /// 1. Authenticates the user from the session.
+  /// 2. Validates that the authenticated user owns the project with the given [projectId].
+  /// 3. Retrieves the project from the database.
+  /// 4. If the project does not exist, throws a [PostException].
+  /// 5. Marks the project as deleted by setting its `isDeleted` property to `true`.
+  /// 6. Updates the project in the database.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to delete.
   _i2.Future<void> deleteProject(int projectId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -555,6 +748,19 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
+  /// Toggles the bookmark status of a project for the authenticated user.
+  ///
+  /// - If the user has already bookmarked the project, this method removes the bookmark.
+  /// - Otherwise, it adds a new bookmark for the project.
+  /// - The operation is performed within a database transaction to ensure consistency.
+  /// - Updates the `bookmarkedBy` field of the project accordingly.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Logs any errors encountered during the process.
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to toggle the bookmark for.
   _i2.Future<void> toggleBookmark(int projectId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -562,12 +768,35 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
+  /// Toggles the like status for a project by the authenticated user.
+  ///
+  /// - If the user has already liked the project, this method will remove the like.
+  /// - If the user has not liked the project yet, this method will add a like.
+  /// - The operation is performed within a database transaction to ensure consistency.
+  ///
+  /// Throws a [PostException] if the project is not found.
+  ///
+  /// Logs any errors encountered during the operation.
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to like or unlike.
   _i2.Future<void> toggleLike(int projectId) => caller.callServerEndpoint<void>(
         'project',
         'toggleLike',
         {'projectId': projectId},
       );
 
+  /// Marks a project as "not interested" for the authenticated user.
+  ///
+  /// This method retrieves the authenticated user from the [session] and creates
+  /// a [ProjectNotInterested] entry associating the user with the specified [projectId].
+  /// The entry is then inserted into the database. If an error occurs during the process,
+  /// it is logged with error level, including the exception and stack trace.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to mark as not interested.
+  ///
+  /// Throws an exception if the operation fails.
   _i2.Future<void> markNotInterested(int projectId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -575,26 +804,71 @@ class EndpointProject extends _i1.EndpointRef {
         {'projectId': projectId},
       );
 
-  _i2.Future<_i17.ProjectVetting> vetProject(
-          _i17.ProjectVetting projectVetting) =>
-      caller.callServerEndpoint<_i17.ProjectVetting>(
+  /// Vets a project by either updating an existing vetting record or creating a new one.
+  ///
+  /// This method performs the following steps within a database transaction:
+  /// - Authenticates the user from the session.
+  /// - Checks if the project with the given [projectVetting.projectId] exists.
+  ///   - Throws a [PostException] if the project cannot be found.
+  /// - Checks if the user has already vetted the project.
+  ///   - If an existing vetting record is found, updates its `updatedAt` timestamp and returns the updated record.
+  ///   - If no vetting record exists, adds the user's ID to the project's `vettedBy` list,
+  ///     creates a new vetting record with empty `likedBy` and `dislikedBy` lists, and returns it.
+  /// - Logs and rethrows any [PostException], or wraps other exceptions in a [PostException].
+  ///
+  /// Throws a [PostException] if the project does not exist or if an unexpected error occurs.
+  ///
+  /// Returns the updated or newly created [ProjectVetting] record.
+  ///
+  /// Parameters:
+  /// - [projectVetting]: The project vetting object to be processed.
+  _i2.Future<_i15.ProjectVetting> vetProject(
+          _i15.ProjectVetting projectVetting) =>
+      caller.callServerEndpoint<_i15.ProjectVetting>(
         'project',
         'vetProject',
         {'projectVetting': projectVetting},
       );
 
-  _i2.Future<_i17.ProjectVetting?> getVettedProject(int projectId) =>
-      caller.callServerEndpoint<_i17.ProjectVetting?>(
+  /// Retrieves the vetted project for the authenticated user and specified project ID.
+  ///
+  /// This method first authenticates the user from the provided [session], then attempts to find
+  /// the project with the given [projectId]. If the project does not exist, a [PostException] is thrown.
+  /// If the project exists, it searches for a [ProjectVetting] record associated with both the project
+  /// and the authenticated user. The related [Project] is also included in the result.
+  ///
+  /// Returns a [ProjectVetting] instance if found, or `null` if no matching record exists.
+  ///
+  /// Throws a [PostException] if the project does not exist.
+  ///
+  /// Parameters:
+  /// - [projectId]: The ID of the project to retrieve.
+  _i2.Future<_i15.ProjectVetting?> getVettedProject(int projectId) =>
+      caller.callServerEndpoint<_i15.ProjectVetting?>(
         'project',
         'getVettedProject',
         {'projectId': projectId},
       );
 
-  _i2.Future<_i18.ProjectVetList> getVettedProjects({
+  /// Retrieves a paginated list of vetted projects.
+  ///
+  /// Throws a [UserException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
+  ///
+  /// Parameters:
+  /// - [limit]: The maximum number of projects to return per page (default is 50).
+  /// - [page]: The page number to retrieve (default is 1).
+  ///
+  /// Returns a [ProjectVetList] containing:
+  /// - The total count of vetted projects.
+  /// - The current page and limit.
+  /// - The list of vetted project results for the requested page.
+  /// - The total number of pages.
+  /// - Whether more pages can be loaded.
+  _i2.Future<_i16.ProjectVetList> getVettedProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i18.ProjectVetList>(
+      caller.callServerEndpoint<_i16.ProjectVetList>(
         'project',
         'getVettedProjects',
         {
@@ -603,6 +877,19 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
+  /// Authenticates the current user based on the provided [session].
+  ///
+  /// Retrieves authentication information from the [session]. If the user is not
+  /// authenticated, a [UserException] is thrown with an appropriate message.
+  /// If authenticated, attempts to find the corresponding [UserRecord] in the database,
+  /// including related [UserInfo]. If the user record is not found, another [UserException]
+  /// is thrown. Otherwise, returns the authenticated [UserRecord].
+  ///
+  /// Throws:
+  ///   - [UserException] if the user is not logged in or the user record is not found.
+  ///
+  /// Returns:
+  ///   - The authenticated [UserRecord] with included [UserInfo].
   _i2.Future<_i10.UserRecord> authUser() =>
       caller.callServerEndpoint<_i10.UserRecord>(
         'project',
@@ -610,6 +897,13 @@ class EndpointProject extends _i1.EndpointRef {
         {},
       );
 
+  /// Validates that the given [user] is the owner of the project with the specified [projectId].
+  ///
+  /// Throws a [PostException] if the project does not exist or if the user is not the owner.
+  ///
+  /// Parameters:
+  /// [projectId] - The ID of the project to validate ownership for.
+  /// [user] - The user attempting the operation.
   _i2.Future<void> validateProjectOwnership(
     int projectId,
     _i10.UserRecord user,
@@ -623,6 +917,13 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
+  /// Validates that the given [user] is the owner of the project review with the specified [projectReviewId].
+  ///
+  /// Throws a [PostException] if the project review is not found or if the user is not the owner.
+  ///
+  /// Parameters:
+  /// [projectReviewId] - The ID of the project review to validate.
+  /// [user] - The user attempting the operation.
   _i2.Future<void> validateProjectReviewOwnership(
     int projectReviewId,
     _i10.UserRecord user,
@@ -636,47 +937,112 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Stream<_i13.Project> projectUpdates(int projectId) => caller
-          .callStreamingServerEndpoint<_i2.Stream<_i13.Project>, _i13.Project>(
+  /// Returns a stream of [Project] updates for the specified [projectId].
+  ///
+  /// When a client subscribes, this method first yields the latest project details,
+  /// including the owner and their user info. It then listens for further updates
+  /// to the project via a message stream and yields updated [Project] instances
+  /// as they occur. Each update preserves the original owner information.
+  ///
+  /// - [session]: The current session context.
+  /// - [projectId]: The ID of the project to subscribe to updates for.
+  ///
+  /// Yields:
+  ///   - The initial [Project] details.
+  ///   - Subsequent [Project] updates as they occur.
+  _i2.Stream<_i11.Project> projectUpdates(int projectId) => caller
+          .callStreamingServerEndpoint<_i2.Stream<_i11.Project>, _i11.Project>(
         'project',
         'projectUpdates',
         {'projectId': projectId},
         {},
       );
 
-  _i2.Future<void> updateProject(_i13.Project project) =>
+  /// Updates the given [project] in the database and notifies all clients
+  /// subscribed to this project by sending an update message.
+  ///
+  /// Parameters:
+  /// - [project]: The project instance to be updated.
+  ///
+  /// This method first updates the project in the database, then posts a message
+  /// to all clients subscribed to the project's channel to notify them of the update.
+  _i2.Future<void> updateProject(_i11.Project project) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProject',
         {'project': project},
       );
 
-  _i2.Stream<_i14.ProjectReview> projectReviewUpdates(int reviewId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i14.ProjectReview>,
-          _i14.ProjectReview>(
+  /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
+  ///
+  /// When a client subscribes, this method first yields the latest [ProjectReview]
+  /// from the database, including its [owner] and associated [UserInfo].
+  /// Then, it listens for real-time updates on the review via the session's message stream,
+  /// yielding each update as it occurs. The [owner] information is preserved in each update.
+  ///
+  /// - [session]: The current user session.
+  /// - [reviewId]: The ID of the project review to subscribe to.
+  ///
+  /// Yields:
+  ///   - The initial [ProjectReview] object (if found).
+  ///   - Subsequent updates to the [ProjectReview] as they occur.
+  _i2.Stream<_i12.ProjectReview> projectReviewUpdates(int reviewId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i12.ProjectReview>,
+          _i12.ProjectReview>(
         'project',
         'projectReviewUpdates',
         {'reviewId': reviewId},
         {},
       );
 
-  _i2.Future<void> updateProjectReview(_i14.ProjectReview projectReview) =>
+  /// Updates a [ProjectReview] in the database and notifies all clients subscribed to this review.
+  ///
+  /// This method performs the following actions:
+  /// - Updates the specified [projectReview] in the database using the provided [session].
+  /// - Sends a message to all clients subscribed to the review channel identified by `'review_${projectReview.id}'`,
+  ///   containing the updated [projectReview] data.
+  ///
+  /// [session]: The current database session.
+  /// [projectReview]: The project review object to update.
+  _i2.Future<void> updateProjectReview(_i12.ProjectReview projectReview) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProjectReview',
         {'projectReview': projectReview},
       );
 
-  _i2.Stream<_i17.ProjectVetting> projectVettingUpdates(int vettingId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i17.ProjectVetting>,
-          _i17.ProjectVetting>(
+  /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
+  ///
+  /// When a client subscribes, the latest [ProjectVetting] details are yielded first,
+  /// including the owner and related user information. Subsequent updates are streamed
+  /// as they occur, ensuring the owner information remains consistent with the initial fetch.
+  ///
+  /// - [session]: The current [Session] context.
+  /// - [vettingId]: The ID of the project vetting to subscribe to.
+  ///
+  /// Yields:
+  ///   - The initial [ProjectVetting] object if found.
+  ///   - Any subsequent updates to the [ProjectVetting] object.
+  _i2.Stream<_i15.ProjectVetting> projectVettingUpdates(int vettingId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i15.ProjectVetting>,
+          _i15.ProjectVetting>(
         'project',
         'projectVettingUpdates',
         {'vettingId': vettingId},
         {},
       );
 
-  _i2.Future<void> updateProjectVetting(_i17.ProjectVetting projectVetting) =>
+  /// Updates the given [projectVetting] in the database and notifies all clients
+  /// subscribed to updates for this project.
+  ///
+  /// This method performs the following actions:
+  /// - Updates the [ProjectVetting] record in the database using the provided [session].
+  /// - Posts a message to all clients subscribed to the review channel for the specific project,
+  ///   notifying them of the update.
+  ///
+  /// Parameters:
+  /// [projectVetting]: The project vetting object to update.
+  _i2.Future<void> updateProjectVetting(_i15.ProjectVetting projectVetting) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProjectVetting',
@@ -718,8 +1084,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i19.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i19.UserNinRecord?>(
+  _i2.Future<_i17.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i17.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -761,12 +1127,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i20.UsersList> getUsers({
+  _i2.Future<_i18.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i20.UsersList>(
+      caller.callServerEndpoint<_i18.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -799,10 +1165,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i21.Caller(client);
+    auth = _i19.Caller(client);
   }
 
-  late final _i21.Caller auth;
+  late final _i19.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -821,7 +1187,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i22.Protocol(),
+          _i20.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -836,7 +1202,6 @@ class Client extends _i1.ServerpodClientShared {
     hashtag = EndpointHashtag(this);
     location = EndpointLocation(this);
     poll = EndpointPoll(this);
-    postComment = EndpointPostComment(this);
     post = EndpointPost(this);
     project = EndpointProject(this);
     sendEmail = EndpointSendEmail(this);
@@ -854,8 +1219,6 @@ class Client extends _i1.ServerpodClientShared {
   late final EndpointLocation location;
 
   late final EndpointPoll poll;
-
-  late final EndpointPostComment postComment;
 
   late final EndpointPost post;
 
@@ -876,7 +1239,6 @@ class Client extends _i1.ServerpodClientShared {
         'hashtag': hashtag,
         'location': location,
         'poll': poll,
-        'postComment': postComment,
         'post': post,
         'project': project,
         'sendEmail': sendEmail,

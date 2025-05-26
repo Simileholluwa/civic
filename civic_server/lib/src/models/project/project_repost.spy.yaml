@@ -2,7 +2,7 @@ class: ProjectRepost
 table: project_reposts
 fields:
     owner: UserRecord?, relation
-    project: Project?, relation(name=project_repostOnProject)   
+    project: Project?, relation(name=project_repostOnProject, onDelete=Cascade)   
     post: Post?, relation(onDelete=Cascade)
     repostedAt: DateTime?, default=now
 

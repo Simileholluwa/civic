@@ -52,7 +52,7 @@ class ContentMultipleCachedImage extends StatelessWidget {
                         maxWidth: maxHeight,
                       ),
                       child: isUrl
-                          ? ContentCachedImage(url: url as String)
+                          ? ContentCachedImage(url: url as String, height: maxHeight,)
                           : FadeInImage(
                               image: MemoryImage(
                                 url as Uint8List,

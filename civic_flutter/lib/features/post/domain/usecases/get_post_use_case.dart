@@ -3,13 +3,13 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetPostUseCase implements StringUseCase<Post?, GetPostParams> {
+class GetPostUseCase implements UseCase<Post, GetPostParams> {
   GetPostUseCase({required PostRepository postRepository})
       : _postRepository = postRepository;
   final PostRepository _postRepository;
 
   @override
-  Future<Either<String, Post?>> call(GetPostParams params) async {
+  Future<Either<Failure, Post>> call(GetPostParams params) async {
     final result = await _postRepository.getPost(
       id: params.id,
     );

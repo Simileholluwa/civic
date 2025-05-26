@@ -21,14 +21,33 @@ class FeedRoutes {
         },
         routes: [
           GoRoute(
-            path: PostDetailScreen.routePath(),
-            name: PostDetailScreen.routeName(),
+            path: 'post/:postId',
             builder: (context, state) => PostDetailScreen(
-              id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+              id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
+              post: state.extra as Post?,
             ),
+            routes: [
+              GoRoute(
+                path: 'comment',
+                builder: (_, state) {
+                  return PostCommentScreen(
+                    postId: int.tryParse(state.pathParameters['postId'] ?? '') ?? 0,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'replies/:replyId',
+                builder: (_, state) {
+                  return PostRepliesScreen(
+                    replyId: int.tryParse(state.pathParameters['replyId'] ?? '') ?? 0,
+                  );
+                },
+              ),
+              
+            ]
           ),
           GoRoute(
-            path: ':projectId/:tab',
+            path: 'project/:projectId/:tab',
             builder: (_, state) {
               return ProjectDetailsScreen(
                 projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,

@@ -6,7 +6,7 @@ part of 'post_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postCardWidgetHash() => r'82709c52cbef1dff971068003a11e15cf2f758bf';
+String _$postCardWidgetHash() => r'202f2e11d9db95965f816f9bea6831d9385a182e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,8 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$PostCardWidget
-    extends BuildlessAutoDisposeNotifier<PostCardState> {
+abstract class _$PostCardWidget extends BuildlessNotifier<PostCardState> {
   late final Post? post;
 
   PostCardState build(
@@ -82,7 +81,7 @@ class PostCardWidgetFamily extends Family<PostCardState> {
 
 /// See also [PostCardWidget].
 class PostCardWidgetProvider
-    extends AutoDisposeNotifierProviderImpl<PostCardWidget, PostCardState> {
+    extends NotifierProviderImpl<PostCardWidget, PostCardState> {
   /// See also [PostCardWidget].
   PostCardWidgetProvider(
     Post? post,
@@ -138,8 +137,7 @@ class PostCardWidgetProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
-      createElement() {
+  NotifierProviderElement<PostCardWidget, PostCardState> createElement() {
     return _PostCardWidgetProviderElement(this);
   }
 
@@ -159,13 +157,13 @@ class PostCardWidgetProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PostCardWidgetRef on AutoDisposeNotifierProviderRef<PostCardState> {
+mixin PostCardWidgetRef on NotifierProviderRef<PostCardState> {
   /// The parameter `post` of this provider.
   Post? get post;
 }
 
 class _PostCardWidgetProviderElement
-    extends AutoDisposeNotifierProviderElement<PostCardWidget, PostCardState>
+    extends NotifierProviderElement<PostCardWidget, PostCardState>
     with PostCardWidgetRef {
   _PostCardWidgetProviderElement(super.provider);
 

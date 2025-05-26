@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -7,14 +6,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 abstract class PostLocalDatabase {
-  Future<void> saveDraft({
-    required DraftPost draftPost,
+  Future<void> savePostDraft({
+    required Post post,
   });
-  List<DraftPost> retrieveDrafts();
-  Future<List<DraftPost>> removeAllDraftPost();
-  Future<void> deleteDraftPost({
-    required DraftPost draftPost,
-  });
+  Future<Post> getPostDraft();
+  Future<void> deletePostDraft();
 }
 
 class PostLocalDatabaseImpl extends PostLocalDatabase {
@@ -23,153 +19,103 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   }) : _prefs = prefs;
   final LocalStorage _prefs;
   @override
-  List<DraftPost> retrieveDrafts() {
+  Future<Post> getPostDraft() async {
     try {
-      final postsDraft = _prefs.getString('postsDraft');
-      final ownerId = _prefs.getInt('userId');
-      if (postsDraft != null) {
-        final draftList = jsonDecode(postsDraft) as List<dynamic>;
-        return draftList
-            .map(
-              (postDraft) =>
-                  DraftPost.fromJson(postDraft as Map<String, dynamic>),
-            )
-            .where((draft) => draft.ownerId == ownerId)
-            .toList();
+      final userId = _prefs.getInt('userId')!;
+      final rawOwner = _prefs.getString('userRecord')!;
+      final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
+      final owner = UserRecord.fromJson(ownerMap);
+      final postDraft = _prefs.getString('postDraft');
+      if (postDraft != null) {
+        final postMap =
+            jsonDecode(postDraft.toString()) as Map<String, dynamic>;
+        if (postMap['ownerId'] == userId) {
+          return Post.fromJson(postMap);
+        }
+        return Post(
+          ownerId: userId,
+          owner: owner,
+        );
       }
-      return <DraftPost>[];
+      return Post(
+        ownerId: userId,
+        owner: owner,
+      );
     } catch (e) {
-      log(e.toString());
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<void> saveDraft({
-    required DraftPost draftPost,
+  Future<void> savePostDraft({
+    required Post post,
   }) async {
     try {
-      final drafts = await clearExpiredDrafts();
-      final ownerId = _prefs.getInt('userId');
       var savedImagesPath = <String>[];
+      var existingUploadedImage = <String>[];
+      var existingUploadedVideo = '';
       var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/drafts');
+      final directory = Directory('${appDir.path}/draft');
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
-      if (draftPost.imagesPath.isNotEmpty) {
-        for (var i = 0; i < draftPost.imagesPath.length; i++) {
-          final ext = path.extension(draftPost.imagesPath[i]);
-          final fileName = '${draftPost.draftId}$i$ext';
-          final savedFile = File(
-            path.join(directory.path, fileName),
-          );
-          final copy = await File(draftPost.imagesPath[i]).copy(savedFile.path);
-          savedImagesPath.add(copy.path);
-        }
-      }
-      if (draftPost.videoPath.isNotEmpty) {
-        final ext = path.extension(draftPost.videoPath);
-        final fileName = '${draftPost.draftId}$ext';
-        final savedFile = File(
-          path.join(directory.path, fileName),
-        );
-        final copy = await File(draftPost.videoPath).copy(savedFile.path);
-        savedVideoPath = copy.path;
-      }
-
-      if (drafts.length < 10) {
-        drafts.add(
-          draftPost.copyWith(
-            draftId: DateTime.now().millisecondsSinceEpoch,
-            ownerId: ownerId,
-            createdAt: DateTime.now(),
-            imagesPath: savedImagesPath,
-            videoPath: savedVideoPath,
-          ),
-        );
-        final jsonString = jsonEncode(
-          drafts.map((draft) => draft.toJson()).toList(),
-        );
-        await _prefs.setString('postsDraft', jsonString);
-      }
-    } catch (e) {
-      
-      throw const CacheException(message: 'Something went wrong');
-    }
-  }
-
-  Future<List<DraftPost>> clearExpiredDrafts() async {
-    try {
-      var drafts = retrieveDrafts();
-      if (drafts.isEmpty) return <DraftPost>[];
-
-      final latestDraft = drafts.where((draft) {
-        return DateTime.now()
-                .difference(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(
-                      draft.createdAt!.millisecondsSinceEpoch.toString(),
-                    ),
-                  ),
-                )
-                .inDays <=
-            10;
-      }).toList();
-      return latestDraft;
-    } catch (_) {
-      throw const CacheException(message: 'Something went wrong');
-    }
-  }
-
-  @override
-  Future<void> deleteDraftPost({
-    required DraftPost draftPost,
-  }) async {
-    try {
-      final drafts = retrieveDrafts();
-
-      drafts.removeWhere((draft) => draft.draftId == draftPost.draftId);
-
-      final draftsJson = jsonEncode(
-        drafts.map((draft) => draft.toJson()).toList(),
-      );
-
-      await _prefs.setString('postsDraft', draftsJson);
-
-      if (draftPost.videoPath.isNotEmpty) {
-        final videoFile = File(draftPost.videoPath);
-        if (videoFile.existsSync()) {
-          videoFile.deleteSync();
-        }
-      }
-
-      if (draftPost.imagesPath.isNotEmpty) {
-        for (final imgPath in draftPost.imagesPath) {
-          final imageFile = File(imgPath);
-          if (imageFile.existsSync()) {
-            imageFile.deleteSync();
+      if (post.imageUrls!.isNotEmpty) {
+        for (var i = 0; i < post.imageUrls!.length; i++) {
+          final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+          final match = regex.hasMatch(post.imageUrls![i]);
+          if (match) {
+            existingUploadedImage.add(post.imageUrls![i]);
+          } else {
+            final ext = path.extension(post.imageUrls![i]);
+            final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
+            final savedFile = File(
+              path.join(directory.path, fileName),
+            );
+            final copy = await File(post.imageUrls![i]).copy(savedFile.path);
+            savedImagesPath.add(copy.path);
           }
         }
       }
-    } catch (_) {
+      if (post.videoUrl!.isNotEmpty) {
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        final match = regex.hasMatch(post.videoUrl!);
+        if (match) {
+          existingUploadedVideo = post.videoUrl!;
+        } else {
+          final ext = path.extension(post.videoUrl!);
+          final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
+          final savedFile = File(
+            path.join(directory.path, fileName),
+          );
+          final copy = await File(post.videoUrl!).copy(savedFile.path);
+          savedVideoPath = copy.path;
+        }
+      }
+      final rawOwner = _prefs.getString('userRecord')!;
+      final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
+      final owner = UserRecord.fromJson(ownerMap);
+      final postDraft = post.copyWith(
+        imageUrls: [...savedImagesPath, ...existingUploadedImage],
+        videoUrl: savedVideoPath + existingUploadedVideo,
+        owner: owner,
+      ).toJson();
+      final jsonString = jsonEncode(postDraft);
+      await _prefs.setString('postDraft', jsonString);
+    } catch (e) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<List<DraftPost>> removeAllDraftPost() async {
+  Future<void> deletePostDraft() async {
     try {
-      await _prefs.remove('postsDraft');
+      await _prefs.remove('postDraft');
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/drafts');
+      final directory = Directory('${appDir.path}/draft');
       if (!await directory.exists()) {
         await directory.delete(recursive: true);
       }
-
-      final drafts = retrieveDrafts();
-      return drafts;
     } catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }

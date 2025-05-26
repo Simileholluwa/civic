@@ -1,68 +1,60 @@
 // ignore_for_file: use_build_context_synchronously
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CreatePostScreen extends ConsumerWidget {
   const CreatePostScreen({
     super.key,
     required this.id,
     required this.project,
-    required this.draft,
+    required this.parent,
   });
 
   final int id;
   final Project? project;
-  final DraftPost? draft;
-
-  static String routePath([int? id]) => '${id ?? ':id'}/create';
-  static String routeName() => 'post/create';
+  final Post? parent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final data = ref.watch(
-      postDetailProvider(draft, id),
+      postDetailProvider(id),
     );
     final postState = ref.watch(
       regularPostProvider(
         data.value,
       ),
     );
-    final draftsData = id == 0 ? ref.watch(postDraftsProvider) : [];
+    final postNotifier = ref.watch(
+      regularPostProvider(
+        data.value,
+      ).notifier,
+    );
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
-        postState.videoUrl.isNotEmpty ||
-        project != null;
+        postState.videoUrl.isNotEmpty;
+    final isRepost = project != null || parent != null;
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop = canSendPost
-            ? id == 0
-                ? await savePostDraftDialog(
-                    ref,
-                    context,
-                    postState,
-                  )
-                : await editPostDialog(
-                    ref,
-                    context,
-                    data.value!,
-                  )
+            ? await savePostDraftDialog(
+                ref,
+                context,
+                data.value!,
+              )
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
-            if (postState.videoUrl.isNotEmpty) {
-              ref
-                  .read(mediaVideoPlayerProvider(postState.videoUrl).notifier)
-                  .dispose();
-            }
             context.pop();
           }
         }
@@ -75,53 +67,34 @@ class CreatePostScreen extends ConsumerWidget {
               60,
             ),
             child: CreateContentAppbar(
-                canSend: canSendPost,
-                draftData: draftsData,
-                sendPressed: () {
-                  if (postState.videoUrl.isNotEmpty) {
-                    ref
-                        .read(mediaVideoPlayerProvider(postState.videoUrl)
-                            .notifier)
-                        .dispose();
+              canSend: canSendPost,
+              sendPressed: () async {
+                context.pop();
+                isRepost
+                    ? await postNotifier.repostOrQuote(
+                        parent?.id,
+                        project?.id,
+                      )
+                    : await postNotifier.send(
+                        id,
+                      );
+              },
+              isRepost: isRepost,
+              onCanSendPost: () async {
+                final shouldPop = canSendPost
+                    ? await savePostDraftDialog(
+                        ref,
+                        context,
+                        data.value!,
+                      )
+                    : true;
+                if (shouldPop ?? false) {
+                  if (context.mounted) {
+                    context.pop();
                   }
-                  PostHelperFunctions.sendPost(
-                    ref,
-                    postState,
-                    id,
-                    data.value!,
-                    project?.id,
-                  );
-                  context.pop();
-                },
-                isRepost: project != null,
-                onCanSendPost: () async {
-                  final shouldPop = id == 0
-                      ? await savePostDraftDialog(
-                          ref,
-                          context,
-                          postState,
-                        )
-                      : await editPostDialog(
-                          ref,
-                          context,
-                          data.value!,
-                        );
-                  if (shouldPop ?? false) {
-                    if (context.mounted) {
-                      if (postState.videoUrl.isNotEmpty) {
-                        ref
-                            .read(mediaVideoPlayerProvider(postState.videoUrl)
-                                .notifier)
-                            .dispose();
-                      }
-                      context.pop();
-                    }
-                  }
-                },
-                draftPressed: () {
-                  ref.invalidate(postDraftsProvider);
-                  PostHelperFunctions.showPostDraftsScreen(context);
-                }),
+                }
+              },
+            ),
           ),
           bottomSheet: suggestions.isNotEmpty
               ? MentionsSuggestionsWidget(
@@ -142,27 +115,46 @@ class CreatePostScreen extends ConsumerWidget {
                       ),
                     )
                   : null,
-          bottomNavigationBar:
-              (data.isLoading || data.hasError || data.value == null)
-                  ? const SizedBox()
-                  : PostBottomNavigation(post: data.value!),
+          bottomNavigationBar: data.when(
+            data: (data) {
+              return PostBottomNavigation(post: data);
+            },
+            error: (err, st) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 5,
+                ),
+                child: ContentSingleButton(
+                  onPressed: () {
+                    ref.invalidate(postDetailProvider);
+                  },
+                  text: 'Retry',
+                  buttonIcon: Iconsax.refresh,
+                ),
+              );
+            },
+            loading: () {
+              return null;
+            },
+          ),
           body: data.when(
             data: (post) {
-              if (post == null) {
-                return const Center(
-                  child: Text('Post not found'),
-                );
-              }
               return CreatePostWidget(
                 post: post,
                 project: project,
+                parent: parent,
               );
             },
             error: (error, st) {
-              return Center(
-                child: Text(
-                  error.toString(),
+              return LoadingError(
+                retry: null,
+                imageString: TImageTexts.error,
+                mainAxisAlignment: MainAxisAlignment.center,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
                 ),
+                errorMessage: error.toString(),
               );
             },
             loading: () {

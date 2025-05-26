@@ -52,6 +52,7 @@ class ArticlesScreen extends ConsumerWidget {
                       aspectRatio: 16 / 9,
                       child: ContentCachedImage(
                         url: articleCardState.bannerUrl,
+                        height: 200,
                       ),
                     ),
                   ),
