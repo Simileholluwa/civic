@@ -29,6 +29,15 @@ class CreateProjectScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
+    final isVisibleNotifier = ref.read(
+      appBottomNavigationVisibilityProvider(
+        null,
+      ).notifier,
+    );
+    Future.delayed(
+      Duration.zero,
+      () => isVisibleNotifier.hide(),
+    );
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
@@ -110,7 +119,7 @@ class CreateProjectScreen extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 5,
+                  vertical: 10,
                 ),
                 child: ContentSingleButton(
                   onPressed: () {

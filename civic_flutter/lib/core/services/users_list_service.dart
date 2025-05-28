@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/device/device_utility.dart';
 import 'package:fpdart/fpdart.dart';
 
 class UsersListService {
@@ -14,12 +13,6 @@ class UsersListService {
     required int limit,
   }) async {
     try {
-      final isConnected = await TDeviceUtils.hasInternetConnection();
-      if (!isConnected) {
-        return left(
-          'You are not connected to the internet.',
-        );
-      }
       final result = await client.userRecord.getUsers(
         query: query,
         page: page,

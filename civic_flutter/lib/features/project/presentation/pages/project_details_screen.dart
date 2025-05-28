@@ -69,10 +69,9 @@ class ProjectDetailsScreen extends ConsumerWidget {
                           : () {
                             
                               context.push(
-                                AppRoutes.createPost,
+                                '/create/post/0',
                                 extra: {
                                   'project': project,
-                                  'id': 0,
                                 },
                               );
                             },
@@ -149,7 +148,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 5,
+              vertical: 10,
             ),
             child: ContentSingleButton(
               onPressed: () {

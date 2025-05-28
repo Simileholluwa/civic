@@ -37,10 +37,20 @@ class CreatePostScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
+    final isVisibleNotifier = ref.read(
+      appBottomNavigationVisibilityProvider(
+        null,
+      ).notifier,
+    );
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
         postState.videoUrl.isNotEmpty;
     final isRepost = project != null || parent != null;
+
+    Future.delayed(
+      Duration.zero,
+      () => isVisibleNotifier.hide(),
+    );
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
@@ -79,7 +89,7 @@ class CreatePostScreen extends ConsumerWidget {
                         id,
                       );
               },
-              isRepost: isRepost,
+              sendText: isRepost ? 'REPOST' : null,
               onCanSendPost: () async {
                 final shouldPop = canSendPost
                     ? await savePostDraftDialog(
@@ -123,7 +133,7 @@ class CreatePostScreen extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 5,
+                  vertical: 10,
                 ),
                 child: ContentSingleButton(
                   onPressed: () {

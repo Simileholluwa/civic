@@ -3,7 +3,6 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class PostsScreen extends ConsumerWidget {
   const PostsScreen({super.key});
@@ -18,12 +17,6 @@ class PostsScreen extends ConsumerWidget {
       scrollController: ref.read(postScrollControllerProvider),
       itemBuilder: (context, post, index) {
         return PostCard(
-          onTap: () {
-            context.push(
-              '/feed/post/${post.id}',
-              extra: post,
-            );
-          },
           post: post,
         );
       },

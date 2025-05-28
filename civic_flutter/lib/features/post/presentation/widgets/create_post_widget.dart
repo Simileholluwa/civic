@@ -89,7 +89,6 @@ class CreatePostWidget extends ConsumerWidget {
                     ),
                     child: PostCard(
                       post: parent!,
-                      onTap: null,
                       noMaxLines: false,
                       showInteractions: false,
                     ),

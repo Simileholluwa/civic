@@ -18,3 +18,21 @@ class AppScrollVisibility extends _$AppScrollVisibility {
     state = true;
   }
 }
+
+@riverpod
+class AppBottomNavigationVisibility extends _$AppBottomNavigationVisibility {
+  @override
+  bool build(bool? value) => value ?? true;
+
+  void toggleVisibility() {
+    state = !state;
+  }
+
+  void hide() {
+    state = false;
+  }
+
+  void show() {
+    state = true;
+  }
+}

@@ -450,7 +450,7 @@ class RegularPost extends _$RegularPost {
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: 'First comment for post $postId',
+          text: 'Third comment for post $postId',
           parentId: postId,
         ),
         false,
@@ -477,7 +477,7 @@ class RegularPost extends _$RegularPost {
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: 'Hello there, I am excited to make this reply again and again!',
+          text: 'Third reply to comment $parentId',
           parentId: parentId,
         ),
         true,

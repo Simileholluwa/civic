@@ -1,3 +1,4 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,15 @@ class PostRepliesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(
+      getPostCommentProvider(
+        replyId,
+        false,
+      ),
+    );
+    final commentController = ref.watch(
+      paginatedPostCommentRepliesListProvider(replyId).notifier,
+    );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -34,13 +44,25 @@ class PostRepliesScreen extends ConsumerWidget {
                 context.pop();
               },
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Iconsax.filter5),
-                onPressed: () {},
-              ),
-              const SizedBox(width: 5),
-            ],
+            actions: data.when(
+              data: (_) {
+                return [
+                  IconButton(
+                    icon: const Icon(Iconsax.refresh),
+                    onPressed: () {
+                      commentController.refresh();
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Iconsax.filter),
+                    onPressed: () {},
+                  ),
+                  const SizedBox(width: 5),
+                ];
+              },
+              error: (_, __) => null,
+              loading: () => null,
+            ),
             title: Text(
               'Replies',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
@@ -50,11 +72,67 @@ class PostRepliesScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10,),
-        child: PostCommentReplyCard(
-          postId: replyId,
-        ),
+      bottomNavigationBar: data.when(
+        data: (_) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: ContentSingleButton(
+              onPressed: () {},
+              text: 'Add a reply',
+              buttonIcon: Iconsax.magicpen5,
+            ),
+          );
+        },
+        error: (error, __) {
+          final err = error as Map<String, dynamic>;
+          if (err['message'] == 'retry') {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: ContentSingleButton(
+                onPressed: () {
+                  ref.invalidate(getPostCommentProvider);
+                },
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
+              ),
+            );
+          }
+          return null;
+        },
+        loading: () => null,
+      ),
+      body: data.when(
+        data: (_) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.only(
+              top: 10,
+            ),
+            child: PostCommentReplyCard(
+              postId: replyId,
+            ),
+          );
+        },
+        error: (error, stackTrace) {
+          final err = error as Map<String, dynamic>;
+          return Center(
+            child: LoadingError(
+              retry: null,
+              errorMessage: err['message'],
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+          );
+        },
+        loading: () {
+          return const Center(
+            child: AppLoadingWidget(),
+          );
+        },
       ),
     );
   }

@@ -181,6 +181,25 @@ class PostEndpoint extends Endpoint {
     return;
   }
 
+  Future<void> getComment(
+    Session session,
+    int commentId,
+    bool isComment,
+  ) async {
+    final comment = await Post.db.findById(
+      session,
+      commentId,
+    );
+
+    if (comment == null) {
+      throw PostException(
+        message: isComment
+            ? 'This comment does not exist. It may have been deleted.'
+            : 'This reply does not exist. It may have been deleted.',
+      );
+    }
+  }
+
   Future<PostList> getPostCommentReplies(
     Session session,
     int commentId, {
@@ -192,6 +211,7 @@ class PostEndpoint extends Endpoint {
         message: 'Invalid pagination parameters',
       );
     }
+
     final count = await Post.db.count(
       session,
       where: (t) =>
@@ -256,92 +276,88 @@ class PostEndpoint extends Endpoint {
     return await session.db.transaction((transaction) async {
       try {
         if (projectId == null) {
-          throw PostException(
-              message: 'Specify the Id of the project');
+          throw PostException(message: 'Specify the Id of the project');
         }
 
         // Determine if this is a post or project repost/quote
         Post? existing;
         Post newPost;
 
+        final selectedProject = await Project.db.findById(
+          session,
+          projectId,
+          transaction: transaction,
+        );
+        if (selectedProject == null) {
+          throw PostException(message: 'Project not found.');
+        }
+        existing = await Post.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.ownerId.equals(user.id!) &
+              t.projectId.equals(selectedProject.id!) &
+              t.postType.equals(
+                PostType.projectRepost,
+              ),
+          transaction: transaction,
+        );
 
-          final selectedProject = await Project.db.findById(
+        if (existing != null) {
+          await Post.db.deleteRow(
             session,
-            projectId,
+            existing,
             transaction: transaction,
           );
-          if (selectedProject == null) {
-            throw PostException(message: 'Project not found.');
-          }
-          existing = await Post.db.findFirstRow(
-            session,
-            where: (t) =>
-                t.ownerId.equals(user.id!) &
-                t.projectId.equals(selectedProject.id!) &
-                t.postType.equals(
-                  PostType.projectRepost,
-                ),
-            transaction: transaction,
-          );
-
-          if (existing != null) {
-            await Post.db.deleteRow(
-              session,
-              existing,
-              transaction: transaction,
-            );
-            selectedProject.quotedBy?.remove(user.id);
-            await ProjectEndpoint().updateProject(session, selectedProject);
-            throw PostException(
-              message: 'Project repost successfully removed.',
-              action: 'deleted',
-            );
-          }
-
-          newPost = Post(
-            ownerId: user.id!,
-            postType: PostType.projectRepost,
-            projectId: selectedProject.id,
-            text: quoteContent?.text,
-            imageUrls: quoteContent?.imageUrls,
-            videoUrl: quoteContent?.videoUrl,
-            mentions: quoteContent?.mentions,
-            tags: quoteContent?.tags,
-            locations: quoteContent?.locations,
-            taggedUsers: quoteContent?.taggedUsers,
-            hashtags: quoteContent?.hashtags,
-            quotedOrRepostedFromUserId: user.id,
-            dateCreated: DateTime.now(),
-            likedBy: [],
-            commentedBy: [],
-            quotedBy: [],
-            bookmarkedBy: [],
-          );
-          
-            if (!selectedProject.quotedBy!.contains(user.id!)) {
-              selectedProject.quotedBy!.add(user.id!);
-            }
-            selectedProject.quoteCount =
-                (selectedProject.quoteCount ?? 0) + 1;
-          
+          selectedProject.quotedBy?.remove(user.id);
           await ProjectEndpoint().updateProject(session, selectedProject);
-          final sentPost = await Post.db.insertRow(
-            session,
-            newPost,
-            transaction: transaction,
+          throw PostException(
+            message: 'Project repost successfully removed.',
+            action: 'deleted',
           );
+        }
 
-          await HashtagEndpoint().sendPostHashtags(
-            session,
-            newPost.tags ?? [],
-            sentPost.id!,
-          );
+        newPost = Post(
+          ownerId: user.id!,
+          postType: PostType.projectRepost,
+          projectId: selectedProject.id,
+          text: quoteContent?.text,
+          imageUrls: quoteContent?.imageUrls,
+          videoUrl: quoteContent?.videoUrl,
+          mentions: quoteContent?.mentions,
+          tags: quoteContent?.tags,
+          locations: quoteContent?.locations,
+          taggedUsers: quoteContent?.taggedUsers,
+          hashtags: quoteContent?.hashtags,
+          quotedOrRepostedFromUserId: user.id,
+          dateCreated: DateTime.now(),
+          likedBy: [],
+          commentedBy: [],
+          quotedBy: [],
+          bookmarkedBy: [],
+        );
 
-          return sentPost.copyWith(
-            quotedOrRepostedFromUser: user,
-            owner: user,
-          );
-        
+        if (!selectedProject.quotedBy!.contains(user.id!)) {
+          selectedProject.quotedBy!.add(user.id!);
+        }
+        selectedProject.quoteCount = (selectedProject.quoteCount ?? 0) + 1;
+
+        await ProjectEndpoint().updateProject(session, selectedProject);
+        final sentPost = await Post.db.insertRow(
+          session,
+          newPost,
+          transaction: transaction,
+        );
+
+        await HashtagEndpoint().sendPostHashtags(
+          session,
+          newPost.tags ?? [],
+          sentPost.id!,
+        );
+
+        return sentPost.copyWith(
+          quotedOrRepostedFromUser: user,
+          owner: user,
+        );
       } on PostException {
         rethrow;
       } catch (e, stackTrace) {

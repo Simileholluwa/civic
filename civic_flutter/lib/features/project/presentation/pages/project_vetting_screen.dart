@@ -79,7 +79,7 @@ class ProjectVettingScreen extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 5,
+                  vertical: 10,
                 ),
                 child: ContentDoubleButton(
                   firstButtonOnPressed: () {
@@ -115,7 +115,7 @@ class ProjectVettingScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 5,
+              vertical: 10,
             ),
             child: ContentSingleButton(
               onPressed: () {
@@ -132,7 +132,7 @@ class ProjectVettingScreen extends ConsumerWidget {
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 5,
+              vertical: 10,
             ),
             child: ContentSingleButton(
               onPressed: () {

@@ -24,6 +24,7 @@ post:
   - savePost:
   - savePostComment:
   - getPostComments:
+  - getComment:
   - getPostCommentReplies:
   - schedulePost:
   - getRootPost:

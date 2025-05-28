@@ -11,6 +11,10 @@ abstract class PostRepository {
     required DateTime dateTime,
   });
   Future<Either<Failure, void>> savePostDraft({required Post post});
+  Future<Either<Failure, void>> getComment({
+    required int commentId,
+    required bool isComment,
+  });
   Future<Either<Failure, PostList>> getPosts({
     required int page,
     required int limit,

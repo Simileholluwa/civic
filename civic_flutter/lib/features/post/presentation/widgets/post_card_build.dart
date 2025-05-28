@@ -7,12 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class PostCardBuild extends ConsumerWidget {
   const PostCardBuild({
     super.key,
-    required this.onTap,
     required this.noMaxLines,
     required this.post,
   });
 
-  final VoidCallback? onTap;
   final bool noMaxLines;
   final Post post;
 
@@ -21,40 +19,37 @@ class PostCardBuild extends ConsumerWidget {
     final postCardState = ref.watch(
       postCardWidgetProvider(post),
     );
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (postCardState.hasText)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: ContentExpandableText(
-                text: postCardState.text,
-                hasImage: postCardState.hasImage,
-                hasVideo: postCardState.hasVideo,
-                noMaxLines: noMaxLines,
-                onToggleTextTap: () {},
-              ),
+    return Column(
+      spacing: 10,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (postCardState.hasText)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: ContentExpandableText(
+              text: postCardState.text,
+              hasImage: postCardState.hasImage,
+              hasVideo: postCardState.hasVideo,
+              noMaxLines: noMaxLines,
+              onToggleTextTap: () {},
             ),
-          if (postCardState.hasImage)
-            postCardState.imageUrls.length == 1
-                ? ContentSingleCachedImage(
-                    imageUrl: postCardState.imageUrls.first,
-                  )
-                : ContentMultipleCachedImage(
-                    imageUrls: postCardState.imageUrls,
-                  ),
-          if (postCardState.hasVideo)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: VideoPost(
-                videoUrl: postCardState.videoUrl,
-              ),
+          ),
+        if (postCardState.hasImage)
+          postCardState.imageUrls.length == 1
+              ? ContentSingleCachedImage(
+                  imageUrl: postCardState.imageUrls.first,
+                )
+              : ContentMultipleCachedImage(
+                  imageUrls: postCardState.imageUrls,
+                ),
+        if (postCardState.hasVideo)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: VideoPost(
+              videoUrl: postCardState.videoUrl,
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

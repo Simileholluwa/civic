@@ -306,6 +306,22 @@ final getPostCommentsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetPostCommentsRef = AutoDisposeProviderRef<GetPostCommentsUseCase>;
+String _$getCommentHash() => r'5a5ece68bac90fd335cf8d5b2307412abf5cb826';
+
+/// See also [getComment].
+@ProviderFor(getComment)
+final getCommentProvider = AutoDisposeProvider<GetCommentUseCase>.internal(
+  getComment,
+  name: r'getCommentProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getCommentHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetCommentRef = AutoDisposeProviderRef<GetCommentUseCase>;
 String _$getPostCommentRepliesHash() =>
     r'd5b404ae00a6304099fbecf1ce2b221b98c373b9';
 

@@ -2,12 +2,11 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:civic_flutter/features/create/presentation/routes/create_route.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
-import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,8 +27,7 @@ GoRouter router(Ref ref) {
         },
         redirect: (context, state) async {
           final localStorage = ref.read(localStorageProvider);
-          final firstTimer =
-              localStorage.getBool('first_timer') ?? true;
+          final firstTimer = localStorage.getBool('first_timer') ?? true;
           if (firstTimer) {
             FlutterNativeSplash.remove();
             return AppRoutes.initial;
@@ -163,6 +161,7 @@ GoRouter router(Ref ref) {
       StatefulShellRoute.indexedStack(
         branches: [
           FeedRoutes.branch,
+          CreateRoutes.branch,
           NotificationsRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
@@ -184,34 +183,12 @@ GoRouter router(Ref ref) {
       ),
 
       GoRoute(
-        path: AppRoutes.createPost,
-        builder: (context, state) {
-              final data = state.extra as Map<String, dynamic>;
-              return CreatePostScreen(
-                id: data['id'],
-                project: data['project'],
-                parent: data['parent'],
-              );
-            },
-      ),
-
-      GoRoute(
         path: AppRoutes.createArticle,
         builder: (context, state) {
           final data = state.extra as Map<String, dynamic>;
           return CreateArticleScreen(
             id: data['id'],
             draft: data['draft'],
-          );
-        },
-      ),
-
-      GoRoute(
-        path: AppRoutes.createProject,
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return CreateProjectScreen(
-            id: data['id'],
           );
         },
       ),

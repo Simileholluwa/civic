@@ -30,199 +30,146 @@ class ShowProjectActions extends ConsumerWidget {
         project,
       ).notifier,
     );
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65),
-        child: Container(
-          margin: EdgeInsets.only(top: 4),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'More actions',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.left,
               ),
-            ),
-          ),
-          child: AppBar(
-            titleSpacing: 4,
-            title: Text(
-              'More actions',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 20,
-                  ),
-            ),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                context.pop();
-              },
-            ),
+              GestureDetector(
+                onTap: context.pop,
+                child: const Icon(
+                  Icons.clear,
+                  color: TColors.secondary,
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          if (projectCardState.canVet! && !projectCardState.isOwner!)
-            ListTile(
-              leading: Icon(
-                projectCardState.isBookmarked!
-                    ? Icons.bookmark
-                    : Icons.bookmark_add_outlined,
-              ),
-              title: Text(
+        const Divider(
+          height: 0,
+        ),
+        if (projectCardState.canVet! && !projectCardState.isOwner!)
+          MoreActionsListTile(
+            title:
                 projectCardState.isBookmarked! ? 'Remove Bookmark' : 'Bookmark',
-              ),
-              onTap: () async {
-                if (context.mounted) {
-                  context.pop();
-                }
-                final result = await projectCardNotifier.toggleBookmarkStatus(
-                  project.id!,
-                );
-                if (result) {
-                  if (!projectCardState.isBookmarked!) {
-                    TToastMessages.infoToast('Project has been bookmarked');
-                  } else {
-                    TToastMessages.infoToast(
-                        'Project has been removed from bookmarks');
-                  }
-                }
-              },
-            ),
-          ListTile(
-            leading: Icon(Icons.share),
-            title: Text(
-              'Share',
-            ),
-            trailing: Icon(
-              Iconsax.arrow_right_3,
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(Iconsax.copy),
-            title: Text(
-              'Copy link',
-            ),
-            onTap: () {},
-          ),
-          if (!projectCardState.isOwner!)
-            ListTile(
-              leading: Icon(Iconsax.eye_slash),
-              title: Text(
-                'Not interested',
-              ),
-              onTap: () async {
-                if (context.mounted) {
-                  context.pop();
-                  if (fromDetails) {
-                    context.pop();
-                  }
-                }
-                final result =
-                    await projectCardNotifier.markProjectNotInterested(
-                  project.id!,
-                );
-                if (result) {
+            subTitle: projectCardState.isBookmarked!
+                ? 'This project will be removed from your bookmarks.'
+                : "Bookmarking let's you easily access your favorite projects.",
+            icon: projectCardState.isBookmarked!
+                ? Icons.bookmark
+                : Icons.bookmark_add_outlined,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+              }
+              final result = await projectCardNotifier.toggleBookmarkStatus(
+                project.id!,
+              );
+              if (result) {
+                if (!projectCardState.isBookmarked!) {
+                  TToastMessages.infoToast('Project has been bookmarked');
+                } else {
                   TToastMessages.infoToast(
-                    'You will no longer see this project in your feed',
+                      'Project has been removed from bookmarks');
+                }
+              }
+            },
+          ),
+        MoreActionsListTile(
+          title: 'Share',
+          subTitle: "Invite others to vet or review this project.",
+          icon: Icons.share,
+          onTap: () async {},
+        ),
+        if (!projectCardState.isOwner!)
+          MoreActionsListTile(
+            title: 'Not interested',
+            subTitle: "I don't want to see this project in my feed.",
+            icon: Iconsax.eye_slash,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+                if (fromDetails) {
+                  context.pop();
+                }
+              }
+              final result = await projectCardNotifier.markProjectNotInterested(
+                project.id!,
+              );
+              if (result) {
+                TToastMessages.infoToast(
+                  'You will no longer see this project in your feed.',
+                );
+              }
+            },
+          ),
+        if (!projectCardState.isOwner!)
+          MoreActionsListTile(
+            title: projectCardState.isFollower! ? 'Unfollow' : 'Follow',
+            subTitle: projectCardState.isFollower!
+                ? 'You will no longer see projects from ${project.owner!.userInfo!.userName}.'
+                : 'You will now see more projects from ${project.owner!.userInfo!.userName}.',
+            icon: projectCardState.isFollower!
+                ? Iconsax.user_remove
+                : Iconsax.user_cirlce_add,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+              }
+              final result = await userNotifier.toggleFollow(
+                project.ownerId,
+              );
+
+              if (result) {
+                projectCardNotifier.setIsFollower();
+                if (!projectCardState.isFollower!) {
+                  TToastMessages.infoToast(
+                    'You are now following ${project.owner!.userInfo!.userName}',
+                  );
+                } else {
+                  TToastMessages.infoToast(
+                    'You are no longer following ${project.owner!.userInfo!.userName}',
                   );
                 }
-              },
-            ),
-          if (!projectCardState.isOwner!)
-            ListTile(
-              leading: Icon(
-                Iconsax.flag,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Report',
-                style: TextStyle().copyWith(
-                  color: Colors.red,
-                ),
-              ),
-              onTap: () {},
-            ),
-          if (projectCardState.isOwner!)
-            ListTile(
-              leading: Icon(
-                Iconsax.trash,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Delete',
-                style: TextStyle().copyWith(
-                  color: Colors.red,
-                ),
-              ),
-              onTap: () async {
-                if (context.mounted) {
-                  context.pop();
-                }
-                ProjectHelperFunctions.deleteProjectBottomSheet(
-                  context,
-                  project,
-                  fromDetails,
-                );
-              },
-            ),
-          if (!projectCardState.isOwner!)
-            const Divider(
-              indent: 20,
-              endIndent: 30,
-            ),
-          if (!projectCardState.isOwner!)
-            Column(
-              children: [
-                ListTile(
-                  leading: Icon(
-                    projectCardState.isFollower!
-                        ? Iconsax.user_remove
-                        : Iconsax.user_cirlce_add,
-                  ),
-                  title: Text(
-                    projectCardState.isFollower! ? 'Unfollow' : 'Follow',
-                  ),
-                  onTap: () async {
-                    if (context.mounted) {
-                      context.pop();
-                    }
-                    final result = await userNotifier.toggleFollow(
-                      project.ownerId,
-                    );
-
-                    if (result) {
-                      projectCardNotifier.setIsFollower();
-                      if (!projectCardState.isFollower!) {
-                        TToastMessages.infoToast(
-                          'You are now following ${project.owner!.userInfo!.userName}',
-                        );
-                      } else {
-                        TToastMessages.infoToast(
-                          'You are no longer following ${project.owner!.userInfo!.userName}',
-                        );
-                      }
-                    }
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.block_sharp,
-                    color: Colors.red,
-                  ),
-                  title: Text(
-                    'Block',
-                    style: TextStyle().copyWith(
-                      color: Colors.red,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ],
-            ),
-        ],
-      ),
+              }
+            },
+          ),
+        if (projectCardState.isOwner!)
+          MoreActionsListTile(
+            title: 'Delete',
+            subTitle: "Ensure you understand the consequences of deleting a project.",
+            icon: Iconsax.trash,
+            color: Colors.red,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+              }
+              ProjectHelperFunctions.deleteProjectBottomSheet(
+                context,
+                project,
+                fromDetails,
+              );
+            },
+          ),
+        if (!projectCardState.isOwner!)
+          MoreActionsListTile(
+            title: 'Report',
+            subTitle: "This project is inappropriate or offensive.",
+            icon: Iconsax.flag,
+            color: Colors.red,
+            onTap: () async {},
+          ),
+      ],
     );
   }
 }

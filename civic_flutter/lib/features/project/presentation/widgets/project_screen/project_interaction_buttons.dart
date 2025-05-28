@@ -51,10 +51,9 @@ class ProjectInteractionButtons extends ConsumerWidget {
               : () {
                  
                   context.push(
-                    AppRoutes.createPost,
+                    '/create/post/0',
                     extra: {
                       'project': project,
-                      'id': 0,
                     },
                   );
                 },
@@ -164,10 +163,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () {
                     context.push(
-                      AppRoutes.createProject,
-                      extra: {
-                        'id': project.id,
-                      },
+                      '/create/project/${project.id}',
                     );
                   },
           ),
@@ -195,18 +191,14 @@ class ProjectInteractionButtons extends ConsumerWidget {
           onTap: projectCardState.isDeleted!
               ? null
               : () {
-                  showModalBottomSheet(
+                  showDialog(
                     context: context,
-                    constraints: BoxConstraints(
-                      maxHeight: projectCardState.isOwner!
-                          ? 240
-                          : projectCardState.canVet!
-                              ? 480
-                              : 430,
-                    ),
                     builder: (ctx) {
-                      return ShowProjectActions(
-                        project: project,
+                      return AlertDialog(
+                        contentPadding: const EdgeInsets.only(bottom: 16,),
+                        content: ShowProjectActions(
+                          project: project,
+                        ),
                       );
                     },
                   );

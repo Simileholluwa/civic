@@ -94,6 +94,8 @@ class PostTagUsersScreen extends ConsumerWidget {
               return Chip(
                 avatar: AppUserProfileImage(
                   imageUrl: postState.taggedUsers[index].userInfo!.imageUrl!,
+                  radius: 13,
+                  iconSize: 23,
                 ),
                 label: Text(
                   postState.taggedUsers[index].userInfo!.fullName ??

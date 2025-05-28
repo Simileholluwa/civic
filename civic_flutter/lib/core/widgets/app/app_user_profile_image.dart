@@ -7,36 +7,40 @@ class AppUserProfileImage extends StatelessWidget {
   const AppUserProfileImage({
     super.key,
     required this.imageUrl,
+    this.radius = 25,
+    this.iconSize = 47,
   });
 
   final String imageUrl;
+  final double radius;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 25,
+      radius: radius,
       backgroundColor: TColors.primary,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100),
         child: CachedNetworkImage(
           imageUrl: imageUrl,
           fit: BoxFit.cover,
-          height: 50,
-          width: 50,
+          height: radius * 2,
+          width: radius * 2,
           errorWidget: (context, url, child) {
-            return const Center(
+            return Center(
               child: Icon(
                 CupertinoIcons.person_alt_circle_fill,
-                size: 47,
+                size: iconSize,
                 color: TColors.textWhite,
               ),
             );
           },
           progressIndicatorBuilder: (context, url, progress) {
-            return const Center(
+            return Center(
               child: Icon(
                 CupertinoIcons.person_alt_circle_fill,
-                size: 47,
+                size: iconSize,
                 color: TColors.textWhite,
               ),
             );

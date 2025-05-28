@@ -25,6 +25,11 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
   }
 
   Future<void> fetchPage(int postId, int page, {int limit = 50}) async {
+    if (pagingController.itemList != null) {
+      pagingController.value = PagingState(
+        itemList: null,
+      );
+    }
     final listPostCommentUseCase = ref.read(getPostCommentsProvider);
     final result = await listPostCommentUseCase(
       GetPostCommentsParams(
@@ -50,12 +55,12 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
   }
 
   void addComment(Post comment) {
-    if (pagingController.itemList == null) {
-      refresh();
-    }
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: [comment, ...pagingController.itemList ?? []],
     );
+    if (pagingController.itemList == null) {
+      refresh();
+    }
   }
 }

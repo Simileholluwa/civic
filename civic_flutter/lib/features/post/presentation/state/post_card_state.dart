@@ -46,7 +46,7 @@ class PostCardState {
         post.likedBy!.length,
       ),
       numberOfComments: THelperFunctions.humanizeNumber(
-        post.commentedBy!.length,
+        post.commentCount!,
       ),
       numberOfReposts: THelperFunctions.humanizeNumber(
         post.quoteCount!,

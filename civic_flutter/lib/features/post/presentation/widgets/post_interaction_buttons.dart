@@ -46,7 +46,7 @@ class PostInteractionButtons extends ConsumerWidget {
             text: postCardState.numberOfComments,
             onTap: () async {
               context.push(
-                '/feed/post/${post.id}/comment',
+                '/feed/post/${post.id}/comments',
               );
             },
             color: postCardState.hasCommented == true
@@ -77,14 +77,14 @@ class PostInteractionButtons extends ConsumerWidget {
           ContentInteractionButton(
             icon: Iconsax.more_circle,
             onTap: () {
-              showModalBottomSheet(
+              showDialog(
                 context: context,
-                constraints: BoxConstraints(
-                  maxHeight: postCardState.isOwner ? 180 : 370,
-                ),
                 builder: (ctx) {
-                  return ShowPostActions(
-                    post: post,
+                  return AlertDialog(
+                    contentPadding: const EdgeInsets.only(bottom: 16,),
+                    content: ShowPostActions(
+                      post: post,
+                    ),
                   );
                 },
               );

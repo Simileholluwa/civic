@@ -9,17 +9,20 @@ class PostCommentCard extends ConsumerWidget {
   const PostCommentCard({
     super.key,
     required this.postId,
+    this.scrollPhysics,
   });
 
   final int postId;
+  final ScrollPhysics? scrollPhysics;
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final commentPagingControllerNotifier = ref.watch(
+    final commentController= ref.watch(
       paginatedPostCommentListProvider(postId).notifier,
     );
     return AppInfiniteList<Post>(
-      pagingController: commentPagingControllerNotifier.pagingController,
+      pagingController: commentController.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, comment, index) {
@@ -72,7 +75,7 @@ class PostCommentCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: () => commentPagingControllerNotifier.refresh(),
+      onRefresh: () => commentController.refresh(),
       noItemsFound: ContentNoItemsFound(),
     );
   }

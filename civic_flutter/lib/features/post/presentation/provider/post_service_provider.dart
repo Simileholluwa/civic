@@ -130,6 +130,13 @@ GetPostCommentsUseCase getPostComments(Ref ref) {
 }
 
 @riverpod
+GetCommentUseCase getComment(Ref ref) {
+  return GetCommentUseCase(
+    postRepository: ref.read(postRepositoryImplProvider),
+  );
+}
+
+@riverpod
 GetPostCommentRepliesUseCase getPostCommentReplies(Ref ref) {
   return GetPostCommentRepliesUseCase(
     postRepository: ref.read(postRepositoryImplProvider),

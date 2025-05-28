@@ -279,6 +279,19 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
+  _i2.Future<void> getComment(
+    int commentId,
+    bool isComment,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'getComment',
+        {
+          'commentId': commentId,
+          'isComment': isComment,
+        },
+      );
+
   _i2.Future<_i9.PostList> getPostCommentReplies(
     int commentId, {
     required int limit,

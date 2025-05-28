@@ -3,18 +3,17 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class PostCard extends ConsumerWidget {
   const PostCard({
     super.key,
-    required this.onTap,
     required this.post,
     this.noMaxLines = false,
     this.showInteractions = true,
   });
   final Post post;
   final bool noMaxLines;
-  final VoidCallback? onTap;
   final bool showInteractions;
 
   @override
@@ -28,14 +27,22 @@ class PostCard extends ConsumerWidget {
     return livePost.when(data: (newPost) {
       return PostCardItem(
         post: newPost,
-        onTap: onTap,
+        onTap: () {
+          context.push(
+            '/feed/post/${post.id}',
+          );
+        },
         noMaxLines: noMaxLines,
         showInteractions: showInteractions,
       );
     }, error: (err, st) {
       return PostCardItem(
         post: post,
-        onTap: onTap,
+        onTap: () {
+          context.push(
+            '/feed/post/${post.id}',
+          );
+        },
         noMaxLines: noMaxLines,
         showInteractions: showInteractions,
       );
@@ -68,18 +75,19 @@ class PostCardItem extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
       children: [
-        if (
-            postCardState.postType == PostType.projectRepost)
+        if (postCardState.postType == PostType.projectRepost)
           PostCardDetail(
             post: post,
             showInteractions: true,
             hasProject: true,
+            onTap: onTap,
           ),
         if (postCardState.postType == PostType.regular)
           PostCardDetail(
             post: post,
             showInteractions: true,
             hasProject: false,
+            onTap: onTap,
           ),
       ],
     );

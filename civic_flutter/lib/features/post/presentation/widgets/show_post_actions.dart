@@ -30,165 +30,117 @@ class ShowPostActions extends ConsumerWidget {
         post,
       ).notifier,
     );
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65),
-        child: Container(
-          margin: EdgeInsets.only(top: 4),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'More actions',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.left,
               ),
-            ),
-          ),
-          child: AppBar(
-            titleSpacing: 4,
-            title: Text(
-              'More actions',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 20,
-                  ),
-            ),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                context.pop();
-              },
-            ),
+              GestureDetector(
+                onTap: context.pop,
+                child: const Icon(
+                  Icons.clear,
+                  color: TColors.secondary,
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          ListTile(
-            leading: Icon(Iconsax.copy),
-            title: Text(
-              'Copy link',
-            ),
-            onTap: () {},
-          ),
-          if (!postCardState.isOwner)
-            ListTile(
-              leading: Icon(Iconsax.eye_slash),
-              title: Text(
-                'Not interested',
-              ),
-              onTap: () async {
-                if (context.mounted) {
+        const Divider(
+          height: 0,
+        ),
+        if (!postCardState.isOwner)
+          MoreActionsListTile(
+            title: 'Not interested',
+            subTitle: "I don't want to see this post in my feed.",
+            icon: Iconsax.eye_slash,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+                if (fromDetails) {
                   context.pop();
-                  if (fromDetails) {
-                    context.pop();
-                  }
                 }
-                final result = await postCardNotifier.markPostNotInterested(
-                  post.id!,
+              }
+              final result = await postCardNotifier.markPostNotInterested(
+                post.id!,
+              );
+              if (result) {
+                TToastMessages.infoToast(
+                  'You will no longer see this post in your feed.',
                 );
-                if (result) {
+              }
+            },
+          ),
+        if (!postCardState.isOwner)
+          MoreActionsListTile(
+            title: postCardState.isFollower ? 'Unfollow' : 'Follow',
+            subTitle: postCardState.isFollower
+                ? 'You will no longer see posts from ${post.owner!.userInfo!.userName}.'
+                : 'You will now see more posts from ${post.owner!.userInfo!.userName}.',
+            icon: postCardState.isFollower
+                ? Iconsax.user_remove
+                : Iconsax.user_cirlce_add,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+              }
+              final result = await userNotifier.toggleFollow(
+                post.ownerId,
+              );
+
+              if (result) {
+                postCardNotifier.setIsFollower();
+                if (!postCardState.isFollower) {
                   TToastMessages.infoToast(
-                    'You will no longer see this post in your feed',
+                    'You are now following ${post.owner!.userInfo!.userName}',
+                  );
+                } else {
+                  TToastMessages.infoToast(
+                    'You are no longer following ${post.owner!.userInfo!.userName}',
                   );
                 }
-              },
-            ),
-          if (!postCardState.isOwner)
-            ListTile(
-              leading: Icon(
-                Iconsax.flag,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Report',
-                style: TextStyle().copyWith(
-                  color: Colors.red,
-                ),
-              ),
-              onTap: () {},
-            ),
-          if (postCardState.isOwner)
-            ListTile(
-              leading: Icon(
-                Iconsax.trash,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Delete',
-                style: TextStyle().copyWith(
-                  color: Colors.red,
-                ),
-              ),
-              onTap: () async {
-                if (context.mounted) {
-                  context.pop();
-                }
-                await PostHelperFunctions.deletePostDialog(
-                  context,
-                  postCardNotifier,
-                  post.id!,
-                );
+              }
+            },
+          ),
+        if (!postCardState.isOwner)
+          MoreActionsListTile(
+            title: 'Report',
+            subTitle: "This post is inappropriate or offensive.",
+            icon: Iconsax.flag,
+            color: Colors.red,
+            onTap: () async {},
+          ),
+        if (postCardState.isOwner)
+          MoreActionsListTile(
+            title: 'Delete',
+            subTitle: "Keep in mind. Deleted posts can not be undone.",
+            icon: Iconsax.trash,
+            color: Colors.red,
+            onTap: () async {
+              if (context.mounted) {
+                context.pop();
+              }
+              await PostHelperFunctions.deletePostDialog(
+                context,
+                postCardNotifier,
+                post.id!,
+              );
 
-                if (context.mounted) {
-                  context.pop();
-                }
-              },
-            ),
-          if (!postCardState.isOwner)
-            const Divider(
-              indent: 20,
-              endIndent: 30,
-            ),
-          if (!postCardState.isOwner)
-            Column(
-              children: [
-                ListTile(
-                  leading: Icon(
-                    postCardState.isFollower
-                        ? Iconsax.user_remove
-                        : Iconsax.user_cirlce_add,
-                  ),
-                  title: Text(
-                    postCardState.isFollower ? 'Unfollow' : 'Follow',
-                  ),
-                  onTap: () async {
-                    if (context.mounted) {
-                      context.pop();
-                    }
-                    final result = await userNotifier.toggleFollow(
-                      post.ownerId,
-                    );
-
-                    if (result) {
-                      postCardNotifier.setIsFollower();
-                      if (!postCardState.isFollower) {
-                        TToastMessages.infoToast(
-                          'You are now following ${post.owner!.userInfo!.userName}',
-                        );
-                      } else {
-                        TToastMessages.infoToast(
-                          'You are no longer following ${post.owner!.userInfo!.userName}',
-                        );
-                      }
-                    }
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.block_sharp,
-                    color: Colors.red,
-                  ),
-                  title: Text(
-                    'Block',
-                    style: TextStyle().copyWith(
-                      color: Colors.red,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ],
-            ),
-        ],
-      ),
+              if (context.mounted) {
+                context.pop();
+              }
+            },
+          ),
+      ],
     );
   }
 }

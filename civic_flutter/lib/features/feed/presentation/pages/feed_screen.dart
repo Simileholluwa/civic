@@ -26,6 +26,15 @@ class FeedScreen extends ConsumerWidget {
         true,
       ),
     );
+    final isVisibleNotifier = ref.read(
+      appBottomNavigationVisibilityProvider(
+        null,
+      ).notifier,
+    );
+    Future.delayed(
+      Duration.zero,
+      () => isVisibleNotifier.show(),
+    );
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: isVisible,

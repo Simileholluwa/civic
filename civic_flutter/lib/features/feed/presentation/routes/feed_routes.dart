@@ -28,7 +28,7 @@ class FeedRoutes {
             ),
             routes: [
               GoRoute(
-                path: 'comment',
+                path: 'comments',
                 builder: (_, state) {
                   return PostCommentScreen(
                     postId: int.tryParse(state.pathParameters['postId'] ?? '') ?? 0,

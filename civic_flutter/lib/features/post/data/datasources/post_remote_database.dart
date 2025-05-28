@@ -38,6 +38,10 @@ abstract class PostRemoteDatabase {
     required Post comment,
     required bool isReply,
   });
+  Future<void> getComment({
+    required int commentId,
+    required bool isComment,
+  });
   Future<PostList> getPostComments({
     required int postId,
     required int page,
@@ -129,6 +133,31 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       throw ServerException(
         message: e.message,
         action: null,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+        action: 'retry',
+      );
+    }
+  }
+
+  @override
+  Future<void> getComment({required int commentId, required bool isComment}) async {
+    try {
+      final result = await _client.post.getComment(
+        commentId,
+        isComment,
+      );
+      return result;
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } on PostException catch (e) {
+      throw ServerException(
+        message: e.message,
       );
     } catch (e) {
       throw ServerException(

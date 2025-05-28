@@ -68,6 +68,27 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
+  Future<Either<Failure, void>> getComment({
+    required int commentId,
+    required bool isComment,
+  }) async {
+    try {
+      final result = await _remoteDatabase.getComment(
+        commentId: commentId,
+        isComment: isComment,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, Post>> repostOrQuote({
     required int? projectId,
     required Post? quoteContent,

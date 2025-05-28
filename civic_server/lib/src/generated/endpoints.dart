@@ -556,6 +556,30 @@ class Endpoints extends _i1.EndpointDispatch {
             page: params['page'],
           ),
         ),
+        'getComment': _i1.MethodConnector(
+          name: 'getComment',
+          params: {
+            'commentId': _i1.ParameterDescription(
+              name: 'commentId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'isComment': _i1.ParameterDescription(
+              name: 'isComment',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i7.PostEndpoint).getComment(
+            session,
+            params['commentId'],
+            params['isComment'],
+          ),
+        ),
         'getPostCommentReplies': _i1.MethodConnector(
           name: 'getPostCommentReplies',
           params: {
