@@ -68,6 +68,7 @@ export './widgets/app/infinite_list_loading_error.dart';
 export './widgets/auth/auth_app_bar.dart';
 export './widgets/auth/auth_header.dart';
 export './widgets/create_content/create_content_appbar.dart';
+export './widgets/create_content/create_content_items.dart';
 export './widgets/create_content/create_content_darft_text.dart';
 export './widgets/create_content/create_content_dialog.dart';
 export './widgets/create_content/create_content_drafts_appbar.dart';

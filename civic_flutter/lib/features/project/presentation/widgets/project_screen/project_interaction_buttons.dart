@@ -49,7 +49,6 @@ class ProjectInteractionButtons extends ConsumerWidget {
           onTap: projectCardState.isDeleted!
               ? null
               : () {
-                 
                   context.push(
                     '/create/post/0',
                     extra: {
@@ -72,22 +71,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
             onTap: projectCardState.isDeleted!
                 ? null
                 : () {
-                    showModalBottomSheet(
-                      context: context,
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.sizeOf(context).height * .7,
-                        minHeight: MediaQuery.sizeOf(context).height * .5,
-                      ),
-                      isScrollControlled: true,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      elevation: 0,
-                      builder: (ctx) {
-                        return ProjectReviewScreen(
-                          projectId: project.id!,
-                          fromDetails: false,
-                        );
-                      },
+                    context.push(
+                      '/feed/project/${project.id}/review',
                     );
                   },
             color: projectCardState.isDeleted!
@@ -124,23 +109,9 @@ class ProjectInteractionButtons extends ConsumerWidget {
             onTap: projectCardState.isDeleted!
                 ? null
                 : () {
-                    showModalBottomSheet(
-                      context: context,
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.sizeOf(context).height * .7,
-                        minHeight: MediaQuery.sizeOf(context).height * .5,
-                      ),
-                      isScrollControlled: true,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      elevation: 0,
-                      builder: (ctx) {
-                        return ProjectVettingScreen(
-                          projectId: project.id!,
-                          projectLocations: projectCardState.locations!,
-                          fromDetails: false,
-                        );
-                      },
+                    context.push(
+                      '/feed/project/${project.id}/vet',
+                      extra: project.physicalLocations!,
                     );
                   },
             color: projectCardState.isDeleted!
@@ -195,7 +166,9 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     context: context,
                     builder: (ctx) {
                       return AlertDialog(
-                        contentPadding: const EdgeInsets.only(bottom: 16,),
+                        contentPadding: const EdgeInsets.only(
+                          bottom: 16,
+                        ),
                         content: ShowProjectActions(
                           project: project,
                         ),

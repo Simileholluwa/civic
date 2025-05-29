@@ -10,15 +10,16 @@ class PostCommentCard extends ConsumerWidget {
     super.key,
     required this.postId,
     this.scrollPhysics,
+    this.firstPageProgressIndicator,
   });
 
   final int postId;
   final ScrollPhysics? scrollPhysics;
-
+  final Widget? firstPageProgressIndicator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final commentController= ref.watch(
+    final commentController = ref.watch(
       paginatedPostCommentListProvider(postId).notifier,
     );
     return AppInfiniteList<Post>(
@@ -53,7 +54,6 @@ class PostCommentCard extends ConsumerWidget {
                   );
                 },
                 contentChild: (context, reply) {
-                  
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
                     onReply: () async {
@@ -62,9 +62,7 @@ class PostCommentCard extends ConsumerWidget {
                     isReply: true,
                     hasReplies: reply.commentedBy!.isNotEmpty,
                     onShowReplies: () {
-                      context.push(
-                        '/feed/post/$postId/replies/${reply.id!}'
-                      );
+                      context.push('/feed/post/$postId/replies/${reply.id!}');
                     },
                   );
                 },
@@ -76,6 +74,7 @@ class PostCommentCard extends ConsumerWidget {
         );
       },
       onRefresh: () => commentController.refresh(),
+      firstPageProgressIndicator: firstPageProgressIndicator,
       noItemsFound: ContentNoItemsFound(),
     );
   }

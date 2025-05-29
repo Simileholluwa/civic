@@ -58,19 +58,10 @@ class ProjectReviewsList extends ConsumerWidget {
                   review,
                 ),
               );
-              return liveProjectReview.when(data: (projectReview) {
-                return ProjectReviewCard(
-                  projectReview: projectReview,
-                  projectId: project.id!,
-                );
-              }, error: (_, __) {
-                return ProjectReviewCard(
-                  projectReview: review,
-                  projectId: project.id!,
-                );
-              }, loading: () {
-                return const SizedBox();
-              });
+              return ProjectReviewCard(
+                projectReview: liveProjectReview.value ?? review,
+                projectId: project.id!,
+              );
             },
             onRefresh: pagingControllerNotifier.refresh,
             noItemsFound: Padding(

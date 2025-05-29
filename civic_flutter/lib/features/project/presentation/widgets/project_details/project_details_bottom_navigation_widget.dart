@@ -33,7 +33,7 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     context.push(
-                      '/feed/project/${project.id!}/details/vet',
+                      '/feed/project/${project.id!}/vet',
                       extra: project.physicalLocations,
                     );
                   },
@@ -60,7 +60,7 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
               child: ElevatedButton.icon(
                 onPressed: () {
                   context.push(
-                    '/feed/project/${project.id}/details/review',
+                    '/feed/project/${project.id}/review',
                   );
                 },
                 label: Text(

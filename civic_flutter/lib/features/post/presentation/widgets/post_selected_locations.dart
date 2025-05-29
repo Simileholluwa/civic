@@ -28,7 +28,9 @@ class PostSelectedLocations extends ConsumerWidget {
       return InkWell(
         onTap: showRemoveLocations
             ? () => PostHelperFunctions.selectLocationBottomSheet(
-                context: context, post: post!)
+                  context: context,
+                  post: post!,
+                )
             : null,
         child: Ink(
           height: height,

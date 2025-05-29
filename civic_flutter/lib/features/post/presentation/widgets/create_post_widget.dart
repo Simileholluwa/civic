@@ -38,7 +38,7 @@ class CreatePostWidget extends ConsumerWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [               
+              children: [
                 PostTextField(
                   userName: post.owner!.userInfo!.userName!,
                   controller: postState.controller,
@@ -91,6 +91,29 @@ class CreatePostWidget extends ConsumerWidget {
                       post: parent!,
                       noMaxLines: false,
                       showInteractions: false,
+                    ),
+                  ),
+                if (postState.taggedUsers.isNotEmpty ||
+                    postState.locations.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10,),
+                    child: ContentEngagementTagsAndLocations(
+                      tags: postState.taggedUsers,
+                      locations: postState.locations,
+                      hasTags: postState.taggedUsers.isNotEmpty,
+                      hasLocations: postState.locations.isNotEmpty,
+                      onTaggedUsersTap: () {
+                        PostHelperFunctions.selectLocationBottomSheet(
+                          context: context,
+                          post: post,
+                        );
+                      },
+                      onLocationTap: () {
+                        PostHelperFunctions.selectLocationBottomSheet(
+                          context: context,
+                          post: post,
+                        );
+                      },
                     ),
                   ),
               ],

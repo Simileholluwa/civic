@@ -16,6 +16,7 @@ class PostBottomOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(regularPostProvider(post));
     final postNotifier = ref.watch(regularPostProvider(post).notifier);
+    final showTagLoc = postState.imageUrls.isNotEmpty || postState.videoUrl.isNotEmpty;
     return Container(
       height: 55,
       padding: const EdgeInsets.only(
@@ -27,24 +28,30 @@ class PostBottomOptions extends ConsumerWidget {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  PostHelperFunctions.tagUsersBottomSheet(
-                    context,
-                    post,
-                  );
-                },
-                icon: const Icon(
-                  Iconsax.tag_user5,
+              Visibility(
+                visible: showTagLoc,
+                child: IconButton(
+                  onPressed: () {
+                    PostHelperFunctions.tagUsersBottomSheet(
+                      context,
+                      post,
+                    );
+                  },
+                  icon: const Icon(
+                    Iconsax.tag_user5,
+                  ),
                 ),
               ),
-              IconButton(
-                onPressed: () => PostHelperFunctions.selectLocation(
-                  context,
-                  post,
-                ),
-                icon: const Icon(
-                  Iconsax.location5,
+              Visibility(
+                visible: showTagLoc,
+                child: IconButton(
+                  onPressed: () => PostHelperFunctions.selectLocation(
+                    context,
+                    post,
+                  ),
+                  icon: const Icon(
+                    Iconsax.location5,
+                  ),
                 ),
               ),
               IconButton(

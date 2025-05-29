@@ -21,6 +21,10 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
     pagingController.addStatusListener((status) {
       state = status;
     });
+
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
     return PagingStatus.loadingFirstPage;
   }
 

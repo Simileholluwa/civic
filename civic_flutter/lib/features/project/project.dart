@@ -93,6 +93,7 @@ export 'presentation/widgets/project_screen/project_filter_date_range_picker.dar
 export 'presentation/widgets/project_screen/project_date_filter_chips.dart';
 export 'presentation/widgets/project_screen/project_attachment_filter.dart';
 export 'presentation/widgets/project_screen/project_category_filter.dart';
+export 'presentation/widgets/project_screen/project_card_item.dart';
 export 'presentation/widgets/project_screen/project_cost_filter.dart';
 export 'presentation/widgets/project_screen/project_date_filter.dart';
 export 'presentation/widgets/project_screen/project_filter_buttons.dart';

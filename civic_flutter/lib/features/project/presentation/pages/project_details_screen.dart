@@ -11,12 +11,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
     super.key,
     required this.projectId,
     this.project,
-    this.tab,
   });
 
   final int projectId;
   final Project? project;
-  final String? tab;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +28,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
         data.hasValue ? data.value : null,
       ),
     );
-    final tabController = ref.watch(projectDetailsTabControllerProvider(tab));
+    final tabController = ref.watch(projectDetailsTabControllerProvider);
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
         data.hasValue ? data.value : null,
@@ -148,7 +146,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 5,
             ),
             child: ContentSingleButton(
               onPressed: () {

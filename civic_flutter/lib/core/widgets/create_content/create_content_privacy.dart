@@ -12,33 +12,31 @@ class CreateContentPrivacy extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Ink(
-        padding: const EdgeInsets.only(
-          left: TSizes.md - 2,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: TSizes.sm,
         ),
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(200),
         ),
-        height: 50,
-        width: double.maxFinite,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
-              Iconsax.global5,
-              size: 20,
+              Iconsax.global,
               color: TColors.primary,
+              size: 17,
             ),
-            const SizedBox(
-              width: TSizes.sm,
-            ),
+            const SizedBox(width: 10),
             Text(
-              'Everyone can see this post and reply',
+              'Change privacy',
               style: Theme.of(context).textTheme.labelMedium!.copyWith(
                     color: TColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
+              maxLines: 2,
             ),
           ],
         ),

@@ -37,16 +37,16 @@ class CreatePostScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
-    final isVisibleNotifier = ref.read(
-      appBottomNavigationVisibilityProvider(
-        null,
-      ).notifier,
-    );
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
         postState.videoUrl.isNotEmpty;
     final isRepost = project != null || parent != null;
-
+    final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
+    final isVisibleNotifier = ref.watch(
+      appBottomNavigationVisibilityProvider(
+        null,
+      ).notifier,
+    );
     Future.delayed(
       Duration.zero,
       () => isVisibleNotifier.hide(),
@@ -89,6 +89,7 @@ class CreatePostScreen extends ConsumerWidget {
                         id,
                       );
               },
+              title: CreateContentPrivacy(),
               sendText: isRepost ? 'REPOST' : null,
               onCanSendPost: () async {
                 final shouldPop = canSendPost
@@ -126,14 +127,19 @@ class CreatePostScreen extends ConsumerWidget {
                     )
                   : null,
           bottomNavigationBar: data.when(
-            data: (data) {
-              return PostBottomNavigation(post: data);
+            data: (_) {
+              return scheduledDateTimeState == null
+                  ? null
+                  : SizedBox(
+                      height: 55,
+                      child: const CreateContentSchedule(),
+                    );
             },
             error: (err, st) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 5,
                 ),
                 child: ContentSingleButton(
                   onPressed: () {

@@ -9,6 +9,9 @@ part 'post_video_player_provider.g.dart';
 class PostVideoPlayer extends _$PostVideoPlayer {
   @override
   Raw<VideoPlayerController?> build(String videoUrl) {
+    ref.onDispose(() {
+      state?.dispose();
+    });
     var videoFile = '';
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
     final isUrlVideo = regex.hasMatch(videoUrl);
@@ -48,6 +51,7 @@ class PostVideoPlayer extends _$PostVideoPlayer {
     } else {
       return null;
     }
+    
   }
 
   void pausePlay() {

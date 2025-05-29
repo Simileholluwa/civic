@@ -137,7 +137,7 @@ class ProjectReviewScreen extends ConsumerWidget {
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 5,
             ),
             child: ContentSingleButton(
               onPressed: () {

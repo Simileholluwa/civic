@@ -24,21 +24,10 @@ class ProjectVettingsList extends ConsumerWidget {
             vetting,
           ),
         );
-        return liveProjectVetting.when(
-          data: (projectVetting) {
-            return ProjectVettingCard(
-              projectVetting: projectVetting,
+        return ProjectVettingCard(
+              projectVetting: liveProjectVetting.value ?? vetting,
             );
-          },
-          error: (_, __) {
-            return ProjectVettingCard(
-              projectVetting: vetting,
-            );
-          },
-          loading: () {
-            return const SizedBox.shrink();
-          },
-        );
+        
       },
       onRefresh: pagingControllerNotifier.refresh,
       noItemsFound: Padding(

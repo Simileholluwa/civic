@@ -8,19 +8,6 @@ import 'package:go_router/go_router.dart';
 class PostHelperFunctions {
   PostHelperFunctions._();
 
-  static double getBottomNavigationBarHeight(
-    DateTime? scheduledDateTimeState,
-    List<AWSPlaces> selectedLocations,
-  ) {
-    return scheduledDateTimeState == null && selectedLocations.isEmpty
-        ? 55
-        : scheduledDateTimeState == null && selectedLocations.isNotEmpty
-            ? 105
-            : scheduledDateTimeState != null && selectedLocations.isNotEmpty
-                ? 155
-                : 105;
-  }
-
   static Future<bool?> deletePostDialog(
     BuildContext context,
     PostCardWidget postCardNotifier,

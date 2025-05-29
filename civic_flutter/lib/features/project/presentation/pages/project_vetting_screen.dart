@@ -11,12 +11,10 @@ class ProjectVettingScreen extends ConsumerWidget {
     super.key,
     this.projectLocations,
     required this.projectId,
-    this.fromDetails = true,
   });
 
   final List<AWSPlaces>? projectLocations;
   final int projectId;
-  final bool fromDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +33,6 @@ class ProjectVettingScreen extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(65),
         child: Container(
-          margin: EdgeInsets.only(top: fromDetails ? 0 : 4),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -115,7 +112,7 @@ class ProjectVettingScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 5,
             ),
             child: ContentSingleButton(
               onPressed: () {
@@ -132,7 +129,7 @@ class ProjectVettingScreen extends ConsumerWidget {
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 20,
-              vertical: 10,
+              vertical: 5,
             ),
             child: ContentSingleButton(
               onPressed: () {

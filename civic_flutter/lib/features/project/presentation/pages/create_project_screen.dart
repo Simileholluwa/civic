@@ -119,7 +119,7 @@ class CreateProjectScreen extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 10,
+                  vertical: 5,
                 ),
                 child: ContentSingleButton(
                   onPressed: () {

@@ -72,7 +72,7 @@ class PostCommentScreen extends ConsumerWidget {
       bottomNavigationBar: data.when(
         data: (_) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
               onPressed: () {},
               text: 'Share your opinion',
@@ -86,7 +86,7 @@ class PostCommentScreen extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 10,
+                vertical: 5,
               ),
               child: ContentSingleButton(
                 onPressed: () {
@@ -126,9 +126,7 @@ class PostCommentScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return const Center(
-            child: AppLoadingWidget(),
-          );
+          return AppLoadingWidget();
         },
       ),
     );

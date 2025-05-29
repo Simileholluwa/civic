@@ -39,7 +39,6 @@ export './presentation/state/post_state.dart';
 export './presentation/state/post_card_state.dart';
 export './presentation/widgets/create_post_widget.dart';
 export './presentation/widgets/post_comment_card.dart';
-export './presentation/widgets/post_bottom_navigation.dart';
 export './presentation/widgets/post_bottom_options.dart';
 export './presentation/widgets/post_image_options.dart';
 export './presentation/widgets/post_image_post.dart';

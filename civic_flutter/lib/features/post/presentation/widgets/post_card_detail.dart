@@ -19,12 +19,18 @@ class PostCardDetail extends ConsumerWidget {
   final bool hasProject;
   final VoidCallback? onTap;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postCardState = ref.watch(
-      postCardWidgetProvider(post),
+    final livePost = ref.watch(
+      postStreamProvider(
+        post.id!,
+        post,
+      ),
     );
+    final postCardState = ref.watch(
+      postCardWidgetProvider(livePost.value ?? post),
+    );
+
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -39,7 +45,7 @@ class PostCardDetail extends ConsumerWidget {
             ),
           ),
           PostCardBuild(
-            post: post,
+            post: livePost.value ?? post,
             noMaxLines: false,
           ),
           if (hasProject)
@@ -69,7 +75,10 @@ class PostCardDetail extends ConsumerWidget {
               hasTags: postCardState.hasTags,
               hasLocations: postCardState.hasLocation,
             ),
-          if (showInteractions) PostInteractionButtons(post: post),
+          if (showInteractions)
+            PostInteractionButtons(
+              post: livePost.value ?? post,
+            ),
         ],
       ),
     );

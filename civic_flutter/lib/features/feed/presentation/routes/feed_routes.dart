@@ -47,11 +47,10 @@ class FeedRoutes {
             ]
           ),
           GoRoute(
-            path: 'project/:projectId/:tab',
+            path: 'project/:projectId',
             builder: (_, state) {
               return ProjectDetailsScreen(
                 projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
-                tab: state.pathParameters['tab'],
                 project: state.extra as Project?,
               );
             },

@@ -75,32 +75,11 @@ class ProjectTabController extends _$ProjectTabController {
 @riverpod
 class ProjectDetailsTabController extends _$ProjectDetailsTabController {
   @override
-  Raw<TabController> build(String? tabName) { 
-    int initialPage;
-    if (tabName == null) {
-      initialPage = 0;
-    }
-    switch (tabName) {
-      case 'details':
-        initialPage = 0;
-        break;
-      case 'overview':
-        initialPage = 1;
-        break;
-      case 'reviews':
-        initialPage = 2;
-        break;
-      case 'vettings':
-        initialPage = 3;
-        break;
-      default:
-        initialPage = 0;
-        break;
-    }
+  Raw<TabController> build() { 
     return TabController(
     length: 4,
     vsync: ref.watch(vsyncProvider),
-    initialIndex: initialPage,
+    initialIndex: 0,
   );}
 }
 

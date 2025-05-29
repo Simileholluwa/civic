@@ -75,7 +75,7 @@ class PostRepliesScreen extends ConsumerWidget {
       bottomNavigationBar: data.when(
         data: (_) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
               onPressed: () {},
               text: 'Add a reply',
@@ -89,7 +89,7 @@ class PostRepliesScreen extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 10,
+                vertical: 5,
               ),
               child: ContentSingleButton(
                 onPressed: () {

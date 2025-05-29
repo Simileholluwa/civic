@@ -10,12 +10,17 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
     required this.locations,
     this.hasTags = false,
     this.hasLocations = false,
+    this.onTaggedUsersTap,
+    this.onLocationTap,
   });
 
   final List<UserRecord> tags;
   final List<AWSPlaces> locations;
   final bool hasTags;
   final bool hasLocations;
+  final VoidCallback? onTaggedUsersTap;
+  final VoidCallback? onLocationTap;
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,30 +33,36 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
         spacing: 10,
         children: [
           if (hasTags)
-            ProjectQuickDetailWidget(
-              icon: Iconsax.tag5,
-              title: tags.length == 1
-                  ? 'With ${tags.first.userInfo!.userName}'
-                  : tags.length == 2
-                      ? 'With ${tags.first.userInfo!.userName} and 1 other'
-                      : 'With ${tags.first.userInfo!.userName} and ${tags.length - 1} others',
-              color: Colors.blue,
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontSize: 12,
-                  ),
+            InkWell(
+              onTap: onTaggedUsersTap,
+              child: ProjectQuickDetailWidget(
+                icon: Iconsax.tag5,
+                title: tags.length == 1
+                    ? 'With ${tags.first.userInfo!.userName}'
+                    : tags.length == 2
+                        ? 'With ${tags[0].userInfo!.userName} and ${tags[1].userInfo!.userName}'
+                        : 'With ${tags.first.userInfo!.userName} and ${tags.length - 1} others',
+                color: Colors.blue,
+                textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontSize: 12,
+                    ),
+              ),
             ),
           if (hasLocations)
-            ProjectQuickDetailWidget(
-              icon: Iconsax.location5,
-              title: locations.length == 1
-                  ? 'At ${locations.first.place}'
-                  : tags.length == 2
-                      ? 'At ${locations.first.place} and 1 other'
-                      : 'At ${locations.first.place} and ${locations.length - 1} others',
-              color: Colors.orange,
-              textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontSize: 12,
-                  ),
+            InkWell(
+              onTap: onLocationTap,
+              child: ProjectQuickDetailWidget(
+                icon: Iconsax.location5,
+                title: locations.length == 1
+                    ? 'At ${locations.first.place}'
+                    : tags.length == 2
+                        ? 'At ${locations.first.place} and 1 other'
+                        : 'At ${locations.first.place} and ${locations.length - 1} others',
+                color: Colors.orange,
+                textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontSize: 12,
+                    ),
+              ),
             ),
         ],
       ),

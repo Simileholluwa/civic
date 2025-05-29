@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PostDetailScreen extends ConsumerWidget {
   const PostDetailScreen({
@@ -20,15 +21,6 @@ class PostDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isVisibleNotifier = ref.read(
-      appBottomNavigationVisibilityProvider(
-        null,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.hide(),
-    );
     final data = post == null
         ? ref.watch(
             postDetailProvider(
@@ -108,7 +100,9 @@ class PostDetailScreen extends ConsumerWidget {
                               ? Icons.person_remove_alt_1_rounded
                               : Icons.person_add_alt_rounded,
                           size: 27,
-                          color: !postCardState.isFollower ? TColors.primary: null,
+                          color: !postCardState.isFollower
+                              ? TColors.primary
+                              : null,
                         ),
                       ),
                     const SizedBox(
@@ -156,9 +150,7 @@ class PostDetailScreen extends ConsumerWidget {
                         ),
                         if (likesCount > 0)
                           Text(
-                            likesCount == 1
-                                ? '$likes like'
-                                : '$likes likes',
+                            likesCount == 1 ? '$likes like' : '$likes likes',
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium!
@@ -185,6 +177,17 @@ class PostDetailScreen extends ConsumerWidget {
                   ),
                   PostCommentCard(
                     postId: data.id!,
+                    firstPageProgressIndicator: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                      ),
+                      child: Center(
+                        child: LoadingAnimationWidget.progressiveDots(
+                          color: TColors.primary,
+                          size: 50,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -214,7 +217,7 @@ class PostDetailScreen extends ConsumerWidget {
             return null;
           } else {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ContentSingleButton(
                 onPressed: () {},
                 text: 'Share your opinion',
@@ -230,7 +233,7 @@ class PostDetailScreen extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 10,
+                vertical: 5,
               ),
               child: ContentSingleButton(
                 onPressed: () {
