@@ -68,7 +68,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> getComment({
+  Future<Either<Failure, Post>> getComment({
     required int commentId,
     required bool isComment,
   }) async {
@@ -214,10 +214,12 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, void>> markNotInterested({
     required int id,
+    required String reason,
   }) async {
     try {
       final result = await _remoteDatabase.markNotInterested(
         id: id,
+        reason: reason,
       );
       return Right(result);
     } on ServerException catch (e) {

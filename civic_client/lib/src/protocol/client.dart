@@ -279,11 +279,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<void> getComment(
+  _i2.Future<_i8.Post> getComment(
     int commentId,
     bool isComment,
   ) =>
-      caller.callServerEndpoint<void>(
+      caller.callServerEndpoint<_i8.Post>(
         'post',
         'getComment',
         {
@@ -378,11 +378,17 @@ class EndpointPost extends _i1.EndpointRef {
         {'postId': postId},
       );
 
-  _i2.Future<void> markNotInterested(int postId) =>
+  _i2.Future<void> markNotInterested(
+    int postId,
+    String reason,
+  ) =>
       caller.callServerEndpoint<void>(
         'post',
         'markNotInterested',
-        {'postId': postId},
+        {
+          'postId': postId,
+          'reason': reason,
+        },
       );
 
   _i2.Future<_i10.UserRecord> authUser() =>

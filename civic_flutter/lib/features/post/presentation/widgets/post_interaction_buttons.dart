@@ -3,16 +3,21 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PostInteractionButtons extends ConsumerWidget {
   const PostInteractionButtons({
     super.key,
     required this.post,
+    this.hasPadding = true,
+    this.onReply,
+    this.replyIcon1 = Iconsax.message,
   });
 
   final Post post;
+  final bool hasPadding;
+  final VoidCallback? onReply;
+  final IconData replyIcon1;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +28,7 @@ class PostInteractionButtons extends ConsumerWidget {
       postCardWidgetProvider(post).notifier,
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+      padding: hasPadding ? const EdgeInsets.fromLTRB(12, 0, 12, 10) : EdgeInsets.zero,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -41,17 +46,10 @@ class PostInteractionButtons extends ConsumerWidget {
             text: postCardState.numberOfLikes,
           ),
           ContentInteractionButton(
-            icon:
-                postCardState.hasCommented ? Iconsax.message5 : Iconsax.message,
+            icon: replyIcon1,
             text: postCardState.numberOfComments,
-            onTap: () async {
-              context.push(
-                '/feed/post/${post.id}/comments',
-              );
-            },
-            color: postCardState.hasCommented == true
-                ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
+            onTap: onReply,
+            color: Theme.of(context).iconTheme.color!,
           ),
           ContentInteractionButton(
             icon: postCardState.hasBookmarked
@@ -69,7 +67,6 @@ class PostInteractionButtons extends ConsumerWidget {
           ),
           ContentInteractionButton(
             icon: Icons.share,
-            text: postCardState.numberOfReposts,
             showText: false,
             onTap: () {},
             color: Theme.of(context).colorScheme.onSurface,

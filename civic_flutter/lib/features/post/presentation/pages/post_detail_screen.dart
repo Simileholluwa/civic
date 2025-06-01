@@ -132,6 +132,7 @@ class PostDetailScreen extends ConsumerWidget {
                     showInteractions: false,
                     hasProject: data.project != null,
                     onTap: null,
+                    noMaxLines: true,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -219,7 +220,14 @@ class PostDetailScreen extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ContentSingleButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(
+                    '/create/post/0',
+                    extra: {
+                      'parent': data,
+                    }
+                  );
+                },
                 text: 'Share your opinion',
                 buttonIcon: Iconsax.magicpen5,
               ),

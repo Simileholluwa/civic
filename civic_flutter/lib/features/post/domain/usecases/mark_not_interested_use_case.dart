@@ -9,8 +9,9 @@ class MarkPostNotInterestedUseCase implements UseCase<void, MarkPostNotIntereste
 
   @override
   Future<Either<Failure, void>> call(MarkPostNotInterestedParams params) async {
-    final result = await _postRepository.toggleBookmark(
+    final result = await _postRepository.markNotInterested(
       id: params.id,
+      reason: params.reason,
     );
     return result;
   }
@@ -19,6 +20,8 @@ class MarkPostNotInterestedUseCase implements UseCase<void, MarkPostNotIntereste
 class MarkPostNotInterestedParams {
   MarkPostNotInterestedParams(
     this.id,
+    this.reason,
   );
   final int id;
+  final String reason;
 }

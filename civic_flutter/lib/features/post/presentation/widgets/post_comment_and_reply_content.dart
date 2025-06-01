@@ -1,8 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 
-class PostCommentAndReplyContent extends StatelessWidget {
+class PostCommentAndReplyContent extends ConsumerWidget {
   const PostCommentAndReplyContent({
     super.key,
     required this.replyOrComment,
@@ -21,7 +23,13 @@ class PostCommentAndReplyContent extends StatelessWidget {
   final VoidCallback? onShowReplies;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final livePost = ref.watch(
+      postStreamProvider(
+        replyOrComment.id!,
+        replyOrComment,
+      ),
+    );
     return Column(
       spacing: 10,
       mainAxisSize: MainAxisSize.min,
@@ -50,50 +58,11 @@ class PostCommentAndReplyContent extends StatelessWidget {
                   imageUrls: replyOrComment.imageUrls!,
                   useMargin: false,
                 ),
-        Row(
-          spacing: 10,
-          children: [
-            Row(
-              spacing: 10,
-              children: [
-                GestureDetector(
-                  onTap: onLike,
-                  child: Text(
-                    'Like',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                ),
-                const Text('•'),
-                GestureDetector(
-                  onTap: onReply,
-                  child: Text(
-                    'Reply',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            if (hasReplies)
-              Row(
-                spacing: 10,
-                children: [
-                  const Text('•'),
-                  GestureDetector(
-                    onTap: onShowReplies,
-                    child: Text(
-                      'Show Replies',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-          ],
+        PostInteractionButtons(
+          post: livePost.value ?? replyOrComment,
+          hasPadding: false,
+          onReply: onReply,
+          replyIcon1: Icons.reply_rounded,
         ),
       ],
     );

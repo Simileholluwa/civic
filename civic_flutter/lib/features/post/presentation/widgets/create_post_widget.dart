@@ -9,6 +9,7 @@ class CreatePostWidget extends ConsumerWidget {
   const CreatePostWidget({
     super.key,
     required this.post,
+    required this.isReplyOrComment,
     this.project,
     this.parent,
   });
@@ -16,6 +17,7 @@ class CreatePostWidget extends ConsumerWidget {
   final Post post;
   final Project? project;
   final Post? parent;
+  final bool isReplyOrComment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +29,7 @@ class CreatePostWidget extends ConsumerWidget {
       children: [
         PostBottomOptions(
           post: post,
+          isReplyOrComment: isReplyOrComment, 
         ),
         const Divider(
           height: 0,
@@ -71,26 +74,6 @@ class CreatePostWidget extends ConsumerWidget {
                       canTap: false,
                       showInteractions: false,
                       maxHeight: 200,
-                    ),
-                  ),
-                if (parent != null)
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    padding: const EdgeInsets.only(
-                      bottom: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        TSizes.md,
-                      ),
-                      border: Border.all(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                    child: PostCard(
-                      post: parent!,
-                      noMaxLines: false,
-                      showInteractions: false,
                     ),
                   ),
                 if (postState.taggedUsers.isNotEmpty ||

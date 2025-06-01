@@ -444,40 +444,54 @@ class RegularPost extends _$RegularPost {
   }
 
   Future<void> sendComment(int postId) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveComment = ref.read(savePostCommentProvider);
+    final sentImages = await sendMediaImages(postId);
+    if (!sentImages) return;
     final result = await saveComment(
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: 'Third comment for post $postId',
+          text: state.text,
+          imageUrls: state.imageUrls,
+          locations: state.locations,
+          taggedUsers: state.taggedUsers,
           parentId: postId,
         ),
         false,
       ),
     );
     result.fold((l) {
-      log(l.message);
+      TToastMessages.errorToast(l.message);
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
     }, (r) {
-      final commentPagingControllerNotifier = ref.watch(
+      TToastMessages.successToast('Your comment has been sent.');
+      ref.watch(
         paginatedPostCommentListProvider(postId).notifier,
-      );
-      commentPagingControllerNotifier.addComment(r!);
+      ).addComment(r!);
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
     });
   }
 
   Future<void> sendReply(
     int parentId,
   ) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveReply = ref.read(
       savePostCommentProvider,
     );
+    final sentImages = await sendMediaImages(parentId);
+    if (!sentImages) return;
     final result = await saveReply(
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: 'Third reply to comment $parentId',
+          text: state.text,
+          imageUrls: state.imageUrls,
+          locations: state.locations,
+          taggedUsers: state.taggedUsers,
           parentId: parentId,
         ),
         true,
@@ -485,15 +499,15 @@ class RegularPost extends _$RegularPost {
     );
     result.fold(
       (l) {
-        log(l.message);
+        TToastMessages.errorToast(l.message);
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
       },
       (r) {
-        if (r != null) {
-          //TODO: Update the comment replies provider to add the reply
-          // ref
-          //     .read(postCommentRepliesProvider.notifier)
-          //     .addReply(parentId, r);
-        }
+        TToastMessages.successToast('Your reply has been sent.');
+        ref
+            .read(paginatedPostCommentRepliesListProvider(parentId).notifier)
+            .addReply(r!);
+        ref.read(sendPostLoadingProvider.notifier).setValue(false);
       },
     );
   }

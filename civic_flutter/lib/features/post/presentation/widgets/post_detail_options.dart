@@ -36,9 +36,7 @@ class PostDetailOptions extends ConsumerWidget {
             );
           },
           icon: Icon(
-            postCardState.hasLiked
-                ? Iconsax.heart5
-                : Iconsax.heart,
+            postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
             color: postCardState.hasLiked
                 ? TColors.primary
                 : Theme.of(context).iconTheme.color!,
@@ -67,7 +65,11 @@ class PostDetailOptions extends ConsumerWidget {
         ),
         if (postCardState.isOwner)
           IconButton(
-            onPressed: () async {},
+            onPressed: () async {
+              context.push(
+                '/create/post/${post.id}',
+              );
+            },
             icon: Icon(
               Iconsax.edit,
             ),
@@ -78,15 +80,10 @@ class PostDetailOptions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
-              final result =
-                  await postCardNotifier.markPostNotInterested(
-                post.id!,
+              context.push(
+                '/feed/post/${post.id}/notInterested',
+                extra: post,
               );
-              if (result) {
-                TToastMessages.infoToast(
-                  'You will no longer see this post in your feed',
-                );
-              }
             },
             icon: Icon(
               Iconsax.eye_slash,
@@ -95,12 +92,11 @@ class PostDetailOptions extends ConsumerWidget {
         if (postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              await postCardNotifier.deletePost(
+              await PostHelperFunctions.deletePostDialog(
+                context,
+                postCardNotifier,
                 post.id!,
               );
-              if (context.mounted) {
-                context.pop();
-              }
             },
             icon: Icon(
               Iconsax.trash,

@@ -11,7 +11,7 @@ abstract class PostRepository {
     required DateTime dateTime,
   });
   Future<Either<Failure, void>> savePostDraft({required Post post});
-  Future<Either<Failure, void>> getComment({
+  Future<Either<Failure, Post>> getComment({
     required int commentId,
     required bool isComment,
   });
@@ -29,7 +29,7 @@ abstract class PostRepository {
 
   Future<Either<Failure, void>> toggleLike({required int id});
   Future<Either<Failure, void>> toggleBookmark({required int id});
-  Future<Either<Failure, void>> markNotInterested({required int id});
+  Future<Either<Failure, void>> markNotInterested({required int id, required String reason,});
   Future<Either<Failure, void>> deletePost({required int id});
   Future<Either<Failure, void>> deletePostComment({required int id});
   Future<Either<Failure, int>> toggleCommentLike({required int id});

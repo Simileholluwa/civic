@@ -41,9 +41,7 @@ class PostEndpoint extends Endpoint {
               owner: user,
               postType: PostType.regular,
               likedBy: [],
-              commentedBy: [],
               bookmarkedBy: [],
-              quotedBy: [],
             ),
             transaction: transaction,
           );
@@ -100,10 +98,6 @@ class PostEndpoint extends Endpoint {
             await updatePost(
               session,
               parent.copyWith(
-                commentedBy: {
-                  ...parent.commentedBy!,
-                  user.userInfoId,
-                }.toList(),
                 commentCount: parent.commentCount! + 1,
               ),
             );
@@ -117,7 +111,7 @@ class PostEndpoint extends Endpoint {
             postType: isReply ? PostType.commentReply : PostType.comment,
             dateCreated: DateTime.now(),
             likedBy: [],
-            commentedBy: [],
+            bookmarkedBy: [],
           ),
         );
       }
@@ -142,16 +136,26 @@ class PostEndpoint extends Endpoint {
         message: 'Invalid pagination parameters',
       );
     }
+    final user = await authUser(session);
+    final ignored = await PostNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.postId).toSet();
     final count = await Post.db.count(
       session,
       where: (t) =>
-          t.parentId.equals(postId) & t.postType.equals(PostType.comment),
+          t.parentId.equals(postId) &
+          t.postType.equals(PostType.comment) &
+          t.id.notInSet(ignoredIds),
     );
 
     final results = await Post.db.find(
       session,
       where: (t) =>
-          t.parentId.equals(postId) & t.postType.equals(PostType.comment),
+          t.parentId.equals(postId) &
+          t.postType.equals(PostType.comment) &
+          t.id.notInSet(ignoredIds),
       limit: limit,
       offset: (page * limit) - limit,
       orderBy: (t) => t.dateCreated,
@@ -181,7 +185,7 @@ class PostEndpoint extends Endpoint {
     return;
   }
 
-  Future<void> getComment(
+  Future<Post> getComment(
     Session session,
     int commentId,
     bool isComment,
@@ -189,6 +193,11 @@ class PostEndpoint extends Endpoint {
     final comment = await Post.db.findById(
       session,
       commentId,
+      include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
     );
 
     if (comment == null) {
@@ -198,6 +207,8 @@ class PostEndpoint extends Endpoint {
             : 'This reply does not exist. It may have been deleted.',
       );
     }
+
+    return comment;
   }
 
   Future<PostList> getPostCommentReplies(
@@ -212,18 +223,27 @@ class PostEndpoint extends Endpoint {
       );
     }
 
+    final user = await authUser(session);
+    final ignored = await PostNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.postId).toSet();
+
     final count = await Post.db.count(
       session,
       where: (t) =>
           t.parentId.equals(commentId) &
-          t.postType.equals(PostType.commentReply),
+          t.postType.equals(PostType.commentReply) &
+          t.id.notInSet(ignoredIds),
     );
 
     final results = await Post.db.find(
       session,
       where: (t) =>
           t.parentId.equals(commentId) &
-          t.postType.equals(PostType.commentReply),
+          t.postType.equals(PostType.commentReply) &
+          t.id.notInSet(ignoredIds),
       limit: limit,
       offset: (page * limit) - limit,
       orderBy: (t) => t.dateCreated,
@@ -331,8 +351,6 @@ class PostEndpoint extends Endpoint {
           quotedOrRepostedFromUserId: user.id,
           dateCreated: DateTime.now(),
           likedBy: [],
-          commentedBy: [],
-          quotedBy: [],
           bookmarkedBy: [],
         );
 
@@ -417,18 +435,26 @@ class PostEndpoint extends Endpoint {
         message: 'Invalid pagination parameters',
       );
     }
-    final count = await Post.db.count(session,
-        where: (t) =>
-            t.postType.equals(PostType.regular) |
-            t.postType.equals(PostType.postRepost) |
-            t.postType.equals(PostType.projectRepost));
+    final user = await authUser(session);
+    final ignored = await PostNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.postId).toSet();
+    final count = await Post.db.count(
+      session,
+      where: (t) => (t.postType.equals(PostType.regular) |
+          t.postType.equals(PostType.postRepost) |
+          t.postType.equals(PostType.projectRepost) &
+              t.id.notInSet(ignoredIds)),
+    );
     final results = await Post.db.find(
       session,
       limit: limit,
-      where: (t) =>
-          t.postType.equals(PostType.regular) |
+      where: (t) => (t.postType.equals(PostType.regular) |
           t.postType.equals(PostType.postRepost) |
-          t.postType.equals(PostType.projectRepost),
+          t.postType.equals(PostType.projectRepost) &
+              t.id.notInSet(ignoredIds)),
       offset: (page * limit) - limit,
       include: Post.include(
         owner: UserRecord.include(
@@ -483,6 +509,23 @@ class PostEndpoint extends Endpoint {
       throw PostException(
         message: 'Post not found',
       );
+    }
+
+    if (post.postType == PostType.comment ||
+        post.postType == PostType.commentReply) {
+      final parent = await Post.db.findById(
+        session,
+        post.parentId!,
+      );
+      if (parent != null) {
+        parent.commentCount = parent.commentCount! - 1;
+        await updatePost(
+          session,
+          parent.copyWith(
+            commentCount: parent.commentCount,
+          ),
+        );
+      }
     }
 
     await Post.db.deleteRow(
@@ -620,12 +663,14 @@ class PostEndpoint extends Endpoint {
   Future<void> markNotInterested(
     Session session,
     int postId,
+    String reason,
   ) async {
     try {
       final user = await authUser(session);
       final entry = PostNotInterested(
         userId: user.id!,
         postId: postId,
+        reason: reason,
       );
 
       await PostNotInterested.db.insertRow(

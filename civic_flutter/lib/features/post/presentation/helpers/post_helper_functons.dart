@@ -24,12 +24,13 @@ class PostHelperFunctions {
       skipButtonLoading: false,
       skipText: 'Cancel',
       onTapActiveButton: () async {
-        await postCardNotifier.deletePost(
-          postId,
-        );
         if (context.mounted) {
           context.pop();
         }
+        await postCardNotifier.deletePost(
+          postId,
+        );
+        
       },
     );
   }

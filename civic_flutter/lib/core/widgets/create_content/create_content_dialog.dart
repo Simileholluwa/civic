@@ -12,25 +12,18 @@ Future<bool?> postDialog({
   required bool skipButtonLoading,
   required VoidCallback onTapActiveButton,
   required String skipText,
-  double height = 283,
 }) {
   return showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              TSizes.sm,
-            ),
-          ),
-          elevation: 8,
-          content: SizedBox(
-            height: height,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              
-              children: [
-                Row(
+          contentPadding: const EdgeInsets.only(bottom: 16,),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,          
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -49,42 +42,34 @@ Future<bool?> postDialog({
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: TSizes.md,
+              ),
+              const Divider(
+                height: 0,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 30,
+                  children: [
+                    Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.left,
+                    ),
+                  
+                    AppDualButton(
+                      onTapActiveButton: onTapActiveButton,
+                      activeButtonText: activeButtonText,
+                      activeButtonLoading: activeButtonLoading,
+                      onTapSkipButton: onTapSkipButton,
+                      skipButtonLoading: skipButtonLoading,
+                      skipText: skipText,
+                    ),
+                  ],
                 ),
-                const Divider(
-                  height: 0,
-                ),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: TSizes.sm + 4,
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: TSizes.md,
-                      ),
-                      Text(
-                        description,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.left,
-                      ),
-                      const SizedBox(
-                        height: TSizes.spaceBtwSections,
-                      ),
-                      AppDualButton(
-                        onTapActiveButton: onTapActiveButton,
-                        activeButtonText: activeButtonText,
-                        activeButtonLoading: activeButtonLoading,
-                        onTapSkipButton: onTapSkipButton,
-                        skipButtonLoading: skipButtonLoading,
-                        skipText: skipText,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       });

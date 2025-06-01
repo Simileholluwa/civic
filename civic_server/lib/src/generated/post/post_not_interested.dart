@@ -24,6 +24,7 @@ abstract class PostNotInterested
     required this.postId,
     this.post,
     DateTime? dateMarked,
+    required this.reason,
   }) : dateMarked = dateMarked ?? DateTime.now();
 
   factory PostNotInterested({
@@ -33,6 +34,7 @@ abstract class PostNotInterested
     required int postId,
     _i3.Post? post,
     DateTime? dateMarked,
+    required String reason,
   }) = _PostNotInterestedImpl;
 
   factory PostNotInterested.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -51,6 +53,7 @@ abstract class PostNotInterested
       dateMarked: jsonSerialization['dateMarked'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['dateMarked']),
+      reason: jsonSerialization['reason'] as String,
     );
   }
 
@@ -71,6 +74,8 @@ abstract class PostNotInterested
 
   DateTime? dateMarked;
 
+  String reason;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -84,6 +89,7 @@ abstract class PostNotInterested
     int? postId,
     _i3.Post? post,
     DateTime? dateMarked,
+    String? reason,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,6 +100,7 @@ abstract class PostNotInterested
       'postId': postId,
       if (post != null) 'post': post?.toJson(),
       if (dateMarked != null) 'dateMarked': dateMarked?.toJson(),
+      'reason': reason,
     };
   }
 
@@ -106,6 +113,7 @@ abstract class PostNotInterested
       'postId': postId,
       if (post != null) 'post': post?.toJsonForProtocol(),
       if (dateMarked != null) 'dateMarked': dateMarked?.toJson(),
+      'reason': reason,
     };
   }
 
@@ -155,6 +163,7 @@ class _PostNotInterestedImpl extends PostNotInterested {
     required int postId,
     _i3.Post? post,
     DateTime? dateMarked,
+    required String reason,
   }) : super._(
           id: id,
           userId: userId,
@@ -162,6 +171,7 @@ class _PostNotInterestedImpl extends PostNotInterested {
           postId: postId,
           post: post,
           dateMarked: dateMarked,
+          reason: reason,
         );
 
   /// Returns a shallow copy of this [PostNotInterested]
@@ -175,6 +185,7 @@ class _PostNotInterestedImpl extends PostNotInterested {
     int? postId,
     Object? post = _Undefined,
     Object? dateMarked = _Undefined,
+    String? reason,
   }) {
     return PostNotInterested(
       id: id is int? ? id : this.id,
@@ -183,6 +194,7 @@ class _PostNotInterestedImpl extends PostNotInterested {
       postId: postId ?? this.postId,
       post: post is _i3.Post? ? post : this.post?.copyWith(),
       dateMarked: dateMarked is DateTime? ? dateMarked : this.dateMarked,
+      reason: reason ?? this.reason,
     );
   }
 }
@@ -203,6 +215,10 @@ class PostNotInterestedTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
+    reason = _i1.ColumnString(
+      'reason',
+      this,
+    );
   }
 
   late final _i1.ColumnInt userId;
@@ -214,6 +230,8 @@ class PostNotInterestedTable extends _i1.Table<int?> {
   _i3.PostTable? _post;
 
   late final _i1.ColumnDateTime dateMarked;
+
+  late final _i1.ColumnString reason;
 
   _i2.UserRecordTable get user {
     if (_user != null) return _user!;
@@ -247,6 +265,7 @@ class PostNotInterestedTable extends _i1.Table<int?> {
         userId,
         postId,
         dateMarked,
+        reason,
       ];
 
   @override

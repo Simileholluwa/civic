@@ -22,6 +22,7 @@ export './presentation/helpers/post_helper_functons.dart';
 export './presentation/pages/create_post_screen.dart';
 export './presentation/pages/post_detail_screen.dart';
 export './presentation/pages/post_locations_screen.dart';
+export './presentation/pages/mark_post_not_interested.dart';
 export './presentation/pages/post_tag_users_screen.dart';
 export './presentation/pages/posts_screen.dart';
 export 'presentation/pages/post_replies_screen.dart';

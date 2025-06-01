@@ -5,7 +5,7 @@ fields:
     postType: PostType?
     text: String?
     imageUrls: List<String>?
-    videoUrl: String?
+    videoUrl: String?, default=''
     taggedUsers: List<UserRecord>?
     locations: List<AWSPlaces>?
     mentions: List<UserRecord>?
@@ -14,11 +14,8 @@ fields:
     updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)
     likedBy: List<int>?
-    commentedBy: List<int>?
     bookmarkedBy: List<int>?
-    quotedBy: List<int>?
     commentCount: int?, default=0
-    quoteCount: int?, default=0
     project: Project?, relation(optional, onDelete=NoAction)
     parent: Post?, relation(optional, onDelete=SetNull,)
     quotedOrRepostedFromUser: UserRecord?, relation(optional)

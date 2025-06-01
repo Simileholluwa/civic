@@ -6,7 +6,7 @@ part of 'post_comment_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getPostCommentHash() => r'824cc9e90999fcfc96292be13d6e679c4e4dcb9e';
+String _$getPostCommentHash() => r'8638f0ff1b75256729b19fff8a6f83aa22c8a63c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const getPostCommentProvider = GetPostCommentFamily();
 
 /// See also [getPostComment].
-class GetPostCommentFamily extends Family<AsyncValue<void>> {
+class GetPostCommentFamily extends Family<AsyncValue<Post>> {
   /// See also [getPostComment].
   const GetPostCommentFamily();
 
@@ -75,7 +75,7 @@ class GetPostCommentFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [getPostComment].
-class GetPostCommentProvider extends AutoDisposeFutureProvider<void> {
+class GetPostCommentProvider extends AutoDisposeFutureProvider<Post> {
   /// See also [getPostComment].
   GetPostCommentProvider(
     int commentId,
@@ -115,7 +115,7 @@ class GetPostCommentProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(GetPostCommentRef provider) create,
+    FutureOr<Post> Function(GetPostCommentRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -133,7 +133,7 @@ class GetPostCommentProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Post> createElement() {
     return _GetPostCommentProviderElement(this);
   }
 
@@ -156,7 +156,7 @@ class GetPostCommentProvider extends AutoDisposeFutureProvider<void> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetPostCommentRef on AutoDisposeFutureProviderRef<void> {
+mixin GetPostCommentRef on AutoDisposeFutureProviderRef<Post> {
   /// The parameter `commentId` of this provider.
   int get commentId;
 
@@ -165,7 +165,7 @@ mixin GetPostCommentRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _GetPostCommentProviderElement
-    extends AutoDisposeFutureProviderElement<void> with GetPostCommentRef {
+    extends AutoDisposeFutureProviderElement<Post> with GetPostCommentRef {
   _GetPostCommentProviderElement(super.provider);
 
   @override

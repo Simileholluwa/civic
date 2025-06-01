@@ -59,12 +59,24 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
   }
 
   void addComment(Post comment) {
+    if (pagingController.itemList == null) {
+      refresh();
+      return;
+    }
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: [comment, ...pagingController.itemList ?? []],
     );
-    if (pagingController.itemList == null) {
-      refresh();
+  }
+
+  void removeCommentById(int? commentId) {
+    if (pagingController.itemList != null && commentId != null) {
+      final updatedList = List<Post>.from(pagingController.itemList ?? []);
+      updatedList.removeWhere((element) => element.id == commentId);
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: updatedList,
+      );
     }
   }
 }

@@ -8,15 +8,18 @@ import 'package:iconsax/iconsax.dart';
 class PostBottomOptions extends ConsumerWidget {
   const PostBottomOptions({
     super.key,
-     required this.post,
+    required this.post,
+    this.isReplyOrComment = false,
   });
   final Post post;
+  final bool isReplyOrComment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(regularPostProvider(post));
     final postNotifier = ref.watch(regularPostProvider(post).notifier);
-    final showTagLoc = postState.imageUrls.isNotEmpty || postState.videoUrl.isNotEmpty;
+    final showTagLoc =
+        postState.imageUrls.isNotEmpty || postState.videoUrl.isNotEmpty;
     return Container(
       height: 55,
       padding: const EdgeInsets.only(
@@ -54,48 +57,57 @@ class PostBottomOptions extends ConsumerWidget {
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  THelperFunctions.showScheduleDialog(
-                    context,
-                  );
-                },
-                icon: const Icon(
-                  Icons.timer,
+              Visibility(
+                visible: !isReplyOrComment,
+                child: IconButton(
+                  onPressed: () {
+                    THelperFunctions.showScheduleDialog(
+                      context,
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.timer,
+                  ),
                 ),
               ),
-                IconButton(
-                  onPressed: postNotifier.pickPicture,
-                  icon: const Icon(
-                    Iconsax.gallery5,
-                  ),
+              IconButton(
+                onPressed: postNotifier.pickPicture,
+                icon: const Icon(
+                  Iconsax.gallery5,
                 ),
-                IconButton(
-                  onPressed: postNotifier.takePicture,
-                  icon: const Icon(
-                    Iconsax.camera5,
-                  ),
+              ),
+              IconButton(
+                onPressed: postNotifier.takePicture,
+                icon: const Icon(
+                  Iconsax.camera5,
                 ),
-                IconButton(
+              ),
+              Visibility(
+                visible: !isReplyOrComment,
+                child: IconButton(
                   onPressed: postNotifier.takeVideo,
                   icon: const Icon(
                     Icons.video_camera_front_rounded,
                   ),
                 ),
-                IconButton(
+              ),
+              Visibility(
+                visible: !isReplyOrComment,
+                child: IconButton(
                   onPressed: postNotifier.pickVideo,
                   icon: const Icon(
                     Icons.video_file_rounded,
                   ),
                 ),
+              ),
             ],
           ),
-           Padding(
+          Padding(
             padding: const EdgeInsets.only(
               right: TSizes.sm,
             ),
             child: CreatContentTextCounter(
-              maxLength: 2500,
+              maxLength: isReplyOrComment ? 400 : 2500,
               currentTextLength: postState.text.length,
             ),
           ),

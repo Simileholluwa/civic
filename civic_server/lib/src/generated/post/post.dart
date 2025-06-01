@@ -27,7 +27,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.postType,
     this.text,
     this.imageUrls,
-    this.videoUrl,
+    String? videoUrl,
     this.taggedUsers,
     this.locations,
     this.mentions,
@@ -36,11 +36,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.updatedAt,
     this.hashtags,
     this.likedBy,
-    this.commentedBy,
     this.bookmarkedBy,
-    this.quotedBy,
     int? commentCount,
-    int? quoteCount,
     this.projectId,
     this.project,
     this.parentId,
@@ -48,9 +45,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.quotedOrRepostedFromUserId,
     this.quotedOrRepostedFromUser,
     bool? isDeleted,
-  })  : dateCreated = dateCreated ?? DateTime.now(),
+  })  : videoUrl = videoUrl ?? '',
+        dateCreated = dateCreated ?? DateTime.now(),
         commentCount = commentCount ?? 0,
-        quoteCount = quoteCount ?? 0,
         isDeleted = isDeleted ?? false;
 
   factory Post({
@@ -69,11 +66,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentedBy,
     List<int>? bookmarkedBy,
-    List<int>? quotedBy,
     int? commentCount,
-    int? quoteCount,
     int? projectId,
     _i6.Project? project,
     int? parentId,
@@ -124,17 +118,10 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      commentedBy: (jsonSerialization['commentedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      quotedBy: (jsonSerialization['quotedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       commentCount: jsonSerialization['commentCount'] as int?,
-      quoteCount: jsonSerialization['quoteCount'] as int?,
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
@@ -192,15 +179,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   List<int>? likedBy;
 
-  List<int>? commentedBy;
-
   List<int>? bookmarkedBy;
 
-  List<int>? quotedBy;
-
   int? commentCount;
-
-  int? quoteCount;
 
   int? projectId;
 
@@ -238,11 +219,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentedBy,
     List<int>? bookmarkedBy,
-    List<int>? quotedBy,
     int? commentCount,
-    int? quoteCount,
     int? projectId,
     _i6.Project? project,
     int? parentId,
@@ -273,11 +251,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentedBy != null) 'commentedBy': commentedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (commentCount != null) 'commentCount': commentCount,
-      if (quoteCount != null) 'quoteCount': quoteCount,
       if (projectId != null) 'projectId': projectId,
       if (project != null) 'project': project?.toJson(),
       if (parentId != null) 'parentId': parentId,
@@ -314,11 +289,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (commentedBy != null) 'commentedBy': commentedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (commentCount != null) 'commentCount': commentCount,
-      if (quoteCount != null) 'quoteCount': quoteCount,
       if (projectId != null) 'projectId': projectId,
       if (project != null) 'project': project?.toJsonForProtocol(),
       if (parentId != null) 'parentId': parentId,
@@ -393,11 +365,8 @@ class _PostImpl extends Post {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
-    List<int>? commentedBy,
     List<int>? bookmarkedBy,
-    List<int>? quotedBy,
     int? commentCount,
-    int? quoteCount,
     int? projectId,
     _i6.Project? project,
     int? parentId,
@@ -421,11 +390,8 @@ class _PostImpl extends Post {
           updatedAt: updatedAt,
           hashtags: hashtags,
           likedBy: likedBy,
-          commentedBy: commentedBy,
           bookmarkedBy: bookmarkedBy,
-          quotedBy: quotedBy,
           commentCount: commentCount,
-          quoteCount: quoteCount,
           projectId: projectId,
           project: project,
           parentId: parentId,
@@ -455,11 +421,8 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likedBy = _Undefined,
-    Object? commentedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
-    Object? quotedBy = _Undefined,
     Object? commentCount = _Undefined,
-    Object? quoteCount = _Undefined,
     Object? projectId = _Undefined,
     Object? project = _Undefined,
     Object? parentId = _Undefined,
@@ -496,17 +459,10 @@ class _PostImpl extends Post {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
-      commentedBy: commentedBy is List<int>?
-          ? commentedBy
-          : this.commentedBy?.map((e0) => e0).toList(),
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
-      quotedBy: quotedBy is List<int>?
-          ? quotedBy
-          : this.quotedBy?.map((e0) => e0).toList(),
       commentCount: commentCount is int? ? commentCount : this.commentCount,
-      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       projectId: projectId is int? ? projectId : this.projectId,
       project: project is _i6.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
@@ -544,6 +500,7 @@ class PostTable extends _i1.Table<int?> {
     videoUrl = _i1.ColumnString(
       'videoUrl',
       this,
+      hasDefault: true,
     );
     taggedUsers = _i1.ColumnSerializable(
       'taggedUsers',
@@ -574,25 +531,12 @@ class PostTable extends _i1.Table<int?> {
       'likedBy',
       this,
     );
-    commentedBy = _i1.ColumnSerializable(
-      'commentedBy',
-      this,
-    );
     bookmarkedBy = _i1.ColumnSerializable(
       'bookmarkedBy',
       this,
     );
-    quotedBy = _i1.ColumnSerializable(
-      'quotedBy',
-      this,
-    );
     commentCount = _i1.ColumnInt(
       'commentCount',
-      this,
-      hasDefault: true,
-    );
-    quoteCount = _i1.ColumnInt(
-      'quoteCount',
       this,
       hasDefault: true,
     );
@@ -645,15 +589,9 @@ class PostTable extends _i1.Table<int?> {
 
   late final _i1.ColumnSerializable likedBy;
 
-  late final _i1.ColumnSerializable commentedBy;
-
   late final _i1.ColumnSerializable bookmarkedBy;
 
-  late final _i1.ColumnSerializable quotedBy;
-
   late final _i1.ColumnInt commentCount;
-
-  late final _i1.ColumnInt quoteCount;
 
   late final _i1.ColumnInt projectId;
 
@@ -767,11 +705,8 @@ class PostTable extends _i1.Table<int?> {
         dateCreated,
         updatedAt,
         likedBy,
-        commentedBy,
         bookmarkedBy,
-        quotedBy,
         commentCount,
-        quoteCount,
         projectId,
         parentId,
         quotedOrRepostedFromUserId,

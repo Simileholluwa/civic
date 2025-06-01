@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PostCommentReplyCard extends ConsumerWidget {
   const PostCommentReplyCard({
@@ -23,9 +24,6 @@ class PostCommentReplyCard extends ConsumerWidget {
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, comment, index) {
-        final commentNotifier = ref.watch(
-          regularPostProvider(comment).notifier,
-        );
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -40,37 +38,47 @@ class PostCommentReplyCard extends ConsumerWidget {
                 commentId: comment.id!,
                 postId: postId,
                 comment,
-                comment.commentedBy?.isNotEmpty ?? false,
+                comment.commentCount != 0,
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
-                    onReply: () async {
-                      await commentNotifier.sendReply(comment.id!);
+                    onReply: () {
+                      context.push('/create/post/0', extra: {
+                        'parent': comment,
+                      });
                     },
                   );
                 },
                 contentChild: (context, reply) {
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
-                    onReply: () async {
-                      await commentNotifier.sendReply(reply.id!);
+                    onReply: () {
+                      context.push('/create/post/0', extra: {
+                        'parent': reply,
+                      });
                     },
                     isReply: true,
-                    hasReplies: reply.commentedBy!.isNotEmpty,
+                    hasReplies: reply.commentCount != 0,
                     onShowReplies: () {
                       context.push('/feed/post/$postId/replies/${reply.id}');
                     },
                   );
                 },
               ),
-              if (comment.commentedBy?.isEmpty ?? false)
+              if (comment.commentCount != 0)
                 const SizedBox(height: 10),
             ],
           ),
         );
       },
       onRefresh: () => commentPagingControllerNotifier.refresh(),
-      noItemsFound: ContentNoItemsFound(),  
+      noItemsFound: ContentNoItemsFound(),
+      firstPageProgressIndicator: Center(
+                child: LoadingAnimationWidget.progressiveDots(
+                  color: TColors.primary,
+                  size: 50,
+                ),
+              ),
     );
   }
 }

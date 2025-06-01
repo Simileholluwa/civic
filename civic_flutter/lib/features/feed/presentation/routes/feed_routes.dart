@@ -36,6 +36,14 @@ class FeedRoutes {
                 },
               ),
               GoRoute(
+                path: 'notInterested',
+                builder: (_, state) {
+                  return MarkPostNotInterested(
+                    post: state.extra as Post,
+                  );
+                },
+              ),
+              GoRoute(
                 path: 'replies/:replyId',
                 builder: (_, state) {
                   return PostRepliesScreen(

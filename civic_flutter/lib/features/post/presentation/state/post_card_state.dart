@@ -8,7 +8,6 @@ class PostCardState {
   PostCardState({
     required this.creator,
     required this.timeAgo,
-    required this.numberOfReposts,
     required this.numberOfLikes,
     required this.numberOfComments,
     required this.numberOfBookmarks,
@@ -25,12 +24,12 @@ class PostCardState {
     required this.hasLiked,
     required this.mentions,
     required this.postType,
+    this.reasonNotInterested = '',
     this.quoteOrRepostUser,
-    this.hasReposted = false,
-    this.hasCommented = false,
     this.hasBookmarked = false,
     this.isOwner = false,
     this.isFollower = false,
+    this.isSendingNotInterested = false,
   });
 
   factory PostCardState.populate(
@@ -48,27 +47,22 @@ class PostCardState {
       numberOfComments: THelperFunctions.humanizeNumber(
         post.commentCount!,
       ),
-      numberOfReposts: THelperFunctions.humanizeNumber(
-        post.quoteCount!,
-      ),
       numberOfBookmarks: THelperFunctions.humanizeNumber(
         post.bookmarkedBy!.length,
       ),
       text: post.text!,
       hasText: post.text?.isNotEmpty ?? false,
-      imageUrls: post.imageUrls!,
+      imageUrls: post.imageUrls ?? [],
       hasImage: post.imageUrls?.isNotEmpty ?? false,
-      videoUrl: post.videoUrl!,
+      videoUrl: post.videoUrl ?? '',
       hasVideo: post.videoUrl?.isNotEmpty ?? false,
-      locations: post.locations!,
+      locations: post.locations ?? [],
       hasLocation: post.locations?.isNotEmpty ?? false,
-      tags: post.taggedUsers!,
+      tags: post.taggedUsers ?? [],
       hasTags: post.taggedUsers?.isNotEmpty ?? false,
       creator: post.owner!,
       hasLiked: post.likedBy!.contains(userId),
       mentions: [],
-      hasReposted: post.quotedBy!.contains(userId),
-      hasCommented: post.commentedBy!.contains(userId),
       hasBookmarked: post.bookmarkedBy!.contains(userId),
       isOwner: post.owner!.id == userId,
       quoteOrRepostUser: post.quotedOrRepostedFromUser,
@@ -87,7 +81,6 @@ class PostCardState {
   final List<AWSPlaces> locations;
   final String numberOfComments;
   final String numberOfLikes;
-  final String numberOfReposts;
   final String numberOfBookmarks;
   final List<UserRecord> tags;
   final String text;
@@ -97,17 +90,13 @@ class PostCardState {
   final List<UserRecord> mentions;
   final bool hasLiked;
   final bool hasBookmarked;
-  final bool hasReposted;
   final bool isOwner;
   final bool isFollower;
-  final bool hasCommented;
   final PostType postType;
   final UserRecord? quoteOrRepostUser;
+  final String reasonNotInterested;
+  final bool isSendingNotInterested;
 
-  @override
-  String toString() {
-    return 'PostCardState( timeAgo: $timeAgo, numberOfViews: $numberOfReposts, numberOfLikes: $numberOfLikes, numberOfComments: $numberOfComments, text: $text, hasText: $hasText, imageUrls: $imageUrls, hasImage: $hasImage, videoUrl: $videoUrl, hasVideo: $hasVideo, locations: $locations, hasLocation: $hasLocation, tags: $tags, hasTags: $hasTags)';
-  }
 
   PostCardState copyWith({
     bool? hasImage,
@@ -119,7 +108,6 @@ class PostCardState {
     List<AWSPlaces>? locations,
     String? numberOfComments,
     String? numberOfLikes,
-    String? numberOfReposts,
     String? numberOfBookmarks,
     List<UserRecord>? tags,
     String? text,
@@ -129,11 +117,11 @@ class PostCardState {
     List<UserRecord>? mentions,
     bool? hasLiked,
     bool? hasBookmarked,
-    bool? hasReposted,
     bool? isOwner,
     bool? isFollower,
-    bool? hasCommented,
     PostType? postType,
+    String? reasonNotInterested,
+    bool? isSendingNotInterested,
   }) {
     return PostCardState(
       hasImage: hasImage ?? this.hasImage,
@@ -145,7 +133,6 @@ class PostCardState {
       locations: locations ?? this.locations,
       numberOfComments: numberOfComments ?? this.numberOfComments,
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
-      numberOfReposts: numberOfReposts ?? this.numberOfReposts,
       numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
       tags: tags ?? this.tags,
       text: text ?? this.text,
@@ -155,18 +142,17 @@ class PostCardState {
       mentions: mentions ?? this.mentions,
       hasLiked: hasLiked ?? this.hasLiked,
       hasBookmarked: hasBookmarked ?? this.hasBookmarked,
-      hasReposted: hasReposted ?? this.hasReposted,
       isOwner: isOwner ?? this.isOwner,
       isFollower: isFollower ?? this.isFollower,
-      hasCommented: hasCommented ?? this.hasCommented,
       postType: postType ?? this.postType,
+      reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
+      isSendingNotInterested: isSendingNotInterested ?? this.isSendingNotInterested,
     );
   }
 
   factory PostCardState.empty() {
     return PostCardState(
       timeAgo: '',
-      numberOfReposts: '0',
       numberOfLikes: '0',
       numberOfComments: '0',
       numberOfBookmarks: '0',

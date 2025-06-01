@@ -4,6 +4,7 @@ fields:
   user: UserRecord?, relation
   post: Post?, relation
   dateMarked: DateTime?, default=now
+  reason: String,
 indexes:
     post_not_interested_id_unique_idx:
         fields: userId, postId

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PostCommentScreen extends ConsumerWidget {
   const PostCommentScreen({super.key, required this.postId});
@@ -18,9 +19,11 @@ class PostCommentScreen extends ConsumerWidget {
         true,
       ),
     );
-    final pagingController = ref.watch(
-      paginatedPostCommentListProvider(postId).notifier,
-    ).pagingController;
+    final pagingController = ref
+        .watch(
+          paginatedPostCommentListProvider(postId).notifier,
+        )
+        .pagingController;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -41,7 +44,7 @@ class PostCommentScreen extends ConsumerWidget {
                 context.pop();
               },
             ),
-            actions:  data.when(
+            actions: data.when(
               data: (_) {
                 return [
                   IconButton(
@@ -70,11 +73,18 @@ class PostCommentScreen extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: data.when(
-        data: (_) {
+        data: (data) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push(
+                    '/create/post/0',
+                    extra: {
+                      'parent': data,
+                    }
+                  );
+              },
               text: 'Share your opinion',
               buttonIcon: Iconsax.magicpen5,
             ),
@@ -109,6 +119,12 @@ class PostCommentScreen extends ConsumerWidget {
             ),
             child: PostCommentCard(
               postId: postId,
+              firstPageProgressIndicator: Center(
+                child: LoadingAnimationWidget.progressiveDots(
+                  color: TColors.primary,
+                  size: 50,
+                ),
+              ),
             ),
           );
         },

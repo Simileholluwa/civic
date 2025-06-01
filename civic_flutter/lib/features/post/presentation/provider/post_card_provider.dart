@@ -21,7 +21,19 @@ class PostCardWidget extends _$PostCardWidget {
       isFollower: !state.isFollower,
     );
   }
-  
+
+  void setReasonNotInterested(String reason) {
+    state = state.copyWith(
+      reasonNotInterested: reason,
+    );
+  }
+
+  void setIsSendingNotInterested(bool value) {
+    state = state.copyWith(
+      isSendingNotInterested: value,
+    );
+  }
+
   Future<void> togglePostLikeStatus(int id) async {
     final toggleLike = ref.read(togglePostLikeProvider);
     final result = await toggleLike(
@@ -59,20 +71,51 @@ class PostCardWidget extends _$PostCardWidget {
 
   Future<bool> markPostNotInterested(
     int postId,
+    String reason,
+    bool isReply,
+    bool isComment,
   ) async {
+    setIsSendingNotInterested(true);
     final notInterested = ref.read(markPostNotInterestedProvider);
     final result = await notInterested(
       MarkPostNotInterestedParams(
         postId,
+        reason,
       ),
     );
     return result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
+      setIsSendingNotInterested(false);
       return false;
     }, (_) async {
-      ref.read(paginatedPostListProvider.notifier).removePostById(
-            postId,
-          );
+      if (isReply) {
+        ref
+            .read(
+              paginatedPostCommentRepliesListProvider(
+                postId,
+              ).notifier,
+            )
+            .removeReplyById(
+              postId,
+            );
+      } else if (isComment) {
+        ref
+            .read(
+              paginatedPostCommentListProvider(postId).notifier,
+            )
+            .removeCommentById(
+              postId,
+            );
+      } else {
+        ref
+            .read(
+              paginatedPostListProvider.notifier,
+            )
+            .removePostById(
+              postId,
+            );
+      }
+      setIsSendingNotInterested(false);
       return true;
     });
   }

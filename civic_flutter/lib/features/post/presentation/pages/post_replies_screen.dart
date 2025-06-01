@@ -73,11 +73,15 @@ class PostRepliesScreen extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: data.when(
-        data: (_) {
+        data: (data) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push('/create/post/0', extra: {
+                  'parent': data,
+                });
+              },
               text: 'Add a reply',
               buttonIcon: Iconsax.magicpen5,
             ),

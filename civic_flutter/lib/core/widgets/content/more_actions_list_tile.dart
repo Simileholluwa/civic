@@ -35,7 +35,7 @@ class MoreActionsListTile extends StatelessWidget {
       subtitle: Text(
         subTitle,
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              fontSize: 12,
+              fontSize: 14,
               color: color,
             ),
       ),

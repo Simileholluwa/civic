@@ -615,6 +615,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.text,
           isNullable: true,
           dartType: 'String?',
+          columnDefault: '\'\'::text',
         ),
         _i2.ColumnDefinition(
           name: 'taggedUsers',
@@ -660,32 +661,13 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'commentedBy',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<int>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'bookmarkedBy',
           columnType: _i2.ColumnType.json,
           isNullable: true,
           dartType: 'List<int>?',
         ),
         _i2.ColumnDefinition(
-          name: 'quotedBy',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<int>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'commentCount',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-          columnDefault: '0',
-        ),
-        _i2.ColumnDefinition(
-          name: 'quoteCount',
           columnType: _i2.ColumnType.bigint,
           isNullable: true,
           dartType: 'int?',
@@ -984,6 +966,12 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'DateTime?',
           columnDefault: 'CURRENT_TIMESTAMP',
+        ),
+        _i2.ColumnDefinition(
+          name: 'reason',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
         ),
       ],
       foreignKeys: [
@@ -2927,16 +2915,6 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List)
               .map((e) => deserialize<_i27.PostsHashtags>(e))
               .toList()
-          : null) as T;
-    }
-    if (t == _i1.getType<List<int>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<int>(e)).toList()
-          : null) as T;
-    }
-    if (t == _i1.getType<List<int>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<int>(e)).toList()
           : null) as T;
     }
     if (t == _i1.getType<List<int>?>()) {

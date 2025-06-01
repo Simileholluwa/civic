@@ -779,7 +779,12 @@ class Endpoints extends _i1.EndpointDispatch {
               name: 'postId',
               type: _i1.getType<int>(),
               nullable: false,
-            )
+            ),
+            'reason': _i1.ParameterDescription(
+              name: 'reason',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
@@ -788,6 +793,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['post'] as _i7.PostEndpoint).markNotInterested(
             session,
             params['postId'],
+            params['reason'],
           ),
         ),
         'authUser': _i1.MethodConnector(

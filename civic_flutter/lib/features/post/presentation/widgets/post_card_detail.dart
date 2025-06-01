@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class PostCardDetail extends ConsumerWidget {
   const PostCardDetail({
@@ -11,6 +12,7 @@ class PostCardDetail extends ConsumerWidget {
     required this.post,
     this.showInteractions = true,
     this.hasProject = false,
+    this.noMaxLines = false,
     required this.onTap,
   });
 
@@ -18,6 +20,7 @@ class PostCardDetail extends ConsumerWidget {
   final bool showInteractions;
   final bool hasProject;
   final VoidCallback? onTap;
+  final bool noMaxLines;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +49,7 @@ class PostCardDetail extends ConsumerWidget {
           ),
           PostCardBuild(
             post: livePost.value ?? post,
-            noMaxLines: false,
+            noMaxLines: noMaxLines,
           ),
           if (hasProject)
             Container(
@@ -77,8 +80,12 @@ class PostCardDetail extends ConsumerWidget {
             ),
           if (showInteractions)
             PostInteractionButtons(
-              post: livePost.value ?? post,
-            ),
+                post: livePost.value ?? post,
+                onReply: () {
+                  context.push(
+                    '/feed/post/${post.id}/comments',
+                  );
+                }),
         ],
       ),
     );

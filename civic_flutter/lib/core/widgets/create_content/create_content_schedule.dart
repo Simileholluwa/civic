@@ -19,6 +19,7 @@ class CreateContentSchedule extends ConsumerWidget {
           left: TSizes.md - 2,
           right: TSizes.md,
         ),
+        height: 55,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -26,7 +27,6 @@ class CreateContentSchedule extends ConsumerWidget {
             ),
           ),
         ),
-        height: 50,
         width: double.maxFinite,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

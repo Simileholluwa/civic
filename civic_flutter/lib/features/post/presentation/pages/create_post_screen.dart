@@ -40,7 +40,8 @@ class CreatePostScreen extends ConsumerWidget {
     final canSendPost = postState.imageUrls.isNotEmpty ||
         postState.text.isNotEmpty ||
         postState.videoUrl.isNotEmpty;
-    final isRepost = project != null || parent != null;
+    final isRepost = project != null;
+    final isReplyOrComment = parent != null;
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     final isVisibleNotifier = ref.watch(
       appBottomNavigationVisibilityProvider(
@@ -85,9 +86,17 @@ class CreatePostScreen extends ConsumerWidget {
                         parent?.id,
                         project?.id,
                       )
-                    : await postNotifier.send(
-                        id,
-                      );
+                    : isReplyOrComment
+                        ? parent!.postType == PostType.regular || parent!.postType == PostType.projectRepost
+                            ? await postNotifier.sendComment(
+                                parent!.id!,
+                              )
+                            : await postNotifier.sendReply(
+                                parent!.id!,
+                              )
+                        : await postNotifier.send(
+                            id,
+                          );
               },
               title: CreateContentPrivacy(),
               sendText: isRepost ? 'REPOST' : null,
@@ -128,12 +137,34 @@ class CreatePostScreen extends ConsumerWidget {
                   : null,
           bottomNavigationBar: data.when(
             data: (_) {
-              return scheduledDateTimeState == null
-                  ? null
-                  : SizedBox(
-                      height: 55,
-                      child: const CreateContentSchedule(),
-                    );
+              if (scheduledDateTimeState != null) {
+                return const CreateContentSchedule();
+              } else if (parent != null) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                  ),
+                  child: ContentExpandableText(
+                    text: parent!.postType == PostType.regular ||
+                            parent!.postType == PostType.projectRepost
+                        ? "Commenting on @${parent!.owner!.userInfo!.userName!}'s post"
+                        : parent!.postType == PostType.comment
+                            ? "Replying to @${parent!.owner!.userInfo!.userName!}'s comment"
+                            : "Replying to @${parent!.owner!.userInfo!.userName!}'s reply",
+                    onToggleTextTap: null,
+                  ),
+                );
+              } else {
+                return null;
+              }
             },
             error: (err, st) {
               return Padding(
@@ -160,6 +191,7 @@ class CreatePostScreen extends ConsumerWidget {
                 post: post,
                 project: project,
                 parent: parent,
+                isReplyOrComment: parent != null,
               );
             },
             error: (error, st) {

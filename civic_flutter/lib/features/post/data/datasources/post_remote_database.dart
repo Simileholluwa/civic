@@ -30,6 +30,7 @@ abstract class PostRemoteDatabase {
   });
   Future<void> markNotInterested({
     required int id,
+    required String reason,
   });
   Future<void> deletePost({required int id});
   Future<void> deletePostComment({required int id});
@@ -38,7 +39,7 @@ abstract class PostRemoteDatabase {
     required Post comment,
     required bool isReply,
   });
-  Future<void> getComment({
+  Future<Post> getComment({
     required int commentId,
     required bool isComment,
   });
@@ -143,7 +144,7 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<void> getComment({required int commentId, required bool isComment}) async {
+  Future<Post> getComment({required int commentId, required bool isComment}) async {
     try {
       final result = await _client.post.getComment(
         commentId,
@@ -252,10 +253,12 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   @override
   Future<void> markNotInterested({
     required int id,
+    required String reason,
   }) async {
     try {
       return await _client.post.markNotInterested(
         id,
+        reason,
       );
     } on UserException catch (e) {
       throw ServerException(message: e.message);

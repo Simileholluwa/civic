@@ -69,13 +69,10 @@ class ShowPostActions extends ConsumerWidget {
                 if (fromDetails) {
                   context.pop();
                 }
-              }
-              final result = await postCardNotifier.markPostNotInterested(
-                post.id!,
-              );
-              if (result) {
-                TToastMessages.infoToast(
-                  'You will no longer see this post in your feed.',
+                context.push(
+                  '/feed/post/${post.id}/notInterested',
+                  extra: post,
+
                 );
               }
             },
@@ -118,6 +115,17 @@ class ShowPostActions extends ConsumerWidget {
             icon: Iconsax.flag,
             color: Colors.red,
             onTap: () async {},
+          ),
+        if (postCardState.isOwner)
+          MoreActionsListTile(
+            title: 'Edit',
+            subTitle: "You can change the content of this post however, previous version(s) will be saved.",
+            icon: Iconsax.edit,
+            onTap: () {
+              context.push(
+                '/create/post/${post.id}',
+              );
+            },
           ),
         if (postCardState.isOwner)
           MoreActionsListTile(
