@@ -85,7 +85,9 @@ class PostCardDetail extends ConsumerWidget {
                   context.push(
                     '/feed/post/${post.id}/comments',
                   );
-                }),
+                },
+                originalPostId: post.id!,
+                ),
         ],
       ),
     );

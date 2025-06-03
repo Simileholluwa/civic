@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,15 +10,25 @@ class ShowPostActions extends ConsumerWidget {
   const ShowPostActions({
     super.key,
     required this.post,
+    required this.originalPostId,
     this.fromDetails = false,
+    this.isReply = false,
+    this.isComment = false,
   });
 
   final Post post;
   final bool fromDetails;
+  final bool isReply;
+  final bool isComment;
+  final int originalPostId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userNotifier = ref.watch(currentActiveUserProvider.notifier);
+    final type = isReply
+        ? 'reply'
+        : isComment
+            ? 'comment'
+            : 'post';
     final postCardState = ref.watch(
       postCardWidgetProvider(
         post,
@@ -61,28 +70,27 @@ class ShowPostActions extends ConsumerWidget {
         if (!postCardState.isOwner)
           MoreActionsListTile(
             title: 'Not interested',
-            subTitle: "I don't want to see this post in my feed.",
+            subTitle: "I don't want to see this $type anymore.",
             icon: Iconsax.eye_slash,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
-                if (fromDetails) {
-                  context.pop();
-                }
-                context.push(
-                  '/feed/post/${post.id}/notInterested',
-                  extra: post,
-
-                );
               }
+              context.push(
+                '/feed/post/${post.id}/notInterested',
+                extra: {
+                  'post': post,
+                  'originalPostId': originalPostId,
+                },
+              );
             },
           ),
         if (!postCardState.isOwner)
           MoreActionsListTile(
             title: postCardState.isFollower ? 'Unfollow' : 'Follow',
             subTitle: postCardState.isFollower
-                ? 'You will no longer see posts from ${post.owner!.userInfo!.userName}.'
-                : 'You will now see more posts from ${post.owner!.userInfo!.userName}.',
+                ? '${post.owner!.userInfo!.userName} will be removed from the list of people you follow.'
+                : '${post.owner!.userInfo!.userName} will be added to the list of people you follow.',
             icon: postCardState.isFollower
                 ? Iconsax.user_remove
                 : Iconsax.user_cirlce_add,
@@ -90,22 +98,9 @@ class ShowPostActions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
-              final result = await userNotifier.toggleFollow(
+              await postCardNotifier.toggleFollow(
                 post.ownerId,
               );
-
-              if (result) {
-                postCardNotifier.setIsFollower();
-                if (!postCardState.isFollower) {
-                  TToastMessages.infoToast(
-                    'You are now following ${post.owner!.userInfo!.userName}',
-                  );
-                } else {
-                  TToastMessages.infoToast(
-                    'You are no longer following ${post.owner!.userInfo!.userName}',
-                  );
-                }
-              }
             },
           ),
         if (!postCardState.isOwner)
@@ -119,7 +114,8 @@ class ShowPostActions extends ConsumerWidget {
         if (postCardState.isOwner)
           MoreActionsListTile(
             title: 'Edit',
-            subTitle: "You can change the content of this post however, previous version(s) will be saved.",
+            subTitle:
+                "You can change the content of this $type however, previous version(s) will be saved.",
             icon: Iconsax.edit,
             onTap: () {
               context.push(
@@ -130,22 +126,20 @@ class ShowPostActions extends ConsumerWidget {
         if (postCardState.isOwner)
           MoreActionsListTile(
             title: 'Delete',
-            subTitle: "Keep in mind. Deleted posts can not be undone.",
+            subTitle:
+                "Proceed with caution, deleted ${type == 'reply' ? 'replie' : type}s can not be undone!",
             icon: Iconsax.trash,
             color: Colors.red,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
               }
-              await PostHelperFunctions.deletePostDialog(
-                context,
-                postCardNotifier,
+              await postCardNotifier.deletePost(
                 post.id!,
+                originalPostId,
+                isReply,
+                isComment,
               );
-
-              if (context.mounted) {
-                context.pop();
-              }
             },
           ),
       ],

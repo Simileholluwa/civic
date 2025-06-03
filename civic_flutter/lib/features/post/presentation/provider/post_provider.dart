@@ -184,7 +184,7 @@ class RegularPost extends _$RegularPost {
     final post = Post(
       id: id,
       ownerId: ref.read(localStorageProvider).getInt('userId')!,
-      text: state.text,
+      text: state.text.trim(),
       imageUrls: state.imageUrls,
       videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
@@ -353,7 +353,7 @@ class RegularPost extends _$RegularPost {
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final quoteContent = Post(
       ownerId: ownerId,
-      text: state.text,
+      text: state.text.trim(),
       imageUrls: state.imageUrls,
       videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
@@ -420,7 +420,7 @@ class RegularPost extends _$RegularPost {
     final post = Post(
       id: postId,
       ownerId: ownerId,
-      text: state.text,
+      text: state.text.trim(),
       imageUrls: state.imageUrls,
       videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
@@ -453,7 +453,7 @@ class RegularPost extends _$RegularPost {
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: state.text,
+          text: state.text.trim(),
           imageUrls: state.imageUrls,
           locations: state.locations,
           taggedUsers: state.taggedUsers,
@@ -488,7 +488,7 @@ class RegularPost extends _$RegularPost {
       SavePostCommentParams(
         Post(
           ownerId: ownerId,
-          text: state.text,
+          text: state.text.trim(),
           imageUrls: state.imageUrls,
           locations: state.locations,
           taggedUsers: state.taggedUsers,

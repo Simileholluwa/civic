@@ -9,15 +9,21 @@ class PostInteractionButtons extends ConsumerWidget {
   const PostInteractionButtons({
     super.key,
     required this.post,
+    required this.originalPostId,
     this.hasPadding = true,
     this.onReply,
     this.replyIcon1 = Iconsax.message,
+    this.isReply = false,
+    this.isComment = false,
   });
 
   final Post post;
   final bool hasPadding;
   final VoidCallback? onReply;
   final IconData replyIcon1;
+  final bool isReply;
+  final bool isComment;
+  final int originalPostId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,6 +87,10 @@ class PostInteractionButtons extends ConsumerWidget {
                     contentPadding: const EdgeInsets.only(bottom: 16,),
                     content: ShowPostActions(
                       post: post,
+                      fromDetails: true,
+                      isReply: isReply,
+                      isComment: isComment,
+                      originalPostId: originalPostId,
                     ),
                   );
                 },

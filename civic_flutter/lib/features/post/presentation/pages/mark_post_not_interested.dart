@@ -11,9 +11,11 @@ class MarkPostNotInterested extends ConsumerWidget {
   const MarkPostNotInterested({
     super.key,
     required this.post,
+    required this.originalPostId,
   });
 
   final Post post;
+  final int originalPostId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,7 +86,9 @@ class MarkPostNotInterested extends ConsumerWidget {
                         Text(
                           texts[index],
                           textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontSize: 16,
+                              ),
                         ),
                         SizedBox(
                           width: 20,
@@ -172,7 +176,7 @@ class MarkPostNotInterested extends ConsumerWidget {
               ),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: FilledButton(
                   onPressed: postCardState.reasonNotInterested.isEmpty ||
                           postCardState.isSendingNotInterested
                       ? null
@@ -181,6 +185,7 @@ class MarkPostNotInterested extends ConsumerWidget {
                               await postCardNotifier.markPostNotInterested(
                             post.id!,
                             postCardState.reasonNotInterested,
+                            originalPostId,
                             isReply,
                             isComment,
                           );
@@ -188,9 +193,6 @@ class MarkPostNotInterested extends ConsumerWidget {
                             if (context.mounted) {
                               context.pop();
                             }
-                            TToastMessages.infoToast(
-                              'You will no longer see this $type in your feed',
-                            );
                           }
                         },
                   child: Text(
@@ -198,11 +200,6 @@ class MarkPostNotInterested extends ConsumerWidget {
                     style: const TextStyle().copyWith(
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: TColors.textWhite,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                 ).withLoading(
                   loading: postCardState.isSendingNotInterested,

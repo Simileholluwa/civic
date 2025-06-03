@@ -77,12 +77,12 @@ class PostDetailOptions extends ConsumerWidget {
         if (!postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              if (context.mounted) {
-                context.pop();
-              }
               context.push(
                 '/feed/post/${post.id}/notInterested',
-                extra: post,
+                extra: {
+                  'post': post,
+                  'originalPostId': post.id!,
+                },
               );
             },
             icon: Icon(
@@ -92,11 +92,20 @@ class PostDetailOptions extends ConsumerWidget {
         if (postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              await PostHelperFunctions.deletePostDialog(
+              final result = await PostHelperFunctions.deletePostDialog(
                 context,
-                postCardNotifier,
                 post.id!,
               );
+              if (result != null) {
+                if (result) {
+                  await postCardNotifier.deletePost(
+                    post.id!,
+                    post.id!,
+                    false,
+                    false,
+                  );
+                }
+              }
             },
             icon: Icon(
               Iconsax.trash,

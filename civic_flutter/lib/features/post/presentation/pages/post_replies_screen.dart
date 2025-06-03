@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +26,7 @@ class PostRepliesScreen extends ConsumerWidget {
     final commentController = ref.watch(
       paginatedPostCommentRepliesListProvider(replyId).notifier,
     );
+    log(replyId.toString());
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),

@@ -26,7 +26,15 @@ class PostCommentCard extends ConsumerWidget {
       pagingController: commentController.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemBuilder: (context, comment, index) {
+      itemBuilder: (context, value, index) {
+        final liveComment = ref.watch(
+          postStreamProvider(
+            value.id!,
+            value,
+          ),
+        );
+        final comment = liveComment.value ?? value;
+
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -50,26 +58,11 @@ class PostCommentCard extends ConsumerWidget {
                         'parent': comment,
                       });
                     },
-                  );
-                },
-                contentChild: (context, reply) {
-                  return PostCommentAndReplyContent(
-                    replyOrComment: reply,
-                    onReply: () {
-                      context.push('/create/post/0', extra: {
-                        'parent': reply,
-                      });
-                    },
-                    isReply: true,
-                    hasReplies: reply.commentCount != 0,
-                    onShowReplies: () {
-                      context.push('/feed/post/$postId/replies/${reply.id!}');
-                    },
+                    originalPostId: postId,
+                    isComment: true,
                   );
                 },
               ),
-              if (comment.commentCount != 0)
-                const SizedBox(height: 10),
             ],
           ),
         );

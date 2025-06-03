@@ -1,11 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-
-final expandedRepliesProvider =
-    StateProvider.family<bool, int>((ref, id) => false);
 
 typedef ContentBuilder<T> = Widget Function(
   BuildContext context,

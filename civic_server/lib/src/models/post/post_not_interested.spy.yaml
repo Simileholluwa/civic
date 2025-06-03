@@ -2,7 +2,7 @@ class: PostNotInterested
 table: post_not_interested
 fields:
   user: UserRecord?, relation
-  post: Post?, relation
+  post: Post?, relation(onDelete=Cascade)
   dateMarked: DateTime?, default=now
   reason: String,
 indexes:

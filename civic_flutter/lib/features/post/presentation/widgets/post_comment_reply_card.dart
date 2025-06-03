@@ -23,7 +23,14 @@ class PostCommentReplyCard extends ConsumerWidget {
       pagingController: commentPagingControllerNotifier.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemBuilder: (context, comment, index) {
+      itemBuilder: (context, value, index) {
+        final liveReply = ref.watch(
+          postStreamProvider(
+            value.id!,
+            value,
+          ),
+        );
+        final reply = liveReply.value ?? value;
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -35,21 +42,11 @@ class PostCommentReplyCard extends ConsumerWidget {
               else
                 const SizedBox(height: 10),
               PostCommentTreeWidget(
-                commentId: comment.id!,
+                commentId: reply.id!,
                 postId: postId,
-                comment,
-                comment.commentCount != 0,
+                reply,
+                reply.commentCount != 0,
                 contentRoot: (context, reply) {
-                  return PostCommentAndReplyContent(
-                    replyOrComment: reply,
-                    onReply: () {
-                      context.push('/create/post/0', extra: {
-                        'parent': comment,
-                      });
-                    },
-                  );
-                },
-                contentChild: (context, reply) {
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
                     onReply: () {
@@ -58,15 +55,10 @@ class PostCommentReplyCard extends ConsumerWidget {
                       });
                     },
                     isReply: true,
-                    hasReplies: reply.commentCount != 0,
-                    onShowReplies: () {
-                      context.push('/feed/post/$postId/replies/${reply.id}');
-                    },
+                    originalPostId: postId,
                   );
                 },
               ),
-              if (comment.commentCount != 0)
-                const SizedBox(height: 10),
             ],
           ),
         );

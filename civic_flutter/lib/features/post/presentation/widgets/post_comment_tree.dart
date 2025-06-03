@@ -7,7 +7,6 @@ import 'package:iconsax/iconsax.dart';
 class PostCommentTreeWidget extends StatelessWidget {
   final Post rootComment;
   final ContentBuilder<Post>? contentRoot;
-  final ContentBuilder<Post>? contentChild;
   final bool hasReplies;
   final int postId;
   final int commentId;
@@ -16,7 +15,6 @@ class PostCommentTreeWidget extends StatelessWidget {
     this.rootComment,
     this.hasReplies, {
     this.contentRoot,
-    this.contentChild,
     required this.postId,
     required this.commentId,
     super.key,

@@ -1,17 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 
-class PostCommentAndReplyContent extends ConsumerWidget {
+class PostCommentAndReplyContent extends StatelessWidget {
   const PostCommentAndReplyContent({
     super.key,
     required this.replyOrComment,
+    required this.originalPostId,
     this.onReply,
     this.onLike,
     this.isReply = false,
-    this.hasReplies = false,
+    this.isComment = false,
     this.onShowReplies,
   });
 
@@ -19,29 +19,23 @@ class PostCommentAndReplyContent extends ConsumerWidget {
   final VoidCallback? onReply;
   final VoidCallback? onLike;
   final bool isReply;
-  final bool hasReplies;
   final VoidCallback? onShowReplies;
+  final bool isComment;
+  final int originalPostId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final livePost = ref.watch(
-      postStreamProvider(
-        replyOrComment.id!,
-        replyOrComment,
-      ),
-    );
+  Widget build(BuildContext context) {
     return Column(
       spacing: 10,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isReply)
-          CreatorNameAndAccountInfo(
-            creator: replyOrComment.owner!,
-            timeAgo: THelperFunctions.humanizeDateTime(
-              replyOrComment.dateCreated ?? DateTime.now(),
-            ),
+        CreatorNameAndAccountInfo(
+          creator: replyOrComment.owner!,
+          timeAgo: THelperFunctions.humanizeDateTime(
+            replyOrComment.dateCreated ?? DateTime.now(),
           ),
+        ),
         if (replyOrComment.text != null)
           ContentExpandableText(
             text: replyOrComment.text!,
@@ -59,11 +53,18 @@ class PostCommentAndReplyContent extends ConsumerWidget {
                   useMargin: false,
                 ),
         PostInteractionButtons(
-          post: livePost.value ?? replyOrComment,
+          post: replyOrComment,
           hasPadding: false,
           onReply: onReply,
           replyIcon1: Icons.reply_rounded,
+          isReply: isReply,
+          isComment: isComment,
+          originalPostId: originalPostId,
         ),
+        if (replyOrComment.commentCount == 0)
+          const SizedBox(
+            height: 5,
+          ),
       ],
     );
   }

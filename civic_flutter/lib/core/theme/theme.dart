@@ -59,8 +59,8 @@ class TAppTheme {
       bottomNavigationBarSelectedLabelSchemeColor: SchemeColor.black,
       bottomNavigationBarSelectedIconSchemeColor: SchemeColor.black,
       appBarScrolledUnderElevation: 0,
-      filledButtonRadius: 100,
-      outlinedButtonRadius: 100,
+      filledButtonRadius: 10,
+      outlinedButtonRadius: 10,
       elevatedButtonSchemeColor: SchemeColor.primary,
       //elevatedButtonSecondarySchemeColor: SchemeColor.secondary,
       elevatedButtonTextStyle: WidgetStatePropertyAll(
@@ -72,14 +72,14 @@ class TAppTheme {
       ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
       ),
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
@@ -127,7 +127,7 @@ class TAppTheme {
       dialogBackgroundSchemeColor: SchemeColor.surface,
       useInputDecoratorThemeInDialogs: true,
       appBarScrolledUnderElevation: 0,
-      filledButtonRadius: 100,
+      filledButtonRadius: 10,
       chipRadius: 10,
       navigationBarIndicatorOpacity: 0,
       bottomNavigationBarMutedUnselectedLabel: true,   
@@ -142,7 +142,7 @@ class TAppTheme {
       bottomNavigationBarUnselectedLabelSize: 12,
       bottomNavigationBarSelectedLabelSchemeColor: SchemeColor.white,
       bottomNavigationBarSelectedIconSchemeColor: SchemeColor.white,
-      outlinedButtonRadius: 100,
+      outlinedButtonRadius: 10,
       elevatedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 17,
@@ -152,14 +152,14 @@ class TAppTheme {
       ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),
       ),
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
           fontFamily: 'Montserrat',
         ),

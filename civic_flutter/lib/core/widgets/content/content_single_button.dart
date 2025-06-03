@@ -10,11 +10,13 @@ class ContentSingleButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     required this.buttonIcon,
+    this.color = TColors.primary,
   });
 
   final VoidCallback onPressed;
   final String text;
   final IconData buttonIcon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class ContentSingleButton extends StatelessWidget {
           color: TColors.textWhite,
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: TColors.primary,
+          backgroundColor: color,
           foregroundColor: TColors.textWhite,
           padding: const EdgeInsets.symmetric(
             vertical: 10,

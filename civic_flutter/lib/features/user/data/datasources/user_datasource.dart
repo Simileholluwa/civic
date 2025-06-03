@@ -36,6 +36,8 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
       return userRecord;
     } on UserException catch (e) {
       throw ServerException(message: e.message);
+    } on ServerException {
+      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),

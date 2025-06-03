@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_card_provider.g.dart';
 
@@ -16,10 +17,28 @@ class PostCardWidget extends _$PostCardWidget {
     return PostCardState.populate(post, ref);
   }
 
-  void setIsFollower() {
-    state = state.copyWith(
-      isFollower: !state.isFollower,
+  Future<void> toggleFollow(int userId) async {
+    final userNotifier = ref.watch(
+      currentActiveUserProvider.notifier,
     );
+    final result = await userNotifier.toggleFollow(
+      userId,
+    );
+    if (result) {
+      final isFollower = state.isFollower;
+      if (isFollower) {
+        state = state.copyWith(
+          isFollower: false,
+        );
+        TToastMessages.infoToast('You are no longer following.');
+      } else {
+        state = state.copyWith(
+          isFollower: true,
+        );
+        TToastMessages.infoToast('You are now following.');
+      }
+      log(state.isFollower.toString());
+    }
   }
 
   void setReasonNotInterested(String reason) {
@@ -72,6 +91,7 @@ class PostCardWidget extends _$PostCardWidget {
   Future<bool> markPostNotInterested(
     int postId,
     String reason,
+    int originalPostId,
     bool isReply,
     bool isComment,
   ) async {
@@ -90,22 +110,15 @@ class PostCardWidget extends _$PostCardWidget {
     }, (_) async {
       if (isReply) {
         ref
-            .read(
-              paginatedPostCommentRepliesListProvider(
-                postId,
-              ).notifier,
-            )
-            .removeReplyById(
-              postId,
-            );
+            .read(paginatedPostCommentRepliesListProvider(originalPostId)
+                .notifier)
+            .removeReplyById(postId);
+        TToastMessages.infoToast('You will no longer see this reply.');
       } else if (isComment) {
         ref
-            .read(
-              paginatedPostCommentListProvider(postId).notifier,
-            )
-            .removeCommentById(
-              postId,
-            );
+            .read(paginatedPostCommentListProvider(originalPostId).notifier)
+            .removeCommentById(postId);
+        TToastMessages.infoToast('You will no longer see this comment.');
       } else {
         ref
             .read(
@@ -114,6 +127,7 @@ class PostCardWidget extends _$PostCardWidget {
             .removePostById(
               postId,
             );
+        TToastMessages.infoToast('You will no longer see this post.');
       }
       setIsSendingNotInterested(false);
       return true;
@@ -142,6 +156,9 @@ class PostCardWidget extends _$PostCardWidget {
 
   Future<void> deletePost(
     int postId,
+    int originalPostId,
+    bool isReply,
+    bool isComment,
   ) async {
     final deleteProject = ref.read(deletePostProvider);
     final result = await deleteProject(
@@ -155,13 +172,27 @@ class PostCardWidget extends _$PostCardWidget {
       );
       return;
     }, (_) {
-      ref
-          .watch(
-            paginatedPostListProvider.notifier,
-          )
-          .removePostById(
-            postId,
-          );
+      if (isReply) {
+        ref
+            .read(paginatedPostCommentRepliesListProvider(originalPostId)
+                .notifier)
+            .removeReplyById(postId);
+        TToastMessages.infoToast('Your reply has been deleted.');
+      } else if (isComment) {
+        ref
+            .read(paginatedPostCommentListProvider(originalPostId).notifier)
+            .removeCommentById(postId);
+        TToastMessages.infoToast('Your comment has been deleted.');
+      } else {
+        ref
+            .watch(
+              paginatedPostListProvider.notifier,
+            )
+            .removePostById(
+              postId,
+            );
+        TToastMessages.infoToast('Your post has been deleted.');
+      }
       return;
     });
   }

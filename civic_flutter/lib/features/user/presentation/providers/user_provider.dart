@@ -22,9 +22,7 @@ class CurrentActiveUser extends _$CurrentActiveUser {
       log(l.message);
       return false;
     }, (_) async {
-      final user = await fetchUser();
-      if (user) return true;
-      return false;
+      return true;
     });
   }
 

@@ -38,8 +38,10 @@ class FeedRoutes {
               GoRoute(
                 path: 'notInterested',
                 builder: (_, state) {
+                  final data = state.extra as Map<String, dynamic>;
                   return MarkPostNotInterested(
-                    post: state.extra as Post,
+                    post: data['post'],
+                    originalPostId: data['originalPostId'],
                   );
                 },
               ),

@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/user/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -30,18 +29,21 @@ class PostDetailScreen extends ConsumerWidget {
         : AsyncValue.data(
             post,
           );
+    final livePost = ref.watch(
+      postStreamProvider(
+        id,
+        data.value,
+      ),
+    );
     final postCardState = ref.watch(
       postCardWidgetProvider(
-        data.hasValue ? data.value : null,
+        livePost.value ?? data.value,
       ),
     );
     final postCardNotifier = ref.watch(
       postCardWidgetProvider(
-        post,
+        livePost.value ?? data.value,
       ).notifier,
-    );
-    final userNotifier = ref.watch(
-      currentActiveUserProvider.notifier,
     );
 
     return Scaffold(
@@ -78,31 +80,17 @@ class PostDetailScreen extends ConsumerWidget {
                     if (!postCardState.isOwner)
                       IconButton(
                         onPressed: () async {
-                          final result = await userNotifier.toggleFollow(
-                            data.value!.ownerId,
-                          );
-
-                          if (result) {
-                            postCardNotifier.setIsFollower();
-                            if (!postCardState.isFollower) {
-                              TToastMessages.infoToast(
-                                'You are now following ${data.value!.owner!.userInfo!.userName}',
-                              );
-                            } else {
-                              TToastMessages.infoToast(
-                                'You are no longer following ${data.value!.owner!.userInfo!.userName}',
-                              );
-                            }
-                          }
+                          await postCardNotifier
+                              .toggleFollow(data.value!.ownerId);
                         },
                         icon: Icon(
                           postCardState.isFollower
-                              ? Icons.person_remove_alt_1_rounded
-                              : Icons.person_add_alt_rounded,
-                          size: 27,
+                              ? Icons.person_remove_sharp
+                              : Icons.person_add_sharp,
                           color: !postCardState.isFollower
                               ? TColors.primary
                               : null,
+                          size: 30,
                         ),
                       ),
                     const SizedBox(
@@ -221,12 +209,9 @@ class PostDetailScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ContentSingleButton(
                 onPressed: () {
-                  context.push(
-                    '/create/post/0',
-                    extra: {
-                      'parent': data,
-                    }
-                  );
+                  context.push('/create/post/0', extra: {
+                    'parent': data,
+                  });
                 },
                 text: 'Share your opinion',
                 buttonIcon: Iconsax.magicpen5,

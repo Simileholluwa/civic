@@ -10,7 +10,6 @@ class PostHelperFunctions {
 
   static Future<bool?> deletePostDialog(
     BuildContext context,
-    PostCardWidget postCardNotifier,
     int postId,
   ) {
     return postDialog(
@@ -18,20 +17,12 @@ class PostHelperFunctions {
       title: 'Delete post?',
       description: 'Proceed with caution as this action is '
           'irreversible.',
-      onTapSkipButton: context.pop,
+      onTapSkipButton: () => context.pop(false),
       activeButtonText: 'Delete',
       activeButtonLoading: false,
       skipButtonLoading: false,
       skipText: 'Cancel',
-      onTapActiveButton: () async {
-        if (context.mounted) {
-          context.pop();
-        }
-        await postCardNotifier.deletePost(
-          postId,
-        );
-        
-      },
+      onTapActiveButton: () => context.pop(true),
     );
   }
 
