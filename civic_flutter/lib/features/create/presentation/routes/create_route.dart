@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/create/presentation/widgets/create_dialog.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -25,6 +26,7 @@ class CreateRoutes {
                 id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
                 project: data?['project'],
                 parent: data?['parent'],
+                post: data?['post'],
               );
             },
           ),
@@ -33,6 +35,7 @@ class CreateRoutes {
             builder: (context, state) {
               return CreateProjectScreen(
                 id: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
+                project: state.extra as Project?,
               );
             },
           ),

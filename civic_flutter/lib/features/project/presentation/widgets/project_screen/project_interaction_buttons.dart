@@ -135,6 +135,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 : () {
                     context.push(
                       '/create/project/${project.id}',
+                      extra: project,
                     );
                   },
           ),

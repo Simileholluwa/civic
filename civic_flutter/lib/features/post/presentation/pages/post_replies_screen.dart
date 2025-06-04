@@ -92,7 +92,7 @@ class PostRepliesScreen extends ConsumerWidget {
         },
         error: (error, __) {
           final err = error as Map<String, dynamic>;
-          if (err['message'] == 'retry') {
+          if (err['action'] == 'retry') {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,

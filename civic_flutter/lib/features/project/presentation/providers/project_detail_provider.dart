@@ -19,7 +19,10 @@ Future<Project> projectDetail(
     final result = await getProjectDraft(NoParams());
     result.fold(
       (error) {
-        completer.completeError(error);
+        completer.completeError({
+          'message': error.message,
+          'action': error.action,
+        });
       },
       (project) async {
         completer.complete(project);
@@ -36,7 +39,10 @@ Future<Project> projectDetail(
 
     result.fold(
       (error) {
-        completer.completeError(error);
+        completer.completeError({
+          'message': error.message,
+          'action': error.action,
+        });
       },
       (project) async {
         completer.complete(project);

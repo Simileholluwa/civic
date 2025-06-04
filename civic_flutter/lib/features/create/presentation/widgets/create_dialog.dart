@@ -75,7 +75,7 @@ class CreateContentDialog extends ConsumerWidget {
                   onTap: isLeader
                       ? () {
                           context.push(
-                            '/create/project/0',
+                            '/create/project/0',                           
                           );
                         }
                       : null,

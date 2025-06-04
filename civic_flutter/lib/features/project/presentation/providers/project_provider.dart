@@ -771,8 +771,8 @@ class ProjectProvider extends _$ProjectProvider {
         Project(
           id: projectId,
           ownerId: ownerId,
-          title: state.title,
-          description: state.description,
+          title: state.title.trim(),
+          description: state.description.trim(),
           projectCategory: state.projectCategory,
           projectSubCategory: state.projectSubCategory,
           startDate: state.startDate,

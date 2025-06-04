@@ -30,7 +30,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<String, Project>> getProject({required int id}) async {
+  Future<Either<Failure, Project>> getProject({required int id}) async {
     try {
       final result = await _remoteDatasource.getProject(
         id: id,
@@ -38,7 +38,10 @@ class ProjectRepositoryImpl extends ProjectRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(
-        e.message,
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
       );
     }
   }
@@ -370,7 +373,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
   Future<Either<Failure, void>> deleteProjectDraft() async {
     try {
@@ -384,7 +387,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
   Future<Either<Failure, Project>> getProjectDraft() async {
     try {
@@ -398,9 +401,11 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> saveProjectDraft({required Project project,}) async {
+  Future<Either<Failure, void>> saveProjectDraft({
+    required Project project,
+  }) async {
     try {
       final result = await _localDatasource.saveProjectDraft(
         project: project,

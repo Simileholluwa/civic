@@ -68,6 +68,9 @@ class PostDetailOptions extends ConsumerWidget {
             onPressed: () async {
               context.push(
                 '/create/post/${post.id}',
+                extra: {
+                  'post': post,
+                },
               );
             },
             icon: Icon(

@@ -16,11 +16,11 @@ class PostCommentReplyCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final commentPagingControllerNotifier = ref.watch(
+    final repliesController = ref.watch(
       paginatedPostCommentRepliesListProvider(postId).notifier,
     );
     return AppInfiniteList<Post>(
-      pagingController: commentPagingControllerNotifier.pagingController,
+      pagingController: repliesController.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, value, index) {
@@ -63,7 +63,7 @@ class PostCommentReplyCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: () => commentPagingControllerNotifier.refresh(),
+      onRefresh: () => repliesController.refresh(),
       noItemsFound: ContentNoItemsFound(),
       firstPageProgressIndicator: Center(
                 child: LoadingAnimationWidget.progressiveDots(
@@ -71,6 +71,10 @@ class PostCommentReplyCard extends ConsumerWidget {
                   size: 50,
                 ),
               ),
+      firstPageErrorIndicator: CommentRepliesPageError(
+        onTap: () => repliesController.refresh(),
+        errorMessage: "We couldn't fetch replies for this post. Please try again.",
+      ),
     );
   }
 }

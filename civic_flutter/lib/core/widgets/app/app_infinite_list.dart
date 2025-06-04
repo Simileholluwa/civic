@@ -16,7 +16,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
     this.shrinkWrap,
     this.showDivider = true,
     this.showRefresh = true,
+    this.errorMessage,
     this.firstPageProgressIndicator,
+    this.firstPageErrorIndicator,
   });
 
   final PagingController<int, T> pagingController;
@@ -33,6 +35,8 @@ class AppInfiniteList<T> extends ConsumerWidget {
   final bool? shrinkWrap;
   final bool showDivider;
   final Widget? firstPageProgressIndicator;
+  final Widget? firstPageErrorIndicator;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -65,16 +69,18 @@ class AppInfiniteList<T> extends ConsumerWidget {
                 );
           },
           firstPageErrorIndicatorBuilder: (context) {
-            return LoadingError(
-              retry: () => Future.sync(
-                () => onRefresh(),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              mainAxisAlignment: MainAxisAlignment.center,
-              showRefresh: showRefresh,
-            );
+            return firstPageErrorIndicator ??
+                LoadingError(
+                  retry: () => Future.sync(
+                    () => onRefresh(),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  errorMessage: errorMessage,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  showRefresh: showRefresh,
+                );
           },
           noItemsFoundIndicatorBuilder: (context) {
             return Padding(

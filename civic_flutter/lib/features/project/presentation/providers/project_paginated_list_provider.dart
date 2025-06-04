@@ -42,7 +42,7 @@ class PaginatedProjectList extends _$PaginatedProjectList {
         pagingController.value = PagingState(
           nextPageKey: null,
           itemList: null,
-          error: error,
+          error: error.message,
         );
       }, (data) {
         if (data.canLoadMore) {

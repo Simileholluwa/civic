@@ -29,30 +29,31 @@ class PaginatedPostList extends _$PaginatedPostList {
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
     try {
-    final listPostUseCase = ref.read(getPostsProvider);
-    final result = await listPostUseCase(
-      GetPostsParams(
-        page,
-        limit,
-      ),
-    );
-    result.fold((error) {
-      log(error.toString(), name: 'PaginatedPostList');
+      final listPostUseCase = ref.read(getPostsProvider);
+      final result = await listPostUseCase(
+        GetPostsParams(
+          page,
+          limit,
+        ),
+      );
+      result.fold((error) {
+        log(error.toString(), name: 'PaginatedPostList');
         pagingController.value = PagingState(
           nextPageKey: null,
           itemList: null,
-          error: error,
+          error: error.message,
         );
-    }, (data) {
-      if (data.canLoadMore) {
-        pagingController.appendPage(
-          data.results,
-          data.page + 1,
-        );
-      } else {
-        pagingController.appendLastPage(data.results);
-      }
-    });} catch (e) {
+      }, (data) {
+        if (data.canLoadMore) {
+          pagingController.appendPage(
+            data.results,
+            data.page + 1,
+          );
+        } else {
+          pagingController.appendLastPage(data.results);
+        }
+      });
+    } catch (e) {
       log(e.toString(), name: 'PaginatedPostList');
       pagingController.value = PagingState(
         nextPageKey: null,

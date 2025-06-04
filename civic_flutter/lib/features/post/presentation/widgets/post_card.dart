@@ -24,6 +24,7 @@ class PostCard extends ConsumerWidget {
       onTap: () {
         context.push(
           '/feed/post/${post.id}',
+          extra: post,
         );
       },
     );

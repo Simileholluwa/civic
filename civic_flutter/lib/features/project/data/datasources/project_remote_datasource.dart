@@ -111,13 +111,19 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       );
       return result;
     } on PostException catch (e) {
-      throw ServerException(message: e.message);
+      throw ServerException(
+        message: e.message,
+        action: e.action,
+      );
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
+        action: 'retry',
       );
     }
   }

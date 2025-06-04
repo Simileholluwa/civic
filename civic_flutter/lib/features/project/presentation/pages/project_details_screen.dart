@@ -25,13 +25,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
-        data.hasValue ? data.value : null,
+        data.value,
       ),
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
-        data.hasValue ? data.value : null,
+        data.value,
       ).notifier,
     );
     return Scaffold(

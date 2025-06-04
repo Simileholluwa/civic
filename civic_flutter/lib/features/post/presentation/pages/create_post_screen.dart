@@ -14,19 +14,27 @@ class CreatePostScreen extends ConsumerWidget {
     required this.id,
     required this.project,
     required this.parent,
+    this.post,
   });
 
   final int id;
   final Project? project;
   final Post? parent;
+  final Post? post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final data = ref.watch(
-      postDetailProvider(id),
-    );
+    final data = post == null
+        ? ref.watch(
+            postDetailProvider(
+              id,
+            ),
+          )
+        : AsyncValue.data(
+            post,
+          );
     final postState = ref.watch(
       regularPostProvider(
         data.value,
@@ -87,7 +95,8 @@ class CreatePostScreen extends ConsumerWidget {
                         project?.id,
                       )
                     : isReplyOrComment
-                        ? parent!.postType == PostType.regular || parent!.postType == PostType.projectRepost
+                        ? parent!.postType == PostType.regular ||
+                                parent!.postType == PostType.projectRepost
                             ? await postNotifier.sendComment(
                                 parent!.id!,
                               )
@@ -166,35 +175,40 @@ class CreatePostScreen extends ConsumerWidget {
                 return null;
               }
             },
-            error: (err, st) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 5,
-                ),
-                child: ContentSingleButton(
-                  onPressed: () {
-                    ref.invalidate(postDetailProvider);
-                  },
-                  text: 'Retry',
-                  buttonIcon: Iconsax.refresh,
-                ),
-              );
+            error: (error, st) {
+              final err = error as Map<String, dynamic>;
+              if (err['action'] == 'retry') {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 5,
+                  ),
+                  child: ContentSingleButton(
+                    onPressed: () {
+                      ref.invalidate(postDetailProvider);
+                    },
+                    text: 'Retry',
+                    buttonIcon: Iconsax.refresh,
+                  ),
+                );
+              }
+              return null;
             },
             loading: () {
               return null;
             },
           ),
           body: data.when(
-            data: (post) {
+            data: (value) {
               return CreatePostWidget(
-                post: post,
+                post: value!,
                 project: project,
                 parent: parent,
                 isReplyOrComment: parent != null,
               );
             },
             error: (error, st) {
+              final err = error as Map<String, dynamic>;
               return LoadingError(
                 retry: null,
                 imageString: TImageTexts.error,
@@ -202,7 +216,7 @@ class CreatePostScreen extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                errorMessage: error.toString(),
+                errorMessage: err['message'],
               );
             },
             loading: () {

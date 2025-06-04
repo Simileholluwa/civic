@@ -1,3 +1,4 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,23 @@ class CreateProjectScreen extends ConsumerWidget {
   const CreateProjectScreen({
     super.key,
     required this.id,
+    this.project,
   });
 
   final int id;
+  final Project? project;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(
-      projectDetailProvider(
-        id,
-      ),
-    );
+    final data = project == null
+        ? ref.watch(
+            projectDetailProvider(
+              id,
+            ),
+          )
+        : AsyncValue.data(
+            project,
+          );
     final projectCreationState = ref.watch(
       projectProviderProvider(
         data.value,
@@ -91,9 +99,9 @@ class CreateProjectScreen extends ConsumerWidget {
             ),
           ),
           body: data.when(
-            data: (project) {
+            data: (value) {
               return CreateProjectWidget(
-                project: project,
+                project: value!,
               );
             },
             error: (error, st) {

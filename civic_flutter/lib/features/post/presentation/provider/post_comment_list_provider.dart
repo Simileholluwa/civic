@@ -29,29 +29,45 @@ class PaginatedPostCommentList extends _$PaginatedPostCommentList {
   }
 
   Future<void> fetchPage(int postId, int page, {int limit = 50}) async {
-    if (pagingController.itemList != null) {
+    try {
+      if (pagingController.itemList != null) {
+        pagingController.value = PagingState(
+          itemList: null,
+        );
+      }
+      final listPostCommentUseCase = ref.read(getPostCommentsProvider);
+      final result = await listPostCommentUseCase(
+        GetPostCommentsParams(
+          postId,
+          page,
+          limit,
+        ),
+      );
+      result.fold((error) {
+        log(error.message, name: 'PaginatedPostCommentList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: error.message,
+        );
+      }, (data) {
+        if (data.canLoadMore) {
+          pagingController.appendPage(
+            data.results,
+            data.page + 1,
+          );
+        } else {
+          pagingController.appendLastPage(data.results);
+        }
+      });
+    } catch (e) {
+      log(e.toString(), name: 'PaginatedPostCommentList');
       pagingController.value = PagingState(
+        nextPageKey: null,
         itemList: null,
+        error: e.toString(),
       );
     }
-    final listPostCommentUseCase = ref.read(getPostCommentsProvider);
-    final result = await listPostCommentUseCase(
-      GetPostCommentsParams(
-        postId,
-        page,
-        limit,
-      ),
-    );
-    result.fold((error) => log(error.message), (data) {
-      if (data.canLoadMore) {
-        pagingController.appendPage(
-          data.results,
-          data.page + 1,
-        );
-      } else {
-        pagingController.appendLastPage(data.results);
-      }
-    });
   }
 
   void refresh() {

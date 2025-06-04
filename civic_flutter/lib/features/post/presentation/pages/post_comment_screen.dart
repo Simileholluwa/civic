@@ -92,7 +92,7 @@ class PostCommentScreen extends ConsumerWidget {
         },
         error: (error, __) {
           final err = error as Map<String, dynamic>;
-          if (err['message'] == 'retry') {
+          if (err['action'] == 'retry') {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -119,7 +119,8 @@ class PostCommentScreen extends ConsumerWidget {
             ),
             child: PostCommentCard(
               postId: postId,
-              firstPageProgressIndicator: Center(
+              firstPageProgressIndicator: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50,),
                 child: LoadingAnimationWidget.progressiveDots(
                   color: TColors.primary,
                   size: 50,

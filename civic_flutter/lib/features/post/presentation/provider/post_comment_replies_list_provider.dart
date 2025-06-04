@@ -30,24 +30,40 @@ class PaginatedPostCommentRepliesList
   }
 
   Future<void> fetchPage(int commentId, int page, {int limit = 50}) async {
-    final commentReplies = ref.read(getPostCommentRepliesProvider);
-    final result = await commentReplies(
-      GetPostCommentRepliesParams(
-        commentId,
-        page,
-        limit,
-      ),
-    );
-    result.fold((error) => log(error.message), (data) {
-      if (data.canLoadMore) {
-        pagingController.appendPage(
-          data.results,
-          data.page + 1,
+    try {
+      final commentReplies = ref.read(getPostCommentRepliesProvider);
+      final result = await commentReplies(
+        GetPostCommentRepliesParams(
+          commentId,
+          page,
+          limit,
+        ),
+      );
+      result.fold((error) {
+        log(error.message, name: 'PaginatedPostCommentRepliesList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: error.message,
         );
-      } else {
-        pagingController.appendLastPage(data.results);
-      }
-    });
+      }, (data) {
+        if (data.canLoadMore) {
+          pagingController.appendPage(
+            data.results,
+            data.page + 1,
+          );
+        } else {
+          pagingController.appendLastPage(data.results);
+        }
+      });
+    } catch (e) {
+      log(e.toString(), name: 'PaginatedPostCommentRepliesList');
+      pagingController.value = PagingState(
+        nextPageKey: null,
+        itemList: null,
+        error: e.toString(),
+      );
+    }
   }
 
   void refresh() {

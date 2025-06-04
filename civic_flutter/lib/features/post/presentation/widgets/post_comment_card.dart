@@ -70,6 +70,11 @@ class PostCommentCard extends ConsumerWidget {
       onRefresh: () => commentController.refresh(),
       firstPageProgressIndicator: firstPageProgressIndicator,
       noItemsFound: ContentNoItemsFound(),
+      firstPageErrorIndicator: CommentRepliesPageError(
+        onTap: () => commentController.refresh(),
+        errorMessage: "We couldn't fetch comments for this post. Please try again.",
+      ),
+      errorMessage: commentController.pagingController.error,
     );
   }
 }

@@ -118,8 +118,12 @@ class ShowPostActions extends ConsumerWidget {
                 "You can change the content of this $type however, previous version(s) will be saved.",
             icon: Iconsax.edit,
             onTap: () {
+              context.pop();
               context.push(
                 '/create/post/${post.id}',
+                extra: {
+                  'post': post,
+                },
               );
             },
           ),

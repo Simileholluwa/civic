@@ -31,7 +31,7 @@ abstract class ProjectRepository {
     required bool isLike,
   });
 
-  Future<Either<String, Project>> getProject({
+  Future<Either<Failure, Project>> getProject({
     required int id,
   });
 

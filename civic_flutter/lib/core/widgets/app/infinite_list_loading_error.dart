@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 class LoadingError extends StatelessWidget {
   const LoadingError({
     super.key,
-    this.errorMessage =
-        'Something went wrong while fetching data. Please try again.',
+    this.errorMessage,
     required this.retry,
     this.padding = const EdgeInsets.fromLTRB(20, 20, 20, 0),
     this.imageString = TImageTexts.disconnected,
@@ -13,7 +12,7 @@ class LoadingError extends StatelessWidget {
     this.showRefresh = false,
   });
 
-  final String errorMessage;
+  final String? errorMessage;
   final VoidCallback? retry;
   final EdgeInsetsGeometry padding;
   final MainAxisAlignment? mainAxisAlignment;
@@ -34,7 +33,7 @@ class LoadingError extends StatelessWidget {
             ),
           ),
           Text(
-            errorMessage,
+            errorMessage ?? 'Something went wrong while fetching data. Please try again.',
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
