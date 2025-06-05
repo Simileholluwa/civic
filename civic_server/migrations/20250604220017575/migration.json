@@ -1,0 +1,332 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "expiresAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          },
+          {
+            "name": "votedBy",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          },
+          {
+            "name": "options",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<protocol:PollOption>?"
+          }
+        ],
+        "deleteColumns": [
+          "pollDuration",
+          "voteCount",
+          "options"
+        ],
+        "modifyColumns": [
+          {
+            "columnName": "createdAt",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "CURRENT_TIMESTAMP"
+          },
+          {
+            "columnName": "numberOfLikes",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0"
+          },
+          {
+            "columnName": "numberOfComments",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0"
+          },
+          {
+            "columnName": "numberOfViews",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0"
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"pollDuration\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "pollDuration"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"voteCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "voteCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column options of table poll is modified in a way that it must be deleted and recreated.",
+            "table": "poll",
+            "columns": [
+              "options"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "One or more columns are added to table \"poll_vote\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+            "table": "poll_vote",
+            "columns": [
+              "optionId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "poll_option",
+        "dartName": "PollOption",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('poll_option_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "pollId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "option",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "votedBy",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "poll_option_fk_0",
+            "columns": [
+              "pollId"
+            ],
+            "referenceTable": "poll",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "poll_option_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "poll_vote"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "poll_vote",
+        "dartName": "PollVote",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('poll_vote_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "pollId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "optionId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "voterId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "votedAt",
+            "columnType": 4,
+            "isNullable": true,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "poll_vote_fk_0",
+            "columns": [
+              "pollId"
+            ],
+            "referenceTable": "poll",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          },
+          {
+            "constraintName": "poll_vote_fk_1",
+            "columns": [
+              "optionId"
+            ],
+            "referenceTable": "poll_option",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          },
+          {
+            "constraintName": "poll_vote_fk_2",
+            "columns": [
+              "voterId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "poll_vote_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "poll_vote_unique_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "pollId"
+              },
+              {
+                "type": 0,
+                "definition": "voterId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"pollDuration\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "pollDuration"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"voteCount\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "voteCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column options of table poll is modified in a way that it must be deleted and recreated.",
+      "table": "poll",
+      "columns": [
+        "options"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"poll_vote\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "poll_vote",
+      "columns": [
+        "optionId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -280,24 +280,24 @@ class RegularPost extends _$RegularPost {
     }
   }
 
-  Future<Post?> sendPost(
+  Future<void> sendPost(
     Post post,
   ) async {
     final savePost = ref.read(savePostProvider);
 
-    final saveResult = await savePost(
+    final result = await savePost(
       SavePostParams(
         post,
       ),
     );
-    return saveResult.fold((error) async {
+    return result.fold((error) async {
       log(error.message);
       await savePostAsDraft(
         null,
         error.message,
       );
 
-      return null;
+      return;
     }, (data) async {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
       if (data == null) {
@@ -305,7 +305,7 @@ class RegularPost extends _$RegularPost {
           post.id,
           'Something went wrong',
         );
-        return null;
+        return;
       }
       ref.read(paginatedPostListProvider.notifier).addPost(
             data,
@@ -313,11 +313,11 @@ class RegularPost extends _$RegularPost {
       TToastMessages.successToast(
         'Your post was sent.',
       );
-      return data;
+      return;
     });
   }
 
-  Future<void> saveInFuture(
+  Future<void> savePostInFuture(
     Post post,
     DateTime dateTime,
   ) async {
@@ -435,7 +435,7 @@ class RegularPost extends _$RegularPost {
         post,
       );
     } else {
-      await saveInFuture(
+      await savePostInFuture(
         post,
         scheduledDateTime!,
       );

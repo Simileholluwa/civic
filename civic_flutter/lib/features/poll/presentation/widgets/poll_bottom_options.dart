@@ -8,7 +8,7 @@ import 'package:iconsax/iconsax.dart';
 class PollBottomOptions extends ConsumerWidget {
   const PollBottomOptions({
     super.key,
-     this.poll,
+    this.poll,
   });
   final Poll? poll;
 
@@ -21,15 +21,9 @@ class PollBottomOptions extends ConsumerWidget {
         left: TSizes.xs,
         right: TSizes.sm,
       ),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).dividerColor,
-          ),
-        ),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        spacing: 4,
         children: [
           Row(
             children: [
@@ -42,12 +36,7 @@ class PollBottomOptions extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Iconsax.tag_user5,
-                  size: 27,
-                  color: TColors.primary,
                 ),
-              ),
-              const SizedBox(
-                width: TSizes.xs,
               ),
               IconButton(
                 onPressed: () => PollHelperFunctions.selectLocation(
@@ -56,12 +45,7 @@ class PollBottomOptions extends ConsumerWidget {
                 ),
                 icon: const Icon(
                   Iconsax.location5,
-                  size: 27,
-                  color: TColors.primary,
                 ),
-              ),
-              const SizedBox(
-                width: TSizes.xs,
               ),
               IconButton(
                 onPressed: () {
@@ -71,22 +55,16 @@ class PollBottomOptions extends ConsumerWidget {
                 },
                 icon: const Icon(
                   Icons.timer,
-                  size: 27,
-                  color: TColors.primary,
                 ),
               ),
-              const SizedBox(
-                width: TSizes.xs,
-              ),
-              
             ],
           ),
-            Padding(
+          Padding(
             padding: const EdgeInsets.only(
               right: TSizes.sm,
             ),
             child: CreatContentTextCounter(
-              maxLength: 300,
+              maxLength: 400,
               currentTextLength: pollState.question.length,
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 
 class PollDurationAndAddOptions extends ConsumerWidget {
   const PollDurationAndAddOptions({
@@ -24,11 +25,11 @@ class PollDurationAndAddOptions extends ConsumerWidget {
         children: [
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: pollState.controllers.length < 5
+              onPressed: pollState.controllers.length < 4
                   ? () => pollNotifier.addOption(text: '')
                   : null,
               label: const Text(
-                'Add option',
+                'Add',
               ),
               icon: Icon(
                 Iconsax.add_circle,
@@ -41,15 +42,23 @@ class PollDurationAndAddOptions extends ConsumerWidget {
                 backgroundColor: pollState.controllers.length < 5
                     ? Theme.of(context).cardColor
                     : Theme.of(context).disabledColor,
-                padding: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5,),
               ),
             ),
           ),
           Expanded(
+            flex: 2,
             child: ElevatedButton.icon(
-              onPressed: () => pollDurationDialog(context: context, poll: poll),
+              onPressed: () async {
+                final selectedDateTime = await createContentPollDuration(
+                  context,
+                );
+                if (selectedDateTime != null) {
+                  pollNotifier.setExpiration(selectedDateTime);
+                }
+              },
               label: Text(
-                '${pollState.duration} ${pollState.duration == 1 ? 'Day' : 'Days'}',
+                DateFormat('hh:mm a • MMM d, y').format(pollState.expiresAt),
               ),
               icon: const Icon(
                 Iconsax.calendar_1,
@@ -57,8 +66,7 @@ class PollDurationAndAddOptions extends ConsumerWidget {
                 color: TColors.primary,
               ),
               style: ElevatedButton.styleFrom(
-                
-                padding: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10,),
               ),
             ),
           ),

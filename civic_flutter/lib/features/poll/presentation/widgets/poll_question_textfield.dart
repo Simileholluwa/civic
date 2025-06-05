@@ -47,7 +47,7 @@ class PollQuestionTextFormField extends ConsumerWidget {
           ),
           keyboardType: TextInputType.multiline,
           textInputAction: TextInputAction.newline,
-          maxLength: 300,
+          maxLength: 400,
           maxLines: null,
         ),
       ],

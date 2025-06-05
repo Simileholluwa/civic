@@ -1,0 +1,6 @@
+class: PollOptionResult
+fields: 
+    optionId: int,
+    option: String,
+    voteCount: int,
+    percentage: double,

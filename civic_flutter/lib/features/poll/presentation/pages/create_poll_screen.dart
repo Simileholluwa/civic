@@ -2,42 +2,63 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CreatePollScreen extends ConsumerWidget {
   const CreatePollScreen({
     super.key,
     required this.id,
-    required this.draft,
+    required this.poll,
   });
 
-  final DraftPoll? draft;
+  final Poll? poll;
   final int id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     final suggestions = ref.watch(mentionSuggestionsProvider);
-    final data = ref.watch(pollDetailProvider(draft, id));
+    final data = poll == null
+        ? ref.watch(
+            pollDetailProvider(
+              id,
+            ),
+          )
+        : AsyncValue.data(
+            poll,
+          );
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final pollState = ref.watch(pollsOptionsProvider(data.value));
+    final pollState = ref.watch(
+      pollsOptionsProvider(
+        data.value,
+      ),
+    );
+    final pollNotifier = ref.watch(
+      pollsOptionsProvider(
+        data.value,
+      ).notifier,
+    );
     final canSendPoll = pollState.question.isNotEmpty &&
         pollState.optionText.every((text) => text.isNotEmpty);
+    final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
+    final isVisibleNotifier = ref.watch(
+      appBottomNavigationVisibilityProvider(
+        null,
+      ).notifier,
+    );
+    Future.delayed(
+      Duration.zero,
+      () => isVisibleNotifier.hide(),
+    );
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop = canSendPoll
-            ? id == 0
-                ? await savePollDraftDialog(ref, context, data.value!)
-                : await editPollDialog(
-                    ref,
-                    context,
-                  )
+            ? await savePollDraftDialog(ref, context, data.value!)
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
@@ -53,23 +74,17 @@ class CreatePollScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: canSendPoll,
-              sendPressed: () {
-                context.go(
-                  FeedRoutes.namespace,
-                  extra: () => PollHelperFunctions.sendPoll(
-                    ref,
-                    data.value!,
-                    id,
-                  ),
+              sendPressed: () async {
+                context.pop();
+                await pollNotifier.send(
+                  id,
                 );
               },
+              title: CreateContentPrivacy(),
               onCanSendPost: () async {
-                final shouldPop = id == 0
+                final bool? shouldPop = canSendPoll
                     ? await savePollDraftDialog(ref, context, data.value!)
-                    : await editPollDialog(
-                        ref,
-                        context,
-                      );
+                    : true;
                 if (shouldPop ?? false) {
                   if (context.mounted) context.pop();
                 }
@@ -95,12 +110,37 @@ class CreatePollScreen extends ConsumerWidget {
                       ),
                     )
                   : null,
-          bottomNavigationBar:
-              (data.isLoading || data.hasError || data.value == null)
-                  ? const SizedBox()
-                  : PollBottomNavigation(
-                      poll: data.value!,
-                    ),
+          bottomNavigationBar: data.when(
+            data: (_) {
+              if (scheduledDateTimeState != null) {
+                return const CreateContentSchedule();
+              } else {
+                return null;
+              }
+            },
+            error: (error, st) {
+              final err = error as Map<String, dynamic>;
+              if (err['action'] == 'retry') {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 5,
+                  ),
+                  child: ContentSingleButton(
+                    onPressed: () {
+                      ref.invalidate(pollDetailProvider);
+                    },
+                    text: 'Retry',
+                    buttonIcon: Iconsax.refresh,
+                  ),
+                );
+              }
+              return null;
+            },
+            loading: () {
+              return null;
+            },
+          ),
           body: data.when(
             data: (poll) {
               if (poll == null) {
@@ -120,9 +160,7 @@ class CreatePollScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget(
-                
-              );
+              return AppLoadingWidget();
             },
           ),
         ),

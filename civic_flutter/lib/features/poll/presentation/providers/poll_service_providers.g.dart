@@ -143,77 +143,57 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
-String _$saveDraftPollHash() => r'be3c0ab8f5b132edee268297cb9c163df820eec8';
+String _$savePollDraftHash() => r'c1082dcf77ae1de4fb828355432fbb78d4ebada1';
 
-/// See also [saveDraftPoll].
-@ProviderFor(saveDraftPoll)
-final saveDraftPollProvider =
-    AutoDisposeProvider<SaveDraftPollUseCase>.internal(
-  saveDraftPoll,
-  name: r'saveDraftPollProvider',
+/// See also [savePollDraft].
+@ProviderFor(savePollDraft)
+final savePollDraftProvider =
+    AutoDisposeProvider<SavePollDraftUseCase>.internal(
+  savePollDraft,
+  name: r'savePollDraftProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$saveDraftPollHash,
+      : _$savePollDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef SaveDraftPollRef = AutoDisposeProviderRef<SaveDraftPollUseCase>;
-String _$getDraftsPollHash() => r'324d711ac1a7753bb06da44fba06a7cf8e1f48ab';
+typedef SavePollDraftRef = AutoDisposeProviderRef<SavePollDraftUseCase>;
+String _$getPollDraftHash() => r'11eb05d2a490463c5f5256347c44a4a3a56cb635';
 
-/// See also [getDraftsPoll].
-@ProviderFor(getDraftsPoll)
-final getDraftsPollProvider =
-    AutoDisposeProvider<GetDraftsPollUseCase>.internal(
-  getDraftsPoll,
-  name: r'getDraftsPollProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getDraftsPollHash,
+/// See also [getPollDraft].
+@ProviderFor(getPollDraft)
+final getPollDraftProvider = AutoDisposeProvider<GetPollDraftUseCase>.internal(
+  getPollDraft,
+  name: r'getPollDraftProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getPollDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetDraftsPollRef = AutoDisposeProviderRef<GetDraftsPollUseCase>;
-String _$deleteDraftsPollHash() => r'bf47149a90f8beae55304ce53650b224a03e2da0';
+typedef GetPollDraftRef = AutoDisposeProviderRef<GetPollDraftUseCase>;
+String _$deletePollDraftHash() => r'8acd5982e8faef4c417af3aa1d5c49a13fc54555';
 
-/// See also [deleteDraftsPoll].
-@ProviderFor(deleteDraftsPoll)
-final deleteDraftsPollProvider =
-    AutoDisposeProvider<DeleteDraftsPollUseCase>.internal(
-  deleteDraftsPoll,
-  name: r'deleteDraftsPollProvider',
+/// See also [deletePollDraft].
+@ProviderFor(deletePollDraft)
+final deletePollDraftProvider =
+    AutoDisposeProvider<DeletePollDraftUseCase>.internal(
+  deletePollDraft,
+  name: r'deletePollDraftProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$deleteDraftsPollHash,
+      : _$deletePollDraftHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef DeleteDraftsPollRef = AutoDisposeProviderRef<DeleteDraftsPollUseCase>;
-String _$deleteDraftPollHash() => r'dc8a10f5582d6863c2946626ba73c9392766f38f';
-
-/// See also [deleteDraftPoll].
-@ProviderFor(deleteDraftPoll)
-final deleteDraftPollProvider =
-    AutoDisposeProvider<DeleteDraftPollUseCase>.internal(
-  deleteDraftPoll,
-  name: r'deleteDraftPollProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteDraftPollHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteDraftPollRef = AutoDisposeProviderRef<DeleteDraftPollUseCase>;
+typedef DeletePollDraftRef = AutoDisposeProviderRef<DeletePollDraftUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

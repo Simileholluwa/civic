@@ -107,11 +107,8 @@ class CreateContentDialog extends ConsumerWidget {
                   icon: Iconsax.chart,
                   onTap: () {
                     context.push(
-                      AppRoutes.createPoll,
-                      extra: {
-                        'id': 0,
-                        'draft': null,
-                      },
+                      '/create/poll/0',
+                      extra: null,
                     );
                   },
                   itemCaption:

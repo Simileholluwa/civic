@@ -11,53 +11,37 @@ Future<bool?> savePollDraftDialog(
   BuildContext context,
   Poll poll,
 ) {
-  final pollState = ref.watch(pollsOptionsProvider(poll));
-    return postDialog(
-      context: context,
-      title: 'Save poll as draft?',
-      description: 'Draft poll will be saved in drafts for '
-          'a maximum of 10 days.',
-      onTapSkipButton: () {
+  return postDialog(
+    context: context,
+    title: 'Save poll as draft?',
+    description: 'Would you like to save the changes you have made?',
+    onTapSkipButton: () {
+      context.go(
+        FeedRoutes.namespace,
+        extra: null,
+      );
+    },
+    activeButtonText: 'Save as draft',
+    activeButtonLoading: false,
+    skipButtonLoading: false,
+    skipText: "Don't save",
+    onTapActiveButton: () async {
+      if (context.mounted) {
         context.go(
           FeedRoutes.namespace,
           extra: null,
         );
-      },
-      activeButtonText: 'Save as draft',
-      activeButtonLoading: false,
-      skipButtonLoading: false,
-      skipText: "Don't save",
-      onTapActiveButton: () async {
-        if (context.mounted) {
-          context.go(
-            FeedRoutes.namespace,
-            extra: null,
-          );
-        }
-        final result =
-            await ref.read(pollDraftsProvider.notifier).saveDraftPoll(
-                  DraftPoll(
-                    draftId: DateTime.now().millisecondsSinceEpoch,
-                    options: PollOption(
-                      option: pollState.optionText,
-                      votes: List<int>.filled(poll.options!.votes.length, 0),
-                      voters: [],
-                    ),
-                    question: pollState.question,
-                    taggedUsers: pollState.taggedUsers,
-                    locations: pollState.locations,
-                    createdAt: DateTime.now(),
-                    mentions: pollState.mentions,
-                    tags: pollState.tags,
-                    pollDuration: 
-                      pollState.duration,
-                    
-                  ),
-                );
-        if (result) {
-          TToastMessages.successToast(
-            'Your poll has been saved as draft.',
-          );
-        }
-      },);}
-    
+      }
+
+      final pollNotifier = ref.read(
+        pollsOptionsProvider(
+          poll,
+        ).notifier,
+      );
+      await pollNotifier.savePollAsDraft(
+        poll.id,
+        null,
+      );
+    },
+  );
+}

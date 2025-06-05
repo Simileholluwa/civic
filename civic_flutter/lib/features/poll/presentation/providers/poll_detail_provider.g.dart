@@ -6,7 +6,7 @@ part of 'poll_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pollDetailHash() => r'd90f3f9afa882de00c3c98dc1d44c796e16bb94f';
+String _$pollDetailHash() => r'748ce4f6a3582c24f0bbb4e63f0a9c97c6d6a3b0';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,17 +34,15 @@ class _SystemHash {
 const pollDetailProvider = PollDetailFamily();
 
 /// See also [pollDetail].
-class PollDetailFamily extends Family<AsyncValue<Poll?>> {
+class PollDetailFamily extends Family<AsyncValue<Poll>> {
   /// See also [pollDetail].
   const PollDetailFamily();
 
   /// See also [pollDetail].
   PollDetailProvider call(
-    DraftPoll? draftPoll,
     int id,
   ) {
     return PollDetailProvider(
-      draftPoll,
       id,
     );
   }
@@ -54,7 +52,6 @@ class PollDetailFamily extends Family<AsyncValue<Poll?>> {
     covariant PollDetailProvider provider,
   ) {
     return call(
-      provider.draftPoll,
       provider.id,
     );
   }
@@ -75,15 +72,13 @@ class PollDetailFamily extends Family<AsyncValue<Poll?>> {
 }
 
 /// See also [pollDetail].
-class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
+class PollDetailProvider extends AutoDisposeFutureProvider<Poll> {
   /// See also [pollDetail].
   PollDetailProvider(
-    DraftPoll? draftPoll,
     int id,
   ) : this._internal(
           (ref) => pollDetail(
             ref as PollDetailRef,
-            draftPoll,
             id,
           ),
           from: pollDetailProvider,
@@ -95,7 +90,6 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
           dependencies: PollDetailFamily._dependencies,
           allTransitiveDependencies:
               PollDetailFamily._allTransitiveDependencies,
-          draftPoll: draftPoll,
           id: id,
         );
 
@@ -106,16 +100,14 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.draftPoll,
     required this.id,
   }) : super.internal();
 
-  final DraftPoll? draftPoll;
   final int id;
 
   @override
   Override overrideWith(
-    FutureOr<Poll?> Function(PollDetailRef provider) create,
+    FutureOr<Poll> Function(PollDetailRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -126,28 +118,24 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        draftPoll: draftPoll,
         id: id,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<Poll?> createElement() {
+  AutoDisposeFutureProviderElement<Poll> createElement() {
     return _PollDetailProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PollDetailProvider &&
-        other.draftPoll == draftPoll &&
-        other.id == id;
+    return other is PollDetailProvider && other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, draftPoll.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
@@ -156,20 +144,15 @@ class PollDetailProvider extends AutoDisposeFutureProvider<Poll?> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PollDetailRef on AutoDisposeFutureProviderRef<Poll?> {
-  /// The parameter `draftPoll` of this provider.
-  DraftPoll? get draftPoll;
-
+mixin PollDetailRef on AutoDisposeFutureProviderRef<Poll> {
   /// The parameter `id` of this provider.
   int get id;
 }
 
-class _PollDetailProviderElement extends AutoDisposeFutureProviderElement<Poll?>
+class _PollDetailProviderElement extends AutoDisposeFutureProviderElement<Poll>
     with PollDetailRef {
   _PollDetailProviderElement(super.provider);
 
-  @override
-  DraftPoll? get draftPoll => (origin as PollDetailProvider).draftPoll;
   @override
   int get id => (origin as PollDetailProvider).id;
 }

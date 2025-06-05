@@ -56,7 +56,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
       var existingUploadedVideo = '';
       var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/draft');
+      final directory = Directory('${appDir.path}/postDraft');
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
@@ -112,7 +112,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
     try {
       await _prefs.remove('postDraft');
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/draft');
+      final directory = Directory('${appDir.path}/postDraft');
       if (!await directory.exists()) {
         await directory.delete(recursive: true);
       }

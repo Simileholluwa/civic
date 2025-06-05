@@ -22,8 +22,8 @@ import '../endpoints/user_nin_endpoint.dart' as _i10;
 import '../endpoints/user_record_endpoint.dart' as _i11;
 import 'package:civic_server/src/generated/article/article.dart' as _i12;
 import 'package:civic_server/src/generated/poll/poll.dart' as _i13;
-import 'package:civic_server/src/generated/post/post.dart' as _i14;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i15;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i14;
+import 'package:civic_server/src/generated/post/post.dart' as _i15;
 import 'package:civic_server/src/generated/project/project.dart' as _i16;
 import 'package:civic_server/src/generated/project/project_review.dart' as _i17;
 import 'package:civic_server/src/generated/project/project_vetting.dart'
@@ -388,8 +388,32 @@ class Endpoints extends _i1.EndpointDispatch {
             params['dateTime'],
           ),
         ),
-        'getPoll': _i1.MethodConnector(
-          name: 'getPoll',
+        'castVote': _i1.MethodConnector(
+          name: 'castVote',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'optionId': _i1.ParameterDescription(
+              name: 'optionId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).castVote(
+            session,
+            params['pollId'],
+            params['optionId'],
+          ),
+        ),
+        'clearVote': _i1.MethodConnector(
+          name: 'clearVote',
           params: {
             'pollId': _i1.ParameterDescription(
               name: 'pollId',
@@ -401,33 +425,27 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).getPoll(
+              (endpoints['poll'] as _i6.PollEndpoint).clearVote(
             session,
-            params['pollId'],
+            pollId: params['pollId'],
           ),
         ),
-        'castVote': _i1.MethodConnector(
-          name: 'castVote',
+        'getPollResults': _i1.MethodConnector(
+          name: 'getPollResults',
           params: {
             'pollId': _i1.ParameterDescription(
               name: 'pollId',
               type: _i1.getType<int>(),
               nullable: false,
-            ),
-            'option': _i1.ParameterDescription(
-              name: 'option',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).castVote(
+              (endpoints['poll'] as _i6.PollEndpoint).getPollResults(
             session,
             params['pollId'],
-            params['option'],
           ),
         ),
         'getPolls': _i1.MethodConnector(
@@ -454,6 +472,24 @@ class Endpoints extends _i1.EndpointDispatch {
             page: params['page'],
           ),
         ),
+        'getPoll': _i1.MethodConnector(
+          name: 'getPoll',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).getPoll(
+            session,
+            params['pollId'],
+          ),
+        ),
         'hasVoted': _i1.MethodConnector(
           name: 'hasVoted',
           params: {
@@ -478,6 +514,39 @@ class Endpoints extends _i1.EndpointDispatch {
             params['userId'],
           ),
         ),
+        'authUser': _i1.MethodConnector(
+          name: 'authUser',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).authUser(session),
+        ),
+        'validatePollOwnership': _i1.MethodConnector(
+          name: 'validatePollOwnership',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'user': _i1.ParameterDescription(
+              name: 'user',
+              type: _i1.getType<_i14.UserRecord>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).validatePollOwnership(
+            session,
+            params['pollId'],
+            params['user'],
+          ),
+        ),
       },
     );
     connectors['post'] = _i1.EndpointConnector(
@@ -489,7 +558,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i15.Post>(),
               nullable: false,
             )
           },
@@ -507,7 +576,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'comment': _i1.ParameterDescription(
               name: 'comment',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i15.Post>(),
               nullable: false,
             ),
             'isReply': _i1.ParameterDescription(
@@ -615,7 +684,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i15.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -639,7 +708,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i15.Post>(),
               nullable: false,
             )
           },
@@ -662,7 +731,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i14.Post?>(),
+              type: _i1.getType<_i15.Post?>(),
               nullable: true,
             ),
           },
@@ -815,7 +884,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -844,7 +913,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -864,7 +933,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i15.Post>(),
               nullable: false,
             )
           },
@@ -1320,7 +1389,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1345,7 +1414,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1563,7 +1632,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             )
           },

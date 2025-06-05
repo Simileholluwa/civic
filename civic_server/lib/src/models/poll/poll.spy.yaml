@@ -7,15 +7,15 @@ fields:
     taggedUsers: List<UserRecord>?
     locations: List<AWSPlaces>?
     mentions: List<UserRecord>?
-    options: PollOption?
+    options: List<PollOption>?
     tags: List<String>?
-    createdAt: DateTime?
-    pollDuration: int?
+    createdAt: DateTime?, default=now
+    expiresAt: DateTime?
     hashtags: List<PollsHashtags>?, relation(name=polls_pollshashtags)
-    voteCount: int?
-    numberOfLikes: int?
-    numberOfComments: int?
-    numberOfViews: int?
+    votedBy: List<int>?,
+    numberOfLikes: int?, default=0
+    numberOfComments: int?, default=0
+    numberOfViews: int?, default=0
     imagesUrl: List<String>?
     updatedAt: DateTime?
     

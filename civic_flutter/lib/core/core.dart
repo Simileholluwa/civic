@@ -75,6 +75,7 @@ export './widgets/create_content/create_content_drafts_appbar.dart';
 export './widgets/create_content/create_content_location_error.dart';
 export './widgets/create_content/create_content_locations_and_tagged_users.dart';
 export './widgets/create_content/create_content_pick_date_and_time.dart';
+export './widgets/create_content/create_content_poll_duration.dart';
 export './widgets/create_content/create_content_privacy.dart';
 export './widgets/create_content/create_content_schedule.dart';
 export './widgets/create_content/create_content_schedule_dialog.dart';

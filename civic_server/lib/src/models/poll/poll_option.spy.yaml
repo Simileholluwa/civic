@@ -1,5 +1,6 @@
 class: PollOption
+table: poll_option
 fields:
-    option: List<String>
-    votes: List<int>
-    voters: List<UserRecord>
+    poll: Poll?, relation(onDelete=cascade)
+    option: String?
+    votedBy: List<int>?

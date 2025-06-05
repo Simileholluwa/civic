@@ -67,29 +67,22 @@ CastVoteUseCase castVote(Ref ref) {
 }
 
 @riverpod
-SaveDraftPollUseCase saveDraftPoll(Ref ref) {
-  return SaveDraftPollUseCase(
+SavePollDraftUseCase savePollDraft(Ref ref) {
+  return SavePollDraftUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetDraftsPollUseCase getDraftsPoll(Ref ref) {
-  return GetDraftsPollUseCase(
+GetPollDraftUseCase getPollDraft(Ref ref) {
+  return GetPollDraftUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeleteDraftsPollUseCase deleteDraftsPoll(Ref ref) {
-  return DeleteDraftsPollUseCase(
-    pollRepository: ref.read(pollRepositoryImplProvider),
-  );
-}
-
-@riverpod
-DeleteDraftPollUseCase deleteDraftPoll(Ref ref) {
-  return DeleteDraftPollUseCase(
+DeletePollDraftUseCase deletePollDraft(Ref ref) {
+  return DeletePollDraftUseCase(
     pollRepository: ref.read(pollRepositoryImplProvider),
   );
 }

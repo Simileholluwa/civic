@@ -28,16 +28,19 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.mentions,
     this.options,
     this.tags,
-    this.createdAt,
-    this.pollDuration,
+    DateTime? createdAt,
+    this.expiresAt,
     this.hashtags,
-    this.voteCount,
-    this.numberOfLikes,
-    this.numberOfComments,
-    this.numberOfViews,
+    this.votedBy,
+    int? numberOfLikes,
+    int? numberOfComments,
+    int? numberOfViews,
     this.imagesUrl,
     this.updatedAt,
-  });
+  })  : createdAt = createdAt ?? DateTime.now(),
+        numberOfLikes = numberOfLikes ?? 0,
+        numberOfComments = numberOfComments ?? 0,
+        numberOfViews = numberOfViews ?? 0;
 
   factory Poll({
     int? id,
@@ -47,12 +50,12 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     List<_i2.UserRecord>? taggedUsers,
     List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i4.PollOption? options,
+    List<_i4.PollOption>? options,
     List<String>? tags,
     DateTime? createdAt,
-    int? pollDuration,
+    DateTime? expiresAt,
     List<_i5.PollsHashtags>? hashtags,
-    int? voteCount,
+    List<int>? votedBy,
     int? numberOfLikes,
     int? numberOfComments,
     int? numberOfViews,
@@ -78,21 +81,24 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       mentions: (jsonSerialization['mentions'] as List?)
           ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      options: jsonSerialization['options'] == null
-          ? null
-          : _i4.PollOption.fromJson(
-              (jsonSerialization['options'] as Map<String, dynamic>)),
+      options: (jsonSerialization['options'] as List?)
+          ?.map((e) => _i4.PollOption.fromJson((e as Map<String, dynamic>)))
+          .toList(),
       tags: (jsonSerialization['tags'] as List?)
           ?.map((e) => e as String)
           .toList(),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      pollDuration: jsonSerialization['pollDuration'] as int?,
+      expiresAt: jsonSerialization['expiresAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['expiresAt']),
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i5.PollsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      voteCount: jsonSerialization['voteCount'] as int?,
+      votedBy: (jsonSerialization['votedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
       numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
       numberOfComments: jsonSerialization['numberOfComments'] as int?,
       numberOfViews: jsonSerialization['numberOfViews'] as int?,
@@ -124,17 +130,17 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   List<_i2.UserRecord>? mentions;
 
-  _i4.PollOption? options;
+  List<_i4.PollOption>? options;
 
   List<String>? tags;
 
   DateTime? createdAt;
 
-  int? pollDuration;
+  DateTime? expiresAt;
 
   List<_i5.PollsHashtags>? hashtags;
 
-  int? voteCount;
+  List<int>? votedBy;
 
   int? numberOfLikes;
 
@@ -160,12 +166,12 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     List<_i2.UserRecord>? taggedUsers,
     List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i4.PollOption? options,
+    List<_i4.PollOption>? options,
     List<String>? tags,
     DateTime? createdAt,
-    int? pollDuration,
+    DateTime? expiresAt,
     List<_i5.PollsHashtags>? hashtags,
-    int? voteCount,
+    List<int>? votedBy,
     int? numberOfLikes,
     int? numberOfComments,
     int? numberOfViews,
@@ -185,13 +191,14 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
         'locations': locations?.toJson(valueToJson: (v) => v.toJson()),
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJson()),
-      if (options != null) 'options': options?.toJson(),
+      if (options != null)
+        'options': options?.toJson(valueToJson: (v) => v.toJson()),
       if (tags != null) 'tags': tags?.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
-      if (pollDuration != null) 'pollDuration': pollDuration,
+      if (expiresAt != null) 'expiresAt': expiresAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
-      if (voteCount != null) 'voteCount': voteCount,
+      if (votedBy != null) 'votedBy': votedBy?.toJson(),
       if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
       if (numberOfComments != null) 'numberOfComments': numberOfComments,
       if (numberOfViews != null) 'numberOfViews': numberOfViews,
@@ -215,13 +222,14 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
             locations?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      if (options != null) 'options': options?.toJsonForProtocol(),
+      if (options != null)
+        'options': options?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (tags != null) 'tags': tags?.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
-      if (pollDuration != null) 'pollDuration': pollDuration,
+      if (expiresAt != null) 'expiresAt': expiresAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      if (voteCount != null) 'voteCount': voteCount,
+      if (votedBy != null) 'votedBy': votedBy?.toJson(),
       if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
       if (numberOfComments != null) 'numberOfComments': numberOfComments,
       if (numberOfViews != null) 'numberOfViews': numberOfViews,
@@ -277,12 +285,12 @@ class _PollImpl extends Poll {
     List<_i2.UserRecord>? taggedUsers,
     List<_i3.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
-    _i4.PollOption? options,
+    List<_i4.PollOption>? options,
     List<String>? tags,
     DateTime? createdAt,
-    int? pollDuration,
+    DateTime? expiresAt,
     List<_i5.PollsHashtags>? hashtags,
-    int? voteCount,
+    List<int>? votedBy,
     int? numberOfLikes,
     int? numberOfComments,
     int? numberOfViews,
@@ -299,9 +307,9 @@ class _PollImpl extends Poll {
           options: options,
           tags: tags,
           createdAt: createdAt,
-          pollDuration: pollDuration,
+          expiresAt: expiresAt,
           hashtags: hashtags,
-          voteCount: voteCount,
+          votedBy: votedBy,
           numberOfLikes: numberOfLikes,
           numberOfComments: numberOfComments,
           numberOfViews: numberOfViews,
@@ -324,9 +332,9 @@ class _PollImpl extends Poll {
     Object? options = _Undefined,
     Object? tags = _Undefined,
     Object? createdAt = _Undefined,
-    Object? pollDuration = _Undefined,
+    Object? expiresAt = _Undefined,
     Object? hashtags = _Undefined,
-    Object? voteCount = _Undefined,
+    Object? votedBy = _Undefined,
     Object? numberOfLikes = _Undefined,
     Object? numberOfComments = _Undefined,
     Object? numberOfViews = _Undefined,
@@ -347,14 +355,18 @@ class _PollImpl extends Poll {
       mentions: mentions is List<_i2.UserRecord>?
           ? mentions
           : this.mentions?.map((e0) => e0.copyWith()).toList(),
-      options: options is _i4.PollOption? ? options : this.options?.copyWith(),
+      options: options is List<_i4.PollOption>?
+          ? options
+          : this.options?.map((e0) => e0.copyWith()).toList(),
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
-      pollDuration: pollDuration is int? ? pollDuration : this.pollDuration,
+      expiresAt: expiresAt is DateTime? ? expiresAt : this.expiresAt,
       hashtags: hashtags is List<_i5.PollsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
-      voteCount: voteCount is int? ? voteCount : this.voteCount,
+      votedBy: votedBy is List<int>?
+          ? votedBy
+          : this.votedBy?.map((e0) => e0).toList(),
       numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
       numberOfComments:
           numberOfComments is int? ? numberOfComments : this.numberOfComments,
@@ -400,26 +412,30 @@ class PollTable extends _i1.Table<int?> {
     createdAt = _i1.ColumnDateTime(
       'createdAt',
       this,
+      hasDefault: true,
     );
-    pollDuration = _i1.ColumnInt(
-      'pollDuration',
+    expiresAt = _i1.ColumnDateTime(
+      'expiresAt',
       this,
     );
-    voteCount = _i1.ColumnInt(
-      'voteCount',
+    votedBy = _i1.ColumnSerializable(
+      'votedBy',
       this,
     );
     numberOfLikes = _i1.ColumnInt(
       'numberOfLikes',
       this,
+      hasDefault: true,
     );
     numberOfComments = _i1.ColumnInt(
       'numberOfComments',
       this,
+      hasDefault: true,
     );
     numberOfViews = _i1.ColumnInt(
       'numberOfViews',
       this,
+      hasDefault: true,
     );
     imagesUrl = _i1.ColumnSerializable(
       'imagesUrl',
@@ -449,13 +465,13 @@ class PollTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime createdAt;
 
-  late final _i1.ColumnInt pollDuration;
+  late final _i1.ColumnDateTime expiresAt;
 
   _i5.PollsHashtagsTable? ___hashtags;
 
   _i1.ManyRelation<_i5.PollsHashtagsTable>? _hashtags;
 
-  late final _i1.ColumnInt voteCount;
+  late final _i1.ColumnSerializable votedBy;
 
   late final _i1.ColumnInt numberOfLikes;
 
@@ -522,8 +538,8 @@ class PollTable extends _i1.Table<int?> {
         options,
         tags,
         createdAt,
-        pollDuration,
-        voteCount,
+        expiresAt,
+        votedBy,
         numberOfLikes,
         numberOfComments,
         numberOfViews,

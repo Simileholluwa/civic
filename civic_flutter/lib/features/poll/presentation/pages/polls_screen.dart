@@ -19,6 +19,7 @@ class PollsScreen extends ConsumerWidget {
         final pollCardState = ref.watch(pollCardWidgetProvider(poll));
         return Column(
           spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
@@ -34,105 +35,94 @@ class PollsScreen extends ConsumerWidget {
                 ),
                 child: ContentExpandableText(
                   text: pollCardState.question,
-                  onToggleTextTap: (){},
+                  onToggleTextTap: () {},
                 ),
               ),
-            Container(
-              margin: const EdgeInsets.symmetric(
+            ListView.separated(
+              itemCount: poll.options!.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(
                 horizontal: 15,
               ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  TSizes.borderRadiusLg,
-                ),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              child: ListView.separated(
-                itemCount: poll.options!.option.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    thickness: 2,
-                    height: 0,
-                  );
-                },
-                itemBuilder: (context, index) {
-                  final option = poll.options!.option[index];
-                  final numberOfVotes = poll.options!.votes[index];
-                  final totalVotes =
-                      poll.options!.votes.reduce((a, b) => a + b);
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: index == 0
-                          ? const BorderRadius.only(
-                              topRight: Radius.circular(
-                                TSizes.borderRadiusLg,
-                              ),
-                              topLeft: Radius.circular(
-                                TSizes.borderRadiusLg,
-                              ),
-                            )
-                          : index == poll.options!.option.length - 1
-                              ? const BorderRadius.only(
-                                  bottomRight: Radius.circular(
-                                    TSizes.borderRadiusLg,
-                                  ),
-                                  bottomLeft: Radius.circular(
-                                    TSizes.borderRadiusLg,
-                                  ),
-                                )
-                              : BorderRadius.zero,
-                      color: Colors.transparent,
-                    ),
-                    child: ListTile(
-                      onTap: () {},
-                      title: Text(
-                        option,
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                      ),
-                      subtitle: Row(
-                        spacing: 10,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 10,
-                              child: LinearProgressIndicator(
-                                value: totalVotes == 0
-                                    ? 0
-                                    : numberOfVotes / totalVotes,
-                                backgroundColor: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(
-                                  100,
-                                ),
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            totalVotes != 0
-                                ? '${((numberOfVotes / totalVotes) * 100).toStringAsFixed(2)}%'
-                                : '0.00%',
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  
+                  height: 10,
+                );
+              },
+              itemBuilder: (context, index) {
+                final option = poll.options![index].option;
+                final numberOfVotes = poll.options![index].votedBy!.length;
+                final totalVotes = poll.votedBy!.length;
+                return Container(
+                  padding: const EdgeInsets.symmetric(                     
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10,),
+                    color: Theme.of(context).cardColor,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: ListTile(
+                          onTap: () {},
+                          title: Text(
+                            option!,
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium!
                                 .copyWith(
-                                  color: Theme.of(context).hintColor,
+                                  fontWeight: FontWeight.w500,
                                 ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                      const SizedBox(
+                        height: 40,
+                        child: VerticalDivider(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10,),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              totalVotes != 0
+                                  ? '${((numberOfVotes / totalVotes) * 100).toStringAsFixed(2)}%'
+                                  : '0.00%',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                            ),
+                            Text(
+                              '${THelperFunctions.humanizeNumber(
+                                numberOfVotes,
+                              )} votes',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             if (pollCardState.hasTags || pollCardState.hasLocations)
               ContentEngagementTagsAndLocations(

@@ -16,10 +16,14 @@ location:
 poll:
   - savePoll:
   - schedulePoll:
-  - getPoll:
   - castVote:
+  - clearVote:
+  - getPollResults:
   - getPolls:
+  - getPoll:
   - hasVoted:
+  - authUser:
+  - validatePollOwnership:
 post:
   - savePost:
   - savePostComment:

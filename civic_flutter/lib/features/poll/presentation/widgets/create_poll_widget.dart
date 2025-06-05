@@ -4,7 +4,7 @@ import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CreatePollWidget extends ConsumerStatefulWidget {
+class CreatePollWidget extends ConsumerWidget {
   const CreatePollWidget({
     super.key,
     required this.poll,
@@ -13,71 +13,74 @@ class CreatePollWidget extends ConsumerStatefulWidget {
   final Poll poll;
 
   @override
-  ConsumerState<CreatePollWidget> createState() => _CreatePollWidgetState();
-}
-
-class _CreatePollWidgetState extends ConsumerState<CreatePollWidget> {
-  late Poll poll;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      poll = widget.poll;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final pollState = ref.watch(pollsOptionsProvider(poll));
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + TSizes.md,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: TSizes.md,
+    return Column(     
+      children: [
+        PollBottomOptions(
+          poll: poll,
+        ),
+        const Divider(
+          height: 0,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom + TSizes.md,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                PollQuestionTextFormField(
+                  userName: poll.owner!.userInfo!.userName!,
+                  poll: poll,
+                ),
+                ...pollState.controllers.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final controller = entry.value;
+          
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12,),
+                    child: PollOptionsTextField(
+                      index: index,
+                      controller: controller,
+                      poll: poll,
+                    ),
+                  );
+                }),
+                if (pollState.taggedUsers.isNotEmpty ||
+                    pollState.locations.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10,),
+                    child: ContentEngagementTagsAndLocations(
+                      tags: pollState.taggedUsers,
+                      locations: pollState.locations,
+                      hasTags: pollState.taggedUsers.isNotEmpty,
+                      hasLocations: pollState.locations.isNotEmpty,
+                      onTaggedUsersTap: () {
+                        PollHelperFunctions.selectLocationBottomSheet(
+                          context: context,
+                          poll: poll,
+                        );
+                      },
+                      onLocationTap: () {
+                        PollHelperFunctions.selectLocationBottomSheet(
+                          context: context,
+                          poll: poll,
+                        );
+                      },
+                    ),
+                  ),
+                PollDurationAndAddOptions(
+                  poll: poll,
+                ),
+              ],
+            ),
           ),
-          AppUserInfoWidget(
-            userRecord: poll.owner!,
-            onTap: () {},
-          ),
-          PollQuestionTextFormField(
-            userName: poll.owner!.userInfo!.userName!,
-            poll: poll,
-          ),
-          const SizedBox(
-            height: TSizes.md,
-          ),
-          ...pollState.controllers.asMap().entries.map((entry) {
-            final index = entry.key;
-            final controller = entry.value;
-
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(
-                TSizes.md - 4,
-                0,
-                TSizes.md,
-                0,
-              ),
-              child: PollOptionsTextField(
-                index: index,
-                controller: controller,
-                poll: poll,
-              ),
-            );
-          }),
-          const SizedBox(
-            height: 8,
-          ),
-          PollDurationAndAddOptions(
-            poll: poll,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

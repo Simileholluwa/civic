@@ -12,7 +12,7 @@ class CastVoteUseCase implements UseCase<void, CastVoteParams> {
   Future<Either<Failure, void>> call(CastVoteParams params) async {
     final result = await _pollRepository.castVote(
       pollId: params.pollId,
-      option: params.option,
+      optionId: params.optionId,
     );
     return result;
   }
@@ -21,8 +21,8 @@ class CastVoteUseCase implements UseCase<void, CastVoteParams> {
 class CastVoteParams {
   CastVoteParams(
     this.pollId,
-    this.option,
+    this.optionId,
   );
   final int pollId;
-  final String option;
+  final int optionId;
 }

@@ -21,10 +21,16 @@ class PaginatedPollList extends _$PaginatedPollList {
     pagingController.addStatusListener((status) {
       state = status;
     });
-    return PagingStatus.loadingFirstPage;
+
+    ref.onDispose(() {
+      pagingController.dispose();
+    });
+
+    return pagingController.value.status;
   }
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
+    try {
     final listPollUseCase = ref.read(getPollsProvider);
     final result = await listPollUseCase(
       GetPollsParams(
@@ -32,7 +38,14 @@ class PaginatedPollList extends _$PaginatedPollList {
         limit,
       ),
     );
-    result.fold((error) => log(error.message), (data) {
+    result.fold((error) {
+      log(error.toString(), name: 'PaginatedPollList');
+        pagingController.value = PagingState(
+          nextPageKey: null,
+          itemList: null,
+          error: error.message,
+        );
+    }, (data) {
       if (data.canLoadMore) {
         pagingController.appendPage(
           data.results,
@@ -41,10 +54,39 @@ class PaginatedPollList extends _$PaginatedPollList {
       } else {
         pagingController.appendLastPage(data.results);
       }
-    });
+    });} catch (e) {
+      log(e.toString(), name: 'PaginatedPostList');
+      pagingController.value = PagingState(
+        nextPageKey: null,
+        itemList: null,
+        error: e.toString(),
+      );
+    }
   }
 
   void refresh() {
     pagingController.refresh();
+  }
+
+  void addPoll(Poll poll) {
+    if (pagingController.itemList != null) {
+      final updatedList = List<Poll>.from(pagingController.itemList ?? []);
+      updatedList.insert(0, poll);
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: updatedList,
+      );
+    }
+  }
+
+  void removePollById(int? pollId) {
+    if (pagingController.itemList != null && pollId != null) {
+      final updatedList = List<Poll>.from(pagingController.itemList ?? []);
+      updatedList.removeWhere((element) => element.id == pollId);
+      pagingController.value = PagingState(
+        nextPageKey: pagingController.nextPageKey,
+        itemList: updatedList,
+      );
+    }
   }
 }

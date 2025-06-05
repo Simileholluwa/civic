@@ -14,12 +14,12 @@ class PollRepositoryImpl implements PollRepository {
   @override
   Future<Either<Failure, void>> castVote({
     required int pollId,
-    required String option,
+    required int optionId,
   }) async {
     try {
       final result = await _pollRemoteDatasource.castVote(
         pollId: pollId,
-        option: option,
+        optionId: optionId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -88,26 +88,9 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteDraftPoll(
-      {required DraftPoll draftPoll,}) async {
+  Future<Either<Failure, void>> deletePollDraft() async {
     try {
-      final result = await _pollLocalDatasource.deleteDraftPoll(
-        draftPoll: draftPoll,
-      );
-      return Right(result);
-    } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<DraftPoll>>> deleteDraftsPoll() async {
-    try {
-      final result = await _pollLocalDatasource.removeAllDraftPoll();
+      final result = await _pollLocalDatasource.deletePollDraft();
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -139,9 +122,9 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Either<Failure, List<DraftPoll>> getDraftPolls() {
+  Future<Either<Failure, Poll>> getPollDraft() async {
     try {
-      final result = _pollLocalDatasource.retrieveDrafts();
+      final result = await _pollLocalDatasource.getPollDraft();
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -153,10 +136,10 @@ class PollRepositoryImpl implements PollRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveDraftPoll({required DraftPoll draftPoll}) async {
+  Future<Either<Failure, void>> savePollDraft({required Poll poll}) async {
     try {
-      final result = await _pollLocalDatasource.saveDraft(
-        draftPoll: draftPoll,
+      final result = await _pollLocalDatasource.savePollDraft(
+        poll: poll,
       );
       return Right(result);
     } on CacheException catch (e) {

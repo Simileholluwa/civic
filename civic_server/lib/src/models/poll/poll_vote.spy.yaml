@@ -2,10 +2,13 @@ class: PollVote
 table: poll_vote
 
 fields: 
-    poll: Poll?, relation
-    voterId: int
+    poll: Poll?, relation(onDelete=cascade)
+    option: PollOption?, relation(onDelete=cascade)
+    voter: UserRecord?, relation
+    votedAt: DateTime?, default=now
+    
 
 indexes:
   poll_vote_unique_idx:
-    fields: pollId
+    fields: pollId, voterId
     unique: true

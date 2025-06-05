@@ -13,6 +13,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../poll/poll.dart' as _i2;
+import '../poll/poll_option.dart' as _i3;
+import '../user/user_record.dart' as _i4;
 
 abstract class PollVote
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -20,14 +22,22 @@ abstract class PollVote
     this.id,
     required this.pollId,
     this.poll,
+    required this.optionId,
+    this.option,
     required this.voterId,
-  });
+    this.voter,
+    DateTime? votedAt,
+  }) : votedAt = votedAt ?? DateTime.now();
 
   factory PollVote({
     int? id,
     required int pollId,
     _i2.Poll? poll,
+    required int optionId,
+    _i3.PollOption? option,
     required int voterId,
+    _i4.UserRecord? voter,
+    DateTime? votedAt,
   }) = _PollVoteImpl;
 
   factory PollVote.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -38,7 +48,19 @@ abstract class PollVote
           ? null
           : _i2.Poll.fromJson(
               (jsonSerialization['poll'] as Map<String, dynamic>)),
+      optionId: jsonSerialization['optionId'] as int,
+      option: jsonSerialization['option'] == null
+          ? null
+          : _i3.PollOption.fromJson(
+              (jsonSerialization['option'] as Map<String, dynamic>)),
       voterId: jsonSerialization['voterId'] as int,
+      voter: jsonSerialization['voter'] == null
+          ? null
+          : _i4.UserRecord.fromJson(
+              (jsonSerialization['voter'] as Map<String, dynamic>)),
+      votedAt: jsonSerialization['votedAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['votedAt']),
     );
   }
 
@@ -53,7 +75,15 @@ abstract class PollVote
 
   _i2.Poll? poll;
 
+  int optionId;
+
+  _i3.PollOption? option;
+
   int voterId;
+
+  _i4.UserRecord? voter;
+
+  DateTime? votedAt;
 
   @override
   _i1.Table<int?> get table => t;
@@ -65,7 +95,11 @@ abstract class PollVote
     int? id,
     int? pollId,
     _i2.Poll? poll,
+    int? optionId,
+    _i3.PollOption? option,
     int? voterId,
+    _i4.UserRecord? voter,
+    DateTime? votedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -73,7 +107,11 @@ abstract class PollVote
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
+      'optionId': optionId,
+      if (option != null) 'option': option?.toJson(),
       'voterId': voterId,
+      if (voter != null) 'voter': voter?.toJson(),
+      if (votedAt != null) 'votedAt': votedAt?.toJson(),
     };
   }
 
@@ -83,12 +121,24 @@ abstract class PollVote
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJsonForProtocol(),
+      'optionId': optionId,
+      if (option != null) 'option': option?.toJsonForProtocol(),
       'voterId': voterId,
+      if (voter != null) 'voter': voter?.toJsonForProtocol(),
+      if (votedAt != null) 'votedAt': votedAt?.toJson(),
     };
   }
 
-  static PollVoteInclude include({_i2.PollInclude? poll}) {
-    return PollVoteInclude._(poll: poll);
+  static PollVoteInclude include({
+    _i2.PollInclude? poll,
+    _i3.PollOptionInclude? option,
+    _i4.UserRecordInclude? voter,
+  }) {
+    return PollVoteInclude._(
+      poll: poll,
+      option: option,
+      voter: voter,
+    );
   }
 
   static PollVoteIncludeList includeList({
@@ -124,12 +174,20 @@ class _PollVoteImpl extends PollVote {
     int? id,
     required int pollId,
     _i2.Poll? poll,
+    required int optionId,
+    _i3.PollOption? option,
     required int voterId,
+    _i4.UserRecord? voter,
+    DateTime? votedAt,
   }) : super._(
           id: id,
           pollId: pollId,
           poll: poll,
+          optionId: optionId,
+          option: option,
           voterId: voterId,
+          voter: voter,
+          votedAt: votedAt,
         );
 
   /// Returns a shallow copy of this [PollVote]
@@ -140,13 +198,21 @@ class _PollVoteImpl extends PollVote {
     Object? id = _Undefined,
     int? pollId,
     Object? poll = _Undefined,
+    int? optionId,
+    Object? option = _Undefined,
     int? voterId,
+    Object? voter = _Undefined,
+    Object? votedAt = _Undefined,
   }) {
     return PollVote(
       id: id is int? ? id : this.id,
       pollId: pollId ?? this.pollId,
       poll: poll is _i2.Poll? ? poll : this.poll?.copyWith(),
+      optionId: optionId ?? this.optionId,
+      option: option is _i3.PollOption? ? option : this.option?.copyWith(),
       voterId: voterId ?? this.voterId,
+      voter: voter is _i4.UserRecord? ? voter : this.voter?.copyWith(),
+      votedAt: votedAt is DateTime? ? votedAt : this.votedAt,
     );
   }
 }
@@ -157,9 +223,18 @@ class PollVoteTable extends _i1.Table<int?> {
       'pollId',
       this,
     );
+    optionId = _i1.ColumnInt(
+      'optionId',
+      this,
+    );
     voterId = _i1.ColumnInt(
       'voterId',
       this,
+    );
+    votedAt = _i1.ColumnDateTime(
+      'votedAt',
+      this,
+      hasDefault: true,
     );
   }
 
@@ -167,7 +242,15 @@ class PollVoteTable extends _i1.Table<int?> {
 
   _i2.PollTable? _poll;
 
+  late final _i1.ColumnInt optionId;
+
+  _i3.PollOptionTable? _option;
+
   late final _i1.ColumnInt voterId;
+
+  _i4.UserRecordTable? _voter;
+
+  late final _i1.ColumnDateTime votedAt;
 
   _i2.PollTable get poll {
     if (_poll != null) return _poll!;
@@ -182,11 +265,39 @@ class PollVoteTable extends _i1.Table<int?> {
     return _poll!;
   }
 
+  _i3.PollOptionTable get option {
+    if (_option != null) return _option!;
+    _option = _i1.createRelationTable(
+      relationFieldName: 'option',
+      field: PollVote.t.optionId,
+      foreignField: _i3.PollOption.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.PollOptionTable(tableRelation: foreignTableRelation),
+    );
+    return _option!;
+  }
+
+  _i4.UserRecordTable get voter {
+    if (_voter != null) return _voter!;
+    _voter = _i1.createRelationTable(
+      relationFieldName: 'voter',
+      field: PollVote.t.voterId,
+      foreignField: _i4.UserRecord.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.UserRecordTable(tableRelation: foreignTableRelation),
+    );
+    return _voter!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
         pollId,
+        optionId,
         voterId,
+        votedAt,
       ];
 
   @override
@@ -194,19 +305,39 @@ class PollVoteTable extends _i1.Table<int?> {
     if (relationField == 'poll') {
       return poll;
     }
+    if (relationField == 'option') {
+      return option;
+    }
+    if (relationField == 'voter') {
+      return voter;
+    }
     return null;
   }
 }
 
 class PollVoteInclude extends _i1.IncludeObject {
-  PollVoteInclude._({_i2.PollInclude? poll}) {
+  PollVoteInclude._({
+    _i2.PollInclude? poll,
+    _i3.PollOptionInclude? option,
+    _i4.UserRecordInclude? voter,
+  }) {
     _poll = poll;
+    _option = option;
+    _voter = voter;
   }
 
   _i2.PollInclude? _poll;
 
+  _i3.PollOptionInclude? _option;
+
+  _i4.UserRecordInclude? _voter;
+
   @override
-  Map<String, _i1.Include?> get includes => {'poll': _poll};
+  Map<String, _i1.Include?> get includes => {
+        'poll': _poll,
+        'option': _option,
+        'voter': _voter,
+      };
 
   @override
   _i1.Table<int?> get table => PollVote.t;
@@ -475,6 +606,52 @@ class PollVoteAttachRowRepository {
     await session.db.updateRow<PollVote>(
       $pollVote,
       columns: [PollVote.t.pollId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between the given [PollVote] and [PollOption]
+  /// by setting the [PollVote]'s foreign key `optionId` to refer to the [PollOption].
+  Future<void> option(
+    _i1.Session session,
+    PollVote pollVote,
+    _i3.PollOption option, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (pollVote.id == null) {
+      throw ArgumentError.notNull('pollVote.id');
+    }
+    if (option.id == null) {
+      throw ArgumentError.notNull('option.id');
+    }
+
+    var $pollVote = pollVote.copyWith(optionId: option.id);
+    await session.db.updateRow<PollVote>(
+      $pollVote,
+      columns: [PollVote.t.optionId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between the given [PollVote] and [UserRecord]
+  /// by setting the [PollVote]'s foreign key `voterId` to refer to the [UserRecord].
+  Future<void> voter(
+    _i1.Session session,
+    PollVote pollVote,
+    _i4.UserRecord voter, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (pollVote.id == null) {
+      throw ArgumentError.notNull('pollVote.id');
+    }
+    if (voter.id == null) {
+      throw ArgumentError.notNull('voter.id');
+    }
+
+    var $pollVote = pollVote.copyWith(voterId: voter.id);
+    await session.db.updateRow<PollVote>(
+      $pollVote,
+      columns: [PollVote.t.voterId],
       transaction: transaction,
     );
   }

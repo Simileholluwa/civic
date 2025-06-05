@@ -6,7 +6,6 @@ import 'package:civic_flutter/features/create/presentation/routes/create_route.d
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
-import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -167,17 +166,6 @@ GoRouter router(Ref ref) {
         builder: (context, state, navigationShell) {
           return AppWrapper(
             navigatorShell: navigationShell,
-          );
-        },
-      ),
-
-      GoRoute(
-        path: AppRoutes.createPoll,
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return CreatePollScreen(
-            id: data['id'],
-            draft: data['draft'],
           );
         },
       ),

@@ -56,6 +56,7 @@ class HashtagEndpoint extends Endpoint {
     int pollId,
   ) async {
     try {
+      if (tags.isEmpty) return;
       for (var tag in tags) {
         var existingHashtag = await PollHashtag.db.findFirstRow(
           session,

@@ -8,17 +8,21 @@ class PollState {
     required this.question,
     required this.optionText,
     required this.controllers,
-    this.duration = 1,
+    required this.expiresAt,
     required this.taggedUsers,
     required this.locations,
     required this.mentions,
     required this.tags,
     required this.questionController,
+    required this.images,
   });
 
   factory PollState.empty() {
     return PollState(
-      optionText: ['',''],
+      expiresAt: DateTime.now().add(
+        const Duration(days: 1),
+      ),
+      optionText: ['', ''],
       controllers: List.generate(
         2,
         (_) => TextEditingController(),
@@ -28,6 +32,7 @@ class PollState {
       mentions: [],
       tags: [],
       question: '',
+      images: [],
       questionController: MentionHashtagLinkTextEditingController(),
     );
   }
@@ -39,19 +44,27 @@ class PollState {
       mentions: poll.mentions ?? [],
       tags: poll.tags ?? [],
       question: poll.question ?? '',
-      optionText: poll.options == null ? ['',''] : poll.options!.option,
+      optionText: poll.options == null
+          ? ['', '']
+          : poll.options!.map((e) => e.option!).toList(
+                growable: false,
+              ),
       controllers: poll.options == null
           ? List.generate(
               2,
               (_) => TextEditingController(),
             )
           : List.generate(
-              poll.options!.option.length,
+              poll.options!.length,
               (index) => TextEditingController(
-                text: poll.options!.option[index],
+                text: poll.options![index].option,
               ),
             ),
-      duration: poll.pollDuration ?? 1,
+      images: poll.imagesUrl ?? [],
+      expiresAt: poll.expiresAt ??
+          DateTime.now().add(
+            const Duration(days: 1),
+          ),
       questionController: MentionHashtagLinkTextEditingController(
         text: poll.question,
       ),
@@ -59,7 +72,7 @@ class PollState {
   }
 
   final List<TextEditingController> controllers;
-  int duration;
+  final DateTime expiresAt;
   final List<AWSPlaces> locations;
   final List<UserRecord> mentions;
   final List<String> optionText;
@@ -67,27 +80,30 @@ class PollState {
   final MentionHashtagLinkTextEditingController questionController;
   final List<UserRecord> taggedUsers;
   final List<String> tags;
+  final List<String> images;
 
   PollState copyWith({
     String? question,
     List<String>? optionText,
     List<TextEditingController>? controllers,
-    int? duration,
+    DateTime? expiresAt,
     List<UserRecord>? taggedUsers,
     List<AWSPlaces>? locations,
     List<UserRecord>? mentions,
     List<String>? tags,
+    List<String>? images,
     MentionHashtagLinkTextEditingController? questionController,
   }) {
     return PollState(
       question: question ?? this.question,
-      duration: duration ?? this.duration,
+      expiresAt: expiresAt ?? this.expiresAt,
       optionText: optionText ?? this.optionText,
       controllers: controllers ?? this.controllers,
       taggedUsers: taggedUsers ?? this.taggedUsers,
       locations: locations ?? this.locations,
       mentions: mentions ?? this.mentions,
       tags: tags ?? this.tags,
+      images: images ?? this.images,
       questionController: questionController ?? this.questionController,
     );
   }

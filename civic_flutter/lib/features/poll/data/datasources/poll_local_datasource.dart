@@ -1,17 +1,16 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:io';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 abstract class PollLocalDatabase {
-  Future<void> saveDraft({
-    required DraftPoll draftPoll,
+  Future<void> savePollDraft({
+    required Poll poll,
   });
-  List<DraftPoll> retrieveDrafts();
-  Future<List<DraftPoll>> removeAllDraftPoll();
-  Future<void> deleteDraftPoll({
-    required DraftPoll draftPoll,
-  });
+  Future<Poll> getPollDraft();
+  Future<void> deletePollDraft();
 }
 
 class PollLocalDatabaseImpl extends PollLocalDatabase {
@@ -19,103 +18,87 @@ class PollLocalDatabaseImpl extends PollLocalDatabase {
     required LocalStorage prefs,
   }) : _prefs = prefs;
   final LocalStorage _prefs;
-  @override
-  List<DraftPoll> retrieveDrafts() {
-    try {
-      final pollsDraft = _prefs.getString('pollsDraft');
-      final ownerId = _prefs.getInt('userId');
-      if (pollsDraft != null) {
-        final draftList = jsonDecode(pollsDraft) as List<dynamic>;
-        return draftList
-            .map(
-              (pollDraft) =>
-                  DraftPoll.fromJson(pollDraft as Map<String, dynamic>),
-            )
-            .where((draft) => draft.ownerId == ownerId)
-            .toList();
-      }
-      return <DraftPoll>[];
-    } catch (e) {
-      log(e.toString());
-      throw const CacheException(message: 'Something went wrong');
-    }
-  }
 
   @override
-  Future<void> saveDraft({
-    required DraftPoll draftPoll,
-  }) async {
+  Future<Poll> getPollDraft() async {
     try {
-      final drafts = await clearExpiredDrafts();
-      final ownerId = _prefs.getInt('userId');
-      if (drafts.length < 10) {
-        drafts.add(
-          draftPoll.copyWith(
-            draftId: DateTime.now().millisecondsSinceEpoch,
-            ownerId: ownerId,
-            createdAt: DateTime.now(),
-          ),
+      final userId = _prefs.getInt('userId')!;
+      final rawOwner = _prefs.getString('userRecord')!;
+      final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
+      final owner = UserRecord.fromJson(ownerMap);
+      final pollDraft = _prefs.getString('pollDraft');
+      if (pollDraft != null) {
+        final pollMap =
+            jsonDecode(pollDraft.toString()) as Map<String, dynamic>;
+        if (pollMap['ownerId'] == userId) {
+          return Poll.fromJson(pollMap);
+        }
+        return Poll(
+          ownerId: userId,
+          owner: owner,
         );
-        final jsonString = jsonEncode(
-          drafts.map((draft) => draft.toJson()).toList(),
-        );
-        await _prefs.setString('pollsDraft', jsonString);
       }
-    } catch (e) {
-      
-      throw const CacheException(message: 'Something went wrong');
-    }
-  }
-
-  Future<List<DraftPoll>> clearExpiredDrafts() async {
-    try {
-      var drafts = retrieveDrafts();
-      if (drafts.isEmpty) return <DraftPoll>[];
-
-      final latestDraft = drafts.where((draft) {
-        return DateTime.now()
-                .difference(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(
-                      draft.createdAt!.millisecondsSinceEpoch.toString(),
-                    ),
-                  ),
-                )
-                .inDays <=
-            10;
-      }).toList();
-      return latestDraft;
-    } catch (_) {
-      throw const CacheException(message: 'Something went wrong');
-    }
-  }
-
-  @override
-  Future<void> deleteDraftPoll({
-    required DraftPoll draftPoll,
-  }) async {
-    try {
-      final drafts = retrieveDrafts();
-
-      drafts.removeWhere((draft) => draft.draftId == draftPoll.draftId);
-
-      final draftsJson = jsonEncode(
-        drafts.map((draft) => draft.toJson()).toList(),
+      return Poll(
+        ownerId: userId,
+        owner: owner,
       );
-
-      await _prefs.setString('pollsDraft', draftsJson);
-
-    } catch (_) {
+    } catch (e) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<List<DraftPoll>> removeAllDraftPoll() async {
+  Future<void> savePollDraft({
+    required Poll poll,
+  }) async {
     try {
-      await _prefs.remove('pollsDraft');
-      final drafts = retrieveDrafts();
-      return drafts;
+      var savedImagesPath = <String>[];
+      var existingUploadedImage = <String>[];
+      final appDir = await getApplicationDocumentsDirectory();
+      final directory = Directory('${appDir.path}/pollDraft');
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (poll.imagesUrl!.isNotEmpty) {
+        for (var i = 0; i < poll.imagesUrl!.length; i++) {
+          final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+          final match = regex.hasMatch(poll.imagesUrl![i]);
+          if (match) {
+            existingUploadedImage.add(poll.imagesUrl![i]);
+          } else {
+            final ext = path.extension(poll.imagesUrl![i]);
+            final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
+            final savedFile = File(
+              path.join(directory.path, fileName),
+            );
+            final copy = await File(poll.imagesUrl![i]).copy(savedFile.path);
+            savedImagesPath.add(copy.path);
+          }
+        }
+      }
+      final rawOwner = _prefs.getString('userRecord')!;
+      final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
+      final owner = UserRecord.fromJson(ownerMap);
+      final pollDraft = poll.copyWith(
+        imagesUrl: [...savedImagesPath, ...existingUploadedImage],
+        owner: owner,
+      ).toJson();
+      final jsonString = jsonEncode(pollDraft);
+      await _prefs.setString('pollDraft', jsonString);
+    } catch (e) {
+      throw const CacheException(message: 'Something went wrong');
+    }
+  }
+
+    @override
+  Future<void> deletePollDraft() async {
+    try {
+      await _prefs.remove('pollDraft');
+      final appDir = await getApplicationDocumentsDirectory();
+      final directory = Directory('${appDir.path}/pollDraft');
+      if (!await directory.exists()) {
+        await directory.delete(recursive: true);
+      }
     } catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }

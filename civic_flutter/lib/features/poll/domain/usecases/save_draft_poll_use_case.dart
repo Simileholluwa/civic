@@ -3,23 +3,23 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:fpdart/fpdart.dart';
 
-class SaveDraftPollUseCase implements UseCase<void, SaveDraftPollParams> {
-  SaveDraftPollUseCase({required PollRepository pollRepository})
+class SavePollDraftUseCase implements UseCase<void, SavePollDraftParams> {
+  SavePollDraftUseCase({required PollRepository pollRepository})
       : _pollRepository = pollRepository;
   final PollRepository _pollRepository;
 
   @override
-  Future<Either<Failure, void>> call(SaveDraftPollParams params) async {
-    final result = await _pollRepository.saveDraftPoll(
-      draftPoll: params.draftPoll,
+  Future<Either<Failure, void>> call(SavePollDraftParams params) async {
+    final result = await _pollRepository.savePollDraft(
+      poll: params.poll,
     );
     return result;
   }
 }
 
-class SaveDraftPollParams {
-  SaveDraftPollParams(
-    this.draftPoll,
+class SavePollDraftParams {
+  SavePollDraftParams(
+    this.poll,
   );
-  final DraftPoll draftPoll;
+  final Poll poll;
 }

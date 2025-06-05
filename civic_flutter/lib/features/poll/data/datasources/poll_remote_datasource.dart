@@ -16,7 +16,7 @@ abstract class PollRemoteDatasource {
   });
   Future<void> castVote({
     required int pollId,
-    required String option,
+    required int optionId,
   });
   Future<PollList> getPolls({
     required int page,
@@ -32,12 +32,11 @@ class PollRemoteDatasourceImpl implements PollRemoteDatasource {
   @override
   Future<void> castVote({
     required int pollId,
-    required String option,
+    required int optionId,
   }) async {
-    try {
-      
+    try {     
       final result = await _client.poll.castVote(
-        pollId, option,
+        pollId, optionId,
       );
       return result;
     } on SocketException catch (_) {
