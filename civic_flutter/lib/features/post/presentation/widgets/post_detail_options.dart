@@ -70,6 +70,7 @@ class PostDetailOptions extends ConsumerWidget {
                 '/create/post/${post.id}',
                 extra: {
                   'post': post,
+                  'project': post.project,
                 },
               );
             },

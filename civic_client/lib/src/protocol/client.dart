@@ -362,13 +362,13 @@ class EndpointPost extends _i1.EndpointRef {
         {'post': post},
       );
 
-  _i2.Future<_i10.Post> repostOrQuote(
-    int? projectId,
-    _i10.Post? quoteContent,
+  _i2.Future<_i10.Post> quoteProject(
+    int projectId,
+    _i10.Post quoteContent,
   ) =>
       caller.callServerEndpoint<_i10.Post>(
         'post',
-        'repostOrQuote',
+        'quoteProject',
         {
           'projectId': projectId,
           'quoteContent': quoteContent,
@@ -450,6 +450,7 @@ class EndpointPost extends _i1.EndpointRef {
     int commentId,
     int postId,
     _i9.UserRecord user,
+    bool isReply,
   ) =>
       caller.callServerEndpoint<void>(
         'post',
@@ -458,6 +459,7 @@ class EndpointPost extends _i1.EndpointRef {
           'commentId': commentId,
           'postId': postId,
           'user': user,
+          'isReply': isReply,
         },
       );
 
@@ -620,21 +622,6 @@ class EndpointProject extends _i1.EndpointRef {
         'project',
         'deleteProjectVetting',
         {'vettingId': vettingId},
-      );
-
-  /// Undoes a repost action for a given project.
-  ///
-  /// Calls the [PostEndpoint.repostOrQuote] method with the provided [session] and [projectId],
-  /// effectively reversing a previous repost operation.
-  ///
-  /// [session] - The current user session.
-  /// [projectId] - The ID of the project to undo the repost for.
-  ///
-  /// Throws an exception if the operation fails.
-  _i2.Future<void> undoRepost(int projectId) => caller.callServerEndpoint<void>(
-        'project',
-        'undoRepost',
-        {'projectId': projectId},
       );
 
   /// Schedules a future call to handle the specified [project] at the given [dateTime].

@@ -721,25 +721,25 @@ class Endpoints extends _i1.EndpointDispatch {
             params['post'],
           ),
         ),
-        'repostOrQuote': _i1.MethodConnector(
-          name: 'repostOrQuote',
+        'quoteProject': _i1.MethodConnector(
+          name: 'quoteProject',
           params: {
             'projectId': _i1.ParameterDescription(
               name: 'projectId',
-              type: _i1.getType<int?>(),
-              nullable: true,
+              type: _i1.getType<int>(),
+              nullable: false,
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i15.Post?>(),
-              nullable: true,
+              type: _i1.getType<_i15.Post>(),
+              nullable: false,
             ),
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).repostOrQuote(
+              (endpoints['post'] as _i7.PostEndpoint).quoteProject(
             session,
             params['projectId'],
             params['quoteContent'],
@@ -916,6 +916,11 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
+            'isReply': _i1.ParameterDescription(
+              name: 'isReply',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
@@ -926,6 +931,7 @@ class Endpoints extends _i1.EndpointDispatch {
             params['commentId'],
             params['postId'],
             params['user'],
+            params['isReply'],
           ),
         ),
         'updatePost': _i1.MethodConnector(
@@ -1080,24 +1086,6 @@ class Endpoints extends _i1.EndpointDispatch {
                   .deleteProjectVetting(
             session,
             params['vettingId'],
-          ),
-        ),
-        'undoRepost': _i1.MethodConnector(
-          name: 'undoRepost',
-          params: {
-            'projectId': _i1.ParameterDescription(
-              name: 'projectId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).undoRepost(
-            session,
-            params['projectId'],
           ),
         ),
         'scheduleProject': _i1.MethodConnector(

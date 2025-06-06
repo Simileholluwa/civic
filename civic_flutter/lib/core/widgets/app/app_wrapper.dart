@@ -61,7 +61,7 @@ class AppWrapper extends ConsumerWidget {
                 ),
               ),
         body: Stack(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.topCenter,
           children: [
             Row(
               children: [

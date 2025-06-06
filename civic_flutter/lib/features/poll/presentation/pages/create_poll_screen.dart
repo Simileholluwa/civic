@@ -45,7 +45,7 @@ class CreatePollScreen extends ConsumerWidget {
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     final isVisibleNotifier = ref.watch(
       appBottomNavigationVisibilityProvider(
-        null,
+        false,
       ).notifier,
     );
     Future.delayed(

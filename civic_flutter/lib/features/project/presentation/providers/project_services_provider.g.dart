@@ -260,22 +260,6 @@ final toggleBookmarkProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ToggleBookmarkRef = AutoDisposeProviderRef<ToggleBookmarkUseCase>;
-String _$undoRepostHash() => r'9f7cf8f08010cdc423a54738b4b3a480e015cea4';
-
-/// See also [undoRepost].
-@ProviderFor(undoRepost)
-final undoRepostProvider = AutoDisposeProvider<UndoRepostUseCase>.internal(
-  undoRepost,
-  name: r'undoRepostProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$undoRepostHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef UndoRepostRef = AutoDisposeProviderRef<UndoRepostUseCase>;
 String _$deleteProjectHash() => r'b877c510c65d1a2eb25340af7864d168b1172672';
 
 /// See also [deleteProject].

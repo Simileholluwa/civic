@@ -1,4 +1,3 @@
-import 'package:civic_server/src/endpoints/post_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
@@ -121,12 +120,32 @@ class ProjectEndpoint extends Endpoint {
           user,
         );
 
+        final existingProject = await Project.db.findById(
+          session,
+          project.id!,
+        );
+
         final updatedProject = project.copyWith(
           updatedAt: DateTime.now(),
+          likedBy: existingProject!.likedBy,
+          reviewedBy: existingProject.reviewedBy,
+          vettedBy: existingProject.vettedBy,
+          bookmarkedBy: existingProject.bookmarkedBy,
+          overallRating: existingProject.overallRating,
+          overallLocationRating: existingProject.overallLocationRating,
+          overallDescriptionRating: existingProject.overallDescriptionRating,
+          overallDatesRating: existingProject.overallDatesRating,
+          overallAttachmentsRating: existingProject.overallAttachmentsRating,
+          overAllCategoryRating: existingProject.overAllCategoryRating,
+          overallFundingRating: existingProject.overallFundingRating,
+          quoteCount: existingProject.quoteCount,
+          dateCreated: existingProject.dateCreated,
         );
         await updateProject(
           session,
-          updatedProject,
+          updatedProject.copyWith(
+            owner: user,
+          ),
         );
         return updatedProject;
       } else {
@@ -138,10 +157,8 @@ class ProjectEndpoint extends Endpoint {
             dateCreated: DateTime.now(),
             likedBy: [],
             reviewedBy: [],
-            verifiedBy: [],
             bookmarkedBy: [],
             vettedBy: [],
-            quotedBy: [],
           ),
         );
       }
@@ -531,26 +548,6 @@ class ProjectEndpoint extends Endpoint {
         throw PostException(message: e.toString());
       }
     });
-  }
-
-  /// Undoes a repost action for a given project.
-  ///
-  /// Calls the [PostEndpoint.repostOrQuote] method with the provided [session] and [projectId],
-  /// effectively reversing a previous repost operation.
-  ///
-  /// [session] - The current user session.
-  /// [projectId] - The ID of the project to undo the repost for.
-  ///
-  /// Throws an exception if the operation fails.  
-  Future<void> undoRepost(
-    Session session,
-    int projectId,
-  ) async {
-    await PostEndpoint().repostOrQuote(
-      session,
-      projectId,
-      null,
-    );
   }
 
   /// Schedules a future call to handle the specified [project] at the given [dateTime].

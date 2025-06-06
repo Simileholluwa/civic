@@ -32,7 +32,7 @@ post:
   - getPostCommentReplies:
   - schedulePost:
   - getRootPost:
-  - repostOrQuote:
+  - quoteProject:
   - getPost:
   - getPosts:
   - deletePost:
@@ -51,7 +51,6 @@ project:
   - saveProjectReview:
   - deleteProjectReview:
   - deleteProjectVetting:
-  - undoRepost:
   - scheduleProject:
   - getProjects:
   - getProjectReviews:

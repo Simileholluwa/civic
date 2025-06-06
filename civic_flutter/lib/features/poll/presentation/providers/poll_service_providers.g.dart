@@ -161,7 +161,7 @@ final savePollDraftProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SavePollDraftRef = AutoDisposeProviderRef<SavePollDraftUseCase>;
-String _$getPollDraftHash() => r'11eb05d2a490463c5f5256347c44a4a3a56cb635';
+String _$getPollDraftHash() => r'eb5849b298ab0f281f32851693bfe04fe56589f2';
 
 /// See also [getPollDraft].
 @ProviderFor(getPollDraft)

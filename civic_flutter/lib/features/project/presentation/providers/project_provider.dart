@@ -528,7 +528,7 @@ class ProjectProvider extends _$ProjectProvider {
 
   void setCanSave() {
     state = state.copyWith(
-    canSave: state.title.isNotEmpty ||
+      canSave: state.title.isNotEmpty ||
           state.description.isNotEmpty ||
           state.projectCategory != null ||
           state.projectSubCategory != null ||
@@ -804,13 +804,15 @@ class ProjectProvider extends _$ProjectProvider {
       TToastMessages.successToast(
         'Your project was sent.',
       );
-      ref
-          .watch(
-            paginatedProjectListProvider.notifier,
-          )
-          .addProject(
-            response,
-          );
+      if (projectId == null) {
+        ref
+            .watch(
+              paginatedProjectListProvider.notifier,
+            )
+            .addProject(
+              response,
+            );
+      }
       return;
     });
   }

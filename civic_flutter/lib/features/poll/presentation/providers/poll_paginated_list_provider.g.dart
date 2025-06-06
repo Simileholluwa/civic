@@ -6,7 +6,7 @@ part of 'poll_paginated_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedPollListHash() => r'8125ac41f87afc73f2b1eab6f52a36dd585e4265';
+String _$paginatedPollListHash() => r'11e3f36b4097dbfee54aa67a5f9d2e0848dfedda';
 
 /// See also [PaginatedPollList].
 @ProviderFor(PaginatedPollList)

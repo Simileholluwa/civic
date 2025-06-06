@@ -1,0 +1,98 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "project_reposts"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "post_reposts"
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "verifiedBy",
+          "quotedBy"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "tableDropped",
+            "message": "Table \"project_reposts\" will be dropped.",
+            "table": "project_reposts",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"post_reposts\" will be dropped.",
+            "table": "post_reposts",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"verifiedBy\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "verifiedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"quotedBy\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "quotedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "Table \"project_reposts\" will be dropped.",
+      "table": "project_reposts",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"post_reposts\" will be dropped.",
+      "table": "post_reposts",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"verifiedBy\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "verifiedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"quotedBy\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "quotedBy"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

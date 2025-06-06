@@ -20,19 +20,33 @@ class PostEndpoint extends Endpoint {
             post.id!,
             user,
           );
-          final sentPost = await Post.db.updateRow(
+
+          final existingPost = await Post.db.findById(
+            session,
+            post.id!,
+            transaction: transaction,
+          );
+
+          await updatePost(
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
+              likedBy: existingPost!.likedBy,
+              bookmarkedBy: existingPost.bookmarkedBy,
+              projectId: existingPost.projectId,
+              quotedOrRepostedFromUserId:
+                  existingPost.quotedOrRepostedFromUserId,
+              commentCount: existingPost.commentCount,
+              postType: existingPost.postType,
+              dateCreated: existingPost.dateCreated,
             ),
-            transaction: transaction,
           );
           await HashtagEndpoint().sendPostHashtags(
             session,
             post.tags ?? [],
             post.id!,
           );
-          return sentPost;
+          return existingPost;
         } else {
           final sentPost = await Post.db.insertRow(
             session,
@@ -80,13 +94,27 @@ class PostEndpoint extends Endpoint {
           comment.id!,
           comment.parentId!,
           user,
+          isReply,
         );
-        return await Post.db.updateRow(
+
+        final existingCommentOrReply = await Post.db.findById(
+          session,
+          comment.id!,
+        );
+
+        await updatePost(
           session,
           comment.copyWith(
             updatedAt: DateTime.now(),
+            likedBy: existingCommentOrReply!.likedBy,
+            bookmarkedBy: existingCommentOrReply.bookmarkedBy,
+            commentCount: existingCommentOrReply.commentCount,
+            postType: existingCommentOrReply.postType,
+            dateCreated: existingCommentOrReply.dateCreated,
           ),
         );
+
+        return comment;
       } else {
         Post? parent;
         if (comment.parentId != null) {
@@ -109,7 +137,6 @@ class PostEndpoint extends Endpoint {
           comment.copyWith(
             owner: user,
             postType: isReply ? PostType.commentReply : PostType.comment,
-            dateCreated: DateTime.now(),
             likedBy: [],
             bookmarkedBy: [],
           ),
@@ -175,14 +202,6 @@ class PostEndpoint extends Endpoint {
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
     );
-  }
-
-  Future<int> toggleCommentLike() async {
-    return 1;
-  }
-
-  Future<void> deletePostComment(int commentId) async {
-    return;
   }
 
   Future<Post> getComment(
@@ -287,95 +306,83 @@ class PostEndpoint extends Endpoint {
     return current;
   }
 
-  Future<Post> repostOrQuote(
+  Future<Post> quoteProject(
     Session session,
-    int? projectId,
-    Post? quoteContent,
+    int projectId,
+    Post quoteContent,
   ) async {
     final user = await authUser(session);
     return await session.db.transaction((transaction) async {
       try {
-        if (projectId == null) {
-          throw PostException(message: 'Specify the Id of the project');
-        }
-
-        // Determine if this is a post or project repost/quote
-        Post? existing;
-        Post newPost;
-
-        final selectedProject = await Project.db.findById(
-          session,
-          projectId,
-          transaction: transaction,
-        );
-        if (selectedProject == null) {
-          throw PostException(message: 'Project not found.');
-        }
-        existing = await Post.db.findFirstRow(
-          session,
-          where: (t) =>
-              t.ownerId.equals(user.id!) &
-              t.projectId.equals(selectedProject.id!) &
-              t.postType.equals(
-                PostType.projectRepost,
-              ),
-          transaction: transaction,
-        );
-
-        if (existing != null) {
-          await Post.db.deleteRow(
+        if (quoteContent.id != null) {
+          await validatePostOwnership(
             session,
-            existing,
+            quoteContent.id!,
+            user,
+          );
+
+          final existingQuote = await Post.db.findById(
+            session,
+            quoteContent.id!,
             transaction: transaction,
           );
-          selectedProject.quotedBy?.remove(user.id);
-          await ProjectEndpoint().updateProject(session, selectedProject);
-          throw PostException(
-            message: 'Project repost successfully removed.',
-            action: 'deleted',
+
+          await updatePost(
+            session,
+            quoteContent.copyWith(
+              updatedAt: DateTime.now(),
+              likedBy: existingQuote!.likedBy,
+              bookmarkedBy: existingQuote.bookmarkedBy,
+              projectId: existingQuote.projectId,
+              quotedOrRepostedFromUserId:
+                  existingQuote.quotedOrRepostedFromUserId,
+              commentCount: existingQuote.commentCount,
+              dateCreated: existingQuote.dateCreated,
+            ),
+          );
+
+          return existingQuote;
+        } else {
+          final selectedProject = await Project.db.findById(
+            session,
+            projectId,
+            transaction: transaction,
+          );
+
+          if (selectedProject == null) {
+            throw PostException(message: 'Project not found.');
+          }
+
+          final sentPost = await Post.db.insertRow(
+            session,
+            quoteContent.copyWith(
+              ownerId: user.id!,
+              projectId: selectedProject.id,
+              likedBy: [],
+              bookmarkedBy: [],
+            ),
+            transaction: transaction,
+          );
+
+          selectedProject.quoteCount = (selectedProject.quoteCount ?? 0) + 1;
+
+          await ProjectEndpoint().updateProject(
+            session,
+            selectedProject,
+          );
+
+          await HashtagEndpoint().sendPostHashtags(
+            session,
+            sentPost.tags ?? [],
+            sentPost.id!,
+          );
+
+          return sentPost.copyWith(
+            quotedOrRepostedFromUser: user,
+            owner: user,
+            project: selectedProject,
           );
         }
-
-        newPost = Post(
-          ownerId: user.id!,
-          postType: PostType.projectRepost,
-          projectId: selectedProject.id,
-          text: quoteContent?.text,
-          imageUrls: quoteContent?.imageUrls,
-          videoUrl: quoteContent?.videoUrl,
-          mentions: quoteContent?.mentions,
-          tags: quoteContent?.tags,
-          locations: quoteContent?.locations,
-          taggedUsers: quoteContent?.taggedUsers,
-          hashtags: quoteContent?.hashtags,
-          quotedOrRepostedFromUserId: user.id,
-          dateCreated: DateTime.now(),
-          likedBy: [],
-          bookmarkedBy: [],
-        );
-
-        if (!selectedProject.quotedBy!.contains(user.id!)) {
-          selectedProject.quotedBy!.add(user.id!);
-        }
-        selectedProject.quoteCount = (selectedProject.quoteCount ?? 0) + 1;
-
-        await ProjectEndpoint().updateProject(session, selectedProject);
-        final sentPost = await Post.db.insertRow(
-          session,
-          newPost,
-          transaction: transaction,
-        );
-
-        await HashtagEndpoint().sendPostHashtags(
-          session,
-          newPost.tags ?? [],
-          sentPost.id!,
-        );
-
-        return sentPost.copyWith(
-          quotedOrRepostedFromUser: user,
-          owner: user,
-        );
       } on PostException {
         rethrow;
       } catch (e, stackTrace) {
@@ -742,6 +749,7 @@ class PostEndpoint extends Endpoint {
     int commentId,
     int postId,
     UserRecord user,
+    bool isReply,
   ) async {
     final comment = await Post.db.findFirstRow(
       session,
@@ -749,11 +757,13 @@ class PostEndpoint extends Endpoint {
           t.id.equals(commentId) &
           t.parentId.equals(postId) &
           t.ownerId.equals(user.id) &
-          t.postType.equals(PostType.comment),
+          (isReply
+              ? t.postType.equals(PostType.commentReply)
+              : t.postType.equals(PostType.comment)),
     );
     if (comment == null) {
       throw PostException(
-        message: 'Comment not found',
+        message: isReply ? 'Reply not found' : 'Comment not found',
       );
     }
     if (comment.ownerId != user.userInfoId) {

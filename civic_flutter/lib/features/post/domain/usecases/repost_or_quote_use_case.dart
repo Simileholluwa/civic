@@ -10,7 +10,7 @@ class RepostOrQuoteUseCase implements UseCase<Post, RepostOrQuoteParams> {
 
   @override
   Future<Either<Failure, Post>> call(RepostOrQuoteParams params) async {
-    final result = await _postRepository.repostOrQuote(
+    final result = await _postRepository.quoteProject(
       projectId: params.projectId,
       quoteContent: params.quoteContent,
     );
@@ -23,6 +23,6 @@ class RepostOrQuoteParams {
     this.projectId,
     this.quoteContent,
   );
-  final int? projectId;
-  final Post? quoteContent;
+  final int projectId;
+  final Post quoteContent;
 }

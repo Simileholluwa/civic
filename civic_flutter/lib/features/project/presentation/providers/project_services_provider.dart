@@ -109,13 +109,6 @@ ToggleBookmarkUseCase toggleBookmark(Ref ref) {
 }
 
 @riverpod
-UndoRepostUseCase undoRepost(Ref ref) {
-  return UndoRepostUseCase(
-    projectRepository: ref.read(projectRepositoryImplProvider),
-  );
-}
-
-@riverpod
 DeleteProjectUseCase deleteProject(Ref ref) {
   return DeleteProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),

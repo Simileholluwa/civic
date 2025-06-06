@@ -49,11 +49,24 @@ class CreatePostScreen extends ConsumerWidget {
         postState.text.isNotEmpty ||
         postState.videoUrl.isNotEmpty;
     final isRepost = project != null;
-    final isReplyOrComment = parent != null;
+    bool isReplyOrComment = false;
+    bool isComment = false;
+    bool isReply = false;
+    String username = '';
+    if (data.hasValue && !data.hasError) {
+      isReplyOrComment = parent != null;
+      if (isReplyOrComment) {
+        isComment = (parent!.postType == PostType.regular ||
+                parent!.postType == PostType.projectRepost);
+
+        isReply = parent!.postType == PostType.comment;
+        username = parent!.owner!.userInfo!.userName!;
+      }
+    }
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     final isVisibleNotifier = ref.watch(
       appBottomNavigationVisibilityProvider(
-        null,
+        false,
       ).notifier,
     );
     Future.delayed(
@@ -91,17 +104,18 @@ class CreatePostScreen extends ConsumerWidget {
                 context.pop();
                 isRepost
                     ? await postNotifier.repostOrQuote(
-                        parent?.id,
+                        data.value?.id,
                         project?.id,
                       )
                     : isReplyOrComment
-                        ? parent!.postType == PostType.regular ||
-                                parent!.postType == PostType.projectRepost
+                        ? isComment
                             ? await postNotifier.sendComment(
                                 parent!.id!,
+                                data.value?.id,
                               )
                             : await postNotifier.sendReply(
                                 parent!.id!,
+                                data.value?.id,
                               )
                         : await postNotifier.send(
                             id,
@@ -162,12 +176,11 @@ class CreatePostScreen extends ConsumerWidget {
                     ),
                   ),
                   child: ContentExpandableText(
-                    text: parent!.postType == PostType.regular ||
-                            parent!.postType == PostType.projectRepost
-                        ? "Commenting on @${parent!.owner!.userInfo!.userName!}'s post"
-                        : parent!.postType == PostType.comment
-                            ? "Replying to @${parent!.owner!.userInfo!.userName!}'s comment"
-                            : "Replying to @${parent!.owner!.userInfo!.userName!}'s reply",
+                    text: isComment
+                        ? "Commenting on @$username's post"
+                        : isReply
+                            ? "Replying to @$username's comment"
+                            : "Replying to @$username's reply",
                     onToggleTextTap: null,
                   ),
                 );

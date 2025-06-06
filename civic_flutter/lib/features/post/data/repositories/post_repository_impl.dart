@@ -89,12 +89,12 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> repostOrQuote({
-    required int? projectId,
-    required Post? quoteContent,
+  Future<Either<Failure, Post>> quoteProject({
+    required int projectId,
+    required Post quoteContent,
   }) async {
     try {
-      final result = await _remoteDatabase.repostOrQuote(
+      final result = await _remoteDatabase.quoteProject(
         projectId: projectId,
         quoteContent: quoteContent,
       );

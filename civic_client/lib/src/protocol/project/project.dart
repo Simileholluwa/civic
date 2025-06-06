@@ -12,7 +12,6 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../general/aws_places.dart' as _i3;
-import '../project/project_repost.dart' as _i4;
 
 abstract class Project implements _i1.SerializableModel {
   Project._({
@@ -37,13 +36,10 @@ abstract class Project implements _i1.SerializableModel {
     this.projectVideoUrl,
     DateTime? dateCreated,
     this.updatedAt,
-    this.repost,
     this.likedBy,
     this.reviewedBy,
-    this.verifiedBy,
     this.bookmarkedBy,
     this.vettedBy,
-    this.quotedBy,
     int? quoteCount,
     this.overallRating,
     this.overallLocationRating,
@@ -79,13 +75,10 @@ abstract class Project implements _i1.SerializableModel {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -142,25 +135,16 @@ abstract class Project implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      repost: (jsonSerialization['repost'] as List?)
-          ?.map((e) => _i4.ProjectRepost.fromJson((e as Map<String, dynamic>)))
-          .toList(),
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       reviewedBy: (jsonSerialization['reviewedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      verifiedBy: (jsonSerialization['verifiedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       vettedBy: (jsonSerialization['vettedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      quotedBy: (jsonSerialization['quotedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       quoteCount: jsonSerialization['quoteCount'] as int?,
@@ -226,19 +210,13 @@ abstract class Project implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  List<_i4.ProjectRepost>? repost;
-
   List<int>? likedBy;
 
   List<int>? reviewedBy;
 
-  List<int>? verifiedBy;
-
   List<int>? bookmarkedBy;
 
   List<int>? vettedBy;
-
-  List<int>? quotedBy;
 
   int? quoteCount;
 
@@ -283,13 +261,10 @@ abstract class Project implements _i1.SerializableModel {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -329,14 +304,10 @@ abstract class Project implements _i1.SerializableModel {
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (repost != null)
-        'repost': repost?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
-      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
@@ -385,13 +356,10 @@ class _ProjectImpl extends Project {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -423,13 +391,10 @@ class _ProjectImpl extends Project {
           projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          repost: repost,
           likedBy: likedBy,
           reviewedBy: reviewedBy,
-          verifiedBy: verifiedBy,
           bookmarkedBy: bookmarkedBy,
           vettedBy: vettedBy,
-          quotedBy: quotedBy,
           quoteCount: quoteCount,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
@@ -467,13 +432,10 @@ class _ProjectImpl extends Project {
     Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? repost = _Undefined,
     Object? likedBy = _Undefined,
     Object? reviewedBy = _Undefined,
-    Object? verifiedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
     Object? vettedBy = _Undefined,
-    Object? quotedBy = _Undefined,
     Object? quoteCount = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
@@ -521,27 +483,18 @@ class _ProjectImpl extends Project {
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      repost: repost is List<_i4.ProjectRepost>?
-          ? repost
-          : this.repost?.map((e0) => e0.copyWith()).toList(),
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
       reviewedBy: reviewedBy is List<int>?
           ? reviewedBy
           : this.reviewedBy?.map((e0) => e0).toList(),
-      verifiedBy: verifiedBy is List<int>?
-          ? verifiedBy
-          : this.verifiedBy?.map((e0) => e0).toList(),
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
       vettedBy: vettedBy is List<int>?
           ? vettedBy
           : this.vettedBy?.map((e0) => e0).toList(),
-      quotedBy: quotedBy is List<int>?
-          ? quotedBy
-          : this.quotedBy?.map((e0) => e0).toList(),
       quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,

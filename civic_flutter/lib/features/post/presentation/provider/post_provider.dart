@@ -282,6 +282,7 @@ class RegularPost extends _$RegularPost {
 
   Future<void> sendPost(
     Post post,
+    bool addToList,
   ) async {
     final savePost = ref.read(savePostProvider);
 
@@ -307,9 +308,11 @@ class RegularPost extends _$RegularPost {
         );
         return;
       }
-      ref.read(paginatedPostListProvider.notifier).addPost(
-            data,
-          );
+      if (addToList) {
+        ref.read(paginatedPostListProvider.notifier).addPost(
+              data,
+            );
+      }
       TToastMessages.successToast(
         'Your post was sent.',
       );
@@ -352,6 +355,7 @@ class RegularPost extends _$RegularPost {
     final repostQuote = ref.read(repostOrQuotePostProvider);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final quoteContent = Post(
+      id: postId,
       ownerId: ownerId,
       text: state.text.trim(),
       imageUrls: state.imageUrls,
@@ -360,10 +364,12 @@ class RegularPost extends _$RegularPost {
       locations: state.locations,
       mentions: state.mentions,
       tags: state.tags,
+      postType: PostType.projectRepost,
+      projectId: projectId,
     );
     final result = await repostQuote(
       RepostOrQuoteParams(
-        projectId,
+        projectId!,
         quoteContent,
       ),
     );
@@ -378,16 +384,16 @@ class RegularPost extends _$RegularPost {
             );
       return;
     }, (post) {
-      final postListNotifier = ref.watch(
-        paginatedPostListProvider.notifier,
-      );
-      postListNotifier.addPost(
-        post,
-      );
+      if (postId == null) {
+        final postListNotifier = ref.watch(
+          paginatedPostListProvider.notifier,
+        );
+        postListNotifier.addPost(
+          post,
+        );
+      }
       TToastMessages.successToast(
-        projectId != null
-            ? 'Project successfully reposted'
-            : 'Post successfully reposted',
+        'Project successfully reposted',
       );
 
       return;
@@ -433,6 +439,7 @@ class RegularPost extends _$RegularPost {
         !scheduledDateTimeProvider.canSendLater()) {
       await sendPost(
         post,
+        postId == null,
       );
     } else {
       await savePostInFuture(
@@ -443,7 +450,10 @@ class RegularPost extends _$RegularPost {
     return;
   }
 
-  Future<void> sendComment(int postId) async {
+  Future<void> sendComment(
+    int postId,
+    int? id,
+  ) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveComment = ref.read(savePostCommentProvider);
@@ -452,6 +462,7 @@ class RegularPost extends _$RegularPost {
     final result = await saveComment(
       SavePostCommentParams(
         Post(
+          id: id,
           ownerId: ownerId,
           text: state.text.trim(),
           imageUrls: state.imageUrls,
@@ -467,15 +478,20 @@ class RegularPost extends _$RegularPost {
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
     }, (r) {
       TToastMessages.successToast('Your comment has been sent.');
-      ref.watch(
-        paginatedPostCommentListProvider(postId).notifier,
-      ).addComment(r!);
+      if (id == null) {
+        ref
+            .watch(
+              paginatedPostCommentListProvider(postId).notifier,
+            )
+            .addComment(r!);
+      }
       ref.read(sendPostLoadingProvider.notifier).setValue(false);
     });
   }
 
   Future<void> sendReply(
     int parentId,
+    int? id,
   ) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
@@ -487,6 +503,7 @@ class RegularPost extends _$RegularPost {
     final result = await saveReply(
       SavePostCommentParams(
         Post(
+          id: id,
           ownerId: ownerId,
           text: state.text.trim(),
           imageUrls: state.imageUrls,
@@ -504,9 +521,11 @@ class RegularPost extends _$RegularPost {
       },
       (r) {
         TToastMessages.successToast('Your reply has been sent.');
-        ref
-            .read(paginatedPostCommentRepliesListProvider(parentId).notifier)
-            .addReply(r!);
+        if (id == null) {
+          ref
+              .read(paginatedPostCommentRepliesListProvider(parentId).notifier)
+              .addReply(r!);
+        }
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
       },
     );

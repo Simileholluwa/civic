@@ -210,7 +210,7 @@ class PostDetailScreen extends ConsumerWidget {
               child: ContentSingleButton(
                 onPressed: () {
                   context.push('/create/post/0', extra: {
-                    'parent': data,       
+                    'parent': data,
                   });
                 },
                 text: 'Share your opinion',

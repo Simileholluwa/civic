@@ -21,9 +21,9 @@ abstract class PostRepository {
   });
   Future<Either<Failure, Post>> getPostDraft();
   Future<Either<Failure, Post>> getPost({required int id});
-  Future<Either<Failure, Post>> repostOrQuote({
-    required int? projectId,
-    required Post? quoteContent,
+  Future<Either<Failure, Post>> quoteProject({
+    required int projectId,
+    required Post quoteContent,
   });
   Future<Either<Failure, void>> deletePostDraft();
 

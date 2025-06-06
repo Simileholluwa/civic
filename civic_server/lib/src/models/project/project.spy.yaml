@@ -20,13 +20,10 @@ fields:
     projectVideoUrl: String?
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
-    repost: List<ProjectRepost>?, relation(name=project_repostOnProject)
     likedBy: List<int>?
     reviewedBy: List<int>?
-    verifiedBy: List<int>?
     bookmarkedBy: List<int>?
     vettedBy: List<int>?
-    quotedBy: List<int>?
     quoteCount: int?, default=0
     overallRating: double?
     overallLocationRating: double?

@@ -102,10 +102,10 @@ class ProjectInteractionButtons extends ConsumerWidget {
           ),
         if (projectCardState.canVet! && !projectCardState.isOwner!)
           ContentInteractionButton(
-            icon: projectCardState.hasVerified!
+            icon: projectCardState.hasVetted!
                 ? Iconsax.medal_star5
                 : Iconsax.medal_star,
-            text: projectCardState.numberOfVerifies!,
+            text: projectCardState.numberOfVettings!,
             onTap: projectCardState.isDeleted!
                 ? null
                 : () {
@@ -116,7 +116,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                   },
             color: projectCardState.isDeleted!
                 ? Theme.of(context).disabledColor
-                : projectCardState.hasVerified!
+                : projectCardState.hasVetted!
                     ? TColors.primary
                     : Theme.of(context).iconTheme.color!,
           ),
@@ -127,7 +127,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
             showText: false,
             color: projectCardState.isDeleted!
                 ? Theme.of(context).disabledColor
-                : projectCardState.hasVerified!
+                : projectCardState.hasVetted!
                     ? TColors.primary
                     : Theme.of(context).iconTheme.color!,
             onTap: projectCardState.isDeleted!

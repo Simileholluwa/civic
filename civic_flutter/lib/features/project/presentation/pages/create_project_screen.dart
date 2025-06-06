@@ -39,7 +39,7 @@ class CreateProjectScreen extends ConsumerWidget {
     );
     final isVisibleNotifier = ref.read(
       appBottomNavigationVisibilityProvider(
-        null,
+        false,
       ).notifier,
     );
     Future.delayed(

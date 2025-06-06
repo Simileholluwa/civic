@@ -14,7 +14,6 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../general/aws_places.dart' as _i3;
-import '../project/project_repost.dart' as _i4;
 
 abstract class Project
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -40,13 +39,10 @@ abstract class Project
     this.projectVideoUrl,
     DateTime? dateCreated,
     this.updatedAt,
-    this.repost,
     this.likedBy,
     this.reviewedBy,
-    this.verifiedBy,
     this.bookmarkedBy,
     this.vettedBy,
-    this.quotedBy,
     int? quoteCount,
     this.overallRating,
     this.overallLocationRating,
@@ -82,13 +78,10 @@ abstract class Project
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -145,25 +138,16 @@ abstract class Project
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      repost: (jsonSerialization['repost'] as List?)
-          ?.map((e) => _i4.ProjectRepost.fromJson((e as Map<String, dynamic>)))
-          .toList(),
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       reviewedBy: (jsonSerialization['reviewedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      verifiedBy: (jsonSerialization['verifiedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       vettedBy: (jsonSerialization['vettedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      quotedBy: (jsonSerialization['quotedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       quoteCount: jsonSerialization['quoteCount'] as int?,
@@ -231,19 +215,13 @@ abstract class Project
 
   DateTime? updatedAt;
 
-  List<_i4.ProjectRepost>? repost;
-
   List<int>? likedBy;
 
   List<int>? reviewedBy;
 
-  List<int>? verifiedBy;
-
   List<int>? bookmarkedBy;
 
   List<int>? vettedBy;
-
-  List<int>? quotedBy;
 
   int? quoteCount;
 
@@ -291,13 +269,10 @@ abstract class Project
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -337,14 +312,10 @@ abstract class Project
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (repost != null)
-        'repost': repost?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
-      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
@@ -391,14 +362,10 @@ abstract class Project
       if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (repost != null)
-        'repost': repost?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
-      if (verifiedBy != null) 'verifiedBy': verifiedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
@@ -416,14 +383,8 @@ abstract class Project
     };
   }
 
-  static ProjectInclude include({
-    _i2.UserRecordInclude? owner,
-    _i4.ProjectRepostIncludeList? repost,
-  }) {
-    return ProjectInclude._(
-      owner: owner,
-      repost: repost,
-    );
+  static ProjectInclude include({_i2.UserRecordInclude? owner}) {
+    return ProjectInclude._(owner: owner);
   }
 
   static ProjectIncludeList includeList({
@@ -477,13 +438,10 @@ class _ProjectImpl extends Project {
     String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i4.ProjectRepost>? repost,
     List<int>? likedBy,
     List<int>? reviewedBy,
-    List<int>? verifiedBy,
     List<int>? bookmarkedBy,
     List<int>? vettedBy,
-    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -515,13 +473,10 @@ class _ProjectImpl extends Project {
           projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          repost: repost,
           likedBy: likedBy,
           reviewedBy: reviewedBy,
-          verifiedBy: verifiedBy,
           bookmarkedBy: bookmarkedBy,
           vettedBy: vettedBy,
-          quotedBy: quotedBy,
           quoteCount: quoteCount,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
@@ -559,13 +514,10 @@ class _ProjectImpl extends Project {
     Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? repost = _Undefined,
     Object? likedBy = _Undefined,
     Object? reviewedBy = _Undefined,
-    Object? verifiedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
     Object? vettedBy = _Undefined,
-    Object? quotedBy = _Undefined,
     Object? quoteCount = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
@@ -613,27 +565,18 @@ class _ProjectImpl extends Project {
           projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      repost: repost is List<_i4.ProjectRepost>?
-          ? repost
-          : this.repost?.map((e0) => e0.copyWith()).toList(),
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
       reviewedBy: reviewedBy is List<int>?
           ? reviewedBy
           : this.reviewedBy?.map((e0) => e0).toList(),
-      verifiedBy: verifiedBy is List<int>?
-          ? verifiedBy
-          : this.verifiedBy?.map((e0) => e0).toList(),
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
       vettedBy: vettedBy is List<int>?
           ? vettedBy
           : this.vettedBy?.map((e0) => e0).toList(),
-      quotedBy: quotedBy is List<int>?
-          ? quotedBy
-          : this.quotedBy?.map((e0) => e0).toList(),
       quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
@@ -747,20 +690,12 @@ class ProjectTable extends _i1.Table<int?> {
       'reviewedBy',
       this,
     );
-    verifiedBy = _i1.ColumnSerializable(
-      'verifiedBy',
-      this,
-    );
     bookmarkedBy = _i1.ColumnSerializable(
       'bookmarkedBy',
       this,
     );
     vettedBy = _i1.ColumnSerializable(
       'vettedBy',
-      this,
-    );
-    quotedBy = _i1.ColumnSerializable(
-      'quotedBy',
       this,
     );
     quoteCount = _i1.ColumnInt(
@@ -843,21 +778,13 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  _i4.ProjectRepostTable? ___repost;
-
-  _i1.ManyRelation<_i4.ProjectRepostTable>? _repost;
-
   late final _i1.ColumnSerializable likedBy;
 
   late final _i1.ColumnSerializable reviewedBy;
 
-  late final _i1.ColumnSerializable verifiedBy;
-
   late final _i1.ColumnSerializable bookmarkedBy;
 
   late final _i1.ColumnSerializable vettedBy;
-
-  late final _i1.ColumnSerializable quotedBy;
 
   late final _i1.ColumnInt quoteCount;
 
@@ -890,37 +817,6 @@ class ProjectTable extends _i1.Table<int?> {
     return _owner!;
   }
 
-  _i4.ProjectRepostTable get __repost {
-    if (___repost != null) return ___repost!;
-    ___repost = _i1.createRelationTable(
-      relationFieldName: '__repost',
-      field: Project.t.id,
-      foreignField: _i4.ProjectRepost.t.projectId,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i4.ProjectRepostTable(tableRelation: foreignTableRelation),
-    );
-    return ___repost!;
-  }
-
-  _i1.ManyRelation<_i4.ProjectRepostTable> get repost {
-    if (_repost != null) return _repost!;
-    var relationTable = _i1.createRelationTable(
-      relationFieldName: 'repost',
-      field: Project.t.id,
-      foreignField: _i4.ProjectRepost.t.projectId,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i4.ProjectRepostTable(tableRelation: foreignTableRelation),
-    );
-    _repost = _i1.ManyRelation<_i4.ProjectRepostTable>(
-      tableWithRelations: relationTable,
-      table: _i4.ProjectRepostTable(
-          tableRelation: relationTable.tableRelation!.lastRelation),
-    );
-    return _repost!;
-  }
-
   @override
   List<_i1.Column> get columns => [
         id,
@@ -945,10 +841,8 @@ class ProjectTable extends _i1.Table<int?> {
         updatedAt,
         likedBy,
         reviewedBy,
-        verifiedBy,
         bookmarkedBy,
         vettedBy,
-        quotedBy,
         quoteCount,
         overallRating,
         overallLocationRating,
@@ -965,31 +859,19 @@ class ProjectTable extends _i1.Table<int?> {
     if (relationField == 'owner') {
       return owner;
     }
-    if (relationField == 'repost') {
-      return __repost;
-    }
     return null;
   }
 }
 
 class ProjectInclude extends _i1.IncludeObject {
-  ProjectInclude._({
-    _i2.UserRecordInclude? owner,
-    _i4.ProjectRepostIncludeList? repost,
-  }) {
+  ProjectInclude._({_i2.UserRecordInclude? owner}) {
     _owner = owner;
-    _repost = repost;
   }
 
   _i2.UserRecordInclude? _owner;
 
-  _i4.ProjectRepostIncludeList? _repost;
-
   @override
-  Map<String, _i1.Include?> get includes => {
-        'owner': _owner,
-        'repost': _repost,
-      };
+  Map<String, _i1.Include?> get includes => {'owner': _owner};
 
   @override
   _i1.Table<int?> get table => Project.t;
@@ -1018,13 +900,7 @@ class ProjectIncludeList extends _i1.IncludeList {
 class ProjectRepository {
   const ProjectRepository._();
 
-  final attach = const ProjectAttachRepository._();
-
   final attachRow = const ProjectAttachRowRepository._();
-
-  final detach = const ProjectDetachRepository._();
-
-  final detachRow = const ProjectDetachRowRepository._();
 
   /// Returns a list of [Project]s matching the given query parameters.
   ///
@@ -1242,34 +1118,6 @@ class ProjectRepository {
   }
 }
 
-class ProjectAttachRepository {
-  const ProjectAttachRepository._();
-
-  /// Creates a relation between this [Project] and the given [ProjectRepost]s
-  /// by setting each [ProjectRepost]'s foreign key `projectId` to refer to this [Project].
-  Future<void> repost(
-    _i1.Session session,
-    Project project,
-    List<_i4.ProjectRepost> projectRepost, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (projectRepost.any((e) => e.id == null)) {
-      throw ArgumentError.notNull('projectRepost.id');
-    }
-    if (project.id == null) {
-      throw ArgumentError.notNull('project.id');
-    }
-
-    var $projectRepost =
-        projectRepost.map((e) => e.copyWith(projectId: project.id)).toList();
-    await session.db.update<_i4.ProjectRepost>(
-      $projectRepost,
-      columns: [_i4.ProjectRepost.t.projectId],
-      transaction: transaction,
-    );
-  }
-}
-
 class ProjectAttachRowRepository {
   const ProjectAttachRowRepository._();
 
@@ -1292,82 +1140,6 @@ class ProjectAttachRowRepository {
     await session.db.updateRow<Project>(
       $project,
       columns: [Project.t.ownerId],
-      transaction: transaction,
-    );
-  }
-
-  /// Creates a relation between this [Project] and the given [ProjectRepost]
-  /// by setting the [ProjectRepost]'s foreign key `projectId` to refer to this [Project].
-  Future<void> repost(
-    _i1.Session session,
-    Project project,
-    _i4.ProjectRepost projectRepost, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (projectRepost.id == null) {
-      throw ArgumentError.notNull('projectRepost.id');
-    }
-    if (project.id == null) {
-      throw ArgumentError.notNull('project.id');
-    }
-
-    var $projectRepost = projectRepost.copyWith(projectId: project.id);
-    await session.db.updateRow<_i4.ProjectRepost>(
-      $projectRepost,
-      columns: [_i4.ProjectRepost.t.projectId],
-      transaction: transaction,
-    );
-  }
-}
-
-class ProjectDetachRepository {
-  const ProjectDetachRepository._();
-
-  /// Detaches the relation between this [Project] and the given [ProjectRepost]
-  /// by setting the [ProjectRepost]'s foreign key `projectId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> repost(
-    _i1.Session session,
-    List<_i4.ProjectRepost> projectRepost, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (projectRepost.any((e) => e.id == null)) {
-      throw ArgumentError.notNull('projectRepost.id');
-    }
-
-    var $projectRepost =
-        projectRepost.map((e) => e.copyWith(projectId: null)).toList();
-    await session.db.update<_i4.ProjectRepost>(
-      $projectRepost,
-      columns: [_i4.ProjectRepost.t.projectId],
-      transaction: transaction,
-    );
-  }
-}
-
-class ProjectDetachRowRepository {
-  const ProjectDetachRowRepository._();
-
-  /// Detaches the relation between this [Project] and the given [ProjectRepost]
-  /// by setting the [ProjectRepost]'s foreign key `projectId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> repost(
-    _i1.Session session,
-    _i4.ProjectRepost projectRepost, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (projectRepost.id == null) {
-      throw ArgumentError.notNull('projectRepost.id');
-    }
-
-    var $projectRepost = projectRepost.copyWith(projectId: null);
-    await session.db.updateRow<_i4.ProjectRepost>(
-      $projectRepost,
-      columns: [_i4.ProjectRepost.t.projectId],
       transaction: transaction,
     );
   }

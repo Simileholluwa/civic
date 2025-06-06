@@ -56,9 +56,7 @@ class PollsScreen extends ConsumerWidget {
                 final numberOfVotes = poll.options![index].votedBy!.length;
                 final totalVotes = poll.votedBy!.length;
                 return Container(
-                  padding: const EdgeInsets.symmetric(                     
-                    vertical: 5,
-                  ),
+                  
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10,),
                     color: Theme.of(context).cardColor,
@@ -82,7 +80,7 @@ class PollsScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 40,
+                        height: 30,
                         child: VerticalDivider(),
                       ),
                       Padding(
@@ -98,7 +96,6 @@ class PollsScreen extends ConsumerWidget {
                                   .textTheme
                                   .labelMedium!
                                   .copyWith(
-                                    color: Theme.of(context).hintColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
                                   ),
@@ -111,7 +108,6 @@ class PollsScreen extends ConsumerWidget {
                                   .textTheme
                                   .labelMedium!
                                   .copyWith(
-                                    color: Theme.of(context).hintColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
                                   ),

@@ -21,11 +21,11 @@ class ProjectCardState {
   final String? numberOfLikes;
   final String? numberOfReviews;
   final String? numberOfReposts;
-  final String? numberOfVerifies;
+  final String? numberOfVettings;
   final String? numberOfBookmarks;
   final bool? hasLiked;
   final bool? hasReviewed;
-  final bool? hasVerified;
+  final bool? hasVetted;
   final UserRecord? creator;
   final bool? canVet;
   final bool? isBookmarked;
@@ -61,11 +61,11 @@ class ProjectCardState {
     required this.numberOfLikes,
     required this.numberOfReviews,
     required this.numberOfReposts,
-    required this.numberOfVerifies,
+    required this.numberOfVettings,
     required this.numberOfBookmarks,
     this.hasLiked = false,
     required this.hasReviewed,
-    required this.hasVerified,
+    required this.hasVetted,
     required this.creator,
     required this.canVet,
     this.isBookmarked = false,
@@ -103,12 +103,12 @@ class ProjectCardState {
     String? numberOfLikes,
     String? numberOfReviews,
     String? numberOfReposts,
-    String? numberOfVerifies,
+    String? numberOfVettings,
     String? numberOfBookmarks,
     bool? hasLiked,
     bool? hasReviewed,
     bool? hasReposted,
-    bool? hasVerified,
+    bool? hasVetted,
     UserRecord? creator,
     bool? canVet,
     bool? isBookmarked,
@@ -144,11 +144,11 @@ class ProjectCardState {
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
       numberOfReviews: numberOfReviews ?? this.numberOfReviews,
       numberOfReposts: numberOfReposts ?? this.numberOfReposts,
-      numberOfVerifies: numberOfVerifies ?? this.numberOfVerifies,
+      numberOfVettings: numberOfVettings ?? this.numberOfVettings,
       numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
       hasLiked: hasLiked ?? this.hasLiked,
       hasReviewed: hasReviewed ?? this.hasReviewed,
-      hasVerified: hasVerified ?? this.hasVerified,
+      hasVetted: hasVetted ?? this.hasVetted,
       creator: creator ?? this.creator,
       canVet: canVet ?? this.canVet,
       isBookmarked: isBookmarked ?? this.isBookmarked,
@@ -214,8 +214,8 @@ class ProjectCardState {
       numberOfReviews: THelperFunctions.humanizeNumber(
         project.reviewedBy!.length,
       ),
-      numberOfVerifies: THelperFunctions.humanizeNumber(
-        project.verifiedBy!.length,
+      numberOfVettings: THelperFunctions.humanizeNumber(
+        project.vettedBy!.length,
       ),
       numberOfBookmarks: THelperFunctions.humanizeNumber(
         project.bookmarkedBy!.length,
@@ -226,7 +226,7 @@ class ProjectCardState {
       hasReviewed: project.reviewedBy!.contains(
         userId,
       ),
-      hasVerified: project.verifiedBy!.contains(
+      hasVetted: project.vettedBy!.contains(
         userId,
       ),
       isBookmarked: project.bookmarkedBy!.contains(
@@ -285,10 +285,10 @@ class ProjectCardState {
       numberOfLikes: null,
       numberOfReviews: null,
       numberOfReposts: null,
-      numberOfVerifies: null,
+      numberOfVettings: null,
       numberOfBookmarks: null,
       hasReviewed: null,
-      hasVerified: null,
+      hasVetted: null,
       creator: null,
       canVet: null,
       startDateISO: null,

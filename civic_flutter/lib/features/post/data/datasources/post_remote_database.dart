@@ -14,9 +14,9 @@ abstract class PostRemoteDatabase {
   Future<Post> getPost({
     required int id,
   });
-  Future<Post> repostOrQuote({
-    required int? projectId,
-    required Post? quoteContent,
+  Future<Post> quoteProject({
+    required int projectId,
+    required Post quoteContent,
   });
   Future<void> schedulePost({
     required Post post,
@@ -206,12 +206,12 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<Post> repostOrQuote({
-    required int? projectId,
-    required Post? quoteContent,
+  Future<Post> quoteProject({
+    required int projectId,
+    required Post quoteContent,
   }) async {
     try {
-      return await _client.post.repostOrQuote(
+      return await _client.post.quoteProject(
         projectId,
         quoteContent,
       );
