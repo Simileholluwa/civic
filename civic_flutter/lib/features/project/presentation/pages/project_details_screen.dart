@@ -135,7 +135,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          if (projectCardState.isOwner!) {
+          if (projectCardState.isOwner! || projectCardState.isDeleted!) {
             return null;
           }
           return ProjectDetailsBottomNavigationWidget(

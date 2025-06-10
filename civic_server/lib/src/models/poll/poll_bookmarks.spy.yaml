@@ -1,0 +1,11 @@
+class: PollBookmarks
+table: poll_bookmarks
+fields:
+    poll: Poll?, relation(onDelete=Cascade)
+    owner: UserRecord?, relation
+    dateCreated: DateTime, default=now
+
+indexes:
+  poll_bookmarks_id_unique_idx:
+    fields: pollId, ownerId
+    unique: true

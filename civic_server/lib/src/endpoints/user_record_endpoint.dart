@@ -63,7 +63,6 @@ class UserRecordEndpoint extends Endpoint {
     if (userInfo == null) return null;
 
     // If the user already exists, return the username
-    print(userInfo.userName);
     return userInfo.userName;
   }
 
@@ -239,12 +238,10 @@ class UserRecordEndpoint extends Endpoint {
       // Unfollow the user
       currentUser.following!.remove(userId);
       followedUser.followers!.remove(authInfo.userId);
-      print('User ${authInfo.userId} has unfollowed $userId');
     } else {
       // Follow the user
       currentUser.following!.add(userId);
       followedUser.followers!.add(authInfo.userId);
-      print('User ${authInfo.userId} has followed $userId');
     }
 
     // Save changes to both users

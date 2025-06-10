@@ -195,5 +195,79 @@ final deletePollDraftProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DeletePollDraftRef = AutoDisposeProviderRef<DeletePollDraftUseCase>;
+String _$deletePollHash() => r'c940e101562446bbe7be4dec11d2ce6cfaea8d5d';
+
+/// See also [deletePoll].
+@ProviderFor(deletePoll)
+final deletePollProvider = AutoDisposeProvider<DeletePollUseCase>.internal(
+  deletePoll,
+  name: r'deletePollProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$deletePollHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DeletePollRef = AutoDisposeProviderRef<DeletePollUseCase>;
+String _$togglePollLikeHash() => r'3879c00ddea3f2690134254439007becbd834a60';
+
+/// See also [togglePollLike].
+@ProviderFor(togglePollLike)
+final togglePollLikeProvider =
+    AutoDisposeProvider<TogglePollLikeUseCase>.internal(
+  togglePollLike,
+  name: r'togglePollLikeProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$togglePollLikeHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef TogglePollLikeRef = AutoDisposeProviderRef<TogglePollLikeUseCase>;
+String _$togglePollBookmarkHash() =>
+    r'cee6600dda96e90c074bbd06b2401404c5fa3d74';
+
+/// See also [togglePollBookmark].
+@ProviderFor(togglePollBookmark)
+final togglePollBookmarkProvider =
+    AutoDisposeProvider<TogglePollBookmarkUseCase>.internal(
+  togglePollBookmark,
+  name: r'togglePollBookmarkProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$togglePollBookmarkHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef TogglePollBookmarkRef
+    = AutoDisposeProviderRef<TogglePollBookmarkUseCase>;
+String _$markPollNotInterestedHash() =>
+    r'ddeec6e40b4050633707b69b105e7e8802c3e92e';
+
+/// See also [markPollNotInterested].
+@ProviderFor(markPollNotInterested)
+final markPollNotInterestedProvider =
+    AutoDisposeProvider<MarkPollNotInterestedUseCase>.internal(
+  markPollNotInterested,
+  name: r'markPollNotInterestedProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$markPollNotInterestedHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MarkPollNotInterestedRef
+    = AutoDisposeProviderRef<MarkPollNotInterestedUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

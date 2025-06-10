@@ -26,4 +26,11 @@ abstract class PollRepository {
   Future<Either<Failure, void>> savePollDraft({
     required Poll poll,
   });
+  Future<Either<Failure, void>> toggleLike({required int id});
+  Future<Either<Failure, void>> toggleBookmark({required int id});
+  Future<Either<Failure, void>> markNotInterested({
+    required int id,
+    required String reason,
+  });
+  Future<Either<Failure, void>> deletePoll({required int id});
 }

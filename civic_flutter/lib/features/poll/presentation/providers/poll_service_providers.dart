@@ -87,3 +87,31 @@ DeletePollDraftUseCase deletePollDraft(Ref ref) {
   );
 }
 
+@riverpod
+DeletePollUseCase deletePoll(Ref ref) {
+  return DeletePollUseCase(
+    pollRepository: ref.read(pollRepositoryImplProvider),
+  );
+}
+
+@riverpod
+TogglePollLikeUseCase togglePollLike(Ref ref) {
+  return TogglePollLikeUseCase(
+    pollRepository: ref.read(pollRepositoryImplProvider),
+  );
+}
+
+@riverpod
+TogglePollBookmarkUseCase togglePollBookmark(Ref ref) {
+  return TogglePollBookmarkUseCase(
+    pollRepository: ref.read(pollRepositoryImplProvider),
+  );
+}
+
+@riverpod
+MarkPollNotInterestedUseCase markPollNotInterested(Ref ref) {
+  return MarkPollNotInterestedUseCase(
+    pollRepository: ref.read(pollRepositoryImplProvider),
+  );
+}
+

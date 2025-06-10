@@ -6,7 +6,7 @@ part of 'post_card_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postCardWidgetHash() => r'b18692dbe35d1a1ac2663bf6c398df3273fbafd0';
+String _$postCardWidgetHash() => r'de4c64bb3e86373e333a55adf549f5c865e852ac';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -17,7 +17,7 @@ class PostCardWidget extends _$PostCardWidget {
     return PostCardState.populate(post, ref);
   }
 
-  Future<void> toggleFollow(int userId) async {
+  Future<void> toggleFollow(int userId, String username,) async {
     final userNotifier = ref.watch(
       currentActiveUserProvider.notifier,
     );
@@ -37,7 +37,6 @@ class PostCardWidget extends _$PostCardWidget {
         );
         TToastMessages.infoToast('You are now following.');
       }
-      log(state.isFollower.toString());
     }
   }
 

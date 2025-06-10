@@ -74,4 +74,22 @@ class PollHelperFunctions {
       }
     }
   }
+
+  static String formatTimeLeft(DateTime expiresAt) {
+    final now = DateTime.now();
+    final timeLeft = expiresAt.difference(now);
+    if (timeLeft.isNegative) return ' • Poll ended';
+
+    final days = timeLeft.inDays;
+    final hours = timeLeft.inHours % 24;
+    final minutes = timeLeft.inMinutes % 60;
+
+    if (days > 0) return ' • $days day${days == 1 ? '' : 's'} left';
+    if (hours > 0) {
+      return ' • $hours hour${hours == 1 ? '' : 's'} ${minutes}m left';
+    }
+    if (minutes > 0) return ' • $minutes minute${minutes == 1 ? '' : 's'} left';
+
+    return ' • Poll ends soon';
+  }
 }

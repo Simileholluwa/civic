@@ -22,12 +22,12 @@ import '../endpoints/user_nin_endpoint.dart' as _i10;
 import '../endpoints/user_record_endpoint.dart' as _i11;
 import 'package:civic_server/src/generated/article/article.dart' as _i12;
 import 'package:civic_server/src/generated/poll/poll.dart' as _i13;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i14;
-import 'package:civic_server/src/generated/post/post.dart' as _i15;
-import 'package:civic_server/src/generated/project/project.dart' as _i16;
-import 'package:civic_server/src/generated/project/project_review.dart' as _i17;
+import 'package:civic_server/src/generated/post/post.dart' as _i14;
+import 'package:civic_server/src/generated/project/project.dart' as _i15;
+import 'package:civic_server/src/generated/project/project_review.dart' as _i16;
 import 'package:civic_server/src/generated/project/project_vetting.dart'
-    as _i18;
+    as _i17;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i18;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i19;
 
 class Endpoints extends _i1.EndpointDispatch {
@@ -412,6 +412,84 @@ class Endpoints extends _i1.EndpointDispatch {
             params['optionId'],
           ),
         ),
+        'toggleLike': _i1.MethodConnector(
+          name: 'toggleLike',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).toggleLike(
+            session,
+            params['pollId'],
+          ),
+        ),
+        'toggleBookmark': _i1.MethodConnector(
+          name: 'toggleBookmark',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).toggleBookmark(
+            session,
+            params['pollId'],
+          ),
+        ),
+        'deletePoll': _i1.MethodConnector(
+          name: 'deletePoll',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).deletePoll(
+            session,
+            params['id'],
+          ),
+        ),
+        'markNotInterested': _i1.MethodConnector(
+          name: 'markNotInterested',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'reason': _i1.ParameterDescription(
+              name: 'reason',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['poll'] as _i6.PollEndpoint).markNotInterested(
+            session,
+            params['pollId'],
+            params['reason'],
+          ),
+        ),
         'clearVote': _i1.MethodConnector(
           name: 'clearVote',
           params: {
@@ -427,7 +505,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['poll'] as _i6.PollEndpoint).clearVote(
             session,
-            pollId: params['pollId'],
+            params['pollId'],
           ),
         ),
         'getPollResults': _i1.MethodConnector(
@@ -490,61 +568,25 @@ class Endpoints extends _i1.EndpointDispatch {
             params['pollId'],
           ),
         ),
-        'hasVoted': _i1.MethodConnector(
-          name: 'hasVoted',
+        'pollUpdates': _i1.MethodStreamConnector(
+          name: 'pollUpdates',
           params: {
             'pollId': _i1.ParameterDescription(
               name: 'pollId',
               type: _i1.getType<int>(),
               nullable: false,
-            ),
-            'userId': _i1.ParameterDescription(
-              name: 'userId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
+            )
           },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).hasVoted(
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['poll'] as _i6.PollEndpoint).pollUpdates(
             session,
             params['pollId'],
-            params['userId'],
-          ),
-        ),
-        'authUser': _i1.MethodConnector(
-          name: 'authUser',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).authUser(session),
-        ),
-        'validatePollOwnership': _i1.MethodConnector(
-          name: 'validatePollOwnership',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).validatePollOwnership(
-            session,
-            params['pollId'],
-            params['user'],
           ),
         ),
       },
@@ -558,7 +600,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i15.Post>(),
+              type: _i1.getType<_i14.Post>(),
               nullable: false,
             )
           },
@@ -576,7 +618,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'comment': _i1.ParameterDescription(
               name: 'comment',
-              type: _i1.getType<_i15.Post>(),
+              type: _i1.getType<_i14.Post>(),
               nullable: false,
             ),
             'isReply': _i1.ParameterDescription(
@@ -684,7 +726,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i15.Post>(),
+              type: _i1.getType<_i14.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -708,7 +750,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i15.Post>(),
+              type: _i1.getType<_i14.Post>(),
               nullable: false,
             )
           },
@@ -731,7 +773,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i15.Post>(),
+              type: _i1.getType<_i14.Post>(),
               nullable: false,
             ),
           },
@@ -865,93 +907,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['reason'],
           ),
         ),
-        'authUser': _i1.MethodConnector(
-          name: 'authUser',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).authUser(session),
-        ),
-        'validatePostOwnership': _i1.MethodConnector(
-          name: 'validatePostOwnership',
-          params: {
-            'postId': _i1.ParameterDescription(
-              name: 'postId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).validatePostOwnership(
-            session,
-            params['postId'],
-            params['user'],
-          ),
-        ),
-        'validateCommentOwnership': _i1.MethodConnector(
-          name: 'validateCommentOwnership',
-          params: {
-            'commentId': _i1.ParameterDescription(
-              name: 'commentId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'postId': _i1.ParameterDescription(
-              name: 'postId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
-              nullable: false,
-            ),
-            'isReply': _i1.ParameterDescription(
-              name: 'isReply',
-              type: _i1.getType<bool>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).validateCommentOwnership(
-            session,
-            params['commentId'],
-            params['postId'],
-            params['user'],
-            params['isReply'],
-          ),
-        ),
-        'updatePost': _i1.MethodConnector(
-          name: 'updatePost',
-          params: {
-            'post': _i1.ParameterDescription(
-              name: 'post',
-              type: _i1.getType<_i15.Post>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).updatePost(
-            session,
-            params['post'],
-          ),
-        ),
         'postUpdates': _i1.MethodStreamConnector(
           name: 'postUpdates',
           params: {
@@ -1020,7 +975,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i16.Project>(),
+              type: _i1.getType<_i15.Project>(),
               nullable: false,
             )
           },
@@ -1038,7 +993,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i17.ProjectReview>(),
+              type: _i1.getType<_i16.ProjectReview>(),
               nullable: false,
             )
           },
@@ -1093,7 +1048,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i16.Project>(),
+              type: _i1.getType<_i15.Project>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -1303,7 +1258,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i18.ProjectVetting>(),
+              type: _i1.getType<_i17.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1377,7 +1332,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
+              type: _i1.getType<_i18.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1402,7 +1357,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
+              type: _i1.getType<_i18.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1422,7 +1377,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i16.Project>(),
+              type: _i1.getType<_i15.Project>(),
               nullable: false,
             )
           },
@@ -1440,7 +1395,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i17.ProjectReview>(),
+              type: _i1.getType<_i16.ProjectReview>(),
               nullable: false,
             )
           },
@@ -1458,7 +1413,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i18.ProjectVetting>(),
+              type: _i1.getType<_i17.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1620,7 +1575,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i14.UserRecord>(),
+              type: _i1.getType<_i18.UserRecord>(),
               nullable: false,
             )
           },

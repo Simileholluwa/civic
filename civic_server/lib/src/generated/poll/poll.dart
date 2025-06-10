@@ -37,10 +37,16 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? numberOfViews,
     this.imagesUrl,
     this.updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    this.likedBy,
+    this.bookmarkedBy,
   })  : createdAt = createdAt ?? DateTime.now(),
         numberOfLikes = numberOfLikes ?? 0,
         numberOfComments = numberOfComments ?? 0,
-        numberOfViews = numberOfViews ?? 0;
+        numberOfViews = numberOfViews ?? 0,
+        commentCount = commentCount ?? 0,
+        quoteCount = quoteCount ?? 0;
 
   factory Poll({
     int? id,
@@ -61,6 +67,10 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -108,6 +118,14 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      commentCount: jsonSerialization['commentCount'] as int?,
+      quoteCount: jsonSerialization['quoteCount'] as int?,
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -152,6 +170,14 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   DateTime? updatedAt;
 
+  int? commentCount;
+
+  int? quoteCount;
+
+  List<int>? likedBy;
+
+  List<int>? bookmarkedBy;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -177,6 +203,10 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -204,6 +234,10 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (numberOfViews != null) 'numberOfViews': numberOfViews,
       if (imagesUrl != null) 'imagesUrl': imagesUrl?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (commentCount != null) 'commentCount': commentCount,
+      if (quoteCount != null) 'quoteCount': quoteCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
     };
   }
 
@@ -235,6 +269,10 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (numberOfViews != null) 'numberOfViews': numberOfViews,
       if (imagesUrl != null) 'imagesUrl': imagesUrl?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (commentCount != null) 'commentCount': commentCount,
+      if (quoteCount != null) 'quoteCount': quoteCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
     };
   }
 
@@ -296,6 +334,10 @@ class _PollImpl extends Poll {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -315,6 +357,10 @@ class _PollImpl extends Poll {
           numberOfViews: numberOfViews,
           imagesUrl: imagesUrl,
           updatedAt: updatedAt,
+          commentCount: commentCount,
+          quoteCount: quoteCount,
+          likedBy: likedBy,
+          bookmarkedBy: bookmarkedBy,
         );
 
   /// Returns a shallow copy of this [Poll]
@@ -340,6 +386,10 @@ class _PollImpl extends Poll {
     Object? numberOfViews = _Undefined,
     Object? imagesUrl = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? commentCount = _Undefined,
+    Object? quoteCount = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? bookmarkedBy = _Undefined,
   }) {
     return Poll(
       id: id is int? ? id : this.id,
@@ -375,6 +425,14 @@ class _PollImpl extends Poll {
           ? imagesUrl
           : this.imagesUrl?.map((e0) => e0).toList(),
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      commentCount: commentCount is int? ? commentCount : this.commentCount,
+      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      bookmarkedBy: bookmarkedBy is List<int>?
+          ? bookmarkedBy
+          : this.bookmarkedBy?.map((e0) => e0).toList(),
     );
   }
 }
@@ -445,6 +503,24 @@ class PollTable extends _i1.Table<int?> {
       'updatedAt',
       this,
     );
+    commentCount = _i1.ColumnInt(
+      'commentCount',
+      this,
+      hasDefault: true,
+    );
+    quoteCount = _i1.ColumnInt(
+      'quoteCount',
+      this,
+      hasDefault: true,
+    );
+    likedBy = _i1.ColumnSerializable(
+      'likedBy',
+      this,
+    );
+    bookmarkedBy = _i1.ColumnSerializable(
+      'bookmarkedBy',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -482,6 +558,14 @@ class PollTable extends _i1.Table<int?> {
   late final _i1.ColumnSerializable imagesUrl;
 
   late final _i1.ColumnDateTime updatedAt;
+
+  late final _i1.ColumnInt commentCount;
+
+  late final _i1.ColumnInt quoteCount;
+
+  late final _i1.ColumnSerializable likedBy;
+
+  late final _i1.ColumnSerializable bookmarkedBy;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -545,6 +629,10 @@ class PollTable extends _i1.Table<int?> {
         numberOfViews,
         imagesUrl,
         updatedAt,
+        commentCount,
+        quoteCount,
+        likedBy,
+        bookmarkedBy,
       ];
 
   @override

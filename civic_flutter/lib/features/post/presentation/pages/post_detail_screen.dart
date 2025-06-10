@@ -80,8 +80,10 @@ class PostDetailScreen extends ConsumerWidget {
                     if (!postCardState.isOwner)
                       IconButton(
                         onPressed: () async {
-                          await postCardNotifier
-                              .toggleFollow(data.value!.ownerId);
+                          await postCardNotifier.toggleFollow(
+                            data.value!.ownerId,
+                            data.value!.owner!.userInfo!.userName!,
+                          );
                         },
                         icon: Icon(
                           postCardState.isFollower

@@ -321,6 +321,153 @@ class _PostStreamProviderElement extends StreamProviderElement<Post>
   Post? get post => (origin as PostStreamProvider).post;
 }
 
+String _$pollStreamHash() => r'203b604859f15bc75c7cf10949cdd427c2e0f4e8';
+
+/// See also [pollStream].
+@ProviderFor(pollStream)
+const pollStreamProvider = PollStreamFamily();
+
+/// See also [pollStream].
+class PollStreamFamily extends Family<AsyncValue<Poll>> {
+  /// See also [pollStream].
+  const PollStreamFamily();
+
+  /// See also [pollStream].
+  PollStreamProvider call(
+    int pollId,
+    Poll? poll,
+  ) {
+    return PollStreamProvider(
+      pollId,
+      poll,
+    );
+  }
+
+  @override
+  PollStreamProvider getProviderOverride(
+    covariant PollStreamProvider provider,
+  ) {
+    return call(
+      provider.pollId,
+      provider.poll,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'pollStreamProvider';
+}
+
+/// See also [pollStream].
+class PollStreamProvider extends StreamProvider<Poll> {
+  /// See also [pollStream].
+  PollStreamProvider(
+    int pollId,
+    Poll? poll,
+  ) : this._internal(
+          (ref) => pollStream(
+            ref as PollStreamRef,
+            pollId,
+            poll,
+          ),
+          from: pollStreamProvider,
+          name: r'pollStreamProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$pollStreamHash,
+          dependencies: PollStreamFamily._dependencies,
+          allTransitiveDependencies:
+              PollStreamFamily._allTransitiveDependencies,
+          pollId: pollId,
+          poll: poll,
+        );
+
+  PollStreamProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pollId,
+    required this.poll,
+  }) : super.internal();
+
+  final int pollId;
+  final Poll? poll;
+
+  @override
+  Override overrideWith(
+    Stream<Poll> Function(PollStreamRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: PollStreamProvider._internal(
+        (ref) => create(ref as PollStreamRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pollId: pollId,
+        poll: poll,
+      ),
+    );
+  }
+
+  @override
+  StreamProviderElement<Poll> createElement() {
+    return _PollStreamProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PollStreamProvider &&
+        other.pollId == pollId &&
+        other.poll == poll;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pollId.hashCode);
+    hash = _SystemHash.combine(hash, poll.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin PollStreamRef on StreamProviderRef<Poll> {
+  /// The parameter `pollId` of this provider.
+  int get pollId;
+
+  /// The parameter `poll` of this provider.
+  Poll? get poll;
+}
+
+class _PollStreamProviderElement extends StreamProviderElement<Poll>
+    with PollStreamRef {
+  _PollStreamProviderElement(super.provider);
+
+  @override
+  int get pollId => (origin as PollStreamProvider).pollId;
+  @override
+  Poll? get poll => (origin as PollStreamProvider).poll;
+}
+
 String _$projectReviewStreamHash() =>
     r'bc35376124017c77050ad7c9964c56da25a02c1a';
 

@@ -17,13 +17,15 @@ poll:
   - savePoll:
   - schedulePoll:
   - castVote:
+  - toggleLike:
+  - toggleBookmark:
+  - deletePoll:
+  - markNotInterested:
   - clearVote:
   - getPollResults:
   - getPolls:
   - getPoll:
-  - hasVoted:
-  - authUser:
-  - validatePollOwnership:
+  - pollUpdates:
 post:
   - savePost:
   - savePostComment:
@@ -39,11 +41,7 @@ post:
   - toggleBookmark:
   - toggleLike:
   - markNotInterested:
-  - authUser:
-  - validatePostOwnership:
-  - validateCommentOwnership:
   - postUpdates:
-  - updatePost:
 project:
   - getProject:
   - getProjectReview:

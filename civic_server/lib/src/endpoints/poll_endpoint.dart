@@ -17,7 +17,7 @@ class PollEndpoint extends Endpoint {
           );
 
           // Update the poll
-          final sentPoll = await Poll.db.updateRow(
+          await updatePoll(
             session,
             poll.copyWith(
               updatedAt: DateTime.now(),
@@ -35,17 +35,19 @@ class PollEndpoint extends Endpoint {
           await HashtagEndpoint().sendPollHashtags(
             session,
             poll.tags ?? [],
-            sentPoll.id!,
+            poll.id!,
           );
 
           // return the sent poll
-          return sentPoll;
+          return poll;
         } else {
           // Create the poll with its related options
           final savedPoll = await Poll.db.insertRow(
             session,
             poll.copyWith(
               votedBy: [],
+              likedBy: [],
+              bookmarkedBy: [],
             ),
             transaction: transaction,
           );
@@ -115,20 +117,50 @@ class PollEndpoint extends Endpoint {
       final user = await authUser(session);
 
       // Fetch the poll
-      final poll =
-          await Poll.db.findById(session, pollId, transaction: transaction);
+      final poll = await Poll.db.findById(
+        session,
+        pollId,
+        transaction: transaction,
+      );
       if (poll == null) {
         throw PostException(message: 'Poll not found.');
       }
 
-      // Check poll expiration
-      if (poll.expiresAt != null && DateTime.now().isAfter(poll.expiresAt!)) {
-        throw PostException(message: 'Poll has ended.');
-      }
-
       // Check if user has already voted
       if (poll.votedBy!.contains(user.id)) {
-        throw PostException(message: 'You have already voted.');
+        final options = await PollOption.db.find(
+          session,
+          where: (o) => o.pollId.equals(pollId),
+          transaction: transaction,
+        );
+
+        // Find the one the user voted on
+        PollOption? votedOption = options.firstWhere(
+          (option) => option.votedBy!.contains(user.id!),
+          orElse: () => throw PostException(
+            message: 'You have not voted for this option.',
+          ),
+        );
+
+        final updatedOption = votedOption.copyWith(
+          votedBy: votedOption.votedBy!
+              .where(
+                (id) => id != user.id!,
+              )
+              .toList(),
+        );
+
+        await PollOption.db.updateRow(
+          session,
+          updatedOption,
+          transaction: transaction,
+        );
+
+        poll.votedBy = poll.votedBy!
+            .where(
+              (id) => id != user.id!,
+            )
+            .toList();
       }
 
       // Ensure selected option belongs to the poll
@@ -137,6 +169,7 @@ class PollEndpoint extends Endpoint {
         optionId,
         transaction: transaction,
       );
+
       if (option == null || option.pollId != pollId) {
         throw PostException(message: 'Invalid poll option selected.');
       }
@@ -148,33 +181,221 @@ class PollEndpoint extends Endpoint {
           user.id!,
         ],
       );
+
       await PollOption.db.updateRow(
         session,
         updatedOption,
         transaction: transaction,
       );
 
-      // Update Poll's votedBy
-      final updatedPoll = poll.copyWith(
-        votedBy: [
-          ...poll.votedBy!,
-          user.id!,
-        ],
-      );
-      await Poll.db.updateRow(
+      final options = await PollOption.db.find(
         session,
-        updatedPoll,
+        where: (o) => o.pollId.equals(pollId),
         transaction: transaction,
+        orderBy: (o) => o.id,
+        orderDescending: false,
+      );
+
+      await updatePoll(
+        session,
+        poll.copyWith(
+          votedBy: [
+            ...poll.votedBy!,
+            user.id!,
+          ],
+          options: options,
+        ),
       );
 
       return;
     });
   }
 
+  Future<void> toggleLike(
+    Session session,
+    int pollId,
+  ) async {
+    await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(
+          session,
+        );
+
+        final poll = await Poll.db.findById(
+          session,
+          pollId,
+          transaction: transaction,
+        );
+        if (poll == null) {
+          throw PostException(
+            message: "Poll not found",
+          );
+        }
+
+        final existingLike = await PollLikes.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.pollId.equals(
+                pollId,
+              ) &
+              t.ownerId.equals(
+                user.userInfoId,
+              ),
+          transaction: transaction,
+        );
+
+        if (existingLike != null) {
+          await PollLikes.db.deleteRow(
+            session,
+            existingLike,
+            transaction: transaction,
+          );
+          poll.likedBy?.remove(user.id!);
+        } else {
+          await PollLikes.db.insertRow(
+            session,
+            PollLikes(
+              pollId: pollId,
+              ownerId: user.userInfoId,
+              dateCreated: DateTime.now(),
+            ),
+            transaction: transaction,
+          );
+          poll.likedBy?.add(user.userInfoId);
+        }
+        await updatePoll(session, poll);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in togglePostLike: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+      }
+    });
+  }
+
+  Future<void> toggleBookmark(
+    Session session,
+    int pollId,
+  ) async {
+    Poll? poll;
+    final user = await authUser(session);
+
+    await session.db.transaction((transaction) async {
+      try {
+        poll = await Poll.db.findById(
+          session,
+          pollId,
+          transaction: transaction,
+        );
+        if (poll == null) {
+          throw PostException(
+            message: "Post not found",
+          );
+        }
+
+        final existingBookmark = await PollBookmarks.db.findFirstRow(
+          session,
+          where: (t) =>
+              t.pollId.equals(
+                pollId,
+              ) &
+              t.ownerId.equals(
+                user.userInfoId,
+              ),
+          transaction: transaction,
+        );
+
+        if (existingBookmark != null) {
+          await PollBookmarks.db.deleteRow(
+            session,
+            existingBookmark,
+            transaction: transaction,
+          );
+          poll!.bookmarkedBy?.remove(user.id!);
+        } else {
+          await PollBookmarks.db.insertRow(
+            session,
+            PollBookmarks(
+              pollId: pollId,
+              ownerId: user.userInfoId,
+            ),
+            transaction: transaction,
+          );
+          poll!.bookmarkedBy?.add(user.id!);
+        }
+        await updatePoll(session, poll!);
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in toggleBookmark: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+      }
+    });
+  }
+
+  Future<void> deletePoll(
+    Session session,
+    int id,
+  ) async {
+    final user = await authUser(
+      session,
+    );
+    await validatePollOwnership(
+      session,
+      id,
+      user,
+    );
+    final poll = await Poll.db.findById(
+      session,
+      id,
+    );
+
+    if (poll == null) {
+      throw PostException(
+        message: 'Poll not found',
+      );
+    }
+
+    await Poll.db.deleteRow(
+      session,
+      poll,
+    );
+  }
+
+  Future<void> markNotInterested(
+    Session session,
+    int pollId,
+    String reason,
+  ) async {
+    try {
+      final user = await authUser(session);
+      final entry = PollNotInterested(
+        userId: user.id!,
+        pollId: pollId,
+        reason: reason,
+      );
+      await PollNotInterested.db.insertRow(
+        session,
+        entry,
+      );
+    } catch (e, stackTrace) {
+      session.log(
+        'Error in markPostNotInterested: $e',
+        level: LogLevel.error,
+        exception: e,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
   Future<bool> clearVote(
-    Session session, {
-    required int pollId,
-  }) async {
+    Session session,
+    int pollId,
+  ) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
       final userId = user.id!;
@@ -185,20 +406,14 @@ class PollEndpoint extends Endpoint {
         pollId,
         transaction: transaction,
       );
+
       if (poll == null) {
-        throw PostException(message: 'Poll not found.');
+        throw Exception('Poll not found.');
       }
 
       // Check if user has voted
       if (!poll.votedBy!.contains(userId)) {
-        throw PostException(
-          message: 'You have not voted on this poll.',
-        );
-      }
-
-      // Check poll expiration
-      if (poll.expiresAt != null && DateTime.now().isAfter(poll.expiresAt!)) {
-        throw PostException(message: 'Poll has ended.');
+        throw Exception('You have not voted.');
       }
 
       // Fetch all options for the poll
@@ -212,7 +427,7 @@ class PollEndpoint extends Endpoint {
       PollOption? votedOption = options.firstWhere(
         (option) => option.votedBy!.contains(userId),
         orElse: () => throw PostException(
-          message: 'You have not voted for this option.',
+          message: 'You have not voted in this poll.',
         ),
       );
 
@@ -224,6 +439,7 @@ class PollEndpoint extends Endpoint {
             )
             .toList(),
       );
+
       await PollOption.db.updateRow(
         session,
         updatedOption,
@@ -238,10 +454,10 @@ class PollEndpoint extends Endpoint {
             )
             .toList(),
       );
-      await Poll.db.updateRow(
+
+      await updatePoll(
         session,
         updatedPoll,
-        transaction: transaction,
       );
 
       return true;
@@ -348,6 +564,7 @@ class PollEndpoint extends Endpoint {
     }
   }
 
+  @doNotGenerate
   Future<bool> hasVoted(Session session, int pollId, int userId) async {
     // Check if the user has already voted
     var existingVote = await PollVote.db.findFirstRow(
@@ -370,6 +587,7 @@ class PollEndpoint extends Endpoint {
     return false;
   }
 
+  @doNotGenerate
   Future<UserRecord> authUser(
     Session session,
   ) async {
@@ -399,6 +617,7 @@ class PollEndpoint extends Endpoint {
     return user;
   }
 
+  @doNotGenerate
   Future<void> validatePollOwnership(
     Session session,
     int pollId,
@@ -418,5 +637,43 @@ class PollEndpoint extends Endpoint {
         message: 'Unauthorised operation',
       );
     }
+  }
+
+  Stream<Poll> pollUpdates(Session session, int pollId) async* {
+    // Create a message stream for this post
+    var updateStream = session.messages.createStream<Poll>('poll_$pollId');
+
+    // Yield the latest post details when the client subscribes
+    var poll = await Poll.db.findById(
+      session,
+      pollId,
+      include: Poll.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+    if (poll != null) {
+      yield poll;
+    }
+
+    // Send updates when changes occur
+    await for (var pollUpdate in updateStream) {
+      yield pollUpdate.copyWith(
+        owner: poll!.owner,
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> updatePoll(Session session, Poll poll) async {
+    // Update the project in the database
+    await Poll.db.updateRow(session, poll);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'poll_${poll.id}',
+      poll,
+    );
   }
 }

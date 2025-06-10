@@ -533,6 +533,20 @@ class PostEndpoint extends Endpoint {
           ),
         );
       }
+    } else if (post.postType == PostType.projectRepost) {
+      final project = await Project.db.findById(
+        session,
+        post.projectId!,
+      );
+      if (project != null) {
+        project.quoteCount = project.quoteCount! - 1;
+        await ProjectEndpoint().updateProject(
+          session,
+          project.copyWith(
+            quoteCount: project.quoteCount,
+          ),
+        );
+      }
     }
 
     await Post.db.deleteRow(
@@ -694,85 +708,6 @@ class PostEndpoint extends Endpoint {
     }
   }
 
-  Future<UserRecord> authUser(
-    Session session,
-  ) async {
-    final authInfo = await session.authenticated;
-    if (authInfo == null) {
-      throw UserException(
-        message: 'You must be logged in',
-      );
-    }
-
-    final user = await UserRecord.db.findFirstRow(
-      session,
-      where: (row) => row.userInfoId.equals(
-        authInfo.userId,
-      ),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
-
-    if (user == null) {
-      throw UserException(
-        message: 'User not found',
-      );
-    }
-
-    return user;
-  }
-
-  Future<void> validatePostOwnership(
-    Session session,
-    int postId,
-    UserRecord user,
-  ) async {
-    final post = await Post.db.findById(
-      session,
-      postId,
-    );
-    if (post == null) {
-      throw PostException(
-        message: 'Post not found',
-      );
-    }
-    if (post.ownerId != user.userInfoId) {
-      throw PostException(
-        message: 'Unauthorised operation',
-      );
-    }
-  }
-
-  Future<void> validateCommentOwnership(
-    Session session,
-    int commentId,
-    int postId,
-    UserRecord user,
-    bool isReply,
-  ) async {
-    final comment = await Post.db.findFirstRow(
-      session,
-      where: (t) =>
-          t.id.equals(commentId) &
-          t.parentId.equals(postId) &
-          t.ownerId.equals(user.id) &
-          (isReply
-              ? t.postType.equals(PostType.commentReply)
-              : t.postType.equals(PostType.comment)),
-    );
-    if (comment == null) {
-      throw PostException(
-        message: isReply ? 'Reply not found' : 'Comment not found',
-      );
-    }
-    if (comment.ownerId != user.userInfoId) {
-      throw PostException(
-        message: 'Unauthorised operation',
-      );
-    }
-  }
-
   Stream<Post> postUpdates(Session session, int postId) async* {
     // Create a message stream for this post
     var updateStream = session.messages.createStream<Post>('post_$postId');
@@ -815,6 +750,89 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  @doNotGenerate
+  Future<UserRecord> authUser(
+    Session session,
+  ) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(
+        message: 'You must be logged in',
+      );
+    }
+
+    final user = await UserRecord.db.findFirstRow(
+      session,
+      where: (row) => row.userInfoId.equals(
+        authInfo.userId,
+      ),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (user == null) {
+      throw UserException(
+        message: 'User not found',
+      );
+    }
+
+    return user;
+  }
+
+  @doNotGenerate
+  Future<void> validatePostOwnership(
+    Session session,
+    int postId,
+    UserRecord user,
+  ) async {
+    final post = await Post.db.findById(
+      session,
+      postId,
+    );
+    if (post == null) {
+      throw PostException(
+        message: 'Post not found',
+      );
+    }
+    if (post.ownerId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> validateCommentOwnership(
+    Session session,
+    int commentId,
+    int postId,
+    UserRecord user,
+    bool isReply,
+  ) async {
+    final comment = await Post.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.id.equals(commentId) &
+          t.parentId.equals(postId) &
+          t.ownerId.equals(user.id) &
+          (isReply
+              ? t.postType.equals(PostType.commentReply)
+              : t.postType.equals(PostType.comment)),
+    );
+    if (comment == null) {
+      throw PostException(
+        message: isReply ? 'Reply not found' : 'Comment not found',
+      );
+    }
+    if (comment.ownerId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
+  }
+
+  @doNotGenerate
   Future<void> updatePost(Session session, Post post) async {
     // Update the project in the database
     await Post.db.updateRow(session, post);

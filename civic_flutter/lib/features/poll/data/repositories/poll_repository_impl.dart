@@ -150,4 +150,76 @@ class PollRepositoryImpl implements PollRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> toggleLike({
+    required int id,
+  }) async {
+    try {
+      final result = await _pollRemoteDatasource.toggleLike(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleBookmark({
+    required int id,
+  }) async {
+    try {
+      final result = await _pollRemoteDatasource.toggleBookmark(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> markNotInterested({
+    required int id,
+    required String reason,
+  }) async {
+    try {
+      final result = await _pollRemoteDatasource.markNotInterested(
+        id: id,
+        reason: reason,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deletePoll({required int id}) async {
+    try {
+      final result = await _pollRemoteDatasource.deletePoll(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

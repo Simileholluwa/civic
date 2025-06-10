@@ -100,6 +100,7 @@ class ShowPostActions extends ConsumerWidget {
               }
               await postCardNotifier.toggleFollow(
                 post.ownerId,
+                post.owner!.userInfo!.userName!,
               );
             },
           ),

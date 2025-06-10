@@ -35,10 +35,16 @@ abstract class Poll implements _i1.SerializableModel {
     int? numberOfViews,
     this.imagesUrl,
     this.updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    this.likedBy,
+    this.bookmarkedBy,
   })  : createdAt = createdAt ?? DateTime.now(),
         numberOfLikes = numberOfLikes ?? 0,
         numberOfComments = numberOfComments ?? 0,
-        numberOfViews = numberOfViews ?? 0;
+        numberOfViews = numberOfViews ?? 0,
+        commentCount = commentCount ?? 0,
+        quoteCount = quoteCount ?? 0;
 
   factory Poll({
     int? id,
@@ -59,6 +65,10 @@ abstract class Poll implements _i1.SerializableModel {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -106,6 +116,14 @@ abstract class Poll implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      commentCount: jsonSerialization['commentCount'] as int?,
+      quoteCount: jsonSerialization['quoteCount'] as int?,
+      likedBy: (jsonSerialization['likedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
     );
   }
 
@@ -148,6 +166,14 @@ abstract class Poll implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
+  int? commentCount;
+
+  int? quoteCount;
+
+  List<int>? likedBy;
+
+  List<int>? bookmarkedBy;
+
   /// Returns a shallow copy of this [Poll]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -170,6 +196,10 @@ abstract class Poll implements _i1.SerializableModel {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -197,6 +227,10 @@ abstract class Poll implements _i1.SerializableModel {
       if (numberOfViews != null) 'numberOfViews': numberOfViews,
       if (imagesUrl != null) 'imagesUrl': imagesUrl?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (commentCount != null) 'commentCount': commentCount,
+      if (quoteCount != null) 'quoteCount': quoteCount,
+      if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
     };
   }
 
@@ -228,6 +262,10 @@ class _PollImpl extends Poll {
     int? numberOfViews,
     List<String>? imagesUrl,
     DateTime? updatedAt,
+    int? commentCount,
+    int? quoteCount,
+    List<int>? likedBy,
+    List<int>? bookmarkedBy,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -247,6 +285,10 @@ class _PollImpl extends Poll {
           numberOfViews: numberOfViews,
           imagesUrl: imagesUrl,
           updatedAt: updatedAt,
+          commentCount: commentCount,
+          quoteCount: quoteCount,
+          likedBy: likedBy,
+          bookmarkedBy: bookmarkedBy,
         );
 
   /// Returns a shallow copy of this [Poll]
@@ -272,6 +314,10 @@ class _PollImpl extends Poll {
     Object? numberOfViews = _Undefined,
     Object? imagesUrl = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? commentCount = _Undefined,
+    Object? quoteCount = _Undefined,
+    Object? likedBy = _Undefined,
+    Object? bookmarkedBy = _Undefined,
   }) {
     return Poll(
       id: id is int? ? id : this.id,
@@ -307,6 +353,14 @@ class _PollImpl extends Poll {
           ? imagesUrl
           : this.imagesUrl?.map((e0) => e0).toList(),
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      commentCount: commentCount is int? ? commentCount : this.commentCount,
+      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
+      likedBy: likedBy is List<int>?
+          ? likedBy
+          : this.likedBy?.map((e0) => e0).toList(),
+      bookmarkedBy: bookmarkedBy is List<int>?
+          ? bookmarkedBy
+          : this.bookmarkedBy?.map((e0) => e0).toList(),
     );
   }
 }

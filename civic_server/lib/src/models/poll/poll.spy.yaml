@@ -18,4 +18,9 @@ fields:
     numberOfViews: int?, default=0
     imagesUrl: List<String>?
     updatedAt: DateTime?
+    commentCount: int?, default=0
+    quoteCount: int?, default=0
+    likedBy: List<int>?
+    bookmarkedBy: List<int>?
+
     
