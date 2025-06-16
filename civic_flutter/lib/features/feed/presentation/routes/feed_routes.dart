@@ -21,6 +21,13 @@ class FeedRoutes {
         },
         routes: [
           GoRoute(
+            path: 'poll/:pollId',
+            builder: (context, state) => PollDetailScreen(
+              id: int.tryParse(state.pathParameters['pollId'] ?? '0') ?? 0,
+              post: state.extra as Post?,
+            ),
+          ),
+          GoRoute(
             path: 'post/:postId',
             builder: (context, state) => PostDetailScreen(
               id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
@@ -30,7 +37,7 @@ class FeedRoutes {
               GoRoute(
                 path: 'comments',
                 builder: (_, state) {
-                  return PostCommentScreen(
+                  return CommentScreen(
                     postId: int.tryParse(state.pathParameters['postId'] ?? '') ?? 0,
                   );
                 },
@@ -39,7 +46,7 @@ class FeedRoutes {
                 path: 'notInterested',
                 builder: (_, state) {
                   final data = state.extra as Map<String, dynamic>;
-                  return MarkPostNotInterested(
+                  return MarkNotInterested(
                     post: data['post'],
                     originalPostId: data['originalPostId'],
                   );
@@ -48,7 +55,7 @@ class FeedRoutes {
               GoRoute(
                 path: 'replies/:replyId',
                 builder: (_, state) {
-                  return PostRepliesScreen(
+                  return RepliesScreen(
                     replyId: int.tryParse(state.pathParameters['replyId'] ?? '') ?? 0,
                   );
                 },

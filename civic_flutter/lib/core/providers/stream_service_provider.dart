@@ -44,7 +44,7 @@ Stream<Poll> pollStream(
   if (poll != null) {
     yield poll;
   }
-  final updates = ref.read(clientProvider).poll.pollUpdates(pollId);
+  final updates = ref.read(clientProvider).post.pollUpdates(pollId);
   await for (final update in updates) {
     yield update;
   }

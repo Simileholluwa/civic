@@ -10,7 +10,10 @@ abstract class PostRepository {
     required Post post,
     required DateTime dateTime,
   });
-  Future<Either<Failure, void>> savePostDraft({required Post post});
+  Future<Either<Failure, void>> savePostDraft({
+    required Post post,
+    required String draftType,
+  });
   Future<Either<Failure, Post>> getComment({
     required int commentId,
     required bool isComment,
@@ -19,20 +22,34 @@ abstract class PostRepository {
     required int page,
     required int limit,
   });
-  Future<Either<Failure, Post>> getPostDraft();
-  Future<Either<Failure, Post>> getPost({required int id});
+  Future<Either<Failure, Post>> getPostDraft({
+    required String draftType,
+  });
+  Future<Either<Failure, Post>> getPost({
+    required int postId,
+    required PostType postType,
+  });
   Future<Either<Failure, Post>> quoteProject({
     required int projectId,
     required Post quoteContent,
   });
-  Future<Either<Failure, void>> deletePostDraft();
+  Future<Either<Failure, void>> deletePostDraft({
+    required String draftType,
+  });
 
-  Future<Either<Failure, void>> toggleLike({required int id});
-  Future<Either<Failure, void>> toggleBookmark({required int id});
-  Future<Either<Failure, void>> markNotInterested({required int id, required String reason,});
-  Future<Either<Failure, void>> deletePost({required int id});
-  Future<Either<Failure, void>> deletePostComment({required int id});
-  Future<Either<Failure, int>> toggleCommentLike({required int id});
+  Future<Either<Failure, void>> toggleLike({
+    required int id,
+  });
+  Future<Either<Failure, void>> toggleBookmark({
+    required int id,
+  });
+  Future<Either<Failure, void>> markNotInterested({
+    required int id,
+    required String reason,
+  });
+  Future<Either<Failure, void>> deletePost({
+    required int postId,
+  });
   Future<Either<Failure, Post>> savePostComment({
     required Post comment,
     required bool isReply,
@@ -46,5 +63,16 @@ abstract class PostRepository {
     required int commentId,
     required int page,
     required int limit,
+  });
+  Future<Either<Failure, Post?>> savePoll({
+    required Post post,
+  });
+  Future<Either<Failure, PostList>> getPolls({
+    required int page,
+    required int limit,
+  });
+  Future<Either<Failure, void>> castVote({
+    required int pollId,
+    required int optionId,
   });
 }

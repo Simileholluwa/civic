@@ -51,10 +51,14 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> getPost({required int id}) async {
+  Future<Either<Failure, Post>> getPost({
+    required int postId,
+    required PostType postType,
+  }) async {
     try {
       final result = await _remoteDatabase.getPost(
-        id: id,
+        postId: postId,
+        postType: postType,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -112,10 +116,12 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, void>> savePostDraft({
     required Post post,
+    required String draftType,
   }) async {
     try {
       final result = await _localDatabase.savePostDraft(
         post: post,
+        draftType: draftType,
       );
       return Right(result);
     } on CacheException catch (e) {
@@ -128,9 +134,13 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> getPostDraft() async {
+  Future<Either<Failure, Post>> getPostDraft({
+    required String draftType,
+  }) async {
     try {
-      final result = await _localDatabase.getPostDraft();
+      final result = await _localDatabase.getPostDraft(
+        draftType: draftType,
+      );
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -142,9 +152,13 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deletePostDraft() async {
+  Future<Either<Failure, void>> deletePostDraft({
+    required String draftType,
+  }) async {
     try {
-      final result = await _localDatabase.deletePostDraft();
+      final result = await _localDatabase.deletePostDraft(
+        draftType: draftType,
+      );
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -232,26 +246,12 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deletePost({required int id}) async {
+  Future<Either<Failure, void>> deletePost({
+    required int postId,
+  }) async {
     try {
       final result = await _remoteDatabase.deletePost(
-        id: id,
-      );
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> deletePostComment({required int id}) async {
-    try {
-      final result = await _remoteDatabase.deletePostComment(
-        id: id,
+        postId: postId,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -306,10 +306,16 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, int>> toggleCommentLike({required int id}) async {
+  Future<Either<Failure, PostList>> getPostCommentReplies({
+    required int commentId,
+    required int page,
+    required int limit,
+  }) async {
     try {
-      final result = await _remoteDatabase.toggleCommentLike(
-        id: id,
+      final result = await _remoteDatabase.getPostCommentReplies(
+        commentId: commentId,
+        page: page,
+        limit: limit,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -322,14 +328,50 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostList>> getPostCommentReplies({
-    required int commentId,
+  Future<Either<Failure, void>> castVote({
+    required int pollId,
+    required int optionId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.castVote(
+        pollId: pollId,
+        optionId: optionId,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post?>> savePoll({
+    required Post post,
+  }) async {
+    try {
+      final result = await _remoteDatabase.savePoll(
+        post: post,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostList>> getPolls({
     required int page,
     required int limit,
   }) async {
     try {
-      final result = await _remoteDatabase.getPostCommentReplies(
-        commentId: commentId,
+      final result = await _remoteDatabase.getPolls(
         page: page,
         limit: limit,
       );

@@ -50,55 +50,6 @@ class HashtagEndpoint extends Endpoint {
     }
   }
 
-  Future<void> sendPollHashtags(
-    Session session,
-    List<String> tags,
-    int pollId,
-  ) async {
-    try {
-      if (tags.isEmpty) return;
-      for (var tag in tags) {
-        var existingHashtag = await PollHashtag.db.findFirstRow(
-          session,
-          where: (t) => t.tag.equals(tag),
-        );
-
-        int hashtagId;
-
-        if (existingHashtag != null) {
-          existingHashtag.usageCount += 1;
-          await PollHashtag.db.updateRow(
-            session,
-            existingHashtag,
-          );
-          hashtagId = existingHashtag.id!;
-        } else {
-          var newHashtag = PollHashtag(
-            tag: tag,
-            usageCount: 1,
-          );
-          final sentHashtag = await PollHashtag.db.insertRow(
-            session,
-            newHashtag,
-          );
-          
-          hashtagId = sentHashtag.id!;
-        }
-        var pollHashtag = PollsHashtags(
-          pollId: pollId,
-          hashtagId: hashtagId,
-        );
-        await PollsHashtags.db.insertRow(
-          session,
-          pollHashtag,
-        );
-      }
-    } catch (e) {
-      print(e);
-      return;
-    }
-  }
-
   Future<List<String>> fetchHashtags(
     Session session, {
     required String query,
@@ -118,19 +69,10 @@ class HashtagEndpoint extends Endpoint {
       limit: limit,
       where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
     );
-
-    // Fetch hashtags that match query from poll hashtag
-    final pollHashtags = await PollHashtag.db.find(
-      session,
-      limit: limit,
-      where: (hashtag) => hashtag.tag.ilike('%${query.trim()}%'),
-    );
-
-    final pollTags = pollHashtags.map((hashtag) => '#${hashtag.tag}').toList();
     final postTags = hashtags.map((hashtag) => '#${hashtag.tag}').toList();
 
     // Return a list of hashtag strings
-    return (pollTags + postTags);
+    return postTags;
   }
 
 }

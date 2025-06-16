@@ -12,7 +12,8 @@ abstract class PostRemoteDatabase {
     required int limit,
   });
   Future<Post> getPost({
-    required int id,
+    required int postId,
+    required PostType postType,
   });
   Future<Post> quoteProject({
     required int projectId,
@@ -32,9 +33,9 @@ abstract class PostRemoteDatabase {
     required int id,
     required String reason,
   });
-  Future<void> deletePost({required int id});
-  Future<void> deletePostComment({required int id});
-  Future<int> toggleCommentLike({required int id});
+  Future<void> deletePost({
+    required int postId,
+  });
   Future<Post> savePostComment({
     required Post comment,
     required bool isReply,
@@ -53,6 +54,17 @@ abstract class PostRemoteDatabase {
     required int page,
     required int limit,
   });
+  Future<Post> savePoll({
+    required Post post,
+  });
+  Future<void> castVote({
+    required int pollId,
+    required int optionId,
+  });
+  Future<PostList> getPolls({
+    required int page,
+    required int limit,
+  });
 }
 
 class PostRemoteDatabaseImpl implements PostRemoteDatabase {
@@ -66,8 +78,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     required Post post,
   }) async {
     try {
-      
-
       final result = await _client.post.savePost(post).timeout(
             const Duration(
               seconds: 60,
@@ -100,7 +110,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     required int limit,
   }) async {
     try {
-      
       final result = _client.post.getPosts(
         limit: limit,
         page: page,
@@ -119,10 +128,14 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<Post> getPost({required int id}) async {
+  Future<Post> getPost({
+    required int postId,
+    required PostType postType,
+  }) async {
     try {
       final result = await _client.post.getPost(
-        id,
+        postId,
+        postType,
       );
       return result;
     } on SocketException catch (_) {
@@ -144,7 +157,8 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<Post> getComment({required int commentId, required bool isComment}) async {
+  Future<Post> getComment(
+      {required int commentId, required bool isComment}) async {
     try {
       final result = await _client.post.getComment(
         commentId,
@@ -174,7 +188,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
     required DateTime dateTime,
   }) async {
     try {
-      
       await _client.post.schedulePost(
         post,
         dateTime,
@@ -272,25 +285,14 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<void> deletePost({required int id}) async {
+  Future<void> deletePost({
+    required int postId,
+  }) async {
     try {
-      return await _client.post.deletePost(id);
+      return await _client.post.deletePost(postId);
     } on UserException catch (e) {
       throw ServerException(message: e.message);
     } on PostException catch (e) {
-      throw ServerException(message: e.message);
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<void> deletePostComment({required int id}) async {
-    try {
-      //return await _client.post.deletePostComment(id);
-    } on UserException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -346,20 +348,6 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
   }
 
   @override
-  Future<int> toggleCommentLike({required int id}) async {
-    try {
-      return 1;
-      // return await _client.post.toggleCommentLike(id);
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
   Future<PostList> getPostCommentReplies({
     required int commentId,
     required int page,
@@ -373,6 +361,84 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
       );
     } on UserException catch (e) {
       throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> castVote({
+    required int pollId,
+    required int optionId,
+  }) async {
+    try {
+      final result = await _client.post.castVote(
+        pollId,
+        optionId,
+      );
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostList> getPolls({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = _client.post.getPolls(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Post> savePoll({
+    required Post post,
+  }) async {
+    try {
+      final result = await _client.post.savePoll(
+        post,
+      );
+      if (result == null) {
+        throw const ServerException(
+          message: 'Failed to save poll',
+        );
+      }
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } on ServerException {
+      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),

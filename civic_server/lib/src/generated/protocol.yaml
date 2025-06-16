@@ -8,26 +8,16 @@ assets:
   - verifyUpload:
 hashtag:
   - sendPostHashtags:
-  - sendPollHashtags:
   - fetchHashtags:
 location:
   - searchLocation:
   - searchNearbyLocation:
-poll:
-  - savePoll:
-  - schedulePoll:
-  - castVote:
-  - toggleLike:
-  - toggleBookmark:
-  - deletePoll:
-  - markNotInterested:
-  - clearVote:
-  - getPollResults:
-  - getPolls:
-  - getPoll:
-  - pollUpdates:
 post:
   - savePost:
+  - savePoll:
+  - castVote:
+  - clearVote:
+  - getPolls:
   - savePostComment:
   - getPostComments:
   - getComment:
@@ -42,6 +32,7 @@ post:
   - toggleLike:
   - markNotInterested:
   - postUpdates:
+  - pollUpdates:
 project:
   - getProject:
   - getProjectReview:

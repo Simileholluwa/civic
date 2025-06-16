@@ -1,6 +1,0 @@
-class: PollHashtag
-table: pollhashtag
-fields:
-    tag: String
-    usageCount: int
-    hashtags: List<PollsHashtags>?, relation(name=pollhashtag_pollshashtags)

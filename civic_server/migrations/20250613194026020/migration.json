@@ -1,0 +1,929 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "pollshashtags"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "pollhashtag"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "poll_not_interested"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "poll_likes"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "poll_bookmarks"
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "postId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "question",
+          "taggedUsers",
+          "locations",
+          "mentions",
+          "options",
+          "tags",
+          "createdAt",
+          "numberOfLikes",
+          "numberOfComments",
+          "numberOfViews",
+          "imagesUrl",
+          "updatedAt",
+          "commentCount",
+          "quoteCount",
+          "likedBy",
+          "bookmarkedBy"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "poll_fk_1",
+            "columns": [
+              "ownerId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "poll_fk_0",
+            "columns": [
+              "postId"
+            ],
+            "referenceTable": "post",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "deleteForeignKeys": [
+          "poll_fk_0"
+        ],
+        "warnings": [
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollshashtags\" will be dropped.",
+            "table": "pollshashtags",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollhashtag\" will be dropped.",
+            "table": "pollhashtag",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_not_interested\" will be dropped.",
+            "table": "poll_not_interested",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_likes\" will be dropped.",
+            "table": "poll_likes",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_bookmarks\" will be dropped.",
+            "table": "poll_bookmarks",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"question\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "question"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"taggedUsers\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "taggedUsers"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"locations\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "locations"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"mentions\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "mentions"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"options\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "options"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"tags\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "tags"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"createdAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "createdAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfLikes\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfLikes"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfComments\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfComments"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfViews\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfViews"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"imagesUrl\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "imagesUrl"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"updatedAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "updatedAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"commentCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "commentCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"quoteCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "quoteCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"bookmarkedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "bookmarkedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll_option",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "_pollOptionsPollId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "poll_option_fk_1",
+            "columns": [
+              "_pollOptionsPollId"
+            ],
+            "referenceTable": "poll",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollshashtags\" will be dropped.",
+            "table": "pollshashtags",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollhashtag\" will be dropped.",
+            "table": "pollhashtag",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_not_interested\" will be dropped.",
+            "table": "poll_not_interested",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_likes\" will be dropped.",
+            "table": "poll_likes",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_bookmarks\" will be dropped.",
+            "table": "poll_bookmarks",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"question\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "question"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"taggedUsers\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "taggedUsers"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"locations\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "locations"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"mentions\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "mentions"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"options\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "options"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"tags\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "tags"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"createdAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "createdAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfLikes\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfLikes"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfComments\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfComments"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfViews\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfViews"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"imagesUrl\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "imagesUrl"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"updatedAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "updatedAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"commentCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "commentCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"quoteCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "quoteCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"bookmarkedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "bookmarkedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "pollId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "post_fk_4",
+            "columns": [
+              "quotedOrRepostedFromUserId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "post_fk_1",
+            "columns": [
+              "pollId"
+            ],
+            "referenceTable": "poll",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "post_fk_2",
+            "columns": [
+              "projectId"
+            ],
+            "referenceTable": "project",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "post_fk_3",
+            "columns": [
+              "parentId"
+            ],
+            "referenceTable": "post",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [
+          "post_fk_1",
+          "post_fk_2",
+          "post_fk_3"
+        ],
+        "warnings": [
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollshashtags\" will be dropped.",
+            "table": "pollshashtags",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"pollhashtag\" will be dropped.",
+            "table": "pollhashtag",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_not_interested\" will be dropped.",
+            "table": "poll_not_interested",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_likes\" will be dropped.",
+            "table": "poll_likes",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"poll_bookmarks\" will be dropped.",
+            "table": "poll_bookmarks",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"question\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "question"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"taggedUsers\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "taggedUsers"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"locations\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "locations"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"mentions\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "mentions"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"options\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "options"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"tags\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "tags"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"createdAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "createdAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfLikes\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfLikes"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfComments\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfComments"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"numberOfViews\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "numberOfViews"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"imagesUrl\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "imagesUrl"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"updatedAt\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "updatedAt"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"commentCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "commentCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"quoteCount\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "quoteCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"bookmarkedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "bookmarkedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "Table \"pollshashtags\" will be dropped.",
+      "table": "pollshashtags",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"pollhashtag\" will be dropped.",
+      "table": "pollhashtag",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"poll_not_interested\" will be dropped.",
+      "table": "poll_not_interested",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"poll_likes\" will be dropped.",
+      "table": "poll_likes",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"poll_bookmarks\" will be dropped.",
+      "table": "poll_bookmarks",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"question\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "question"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"taggedUsers\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "taggedUsers"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"locations\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "locations"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"mentions\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "mentions"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"options\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "options"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"tags\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "tags"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"createdAt\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "createdAt"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"numberOfLikes\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "numberOfLikes"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"numberOfComments\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "numberOfComments"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"numberOfViews\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "numberOfViews"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"imagesUrl\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "imagesUrl"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"updatedAt\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "updatedAt"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"commentCount\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "commentCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"quoteCount\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "quoteCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"likedBy\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "likedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"bookmarkedBy\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "bookmarkedBy"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -40,7 +40,7 @@ class PostHelperFunctions {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       builder: (context) {
-        return PostLocationsScreen(
+        return LocationsScreen(
           post: post,
         );
       },
@@ -61,7 +61,7 @@ class PostHelperFunctions {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       builder: (context) {
-        return PostTagUsersScreen(
+        return TagUsersScreen(
           post: post,
         );
       },
@@ -89,5 +89,42 @@ class PostHelperFunctions {
         selectLocationBottomSheet(context: context, post: post);
       }
     }
+  }
+
+  static Future<bool?> deletePollDialog(
+    BuildContext context,
+    int pollId,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Delete poll?',
+      description: 'Proceed with caution as this action is '
+          'irreversible.',
+      onTapSkipButton: () => context.pop(false),
+      activeButtonText: 'Delete',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: 'Cancel',
+      onTapActiveButton: () => context.pop(true),
+    );
+  }
+
+
+  static String formatTimeLeft(DateTime expiresAt) {
+    final now = DateTime.now();
+    final timeLeft = expiresAt.difference(now);
+    if (timeLeft.isNegative) return ' • Poll ended';
+
+    final days = timeLeft.inDays;
+    final hours = timeLeft.inHours % 24;
+    final minutes = timeLeft.inMinutes % 60;
+
+    if (days > 0) return ' • $days day${days == 1 ? '' : 's'} left';
+    if (hours > 0) {
+      return ' • $hours hour${hours == 1 ? '' : 's'} ${minutes}m left';
+    }
+    if (minutes > 0) return ' • $minutes minute${minutes == 1 ? '' : 's'} left';
+
+    return ' • Poll ends soon';
   }
 }

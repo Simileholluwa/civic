@@ -1,6 +1,5 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/create/presentation/widgets/create_dialog.dart';
-import 'package:civic_flutter/features/poll/poll.dart';
 import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class CreateRoutes {
               final data = state.extra as Map<String, dynamic>?;
               return CreatePollScreen(
                 id: int.tryParse(state.pathParameters['pollId'] ?? '0') ?? 0,
-                poll: data?['poll'],
+                post: data?['post'],
               );
             },
           ),

@@ -1,42 +1,58 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
 class PostCardState {
   PostCardState({
-    required this.creator,
-    required this.timeAgo,
-    required this.numberOfLikes,
-    required this.numberOfComments,
-    required this.numberOfBookmarks,
-    required this.text,
-    required this.hasText,
-    required this.imageUrls,
-    required this.hasImage,
-    required this.videoUrl,
-    required this.hasVideo,
-    required this.locations,
-    required this.hasLocation,
-    required this.tags,
-    required this.hasTags,
-    required this.hasLiked,
-    required this.mentions,
-    required this.postType,
+    this.creator,
+    this.timeAgo = '',
+    this.numberOfLikes = '',
+    this.numberOfComments = '',
+    this.numberOfBookmarks = '',
+    this.text = '',
+    this.hasText = false,
+    this.imageUrls = const <String>[],
+    this.hasImage = false,
+    this.videoUrl = '',
+    this.hasVideo = false,
+    this.locations = const <AWSPlaces>[],
+    this.hasLocation = false,
+    this.tags = const <UserRecord>[],
+    this.hasTags = false,
+    this.hasLiked = false,
+    this.mentions = const <UserRecord>[],
+    this.postType = PostType.regular,
     this.reasonNotInterested = '',
     this.quoteOrRepostUser,
     this.hasBookmarked = false,
     this.isOwner = false,
     this.isFollower = false,
     this.isSendingNotInterested = false,
+    this.hasVoted = false,
+    this.isSendingPoll = false,
+    this.numberOfOptionVoters = 0,
+    this.numberOfVoters = '',
+    this.options = const <String>[],
+    this.pollEnded = false,
+    this.pollOptions = const <PollOption>[],
+    this.quoteCount = '',
+    this.totalVotes = 0,
+    this.votedOption,
   });
+
+  factory PostCardState.empty() {
+    return PostCardState();
+  }
 
   factory PostCardState.populate(
     Post post,
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
+    final poll = post.poll;
     return PostCardState(
       timeAgo: THelperFunctions.humanizeDateTime(
         post.dateCreated ?? DateTime.now(),
@@ -69,107 +85,130 @@ class PostCardState {
       postType: post.postType!,
       isFollower:
           userId != post.ownerId && post.owner!.followers!.contains(userId),
+      numberOfVoters: NumberFormat("#,##0").format(poll?.votedBy!.length ?? 0),
+      numberOfOptionVoters: poll?.options!.map((e) => e.votedBy).length ?? 0,
+      options: poll?.options!.map((e) => e.option!).toList() ?? <String>[],
+      pollOptions: poll?.options! ?? <PollOption>[],
+      votedOption: poll?.options!.firstWhere(
+        (e) => e.votedBy!.contains(
+          userId,
+        ),
+        orElse: () => PollOption(
+          pollId: 0,
+        ),
+      ),
+      pollEnded: poll?.expiresAt!.isBefore(DateTime.now()) ?? false,
+      hasVoted: poll?.votedBy!.contains(userId) ?? false,
+      totalVotes: poll?.votedBy!.length ?? 0,
     );
   }
 
+  final UserRecord? creator;
+  final bool hasBookmarked;
   final bool hasImage;
+  final bool hasLiked;
   final bool hasLocation;
   final bool hasTags;
   final bool hasText;
   final bool hasVideo;
+  final bool hasVoted;
   final List<String> imageUrls;
+  final bool isFollower;
+  final bool isOwner;
+  final bool isSendingNotInterested;
+  final bool isSendingPoll;
   final List<AWSPlaces> locations;
+  final List<UserRecord> mentions;
+  final String numberOfBookmarks;
   final String numberOfComments;
   final String numberOfLikes;
-  final String numberOfBookmarks;
+  final int numberOfOptionVoters;
+  final String numberOfVoters;
+  final List<String> options;
+  final bool pollEnded;
+  final List<PollOption> pollOptions;
+  final PostType postType;
+  final String quoteCount;
+  final UserRecord? quoteOrRepostUser;
+  final String reasonNotInterested;
   final List<UserRecord> tags;
   final String text;
   final String timeAgo;
+  final int totalVotes;
   final String videoUrl;
-  final UserRecord? creator;
-  final List<UserRecord> mentions;
-  final bool hasLiked;
-  final bool hasBookmarked;
-  final bool isOwner;
-  final bool isFollower;
-  final PostType postType;
-  final UserRecord? quoteOrRepostUser;
-  final String reasonNotInterested;
-  final bool isSendingNotInterested;
-
+  final PollOption? votedOption;
 
   PostCardState copyWith({
+    UserRecord? creator,
+    bool? hasBookmarked,
     bool? hasImage,
+    bool? hasLiked,
     bool? hasLocation,
     bool? hasTags,
     bool? hasText,
     bool? hasVideo,
+    bool? hasVoted,
     List<String>? imageUrls,
+    bool? isFollower,
+    bool? isOwner,
+    bool? isSendingNotInterested,
+    bool? isSendingPoll,
     List<AWSPlaces>? locations,
+    List<UserRecord>? mentions,
+    String? numberOfBookmarks,
     String? numberOfComments,
     String? numberOfLikes,
-    String? numberOfBookmarks,
+    int? numberOfOptionVoters,
+    String? numberOfVoters,
+    List<String>? options,
+    bool? pollEnded,
+    List<PollOption>? pollOptions,
+    PostType? postType,
+    String? quoteCount,
+    UserRecord? quoteOrRepostUser,
+    String? reasonNotInterested,
     List<UserRecord>? tags,
     String? text,
     String? timeAgo,
+    int? totalVotes,
     String? videoUrl,
-    UserRecord? creator,
-    List<UserRecord>? mentions,
-    bool? hasLiked,
-    bool? hasBookmarked,
-    bool? isOwner,
-    bool? isFollower,
-    PostType? postType,
-    String? reasonNotInterested,
-    bool? isSendingNotInterested,
+    PollOption? votedOption,
   }) {
     return PostCardState(
+      creator: creator ?? this.creator,
+      hasBookmarked: hasBookmarked ?? this.hasBookmarked,
       hasImage: hasImage ?? this.hasImage,
+      hasLiked: hasLiked ?? this.hasLiked,
       hasLocation: hasLocation ?? this.hasLocation,
       hasTags: hasTags ?? this.hasTags,
       hasText: hasText ?? this.hasText,
       hasVideo: hasVideo ?? this.hasVideo,
+      hasVoted: hasVoted ?? this.hasVoted,
       imageUrls: imageUrls ?? this.imageUrls,
+      isFollower: isFollower ?? this.isFollower,
+      isOwner: isOwner ?? this.isOwner,
+      isSendingNotInterested: isSendingNotInterested ?? this.isSendingNotInterested,
+      isSendingPoll: isSendingPoll ?? this.isSendingPoll,
       locations: locations ?? this.locations,
+      mentions: mentions ?? this.mentions,
+      numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
       numberOfComments: numberOfComments ?? this.numberOfComments,
       numberOfLikes: numberOfLikes ?? this.numberOfLikes,
-      numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
+      numberOfOptionVoters: numberOfOptionVoters ?? this.numberOfOptionVoters,
+      numberOfVoters: numberOfVoters ?? this.numberOfVoters,
+      options: options ?? this.options,
+      pollEnded: pollEnded ?? this.pollEnded,
+      pollOptions: pollOptions ?? this.pollOptions,
+      postType: postType ?? this.postType,
+      quoteCount: quoteCount ?? this.quoteCount,
+      quoteOrRepostUser: quoteOrRepostUser ?? this.quoteOrRepostUser,
+      reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
       tags: tags ?? this.tags,
       text: text ?? this.text,
       timeAgo: timeAgo ?? this.timeAgo,
+      totalVotes: totalVotes ?? this.totalVotes,
       videoUrl: videoUrl ?? this.videoUrl,
-      creator: creator ?? this.creator,
-      mentions: mentions ?? this.mentions,
-      hasLiked: hasLiked ?? this.hasLiked,
-      hasBookmarked: hasBookmarked ?? this.hasBookmarked,
-      isOwner: isOwner ?? this.isOwner,
-      isFollower: isFollower ?? this.isFollower,
-      postType: postType ?? this.postType,
-      reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
-      isSendingNotInterested: isSendingNotInterested ?? this.isSendingNotInterested,
-    );
-  }
-
-  factory PostCardState.empty() {
-    return PostCardState(
-      timeAgo: '',
-      numberOfLikes: '0',
-      numberOfComments: '0',
-      numberOfBookmarks: '0',
-      text: '',
-      hasText: false,
-      imageUrls: [],
-      hasImage: false,
-      videoUrl: '',
-      hasVideo: false,
-      locations: [],
-      hasLocation: false,
-      tags: [],
-      hasTags: false,
-      creator: null,
-      hasLiked: false,
-      mentions: [],
-      postType: PostType.regular,
+      votedOption: votedOption ?? this.votedOption,
     );
   }
 }

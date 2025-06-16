@@ -34,6 +34,8 @@ class PostEndpoint extends Endpoint {
               likedBy: existingPost!.likedBy,
               bookmarkedBy: existingPost.bookmarkedBy,
               projectId: existingPost.projectId,
+              parentId: existingPost.parentId,
+              pollId: existingPost.pollId,
               quotedOrRepostedFromUserId:
                   existingPost.quotedOrRepostedFromUserId,
               commentCount: existingPost.commentCount,
@@ -78,6 +80,315 @@ class PostEndpoint extends Endpoint {
         return null;
       }
     });
+  }
+
+  Future<Post?> savePoll(Session session, Post post) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+
+        if (post.id != null) {
+          await validatePostOwnership(
+            session,
+            post.id!,
+            user,
+          );
+
+          // Update the post
+          await updatePost(
+            session,
+            post.copyWith(
+              likedBy: post.likedBy ?? [],
+              bookmarkedBy: post.bookmarkedBy ?? [],
+              owner: user,
+              updatedAt: DateTime.now(),
+            ),
+          );
+
+          for (final option in post.poll!.options!) {
+            await PollOption.db.updateRow(
+              session,
+              option,
+              transaction: transaction,
+            );
+          }
+
+          // return the sent poll
+          return post;
+        } else {
+          final savedPost = await Post.db.insertRow(
+            session,
+            Post(
+              ownerId: user.id!,
+              postType: PostType.poll,
+              likedBy: [],
+              bookmarkedBy: [],
+            ),
+            transaction: transaction,
+          );
+
+          final savedPoll = await Poll.db.insertRow(
+            session,
+            savedPost.poll!.copyWith(
+              postId: savedPost.id!,
+              votedBy: [],
+            ),
+          );
+
+          final savedOptions = <PollOption>[];
+
+          for (final option in savedPost.poll!.options!) {
+            final insertedOption = await PollOption.db.insertRow(
+              session,
+              option.copyWith(
+                pollId: savedPoll.id,
+                votedBy: [],
+              ),
+              transaction: transaction,
+            );
+            savedOptions.add(insertedOption);
+          }
+
+          await Poll.db.updateRow(
+            session,
+            savedPoll.copyWith(
+              options: savedOptions,
+            ),
+            transaction: transaction,
+          );
+
+          return await Post.db.findById(
+            session,
+            savedPost.id!,
+          );
+        }
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in createPoll: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        return null;
+      }
+    });
+  }
+
+  Future<void> castVote(
+    Session session,
+    int pollId,
+    int optionId,
+  ) async {
+    return await session.db.transaction((transaction) async {
+      final user = await authUser(session);
+
+      // Fetch the poll
+      final poll = await Poll.db.findById(
+        session,
+        pollId,
+        transaction: transaction,
+      );
+      if (poll == null) {
+        throw PostException(message: 'Poll not found.');
+      }
+
+      // Check if user has already voted
+      if (poll.votedBy!.contains(user.id)) {
+        final options = await PollOption.db.find(
+          session,
+          where: (o) => o.pollId.equals(pollId),
+          transaction: transaction,
+        );
+
+        // Find the one the user voted on
+        PollOption? votedOption = options.firstWhere(
+          (option) => option.votedBy!.contains(user.id!),
+          orElse: () => throw PostException(
+            message: 'You have not voted for this option.',
+          ),
+        );
+
+        final updatedOption = votedOption.copyWith(
+          votedBy: votedOption.votedBy!
+              .where(
+                (id) => id != user.id!,
+              )
+              .toList(),
+        );
+
+        await PollOption.db.updateRow(
+          session,
+          updatedOption,
+          transaction: transaction,
+        );
+
+        poll.votedBy = poll.votedBy!
+            .where(
+              (id) => id != user.id!,
+            )
+            .toList();
+      }
+
+      // Ensure selected option belongs to the poll
+      final option = await PollOption.db.findById(
+        session,
+        optionId,
+        transaction: transaction,
+      );
+
+      if (option == null || option.pollId != pollId) {
+        throw PostException(message: 'Invalid poll option selected.');
+      }
+
+      // Update PollOption's votedBy
+      final updatedOption = option.copyWith(
+        votedBy: [
+          ...option.votedBy!,
+          user.id!,
+        ],
+      );
+
+      await PollOption.db.updateRow(
+        session,
+        updatedOption,
+        transaction: transaction,
+      );
+
+      final options = await PollOption.db.find(
+        session,
+        where: (o) => o.pollId.equals(pollId),
+        transaction: transaction,
+        orderBy: (o) => o.id,
+        orderDescending: false,
+      );
+
+      await updatePoll(
+        session,
+        poll.copyWith(
+          votedBy: [
+            ...poll.votedBy!,
+            user.id!,
+          ],
+          options: options,
+        ),
+      );
+
+      return;
+    });
+  }
+
+  Future<bool> clearVote(
+    Session session,
+    int pollId,
+  ) async {
+    return await session.db.transaction((transaction) async {
+      final user = await authUser(session);
+      final userId = user.id!;
+
+      // Fetch the poll
+      final poll = await Poll.db.findById(
+        session,
+        pollId,
+        transaction: transaction,
+      );
+
+      if (poll == null) {
+        throw Exception('Poll not found.');
+      }
+
+      // Check if user has voted
+      if (!poll.votedBy!.contains(userId)) {
+        throw Exception('You have not voted.');
+      }
+
+      // Fetch all options for the poll
+      final options = await PollOption.db.find(
+        session,
+        where: (o) => o.pollId.equals(pollId),
+        transaction: transaction,
+      );
+
+      // Find the one the user voted on
+      PollOption? votedOption = options.firstWhere(
+        (option) => option.votedBy!.contains(userId),
+        orElse: () => throw PostException(
+          message: 'You have not voted in this poll.',
+        ),
+      );
+
+      // Remove user from PollOption.votedBy
+      final updatedOption = votedOption.copyWith(
+        votedBy: votedOption.votedBy!
+            .where(
+              (id) => id != userId,
+            )
+            .toList(),
+      );
+
+      await PollOption.db.updateRow(
+        session,
+        updatedOption,
+        transaction: transaction,
+      );
+
+      // Remove user from Poll.votedBy
+      final updatedPoll = poll.copyWith(
+        votedBy: poll.votedBy!
+            .where(
+              (id) => id != userId,
+            )
+            .toList(),
+      );
+
+      await updatePoll(
+        session,
+        updatedPoll,
+      );
+
+      return true;
+    });
+  }
+
+  Future<PostList> getPolls(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    final user = await authUser(session);
+    final ignored = await PostNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.postId).toSet();
+    final count = await Post.db.count(
+      session,
+      where: (t) =>
+          t.postType.equals(PostType.poll) & t.id.notInSet(ignoredIds),
+    );
+    final results = await Post.db.find(
+      session,
+      where: (t) =>
+          t.postType.equals(PostType.poll) & t.id.notInSet(ignoredIds),
+      limit: limit,
+      offset: (page * limit) - limit,
+      include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+        poll: Poll.include(),
+      ),
+      orderBy: (t) => t.dateCreated,
+      orderDescending: true,
+    );
+
+    return PostList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
   }
 
   Future<Post?> savePostComment(
@@ -402,6 +713,7 @@ class PostEndpoint extends Endpoint {
   Future<Post> getPost(
     Session session,
     int id,
+    PostType postType,
   ) async {
     final result = await Post.db.findById(
       session,
@@ -410,16 +722,28 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
-        project: Project.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
-        ),
-        parent: Post.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
-        ),
+        project: postType == PostType.projectRepost || postType == PostType.regular
+            ? Project.include(
+                owner: UserRecord.include(
+                  userInfo: UserInfo.include(),
+                ),
+              )
+            : null,
+        parent: postType == PostType.postRepost || postType == PostType.regular
+            ? Post.include(
+                owner: UserRecord.include(
+                  userInfo: UserInfo.include(),
+                ),
+              )
+            : null,
+        poll: postType == PostType.poll
+            ? Poll.include(
+                owner: UserRecord.include(
+                  userInfo: UserInfo.include(),
+                ),
+                options: PollOption.includeList(),
+              )
+            : null,
       ),
     );
 
@@ -730,6 +1054,7 @@ class PostEndpoint extends Endpoint {
             userInfo: UserInfo.include(),
           ),
         ),
+        poll: Poll.include(),
         quotedOrRepostedFromUser: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
@@ -841,6 +1166,66 @@ class PostEndpoint extends Endpoint {
     session.messages.postMessage(
       'post_${post.id}',
       post,
+    );
+  }
+
+  @doNotGenerate
+  Future<void> validatePollOwnership(
+    Session session,
+    int pollId,
+    UserRecord user,
+  ) async {
+    final poll = await Poll.db.findById(
+      session,
+      pollId,
+    );
+    if (poll == null) {
+      throw PostException(
+        message: 'Poll not found',
+      );
+    }
+    if (poll.ownerId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
+  }
+
+  Stream<Poll> pollUpdates(Session session, int pollId) async* {
+    // Create a message stream for this post
+    var updateStream = session.messages.createStream<Poll>('poll_$pollId');
+
+    // Yield the latest post details when the client subscribes
+    var poll = await Poll.db.findById(
+      session,
+      pollId,
+      include: Poll.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+      ),
+    );
+    if (poll != null) {
+      yield poll;
+    }
+
+    // Send updates when changes occur
+    await for (var pollUpdate in updateStream) {
+      yield pollUpdate.copyWith(
+        owner: poll!.owner,
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> updatePoll(Session session, Poll poll) async {
+    // Update the project in the database
+    await Poll.db.updateRow(session, poll);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'poll_${poll.id}',
+      poll,
     );
   }
 }

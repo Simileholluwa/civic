@@ -14,21 +14,20 @@ import '../endpoints/article_endpoint.dart' as _i2;
 import '../endpoints/assets_endpoint.dart' as _i3;
 import '../endpoints/hashtag_endpoint.dart' as _i4;
 import '../endpoints/location_endpoint.dart' as _i5;
-import '../endpoints/poll_endpoint.dart' as _i6;
-import '../endpoints/post_endpoint.dart' as _i7;
-import '../endpoints/project_endpoint.dart' as _i8;
-import '../endpoints/send_email_endpoint.dart' as _i9;
-import '../endpoints/user_nin_endpoint.dart' as _i10;
-import '../endpoints/user_record_endpoint.dart' as _i11;
-import 'package:civic_server/src/generated/article/article.dart' as _i12;
-import 'package:civic_server/src/generated/poll/poll.dart' as _i13;
-import 'package:civic_server/src/generated/post/post.dart' as _i14;
-import 'package:civic_server/src/generated/project/project.dart' as _i15;
-import 'package:civic_server/src/generated/project/project_review.dart' as _i16;
+import '../endpoints/post_endpoint.dart' as _i6;
+import '../endpoints/project_endpoint.dart' as _i7;
+import '../endpoints/send_email_endpoint.dart' as _i8;
+import '../endpoints/user_nin_endpoint.dart' as _i9;
+import '../endpoints/user_record_endpoint.dart' as _i10;
+import 'package:civic_server/src/generated/article/article.dart' as _i11;
+import 'package:civic_server/src/generated/post/post.dart' as _i12;
+import 'package:civic_server/src/generated/post/post_type_enums.dart' as _i13;
+import 'package:civic_server/src/generated/project/project.dart' as _i14;
+import 'package:civic_server/src/generated/project/project_review.dart' as _i15;
 import 'package:civic_server/src/generated/project/project_vetting.dart'
-    as _i17;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i18;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i19;
+    as _i16;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i17;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i18;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -58,37 +57,31 @@ class Endpoints extends _i1.EndpointDispatch {
           'location',
           null,
         ),
-      'poll': _i6.PollEndpoint()
-        ..initialize(
-          server,
-          'poll',
-          null,
-        ),
-      'post': _i7.PostEndpoint()
+      'post': _i6.PostEndpoint()
         ..initialize(
           server,
           'post',
           null,
         ),
-      'project': _i8.ProjectEndpoint()
+      'project': _i7.ProjectEndpoint()
         ..initialize(
           server,
           'project',
           null,
         ),
-      'sendEmail': _i9.SendEmailEndpoint()
+      'sendEmail': _i8.SendEmailEndpoint()
         ..initialize(
           server,
           'sendEmail',
           null,
         ),
-      'userNin': _i10.UserNinEndpoint()
+      'userNin': _i9.UserNinEndpoint()
         ..initialize(
           server,
           'userNin',
           null,
         ),
-      'userRecord': _i11.UserRecordEndpoint()
+      'userRecord': _i10.UserRecordEndpoint()
         ..initialize(
           server,
           'userRecord',
@@ -146,7 +139,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'article': _i1.ParameterDescription(
               name: 'article',
-              type: _i1.getType<_i12.Article>(),
+              type: _i1.getType<_i11.Article>(),
               nullable: false,
             )
           },
@@ -249,30 +242,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['postId'],
           ),
         ),
-        'sendPollHashtags': _i1.MethodConnector(
-          name: 'sendPollHashtags',
-          params: {
-            'tags': _i1.ParameterDescription(
-              name: 'tags',
-              type: _i1.getType<List<String>>(),
-              nullable: false,
-            ),
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['hashtag'] as _i4.HashtagEndpoint).sendPollHashtags(
-            session,
-            params['tags'],
-            params['pollId'],
-          ),
-        ),
         'fetchHashtags': _i1.MethodConnector(
           name: 'fetchHashtags',
           params: {
@@ -342,16 +311,16 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    connectors['poll'] = _i1.EndpointConnector(
-      name: 'poll',
-      endpoint: endpoints['poll']!,
+    connectors['post'] = _i1.EndpointConnector(
+      name: 'post',
+      endpoint: endpoints['post']!,
       methodConnectors: {
-        'savePoll': _i1.MethodConnector(
-          name: 'savePoll',
+        'savePost': _i1.MethodConnector(
+          name: 'savePost',
           params: {
-            'poll': _i1.ParameterDescription(
-              name: 'poll',
-              type: _i1.getType<_i13.Poll>(),
+            'post': _i1.ParameterDescription(
+              name: 'post',
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -359,33 +328,27 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).savePoll(
+              (endpoints['post'] as _i6.PostEndpoint).savePost(
             session,
-            params['poll'],
+            params['post'],
           ),
         ),
-        'schedulePoll': _i1.MethodConnector(
-          name: 'schedulePoll',
+        'savePoll': _i1.MethodConnector(
+          name: 'savePoll',
           params: {
-            'poll': _i1.ParameterDescription(
-              name: 'poll',
-              type: _i1.getType<_i13.Poll>(),
+            'post': _i1.ParameterDescription(
+              name: 'post',
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
-            ),
-            'dateTime': _i1.ParameterDescription(
-              name: 'dateTime',
-              type: _i1.getType<DateTime>(),
-              nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).schedulePoll(
+              (endpoints['post'] as _i6.PostEndpoint).savePoll(
             session,
-            params['poll'],
-            params['dateTime'],
+            params['post'],
           ),
         ),
         'castVote': _i1.MethodConnector(
@@ -406,88 +369,10 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).castVote(
+              (endpoints['post'] as _i6.PostEndpoint).castVote(
             session,
             params['pollId'],
             params['optionId'],
-          ),
-        ),
-        'toggleLike': _i1.MethodConnector(
-          name: 'toggleLike',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).toggleLike(
-            session,
-            params['pollId'],
-          ),
-        ),
-        'toggleBookmark': _i1.MethodConnector(
-          name: 'toggleBookmark',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).toggleBookmark(
-            session,
-            params['pollId'],
-          ),
-        ),
-        'deletePoll': _i1.MethodConnector(
-          name: 'deletePoll',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).deletePoll(
-            session,
-            params['id'],
-          ),
-        ),
-        'markNotInterested': _i1.MethodConnector(
-          name: 'markNotInterested',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'reason': _i1.ParameterDescription(
-              name: 'reason',
-              type: _i1.getType<String>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).markNotInterested(
-            session,
-            params['pollId'],
-            params['reason'],
           ),
         ),
         'clearVote': _i1.MethodConnector(
@@ -503,25 +388,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).clearVote(
-            session,
-            params['pollId'],
-          ),
-        ),
-        'getPollResults': _i1.MethodConnector(
-          name: 'getPollResults',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).getPollResults(
+              (endpoints['post'] as _i6.PostEndpoint).clearVote(
             session,
             params['pollId'],
           ),
@@ -544,73 +411,10 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).getPolls(
+              (endpoints['post'] as _i6.PostEndpoint).getPolls(
             session,
             limit: params['limit'],
             page: params['page'],
-          ),
-        ),
-        'getPoll': _i1.MethodConnector(
-          name: 'getPoll',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['poll'] as _i6.PollEndpoint).getPoll(
-            session,
-            params['pollId'],
-          ),
-        ),
-        'pollUpdates': _i1.MethodStreamConnector(
-          name: 'pollUpdates',
-          params: {
-            'pollId': _i1.ParameterDescription(
-              name: 'pollId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          streamParams: {},
-          returnType: _i1.MethodStreamReturnType.streamType,
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-            Map<String, Stream> streamParams,
-          ) =>
-              (endpoints['poll'] as _i6.PollEndpoint).pollUpdates(
-            session,
-            params['pollId'],
-          ),
-        ),
-      },
-    );
-    connectors['post'] = _i1.EndpointConnector(
-      name: 'post',
-      endpoint: endpoints['post']!,
-      methodConnectors: {
-        'savePost': _i1.MethodConnector(
-          name: 'savePost',
-          params: {
-            'post': _i1.ParameterDescription(
-              name: 'post',
-              type: _i1.getType<_i14.Post>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).savePost(
-            session,
-            params['post'],
           ),
         ),
         'savePostComment': _i1.MethodConnector(
@@ -618,7 +422,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'comment': _i1.ParameterDescription(
               name: 'comment',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
             'isReply': _i1.ParameterDescription(
@@ -631,7 +435,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).savePostComment(
+              (endpoints['post'] as _i6.PostEndpoint).savePostComment(
             session,
             params['comment'],
             params['isReply'],
@@ -660,7 +464,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getPostComments(
+              (endpoints['post'] as _i6.PostEndpoint).getPostComments(
             session,
             params['postId'],
             limit: params['limit'],
@@ -685,7 +489,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getComment(
+              (endpoints['post'] as _i6.PostEndpoint).getComment(
             session,
             params['commentId'],
             params['isComment'],
@@ -714,7 +518,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getPostCommentReplies(
+              (endpoints['post'] as _i6.PostEndpoint).getPostCommentReplies(
             session,
             params['commentId'],
             limit: params['limit'],
@@ -726,7 +530,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -739,7 +543,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).schedulePost(
+              (endpoints['post'] as _i6.PostEndpoint).schedulePost(
             session,
             params['post'],
             params['dateTime'],
@@ -750,7 +554,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -758,7 +562,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getRootPost(
+              (endpoints['post'] as _i6.PostEndpoint).getRootPost(
             session,
             params['post'],
           ),
@@ -773,7 +577,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i14.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
           },
@@ -781,7 +585,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).quoteProject(
+              (endpoints['post'] as _i6.PostEndpoint).quoteProject(
             session,
             params['projectId'],
             params['quoteContent'],
@@ -794,15 +598,21 @@ class Endpoints extends _i1.EndpointDispatch {
               name: 'id',
               type: _i1.getType<int>(),
               nullable: false,
-            )
+            ),
+            'postType': _i1.ParameterDescription(
+              name: 'postType',
+              type: _i1.getType<_i13.PostType>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getPost(
+              (endpoints['post'] as _i6.PostEndpoint).getPost(
             session,
             params['id'],
+            params['postType'],
           ),
         ),
         'getPosts': _i1.MethodConnector(
@@ -823,7 +633,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).getPosts(
+              (endpoints['post'] as _i6.PostEndpoint).getPosts(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -842,7 +652,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).deletePost(
+              (endpoints['post'] as _i6.PostEndpoint).deletePost(
             session,
             params['id'],
           ),
@@ -860,7 +670,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).toggleBookmark(
+              (endpoints['post'] as _i6.PostEndpoint).toggleBookmark(
             session,
             params['postId'],
           ),
@@ -878,7 +688,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).toggleLike(
+              (endpoints['post'] as _i6.PostEndpoint).toggleLike(
             session,
             params['postId'],
           ),
@@ -901,7 +711,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['post'] as _i7.PostEndpoint).markNotInterested(
+              (endpoints['post'] as _i6.PostEndpoint).markNotInterested(
             session,
             params['postId'],
             params['reason'],
@@ -923,9 +733,30 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
             Map<String, Stream> streamParams,
           ) =>
-              (endpoints['post'] as _i7.PostEndpoint).postUpdates(
+              (endpoints['post'] as _i6.PostEndpoint).postUpdates(
             session,
             params['postId'],
+          ),
+        ),
+        'pollUpdates': _i1.MethodStreamConnector(
+          name: 'pollUpdates',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['post'] as _i6.PostEndpoint).pollUpdates(
+            session,
+            params['pollId'],
           ),
         ),
       },
@@ -947,7 +778,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).getProject(
             session,
             params['projectId'],
           ),
@@ -965,7 +796,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getProjectReview(
+              (endpoints['project'] as _i7.ProjectEndpoint).getProjectReview(
             session,
             params['projectId'],
           ),
@@ -975,7 +806,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i15.Project>(),
+              type: _i1.getType<_i14.Project>(),
               nullable: false,
             )
           },
@@ -983,7 +814,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).saveProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).saveProject(
             session,
             params['project'],
           ),
@@ -993,7 +824,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i16.ProjectReview>(),
+              type: _i1.getType<_i15.ProjectReview>(),
               nullable: false,
             )
           },
@@ -1001,7 +832,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).saveProjectReview(
+              (endpoints['project'] as _i7.ProjectEndpoint).saveProjectReview(
             session,
             params['projectReview'],
           ),
@@ -1019,7 +850,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).deleteProjectReview(
+              (endpoints['project'] as _i7.ProjectEndpoint).deleteProjectReview(
             session,
             params['reviewId'],
           ),
@@ -1037,7 +868,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .deleteProjectVetting(
             session,
             params['vettingId'],
@@ -1048,7 +879,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i15.Project>(),
+              type: _i1.getType<_i14.Project>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -1061,7 +892,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).scheduleProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).scheduleProject(
             session,
             params['project'],
             params['dateTime'],
@@ -1085,7 +916,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getProjects(
+              (endpoints['project'] as _i7.ProjectEndpoint).getProjects(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -1124,7 +955,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getProjectReviews(
+              (endpoints['project'] as _i7.ProjectEndpoint).getProjectReviews(
             session,
             params['projectId'],
             limit: params['limit'],
@@ -1151,7 +982,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).reactToReview(
+              (endpoints['project'] as _i7.ProjectEndpoint).reactToReview(
             session,
             params['reviewId'],
             params['isLike'],
@@ -1175,7 +1006,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).reactToVetting(
+              (endpoints['project'] as _i7.ProjectEndpoint).reactToVetting(
             session,
             params['vettingId'],
             params['isLike'],
@@ -1194,7 +1025,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).deleteProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).deleteProject(
             session,
             params['projectId'],
           ),
@@ -1212,7 +1043,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).toggleBookmark(
+              (endpoints['project'] as _i7.ProjectEndpoint).toggleBookmark(
             session,
             params['projectId'],
           ),
@@ -1230,7 +1061,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).toggleLike(
+              (endpoints['project'] as _i7.ProjectEndpoint).toggleLike(
             session,
             params['projectId'],
           ),
@@ -1248,7 +1079,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).markNotInterested(
+              (endpoints['project'] as _i7.ProjectEndpoint).markNotInterested(
             session,
             params['projectId'],
           ),
@@ -1258,7 +1089,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i17.ProjectVetting>(),
+              type: _i1.getType<_i16.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1266,7 +1097,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).vetProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).vetProject(
             session,
             params['projectVetting'],
           ),
@@ -1284,7 +1115,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getVettedProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).getVettedProject(
             session,
             params['projectId'],
           ),
@@ -1307,7 +1138,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).getVettedProjects(
+              (endpoints['project'] as _i7.ProjectEndpoint).getVettedProjects(
             session,
             limit: params['limit'],
             page: params['page'],
@@ -1320,7 +1151,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).authUser(session),
+              (endpoints['project'] as _i7.ProjectEndpoint).authUser(session),
         ),
         'validateProjectOwnership': _i1.MethodConnector(
           name: 'validateProjectOwnership',
@@ -1332,7 +1163,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i18.UserRecord>(),
+              type: _i1.getType<_i17.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1340,7 +1171,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .validateProjectOwnership(
             session,
             params['projectId'],
@@ -1357,7 +1188,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i18.UserRecord>(),
+              type: _i1.getType<_i17.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1365,7 +1196,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .validateProjectReviewOwnership(
             session,
             params['projectReviewId'],
@@ -1377,7 +1208,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i15.Project>(),
+              type: _i1.getType<_i14.Project>(),
               nullable: false,
             )
           },
@@ -1385,7 +1216,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).updateProject(
+              (endpoints['project'] as _i7.ProjectEndpoint).updateProject(
             session,
             params['project'],
           ),
@@ -1395,7 +1226,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i16.ProjectReview>(),
+              type: _i1.getType<_i15.ProjectReview>(),
               nullable: false,
             )
           },
@@ -1403,7 +1234,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint).updateProjectReview(
+              (endpoints['project'] as _i7.ProjectEndpoint).updateProjectReview(
             session,
             params['projectReview'],
           ),
@@ -1413,7 +1244,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i17.ProjectVetting>(),
+              type: _i1.getType<_i16.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1421,7 +1252,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .updateProjectVetting(
             session,
             params['projectVetting'],
@@ -1443,7 +1274,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
             Map<String, Stream> streamParams,
           ) =>
-              (endpoints['project'] as _i8.ProjectEndpoint).projectUpdates(
+              (endpoints['project'] as _i7.ProjectEndpoint).projectUpdates(
             session,
             params['projectId'],
           ),
@@ -1464,7 +1295,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
             Map<String, Stream> streamParams,
           ) =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .projectReviewUpdates(
             session,
             params['reviewId'],
@@ -1486,7 +1317,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
             Map<String, Stream> streamParams,
           ) =>
-              (endpoints['project'] as _i8.ProjectEndpoint)
+              (endpoints['project'] as _i7.ProjectEndpoint)
                   .projectVettingUpdates(
             session,
             params['vettingId'],
@@ -1531,7 +1362,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['sendEmail'] as _i9.SendEmailEndpoint).sendEmail(
+              (endpoints['sendEmail'] as _i8.SendEmailEndpoint).sendEmail(
             session,
             params['email'],
             params['code'],
@@ -1559,7 +1390,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userNin'] as _i10.UserNinEndpoint).getNinDetails(
+              (endpoints['userNin'] as _i9.UserNinEndpoint).getNinDetails(
             session,
             params['ninNumber'],
           ),
@@ -1575,7 +1406,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i18.UserRecord>(),
+              type: _i1.getType<_i17.UserRecord>(),
               nullable: false,
             )
           },
@@ -1583,7 +1414,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint).saveUser(
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint).saveUser(
             session,
             params['userRecord'],
           ),
@@ -1595,7 +1426,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
                   .getUser(session),
         ),
         'checkIfNewUser': _i1.MethodConnector(
@@ -1611,7 +1442,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
                   .checkIfNewUser(
             session,
             params['email'],
@@ -1624,7 +1455,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
                   .fetchUsernames(session),
         ),
         'getUsers': _i1.MethodConnector(
@@ -1650,7 +1481,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint).getUsers(
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint).getUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -1675,7 +1506,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint).mentionUsers(
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint).mentionUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -1694,7 +1525,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i11.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
                   .followUnfollowUser(
             session,
             params['userId'],
@@ -1702,6 +1533,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i19.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i18.Endpoints()..initializeEndpoints(server);
   }
 }

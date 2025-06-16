@@ -5,3 +5,5 @@ values:
     - comment
     - projectRepost
     - commentReply
+    - poll
+    - article

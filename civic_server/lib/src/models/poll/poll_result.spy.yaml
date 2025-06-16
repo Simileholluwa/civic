@@ -1,5 +1,0 @@
-class: PollResult
-fields: 
-    pollId: int,
-    totalVotes: int,
-    options: List<PollOptionResult>,

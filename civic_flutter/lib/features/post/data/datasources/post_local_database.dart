@@ -7,10 +7,10 @@ import 'package:path/path.dart' as path;
 
 abstract class PostLocalDatabase {
   Future<void> savePostDraft({
-    required Post post,
+    required Post post, required String draftType,
   });
-  Future<Post> getPostDraft();
-  Future<void> deletePostDraft();
+  Future<Post> getPostDraft({required String draftType,});
+  Future<void> deletePostDraft({required String draftType,});
 }
 
 class PostLocalDatabaseImpl extends PostLocalDatabase {
@@ -19,13 +19,13 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   }) : _prefs = prefs;
   final LocalStorage _prefs;
   @override
-  Future<Post> getPostDraft() async {
+  Future<Post> getPostDraft({required String draftType,}) async {
     try {
       final userId = _prefs.getInt('userId')!;
       final rawOwner = _prefs.getString('userRecord')!;
       final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
       final owner = UserRecord.fromJson(ownerMap);
-      final postDraft = _prefs.getString('postDraft');
+      final postDraft = _prefs.getString(draftType);
       if (postDraft != null) {
         final postMap =
             jsonDecode(postDraft.toString()) as Map<String, dynamic>;
@@ -40,6 +40,10 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
       return Post(
         ownerId: userId,
         owner: owner,
+        poll: Poll(
+          ownerId: userId,
+          owner: owner,
+        ),
       );
     } catch (e) {
       throw const CacheException(message: 'Something went wrong');
@@ -49,6 +53,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
   @override
   Future<void> savePostDraft({
     required Post post,
+    required String draftType,
   }) async {
     try {
       var savedImagesPath = <String>[];
@@ -56,7 +61,7 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
       var existingUploadedVideo = '';
       var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/postDraft');
+      final directory = Directory('${appDir.path}/$draftType');
       if (!await directory.exists()) {
         await directory.create(recursive: true);
       }
@@ -101,18 +106,18 @@ class PostLocalDatabaseImpl extends PostLocalDatabase {
         owner: owner,
       ).toJson();
       final jsonString = jsonEncode(postDraft);
-      await _prefs.setString('postDraft', jsonString);
+      await _prefs.setString(draftType, jsonString);
     } catch (e) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<void> deletePostDraft() async {
+  Future<void> deletePostDraft({required String draftType}) async {
     try {
-      await _prefs.remove('postDraft');
+      await _prefs.remove(draftType);
       final appDir = await getApplicationDocumentsDirectory();
-      final directory = Directory('${appDir.path}/postDraft');
+      final directory = Directory('${appDir.path}/$draftType');
       if (!await directory.exists()) {
         await directory.delete(recursive: true);
       }

@@ -16,7 +16,8 @@ fields:
     likedBy: List<int>?
     bookmarkedBy: List<int>?
     commentCount: int?, default=0
+    poll: Poll?, relation(optional, onDelete=NoAction)
     project: Project?, relation(optional, onDelete=NoAction)
-    parent: Post?, relation(optional, onDelete=SetNull,)
+    parent: Post?, relation(optional, onDelete=NoAction,)
     quotedOrRepostedFromUser: UserRecord?, relation(optional)
     isDeleted: bool?, default=false

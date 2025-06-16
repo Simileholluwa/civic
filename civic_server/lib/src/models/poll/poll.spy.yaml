@@ -2,25 +2,9 @@ class: Poll
 table: poll
 
 fields: 
-    owner: UserRecord?, relation 
-    question: String?
-    taggedUsers: List<UserRecord>?
-    locations: List<AWSPlaces>?
-    mentions: List<UserRecord>?
-    options: List<PollOption>?
-    tags: List<String>?
-    createdAt: DateTime?, default=now
+    post: Post?, relation(onDelete=Cascade, optional)
+    owner: UserRecord?, relation
+    options: List<PollOption>?, relation
     expiresAt: DateTime?
-    hashtags: List<PollsHashtags>?, relation(name=polls_pollshashtags)
-    votedBy: List<int>?,
-    numberOfLikes: int?, default=0
-    numberOfComments: int?, default=0
-    numberOfViews: int?, default=0
-    imagesUrl: List<String>?
-    updatedAt: DateTime?
-    commentCount: int?, default=0
-    quoteCount: int?, default=0
-    likedBy: List<int>?
-    bookmarkedBy: List<int>?
-
+    votedBy: List<int>?
     
