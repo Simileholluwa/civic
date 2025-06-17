@@ -22,7 +22,7 @@ abstract class PollOption
     this.poll,
     this.option,
     this.votedBy,
-  }) : _pollOptionsPollId = null;
+  });
 
   factory PollOption({
     int? id,
@@ -33,7 +33,7 @@ abstract class PollOption
   }) = _PollOptionImpl;
 
   factory PollOption.fromJson(Map<String, dynamic> jsonSerialization) {
-    return PollOptionImplicit._(
+    return PollOption(
       id: jsonSerialization['id'] as int?,
       pollId: jsonSerialization['pollId'] as int,
       poll: jsonSerialization['poll'] == null
@@ -44,7 +44,6 @@ abstract class PollOption
       votedBy: (jsonSerialization['votedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
-      $_pollOptionsPollId: jsonSerialization['_pollOptionsPollId'] as int?,
     );
   }
 
@@ -62,8 +61,6 @@ abstract class PollOption
   String? option;
 
   List<int>? votedBy;
-
-  final int? _pollOptionsPollId;
 
   @override
   _i1.Table<int?> get table => t;
@@ -86,7 +83,6 @@ abstract class PollOption
       if (poll != null) 'poll': poll?.toJson(),
       if (option != null) 'option': option,
       if (votedBy != null) 'votedBy': votedBy?.toJson(),
-      if (_pollOptionsPollId != null) '_pollOptionsPollId': _pollOptionsPollId,
     };
   }
 
@@ -159,7 +155,7 @@ class _PollOptionImpl extends PollOption {
     Object? option = _Undefined,
     Object? votedBy = _Undefined,
   }) {
-    return PollOptionImplicit._(
+    return PollOption(
       id: id is int? ? id : this.id,
       pollId: pollId ?? this.pollId,
       poll: poll is _i2.Poll? ? poll : this.poll?.copyWith(),
@@ -167,44 +163,8 @@ class _PollOptionImpl extends PollOption {
       votedBy: votedBy is List<int>?
           ? votedBy
           : this.votedBy?.map((e0) => e0).toList(),
-      $_pollOptionsPollId: this._pollOptionsPollId,
     );
   }
-}
-
-class PollOptionImplicit extends _PollOptionImpl {
-  PollOptionImplicit._({
-    int? id,
-    required int pollId,
-    _i2.Poll? poll,
-    String? option,
-    List<int>? votedBy,
-    int? $_pollOptionsPollId,
-  })  : _pollOptionsPollId = $_pollOptionsPollId,
-        super(
-          id: id,
-          pollId: pollId,
-          poll: poll,
-          option: option,
-          votedBy: votedBy,
-        );
-
-  factory PollOptionImplicit(
-    PollOption pollOption, {
-    int? $_pollOptionsPollId,
-  }) {
-    return PollOptionImplicit._(
-      id: pollOption.id,
-      pollId: pollOption.pollId,
-      poll: pollOption.poll,
-      option: pollOption.option,
-      votedBy: pollOption.votedBy,
-      $_pollOptionsPollId: $_pollOptionsPollId,
-    );
-  }
-
-  @override
-  final int? _pollOptionsPollId;
 }
 
 class PollOptionTable extends _i1.Table<int?> {
@@ -221,10 +181,6 @@ class PollOptionTable extends _i1.Table<int?> {
       'votedBy',
       this,
     );
-    $_pollOptionsPollId = _i1.ColumnInt(
-      '_pollOptionsPollId',
-      this,
-    );
   }
 
   late final _i1.ColumnInt pollId;
@@ -234,8 +190,6 @@ class PollOptionTable extends _i1.Table<int?> {
   late final _i1.ColumnString option;
 
   late final _i1.ColumnSerializable votedBy;
-
-  late final _i1.ColumnInt $_pollOptionsPollId;
 
   _i2.PollTable get poll {
     if (_poll != null) return _poll!;
@@ -252,15 +206,6 @@ class PollOptionTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        pollId,
-        option,
-        votedBy,
-        $_pollOptionsPollId,
-      ];
-
-  @override
-  List<_i1.Column> get managedColumns => [
         id,
         pollId,
         option,

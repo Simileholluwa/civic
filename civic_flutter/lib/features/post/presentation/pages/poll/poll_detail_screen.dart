@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PollDetailScreen extends ConsumerWidget {
   const PollDetailScreen({
@@ -22,7 +23,9 @@ class PollDetailScreen extends ConsumerWidget {
     final data = post == null
         ? ref.watch(
             postDetailProvider(
-              id, 'pollDraft', PostType.poll,
+              id,
+              'pollDraft',
+              PostType.poll,
             ),
           )
         : AsyncValue.data(
@@ -154,34 +157,38 @@ class PollDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const Divider(
-                    height: 0,
+                  Column(
+                    children: [
+                      const Divider(
+                        height: 0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: PostDetailOptions(
+                          post: newPost,
+                        ),
+                      ),
+                      const Divider(
+                        height: 0,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                  PostCommentCard(
+                    postId: id,
+                    firstPageProgressIndicator: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                      ),
+                      child: Center(
+                        child: LoadingAnimationWidget.progressiveDots(
+                          color: TColors.primary,
+                          size: 50,
+                        ),
+                      ),
                     ),
-                    child: PostDetailOptions(
-                      post: newPost,
-                    ),
                   ),
-                  const Divider(
-                    height: 0,
-                  ),
-                  // PollCommentCard(
-                  //   postId: data.id!,
-                  //   firstPageProgressIndicator: Padding(
-                  //     padding: const EdgeInsets.only(
-                  //       top: 30,
-                  //     ),
-                  //     child: Center(
-                  //       child: LoadingAnimationWidget.progressiveDots(
-                  //         color: TColors.primary,
-                  //         size: 50,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             );
@@ -212,7 +219,11 @@ class PollDetailScreen extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ContentSingleButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push('/create/post/0', extra: {
+                    'parent': value,
+                  });
+                },
                 text: 'Share your opinion',
                 buttonIcon: Iconsax.magicpen5,
               ),

@@ -58,7 +58,7 @@ abstract class PostRemoteDatabase {
     required Post post,
   });
   Future<void> castVote({
-    required int pollId,
+    required int postId,
     required int optionId,
   });
   Future<PostList> getPolls({
@@ -370,12 +370,12 @@ class PostRemoteDatabaseImpl implements PostRemoteDatabase {
 
   @override
   Future<void> castVote({
-    required int pollId,
+    required int postId,
     required int optionId,
   }) async {
     try {
       final result = await _client.post.castVote(
-        pollId,
+        postId,
         optionId,
       );
       return result;

@@ -43,17 +43,19 @@ class PostState {
       mentions: post.mentions ?? [],
       tags: post.tags ?? [],
       controller: MentionHashtagLinkTextEditingController(text: post.text),
-      optionText: poll?.options!.map((e) => e.option!).toList(
+      optionText: poll?.options?.map((e) => e.option!).toList(
                 growable: false,
               ) ??
           ['', ''],
       controllers: List.generate(
-        poll?.options!.length ?? 0,
+        poll?.options?.length ?? 2,
         (index) => TextEditingController(
-          text: poll?.options![index].option,
+          text: poll?.options?[index].option,
         ),
       ),
-      expiresAt: poll?.expiresAt,
+      expiresAt: poll?.expiresAt ?? DateTime.now().add(
+        const Duration(days: 1),
+      ),
     );
   }
 

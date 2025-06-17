@@ -12,15 +12,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../post/post.dart' as _i2;
-import '../user/user_record.dart' as _i3;
-import '../poll/poll_option.dart' as _i4;
+import '../user/user_record.dart' as _i2;
+import '../poll/poll_option.dart' as _i3;
 
 abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Poll._({
     this.id,
-    this.postId,
-    this.post,
     required this.ownerId,
     this.owner,
     this.options,
@@ -30,11 +27,9 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   factory Poll({
     int? id,
-    int? postId,
-    _i2.Post? post,
     required int ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   }) = _PollImpl;
@@ -42,18 +37,13 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
     return Poll(
       id: jsonSerialization['id'] as int?,
-      postId: jsonSerialization['postId'] as int?,
-      post: jsonSerialization['post'] == null
-          ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
+          : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       options: (jsonSerialization['options'] as List?)
-          ?.map((e) => _i4.PollOption.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.PollOption.fromJson((e as Map<String, dynamic>)))
           .toList(),
       expiresAt: jsonSerialization['expiresAt'] == null
           ? null
@@ -71,15 +61,11 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   int? id;
 
-  int? postId;
-
-  _i2.Post? post;
-
   int ownerId;
 
-  _i3.UserRecord? owner;
+  _i2.UserRecord? owner;
 
-  List<_i4.PollOption>? options;
+  List<_i3.PollOption>? options;
 
   DateTime? expiresAt;
 
@@ -93,11 +79,9 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @_i1.useResult
   Poll copyWith({
     int? id,
-    int? postId,
-    _i2.Post? post,
     int? ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   });
@@ -105,8 +89,6 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      if (postId != null) 'postId': postId,
-      if (post != null) 'post': post?.toJson(),
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       if (options != null)
@@ -120,8 +102,6 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      if (postId != null) 'postId': postId,
-      if (post != null) 'post': post?.toJsonForProtocol(),
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
       if (options != null)
@@ -132,12 +112,10 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   }
 
   static PollInclude include({
-    _i2.PostInclude? post,
-    _i3.UserRecordInclude? owner,
-    _i4.PollOptionIncludeList? options,
+    _i2.UserRecordInclude? owner,
+    _i3.PollOptionIncludeList? options,
   }) {
     return PollInclude._(
-      post: post,
       owner: owner,
       options: options,
     );
@@ -174,17 +152,13 @@ class _Undefined {}
 class _PollImpl extends Poll {
   _PollImpl({
     int? id,
-    int? postId,
-    _i2.Post? post,
     required int ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   }) : super._(
           id: id,
-          postId: postId,
-          post: post,
           ownerId: ownerId,
           owner: owner,
           options: options,
@@ -198,8 +172,6 @@ class _PollImpl extends Poll {
   @override
   Poll copyWith({
     Object? id = _Undefined,
-    Object? postId = _Undefined,
-    Object? post = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
     Object? options = _Undefined,
@@ -208,11 +180,9 @@ class _PollImpl extends Poll {
   }) {
     return Poll(
       id: id is int? ? id : this.id,
-      postId: postId is int? ? postId : this.postId,
-      post: post is _i2.Post? ? post : this.post?.copyWith(),
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
-      options: options is List<_i4.PollOption>?
+      owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
+      options: options is List<_i3.PollOption>?
           ? options
           : this.options?.map((e0) => e0.copyWith()).toList(),
       expiresAt: expiresAt is DateTime? ? expiresAt : this.expiresAt,
@@ -225,10 +195,6 @@ class _PollImpl extends Poll {
 
 class PollTable extends _i1.Table<int?> {
   PollTable({super.tableRelation}) : super(tableName: 'poll') {
-    postId = _i1.ColumnInt(
-      'postId',
-      this,
-    );
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -243,74 +209,57 @@ class PollTable extends _i1.Table<int?> {
     );
   }
 
-  late final _i1.ColumnInt postId;
-
-  _i2.PostTable? _post;
-
   late final _i1.ColumnInt ownerId;
 
-  _i3.UserRecordTable? _owner;
+  _i2.UserRecordTable? _owner;
 
-  _i4.PollOptionTable? ___options;
+  _i3.PollOptionTable? ___options;
 
-  _i1.ManyRelation<_i4.PollOptionTable>? _options;
+  _i1.ManyRelation<_i3.PollOptionTable>? _options;
 
   late final _i1.ColumnDateTime expiresAt;
 
   late final _i1.ColumnSerializable votedBy;
 
-  _i2.PostTable get post {
-    if (_post != null) return _post!;
-    _post = _i1.createRelationTable(
-      relationFieldName: 'post',
-      field: Poll.t.postId,
-      foreignField: _i2.Post.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i2.PostTable(tableRelation: foreignTableRelation),
-    );
-    return _post!;
-  }
-
-  _i3.UserRecordTable get owner {
+  _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
       relationFieldName: 'owner',
       field: Poll.t.ownerId,
-      foreignField: _i3.UserRecord.t.id,
+      foreignField: _i2.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i3.UserRecordTable(tableRelation: foreignTableRelation),
+          _i2.UserRecordTable(tableRelation: foreignTableRelation),
     );
     return _owner!;
   }
 
-  _i4.PollOptionTable get __options {
+  _i3.PollOptionTable get __options {
     if (___options != null) return ___options!;
     ___options = _i1.createRelationTable(
       relationFieldName: '__options',
       field: Poll.t.id,
-      foreignField: _i4.PollOption.t.$_pollOptionsPollId,
+      foreignField: _i3.PollOption.t.pollId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i4.PollOptionTable(tableRelation: foreignTableRelation),
+          _i3.PollOptionTable(tableRelation: foreignTableRelation),
     );
     return ___options!;
   }
 
-  _i1.ManyRelation<_i4.PollOptionTable> get options {
+  _i1.ManyRelation<_i3.PollOptionTable> get options {
     if (_options != null) return _options!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'options',
       field: Poll.t.id,
-      foreignField: _i4.PollOption.t.$_pollOptionsPollId,
+      foreignField: _i3.PollOption.t.pollId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i4.PollOptionTable(tableRelation: foreignTableRelation),
+          _i3.PollOptionTable(tableRelation: foreignTableRelation),
     );
-    _options = _i1.ManyRelation<_i4.PollOptionTable>(
+    _options = _i1.ManyRelation<_i3.PollOptionTable>(
       tableWithRelations: relationTable,
-      table: _i4.PollOptionTable(
+      table: _i3.PollOptionTable(
           tableRelation: relationTable.tableRelation!.lastRelation),
     );
     return _options!;
@@ -319,7 +268,6 @@ class PollTable extends _i1.Table<int?> {
   @override
   List<_i1.Column> get columns => [
         id,
-        postId,
         ownerId,
         expiresAt,
         votedBy,
@@ -327,9 +275,6 @@ class PollTable extends _i1.Table<int?> {
 
   @override
   _i1.Table? getRelationTable(String relationField) {
-    if (relationField == 'post') {
-      return post;
-    }
     if (relationField == 'owner') {
       return owner;
     }
@@ -342,24 +287,19 @@ class PollTable extends _i1.Table<int?> {
 
 class PollInclude extends _i1.IncludeObject {
   PollInclude._({
-    _i2.PostInclude? post,
-    _i3.UserRecordInclude? owner,
-    _i4.PollOptionIncludeList? options,
+    _i2.UserRecordInclude? owner,
+    _i3.PollOptionIncludeList? options,
   }) {
-    _post = post;
     _owner = owner;
     _options = options;
   }
 
-  _i2.PostInclude? _post;
+  _i2.UserRecordInclude? _owner;
 
-  _i3.UserRecordInclude? _owner;
-
-  _i4.PollOptionIncludeList? _options;
+  _i3.PollOptionIncludeList? _options;
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'post': _post,
         'owner': _owner,
         'options': _options,
       };
@@ -619,11 +559,11 @@ class PollAttachRepository {
   const PollAttachRepository._();
 
   /// Creates a relation between this [Poll] and the given [PollOption]s
-  /// by setting each [PollOption]'s foreign key `_pollOptionsPollId` to refer to this [Poll].
+  /// by setting each [PollOption]'s foreign key `pollId` to refer to this [Poll].
   Future<void> options(
     _i1.Session session,
     Poll poll,
-    List<_i4.PollOption> pollOption, {
+    List<_i3.PollOption> pollOption, {
     _i1.Transaction? transaction,
   }) async {
     if (pollOption.any((e) => e.id == null)) {
@@ -633,15 +573,11 @@ class PollAttachRepository {
       throw ArgumentError.notNull('poll.id');
     }
 
-    var $pollOption = pollOption
-        .map((e) => _i4.PollOptionImplicit(
-              e,
-              $_pollOptionsPollId: poll.id,
-            ))
-        .toList();
-    await session.db.update<_i4.PollOption>(
+    var $pollOption =
+        pollOption.map((e) => e.copyWith(pollId: poll.id)).toList();
+    await session.db.update<_i3.PollOption>(
       $pollOption,
-      columns: [_i4.PollOption.t.$_pollOptionsPollId],
+      columns: [_i3.PollOption.t.pollId],
       transaction: transaction,
     );
   }
@@ -650,35 +586,12 @@ class PollAttachRepository {
 class PollAttachRowRepository {
   const PollAttachRowRepository._();
 
-  /// Creates a relation between the given [Poll] and [Post]
-  /// by setting the [Poll]'s foreign key `postId` to refer to the [Post].
-  Future<void> post(
-    _i1.Session session,
-    Poll poll,
-    _i2.Post post, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (poll.id == null) {
-      throw ArgumentError.notNull('poll.id');
-    }
-    if (post.id == null) {
-      throw ArgumentError.notNull('post.id');
-    }
-
-    var $poll = poll.copyWith(postId: post.id);
-    await session.db.updateRow<Poll>(
-      $poll,
-      columns: [Poll.t.postId],
-      transaction: transaction,
-    );
-  }
-
   /// Creates a relation between the given [Poll] and [UserRecord]
   /// by setting the [Poll]'s foreign key `ownerId` to refer to the [UserRecord].
   Future<void> owner(
     _i1.Session session,
     Poll poll,
-    _i3.UserRecord owner, {
+    _i2.UserRecord owner, {
     _i1.Transaction? transaction,
   }) async {
     if (poll.id == null) {
@@ -697,11 +610,11 @@ class PollAttachRowRepository {
   }
 
   /// Creates a relation between this [Poll] and the given [PollOption]
-  /// by setting the [PollOption]'s foreign key `_pollOptionsPollId` to refer to this [Poll].
+  /// by setting the [PollOption]'s foreign key `pollId` to refer to this [Poll].
   Future<void> options(
     _i1.Session session,
     Poll poll,
-    _i4.PollOption pollOption, {
+    _i3.PollOption pollOption, {
     _i1.Transaction? transaction,
   }) async {
     if (pollOption.id == null) {
@@ -711,13 +624,10 @@ class PollAttachRowRepository {
       throw ArgumentError.notNull('poll.id');
     }
 
-    var $pollOption = _i4.PollOptionImplicit(
-      pollOption,
-      $_pollOptionsPollId: poll.id,
-    );
-    await session.db.updateRow<_i4.PollOption>(
+    var $pollOption = pollOption.copyWith(pollId: poll.id);
+    await session.db.updateRow<_i3.PollOption>(
       $pollOption,
-      columns: [_i4.PollOption.t.$_pollOptionsPollId],
+      columns: [_i3.PollOption.t.pollId],
       transaction: transaction,
     );
   }
@@ -727,28 +637,23 @@ class PollDetachRepository {
   const PollDetachRepository._();
 
   /// Detaches the relation between this [Poll] and the given [PollOption]
-  /// by setting the [PollOption]'s foreign key `_pollOptionsPollId` to `null`.
+  /// by setting the [PollOption]'s foreign key `pollId` to `null`.
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
   Future<void> options(
     _i1.Session session,
-    List<_i4.PollOption> pollOption, {
+    List<_i3.PollOption> pollOption, {
     _i1.Transaction? transaction,
   }) async {
     if (pollOption.any((e) => e.id == null)) {
       throw ArgumentError.notNull('pollOption.id');
     }
 
-    var $pollOption = pollOption
-        .map((e) => _i4.PollOptionImplicit(
-              e,
-              $_pollOptionsPollId: null,
-            ))
-        .toList();
-    await session.db.update<_i4.PollOption>(
+    var $pollOption = pollOption.map((e) => e.copyWith(pollId: null)).toList();
+    await session.db.update<_i3.PollOption>(
       $pollOption,
-      columns: [_i4.PollOption.t.$_pollOptionsPollId],
+      columns: [_i3.PollOption.t.pollId],
       transaction: transaction,
     );
   }
@@ -757,49 +662,24 @@ class PollDetachRepository {
 class PollDetachRowRepository {
   const PollDetachRowRepository._();
 
-  /// Detaches the relation between this [Poll] and the [Post] set in `post`
-  /// by setting the [Poll]'s foreign key `postId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> post(
-    _i1.Session session,
-    Poll poll, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (poll.id == null) {
-      throw ArgumentError.notNull('poll.id');
-    }
-
-    var $poll = poll.copyWith(postId: null);
-    await session.db.updateRow<Poll>(
-      $poll,
-      columns: [Poll.t.postId],
-      transaction: transaction,
-    );
-  }
-
   /// Detaches the relation between this [Poll] and the given [PollOption]
-  /// by setting the [PollOption]'s foreign key `_pollOptionsPollId` to `null`.
+  /// by setting the [PollOption]'s foreign key `pollId` to `null`.
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
   Future<void> options(
     _i1.Session session,
-    _i4.PollOption pollOption, {
+    _i3.PollOption pollOption, {
     _i1.Transaction? transaction,
   }) async {
     if (pollOption.id == null) {
       throw ArgumentError.notNull('pollOption.id');
     }
 
-    var $pollOption = _i4.PollOptionImplicit(
-      pollOption,
-      $_pollOptionsPollId: null,
-    );
-    await session.db.updateRow<_i4.PollOption>(
+    var $pollOption = pollOption.copyWith(pollId: null);
+    await session.db.updateRow<_i3.PollOption>(
       $pollOption,
-      columns: [_i4.PollOption.t.$_pollOptionsPollId],
+      columns: [_i3.PollOption.t.pollId],
       transaction: transaction,
     );
   }

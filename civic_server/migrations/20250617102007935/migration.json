@@ -1,0 +1,45 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll_option",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "_pollOptionsPollId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [
+          "poll_option_fk_1"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"_pollOptionsPollId\" of table \"poll_option\" will be dropped.",
+            "table": "poll_option",
+            "columns": [
+              "_pollOptionsPollId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"_pollOptionsPollId\" of table \"poll_option\" will be dropped.",
+      "table": "poll_option",
+      "columns": [
+        "_pollOptionsPollId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

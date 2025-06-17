@@ -12,17 +12,19 @@ class PostBottomOptions extends ConsumerWidget {
     this.showMedia = true,
     this.isReplyOrComment = false,
     this.maxLength = 2500,
+    this.tagLoc,
   });
   final Post post;
   final bool showMedia;
   final bool isReplyOrComment;
   final int maxLength;
+  final bool? tagLoc;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(regularPostProvider(post));
     final postNotifier = ref.watch(regularPostProvider(post).notifier);
-    final showTagLoc =
+    final showTagLoc = tagLoc ??
         postState.imageUrls.isNotEmpty || postState.videoUrl.isNotEmpty;
     return Container(
       height: 55,

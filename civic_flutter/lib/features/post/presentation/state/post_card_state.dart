@@ -86,10 +86,10 @@ class PostCardState {
       isFollower:
           userId != post.ownerId && post.owner!.followers!.contains(userId),
       numberOfVoters: NumberFormat("#,##0").format(poll?.votedBy!.length ?? 0),
-      numberOfOptionVoters: poll?.options!.map((e) => e.votedBy).length ?? 0,
-      options: poll?.options!.map((e) => e.option!).toList() ?? <String>[],
-      pollOptions: poll?.options! ?? <PollOption>[],
-      votedOption: poll?.options!.firstWhere(
+      numberOfOptionVoters: poll?.options?.map((e) => e.votedBy).length ?? 0,
+      options: poll?.options?.map((e) => e.option!).toList() ?? <String>[],
+      pollOptions: poll?.options ?? <PollOption>[],
+      votedOption: poll?.options?.firstWhere(
         (e) => e.votedBy!.contains(
           userId,
         ),
@@ -97,9 +97,9 @@ class PostCardState {
           pollId: 0,
         ),
       ),
-      pollEnded: poll?.expiresAt!.isBefore(DateTime.now()) ?? false,
-      hasVoted: poll?.votedBy!.contains(userId) ?? false,
-      totalVotes: poll?.votedBy!.length ?? 0,
+      pollEnded: poll?.expiresAt?.isBefore(DateTime.now()) ?? false,
+      hasVoted: poll?.votedBy?.contains(userId) ?? false,
+      totalVotes: poll?.votedBy?.length ?? 0,
     );
   }
 

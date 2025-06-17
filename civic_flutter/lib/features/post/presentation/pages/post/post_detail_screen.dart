@@ -157,19 +157,23 @@ class PostDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const Divider(
-                    height: 0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: PostDetailOptions(
-                      post: newPost,
-                    ),
-                  ),
-                  const Divider(
-                    height: 0,
+                  Column(
+                    children: [
+                      const Divider(
+                        height: 0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: PostDetailOptions(
+                          post: newPost,
+                        ),
+                      ),
+                      const Divider(
+                        height: 0,
+                      ),
+                    ],
                   ),
                   PostCommentCard(
                     postId: value.id!,
@@ -208,8 +212,8 @@ class PostDetailScreen extends ConsumerWidget {
         },
       ),
       bottomNavigationBar: data.when(
-        data: (data) {
-          if (data == null) {
+        data: (value) {
+          if (value == null) {
             return null;
           } else {
             return Padding(
@@ -217,7 +221,7 @@ class PostDetailScreen extends ConsumerWidget {
               child: ContentSingleButton(
                 onPressed: () {
                   context.push('/create/post/0', extra: {
-                    'parent': data,
+                    'parent': value,
                   });
                 },
                 text: 'Share your opinion',

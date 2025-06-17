@@ -72,7 +72,7 @@ abstract class PostRepository {
     required int limit,
   });
   Future<Either<Failure, void>> castVote({
-    required int pollId,
+    required int postId,
     required int optionId,
   });
 }

@@ -10,9 +10,11 @@ class PollDurationAndAddOptions extends ConsumerWidget {
   const PollDurationAndAddOptions({
     super.key,
     required this.post,
+    required this.isEditing,
   });
 
   final Post post;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +27,7 @@ class PollDurationAndAddOptions extends ConsumerWidget {
         children: [
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: postState.controllers.length < 4
+              onPressed: postState.controllers.length < 4 && !isEditing
                   ? () => postNotifier.addOption(text: '')
                   : null,
               label: const Text(
@@ -34,12 +36,12 @@ class PollDurationAndAddOptions extends ConsumerWidget {
               icon: Icon(
                 Iconsax.add_circle,
                 size: 20,
-                color: postState.controllers.length < 5
+                color: postState.controllers.length < 4 && !isEditing
                     ? TColors.primary
                     : Theme.of(context).disabledColor,
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: postState.controllers.length < 5
+                backgroundColor: postState.controllers.length < 4
                     ? Theme.of(context).cardColor
                     : Theme.of(context).disabledColor,
                 padding: const EdgeInsets.symmetric(
@@ -52,23 +54,27 @@ class PollDurationAndAddOptions extends ConsumerWidget {
           Expanded(
             flex: 2,
             child: ElevatedButton.icon(
-              onPressed: () async {
-                final selectedDateTime = await createContentPollDuration(
-                  context,
-                );
-                if (selectedDateTime != null) {
-                  postNotifier.setExpiration(selectedDateTime);
-                }
-              },
+              onPressed: !isEditing
+                  ? () async {
+                      final selectedDateTime = await createContentPollDuration(
+                        context,
+                      );
+                      if (selectedDateTime != null) {
+                        postNotifier.setExpiration(selectedDateTime);
+                      }
+                    }
+                  : null,
               label: Text(
                 DateFormat('hh:mm a • MMM d, y').format(
                   postState.expiresAt!,
                 ),
               ),
-              icon: const Icon(
+              icon: Icon(
                 Iconsax.calendar_1,
                 size: 20,
-                color: TColors.primary,
+                color: !isEditing
+                    ? TColors.primary
+                    : Theme.of(context).disabledColor,
               ),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(

@@ -75,8 +75,7 @@ class CreatePollScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await postNotifier.sendAPoll(
-                  data.value?.id,
-                  data.value?.pollId,
+                  data.value?.id, data.value?.pollId
                 );
               },
               title: CreateContentPrivacy(),
@@ -149,6 +148,7 @@ class CreatePollScreen extends ConsumerWidget {
               }
               return CreatePollWidget(
                 post: value,
+                isEditing: data.value?.id != null,
               );
             },
             error: (error, st) {

@@ -12,8 +12,8 @@ class CreatePostScreen extends ConsumerWidget {
   const CreatePostScreen({
     super.key,
     required this.id,
-    required this.project,
-    required this.parent,
+    this.project,
+    this.parent,
     this.post,
   });
 
@@ -30,7 +30,8 @@ class CreatePostScreen extends ConsumerWidget {
         ? ref.watch(
             postDetailProvider(
               id,
-              'postDraft', PostType.regular,
+              'postDraft',
+              PostType.regular,
             ),
           )
         : AsyncValue.data(
@@ -58,7 +59,8 @@ class CreatePostScreen extends ConsumerWidget {
       isReplyOrComment = parent != null;
       if (isReplyOrComment) {
         isComment = (parent!.postType == PostType.regular ||
-                parent!.postType == PostType.projectRepost);
+            parent!.postType == PostType.projectRepost ||
+            parent!.postType == PostType.poll);
 
         isReply = parent!.postType == PostType.comment;
         username = parent!.owner!.userInfo!.userName!;

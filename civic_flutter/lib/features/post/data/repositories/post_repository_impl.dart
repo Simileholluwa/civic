@@ -329,12 +329,12 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, void>> castVote({
-    required int pollId,
+    required int postId,
     required int optionId,
   }) async {
     try {
       final result = await _remoteDatabase.castVote(
-        pollId: pollId,
+        postId: postId,
         optionId: optionId,
       );
       return Right(result);

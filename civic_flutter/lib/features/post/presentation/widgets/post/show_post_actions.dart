@@ -14,10 +14,12 @@ class ShowPostActions extends ConsumerWidget {
     this.fromDetails = false,
     this.isReply = false,
     this.isComment = false,
+    this.isPoll = false,
   });
 
   final Post post;
   final bool fromDetails;
+  final bool isPoll;
   final bool isReply;
   final bool isComment;
   final int originalPostId;
@@ -120,14 +122,23 @@ class ShowPostActions extends ConsumerWidget {
             icon: Iconsax.edit,
             onTap: () {
               context.pop();
-              context.push(
-                '/create/post/${post.id}',
-                extra: {
-                  'post': post,
-                  'project': post.project,
-                  'parent': post.parent,
-                },
-              );
+              if (isPoll) {
+                context.push(
+                  '/create/poll/${post.id}',
+                  extra: {
+                    'post': post,
+                  },
+                );
+              } else {
+                context.push(
+                  '/create/post/${post.id}',
+                  extra: {
+                    'post': post,
+                    'project': post.project,
+                    'parent': post.parent,
+                  },
+                );
+              }
             },
           ),
         if (postCardState.isOwner)

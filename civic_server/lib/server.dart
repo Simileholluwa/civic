@@ -1,6 +1,5 @@
 import 'package:civic_server/env_settings.dart';
 import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
-import 'package:civic_server/src/future_calls/poll_future_call.dart';
 import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:civic_server/src/future_calls/project_future_call.dart';
 import 'package:serverpod/serverpod.dart';
@@ -51,7 +50,6 @@ void run(List<String> args) async {
 
   // Future calls
   pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
-  pod.registerFutureCall(SchedulePollFutureCall(), 'schedulePollFutureCall');
   pod.registerFutureCall(ScheduleProjectFutureCall(), 'scheduleProjectFutureCall');
 
   // Auth

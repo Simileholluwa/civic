@@ -172,14 +172,14 @@ class EndpointPost extends _i1.EndpointRef {
       );
 
   _i2.Future<void> castVote(
-    int pollId,
+    int postId,
     int optionId,
   ) =>
       caller.callServerEndpoint<void>(
         'post',
         'castVote',
         {
-          'pollId': pollId,
+          'postId': postId,
           'optionId': optionId,
         },
       );

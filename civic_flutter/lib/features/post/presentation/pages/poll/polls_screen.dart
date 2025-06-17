@@ -4,7 +4,6 @@ import 'package:civic_flutter/features/post/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 
 class PollsScreen extends ConsumerWidget {
   const PollsScreen({super.key});
@@ -42,13 +41,13 @@ class PollCard extends ConsumerWidget {
         post,
       ),
     );
+    final newPost = livePost.value ?? post;
     final postCardState = ref.watch(
       postCardWidgetProvider(
-        livePost.value ?? post,
+        newPost,
       ),
     );
 
-    final newPost = livePost.value ?? post;
     return InkWell(
       onTap: fromDetails
           ? null
@@ -126,96 +125,16 @@ class PollCard extends ConsumerWidget {
             ),
           ),
           if (!fromDetails)
-            PollInteractionButtons(post: newPost),
-        ],
-      ),
-    );
-  }
-}
-
-class PollInteractionButtons extends ConsumerWidget {
-  const PollInteractionButtons({
-    super.key,
-    required this.post,
-  });
-
-  final Post post;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final postCardState = ref.watch(
-      postCardWidgetProvider(
-      post,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      postCardWidgetProvider(
-        post,
-      ).notifier,
-    );
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ContentInteractionButton(
-            icon: postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
-            onTap: () async {
-              await postCardNotifier.togglePostLikeStatus(
-                post.id!,
-              );
-            },
-            color: postCardState.hasLiked
-                ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
-            text: postCardState.numberOfLikes,
-          ),
-          ContentInteractionButton(
-            icon: Iconsax.message,
-            onTap: () {},
-            color: Theme.of(context).textTheme.labelMedium!.color!,
-            text: postCardState.numberOfComments,
-          ),
-          ContentInteractionButton(
-            icon: Iconsax.repeate_music,
-            onTap: () {},
-            color: Theme.of(context).textTheme.labelMedium!.color!,
-            text: postCardState.quoteCount,
-          ),
-          ContentInteractionButton(
-            icon: postCardState.hasBookmarked
-                ? Icons.bookmark
-                : Icons.bookmark_add_outlined,
-            onTap: () async {
-              await postCardNotifier.togglePostBookmarkStatus(
-                post.id!,
-              );
-            },
-            color: postCardState.hasBookmarked
-                ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
-            text: postCardState.numberOfBookmarks,
-          ),
-          ContentInteractionButton(
-            icon: Iconsax.more_circle,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (ctx) {
-                  return AlertDialog(
-                    contentPadding: const EdgeInsets.only(
-                      bottom: 16,
-                    ),
-                    content: ShowPostActions(
-                      post: post,
-                      originalPostId: post.id!,
-                    ),
-                  );
-                },
-              );
-            },
-            color: Theme.of(context).textTheme.labelMedium!.color!,
-          ),
+            PostInteractionButtons(
+              post: newPost,
+              onReply: () {
+                context.push(
+                  '/feed/post/${post.id}/comments',
+                );
+              },
+              originalPostId: post.id!,
+              isPoll: true,
+            ),
         ],
       ),
     );
@@ -232,16 +151,24 @@ class PollOptionsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final livePost = ref.watch(
+      postStreamProvider(
+        post.id!,
+        post,
+      ),
+    );
+    final newPost = livePost.value ?? post;
     final postCardState = ref.watch(
       postCardWidgetProvider(
-        post,
+        newPost,
       ),
     );
     final postCardNotifier = ref.watch(
       postCardWidgetProvider(
-        post,
+        newPost,
       ).notifier,
     );
+
     return ListView.separated(
       itemCount: postCardState.options.length,
       shrinkWrap: true,
@@ -265,7 +192,7 @@ class PollOptionsCard extends ConsumerWidget {
               ? null
               : () async {
                   await postCardNotifier.castVote(
-                    post.pollId!,
+                    post.id!,
                     postCardState.pollOptions[index].id!,
                   );
                 },

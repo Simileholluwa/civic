@@ -11,11 +11,13 @@ class PollOptionsTextField extends ConsumerWidget {
     required this.index,
     required this.controller,
     required this.post,
+    required this.isEditing,
   });
 
   final int index;
   final TextEditingController controller;
   final Post post;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +26,9 @@ class PollOptionsTextField extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(6, 8, 4, 8),
       child: TextFormField(
+        enabled: !isEditing,
         textCapitalization: TextCapitalization.sentences,
+        readOnly: !isEditing,
         maxLength: 35,
         decoration: InputDecoration(
           hintText: 'Option ${index + 1}',

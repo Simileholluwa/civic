@@ -10,15 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../post/post.dart' as _i2;
-import '../user/user_record.dart' as _i3;
-import '../poll/poll_option.dart' as _i4;
+import '../user/user_record.dart' as _i2;
+import '../poll/poll_option.dart' as _i3;
 
 abstract class Poll implements _i1.SerializableModel {
   Poll._({
     this.id,
-    this.postId,
-    this.post,
     required this.ownerId,
     this.owner,
     this.options,
@@ -28,11 +25,9 @@ abstract class Poll implements _i1.SerializableModel {
 
   factory Poll({
     int? id,
-    int? postId,
-    _i2.Post? post,
     required int ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   }) = _PollImpl;
@@ -40,18 +35,13 @@ abstract class Poll implements _i1.SerializableModel {
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
     return Poll(
       id: jsonSerialization['id'] as int?,
-      postId: jsonSerialization['postId'] as int?,
-      post: jsonSerialization['post'] == null
-          ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
+          : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       options: (jsonSerialization['options'] as List?)
-          ?.map((e) => _i4.PollOption.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.PollOption.fromJson((e as Map<String, dynamic>)))
           .toList(),
       expiresAt: jsonSerialization['expiresAt'] == null
           ? null
@@ -67,15 +57,11 @@ abstract class Poll implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  int? postId;
-
-  _i2.Post? post;
-
   int ownerId;
 
-  _i3.UserRecord? owner;
+  _i2.UserRecord? owner;
 
-  List<_i4.PollOption>? options;
+  List<_i3.PollOption>? options;
 
   DateTime? expiresAt;
 
@@ -86,11 +72,9 @@ abstract class Poll implements _i1.SerializableModel {
   @_i1.useResult
   Poll copyWith({
     int? id,
-    int? postId,
-    _i2.Post? post,
     int? ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   });
@@ -98,8 +82,6 @@ abstract class Poll implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      if (postId != null) 'postId': postId,
-      if (post != null) 'post': post?.toJson(),
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       if (options != null)
@@ -120,17 +102,13 @@ class _Undefined {}
 class _PollImpl extends Poll {
   _PollImpl({
     int? id,
-    int? postId,
-    _i2.Post? post,
     required int ownerId,
-    _i3.UserRecord? owner,
-    List<_i4.PollOption>? options,
+    _i2.UserRecord? owner,
+    List<_i3.PollOption>? options,
     DateTime? expiresAt,
     List<int>? votedBy,
   }) : super._(
           id: id,
-          postId: postId,
-          post: post,
           ownerId: ownerId,
           owner: owner,
           options: options,
@@ -144,8 +122,6 @@ class _PollImpl extends Poll {
   @override
   Poll copyWith({
     Object? id = _Undefined,
-    Object? postId = _Undefined,
-    Object? post = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
     Object? options = _Undefined,
@@ -154,11 +130,9 @@ class _PollImpl extends Poll {
   }) {
     return Poll(
       id: id is int? ? id : this.id,
-      postId: postId is int? ? postId : this.postId,
-      post: post is _i2.Post? ? post : this.post?.copyWith(),
       ownerId: ownerId ?? this.ownerId,
-      owner: owner is _i3.UserRecord? ? owner : this.owner?.copyWith(),
-      options: options is List<_i4.PollOption>?
+      owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
+      options: options is List<_i3.PollOption>?
           ? options
           : this.options?.map((e0) => e0.copyWith()).toList(),
       expiresAt: expiresAt is DateTime? ? expiresAt : this.expiresAt,

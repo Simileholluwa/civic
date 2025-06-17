@@ -100,7 +100,9 @@ class RegularPost extends _$RegularPost {
     final updatedOptions = [...state.optionText]..removeAt(index);
     final updatedControllers = [...state.controllers]..removeAt(index);
     state = state.copyWith(
-        optionText: updatedOptions, controllers: updatedControllers,);
+      optionText: updatedOptions,
+      controllers: updatedControllers,
+    );
   }
 
   void setExpiration(DateTime expiresAt) {
@@ -592,7 +594,7 @@ class RegularPost extends _$RegularPost {
       id: id,
       ownerId: ref.read(localStorageProvider).getInt('userId')!,
       options: pollOptions,
-      expiresAt: state.expiresAt,     
+      expiresAt: state.expiresAt,
     );
     final post = Post(
       ownerId: ref.read(localStorageProvider).getInt('userId')!,
@@ -604,7 +606,7 @@ class RegularPost extends _$RegularPost {
       tags: state.tags,
       poll: poll,
     );
-    
+
     final savePost = ref.read(savePostDraftProvider);
     final result = await savePost(
       SavePostDraftParams(
@@ -628,6 +630,7 @@ class RegularPost extends _$RegularPost {
 
   Future<void> sendPoll(
     Post post,
+    bool addToList,
   ) async {
     final savePoll = ref.read(savePollProvider);
 
@@ -653,9 +656,11 @@ class RegularPost extends _$RegularPost {
         );
         return;
       }
-      ref.read(paginatedPollListProvider.notifier).addPoll(
-            data,
-          );
+      if (addToList) {
+        ref.read(paginatedPollListProvider.notifier).addPoll(
+              data,
+            );
+      }
       TToastMessages.successToast(
         'Your poll was sent.',
       );
@@ -664,7 +669,8 @@ class RegularPost extends _$RegularPost {
   }
 
   Future<void> sendAPoll(
-    int? id, int? pollId,
+    int? id,
+    int? pollId,
   ) async {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
@@ -677,14 +683,12 @@ class RegularPost extends _$RegularPost {
     if (id != null) {
       if (id == 0) {
         postId = null;
-        pollId = null;
       } else {
         postId = id;
-        pollId = pollId;
       }
     }
 
-    final uploadedImages = await sendMediaImages(pollId);
+    final uploadedImages = await sendMediaImages(postId);
     if (!uploadedImages) return;
     List<PollOption> pollOptions =
         state.optionText.asMap().entries.map((entry) {
@@ -713,11 +717,12 @@ class RegularPost extends _$RegularPost {
       tags: state.tags,
       poll: poll,
     );
-    
+
     if (scheduledDateTime == null &&
         !scheduledDateTimeProvider.canSendLater()) {
       await sendPoll(
         post,
+        postId == null,
       );
     } else {
       await savePostInFuture(
@@ -732,7 +737,6 @@ class RegularPost extends _$RegularPost {
   PostState build(Post? post) {
     ref.onDispose(() {
       state.controller.dispose();
-      
     });
     if (post == null) {
       final postState = PostState.empty();

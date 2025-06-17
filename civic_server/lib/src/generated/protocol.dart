@@ -248,12 +248,6 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: 'nextval(\'poll_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
-          name: 'postId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
-        _i2.ColumnDefinition(
           name: 'ownerId',
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
@@ -275,16 +269,6 @@ class Protocol extends _i1.SerializationManagerServer {
       foreignKeys: [
         _i2.ForeignKeyDefinition(
           constraintName: 'poll_fk_0',
-          columns: ['postId'],
-          referenceTable: 'post',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.cascade,
-          matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'poll_fk_1',
           columns: ['ownerId'],
           referenceTable: 'user_record',
           referenceTableSchema: 'public',
@@ -292,7 +276,7 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.noAction,
           matchType: null,
-        ),
+        )
       ],
       indexes: [
         _i2.IndexDefinition(
@@ -342,12 +326,6 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: true,
           dartType: 'List<int>?',
         ),
-        _i2.ColumnDefinition(
-          name: '_pollOptionsPollId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -359,17 +337,7 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'poll_option_fk_1',
-          columns: ['_pollOptionsPollId'],
-          referenceTable: 'poll',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
+        )
       ],
       indexes: [
         _i2.IndexDefinition(
@@ -643,7 +611,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(

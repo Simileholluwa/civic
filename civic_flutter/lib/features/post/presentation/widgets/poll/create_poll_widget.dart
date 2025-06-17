@@ -8,9 +8,12 @@ class CreatePollWidget extends ConsumerWidget {
   const CreatePollWidget({
     super.key,
     required this.post,
+    required this.isEditing,
   });
 
   final Post post;
+  final bool isEditing;
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,6 +25,7 @@ class CreatePollWidget extends ConsumerWidget {
           post: post,
           showMedia: false,
           maxLength: 400,
+          tagLoc: true,
         ),
         const Divider(
           height: 0,
@@ -50,6 +54,7 @@ class CreatePollWidget extends ConsumerWidget {
                       index: index,
                       controller: controller,
                       post: post,
+                      isEditing: isEditing,
                     ),
                   );
                 }),
@@ -78,6 +83,7 @@ class CreatePollWidget extends ConsumerWidget {
                   ),
                 PollDurationAndAddOptions(
                   post: post,
+                  isEditing: isEditing,
                 ),
               ],
             ),

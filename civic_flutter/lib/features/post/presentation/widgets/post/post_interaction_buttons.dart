@@ -15,9 +15,11 @@ class PostInteractionButtons extends ConsumerWidget {
     this.replyIcon1 = Iconsax.message,
     this.isReply = false,
     this.isComment = false,
+    this.isPoll = false,
   });
 
   final Post post;
+  final bool isPoll;
   final bool hasPadding;
   final VoidCallback? onReply;
   final IconData replyIcon1;
@@ -91,6 +93,7 @@ class PostInteractionButtons extends ConsumerWidget {
                       isReply: isReply,
                       isComment: isComment,
                       originalPostId: originalPostId,
+                      isPoll: isPoll,
                     ),
                   );
                 },

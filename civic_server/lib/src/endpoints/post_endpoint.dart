@@ -94,51 +94,55 @@ class PostEndpoint extends Endpoint {
             user,
           );
 
-          // Update the post
+          final existingPost = await Post.db.findById(
+            session,
+            post.id!,
+            transaction: transaction,
+          );
+
           await updatePost(
             session,
             post.copyWith(
-              likedBy: post.likedBy ?? [],
-              bookmarkedBy: post.bookmarkedBy ?? [],
-              owner: user,
               updatedAt: DateTime.now(),
+              likedBy: existingPost!.likedBy,
+              bookmarkedBy: existingPost.bookmarkedBy,
+              pollId: existingPost.pollId,
+              commentCount: existingPost.commentCount,
+              postType: existingPost.postType,
+              dateCreated: existingPost.dateCreated,
             ),
           );
-
-          for (final option in post.poll!.options!) {
-            await PollOption.db.updateRow(
-              session,
-              option,
-              transaction: transaction,
-            );
-          }
-
-          // return the sent poll
-          return post;
+          await HashtagEndpoint().sendPostHashtags(
+            session,
+            post.tags ?? [],
+            post.id!,
+          );
+          return existingPost;
         } else {
+          // 1. Insert the post first
           final savedPost = await Post.db.insertRow(
             session,
-            Post(
+            post.copyWith(
               ownerId: user.id!,
-              postType: PostType.poll,
               likedBy: [],
               bookmarkedBy: [],
             ),
             transaction: transaction,
           );
 
+          // 2. Save Poll and its options
           final savedPoll = await Poll.db.insertRow(
             session,
-            savedPost.poll!.copyWith(
-              postId: savedPost.id!,
+            post.poll!.copyWith(
               votedBy: [],
             ),
+            transaction: transaction,
           );
 
+          // 3. Save each poll option
           final savedOptions = <PollOption>[];
-
-          for (final option in savedPost.poll!.options!) {
-            final insertedOption = await PollOption.db.insertRow(
+          for (final option in post.poll!.options ?? []) {
+            final savedOption = await PollOption.db.insertRow(
               session,
               option.copyWith(
                 pollId: savedPoll.id,
@@ -146,25 +150,41 @@ class PostEndpoint extends Endpoint {
               ),
               transaction: transaction,
             );
-            savedOptions.add(insertedOption);
+            savedOptions.add(savedOption);
           }
 
+          // 4. Update the poll with options list
+          final updatedPoll = savedPoll.copyWith(
+            options: savedOptions,
+          );
           await Poll.db.updateRow(
             session,
-            savedPoll.copyWith(
-              options: savedOptions,
+            updatedPoll,
+            transaction: transaction,
+          );
+
+          // 5. Link the poll to the post and update the post again
+          await Post.db.updateRow(
+            session,
+            savedPost.copyWith(
+              pollId: updatedPoll.id,
             ),
             transaction: transaction,
           );
 
+          // 6. Return the fully populated post with poll and options
           return await Post.db.findById(
             session,
             savedPost.id!,
+            include: Post.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              poll: Poll.include(options: PollOption.includeList()),
+            ),
           );
         }
       } catch (e, stackTrace) {
         session.log(
-          'Error in createPoll: $e',
+          'Error in savePoll: $e',
           level: LogLevel.error,
           exception: e,
           stackTrace: stackTrace,
@@ -176,27 +196,35 @@ class PostEndpoint extends Endpoint {
 
   Future<void> castVote(
     Session session,
-    int pollId,
+    int postId,
     int optionId,
   ) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
 
       // Fetch the poll
-      final poll = await Poll.db.findById(
+      final post = await Post.db.findById(
         session,
-        pollId,
+        postId,
+        include: Post.include(
+          poll: Poll.include(
+            options: PollOption.includeList(),
+          ),
+        ),
         transaction: transaction,
       );
-      if (poll == null) {
+
+      if (post == null) {
         throw PostException(message: 'Poll not found.');
       }
+
+      final poll = post.poll!;
 
       // Check if user has already voted
       if (poll.votedBy!.contains(user.id)) {
         final options = await PollOption.db.find(
           session,
-          where: (o) => o.pollId.equals(pollId),
+          where: (o) => o.pollId.equals(poll.id),
           transaction: transaction,
         );
 
@@ -207,6 +235,8 @@ class PostEndpoint extends Endpoint {
             message: 'You have not voted for this option.',
           ),
         );
+
+        if (votedOption.id == optionId) return;
 
         final updatedOption = votedOption.copyWith(
           votedBy: votedOption.votedBy!
@@ -236,7 +266,7 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
 
-      if (option == null || option.pollId != pollId) {
+      if (option == null || option.pollId != poll.id) {
         throw PostException(message: 'Invalid poll option selected.');
       }
 
@@ -254,23 +284,19 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
 
-      final options = await PollOption.db.find(
-        session,
-        where: (o) => o.pollId.equals(pollId),
-        transaction: transaction,
-        orderBy: (o) => o.id,
-        orderDescending: false,
+      final updatedPoll = poll.copyWith(
+        votedBy: [...poll.votedBy!, user.id!],
       );
 
-      await updatePoll(
+      await Poll.db.updateRow(
         session,
-        poll.copyWith(
-          votedBy: [
-            ...poll.votedBy!,
-            user.id!,
-          ],
-          options: options,
-        ),
+        updatedPoll,
+        transaction: transaction,
+      );
+
+      await updatePost(
+        session,
+        post,
       );
 
       return;
@@ -375,7 +401,12 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
-        poll: Poll.include(),
+        poll: Poll.include(
+          options: PollOption.includeList(
+            orderBy: (p0) => p0.id,
+            orderDescending: false,
+          ),
+        ),
       ),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
@@ -722,13 +753,14 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
-        project: postType == PostType.projectRepost || postType == PostType.regular
-            ? Project.include(
-                owner: UserRecord.include(
-                  userInfo: UserInfo.include(),
-                ),
-              )
-            : null,
+        project:
+            postType == PostType.projectRepost || postType == PostType.regular
+                ? Project.include(
+                    owner: UserRecord.include(
+                      userInfo: UserInfo.include(),
+                    ),
+                  )
+                : null,
         parent: postType == PostType.postRepost || postType == PostType.regular
             ? Post.include(
                 owner: UserRecord.include(
@@ -1054,7 +1086,12 @@ class PostEndpoint extends Endpoint {
             userInfo: UserInfo.include(),
           ),
         ),
-        poll: Poll.include(),
+        poll: Poll.include(
+          options: PollOption.includeList(
+            orderBy: (p0) => p0.id,
+            orderDescending: false,
+          ),
+        ),
         quotedOrRepostedFromUser: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
@@ -1070,6 +1107,7 @@ class PostEndpoint extends Endpoint {
         owner: post!.owner,
         project: post.project,
         parent: post.parent,
+        poll: post.poll,
         quotedOrRepostedFromUser: post.quotedOrRepostedFromUser,
       );
     }

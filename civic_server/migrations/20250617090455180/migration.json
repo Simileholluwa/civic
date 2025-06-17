@@ -1,0 +1,60 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "postId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "poll_fk_0",
+            "columns": [
+              "ownerId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [
+          "poll_fk_1",
+          "poll_fk_0"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"postId\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "postId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"postId\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "postId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}
