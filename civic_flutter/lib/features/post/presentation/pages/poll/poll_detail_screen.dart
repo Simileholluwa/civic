@@ -168,6 +168,7 @@ class PollDetailScreen extends ConsumerWidget {
                         ),
                         child: PostDetailOptions(
                           post: newPost,
+                          isPoll: true,
                         ),
                       ),
                       const Divider(

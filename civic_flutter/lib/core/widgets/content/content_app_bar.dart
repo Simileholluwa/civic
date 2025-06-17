@@ -9,6 +9,7 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? bottomHeight;
   final Widget? leading;
   final bool? centerTitle;
+  final bool showBorder;
   final double? titleSpacing;
   const ContentAppBar({
     super.key,
@@ -21,6 +22,7 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.centerTitle,
     this.titleSpacing,
+    this.showBorder = true,
   });
 
   @override
@@ -37,13 +39,15 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.only(
         top: 3,
       ),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).dividerColor,
-          ),
-        ),
-      ),
+      decoration: showBorder
+          ? BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
+            )
+          : null,
       child: AppBar(
         title: title,
         actions: actions,

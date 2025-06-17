@@ -63,12 +63,7 @@ class FeedScreen extends ConsumerWidget {
             tabController: tabController,
             tabs: [
               Tab(
-                text: 'PROJECTS'
-                
-              ),
-              Tab(
                 text: 'POSTS'
-                
               ),
               Tab(
                 text: 'POLLS'
@@ -100,9 +95,6 @@ class FeedScreen extends ConsumerWidget {
           TabBarView(
             controller: tabController,
             children: [
-              ContentKeepAliveWrapper(
-                child: const ProjectsScreen(),
-              ),
               ContentKeepAliveWrapper(
                 child: const PostsScreen(),
               ),

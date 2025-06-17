@@ -30,6 +30,7 @@ export './presentation/pages/project_locations_screen.dart';
 export './presentation/pages/projects_screen.dart';
 export './presentation/pages/project_details_screen.dart';
 export './presentation/pages/project_review_screen.dart';
+export './presentation/routes/project_routes.dart';
 export 'presentation/pages/project_vetting_screen.dart';
 export './presentation/providers/project_detail_provider.dart';
 export './presentation/providers/project_review_detail_provider.dart';

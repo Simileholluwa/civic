@@ -10,9 +10,11 @@ class PostDetailOptions extends ConsumerWidget {
   const PostDetailOptions({
     super.key,
     required this.post,
+    this.isPoll = false,
   });
 
   final Post post;
+  final bool isPoll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,13 +68,22 @@ class PostDetailOptions extends ConsumerWidget {
         if (postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              context.push(
-                '/create/post/${post.id}',
-                extra: {
-                  'post': post,
-                  'project': post.project,
-                },
-              );
+              if (isPoll) {
+                context.push(
+                  '/create/poll/${post.id!}',
+                  extra: {
+                    'post': post,
+                  },
+                );
+              } else {
+                context.push(
+                  '/create/post/${post.id}',
+                  extra: {
+                    'post': post,
+                    'project': post.project,
+                  },
+                );
+              }
             },
             icon: Icon(
               Iconsax.edit,

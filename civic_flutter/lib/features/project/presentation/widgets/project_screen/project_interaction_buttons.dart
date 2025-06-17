@@ -72,7 +72,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () {
                     context.push(
-                      '/feed/project/${project.id}/review',
+                      '/project/${project.id}/review',
                     );
                   },
             color: projectCardState.isDeleted!
@@ -110,7 +110,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () {
                     context.push(
-                      '/feed/project/${project.id}/vet',
+                      '/project/${project.id}/vet',
                       extra: project.physicalLocations!,
                     );
                   },

@@ -6,6 +6,7 @@ import 'package:civic_flutter/features/create/presentation/routes/create_route.d
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +38,7 @@ GoRouter router(Ref ref) {
               return AppRoutes.auth;
             } else {
               FlutterNativeSplash.remove();
-              return FeedRoutes.namespace;
+              return ProjectRoutes.namespace;
             }
           }
         },
@@ -159,6 +160,7 @@ GoRouter router(Ref ref) {
 
       StatefulShellRoute.indexedStack(
         branches: [
+          ProjectRoutes.branch,
           FeedRoutes.branch,
           CreateRoutes.branch,
           NotificationsRoutes.branch,

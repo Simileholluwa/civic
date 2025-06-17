@@ -37,7 +37,6 @@ class CreatePollWidget extends ConsumerWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
               children: [
                 PostTextField(
                   userName: post.owner!.userInfo!.userName!,
@@ -61,7 +60,7 @@ class CreatePollWidget extends ConsumerWidget {
                 if (postState.taggedUsers.isNotEmpty ||
                     postState.locations.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10,),
+                    padding: const EdgeInsets.only(top: 10,),
                     child: ContentEngagementTagsAndLocations(
                       tags: postState.taggedUsers,
                       locations: postState.locations,
@@ -81,6 +80,7 @@ class CreatePollWidget extends ConsumerWidget {
                       },
                     ),
                   ),
+                const SizedBox(height: 10,),
                 PollDurationAndAddOptions(
                   post: post,
                   isEditing: isEditing,

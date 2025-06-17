@@ -42,9 +42,13 @@ class AppWrapper extends ConsumerWidget {
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   items: [
                     BottomNavigationBarItem(
+                        activeIcon: Icon(Iconsax.note5),
+                        icon: Icon(Iconsax.note),
+                        label: 'Projects'),
+                    BottomNavigationBarItem(
                         activeIcon: Icon(Iconsax.airdrop5),
                         icon: Icon(Iconsax.airdrop),
-                        label: 'Home'),
+                        label: 'Feed'),
                     BottomNavigationBarItem(
                         activeIcon: Icon(
                           Icons.add,

@@ -34,7 +34,7 @@ class ProjectCardItem extends ConsumerWidget {
       onTap: canTap
           ? () {
               context.push(
-                '/feed/project/${project.id}',
+                '/project/${project.id}',
                 extra: project,
               );
             }

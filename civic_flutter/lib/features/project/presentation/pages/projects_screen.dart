@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ProjectsScreen extends ConsumerWidget {
   const ProjectsScreen({
@@ -13,15 +14,60 @@ class ProjectsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingControllerNotifier =
         ref.watch(paginatedProjectListProvider.notifier);
-    return AppInfiniteList<Project>(
-          pagingController: pagingControllerNotifier.pagingController,
-          scrollController: ref.read(projectScrollControllerProvider),
-          itemBuilder: (__, project, _) {
-            return ProjectCard(
-              project: project,
-            );
-          },
-          onRefresh: pagingControllerNotifier.refresh,
-        );
+    final isVisible = ref.watch(
+      appScrollVisibilityProvider(
+        true,
+      ),
+    );
+    return Scaffold(
+      appBar: ContentAppBar(
+        isVisible: isVisible,
+        showBorder: false,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.apps,
+            size: 30,
+          ),
+          onPressed: () {},
+        ),
+        titleSpacing: 0,
+        height: 60,
+        title: SizedBox(
+          height: 40,
+          child: SearchAnchor.bar(
+            barLeading: const SizedBox.shrink(),
+            barHintText: 'Search',
+            suggestionsBuilder: (context, controller) {
+              return [const SizedBox.shrink()];
+            },
+            viewConstraints: BoxConstraints(
+              maxHeight: 300,
+            ),
+            viewBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Iconsax.filter5,
+              size: 26,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            onPressed: () {},
+          ),
+          const SizedBox(width: 5),
+        ],
+      ),
+      body: AppInfiniteList<Project>(
+        pagingController: pagingControllerNotifier.pagingController,
+        scrollController: ref.read(projectScrollControllerProvider),
+        itemBuilder: (__, project, _) {
+          return ProjectCard(
+            project: project,
+          );
+        },
+        onRefresh: pagingControllerNotifier.refresh,
+      ),
+    );
   }
 }

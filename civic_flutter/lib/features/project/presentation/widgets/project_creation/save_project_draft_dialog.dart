@@ -1,6 +1,5 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/feed/presentation/routes/feed_routes.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +25,7 @@ Future<bool?> saveProjectDraftDialog(
     onTapActiveButton: () async {
       if (context.mounted) {
         context.go(
-          FeedRoutes.namespace,
+          ProjectRoutes.namespace,
           extra: null,
         );
       }

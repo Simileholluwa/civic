@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/feed/presentation/pages/feed_screen.dart';
 import 'package:civic_flutter/features/post/post.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,34 +61,6 @@ class FeedRoutes {
               ),
               
             ]
-          ),
-          GoRoute(
-            path: 'project/:projectId',
-            builder: (_, state) {
-              return ProjectDetailsScreen(
-                projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
-                project: state.extra as Project?,
-              );
-            },
-            routes: [
-              GoRoute(
-                path: 'review',
-                builder: (_, state) {
-                  return ProjectReviewScreen(
-                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
-                  );
-                },
-              ),
-              GoRoute(
-                path: 'vet',
-                builder: (_, state) {
-                  return ProjectVettingScreen(
-                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
-                    projectLocations: state.extra as List<AWSPlaces>?,
-                  );
-                },
-              ),
-            ],
           ),
         ],
       ),

@@ -23,7 +23,7 @@ class FeedScreenTabController extends _$FeedScreenTabController {
   @override
   Raw<TabController> build() {
     return TabController(
-      length: 4,
+      length: 3,
       vsync: ref.watch(feedVsyncProvider),
     );
   }
