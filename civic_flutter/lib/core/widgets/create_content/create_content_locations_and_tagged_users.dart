@@ -1,6 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 
 class CreateContentLocationsAndTaggedUsers extends StatelessWidget {

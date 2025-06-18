@@ -1,6 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/feed/presentation/pages/feed_screen.dart';
-import 'package:civic_flutter/features/post/post.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

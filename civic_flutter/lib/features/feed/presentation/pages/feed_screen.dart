@@ -1,7 +1,6 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_flutter/features/post/post.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

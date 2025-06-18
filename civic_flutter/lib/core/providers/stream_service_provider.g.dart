@@ -321,7 +321,7 @@ class _PostStreamProviderElement extends StreamProviderElement<Post>
   Post? get post => (origin as PostStreamProvider).post;
 }
 
-String _$pollStreamHash() => r'203b604859f15bc75c7cf10949cdd427c2e0f4e8';
+String _$pollStreamHash() => r'45d800dc14250543113bfc563df82c2d5d847acb';
 
 /// See also [pollStream].
 @ProviderFor(pollStream)
