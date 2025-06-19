@@ -9,10 +9,16 @@ Future<bool?> savePostDraftDialog(
   WidgetRef ref,
   BuildContext context,
   Post post,
+  PostType postType,
 ) {
+  final type = postType == PostType.article
+      ? 'article'
+      : postType == PostType.poll
+          ? 'poll'
+          : 'post';
   return postDialog(
     context: context,
-    title: 'Save post as draft?',
+    title: 'Save $type as draft?',
     description: 'Would you like to save the changes you have made as draft?',
     onTapSkipButton: () {
       context.pop();
@@ -24,20 +30,29 @@ Future<bool?> savePostDraftDialog(
     skipText: "Don't save",
     onTapActiveButton: () async {
       if (context.mounted) {
-        context.go(
-          FeedRoutes.namespace,
-          extra: null,
-        );
+        context.pop();
       }
       final postNotifier = ref.read(
         feedProvider(
           post,
         ).notifier,
       );
-      await postNotifier.savePostAsDraft(
-        post.id,
-        null,
-      );
+      if (type == 'article') {
+        await postNotifier.saveArticleAsDraft(
+          post.id,
+          null,
+        );
+      } else if (type == 'poll') {
+        await postNotifier.savePollAsDraft(
+          post.id,
+          null,
+        );
+      } else {
+        await postNotifier.savePostAsDraft(
+          post.id,
+          null,
+        );
+      }
     },
   );
 }

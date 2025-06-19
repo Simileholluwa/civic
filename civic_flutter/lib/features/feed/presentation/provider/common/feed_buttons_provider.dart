@@ -84,8 +84,7 @@ class FeedButtons extends _$FeedButtons {
     }, (_) async {
       if (isReply) {
         ref
-            .read(paginatedRepliesListProvider(originalPostId)
-                .notifier)
+            .read(paginatedRepliesListProvider(originalPostId).notifier)
             .removeReplyById(postId);
         TToastMessages.infoToast('You will no longer see this reply.');
       } else if (isComment) {
@@ -133,6 +132,8 @@ class FeedButtons extends _$FeedButtons {
     int originalPostId,
     bool isReply,
     bool isComment,
+    bool isPoll,
+    bool isArticle,
   ) async {
     final deleteProject = ref.read(deletePostProvider);
     final result = await deleteProject(
@@ -148,15 +149,44 @@ class FeedButtons extends _$FeedButtons {
     }, (_) {
       if (isReply) {
         ref
-            .read(paginatedRepliesListProvider(originalPostId)
-                .notifier)
-            .removeReplyById(postId);
+            .read(
+              paginatedRepliesListProvider(
+                originalPostId,
+              ).notifier,
+            )
+            .removeReplyById(
+              postId,
+            );
         TToastMessages.infoToast('Your reply has been deleted.');
       } else if (isComment) {
         ref
-            .read(paginatedCommentListProvider(originalPostId).notifier)
-            .removeCommentById(postId);
+            .read(
+              paginatedCommentListProvider(
+                originalPostId,
+              ).notifier,
+            )
+            .removeCommentById(
+              postId,
+            );
         TToastMessages.infoToast('Your comment has been deleted.');
+      } else if (isPoll) {
+        ref
+            .watch(
+              paginatedPollListProvider.notifier,
+            )
+            .removePollById(
+              postId,
+            );
+        TToastMessages.infoToast('Your poll has been deleted.');
+      } else if (isArticle) {
+        ref
+            .watch(
+              paginatedArticleListProvider.notifier,
+            )
+            .removeArticleById(
+              postId,
+            );
+        TToastMessages.infoToast('Your article has been deleted.');
       } else {
         ref
             .watch(

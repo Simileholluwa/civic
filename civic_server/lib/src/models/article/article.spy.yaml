@@ -3,5 +3,4 @@ table: article
 fields:
     owner: UserRecord?, relation
     content: String?, default=''
-    banner: String?, default=''
     tag: List<String>?

@@ -52,10 +52,10 @@ class CreateRoutes {
           GoRoute(
             path: 'article/:articleId',
             builder: (context, state) {
-              final data = state.extra as Map<String, dynamic>;
+              final data = state.extra as Map<String, dynamic>?;
               return CreateArticleScreen(
-                id: data['articleId'],
-                post: data['post'],
+                id: int.tryParse(state.pathParameters['articleId'] ?? '0') ?? 0,
+                post: data?['post'],
               );
             },
           ),

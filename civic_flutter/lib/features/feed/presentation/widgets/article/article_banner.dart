@@ -20,7 +20,9 @@ class ArticleBanner extends ConsumerWidget {
     final postState = ref.watch(feedProvider(post));
     final postNotifier = ref.watch(feedProvider(post).notifier);
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    var isUrlImage = regex.hasMatch(postState.articleBanner);
+    var isUrlImage = postState.imageUrls.isEmpty
+        ? false
+        : regex.hasMatch(postState.imageUrls.first);
     return Stack(
       children: [
         Container(
@@ -28,20 +30,20 @@ class ArticleBanner extends ConsumerWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            image: postState.articleBanner.isNotEmpty
+            image: postState.imageUrls.isNotEmpty
                 ? DecorationImage(
                     image: isUrlImage
-                        ? CachedNetworkImageProvider(postState.articleBanner)
+                        ? CachedNetworkImageProvider(postState.imageUrls.first)
                         : FileImage(
                             File(
-                              postState.articleBanner,
+                              postState.imageUrls.first,
                             ),
                           ) as ImageProvider<Object>,
                     fit: BoxFit.cover,
                   )
                 : null,
           ),
-          child: postState.articleBanner.isEmpty
+          child: postState.imageUrls.isEmpty
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -55,7 +57,8 @@ class ArticleBanner extends ConsumerWidget {
                               color: Colors.grey[600],
                             ),
                             onPressed: () async {
-                              await postNotifier.pickPicture();
+                              postNotifier.clearMedia();
+                              await postNotifier.pickPicture(1);
                               isUrlImage = false;
                             }),
                         IconButton(
@@ -65,7 +68,8 @@ class ArticleBanner extends ConsumerWidget {
                               color: Colors.grey[600],
                             ),
                             onPressed: () async {
-                              await postNotifier.takePicture();
+                              postNotifier.clearMedia();
+                              await postNotifier.takePicture(1);
                               isUrlImage = false;
                             }),
                       ],
@@ -81,7 +85,7 @@ class ArticleBanner extends ConsumerWidget {
                 )
               : null,
         ),
-        if (postState.articleBanner.isNotEmpty)
+        if (postState.imageUrls.isNotEmpty)
           Positioned(
             bottom: 8,
             right: 8,
@@ -108,6 +112,7 @@ class ArticleBanner extends ConsumerWidget {
                         color: TColors.textWhite,
                       ),
                       onPressed: () async {
+                        postNotifier.clearMedia();
                         await postNotifier.pickPicture();
                         isUrlImage = false;
                       }),
@@ -117,6 +122,7 @@ class ArticleBanner extends ConsumerWidget {
                       color: TColors.textWhite,
                     ),
                     onPressed: () async {
+                      postNotifier.clearMedia();
                       await postNotifier.takePicture();
                       isUrlImage = false;
                     },

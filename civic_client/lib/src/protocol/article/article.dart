@@ -18,17 +18,14 @@ abstract class Article implements _i1.SerializableModel {
     required this.ownerId,
     this.owner,
     String? content,
-    String? banner,
     this.tag,
-  })  : content = content ?? '',
-        banner = banner ?? '';
+  }) : content = content ?? '';
 
   factory Article({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
     String? content,
-    String? banner,
     List<String>? tag,
   }) = _ArticleImpl;
 
@@ -41,7 +38,6 @@ abstract class Article implements _i1.SerializableModel {
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
       content: jsonSerialization['content'] as String?,
-      banner: jsonSerialization['banner'] as String?,
       tag:
           (jsonSerialization['tag'] as List?)?.map((e) => e as String).toList(),
     );
@@ -58,8 +54,6 @@ abstract class Article implements _i1.SerializableModel {
 
   String? content;
 
-  String? banner;
-
   List<String>? tag;
 
   /// Returns a shallow copy of this [Article]
@@ -70,7 +64,6 @@ abstract class Article implements _i1.SerializableModel {
     int? ownerId,
     _i2.UserRecord? owner,
     String? content,
-    String? banner,
     List<String>? tag,
   });
   @override
@@ -80,7 +73,6 @@ abstract class Article implements _i1.SerializableModel {
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       if (content != null) 'content': content,
-      if (banner != null) 'banner': banner,
       if (tag != null) 'tag': tag?.toJson(),
     };
   }
@@ -99,14 +91,12 @@ class _ArticleImpl extends Article {
     required int ownerId,
     _i2.UserRecord? owner,
     String? content,
-    String? banner,
     List<String>? tag,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
           content: content,
-          banner: banner,
           tag: tag,
         );
 
@@ -119,7 +109,6 @@ class _ArticleImpl extends Article {
     int? ownerId,
     Object? owner = _Undefined,
     Object? content = _Undefined,
-    Object? banner = _Undefined,
     Object? tag = _Undefined,
   }) {
     return Article(
@@ -127,7 +116,6 @@ class _ArticleImpl extends Article {
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       content: content is String? ? content : this.content,
-      banner: banner is String? ? banner : this.banner,
       tag: tag is List<String>? ? tag : this.tag?.map((e0) => e0).toList(),
     );
   }

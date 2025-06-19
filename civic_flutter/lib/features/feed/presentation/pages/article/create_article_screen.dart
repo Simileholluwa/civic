@@ -32,7 +32,12 @@ class CreateArticleScreen extends ConsumerWidget {
         data.value,
       ),
     );
-    final canSend = postState.articleBanner.isNotEmpty &&
+    final postNotifier = ref.watch(
+      feedProvider(
+        data.value,
+      ).notifier,
+    );
+    final canSend = postState.imageUrls.isNotEmpty &&
         postState.text.isNotEmpty &&
         postState.articleContent.isNotEmpty;
 
@@ -42,7 +47,12 @@ class CreateArticleScreen extends ConsumerWidget {
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop = canSend
-            ? await savePostDraftDialog(ref, context, data.value!)
+            ? await savePostDraftDialog(
+                ref,
+                context,
+                data.value!,
+                PostType.article,
+              )
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
@@ -58,11 +68,21 @@ class CreateArticleScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: canSend,
-              sendPressed: () {},
+              sendPressed: () async {
+                context.pop();
+                await postNotifier.sendAnArticle(
+                  data.value?.id,
+                );
+              },
               title: CreateContentPrivacy(),
               onCanSendPost: () async {
                 final bool? shouldPop = canSend
-                    ? await savePostDraftDialog(ref, context, data.value!)
+                    ? await savePostDraftDialog(
+                        ref,
+                        context,
+                        data.value!,
+                        PostType.article,
+                      )
                     : true;
                 if (shouldPop ?? false) {
                   if (context.mounted) context.pop();

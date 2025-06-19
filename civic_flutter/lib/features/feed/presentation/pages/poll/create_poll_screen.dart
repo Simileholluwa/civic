@@ -56,7 +56,12 @@ class CreatePollScreen extends ConsumerWidget {
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
         final bool? shouldPop = canSendPoll
-            ? await savePostDraftDialog(ref, context, data.value!)
+            ? await savePostDraftDialog(
+                ref,
+                context,
+                data.value!,
+                PostType.poll,
+              )
             : true;
         if (shouldPop ?? false) {
           if (context.mounted) {
@@ -75,13 +80,17 @@ class CreatePollScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await postNotifier.sendAPoll(
-                  data.value?.id, data.value?.pollId
-                );
+                    data.value?.id, data.value?.pollId);
               },
               title: CreateContentPrivacy(),
               onCanSendPost: () async {
                 final bool? shouldPop = canSendPoll
-                    ? await savePostDraftDialog(ref, context, data.value!)
+                    ? await savePostDraftDialog(
+                        ref,
+                        context,
+                        data.value!,
+                        PostType.poll,
+                      )
                     : true;
                 if (shouldPop ?? false) {
                   if (context.mounted) context.pop();

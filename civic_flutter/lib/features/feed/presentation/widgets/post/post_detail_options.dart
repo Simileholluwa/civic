@@ -11,10 +11,16 @@ class PostDetailOptions extends ConsumerWidget {
     super.key,
     required this.post,
     this.isPoll = false,
+    this.isArticle = false,
+    this.isReply = false,
+    this.isComment = false,
   });
 
   final Post post;
   final bool isPoll;
+  final bool isArticle;
+  final bool isReply;
+  final bool isComment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,6 +81,13 @@ class PostDetailOptions extends ConsumerWidget {
                     'post': post,
                   },
                 );
+              } else if(isArticle) {
+                context.push(
+                  '/create/article/${post.id!}',
+                  extra: {
+                    'post': post,
+                  },
+                );
               } else {
                 context.push(
                   '/create/post/${post.id}',
@@ -116,8 +129,10 @@ class PostDetailOptions extends ConsumerWidget {
                   await postCardNotifier.deletePost(
                     post.id!,
                     post.id!,
-                    false,
-                    false,
+                    isReply,
+                    isComment,
+                    isPoll,
+                    isArticle,
                   );
                 }
               }

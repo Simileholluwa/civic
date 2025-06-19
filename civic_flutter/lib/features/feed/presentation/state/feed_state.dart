@@ -22,7 +22,6 @@ class FeedState {
     this.expiresAt,
     this.articleContent = '',
     this.articleTags = const <String>[],
-    this.articleBanner = '',
     this.articleController,
     this.focusNode,
     this.scrollController,
@@ -45,6 +44,18 @@ class FeedState {
   factory FeedState.populate(Post post) {
     final poll = post.poll;
     final article = post.article;
+    Document? document;
+    if (article != null) {
+      if (article.content!.isNotEmpty) {
+        document = Document.fromJson(
+          jsonDecode(article.content!),
+        );
+      } else {
+        document = Document();
+      }
+    } else {
+      document = Document();
+    }
     return FeedState(
       text: post.text ?? '',
       imageUrls: post.imageUrls ?? [],
@@ -64,18 +75,16 @@ class FeedState {
           text: poll?.options?[index].option,
         ),
       ),
-      expiresAt: poll?.expiresAt ?? DateTime.now().add(
-        const Duration(days: 1),
-      ),
+      expiresAt: poll?.expiresAt ??
+          DateTime.now().add(
+            const Duration(days: 1),
+          ),
       focusNode: article == null ? null : FocusNode(),
       scrollController: article == null ? null : ScrollController(),
       articleController: QuillController(
-        document: Document.fromJson(
-          jsonDecode(article?.content ?? '{}'),
-        ),
+        document: document,
         selection: const TextSelection.collapsed(offset: 0),
       ),
-      articleBanner: article?.banner ?? '',
       articleContent: article?.content ?? '',
       articleTags: article?.tag ?? [],
     );
@@ -94,7 +103,6 @@ class FeedState {
   final List<String> optionText;
   final String articleContent;
   final List<String> articleTags;
-  final String articleBanner;
   final QuillController? articleController;
   final FocusNode? focusNode;
   final ScrollController? scrollController;
@@ -114,7 +122,6 @@ class FeedState {
     List<String>? optionText,
     String? articleContent,
     List<String>? articleTags,
-    String? articleBanner,
     QuillController? articleController,
     FocusNode? focusNode,
     ScrollController? scrollController,
@@ -134,7 +141,6 @@ class FeedState {
       optionText: optionText ?? this.optionText,
       articleContent: articleContent ?? this.articleContent,
       articleTags: articleTags ?? this.articleTags,
-      articleBanner: articleBanner ?? this.articleBanner,
       articleController: articleController ?? this.articleController,
       focusNode: focusNode ?? this.focusNode,
       scrollController: scrollController ?? this.scrollController,

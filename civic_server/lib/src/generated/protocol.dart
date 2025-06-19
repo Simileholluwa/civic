@@ -116,13 +116,6 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: '\'\'::text',
         ),
         _i2.ColumnDefinition(
-          name: 'banner',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-          columnDefault: '\'\'::text',
-        ),
-        _i2.ColumnDefinition(
           name: 'tag',
           columnType: _i2.ColumnType.json,
           isNullable: true,

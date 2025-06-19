@@ -37,7 +37,7 @@ class ArticleTextEditor extends StatelessWidget {
         ),
         scrollable: true,
         placeholder:
-            'Write the content of your article here. Use the toolbar to format ad apply all the styles you need.',
+            'Write the content of your article here. Use the toolbar to format and apply all the styles you need.',
         padding: const EdgeInsets.all(16),
         embedBuilders: [
           ...(FlutterQuillEmbeds.editorBuilders(

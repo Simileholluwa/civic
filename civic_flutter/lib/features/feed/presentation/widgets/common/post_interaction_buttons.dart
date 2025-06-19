@@ -16,6 +16,7 @@ class PostInteractionButtons extends ConsumerWidget {
     this.isReply = false,
     this.isComment = false,
     this.isPoll = false,
+    this.isArticle = false,
   });
 
   final Post post;
@@ -26,6 +27,7 @@ class PostInteractionButtons extends ConsumerWidget {
   final bool isReply;
   final bool isComment;
   final int originalPostId;
+  final bool isArticle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,6 +96,7 @@ class PostInteractionButtons extends ConsumerWidget {
                       isComment: isComment,
                       originalPostId: originalPostId,
                       isPoll: isPoll,
+                      isArticle: isArticle,
                     ),
                   );
                 },

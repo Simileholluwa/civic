@@ -231,8 +231,12 @@ class PostEndpoint extends Endpoint {
               bookmarkedBy: existingPost.bookmarkedBy,
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
+              articleId: existingPost.articleId,
               dateCreated: existingPost.dateCreated,
-              article: post.article,
+              article: existingPost.article!.copyWith(
+                content: post.article!.content,
+                tag: [...existingPost.article!.tag!, ...post.article!.tag!],
+              ),
             ),
           );
           return existingPost;
@@ -1215,6 +1219,7 @@ class PostEndpoint extends Endpoint {
             orderDescending: false,
           ),
         ),
+        article: Article.include(),
         quotedOrRepostedFromUser: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
@@ -1231,6 +1236,7 @@ class PostEndpoint extends Endpoint {
         project: post.project,
         parent: post.parent,
         poll: post.poll,
+        article: post.article,
         quotedOrRepostedFromUser: post.quotedOrRepostedFromUser,
       );
     }

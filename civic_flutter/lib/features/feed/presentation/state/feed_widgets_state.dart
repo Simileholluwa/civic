@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -44,6 +47,7 @@ class FeedWidgetsState {
     this.articleTags = const <String>[],
     this.totalVotes = 0,
     this.votedOption,
+    this.rawContent,
   });
 
   factory FeedWidgetsState.empty() {
@@ -103,6 +107,25 @@ class FeedWidgetsState {
       pollEnded: poll?.expiresAt?.isBefore(DateTime.now()) ?? false,
       hasVoted: poll?.votedBy?.contains(userId) ?? false,
       totalVotes: poll?.votedBy?.length ?? 0,
+      articleBanner: post.imageUrls!.isNotEmpty ? post.imageUrls!.first : '',
+      articleContent: post.article != null
+          ? post.article!.content!.isNotEmpty
+              ? Document.fromJson(
+                  jsonDecode(
+                    post.article!.content!,
+                  ),
+                ).toPlainText()
+              : ''
+          : '',
+      rawContent: post.article != null
+          ? post.article!.content!.isNotEmpty
+              ? Document.fromJson(
+                  jsonDecode(
+                    post.article!.content!,
+                  ),
+                )
+              : Document()
+          : Document(),
     );
   }
 
@@ -143,6 +166,7 @@ class FeedWidgetsState {
   final String articleBanner;
   final String articleContent;
   final List<String> articleTags;
+  final Document? rawContent;
 
   FeedWidgetsState copyWith({
     UserRecord? creator,
@@ -193,7 +217,8 @@ class FeedWidgetsState {
       imageUrls: imageUrls ?? this.imageUrls,
       isFollower: isFollower ?? this.isFollower,
       isOwner: isOwner ?? this.isOwner,
-      isSendingNotInterested: isSendingNotInterested ?? this.isSendingNotInterested,
+      isSendingNotInterested:
+          isSendingNotInterested ?? this.isSendingNotInterested,
       isSendingPoll: isSendingPoll ?? this.isSendingPoll,
       locations: locations ?? this.locations,
       mentions: mentions ?? this.mentions,

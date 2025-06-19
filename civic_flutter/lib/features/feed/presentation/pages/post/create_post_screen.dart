@@ -59,7 +59,8 @@ class CreatePostScreen extends ConsumerWidget {
       if (isReplyOrComment) {
         isComment = (parent!.postType == PostType.regular ||
             parent!.postType == PostType.projectRepost ||
-            parent!.postType == PostType.poll);
+            parent!.postType == PostType.poll || 
+            parent!.postType == PostType.article);
 
         isReply = parent!.postType == PostType.comment;
         username = parent!.owner!.userInfo!.userName!;
@@ -85,6 +86,7 @@ class CreatePostScreen extends ConsumerWidget {
                 ref,
                 context,
                 data.value!,
+                PostType.regular,
               )
             : true;
         if (shouldPop ?? false) {
@@ -131,6 +133,7 @@ class CreatePostScreen extends ConsumerWidget {
                         ref,
                         context,
                         data.value!,
+                        PostType.regular,
                       )
                     : true;
                 if (shouldPop ?? false) {

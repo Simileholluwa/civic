@@ -11,7 +11,6 @@ part 'feed_provider.g.dart';
 @riverpod
 class Feed extends _$Feed {
   static final imageHelper = ImageHelper();
-  static const int maxImageCount = 10;
   static const int maxVideoSizeInMb = 10;
 
   void addUser(UserRecord userRecord) {
@@ -151,10 +150,10 @@ class Feed extends _$Feed {
     }
   }
 
-  Future<void> takePicture() async {
+  Future<void> takePicture([int maxImageCount = 5]) async {
     if (state.imageUrls.length >= maxImageCount) return;
     final image = await imageHelper.takeImage();
-    if (image != null && state.imageUrls.length < 10) {
+    if (image != null && state.imageUrls.length < 5) {
       if (isVideo()) {
         state = state.copyWith(videoUrl: '');
       }
@@ -164,7 +163,7 @@ class Feed extends _$Feed {
     }
   }
 
-  Future<void> pickPicture() async {
+  Future<void> pickPicture([int maxImageCount = 5]) async {
     if (state.imageUrls.length >= maxImageCount) return;
     final imageLength = maxImageCount - state.imageUrls.length;
     final image = await imageHelper.pickImage(
@@ -275,7 +274,7 @@ class Feed extends _$Feed {
     });
   }
 
-  Future<bool> sendMediaImages(int? id) async {
+  Future<bool> sendMediaImages(int? id, bool saveDraft) async {
     var existingUpload = <String>[];
     var newUpload = <String>[];
     if (state.imageUrls.isNotEmpty) {
@@ -297,10 +296,12 @@ class Feed extends _$Feed {
       return result.fold((error) async {
         ref.read(sendPostLoadingProvider.notifier).setValue(false);
         log(error);
-        await savePostAsDraft(
-          id,
-          error,
-        );
+        if (saveDraft) {
+          await savePostAsDraft(
+            id,
+            error,
+          );
+        }
         return false;
       }, (mediaUrls) {
         state = state.copyWith(
@@ -483,7 +484,7 @@ class Feed extends _$Feed {
       }
     }
 
-    final uploadedImages = await sendMediaImages(postId);
+    final uploadedImages = await sendMediaImages(postId, true);
     if (!uploadedImages) return;
     final uploadedVideo = await sendMediaVideo(postId);
     if (!uploadedVideo) return;
@@ -521,7 +522,7 @@ class Feed extends _$Feed {
     ref.read(sendPostLoadingProvider.notifier).setValue(true);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveComment = ref.read(savePostCommentProvider);
-    final sentImages = await sendMediaImages(postId);
+    final sentImages = await sendMediaImages(postId, true);
     if (!sentImages) return;
     final result = await saveComment(
       SavePostCommentParams(
@@ -562,7 +563,7 @@ class Feed extends _$Feed {
     final saveReply = ref.read(
       savePostCommentProvider,
     );
-    final sentImages = await sendMediaImages(parentId);
+    final sentImages = await sendMediaImages(parentId, true);
     if (!sentImages) return;
     final result = await saveReply(
       SavePostCommentParams(
@@ -642,6 +643,45 @@ class Feed extends _$Feed {
     });
   }
 
+  Future<void> saveArticleAsDraft(int? id, String? errorMesage) async {
+    final article = Article(
+      id: id,
+      ownerId: ref.read(localStorageProvider).getInt('userId')!,
+      content: state.articleContent,
+      tag: state.articleTags,
+    );
+    final post = Post(
+      ownerId: ref.read(localStorageProvider).getInt('userId')!,
+      text: state.text.trim(),
+      imageUrls: state.imageUrls,
+      taggedUsers: state.taggedUsers,
+      locations: state.locations,
+      mentions: state.mentions,
+      tags: state.tags,
+      article: article,
+    );
+
+    final savePost = ref.read(savePostDraftProvider);
+    final result = await savePost(
+      SavePostDraftParams(
+        post,
+        'articleDraft',
+      ),
+    );
+    result.fold((error) {
+      log(error.message);
+    }, (data) {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      errorMesage != null
+          ? TToastMessages.errorToast(
+              '$errorMesage. Your article was saved to draft.',
+            )
+          : TToastMessages.successToast(
+              'Your article was saved to draft.',
+            );
+    });
+  }
+
   Future<void> sendPoll(
     Post post,
     bool addToList,
@@ -702,8 +742,11 @@ class Feed extends _$Feed {
       }
     }
 
-    final uploadedImages = await sendMediaImages(postId);
-    if (!uploadedImages) return;
+    final uploadedImages = await sendMediaImages(postId, false);
+    if (!uploadedImages) {
+      await savePollAsDraft(id, 'Failed to upload images');
+      return;
+    }
     List<PollOption> pollOptions =
         state.optionText.asMap().entries.map((entry) {
       final text = entry.value;
@@ -747,6 +790,149 @@ class Feed extends _$Feed {
     return;
   }
 
+  Future<void> sendMediaAndModifyContent(
+    int? id,
+    List<String> embeddedImages,
+    String content,
+  ) async {
+    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+          embeddedImages,
+          'articles',
+          'images',
+        );
+
+    return result.fold((error) async {
+      log(error);
+      await saveArticleAsDraft(
+        id,
+        error,
+      );
+
+      return;
+    }, (mediaUrls) {
+      final pathReplacements = FeedHelperFunctions.mapEmbededImages(
+        embeddedImages,
+        mediaUrls,
+      );
+      final modifiedContent = FeedHelperFunctions.modifyArticleContent(
+        content,
+        pathReplacements,
+      );
+
+      setContent(modifiedContent);
+      return;
+    });
+  }
+
+  Future<void> sendArticle(
+    Post post,
+    bool addToList,
+  ) async {
+    final saveArticle = ref.read(saveArticleProvider);
+
+    final result = await saveArticle(
+      SaveArticleParams(
+        post,
+      ),
+    );
+    return result.fold((error) async {
+      log(error.message);
+      await saveArticleAsDraft(
+        null,
+        error.message,
+      );
+
+      return;
+    }, (data) async {
+      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      if (data == null) {
+        await saveArticleAsDraft(
+          post.id,
+          'Something went wrong',
+        );
+        return;
+      }
+      if (addToList) {
+        ref.read(paginatedArticleListProvider.notifier).addArticle(
+              data,
+            );
+      }
+      TToastMessages.successToast(
+        'Your article was sent.',
+      );
+      return;
+    });
+  }
+
+  Future<void> sendAnArticle(
+    int? id,
+  ) async {
+    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
+    final scheduledDateTimeProvider = ref.read(
+      postScheduledDateTimeProvider.notifier,
+    );
+
+    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+    int? postId;
+    if (id != null) {
+      if (id == 0) {
+        postId = null;
+      } else {
+        postId = id;
+      }
+    }
+
+    final uploadedImages = await sendMediaImages(postId, false);
+    if (!uploadedImages) {
+      await saveArticleAsDraft(id, 'Failed to upload banner');
+      return;
+    }
+    final embeddedImages = FeedHelperFunctions.getAllImagesFromEditor(
+      state.articleContent,
+    );
+    if (embeddedImages.isNotEmpty) {
+      await sendMediaAndModifyContent(
+        postId,
+        embeddedImages,
+        state.articleContent,
+      );
+    }
+
+    final article = Article(
+      ownerId: ownerId,
+      content: state.articleContent,
+      tag: state.articleTags,
+    );
+
+    final post = Post(
+      id: postId,
+      ownerId: ownerId,
+      text: state.text.trim(),
+      imageUrls: state.imageUrls,
+      taggedUsers: state.taggedUsers,
+      locations: state.locations,
+      mentions: state.mentions,
+      tags: state.tags,
+      article: article,
+      postType: PostType.article,
+    ); 
+
+    if (scheduledDateTime == null &&
+        !scheduledDateTimeProvider.canSendLater()) {
+      await sendArticle(
+        post,
+        postId == null,
+      );
+    } else {
+      await savePostInFuture(
+        post,
+        scheduledDateTime!,
+      );
+    }
+    return;
+  }
+
   @override
   FeedState build(Post? post) {
     ref.onDispose(() {
@@ -775,10 +961,10 @@ class Feed extends _$Feed {
 
       if (post.article != null) {
         if (post.article!.content != null) {
-          state.articleController!.addListener(() {
+          feedState.articleController!.addListener(() {
             setContent(
               jsonEncode(
-                state.articleController!.document.toDelta().toJson(),
+                feedState.articleController!.document.toDelta().toJson(),
               ),
             );
           });

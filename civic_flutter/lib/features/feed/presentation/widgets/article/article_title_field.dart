@@ -30,12 +30,7 @@ class ArticleTitleField extends ConsumerWidget {
         errorBorder: InputBorder.none,
         hintText: 'Give your article a title...',
         counter: SizedBox(),
-        contentPadding: EdgeInsets.fromLTRB(
-          16,
-          20,
-          16,
-          8,
-        ),
+        contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 0),
       ),
       onChanged: (value) {
         postNotifier.setText(value);

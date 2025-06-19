@@ -23,6 +23,7 @@ class ProjectsScreen extends ConsumerWidget {
       appBar: ContentAppBar(
         isVisible: isVisible,
         showBorder: false,
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.apps,
@@ -32,8 +33,11 @@ class ProjectsScreen extends ConsumerWidget {
         ),
         titleSpacing: 0,
         height: 60,
-        title: SizedBox(
-          height: 40,
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 300,
+            maxHeight: 45,
+          ),
           child: SearchAnchor.bar(
             barLeading: const SizedBox.shrink(),
             barHintText: 'Search',

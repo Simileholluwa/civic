@@ -11,7 +11,7 @@ class SaveArticleUseCase implements UseCase<Post?, SaveArticleParams> {
 
   @override
   Future<Either<Failure, Post?>> call(SaveArticleParams params) async {
-    final result = await _feedRepository.savePoll(
+    final result = await _feedRepository.saveArticle(
       post: params.post,
     );
     return result;

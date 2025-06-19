@@ -47,6 +47,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
         article: Article(
           ownerId: userId,
           owner: owner,
+          content: '',
         ),
       );
     } catch (e) {

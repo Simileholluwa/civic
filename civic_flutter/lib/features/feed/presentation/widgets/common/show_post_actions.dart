@@ -15,6 +15,7 @@ class ShowPostActions extends ConsumerWidget {
     this.isReply = false,
     this.isComment = false,
     this.isPoll = false,
+    this.isArticle = false,
   });
 
   final Post post;
@@ -22,6 +23,7 @@ class ShowPostActions extends ConsumerWidget {
   final bool isPoll;
   final bool isReply;
   final bool isComment;
+  final bool isArticle;
   final int originalPostId;
 
   @override
@@ -129,6 +131,13 @@ class ShowPostActions extends ConsumerWidget {
                     'post': post,
                   },
                 );
+              } else if (isArticle) {
+                context.push(
+                  '/create/article/${post.id}',
+                  extra: {
+                    'post': post,
+                  },
+                );
               } else {
                 context.push(
                   '/create/post/${post.id}',
@@ -157,6 +166,8 @@ class ShowPostActions extends ConsumerWidget {
                 originalPostId,
                 isReply,
                 isComment,
+                isPoll,
+                isArticle,
               );
             },
           ),

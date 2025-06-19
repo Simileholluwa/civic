@@ -75,20 +75,16 @@ class ArticlesScreen extends ConsumerWidget {
                               .textTheme
                               .headlineLarge!
                               .copyWith(
-                                fontSize: 20,
+                                fontSize: 23,
                                 fontWeight: FontWeight.bold,
                               ),
                           textAlign: TextAlign.left,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: ContentExpandableText(
-                            text: postCardState.text,
-                            hasImage: postCardState.hasImage,
-                            hasVideo: postCardState.hasVideo,
-                            noMaxLines: true,
-                            onToggleTextTap: () {},
-                          ),
+                        ContentExpandableText(
+                          text: postCardState.articleContent,
+                          hasImage: true,
+                          maxLines: 4,
+                          onToggleTextTap: () {},
                         ),
                       ],
                     ),
@@ -105,13 +101,14 @@ class ArticlesScreen extends ConsumerWidget {
               ),
             if (true)
               PostInteractionButtons(
-                post: livePost.value ?? post,
+                post: newPost,
                 onReply: () {
                   context.push(
                     '/feed/post/${post.id}/comments',
                   );
                 },
                 originalPostId: post.id!,
+                isArticle: true,
               ),
           ],
         );
