@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -126,5 +128,64 @@ class FeedHelperFunctions {
     if (minutes > 0) return ' • $minutes minute${minutes == 1 ? '' : 's'} left';
 
     return ' • Poll ends soon';
+  }
+
+  static List<String> getAllImagesFromEditor(String content) {
+    final List<String> imageUrls = [];
+    // Convert the document to JSON
+
+    final jsonDocument = jsonDecode(
+      content,
+    );
+
+    // Loop through the document's operations
+    for (var operation in jsonDocument) {
+      if (operation['insert'] is Map &&
+          operation['insert'].containsKey('image')) {
+        // Add the image URL to the list
+        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+        if (!operation['insert']['image'].toString().startsWith(regex)) {
+          imageUrls.add(operation['insert']['image']);
+        }
+      }
+    }
+
+    return imageUrls;
+  }
+
+  static Map<String, String> mapEmbededImages(
+    List<String> oldPath,
+    List<String> newPath,
+  ) {
+    return {for (int i = 0; i < oldPath.length; i++) oldPath[i]: newPath[i]};
+  }
+
+  static String modifyArticleContent(
+    String content,
+    Map<String, String> pathReplacements,
+  ) {
+    // Convert document to JSON
+    final documentJson = jsonDecode(
+      content,
+    );
+
+    // Update the JSON with new image paths
+    for (var block in documentJson) {
+      if (block.containsKey('insert')) {
+        final insert = block['insert'];
+
+        // Check if the block is an image
+        if (insert is Map<String, dynamic> && insert.containsKey('image')) {
+          final oldPath = insert['image'] as String;
+
+          // If the image path has a replacement, update it
+          if (pathReplacements.containsKey(oldPath)) {
+            insert['image'] = pathReplacements[oldPath];
+          }
+        }
+      }
+    }
+
+    return jsonEncode(documentJson);
   }
 }

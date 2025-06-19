@@ -44,6 +44,10 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
           ownerId: userId,
           owner: owner,
         ),
+        article: Article(
+          ownerId: userId,
+          owner: owner,
+        ),
       );
     } catch (e) {
       throw const CacheException(message: 'Something went wrong');

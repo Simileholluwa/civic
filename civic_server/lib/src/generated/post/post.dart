@@ -17,8 +17,9 @@ import '../post/post_type_enums.dart' as _i3;
 import '../general/aws_places.dart' as _i4;
 import '../post/posts_hashtags.dart' as _i5;
 import '../poll/poll.dart' as _i6;
-import '../project/project.dart' as _i7;
-import '../post/post.dart' as _i8;
+import '../article/article.dart' as _i7;
+import '../project/project.dart' as _i8;
+import '../post/post.dart' as _i9;
 
 abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Post._({
@@ -41,6 +42,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? commentCount,
     this.pollId,
     this.poll,
+    this.articleId,
+    this.article,
     this.projectId,
     this.project,
     this.parentId,
@@ -73,10 +76,12 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? commentCount,
     int? pollId,
     _i6.Poll? poll,
+    int? articleId,
+    _i7.Article? article,
     int? projectId,
-    _i7.Project? project,
+    _i8.Project? project,
     int? parentId,
-    _i8.Post? parent,
+    _i9.Post? parent,
     int? quotedOrRepostedFromUserId,
     _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
@@ -132,15 +137,20 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
           ? null
           : _i6.Poll.fromJson(
               (jsonSerialization['poll'] as Map<String, dynamic>)),
+      articleId: jsonSerialization['articleId'] as int?,
+      article: jsonSerialization['article'] == null
+          ? null
+          : _i7.Article.fromJson(
+              (jsonSerialization['article'] as Map<String, dynamic>)),
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
-          : _i7.Project.fromJson(
+          : _i8.Project.fromJson(
               (jsonSerialization['project'] as Map<String, dynamic>)),
       parentId: jsonSerialization['parentId'] as int?,
       parent: jsonSerialization['parent'] == null
           ? null
-          : _i8.Post.fromJson(
+          : _i9.Post.fromJson(
               (jsonSerialization['parent'] as Map<String, dynamic>)),
       quotedOrRepostedFromUserId:
           jsonSerialization['quotedOrRepostedFromUserId'] as int?,
@@ -197,13 +207,17 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   _i6.Poll? poll;
 
+  int? articleId;
+
+  _i7.Article? article;
+
   int? projectId;
 
-  _i7.Project? project;
+  _i8.Project? project;
 
   int? parentId;
 
-  _i8.Post? parent;
+  _i9.Post? parent;
 
   int? quotedOrRepostedFromUserId;
 
@@ -237,10 +251,12 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? commentCount,
     int? pollId,
     _i6.Poll? poll,
+    int? articleId,
+    _i7.Article? article,
     int? projectId,
-    _i7.Project? project,
+    _i8.Project? project,
     int? parentId,
-    _i8.Post? parent,
+    _i9.Post? parent,
     int? quotedOrRepostedFromUserId,
     _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
@@ -271,6 +287,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
+      if (articleId != null) 'articleId': articleId,
+      if (article != null) 'article': article?.toJson(),
       if (projectId != null) 'projectId': projectId,
       if (project != null) 'project': project?.toJson(),
       if (parentId != null) 'parentId': parentId,
@@ -311,6 +329,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJsonForProtocol(),
+      if (articleId != null) 'articleId': articleId,
+      if (article != null) 'article': article?.toJsonForProtocol(),
       if (projectId != null) 'projectId': projectId,
       if (project != null) 'project': project?.toJsonForProtocol(),
       if (parentId != null) 'parentId': parentId,
@@ -328,14 +348,16 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i2.UserRecordInclude? owner,
     _i5.PostsHashtagsIncludeList? hashtags,
     _i6.PollInclude? poll,
-    _i7.ProjectInclude? project,
-    _i8.PostInclude? parent,
+    _i7.ArticleInclude? article,
+    _i8.ProjectInclude? project,
+    _i9.PostInclude? parent,
     _i2.UserRecordInclude? quotedOrRepostedFromUser,
   }) {
     return PostInclude._(
       owner: owner,
       hashtags: hashtags,
       poll: poll,
+      article: article,
       project: project,
       parent: parent,
       quotedOrRepostedFromUser: quotedOrRepostedFromUser,
@@ -391,10 +413,12 @@ class _PostImpl extends Post {
     int? commentCount,
     int? pollId,
     _i6.Poll? poll,
+    int? articleId,
+    _i7.Article? article,
     int? projectId,
-    _i7.Project? project,
+    _i8.Project? project,
     int? parentId,
-    _i8.Post? parent,
+    _i9.Post? parent,
     int? quotedOrRepostedFromUserId,
     _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
@@ -418,6 +442,8 @@ class _PostImpl extends Post {
           commentCount: commentCount,
           pollId: pollId,
           poll: poll,
+          articleId: articleId,
+          article: article,
           projectId: projectId,
           project: project,
           parentId: parentId,
@@ -451,6 +477,8 @@ class _PostImpl extends Post {
     Object? commentCount = _Undefined,
     Object? pollId = _Undefined,
     Object? poll = _Undefined,
+    Object? articleId = _Undefined,
+    Object? article = _Undefined,
     Object? projectId = _Undefined,
     Object? project = _Undefined,
     Object? parentId = _Undefined,
@@ -493,10 +521,12 @@ class _PostImpl extends Post {
       commentCount: commentCount is int? ? commentCount : this.commentCount,
       pollId: pollId is int? ? pollId : this.pollId,
       poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
+      articleId: articleId is int? ? articleId : this.articleId,
+      article: article is _i7.Article? ? article : this.article?.copyWith(),
       projectId: projectId is int? ? projectId : this.projectId,
-      project: project is _i7.Project? ? project : this.project?.copyWith(),
+      project: project is _i8.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
-      parent: parent is _i8.Post? ? parent : this.parent?.copyWith(),
+      parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
       quotedOrRepostedFromUserId: quotedOrRepostedFromUserId is int?
           ? quotedOrRepostedFromUserId
           : this.quotedOrRepostedFromUserId,
@@ -574,6 +604,10 @@ class PostTable extends _i1.Table<int?> {
       'pollId',
       this,
     );
+    articleId = _i1.ColumnInt(
+      'articleId',
+      this,
+    );
     projectId = _i1.ColumnInt(
       'projectId',
       this,
@@ -631,13 +665,17 @@ class PostTable extends _i1.Table<int?> {
 
   _i6.PollTable? _poll;
 
+  late final _i1.ColumnInt articleId;
+
+  _i7.ArticleTable? _article;
+
   late final _i1.ColumnInt projectId;
 
-  _i7.ProjectTable? _project;
+  _i8.ProjectTable? _project;
 
   late final _i1.ColumnInt parentId;
 
-  _i8.PostTable? _parent;
+  _i9.PostTable? _parent;
 
   late final _i1.ColumnInt quotedOrRepostedFromUserId;
 
@@ -684,28 +722,41 @@ class PostTable extends _i1.Table<int?> {
     return _poll!;
   }
 
-  _i7.ProjectTable get project {
+  _i7.ArticleTable get article {
+    if (_article != null) return _article!;
+    _article = _i1.createRelationTable(
+      relationFieldName: 'article',
+      field: Post.t.articleId,
+      foreignField: _i7.Article.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i7.ArticleTable(tableRelation: foreignTableRelation),
+    );
+    return _article!;
+  }
+
+  _i8.ProjectTable get project {
     if (_project != null) return _project!;
     _project = _i1.createRelationTable(
       relationFieldName: 'project',
       field: Post.t.projectId,
-      foreignField: _i7.Project.t.id,
+      foreignField: _i8.Project.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i7.ProjectTable(tableRelation: foreignTableRelation),
+          _i8.ProjectTable(tableRelation: foreignTableRelation),
     );
     return _project!;
   }
 
-  _i8.PostTable get parent {
+  _i9.PostTable get parent {
     if (_parent != null) return _parent!;
     _parent = _i1.createRelationTable(
       relationFieldName: 'parent',
       field: Post.t.parentId,
-      foreignField: _i8.Post.t.id,
+      foreignField: _i9.Post.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i8.PostTable(tableRelation: foreignTableRelation),
+          _i9.PostTable(tableRelation: foreignTableRelation),
     );
     return _parent!;
   }
@@ -759,6 +810,7 @@ class PostTable extends _i1.Table<int?> {
         bookmarkedBy,
         commentCount,
         pollId,
+        articleId,
         projectId,
         parentId,
         quotedOrRepostedFromUserId,
@@ -775,6 +827,9 @@ class PostTable extends _i1.Table<int?> {
     }
     if (relationField == 'poll') {
       return poll;
+    }
+    if (relationField == 'article') {
+      return article;
     }
     if (relationField == 'project') {
       return project;
@@ -794,13 +849,15 @@ class PostInclude extends _i1.IncludeObject {
     _i2.UserRecordInclude? owner,
     _i5.PostsHashtagsIncludeList? hashtags,
     _i6.PollInclude? poll,
-    _i7.ProjectInclude? project,
-    _i8.PostInclude? parent,
+    _i7.ArticleInclude? article,
+    _i8.ProjectInclude? project,
+    _i9.PostInclude? parent,
     _i2.UserRecordInclude? quotedOrRepostedFromUser,
   }) {
     _owner = owner;
     _hashtags = hashtags;
     _poll = poll;
+    _article = article;
     _project = project;
     _parent = parent;
     _quotedOrRepostedFromUser = quotedOrRepostedFromUser;
@@ -812,9 +869,11 @@ class PostInclude extends _i1.IncludeObject {
 
   _i6.PollInclude? _poll;
 
-  _i7.ProjectInclude? _project;
+  _i7.ArticleInclude? _article;
 
-  _i8.PostInclude? _parent;
+  _i8.ProjectInclude? _project;
+
+  _i9.PostInclude? _parent;
 
   _i2.UserRecordInclude? _quotedOrRepostedFromUser;
 
@@ -823,6 +882,7 @@ class PostInclude extends _i1.IncludeObject {
         'owner': _owner,
         'hashtags': _hashtags,
         'poll': _poll,
+        'article': _article,
         'project': _project,
         'parent': _parent,
         'quotedOrRepostedFromUser': _quotedOrRepostedFromUser,
@@ -1156,12 +1216,35 @@ class PostAttachRowRepository {
     );
   }
 
+  /// Creates a relation between the given [Post] and [Article]
+  /// by setting the [Post]'s foreign key `articleId` to refer to the [Article].
+  Future<void> article(
+    _i1.Session session,
+    Post post,
+    _i7.Article article, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+    if (article.id == null) {
+      throw ArgumentError.notNull('article.id');
+    }
+
+    var $post = post.copyWith(articleId: article.id);
+    await session.db.updateRow<Post>(
+      $post,
+      columns: [Post.t.articleId],
+      transaction: transaction,
+    );
+  }
+
   /// Creates a relation between the given [Post] and [Project]
   /// by setting the [Post]'s foreign key `projectId` to refer to the [Project].
   Future<void> project(
     _i1.Session session,
     Post post,
-    _i7.Project project, {
+    _i8.Project project, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1184,7 +1267,7 @@ class PostAttachRowRepository {
   Future<void> parent(
     _i1.Session session,
     Post post,
-    _i8.Post parent, {
+    _i9.Post parent, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1298,6 +1381,28 @@ class PostDetachRowRepository {
     await session.db.updateRow<Post>(
       $post,
       columns: [Post.t.pollId],
+      transaction: transaction,
+    );
+  }
+
+  /// Detaches the relation between this [Post] and the [Article] set in `article`
+  /// by setting the [Post]'s foreign key `articleId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> article(
+    _i1.Session session,
+    Post post, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+
+    var $post = post.copyWith(articleId: null);
+    await session.db.updateRow<Post>(
+      $post,
+      columns: [Post.t.articleId],
       transaction: transaction,
     );
   }

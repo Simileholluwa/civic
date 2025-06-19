@@ -1,15 +1,14 @@
 //ignore_for_file:avoid_public_notifier_properties
-//ignore_for_file:avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'poll_paginated_list_provider.g.dart';
+part 'paginated_article_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class PaginatedPollList extends _$PaginatedPollList {
+class PaginatedArticleList extends _$PaginatedArticleList {
   final PagingController<int, Post> pagingController =
       PagingController(firstPageKey: 1);
 
@@ -22,7 +21,6 @@ class PaginatedPollList extends _$PaginatedPollList {
     pagingController.addStatusListener((status) {
       state = status;
     });
-
     ref.onDispose(() {
       pagingController.dispose();
     });
@@ -32,15 +30,12 @@ class PaginatedPollList extends _$PaginatedPollList {
 
   Future<void> fetchPage(int page, {int limit = 50}) async {
     try {
-      final listPollUseCase = ref.read(getPollsProvider);
-      final result = await listPollUseCase(
-        GetPollsParams(
-          page,
-          limit,
-        ),
+      final listArticleUseCase = ref.read(getArticlesProvider);
+      final result = await listArticleUseCase(
+        GetArticlesParams(page, limit,),
       );
       result.fold((error) {
-        log(error.toString(), name: 'PaginatedPollList');
+        log(error.toString(), name: 'PaginatedArticleList');
         pagingController.value = PagingState(
           nextPageKey: null,
           itemList: null,
@@ -57,7 +52,7 @@ class PaginatedPollList extends _$PaginatedPollList {
         }
       });
     } catch (e) {
-      log(e.toString(), name: 'PaginatedPollList');
+      log(e.toString(), name: 'PaginatedArticleList');
       pagingController.value = PagingState(
         nextPageKey: null,
         itemList: null,
@@ -70,7 +65,7 @@ class PaginatedPollList extends _$PaginatedPollList {
     pagingController.refresh();
   }
 
-  void addPoll(Post post) {
+  void addArticle(Post post) {
     if (pagingController.itemList != null) {
       final updatedList = List<Post>.from(pagingController.itemList ?? []);
       updatedList.insert(0, post);
@@ -81,7 +76,7 @@ class PaginatedPollList extends _$PaginatedPollList {
     }
   }
 
-  void removePollById(int? postId) {
+  void removeArticleById(int? postId) {
     if (pagingController.itemList != null && postId != null) {
       final updatedList = List<Post>.from(pagingController.itemList ?? []);
       updatedList.removeWhere((element) => element.id == postId);

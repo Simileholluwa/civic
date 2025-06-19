@@ -1,4 +1,5 @@
 //ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'dart:convert';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -19,6 +20,19 @@ class Feed extends _$Feed {
         taggedUsers: [...state.taggedUsers, userRecord],
       );
     }
+  }
+
+  void addArticleTag(String tag) {
+    state = state.copyWith(
+      articleTags: [...state.articleTags, tag],
+    );
+  }
+
+  void setContent(String content) {
+    state = state.copyWith(
+      articleContent: content,
+      contentPlainText: state.articleController?.document.toPlainText() ?? '',
+    );
   }
 
   void removeUser(UserRecord userRecord) {
@@ -737,6 +751,12 @@ class Feed extends _$Feed {
   FeedState build(Post? post) {
     ref.onDispose(() {
       state.controller.dispose();
+      state.articleController?.dispose();
+      state.focusNode?.dispose();
+      state.scrollController?.dispose();
+      for (var ctr in state.controllers) {
+        ctr.dispose();
+      }
     });
     if (post == null) {
       final feedState = FeedState.empty();
@@ -745,12 +765,25 @@ class Feed extends _$Feed {
           setText(feedState.controller.text);
         },
       );
+
       return feedState;
     } else {
       final feedState = FeedState.populate(post);
       feedState.controller.addListener(() {
         setText(feedState.controller.text);
       });
+
+      if (post.article != null) {
+        if (post.article!.content != null) {
+          state.articleController!.addListener(() {
+            setContent(
+              jsonEncode(
+                state.articleController!.document.toDelta().toJson(),
+              ),
+            );
+          });
+        }
+      }
 
       if (post.videoUrl != null) {
         if (post.videoUrl!.isNotEmpty) {

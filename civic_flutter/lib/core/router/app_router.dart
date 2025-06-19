@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/presentation/routes/create_route.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -168,17 +167,6 @@ GoRouter router(Ref ref) {
         builder: (context, state, navigationShell) {
           return AppWrapper(
             navigatorShell: navigationShell,
-          );
-        },
-      ),
-
-      GoRoute(
-        path: AppRoutes.createArticle,
-        builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return CreateArticleScreen(
-            id: data['id'],
-            draft: data['draft'],
           );
         },
       ),

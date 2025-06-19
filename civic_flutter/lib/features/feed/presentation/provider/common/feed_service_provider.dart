@@ -163,3 +163,17 @@ CastVoteUseCase castVote(Ref ref) {
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
+
+@riverpod
+GetArticlesUseCase getArticles(Ref ref) {
+  return GetArticlesUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
+SaveArticleUseCase saveArticle(Ref ref) {
+  return SaveArticleUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}

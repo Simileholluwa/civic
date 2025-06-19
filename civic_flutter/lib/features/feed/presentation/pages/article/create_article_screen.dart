@@ -1,61 +1,47 @@
 // ignore_for_file: use_build_context_synchronously
+
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CreatePollScreen extends ConsumerWidget {
-  const CreatePollScreen({
+class CreateArticleScreen extends ConsumerWidget {
+  const CreateArticleScreen({
     super.key,
     required this.id,
     required this.post,
   });
 
-  final Post? post;
   final int id;
-
+  final Post? post;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final suggestions = ref.watch(mentionSuggestionsProvider);
+    final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     final data = post == null
         ? ref.watch(
-            postDetailProvider(id, 'pollDraft'),
+            postDetailProvider(id, 'articleDraft'),
           )
         : AsyncValue.data(
             post,
           );
-    final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final postState = ref.watch(
       feedProvider(
         data.value,
       ),
     );
-    final postNotifier = ref.watch(
-      feedProvider(
-        data.value,
-      ).notifier,
-    );
-    final canSendPoll = postState.text.isNotEmpty &&
-        postState.optionText.every((text) => text.isNotEmpty);
-    final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
-    final isVisibleNotifier = ref.watch(
-      appBottomNavigationVisibilityProvider(
-        false,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.hide(),
-    );
+    final canSend = postState.articleBanner.isNotEmpty &&
+        postState.text.isNotEmpty &&
+        postState.articleContent.isNotEmpty;
+
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
       onPopInvoked: (bool didPop) async {
         if (didPop) return;
-        final bool? shouldPop = canSendPoll
+        final bool? shouldPop = canSend
             ? await savePostDraftDialog(ref, context, data.value!)
             : true;
         if (shouldPop ?? false) {
@@ -71,16 +57,11 @@ class CreatePollScreen extends ConsumerWidget {
               60,
             ),
             child: CreateContentAppbar(
-              canSend: canSendPoll,
-              sendPressed: () async {
-                context.pop();
-                await postNotifier.sendAPoll(
-                  data.value?.id, data.value?.pollId
-                );
-              },
+              canSend: canSend,
+              sendPressed: () {},
               title: CreateContentPrivacy(),
               onCanSendPost: () async {
-                final bool? shouldPop = canSendPoll
+                final bool? shouldPop = canSend
                     ? await savePostDraftDialog(ref, context, data.value!)
                     : true;
                 if (shouldPop ?? false) {
@@ -89,25 +70,28 @@ class CreatePollScreen extends ConsumerWidget {
               },
             ),
           ),
-          bottomSheet: suggestions.isNotEmpty
-              ? MentionsSuggestionsWidget(
-                  onSuggestionSelected: (suggestion) =>
-                      THelperFunctions.onSuggestionSelected(
-                    ref,
-                    suggestion,
-                    postState.controller,
+          body: data.when(
+            data: (value) {
+              if (value == null) {
+                return const Center(
+                  child: Text(
+                    'Article not found',
                   ),
-                )
-              : hashtagsSuggestions.isNotEmpty
-                  ? HashtagSuggestionsWidget(
-                      onSuggestionSelected: (suggestion) =>
-                          THelperFunctions.onSuggestionSelected(
-                        ref,
-                        suggestion,
-                        postState.controller,
-                      ),
-                    )
-                  : null,
+                );
+              }
+              return CreateArticleWidget(post: value);
+            },
+            error: (error, st) {
+              return Center(
+                child: Text(
+                  error.toString(),
+                ),
+              );
+            },
+            loading: () {
+              return AppLoadingWidget();
+            },
+          ),
           bottomNavigationBar: data.when(
             data: (_) {
               if (scheduledDateTimeState != null) {
@@ -137,29 +121,6 @@ class CreatePollScreen extends ConsumerWidget {
             },
             loading: () {
               return null;
-            },
-          ),
-          body: data.when(
-            data: (value) {
-              if (value == null) {
-                return const Center(
-                  child: Text('Poll not found'),
-                );
-              }
-              return CreatePollWidget(
-                post: value,
-                isEditing: data.value?.id != null,
-              );
-            },
-            error: (error, st) {
-              return Center(
-                child: Text(
-                  error.toString(),
-                ),
-              );
-            },
-            loading: () {
-              return AppLoadingWidget();
             },
           ),
         ),

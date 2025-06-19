@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/article/article.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';

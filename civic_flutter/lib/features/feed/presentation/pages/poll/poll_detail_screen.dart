@@ -24,8 +24,7 @@ class PollDetailScreen extends ConsumerWidget {
         ? ref.watch(
             postDetailProvider(
               id,
-              'pollDraft',
-              PostType.poll,
+              'pollDraft'
             ),
           )
         : AsyncValue.data(

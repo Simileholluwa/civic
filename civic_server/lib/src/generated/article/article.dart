@@ -20,28 +20,19 @@ abstract class Article
     this.id,
     required this.ownerId,
     this.owner,
-    this.title,
-    this.content,
-    this.banner,
-    this.dateCreated,
-    this.updatedAt,
-    this.numberOfComments,
-    this.numberOfLikes,
-    this.numberOfViews,
-  });
+    String? content,
+    String? banner,
+    this.tag,
+  })  : content = content ?? '',
+        banner = banner ?? '';
 
   factory Article({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   }) = _ArticleImpl;
 
   factory Article.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -52,19 +43,10 @@ abstract class Article
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      title: jsonSerialization['title'] as String?,
       content: jsonSerialization['content'] as String?,
       banner: jsonSerialization['banner'] as String?,
-      dateCreated: jsonSerialization['dateCreated'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
-      updatedAt: jsonSerialization['updatedAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      numberOfComments: jsonSerialization['numberOfComments'] as int?,
-      numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
-      numberOfViews: jsonSerialization['numberOfViews'] as int?,
+      tag:
+          (jsonSerialization['tag'] as List?)?.map((e) => e as String).toList(),
     );
   }
 
@@ -79,21 +61,11 @@ abstract class Article
 
   _i2.UserRecord? owner;
 
-  String? title;
-
   String? content;
 
   String? banner;
 
-  DateTime? dateCreated;
-
-  DateTime? updatedAt;
-
-  int? numberOfComments;
-
-  int? numberOfLikes;
-
-  int? numberOfViews;
+  List<String>? tag;
 
   @override
   _i1.Table<int?> get table => t;
@@ -105,14 +77,9 @@ abstract class Article
     int? id,
     int? ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -120,14 +87,9 @@ abstract class Article
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      if (title != null) 'title': title,
       if (content != null) 'content': content,
       if (banner != null) 'banner': banner,
-      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
-      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (numberOfComments != null) 'numberOfComments': numberOfComments,
-      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
-      if (numberOfViews != null) 'numberOfViews': numberOfViews,
+      if (tag != null) 'tag': tag?.toJson(),
     };
   }
 
@@ -137,14 +99,9 @@ abstract class Article
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
-      if (title != null) 'title': title,
       if (content != null) 'content': content,
       if (banner != null) 'banner': banner,
-      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
-      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (numberOfComments != null) 'numberOfComments': numberOfComments,
-      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
-      if (numberOfViews != null) 'numberOfViews': numberOfViews,
+      if (tag != null) 'tag': tag?.toJson(),
     };
   }
 
@@ -185,26 +142,16 @@ class _ArticleImpl extends Article {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
-          title: title,
           content: content,
           banner: banner,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          numberOfComments: numberOfComments,
-          numberOfLikes: numberOfLikes,
-          numberOfViews: numberOfViews,
+          tag: tag,
         );
 
   /// Returns a shallow copy of this [Article]
@@ -215,28 +162,17 @@ class _ArticleImpl extends Article {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    Object? title = _Undefined,
     Object? content = _Undefined,
     Object? banner = _Undefined,
-    Object? dateCreated = _Undefined,
-    Object? updatedAt = _Undefined,
-    Object? numberOfComments = _Undefined,
-    Object? numberOfLikes = _Undefined,
-    Object? numberOfViews = _Undefined,
+    Object? tag = _Undefined,
   }) {
     return Article(
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      title: title is String? ? title : this.title,
       content: content is String? ? content : this.content,
       banner: banner is String? ? banner : this.banner,
-      dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
-      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      numberOfComments:
-          numberOfComments is int? ? numberOfComments : this.numberOfComments,
-      numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
-      numberOfViews: numberOfViews is int? ? numberOfViews : this.numberOfViews,
+      tag: tag is List<String>? ? tag : this.tag?.map((e0) => e0).toList(),
     );
   }
 }
@@ -247,36 +183,18 @@ class ArticleTable extends _i1.Table<int?> {
       'ownerId',
       this,
     );
-    title = _i1.ColumnString(
-      'title',
-      this,
-    );
     content = _i1.ColumnString(
       'content',
       this,
+      hasDefault: true,
     );
     banner = _i1.ColumnString(
       'banner',
       this,
+      hasDefault: true,
     );
-    dateCreated = _i1.ColumnDateTime(
-      'dateCreated',
-      this,
-    );
-    updatedAt = _i1.ColumnDateTime(
-      'updatedAt',
-      this,
-    );
-    numberOfComments = _i1.ColumnInt(
-      'numberOfComments',
-      this,
-    );
-    numberOfLikes = _i1.ColumnInt(
-      'numberOfLikes',
-      this,
-    );
-    numberOfViews = _i1.ColumnInt(
-      'numberOfViews',
+    tag = _i1.ColumnSerializable(
+      'tag',
       this,
     );
   }
@@ -285,21 +203,11 @@ class ArticleTable extends _i1.Table<int?> {
 
   _i2.UserRecordTable? _owner;
 
-  late final _i1.ColumnString title;
-
   late final _i1.ColumnString content;
 
   late final _i1.ColumnString banner;
 
-  late final _i1.ColumnDateTime dateCreated;
-
-  late final _i1.ColumnDateTime updatedAt;
-
-  late final _i1.ColumnInt numberOfComments;
-
-  late final _i1.ColumnInt numberOfLikes;
-
-  late final _i1.ColumnInt numberOfViews;
+  late final _i1.ColumnSerializable tag;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -318,14 +226,9 @@ class ArticleTable extends _i1.Table<int?> {
   List<_i1.Column> get columns => [
         id,
         ownerId,
-        title,
         content,
         banner,
-        dateCreated,
-        updatedAt,
-        numberOfComments,
-        numberOfLikes,
-        numberOfViews,
+        tag,
       ];
 
   @override

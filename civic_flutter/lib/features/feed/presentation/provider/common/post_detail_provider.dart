@@ -11,7 +11,6 @@ Future<Post> postDetail(
   Ref ref,
   int id,
   String draftType,
-  PostType postType,
 ) async {
   final completer = Completer<Post>();
   if (id == 0) {
@@ -36,7 +35,6 @@ Future<Post> postDetail(
     final result = await retrievePost(
       GetPostParams(
         id,
-        postType,
       ),
     );
 

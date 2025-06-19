@@ -2,11 +2,6 @@ class: Article
 table: article
 fields:
     owner: UserRecord?, relation
-    title: String?
-    content: String?
-    banner: String?
-    dateCreated: DateTime?
-    updatedAt: DateTime?
-    numberOfComments: int?
-    numberOfLikes: int?
-    numberOfViews: int?
+    content: String?, default=''
+    banner: String?, default=''
+    tag: List<String>?

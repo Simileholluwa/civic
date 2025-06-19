@@ -17,28 +17,19 @@ abstract class Article implements _i1.SerializableModel {
     this.id,
     required this.ownerId,
     this.owner,
-    this.title,
-    this.content,
-    this.banner,
-    this.dateCreated,
-    this.updatedAt,
-    this.numberOfComments,
-    this.numberOfLikes,
-    this.numberOfViews,
-  });
+    String? content,
+    String? banner,
+    this.tag,
+  })  : content = content ?? '',
+        banner = banner ?? '';
 
   factory Article({
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   }) = _ArticleImpl;
 
   factory Article.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -49,19 +40,10 @@ abstract class Article implements _i1.SerializableModel {
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['owner'] as Map<String, dynamic>)),
-      title: jsonSerialization['title'] as String?,
       content: jsonSerialization['content'] as String?,
       banner: jsonSerialization['banner'] as String?,
-      dateCreated: jsonSerialization['dateCreated'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
-      updatedAt: jsonSerialization['updatedAt'] == null
-          ? null
-          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      numberOfComments: jsonSerialization['numberOfComments'] as int?,
-      numberOfLikes: jsonSerialization['numberOfLikes'] as int?,
-      numberOfViews: jsonSerialization['numberOfViews'] as int?,
+      tag:
+          (jsonSerialization['tag'] as List?)?.map((e) => e as String).toList(),
     );
   }
 
@@ -74,21 +56,11 @@ abstract class Article implements _i1.SerializableModel {
 
   _i2.UserRecord? owner;
 
-  String? title;
-
   String? content;
 
   String? banner;
 
-  DateTime? dateCreated;
-
-  DateTime? updatedAt;
-
-  int? numberOfComments;
-
-  int? numberOfLikes;
-
-  int? numberOfViews;
+  List<String>? tag;
 
   /// Returns a shallow copy of this [Article]
   /// with some or all fields replaced by the given arguments.
@@ -97,14 +69,9 @@ abstract class Article implements _i1.SerializableModel {
     int? id,
     int? ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -112,14 +79,9 @@ abstract class Article implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
-      if (title != null) 'title': title,
       if (content != null) 'content': content,
       if (banner != null) 'banner': banner,
-      if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
-      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (numberOfComments != null) 'numberOfComments': numberOfComments,
-      if (numberOfLikes != null) 'numberOfLikes': numberOfLikes,
-      if (numberOfViews != null) 'numberOfViews': numberOfViews,
+      if (tag != null) 'tag': tag?.toJson(),
     };
   }
 
@@ -136,26 +98,16 @@ class _ArticleImpl extends Article {
     int? id,
     required int ownerId,
     _i2.UserRecord? owner,
-    String? title,
     String? content,
     String? banner,
-    DateTime? dateCreated,
-    DateTime? updatedAt,
-    int? numberOfComments,
-    int? numberOfLikes,
-    int? numberOfViews,
+    List<String>? tag,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
-          title: title,
           content: content,
           banner: banner,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          numberOfComments: numberOfComments,
-          numberOfLikes: numberOfLikes,
-          numberOfViews: numberOfViews,
+          tag: tag,
         );
 
   /// Returns a shallow copy of this [Article]
@@ -166,28 +118,17 @@ class _ArticleImpl extends Article {
     Object? id = _Undefined,
     int? ownerId,
     Object? owner = _Undefined,
-    Object? title = _Undefined,
     Object? content = _Undefined,
     Object? banner = _Undefined,
-    Object? dateCreated = _Undefined,
-    Object? updatedAt = _Undefined,
-    Object? numberOfComments = _Undefined,
-    Object? numberOfLikes = _Undefined,
-    Object? numberOfViews = _Undefined,
+    Object? tag = _Undefined,
   }) {
     return Article(
       id: id is int? ? id : this.id,
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
-      title: title is String? ? title : this.title,
       content: content is String? ? content : this.content,
       banner: banner is String? ? banner : this.banner,
-      dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
-      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      numberOfComments:
-          numberOfComments is int? ? numberOfComments : this.numberOfComments,
-      numberOfLikes: numberOfLikes is int? ? numberOfLikes : this.numberOfLikes,
-      numberOfViews: numberOfViews is int? ? numberOfViews : this.numberOfViews,
+      tag: tag is List<String>? ? tag : this.tag?.map((e0) => e0).toList(),
     );
   }
 }

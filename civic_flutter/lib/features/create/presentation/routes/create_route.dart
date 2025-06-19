@@ -1,5 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/create/presentation/widgets/create_dialog.dart';
+import 'package:civic_flutter/features/create/presentation/pages/create_content_page.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class CreateRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (context, state) => CreateContentDialog(),
+        builder: (context, state) => CreateContentScreen(),
         routes: [
           GoRoute(
             path: 'post/:postId',
@@ -46,6 +46,16 @@ class CreateRoutes {
               return CreatePollScreen(
                 id: int.tryParse(state.pathParameters['pollId'] ?? '0') ?? 0,
                 post: data?['post'],
+              );
+            },
+          ),
+          GoRoute(
+            path: 'article/:articleId',
+            builder: (context, state) {
+              final data = state.extra as Map<String, dynamic>;
+              return CreateArticleScreen(
+                id: data['articleId'],
+                post: data['post'],
               );
             },
           ),

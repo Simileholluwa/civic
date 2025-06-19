@@ -392,5 +392,37 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
+String _$getArticlesHash() => r'59c102168a267a5664a9e8352d09528210952489';
+
+/// See also [getArticles].
+@ProviderFor(getArticles)
+final getArticlesProvider = AutoDisposeProvider<GetArticlesUseCase>.internal(
+  getArticles,
+  name: r'getArticlesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getArticlesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetArticlesRef = AutoDisposeProviderRef<GetArticlesUseCase>;
+String _$saveArticleHash() => r'e7c59f4c12dd39e294dde5a62799b3de64598d4e';
+
+/// See also [saveArticle].
+@ProviderFor(saveArticle)
+final saveArticleProvider = AutoDisposeProvider<SaveArticleUseCase>.internal(
+  saveArticle,
+  name: r'saveArticleProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$saveArticleHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SaveArticleRef = AutoDisposeProviderRef<SaveArticleUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -53,12 +53,10 @@ class FeedRepositoryImpl implements FeedRepository {
   @override
   Future<Either<Failure, Post>> getPost({
     required int postId,
-    required PostType postType,
   }) async {
     try {
       final result = await _remoteDatabase.getPost(
         postId: postId,
-        postType: postType,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -374,6 +372,44 @@ class FeedRepositoryImpl implements FeedRepository {
       final result = await _remoteDatabase.getPolls(
         page: page,
         limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, PostList>> getArticles({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatabase.getArticles(
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> saveArticle({
+    required Post post,
+  }) async {
+    try {
+      final result = await _remoteDatabase.saveArticle(
+        post: post,
       );
       return Right(result);
     } on ServerException catch (e) {

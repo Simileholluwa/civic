@@ -12,7 +12,6 @@ class GetPostUseCase implements UseCase<Post, GetPostParams> {
   Future<Either<Failure, Post>> call(GetPostParams params) async {
     final result = await _feedRepository.getPost(
       postId: params.postId,
-      postType: params.postType,
     );
     return result;
   }
@@ -21,8 +20,6 @@ class GetPostUseCase implements UseCase<Post, GetPostParams> {
 class GetPostParams {
   GetPostParams(
     this.postId,
-    this.postType,
   );
   final int postId;
-  final PostType postType;
 }

@@ -1,8 +1,0 @@
-class: ArticleDraft
-fields:
-    draftId: int?
-    ownerId: int?
-    banner: String
-    content: String
-    title: String
-    createdAt: DateTime?

@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -17,6 +20,13 @@ class FeedState {
     this.optionText = const <String>['', ''],
     this.controllers = const <TextEditingController>[],
     this.expiresAt,
+    this.articleContent = '',
+    this.articleTags = const <String>[],
+    this.articleBanner = '',
+    this.articleController,
+    this.focusNode,
+    this.scrollController,
+    this.contentPlainText = '',
   });
 
   factory FeedState.empty() {
@@ -34,6 +44,7 @@ class FeedState {
 
   factory FeedState.populate(Post post) {
     final poll = post.poll;
+    final article = post.article;
     return FeedState(
       text: post.text ?? '',
       imageUrls: post.imageUrls ?? [],
@@ -56,6 +67,17 @@ class FeedState {
       expiresAt: poll?.expiresAt ?? DateTime.now().add(
         const Duration(days: 1),
       ),
+      focusNode: article == null ? null : FocusNode(),
+      scrollController: article == null ? null : ScrollController(),
+      articleController: QuillController(
+        document: Document.fromJson(
+          jsonDecode(article?.content ?? '{}'),
+        ),
+        selection: const TextSelection.collapsed(offset: 0),
+      ),
+      articleBanner: article?.banner ?? '',
+      articleContent: article?.content ?? '',
+      articleTags: article?.tag ?? [],
     );
   }
 
@@ -70,6 +92,13 @@ class FeedState {
   final List<TextEditingController> controllers;
   final DateTime? expiresAt;
   final List<String> optionText;
+  final String articleContent;
+  final List<String> articleTags;
+  final String articleBanner;
+  final QuillController? articleController;
+  final FocusNode? focusNode;
+  final ScrollController? scrollController;
+  final String contentPlainText;
 
   FeedState copyWith({
     MentionHashtagLinkTextEditingController? controller,
@@ -83,6 +112,13 @@ class FeedState {
     List<TextEditingController>? controllers,
     DateTime? expiresAt,
     List<String>? optionText,
+    String? articleContent,
+    List<String>? articleTags,
+    String? articleBanner,
+    QuillController? articleController,
+    FocusNode? focusNode,
+    ScrollController? scrollController,
+    String? contentPlainText,
   }) {
     return FeedState(
       controller: controller ?? this.controller,
@@ -96,6 +132,13 @@ class FeedState {
       controllers: controllers ?? this.controllers,
       expiresAt: expiresAt ?? this.expiresAt,
       optionText: optionText ?? this.optionText,
+      articleContent: articleContent ?? this.articleContent,
+      articleTags: articleTags ?? this.articleTags,
+      articleBanner: articleBanner ?? this.articleBanner,
+      articleController: articleController ?? this.articleController,
+      focusNode: focusNode ?? this.focusNode,
+      scrollController: scrollController ?? this.scrollController,
+      contentPlainText: contentPlainText ?? this.contentPlainText,
     );
   }
 }

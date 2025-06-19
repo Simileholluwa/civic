@@ -194,6 +194,97 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  Future<Post?> saveArticle(
+    Session session,
+    Post post,
+  ) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+        if (post.id != null) {
+          await validatePostOwnership(
+            session,
+            post.id!,
+            user,
+          );
+
+          final existingPost = await Post.db.findById(
+            session,
+            post.id!,
+            include: Post.include(
+              article: Article.include(),
+            ),
+            transaction: transaction,
+          );
+
+          if (existingPost == null) {
+            throw PostException(
+              message: 'Article not found. It may have been deleted.',
+            );
+          }
+
+          await updatePost(
+            session,
+            post.copyWith(
+              updatedAt: DateTime.now(),
+              likedBy: existingPost.likedBy,
+              bookmarkedBy: existingPost.bookmarkedBy,
+              commentCount: existingPost.commentCount,
+              postType: existingPost.postType,
+              dateCreated: existingPost.dateCreated,
+              article: post.article,
+            ),
+          );
+          return existingPost;
+        } else {
+          final savedPost = await Post.db.insertRow(
+            session,
+            post.copyWith(
+              ownerId: user.id!,
+              likedBy: [],
+              bookmarkedBy: [],
+            ),
+            transaction: transaction,
+          );
+
+          final savedArticle = await Article.db.insertRow(
+            session,
+            post.article!,
+            transaction: transaction,
+          );
+
+          await Post.db.updateRow(
+            session,
+            savedPost.copyWith(
+              articleId: savedArticle.id,
+            ),
+            transaction: transaction,
+          );
+
+          return await Post.db.findById(
+            session,
+            savedPost.id!,
+            include: Post.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+              article: Article.include(),
+            ),
+            transaction: transaction,
+          );
+        }
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in saveArticle: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        return null;
+      }
+    });
+  }
+
   Future<void> castVote(
     Session session,
     int postId,
@@ -407,6 +498,48 @@ class PostEndpoint extends Endpoint {
             orderDescending: false,
           ),
         ),
+      ),
+      orderBy: (t) => t.dateCreated,
+      orderDescending: true,
+    );
+
+    return PostList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
+  }
+
+  Future<PostList> getArticles(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    final user = await authUser(session);
+    final ignored = await PostNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.postId).toSet();
+    final count = await Post.db.count(
+      session,
+      where: (t) =>
+          t.postType.equals(PostType.article) & t.id.notInSet(ignoredIds),
+    );
+    final results = await Post.db.find(
+      session,
+      where: (t) =>
+          t.postType.equals(PostType.article) & t.id.notInSet(ignoredIds),
+      limit: limit,
+      offset: (page * limit) - limit,
+      include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+        article: Article.include(),
       ),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
@@ -744,7 +877,6 @@ class PostEndpoint extends Endpoint {
   Future<Post> getPost(
     Session session,
     int id,
-    PostType postType,
   ) async {
     final result = await Post.db.findById(
       session,
@@ -753,29 +885,20 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
-        project:
-            postType == PostType.projectRepost || postType == PostType.regular
-                ? Project.include(
-                    owner: UserRecord.include(
-                      userInfo: UserInfo.include(),
-                    ),
-                  )
-                : null,
-        parent: postType == PostType.postRepost || postType == PostType.regular
-            ? Post.include(
-                owner: UserRecord.include(
-                  userInfo: UserInfo.include(),
-                ),
-              )
-            : null,
-        poll: postType == PostType.poll
-            ? Poll.include(
-                owner: UserRecord.include(
-                  userInfo: UserInfo.include(),
-                ),
-                options: PollOption.includeList(),
-              )
-            : null,
+        project: Project.include(
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+        ),
+        parent: Post.include(
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+        ),
+        poll: Poll.include(
+          options: PollOption.includeList(),
+        ),
+        article: Article.include(),
       ),
     );
 

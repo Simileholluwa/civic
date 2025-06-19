@@ -39,6 +39,9 @@ class FeedWidgetsState {
     this.pollEnded = false,
     this.pollOptions = const <PollOption>[],
     this.quoteCount = '',
+    this.articleBanner = '',
+    this.articleContent = '',
+    this.articleTags = const <String>[],
     this.totalVotes = 0,
     this.votedOption,
   });
@@ -137,6 +140,9 @@ class FeedWidgetsState {
   final int totalVotes;
   final String videoUrl;
   final PollOption? votedOption;
+  final String articleBanner;
+  final String articleContent;
+  final List<String> articleTags;
 
   FeedWidgetsState copyWith({
     UserRecord? creator,

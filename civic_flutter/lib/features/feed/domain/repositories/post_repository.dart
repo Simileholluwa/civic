@@ -27,7 +27,6 @@ abstract class FeedRepository {
   });
   Future<Either<Failure, Post>> getPost({
     required int postId,
-    required PostType postType,
   });
   Future<Either<Failure, Post>> quoteProject({
     required int projectId,
@@ -74,5 +73,12 @@ abstract class FeedRepository {
   Future<Either<Failure, void>> castVote({
     required int postId,
     required int optionId,
+  });
+  Future<Either<Failure, PostList>> getArticles({
+    required int page,
+    required int limit,
+  });
+  Future<Either<Failure, Post>> saveArticle({
+    required Post post,
   });
 }

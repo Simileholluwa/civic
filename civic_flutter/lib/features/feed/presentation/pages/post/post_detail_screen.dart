@@ -26,8 +26,7 @@ class PostDetailScreen extends ConsumerWidget {
         ? ref.watch(
             postDetailProvider(
               id,
-              'postDraft',
-              postType,
+              'postDraft'
             ),
           )
         : AsyncValue.data(

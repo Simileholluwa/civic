@@ -13,7 +13,6 @@ abstract class FeedRemoteDatabase {
   });
   Future<Post> getPost({
     required int postId,
-    required PostType postType,
   });
   Future<Post> quoteProject({
     required int projectId,
@@ -57,11 +56,18 @@ abstract class FeedRemoteDatabase {
   Future<Post> savePoll({
     required Post post,
   });
+  Future<Post> saveArticle({
+    required Post post,
+  });
   Future<void> castVote({
     required int postId,
     required int optionId,
   });
   Future<PostList> getPolls({
+    required int page,
+    required int limit,
+  });
+  Future<PostList> getArticles({
     required int page,
     required int limit,
   });
@@ -130,12 +136,10 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   @override
   Future<Post> getPost({
     required int postId,
-    required PostType postType,
   }) async {
     try {
       final result = await _client.post.getPost(
         postId,
-        postType,
       );
       return result;
     } on SocketException catch (_) {
@@ -429,6 +433,59 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       if (result == null) {
         throw const ServerException(
           message: 'Failed to save poll',
+        );
+      }
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostList> getArticles({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _client.post.getArticles(
+        page: page,
+        limit: limit,
+      );
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Post> saveArticle({
+    required Post post,
+  }) async {
+    try {
+      final result = await _client.post.saveArticle(
+        post,
+      );
+      if (result == null) {
+        throw const ServerException(
+          message: 'Failed to save article',
         );
       }
       return result;
