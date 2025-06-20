@@ -12,6 +12,7 @@ part 'project_detail_provider.g.dart';
 Future<Project> projectDetail(
   Ref ref,
   int id,
+  Project? project,
 ) async {
   final completer = Completer<Project>();
   if (id == 0) {
@@ -28,6 +29,9 @@ Future<Project> projectDetail(
         completer.complete(project);
       },
     );
+    return completer.future;
+  } else if (project != null) {
+    completer.complete(project);
     return completer.future;
   } else {
     final retrieveProject = ref.read(getProjectProvider);

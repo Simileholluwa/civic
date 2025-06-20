@@ -20,13 +20,9 @@ class CreateArticleScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
-    final data = post == null
-        ? ref.watch(
-            postDetailProvider(id, 'articleDraft'),
-          )
-        : AsyncValue.data(
-            post,
-          );
+    final data = ref.watch(
+      postDetailProvider(id, 'articleDraft', post),
+    );
     final postState = ref.watch(
       feedProvider(
         data.value,
@@ -92,13 +88,6 @@ class CreateArticleScreen extends ConsumerWidget {
           ),
           body: data.when(
             data: (value) {
-              if (value == null) {
-                return const Center(
-                  child: Text(
-                    'Article not found',
-                  ),
-                );
-              }
               return CreateArticleWidget(post: value);
             },
             error: (error, st) {

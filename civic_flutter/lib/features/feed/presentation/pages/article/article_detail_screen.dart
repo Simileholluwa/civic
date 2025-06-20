@@ -1,6 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,8 +9,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class PollDetailScreen extends ConsumerWidget {
-  const PollDetailScreen({
+class ArticleDetailScreen extends ConsumerWidget {
+  const ArticleDetailScreen({
     super.key,
     required this.id,
     this.post,
@@ -20,8 +21,9 @@ class PollDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final defaultTextStyle = DefaultTextStyle.of(context);
     final data = ref.watch(
-      postDetailProvider(id, 'pollDraft', post),
+      postDetailProvider(id, 'articleDraft', post),
     );
     final livePost = ref.watch(
       postStreamProvider(
@@ -55,8 +57,8 @@ class PollDetailScreen extends ConsumerWidget {
           child: AppBar(
             title: Text(
               data.hasValue && !data.hasError
-                  ? "${data.value?.owner?.userInfo?.userName}'s Poll"
-                  : 'Poll',
+                  ? "${data.value?.owner?.userInfo?.userName}'s Article"
+                  : 'Article',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 25,
                   ),
@@ -107,14 +109,56 @@ class PollDetailScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                PollCard(
-                  post: newPost,
-                  fromDetails: true,
-                ),
-                const Divider(
-                  height: 0,
-                  indent: 15,
-                  endIndent: 15,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
+                    children: [
+                      ContentCreatorInfo(
+                        creator: postCardState.creator!,
+                        timeAgo: postCardState.timeAgo,
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          TSizes.md,
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: ContentCachedImage(
+                            url: postCardState.articleBanner,
+                            height: 200,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        postCardState.text,
+                        style:
+                            Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                        textAlign: TextAlign.left,
+                      ),
+                      QuillEditor.basic(
+                        controller: QuillController(
+                          document: postCardState.rawContent!,
+                          selection: const TextSelection.collapsed(
+                            offset: 0,
+                          ),
+                          readOnly: true,
+                        ),
+                        config: QuillEditorConfig(
+                          customStyles:
+                              THelperFunctions.articleTextEditorStyles(
+                            context,
+                            defaultTextStyle,
+                          ),
+                          scrollPhysics: const NeverScrollableScrollPhysics(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -133,7 +177,7 @@ class PollDetailScreen extends ConsumerWidget {
                       ),
                       if (likesCount > 0)
                         Text(
-                          likesCount == 1 ? '1 like' : '$likes likes',
+                          likesCount == 1 ? '$likes like' : '$likes likes',
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
                                     color: Theme.of(context).hintColor,
@@ -153,7 +197,7 @@ class PollDetailScreen extends ConsumerWidget {
                       ),
                       child: PostDetailOptions(
                         post: newPost,
-                        isPoll: true,
+                        isArticle: true,
                       ),
                     ),
                     const Divider(
@@ -162,7 +206,7 @@ class PollDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 PostCommentCard(
-                  postId: id,
+                  postId: value.id!,
                   firstPageProgressIndicator: Padding(
                     padding: const EdgeInsets.only(
                       top: 30,

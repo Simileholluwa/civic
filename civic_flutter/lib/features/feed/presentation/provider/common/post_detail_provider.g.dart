@@ -6,7 +6,7 @@ part of 'post_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postDetailHash() => r'aaba230b61ad91f722c399768633cdc01b431181';
+String _$postDetailHash() => r'6078267e5a3e27de3e6c7cb33b8adf23a7ef3ecd';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -42,10 +42,12 @@ class PostDetailFamily extends Family<AsyncValue<Post>> {
   PostDetailProvider call(
     int id,
     String draftType,
+    Post? post,
   ) {
     return PostDetailProvider(
       id,
       draftType,
+      post,
     );
   }
 
@@ -56,6 +58,7 @@ class PostDetailFamily extends Family<AsyncValue<Post>> {
     return call(
       provider.id,
       provider.draftType,
+      provider.post,
     );
   }
 
@@ -80,11 +83,13 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
   PostDetailProvider(
     int id,
     String draftType,
+    Post? post,
   ) : this._internal(
           (ref) => postDetail(
             ref as PostDetailRef,
             id,
             draftType,
+            post,
           ),
           from: postDetailProvider,
           name: r'postDetailProvider',
@@ -97,6 +102,7 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
               PostDetailFamily._allTransitiveDependencies,
           id: id,
           draftType: draftType,
+          post: post,
         );
 
   PostDetailProvider._internal(
@@ -108,10 +114,12 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
     required super.from,
     required this.id,
     required this.draftType,
+    required this.post,
   }) : super.internal();
 
   final int id;
   final String draftType;
+  final Post? post;
 
   @override
   Override overrideWith(
@@ -128,6 +136,7 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
         debugGetCreateSourceHash: null,
         id: id,
         draftType: draftType,
+        post: post,
       ),
     );
   }
@@ -141,7 +150,8 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
   bool operator ==(Object other) {
     return other is PostDetailProvider &&
         other.id == id &&
-        other.draftType == draftType;
+        other.draftType == draftType &&
+        other.post == post;
   }
 
   @override
@@ -149,6 +159,7 @@ class PostDetailProvider extends AutoDisposeFutureProvider<Post> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
     hash = _SystemHash.combine(hash, draftType.hashCode);
+    hash = _SystemHash.combine(hash, post.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -162,6 +173,9 @@ mixin PostDetailRef on AutoDisposeFutureProviderRef<Post> {
 
   /// The parameter `draftType` of this provider.
   String get draftType;
+
+  /// The parameter `post` of this provider.
+  Post? get post;
 }
 
 class _PostDetailProviderElement extends AutoDisposeFutureProviderElement<Post>
@@ -172,6 +186,8 @@ class _PostDetailProviderElement extends AutoDisposeFutureProviderElement<Post>
   int get id => (origin as PostDetailProvider).id;
   @override
   String get draftType => (origin as PostDetailProvider).draftType;
+  @override
+  Post? get post => (origin as PostDetailProvider).post;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

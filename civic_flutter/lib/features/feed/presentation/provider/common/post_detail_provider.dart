@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
+import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -11,6 +12,7 @@ Future<Post> postDetail(
   Ref ref,
   int id,
   String draftType,
+  Post? post,
 ) async {
   final completer = Completer<Post>();
   if (id == 0) {
@@ -30,6 +32,9 @@ Future<Post> postDetail(
       },
     );
     return completer.future;
+  } else if (post != null) {
+    completer.complete(post);
+    return completer.future;
   } else {
     final retrievePost = ref.read(getPostProvider);
     final result = await retrievePost(
@@ -38,17 +43,19 @@ Future<Post> postDetail(
       ),
     );
 
-    result.fold(
+    return result.fold(
       (error) {
+        log(error.toString(), name: 'postDetail');
         completer.completeError({
           'message': error.message,
           'action': error.action,
         });
+        return completer.future;
       },
       (post) {
         completer.complete(post);
+        return completer.future;
       },
     );
-    return completer.future;
   }
 }

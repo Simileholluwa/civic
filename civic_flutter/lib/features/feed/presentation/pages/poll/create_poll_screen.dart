@@ -20,13 +20,9 @@ class CreatePollScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
-    final data = post == null
-        ? ref.watch(
-            postDetailProvider(id, 'pollDraft'),
-          )
-        : AsyncValue.data(
-            post,
-          );
+    final data = ref.watch(
+      postDetailProvider(id, 'pollDraft', post),
+    );
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final postState = ref.watch(
       feedProvider(
@@ -150,11 +146,6 @@ class CreatePollScreen extends ConsumerWidget {
           ),
           body: data.when(
             data: (value) {
-              if (value == null) {
-                return const Center(
-                  child: Text('Poll not found'),
-                );
-              }
               return CreatePollWidget(
                 post: value,
                 isEditing: data.value?.id != null,

@@ -392,7 +392,7 @@ final castVoteProvider = AutoDisposeProvider<CastVoteUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CastVoteRef = AutoDisposeProviderRef<CastVoteUseCase>;
-String _$getArticlesHash() => r'59c102168a267a5664a9e8352d09528210952489';
+String _$getArticlesHash() => r'2f5a71cb50f4663c8f79a69d3629ca9aec3a046e';
 
 /// See also [getArticles].
 @ProviderFor(getArticles)
@@ -408,7 +408,7 @@ final getArticlesProvider = AutoDisposeProvider<GetArticlesUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetArticlesRef = AutoDisposeProviderRef<GetArticlesUseCase>;
-String _$saveArticleHash() => r'e7c59f4c12dd39e294dde5a62799b3de64598d4e';
+String _$saveArticleHash() => r'e23dda5fa1e9f638255ae1c06bd790814abf258f';
 
 /// See also [saveArticle].
 @ProviderFor(saveArticle)

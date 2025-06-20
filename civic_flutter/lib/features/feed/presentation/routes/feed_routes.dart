@@ -19,48 +19,61 @@ class FeedRoutes {
         },
         routes: [
           GoRoute(
-            path: 'poll/:pollId',
-            builder: (context, state) => PollDetailScreen(
-              id: int.tryParse(state.pathParameters['pollId'] ?? '0') ?? 0,
-              post: state.extra as Post?,
-            ),
-          ),
-          GoRoute(
-            path: 'post/:postId',
-            builder: (context, state) => PostDetailScreen(
-              id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
-              post: state.extra as Post?,
-            ),
-            routes: [
-              GoRoute(
-                path: 'comments',
-                builder: (_, state) {
-                  return CommentScreen(
-                    postId: int.tryParse(state.pathParameters['postId'] ?? '') ?? 0,
+              path: ':type/:id',
+              builder: (context, state) {
+                final type = state.pathParameters['type'];
+                if (type == 'post') {
+                  return PostDetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
+                        0,
+                    post: state.extra as Post?,
                   );
-                },
-              ),
-              GoRoute(
-                path: 'notInterested',
-                builder: (_, state) {
-                  final data = state.extra as Map<String, dynamic>;
-                  return MarkNotInterested(
-                    post: data['post'],
-                    originalPostId: data['originalPostId'],
+                } else if (type == 'poll') {
+                  return PollDetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
+                        0,
+                    post: state.extra as Post?,
                   );
-                },
-              ),
-              GoRoute(
-                path: 'replies/:replyId',
-                builder: (_, state) {
-                  return RepliesScreen(
-                    replyId: int.tryParse(state.pathParameters['replyId'] ?? '') ?? 0,
+                } else {
+                  return ArticleDetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
+                        0,
+                    post: state.extra as Post?,
                   );
-                },
-              ),
-              
-            ]
-          ),
+                }
+              },
+              routes: [
+                GoRoute(
+                  path: 'comments',
+                  builder: (_, state) {
+                    return CommentScreen(
+                      postId:
+                          int.tryParse(state.pathParameters['postId'] ?? '') ??
+                              0,
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: 'notInterested',
+                  builder: (_, state) {
+                    final data = state.extra as Map<String, dynamic>;
+                    return MarkNotInterested(
+                      post: data['post'],
+                      originalPostId: data['originalPostId'],
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: 'replies/:replyId',
+                  builder: (_, state) {
+                    return RepliesScreen(
+                      replyId:
+                          int.tryParse(state.pathParameters['replyId'] ?? '') ??
+                              0,
+                    );
+                  },
+                ),
+              ]),
         ],
       ),
     ],

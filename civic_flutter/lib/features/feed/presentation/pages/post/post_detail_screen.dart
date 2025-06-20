@@ -22,16 +22,9 @@ class PostDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = post == null
-        ? ref.watch(
-            postDetailProvider(
-              id,
-              'postDraft'
-            ),
-          )
-        : AsyncValue.data(
-            post,
-          );
+    final data = ref.watch(
+      postDetailProvider(id, 'postDraft', post),
+    );
     final livePost = ref.watch(
       postStreamProvider(
         id,
@@ -109,89 +102,81 @@ class PostDetailScreen extends ConsumerWidget {
       ),
       body: data.when(
         data: (value) {
-          if (value == null) {
-            return const Center(
-              child: Text('Post not found'),
-            );
-          } else {
-            final likes = postCardState.numberOfLikes;
-            final likesCount = newPost!.likedBy!.length;
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 10,
-                children: [
-                  PostCardDetail(
-                    post: newPost,
-                    showInteractions: false,
-                    hasProject: newPost.project != null,
-                    onTap: null,
-                    noMaxLines: true,
+          final likes = postCardState.numberOfLikes;
+          final likesCount = newPost!.likedBy!.length;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                PostCardDetail(
+                  post: newPost,
+                  showInteractions: false,
+                  hasProject: newPost.project != null,
+                  onTap: null,
+                  noMaxLines: true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 17,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 17,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        DateFormat('hh:mm a • MMM d, y')
+                            .format(value.dateCreated!),
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                      ),
+                      if (likesCount > 0)
                         Text(
-                          DateFormat('hh:mm a • MMM d, y')
-                              .format(value.dateCreated!),
+                          likesCount == 1 ? '$likes like' : '$likes likes',
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
                                     color: Theme.of(context).hintColor,
                                   ),
                         ),
-                        if (likesCount > 0)
-                          Text(
-                            likesCount == 1 ? '$likes like' : '$likes likes',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium!
-                                .copyWith(
-                                  color: Theme.of(context).hintColor,
-                                ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      const Divider(
-                        height: 0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        child: PostDetailOptions(
-                          post: newPost,
-                        ),
-                      ),
-                      const Divider(
-                        height: 0,
-                      ),
                     ],
                   ),
-                  PostCommentCard(
-                    postId: value.id!,
-                    firstPageProgressIndicator: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 30,
+                ),
+                Column(
+                  children: [
+                    const Divider(
+                      height: 0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
                       ),
-                      child: Center(
-                        child: LoadingAnimationWidget.progressiveDots(
-                          color: TColors.primary,
-                          size: 50,
-                        ),
+                      child: PostDetailOptions(
+                        post: newPost,
+                      ),
+                    ),
+                    const Divider(
+                      height: 0,
+                    ),
+                  ],
+                ),
+                PostCommentCard(
+                  postId: value.id!,
+                  firstPageProgressIndicator: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 30,
+                    ),
+                    child: Center(
+                      child: LoadingAnimationWidget.progressiveDots(
+                        color: TColors.primary,
+                        size: 50,
                       ),
                     ),
                   ),
-                ],
-              ),
-            );
-          }
+                ),
+              ],
+            ),
+          );
         },
         error: (error, st) {
           final err = error as Map<String, dynamic>;
@@ -212,22 +197,18 @@ class PostDetailScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          if (value == null) {
-            return null;
-          } else {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: ContentSingleButton(
-                onPressed: () {
-                  context.push('/create/post/0', extra: {
-                    'parent': value,
-                  });
-                },
-                text: 'Share your opinion',
-                buttonIcon: Iconsax.magicpen5,
-              ),
-            );
-          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: ContentSingleButton(
+              onPressed: () {
+                context.push('/create/post/0', extra: {
+                  'parent': value,
+                });
+              },
+              text: 'Share your opinion',
+              buttonIcon: Iconsax.magicpen5,
+            ),
+          );
         },
         error: (error, st) {
           final err = error as Map<String, dynamic>;

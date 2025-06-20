@@ -18,14 +18,10 @@ class CreateProjectScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = project == null
-        ? ref.watch(
+    final data = ref.watch(
             projectDetailProvider(
-              id,
+              id, project,
             ),
-          )
-        : AsyncValue.data(
-            project,
           );
     final projectCreationState = ref.watch(
       projectProviderProvider(
@@ -101,7 +97,7 @@ class CreateProjectScreen extends ConsumerWidget {
           body: data.when(
             data: (value) {
               return CreateProjectWidget(
-                project: value!,
+                project: value,
               );
             },
             error: (error, st) {

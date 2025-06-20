@@ -18,11 +18,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = project == null
-        ? ref.watch(projectDetailProvider(projectId))
-        : AsyncValue.data(
-            project,
-          );
+    final data = ref.watch(projectDetailProvider(projectId, project),);
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
         data.value,
@@ -139,7 +135,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
             return null;
           }
           return ProjectDetailsBottomNavigationWidget(
-            project: value!,
+            project: value,
           );
         },
         error: (error, st) {
@@ -165,11 +161,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ),
       body: data.when(
         data: (project) {
-          if (project == null) {
-            return const Center(
-              child: Text('Post not found'),
-            );
-          }
           return TabBarView(
             controller: tabController,
             children: [

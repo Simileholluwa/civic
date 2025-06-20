@@ -6,7 +6,7 @@ part of 'project_detail_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectDetailHash() => r'ebb87df28c3e5df68ef7ea6baa1141ffbf6bcc79';
+String _$projectDetailHash() => r'4e6395a64a8d1006cd552b7bdb6d9b20c948c78d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -41,9 +41,11 @@ class ProjectDetailFamily extends Family<AsyncValue<Project>> {
   /// See also [projectDetail].
   ProjectDetailProvider call(
     int id,
+    Project? project,
   ) {
     return ProjectDetailProvider(
       id,
+      project,
     );
   }
 
@@ -53,6 +55,7 @@ class ProjectDetailFamily extends Family<AsyncValue<Project>> {
   ) {
     return call(
       provider.id,
+      provider.project,
     );
   }
 
@@ -76,10 +79,12 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
   /// See also [projectDetail].
   ProjectDetailProvider(
     int id,
+    Project? project,
   ) : this._internal(
           (ref) => projectDetail(
             ref as ProjectDetailRef,
             id,
+            project,
           ),
           from: projectDetailProvider,
           name: r'projectDetailProvider',
@@ -91,6 +96,7 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
           allTransitiveDependencies:
               ProjectDetailFamily._allTransitiveDependencies,
           id: id,
+          project: project,
         );
 
   ProjectDetailProvider._internal(
@@ -101,9 +107,11 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.project,
   }) : super.internal();
 
   final int id;
+  final Project? project;
 
   @override
   Override overrideWith(
@@ -119,6 +127,7 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        project: project,
       ),
     );
   }
@@ -130,13 +139,16 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectDetailProvider && other.id == id;
+    return other is ProjectDetailProvider &&
+        other.id == id &&
+        other.project == project;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, project.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -147,6 +159,9 @@ class ProjectDetailProvider extends AutoDisposeFutureProvider<Project> {
 mixin ProjectDetailRef on AutoDisposeFutureProviderRef<Project> {
   /// The parameter `id` of this provider.
   int get id;
+
+  /// The parameter `project` of this provider.
+  Project? get project;
 }
 
 class _ProjectDetailProviderElement
@@ -155,6 +170,8 @@ class _ProjectDetailProviderElement
 
   @override
   int get id => (origin as ProjectDetailProvider).id;
+  @override
+  Project? get project => (origin as ProjectDetailProvider).project;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

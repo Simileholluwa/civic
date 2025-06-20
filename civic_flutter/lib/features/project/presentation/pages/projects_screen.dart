@@ -36,11 +36,29 @@ class ProjectsScreen extends ConsumerWidget {
         title: ConstrainedBox(
           constraints: const BoxConstraints(
             maxWidth: 300,
-            maxHeight: 45,
+            maxHeight: 40,
           ),
           child: SearchAnchor.bar(
             barLeading: const SizedBox.shrink(),
-            barHintText: 'Search',
+            barElevation: WidgetStateProperty.all(0),
+            barOverlayColor: WidgetStateProperty.all(
+              Colors.transparent,
+            ),
+            barBackgroundColor: WidgetStateProperty.all(
+              Theme.of(context).scaffoldBackgroundColor,
+            ),
+            barSide: WidgetStateProperty.all(
+              BorderSide(
+                color: Theme.of(context).cardColor,
+                width: 2,
+              ),
+            ),
+            barHintStyle: WidgetStateProperty.all(
+              TextStyle(
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+            barHintText: 'Search projects',
             suggestionsBuilder: (context, controller) {
               return [const SizedBox.shrink()];
             },

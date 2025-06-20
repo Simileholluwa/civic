@@ -51,7 +51,7 @@ class AppWrapper extends ConsumerWidget {
                         label: 'Feed'),
                     BottomNavigationBarItem(
                         activeIcon: Icon(
-                          Icons.add,
+                          Iconsax.magicpen5,
                         ),
                         icon: Icon(
                           Iconsax.magicpen,

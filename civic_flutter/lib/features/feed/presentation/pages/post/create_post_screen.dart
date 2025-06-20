@@ -26,16 +26,9 @@ class CreatePostScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final suggestions = ref.watch(mentionSuggestionsProvider);
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final data = post == null
-        ? ref.watch(
-            postDetailProvider(
-              id,
-              'postDraft'
-            ),
-          )
-        : AsyncValue.data(
-            post,
-          );
+    final data = ref.watch(
+      postDetailProvider(id, 'postDraft', post),
+    );
     final postState = ref.watch(
       feedProvider(
         data.value,
@@ -59,7 +52,7 @@ class CreatePostScreen extends ConsumerWidget {
       if (isReplyOrComment) {
         isComment = (parent!.postType == PostType.regular ||
             parent!.postType == PostType.projectRepost ||
-            parent!.postType == PostType.poll || 
+            parent!.postType == PostType.poll ||
             parent!.postType == PostType.article);
 
         isReply = parent!.postType == PostType.comment;
@@ -219,7 +212,7 @@ class CreatePostScreen extends ConsumerWidget {
           body: data.when(
             data: (value) {
               return CreatePostWidget(
-                post: value!,
+                post: value,
                 project: project,
                 parent: parent,
                 isReplyOrComment: parent != null,
