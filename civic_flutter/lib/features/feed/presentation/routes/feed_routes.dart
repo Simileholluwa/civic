@@ -47,8 +47,8 @@ class FeedRoutes {
                   path: 'comments',
                   builder: (_, state) {
                     return CommentScreen(
-                      postId:
-                          int.tryParse(state.pathParameters['postId'] ?? '') ??
+                      id:
+                          int.tryParse(state.pathParameters['id'] ?? '') ??
                               0,
                     );
                   },

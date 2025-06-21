@@ -1,0 +1,13 @@
+class: NotificationRequest
+fields:
+  receiverId: int
+  senderId: int?
+  type: NotificationType
+  title: String
+  body: String
+  postId: int?
+  projectId: int?
+  pollId: int?
+  articleId: int?
+  actionRoute: String?
+  groupKey: String?

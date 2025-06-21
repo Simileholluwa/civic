@@ -12,9 +12,10 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i3;
-import 'package:civic_client/src/protocol/post/post.dart' as _i4;
-import 'package:civic_client/src/protocol/post/post_list.dart' as _i5;
-import 'package:civic_client/src/protocol/poll/poll.dart' as _i6;
+import 'package:civic_client/src/protocol/notification/notification_request.dart'
+    as _i4;
+import 'package:civic_client/src/protocol/post/post.dart' as _i5;
+import 'package:civic_client/src/protocol/post/post_list.dart' as _i6;
 import 'package:civic_client/src/protocol/project/project.dart' as _i7;
 import 'package:civic_client/src/protocol/project/project_review.dart' as _i8;
 import 'package:civic_client/src/protocol/project/project_list.dart' as _i9;
@@ -107,28 +108,43 @@ class EndpointLocation extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointNotification extends _i1.EndpointRef {
+  EndpointNotification(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'notification';
+
+  _i2.Future<void> sendNotification(_i4.NotificationRequest request) =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'sendNotification',
+        {'request': request},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointPost extends _i1.EndpointRef {
   EndpointPost(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'post';
 
-  _i2.Future<_i4.Post?> savePost(_i4.Post post) =>
-      caller.callServerEndpoint<_i4.Post?>(
+  _i2.Future<_i5.Post?> savePost(_i5.Post post) =>
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'savePost',
         {'post': post},
       );
 
-  _i2.Future<_i4.Post?> savePoll(_i4.Post post) =>
-      caller.callServerEndpoint<_i4.Post?>(
+  _i2.Future<_i5.Post?> savePoll(_i5.Post post) =>
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'savePoll',
         {'post': post},
       );
 
-  _i2.Future<_i4.Post?> saveArticle(_i4.Post post) =>
-      caller.callServerEndpoint<_i4.Post?>(
+  _i2.Future<_i5.Post?> saveArticle(_i5.Post post) =>
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'saveArticle',
         {'post': post},
@@ -153,11 +169,11 @@ class EndpointPost extends _i1.EndpointRef {
         {'pollId': pollId},
       );
 
-  _i2.Future<_i5.PostList> getPolls({
+  _i2.Future<_i6.PostList> getPolls({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'getPolls',
         {
@@ -166,11 +182,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.PostList> getArticles({
+  _i2.Future<_i6.PostList> getArticles({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'getArticles',
         {
@@ -179,11 +195,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Post?> savePostComment(
-    _i4.Post comment,
+  _i2.Future<_i5.Post?> savePostComment(
+    _i5.Post comment,
     bool isReply,
   ) =>
-      caller.callServerEndpoint<_i4.Post?>(
+      caller.callServerEndpoint<_i5.Post?>(
         'post',
         'savePostComment',
         {
@@ -192,12 +208,12 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.PostList> getPostComments(
+  _i2.Future<_i6.PostList> getPostComments(
     int postId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'getPostComments',
         {
@@ -207,11 +223,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Post> getComment(
+  _i2.Future<_i5.Post> getComment(
     int commentId,
     bool isComment,
   ) =>
-      caller.callServerEndpoint<_i4.Post>(
+      caller.callServerEndpoint<_i5.Post>(
         'post',
         'getComment',
         {
@@ -220,12 +236,12 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.PostList> getPostCommentReplies(
+  _i2.Future<_i6.PostList> getPostCommentReplies(
     int commentId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'getPostCommentReplies',
         {
@@ -236,7 +252,7 @@ class EndpointPost extends _i1.EndpointRef {
       );
 
   _i2.Future<void> schedulePost(
-    _i4.Post post,
+    _i5.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -248,18 +264,18 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Post> getRootPost(_i4.Post post) =>
-      caller.callServerEndpoint<_i4.Post>(
+  _i2.Future<_i5.Post> getRootPost(_i5.Post post) =>
+      caller.callServerEndpoint<_i5.Post>(
         'post',
         'getRootPost',
         {'post': post},
       );
 
-  _i2.Future<_i4.Post> quoteProject(
+  _i2.Future<_i5.Post> quoteProject(
     int projectId,
-    _i4.Post quoteContent,
+    _i5.Post quoteContent,
   ) =>
-      caller.callServerEndpoint<_i4.Post>(
+      caller.callServerEndpoint<_i5.Post>(
         'post',
         'quoteProject',
         {
@@ -268,17 +284,17 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i4.Post> getPost(int id) => caller.callServerEndpoint<_i4.Post>(
+  _i2.Future<_i5.Post> getPost(int id) => caller.callServerEndpoint<_i5.Post>(
         'post',
         'getPost',
         {'id': id},
       );
 
-  _i2.Future<_i5.PostList> getPosts({
+  _i2.Future<_i6.PostList> getPosts({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i5.PostList>(
+      caller.callServerEndpoint<_i6.PostList>(
         'post',
         'getPosts',
         {
@@ -319,19 +335,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Stream<_i4.Post> postUpdates(int postId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i4.Post>, _i4.Post>(
+  _i2.Stream<_i5.Post> postUpdates(int postId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i5.Post>, _i5.Post>(
         'post',
         'postUpdates',
         {'postId': postId},
-        {},
-      );
-
-  _i2.Stream<_i6.Poll> pollUpdates(int pollId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i6.Poll>, _i6.Poll>(
-        'post',
-        'pollUpdates',
-        {'pollId': pollId},
         {},
       );
 }
@@ -1099,6 +1107,7 @@ class Client extends _i1.ServerpodClientShared {
     assets = EndpointAssets(this);
     hashtag = EndpointHashtag(this);
     location = EndpointLocation(this);
+    notification = EndpointNotification(this);
     post = EndpointPost(this);
     project = EndpointProject(this);
     sendEmail = EndpointSendEmail(this);
@@ -1112,6 +1121,8 @@ class Client extends _i1.ServerpodClientShared {
   late final EndpointHashtag hashtag;
 
   late final EndpointLocation location;
+
+  late final EndpointNotification notification;
 
   late final EndpointPost post;
 
@@ -1130,6 +1141,7 @@ class Client extends _i1.ServerpodClientShared {
         'assets': assets,
         'hashtag': hashtag,
         'location': location,
+        'notification': notification,
         'post': post,
         'project': project,
         'sendEmail': sendEmail,

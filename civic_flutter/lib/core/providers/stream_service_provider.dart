@@ -36,21 +36,6 @@ Stream<Post> postStream(
 }
 
 @Riverpod(keepAlive: true)
-Stream<Poll> pollStream(
-  Ref ref,
-  int pollId,
-  Poll? poll,
-) async* {
-  if (poll != null) {
-    yield poll;
-  }
-  final updates = ref.read(clientProvider).post.pollUpdates(pollId);
-  await for (final update in updates) {
-    yield update;
-  }
-}
-
-@Riverpod(keepAlive: true)
 Stream<ProjectReview> projectReviewStream(
   Ref ref,
   int projectReviewId,

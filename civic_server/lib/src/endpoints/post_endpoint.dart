@@ -1,4 +1,5 @@
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
+import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/endpoints/project_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
@@ -394,6 +395,23 @@ class PostEndpoint extends Endpoint {
         post,
       );
 
+      if (post.ownerId != user.id) {
+        await NotificationEndpoint().sendNotification(
+          session,
+          NotificationRequest(
+            receiverId: poll.ownerId,
+            senderId: user.id!,
+            title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
+            body:
+                '${user.userInfo?.fullName ?? user.userInfo?.fullName} voted in your poll.',
+            pollId: poll.id,
+            type: NotificationType.vote,
+            groupKey: 'votes_poll_${poll.id}',
+            actionRoute: '/feed/poll/${poll.id}',
+          ),
+        );
+      }
+
       return;
     });
   }
@@ -452,20 +470,14 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
 
-      // Remove user from Poll.votedBy
-      final updatedPoll = poll.copyWith(
-        votedBy: poll.votedBy!
-            .where(
-              (id) => id != userId,
-            )
-            .toList(),
-      );
-
-      await updatePoll(
-        session,
-        updatedPoll,
-      );
-
+      // // Remove user from Poll.votedBy
+      // final updatedPoll = poll.copyWith(
+      //   votedBy: poll.votedBy!
+      //       .where(
+      //         (id) => id != userId,
+      //       )
+      //       .toList(),
+      // );
       return true;
     });
   }
@@ -611,7 +623,7 @@ class PostEndpoint extends Endpoint {
           }
         }
 
-        return await Post.db.insertRow(
+        final sentComment = await Post.db.insertRow(
           session,
           comment.copyWith(
             owner: user,
@@ -620,6 +632,25 @@ class PostEndpoint extends Endpoint {
             bookmarkedBy: [],
           ),
         );
+
+        if (parent!.ownerId != user.id) {
+          await NotificationEndpoint().sendNotification(
+            session,
+            NotificationRequest(
+              receiverId: parent.ownerId,
+              senderId: user.id!,
+              title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
+              body:
+                  '${user.userInfo?.fullName ?? user.userInfo?.fullName} commented on your post.',
+              postId: parent.id,
+              type: NotificationType.comment,
+              groupKey: 'post_comments_${parent.id}',
+              actionRoute: '/feed/post/${parent.id}/comments',
+            ),
+          );
+        }
+
+        return sentComment;
       }
     } catch (e, stackTrace) {
       session.log(
@@ -856,6 +887,23 @@ class PostEndpoint extends Endpoint {
             sentPost.id!,
           );
 
+          if (selectedProject.ownerId != user.id) {
+            await NotificationEndpoint().sendNotification(
+              session,
+              NotificationRequest(
+                receiverId: selectedProject.ownerId,
+                senderId: user.id!,
+                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
+                body:
+                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} quoted your project.',
+                projectId: selectedProject.id,
+                type: NotificationType.quote,
+                groupKey: 'project_quote_${selectedProject.id}',
+                actionRoute: '/feed/post/${sentPost.id}',
+              ),
+            );
+          }
+
           return sentPost.copyWith(
             quotedOrRepostedFromUser: user,
             owner: user,
@@ -1087,6 +1135,22 @@ class PostEndpoint extends Endpoint {
             transaction: transaction,
           );
           post!.bookmarkedBy?.add(user.id!);
+          if (post!.ownerId != user.id) {
+            await NotificationEndpoint().sendNotification(
+              session,
+              NotificationRequest(
+                receiverId: post!.ownerId,
+                senderId: user.id!,
+                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
+                body:
+                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} bookmarked your post.',
+                postId: post!.id,
+                type: NotificationType.like,
+                groupKey: 'post_bookmarks_${post!.id}',
+                actionRoute: '/feed/post/${post!.id}',
+              ),
+            );
+          }
         }
         await updatePost(session, post!);
       } catch (e, stackTrace) {
@@ -1151,6 +1215,23 @@ class PostEndpoint extends Endpoint {
             transaction: transaction,
           );
           post.likedBy?.add(user.userInfoId);
+
+          if (post.ownerId != user.id) {
+            await NotificationEndpoint().sendNotification(
+              session,
+              NotificationRequest(
+                receiverId: post.ownerId,
+                senderId: user.id!,
+                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}',
+                body:
+                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} liked your post.',
+                postId: post.id,
+                type: NotificationType.comment,
+                groupKey: 'post_likes_${post.id}',
+                actionRoute: '/feed/post/${post.id}',
+              ),
+            );
+          }
         }
         await updatePost(session, post);
       } catch (e, stackTrace) {
@@ -1333,66 +1414,6 @@ class PostEndpoint extends Endpoint {
     session.messages.postMessage(
       'post_${post.id}',
       post,
-    );
-  }
-
-  @doNotGenerate
-  Future<void> validatePollOwnership(
-    Session session,
-    int pollId,
-    UserRecord user,
-  ) async {
-    final poll = await Poll.db.findById(
-      session,
-      pollId,
-    );
-    if (poll == null) {
-      throw PostException(
-        message: 'Poll not found',
-      );
-    }
-    if (poll.ownerId != user.userInfoId) {
-      throw PostException(
-        message: 'Unauthorised operation',
-      );
-    }
-  }
-
-  Stream<Poll> pollUpdates(Session session, int pollId) async* {
-    // Create a message stream for this post
-    var updateStream = session.messages.createStream<Poll>('poll_$pollId');
-
-    // Yield the latest post details when the client subscribes
-    var poll = await Poll.db.findById(
-      session,
-      pollId,
-      include: Poll.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
-      ),
-    );
-    if (poll != null) {
-      yield poll;
-    }
-
-    // Send updates when changes occur
-    await for (var pollUpdate in updateStream) {
-      yield pollUpdate.copyWith(
-        owner: poll!.owner,
-      );
-    }
-  }
-
-  @doNotGenerate
-  Future<void> updatePoll(Session session, Poll poll) async {
-    // Update the project in the database
-    await Poll.db.updateRow(session, poll);
-
-    // Send an update to all clients subscribed to this project
-    session.messages.postMessage(
-      'poll_${poll.id}',
-      poll,
     );
   }
 }

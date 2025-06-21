@@ -24,48 +24,29 @@ class ContentExpandableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultTextStyle = DefaultTextStyle.of(context).style;
     return ExpandableRichText(
       text,
       onToggleTextTap: onToggleTextTap,
       expandText: noMaxLines ? '' : 'see more',
       collapseText: 'see less',
-      mentionStyle: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(
-            color: TColors.primary,
-            fontWeight: FontWeight.w500,
-            fontSize: fontSize,
-          ),
-      toggleTextStyle: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(
-            color: Theme.of(context).hintColor,
-            fontSize: fontSize,
-          ),
-      hashtagStyle: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(
-            color: TColors.primary,
-            fontWeight: FontWeight.w500,
-            fontSize: fontSize,
-          ),
-      urlStyle: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(
-            color: TColors.primary,
-            fontWeight: FontWeight.w500,
-            fontSize: fontSize,
-          ),
+      mentionStyle: defaultTextStyle.copyWith(
+        color: TColors.primary,
+        fontWeight: FontWeight.w500,
+      ),
+      toggleTextStyle: defaultTextStyle.copyWith(
+        color: Theme.of(context).hintColor,
+      ),
+      hashtagStyle: defaultTextStyle.copyWith(
+        color: TColors.primary,
+        fontWeight: FontWeight.w500,
+      ),
+      urlStyle: defaultTextStyle.copyWith(
+        color: TColors.primary,
+        fontWeight: FontWeight.w500,
+      ),
       toggleTextColor: TColors.primary,
-      style: Theme.of(context)
-          .textTheme
-          .labelMedium!.copyWith(
-            fontSize: fontSize,
-          ),
+      style: defaultTextStyle,
       maxLines: maxLines ?? (noMaxLines ? 100 : (hasVideo || hasImage ? 3 : 6)),
     );
   }

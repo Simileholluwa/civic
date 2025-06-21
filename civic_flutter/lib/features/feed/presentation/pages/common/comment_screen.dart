@@ -7,21 +7,21 @@ import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CommentScreen extends ConsumerWidget {
-  const CommentScreen({super.key, required this.postId});
+  const CommentScreen({super.key, required this.id});
 
-  final int postId;
+  final int id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(
       getCommentProvider(
-        postId,
+        id,
         true,
       ),
     );
     final pagingController = ref
         .watch(
-          paginatedCommentListProvider(postId).notifier,
+          paginatedCommentListProvider(id).notifier,
         )
         .pagingController;
     return Scaffold(
@@ -118,7 +118,7 @@ class CommentScreen extends ConsumerWidget {
               top: 10,
             ),
             child: PostCommentCard(
-              postId: postId,
+              id: id,
               firstPageProgressIndicator: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50,),
                 child: LoadingAnimationWidget.progressiveDots(

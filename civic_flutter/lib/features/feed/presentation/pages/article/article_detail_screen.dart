@@ -206,7 +206,7 @@ class ArticleDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 PostCommentCard(
-                  postId: value.id!,
+                  id: value.id!,
                   firstPageProgressIndicator: Padding(
                     padding: const EdgeInsets.only(
                       top: 30,

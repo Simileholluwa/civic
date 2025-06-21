@@ -8,19 +8,19 @@ import 'package:go_router/go_router.dart';
 class PostCommentCard extends ConsumerWidget {
   const PostCommentCard({
     super.key,
-    required this.postId,
+    required this.id,
     this.scrollPhysics,
     this.firstPageProgressIndicator,
   });
 
-  final int postId;
+  final int id;
   final ScrollPhysics? scrollPhysics;
   final Widget? firstPageProgressIndicator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final commentController = ref.watch(
-      paginatedCommentListProvider(postId).notifier,
+      paginatedCommentListProvider(id).notifier,
     );
     return AppInfiniteList<Post>(
       pagingController: commentController.pagingController,
@@ -47,7 +47,7 @@ class PostCommentCard extends ConsumerWidget {
                 const SizedBox(height: 10),
               PostCommentTreeWidget(
                 commentId: comment.id!,
-                postId: postId,
+                postId: id,
                 comment,
                 comment.commentCount != 0,
                 contentRoot: (context, reply) {
@@ -58,7 +58,7 @@ class PostCommentCard extends ConsumerWidget {
                         'parent': comment,
                       });
                     },
-                    originalPostId: postId,
+                    originalPostId: id,
                     isComment: true,
                   );
                 },

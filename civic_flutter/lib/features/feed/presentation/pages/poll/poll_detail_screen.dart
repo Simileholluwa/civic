@@ -162,7 +162,7 @@ class PollDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 PostCommentCard(
-                  postId: id,
+                  id: id,
                   firstPageProgressIndicator: Padding(
                     padding: const EdgeInsets.only(
                       top: 30,

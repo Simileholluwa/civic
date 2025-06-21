@@ -7,6 +7,8 @@ hashtag:
 location:
   - searchLocation:
   - searchNearbyLocation:
+notification:
+  - sendNotification:
 post:
   - savePost:
   - savePoll:
@@ -29,7 +31,6 @@ post:
   - toggleLike:
   - markNotInterested:
   - postUpdates:
-  - pollUpdates:
 project:
   - getProject:
   - getProjectReview:
