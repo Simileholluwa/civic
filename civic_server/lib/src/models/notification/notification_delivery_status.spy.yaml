@@ -1,5 +1,0 @@
-enum: NotificationDeliveryStatus
-values:
-  - pending
-  - sent
-  - failed

@@ -22,7 +22,6 @@ class ProjectsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: isVisible,
-        showBorder: false,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
@@ -32,46 +31,11 @@ class ProjectsScreen extends ConsumerWidget {
           onPressed: () {},
         ),
         titleSpacing: 0,
-        height: 60,
-        title: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 300,
-            maxHeight: 40,
-          ),
-          child: SearchAnchor.bar(
-            barLeading: const SizedBox.shrink(),
-            barElevation: WidgetStateProperty.all(0),
-            barOverlayColor: WidgetStateProperty.all(
-              Colors.transparent,
-            ),
-            barBackgroundColor: WidgetStateProperty.all(
-              Theme.of(context).scaffoldBackgroundColor,
-            ),
-            barSide: WidgetStateProperty.all(
-              BorderSide(
-                color: Theme.of(context).cardColor,
-                width: 2,
-              ),
-            ),
-            barHintStyle: WidgetStateProperty.all(
-              TextStyle(
-                color: Theme.of(context).hintColor,
-              ),
-            ),
-            barHintText: 'Search projects',
-            suggestionsBuilder: (context, controller) {
-              return [const SizedBox.shrink()];
-            },
-            viewConstraints: BoxConstraints(
-              maxHeight: 300,
-            ),
-            viewBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          ),
-        ),
+        title: const SizedBox(),
         actions: [
           IconButton(
             icon: Icon(
-              Iconsax.filter5,
+              Iconsax.search_normal,
               size: 26,
               color: Theme.of(context).colorScheme.onSurface,
             ),

@@ -22,20 +22,29 @@ class ContentCreatorInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      spacing: 15,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundImage: CachedNetworkImageProvider(
-            creator.userInfo!.imageUrl!,
-          ),
+        Row(
+          spacing: 15,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: radius,
+              backgroundImage: CachedNetworkImageProvider(
+                creator.userInfo!.imageUrl!,
+              ),
+            ),
+            CreatorNameAndAccountInfo(
+              creator: creator,
+              timeAgo: timeAgo,
+              showPoliticalStatus: showPoliticalStatus,
+            ),
+          ],
         ),
-        CreatorNameAndAccountInfo(
-          creator: creator,
-          timeAgo: timeAgo,
-          showPoliticalStatus: showPoliticalStatus,
-        ),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: Icon(Icons.person_2),
+        // ),
       ],
     );
   }
@@ -55,82 +64,79 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 3,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Text(
-                    creator.userInfo!.fullName ?? creator.userInfo!.userName!,
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Text(
-                  ' • $timeAgo',
-                  style: Theme.of(context).textTheme.labelMedium,
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 3,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  creator.userInfo!.fullName ?? creator.userInfo!.userName!,
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
-            if (showPoliticalStatus)
-              Row(
-                spacing: 10,
-                children: [
+              ),
+              Text(
+                ' • $timeAgo',
+                style: Theme.of(context).textTheme.labelMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          if (showPoliticalStatus)
+            Row(
+              spacing: 10,
+              children: [
+                ProjectQuickDetailWidget(
+                  size: 20,
+                  icon: Iconsax.shield_security2,
+                  title: creator.politicalStatus!.index == 0
+                      ? 'Current Leader'
+                      : creator.politicalStatus!.index == 1
+                          ? 'Former Leader'
+                          : creator.politicalStatus!.index == 2
+                              ? 'Aspiring Leader'
+                              : 'Concerned Citizen',
+                  color: TColors.primary,
+                  textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontSize: 12,
+                      ),
+                ),
+                if (creator.verifiedAccount!)
                   ProjectQuickDetailWidget(
                     size: 20,
-                    icon: Iconsax.shield_security2,
-                    title: creator.politicalStatus!.index == 0
-                        ? 'Current Leader'
-                        : creator.politicalStatus!.index == 1
-                            ? 'Former Leader'
-                            : creator.politicalStatus!.index == 2
-                                ? 'Aspiring Leader'
-                                : 'Concerned Citizen',
+                    icon: Iconsax.verify5,
+                    title: 'Verified',
                     color: TColors.primary,
+                    textStyle:
+                        Theme.of(context).textTheme.labelMedium!.copyWith(
+                              fontSize: 12,
+                              color: TColors.primary,
+                            ),
+                  )
+                else
+                  ProjectQuickDetailWidget(
+                    size: 20,
+                    icon: Iconsax.verify5,
+                    title: 'Unverified',
+                    color: TColors.secondary,
                     textStyle:
                         Theme.of(context).textTheme.labelMedium!.copyWith(
                               fontSize: 12,
                             ),
                   ),
-                  if (creator.verifiedAccount!)
-                    ProjectQuickDetailWidget(
-                      size: 20,
-                      icon: Iconsax.verify5,
-                      title: 'Verified',
-                      color: TColors.primary,
-                      textStyle:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                fontSize: 12,
-                                color: TColors.primary,
-                              ),
-                    )
-                  else
-                    ProjectQuickDetailWidget(
-                      size: 20,
-                      icon: Iconsax.verify5,
-                      title: 'Unverified',
-                      color: TColors.secondary,
-                      textStyle:
-                          Theme.of(context).textTheme.labelMedium!.copyWith(
-                                fontSize: 12,
-                              ),
-                    ),
-                ],
-              ),
-          ],
-        ),
+              ],
+            ),
+        ],
       ),
     );
   }

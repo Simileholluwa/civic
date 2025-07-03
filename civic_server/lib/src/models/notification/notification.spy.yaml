@@ -2,20 +2,14 @@ class: Notification
 table: notification
 fields:
   receiver: UserRecord?, relation
-  sender: UserRecord?, relation(optional)
-  type: NotificationType
-  title: String
-  body: String
-  post: Post?, relation(optional)
-  project: Project?, relation(optional)
-  poll: Poll?, relation(optional)
-  article: Article?, relation(optional)
-  actionRoute: String?
+  sender: UserRecord?, relation
+  groupedSenderIds: List<int>?
+  content: String?
   groupKey: String?
-  groupCount: int?, default=1
-  latestSenderName: String?
-  isRead: bool?, default=false
-  isSeen: bool?, default=false
-  deliveryStatus: NotificationDeliveryStatus, default=pending
+  actionType: String
+  targetType: String
+  actionRoute: String
+  targetId: int
+  isRead: bool, default=false
   createdAt: DateTime, default=now
-  lastUpdatedAt: DateTime?,
+  updatedAt: DateTime?

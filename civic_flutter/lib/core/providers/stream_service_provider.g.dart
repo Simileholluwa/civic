@@ -619,5 +619,158 @@ class _ProjectVettingStreamProviderElement
   ProjectVetting? get projectVetting =>
       (origin as ProjectVettingStreamProvider).projectVetting;
 }
+
+String _$userNotificationStreamHash() =>
+    r'61b2acac0a590d2072717c23adf1517b64585594';
+
+/// See also [userNotificationStream].
+@ProviderFor(userNotificationStream)
+const userNotificationStreamProvider = UserNotificationStreamFamily();
+
+/// See also [userNotificationStream].
+class UserNotificationStreamFamily
+    extends Family<AsyncValue<UserNotification>> {
+  /// See also [userNotificationStream].
+  const UserNotificationStreamFamily();
+
+  /// See also [userNotificationStream].
+  UserNotificationStreamProvider call(
+    int? notificationId,
+    UserNotification? notification,
+  ) {
+    return UserNotificationStreamProvider(
+      notificationId,
+      notification,
+    );
+  }
+
+  @override
+  UserNotificationStreamProvider getProviderOverride(
+    covariant UserNotificationStreamProvider provider,
+  ) {
+    return call(
+      provider.notificationId,
+      provider.notification,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userNotificationStreamProvider';
+}
+
+/// See also [userNotificationStream].
+class UserNotificationStreamProvider extends StreamProvider<UserNotification> {
+  /// See also [userNotificationStream].
+  UserNotificationStreamProvider(
+    int? notificationId,
+    UserNotification? notification,
+  ) : this._internal(
+          (ref) => userNotificationStream(
+            ref as UserNotificationStreamRef,
+            notificationId,
+            notification,
+          ),
+          from: userNotificationStreamProvider,
+          name: r'userNotificationStreamProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userNotificationStreamHash,
+          dependencies: UserNotificationStreamFamily._dependencies,
+          allTransitiveDependencies:
+              UserNotificationStreamFamily._allTransitiveDependencies,
+          notificationId: notificationId,
+          notification: notification,
+        );
+
+  UserNotificationStreamProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.notificationId,
+    required this.notification,
+  }) : super.internal();
+
+  final int? notificationId;
+  final UserNotification? notification;
+
+  @override
+  Override overrideWith(
+    Stream<UserNotification> Function(UserNotificationStreamRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserNotificationStreamProvider._internal(
+        (ref) => create(ref as UserNotificationStreamRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        notificationId: notificationId,
+        notification: notification,
+      ),
+    );
+  }
+
+  @override
+  StreamProviderElement<UserNotification> createElement() {
+    return _UserNotificationStreamProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserNotificationStreamProvider &&
+        other.notificationId == notificationId &&
+        other.notification == notification;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, notificationId.hashCode);
+    hash = _SystemHash.combine(hash, notification.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin UserNotificationStreamRef on StreamProviderRef<UserNotification> {
+  /// The parameter `notificationId` of this provider.
+  int? get notificationId;
+
+  /// The parameter `notification` of this provider.
+  UserNotification? get notification;
+}
+
+class _UserNotificationStreamProviderElement
+    extends StreamProviderElement<UserNotification>
+    with UserNotificationStreamRef {
+  _UserNotificationStreamProviderElement(super.provider);
+
+  @override
+  int? get notificationId =>
+      (origin as UserNotificationStreamProvider).notificationId;
+  @override
+  UserNotification? get notification =>
+      (origin as UserNotificationStreamProvider).notification;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

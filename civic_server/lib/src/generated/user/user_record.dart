@@ -14,6 +14,10 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
 import '../user/political_status_enum.dart' as _i3;
+import '../post/post.dart' as _i4;
+import '../project/project.dart' as _i5;
+import '../project/project_bookmarks.dart' as _i6;
+import '../post/post_bookmarks.dart' as _i7;
 
 abstract class UserRecord
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -29,6 +33,10 @@ abstract class UserRecord
     this.followers,
     this.politicalStatus,
     this.credibilityScore,
+    this.posts,
+    this.projects,
+    this.projectBookmarks,
+    this.postBookmarks,
   });
 
   factory UserRecord({
@@ -43,6 +51,10 @@ abstract class UserRecord
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -69,6 +81,19 @@ abstract class UserRecord
               (jsonSerialization['politicalStatus'] as int)),
       credibilityScore:
           (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
+      posts: (jsonSerialization['posts'] as List?)
+          ?.map((e) => _i4.Post.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      projects: (jsonSerialization['projects'] as List?)
+          ?.map((e) => _i5.Project.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      projectBookmarks: (jsonSerialization['projectBookmarks'] as List?)
+          ?.map(
+              (e) => _i6.ProjectBookmarks.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      postBookmarks: (jsonSerialization['postBookmarks'] as List?)
+          ?.map((e) => _i7.PostBookmarks.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -99,6 +124,14 @@ abstract class UserRecord
 
   double? credibilityScore;
 
+  List<_i4.Post>? posts;
+
+  List<_i5.Project>? projects;
+
+  List<_i6.ProjectBookmarks>? projectBookmarks;
+
+  List<_i7.PostBookmarks>? postBookmarks;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -117,6 +150,10 @@ abstract class UserRecord
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -132,6 +169,14 @@ abstract class UserRecord
       if (followers != null) 'followers': followers?.toJson(),
       if (politicalStatus != null) 'politicalStatus': politicalStatus?.toJson(),
       if (credibilityScore != null) 'credibilityScore': credibilityScore,
+      if (posts != null) 'posts': posts?.toJson(valueToJson: (v) => v.toJson()),
+      if (projects != null)
+        'projects': projects?.toJson(valueToJson: (v) => v.toJson()),
+      if (projectBookmarks != null)
+        'projectBookmarks':
+            projectBookmarks?.toJson(valueToJson: (v) => v.toJson()),
+      if (postBookmarks != null)
+        'postBookmarks': postBookmarks?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -149,11 +194,33 @@ abstract class UserRecord
       if (followers != null) 'followers': followers?.toJson(),
       if (politicalStatus != null) 'politicalStatus': politicalStatus?.toJson(),
       if (credibilityScore != null) 'credibilityScore': credibilityScore,
+      if (posts != null)
+        'posts': posts?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (projects != null)
+        'projects': projects?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (projectBookmarks != null)
+        'projectBookmarks':
+            projectBookmarks?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (postBookmarks != null)
+        'postBookmarks':
+            postBookmarks?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static UserRecordInclude include({_i2.UserInfoInclude? userInfo}) {
-    return UserRecordInclude._(userInfo: userInfo);
+  static UserRecordInclude include({
+    _i2.UserInfoInclude? userInfo,
+    _i4.PostIncludeList? posts,
+    _i5.ProjectIncludeList? projects,
+    _i6.ProjectBookmarksIncludeList? projectBookmarks,
+    _i7.PostBookmarksIncludeList? postBookmarks,
+  }) {
+    return UserRecordInclude._(
+      userInfo: userInfo,
+      posts: posts,
+      projects: projects,
+      projectBookmarks: projectBookmarks,
+      postBookmarks: postBookmarks,
+    );
   }
 
   static UserRecordIncludeList includeList({
@@ -197,6 +264,10 @@ class _UserRecordImpl extends UserRecord {
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   }) : super._(
           id: id,
           bio: bio,
@@ -209,6 +280,10 @@ class _UserRecordImpl extends UserRecord {
           followers: followers,
           politicalStatus: politicalStatus,
           credibilityScore: credibilityScore,
+          posts: posts,
+          projects: projects,
+          projectBookmarks: projectBookmarks,
+          postBookmarks: postBookmarks,
         );
 
   /// Returns a shallow copy of this [UserRecord]
@@ -227,6 +302,10 @@ class _UserRecordImpl extends UserRecord {
     Object? followers = _Undefined,
     Object? politicalStatus = _Undefined,
     Object? credibilityScore = _Undefined,
+    Object? posts = _Undefined,
+    Object? projects = _Undefined,
+    Object? projectBookmarks = _Undefined,
+    Object? postBookmarks = _Undefined,
   }) {
     return UserRecord(
       id: id is int? ? id : this.id,
@@ -250,6 +329,18 @@ class _UserRecordImpl extends UserRecord {
       credibilityScore: credibilityScore is double?
           ? credibilityScore
           : this.credibilityScore,
+      posts: posts is List<_i4.Post>?
+          ? posts
+          : this.posts?.map((e0) => e0.copyWith()).toList(),
+      projects: projects is List<_i5.Project>?
+          ? projects
+          : this.projects?.map((e0) => e0.copyWith()).toList(),
+      projectBookmarks: projectBookmarks is List<_i6.ProjectBookmarks>?
+          ? projectBookmarks
+          : this.projectBookmarks?.map((e0) => e0.copyWith()).toList(),
+      postBookmarks: postBookmarks is List<_i7.PostBookmarks>?
+          ? postBookmarks
+          : this.postBookmarks?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -315,6 +406,22 @@ class UserRecordTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDouble credibilityScore;
 
+  _i4.PostTable? ___posts;
+
+  _i1.ManyRelation<_i4.PostTable>? _posts;
+
+  _i5.ProjectTable? ___projects;
+
+  _i1.ManyRelation<_i5.ProjectTable>? _projects;
+
+  _i6.ProjectBookmarksTable? ___projectBookmarks;
+
+  _i1.ManyRelation<_i6.ProjectBookmarksTable>? _projectBookmarks;
+
+  _i7.PostBookmarksTable? ___postBookmarks;
+
+  _i1.ManyRelation<_i7.PostBookmarksTable>? _postBookmarks;
+
   _i2.UserInfoTable get userInfo {
     if (_userInfo != null) return _userInfo!;
     _userInfo = _i1.createRelationTable(
@@ -326,6 +433,130 @@ class UserRecordTable extends _i1.Table<int?> {
           _i2.UserInfoTable(tableRelation: foreignTableRelation),
     );
     return _userInfo!;
+  }
+
+  _i4.PostTable get __posts {
+    if (___posts != null) return ___posts!;
+    ___posts = _i1.createRelationTable(
+      relationFieldName: '__posts',
+      field: UserRecord.t.id,
+      foreignField: _i4.Post.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.PostTable(tableRelation: foreignTableRelation),
+    );
+    return ___posts!;
+  }
+
+  _i5.ProjectTable get __projects {
+    if (___projects != null) return ___projects!;
+    ___projects = _i1.createRelationTable(
+      relationFieldName: '__projects',
+      field: UserRecord.t.id,
+      foreignField: _i5.Project.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i5.ProjectTable(tableRelation: foreignTableRelation),
+    );
+    return ___projects!;
+  }
+
+  _i6.ProjectBookmarksTable get __projectBookmarks {
+    if (___projectBookmarks != null) return ___projectBookmarks!;
+    ___projectBookmarks = _i1.createRelationTable(
+      relationFieldName: '__projectBookmarks',
+      field: UserRecord.t.id,
+      foreignField: _i6.ProjectBookmarks.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i6.ProjectBookmarksTable(tableRelation: foreignTableRelation),
+    );
+    return ___projectBookmarks!;
+  }
+
+  _i7.PostBookmarksTable get __postBookmarks {
+    if (___postBookmarks != null) return ___postBookmarks!;
+    ___postBookmarks = _i1.createRelationTable(
+      relationFieldName: '__postBookmarks',
+      field: UserRecord.t.id,
+      foreignField: _i7.PostBookmarks.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i7.PostBookmarksTable(tableRelation: foreignTableRelation),
+    );
+    return ___postBookmarks!;
+  }
+
+  _i1.ManyRelation<_i4.PostTable> get posts {
+    if (_posts != null) return _posts!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'posts',
+      field: UserRecord.t.id,
+      foreignField: _i4.Post.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.PostTable(tableRelation: foreignTableRelation),
+    );
+    _posts = _i1.ManyRelation<_i4.PostTable>(
+      tableWithRelations: relationTable,
+      table: _i4.PostTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _posts!;
+  }
+
+  _i1.ManyRelation<_i5.ProjectTable> get projects {
+    if (_projects != null) return _projects!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'projects',
+      field: UserRecord.t.id,
+      foreignField: _i5.Project.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i5.ProjectTable(tableRelation: foreignTableRelation),
+    );
+    _projects = _i1.ManyRelation<_i5.ProjectTable>(
+      tableWithRelations: relationTable,
+      table: _i5.ProjectTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _projects!;
+  }
+
+  _i1.ManyRelation<_i6.ProjectBookmarksTable> get projectBookmarks {
+    if (_projectBookmarks != null) return _projectBookmarks!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'projectBookmarks',
+      field: UserRecord.t.id,
+      foreignField: _i6.ProjectBookmarks.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i6.ProjectBookmarksTable(tableRelation: foreignTableRelation),
+    );
+    _projectBookmarks = _i1.ManyRelation<_i6.ProjectBookmarksTable>(
+      tableWithRelations: relationTable,
+      table: _i6.ProjectBookmarksTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _projectBookmarks!;
+  }
+
+  _i1.ManyRelation<_i7.PostBookmarksTable> get postBookmarks {
+    if (_postBookmarks != null) return _postBookmarks!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'postBookmarks',
+      field: UserRecord.t.id,
+      foreignField: _i7.PostBookmarks.t.ownerId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i7.PostBookmarksTable(tableRelation: foreignTableRelation),
+    );
+    _postBookmarks = _i1.ManyRelation<_i7.PostBookmarksTable>(
+      tableWithRelations: relationTable,
+      table: _i7.PostBookmarksTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _postBookmarks!;
   }
 
   @override
@@ -347,19 +578,55 @@ class UserRecordTable extends _i1.Table<int?> {
     if (relationField == 'userInfo') {
       return userInfo;
     }
+    if (relationField == 'posts') {
+      return __posts;
+    }
+    if (relationField == 'projects') {
+      return __projects;
+    }
+    if (relationField == 'projectBookmarks') {
+      return __projectBookmarks;
+    }
+    if (relationField == 'postBookmarks') {
+      return __postBookmarks;
+    }
     return null;
   }
 }
 
 class UserRecordInclude extends _i1.IncludeObject {
-  UserRecordInclude._({_i2.UserInfoInclude? userInfo}) {
+  UserRecordInclude._({
+    _i2.UserInfoInclude? userInfo,
+    _i4.PostIncludeList? posts,
+    _i5.ProjectIncludeList? projects,
+    _i6.ProjectBookmarksIncludeList? projectBookmarks,
+    _i7.PostBookmarksIncludeList? postBookmarks,
+  }) {
     _userInfo = userInfo;
+    _posts = posts;
+    _projects = projects;
+    _projectBookmarks = projectBookmarks;
+    _postBookmarks = postBookmarks;
   }
 
   _i2.UserInfoInclude? _userInfo;
 
+  _i4.PostIncludeList? _posts;
+
+  _i5.ProjectIncludeList? _projects;
+
+  _i6.ProjectBookmarksIncludeList? _projectBookmarks;
+
+  _i7.PostBookmarksIncludeList? _postBookmarks;
+
   @override
-  Map<String, _i1.Include?> get includes => {'userInfo': _userInfo};
+  Map<String, _i1.Include?> get includes => {
+        'userInfo': _userInfo,
+        'posts': _posts,
+        'projects': _projects,
+        'projectBookmarks': _projectBookmarks,
+        'postBookmarks': _postBookmarks,
+      };
 
   @override
   _i1.Table<int?> get table => UserRecord.t;
@@ -387,6 +654,8 @@ class UserRecordIncludeList extends _i1.IncludeList {
 
 class UserRecordRepository {
   const UserRecordRepository._();
+
+  final attach = const UserRecordAttachRepository._();
 
   final attachRow = const UserRecordAttachRowRepository._();
 
@@ -606,6 +875,106 @@ class UserRecordRepository {
   }
 }
 
+class UserRecordAttachRepository {
+  const UserRecordAttachRepository._();
+
+  /// Creates a relation between this [UserRecord] and the given [Post]s
+  /// by setting each [Post]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> posts(
+    _i1.Session session,
+    UserRecord userRecord,
+    List<_i4.Post> post, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('post.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $post = post.map((e) => e.copyWith(ownerId: userRecord.id)).toList();
+    await session.db.update<_i4.Post>(
+      $post,
+      columns: [_i4.Post.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [Project]s
+  /// by setting each [Project]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> projects(
+    _i1.Session session,
+    UserRecord userRecord,
+    List<_i5.Project> project, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (project.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('project.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $project =
+        project.map((e) => e.copyWith(ownerId: userRecord.id)).toList();
+    await session.db.update<_i5.Project>(
+      $project,
+      columns: [_i5.Project.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [ProjectBookmarks]s
+  /// by setting each [ProjectBookmarks]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> projectBookmarks(
+    _i1.Session session,
+    UserRecord userRecord,
+    List<_i6.ProjectBookmarks> projectBookmarks, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (projectBookmarks.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('projectBookmarks.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $projectBookmarks = projectBookmarks
+        .map((e) => e.copyWith(ownerId: userRecord.id))
+        .toList();
+    await session.db.update<_i6.ProjectBookmarks>(
+      $projectBookmarks,
+      columns: [_i6.ProjectBookmarks.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [PostBookmarks]s
+  /// by setting each [PostBookmarks]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> postBookmarks(
+    _i1.Session session,
+    UserRecord userRecord,
+    List<_i7.PostBookmarks> postBookmarks, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (postBookmarks.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('postBookmarks.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $postBookmarks =
+        postBookmarks.map((e) => e.copyWith(ownerId: userRecord.id)).toList();
+    await session.db.update<_i7.PostBookmarks>(
+      $postBookmarks,
+      columns: [_i7.PostBookmarks.t.ownerId],
+      transaction: transaction,
+    );
+  }
+}
+
 class UserRecordAttachRowRepository {
   const UserRecordAttachRowRepository._();
 
@@ -628,6 +997,98 @@ class UserRecordAttachRowRepository {
     await session.db.updateRow<UserRecord>(
       $userRecord,
       columns: [UserRecord.t.userInfoId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [Post]
+  /// by setting the [Post]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> posts(
+    _i1.Session session,
+    UserRecord userRecord,
+    _i4.Post post, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $post = post.copyWith(ownerId: userRecord.id);
+    await session.db.updateRow<_i4.Post>(
+      $post,
+      columns: [_i4.Post.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [Project]
+  /// by setting the [Project]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> projects(
+    _i1.Session session,
+    UserRecord userRecord,
+    _i5.Project project, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $project = project.copyWith(ownerId: userRecord.id);
+    await session.db.updateRow<_i5.Project>(
+      $project,
+      columns: [_i5.Project.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [ProjectBookmarks]
+  /// by setting the [ProjectBookmarks]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> projectBookmarks(
+    _i1.Session session,
+    UserRecord userRecord,
+    _i6.ProjectBookmarks projectBookmarks, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (projectBookmarks.id == null) {
+      throw ArgumentError.notNull('projectBookmarks.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $projectBookmarks = projectBookmarks.copyWith(ownerId: userRecord.id);
+    await session.db.updateRow<_i6.ProjectBookmarks>(
+      $projectBookmarks,
+      columns: [_i6.ProjectBookmarks.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [UserRecord] and the given [PostBookmarks]
+  /// by setting the [PostBookmarks]'s foreign key `ownerId` to refer to this [UserRecord].
+  Future<void> postBookmarks(
+    _i1.Session session,
+    UserRecord userRecord,
+    _i7.PostBookmarks postBookmarks, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (postBookmarks.id == null) {
+      throw ArgumentError.notNull('postBookmarks.id');
+    }
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
+    }
+
+    var $postBookmarks = postBookmarks.copyWith(ownerId: userRecord.id);
+    await session.db.updateRow<_i7.PostBookmarks>(
+      $postBookmarks,
+      columns: [_i7.PostBookmarks.t.ownerId],
       transaction: transaction,
     );
   }

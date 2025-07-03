@@ -10,6 +10,7 @@ class AppTabBarDesign extends StatelessWidget {
     this.dividerColor,
     this.dividerHeight,
     this.indicator,
+    this.indicatorPadding = EdgeInsets.zero,
   });
 
   final TabController tabController;
@@ -17,6 +18,7 @@ class AppTabBarDesign extends StatelessWidget {
   final TabAlignment? tabAlignment;
   final Color? dividerColor;
   final double? dividerHeight;
+  final EdgeInsetsGeometry indicatorPadding;
   final Decoration? indicator;
 
   @override
@@ -26,6 +28,7 @@ class AppTabBarDesign extends StatelessWidget {
       tabAlignment: tabAlignment ?? TabAlignment.start,
       isScrollable: true,
       indicator: indicator,
+      indicatorPadding: indicatorPadding,
       padding: const EdgeInsets.only(
         left: TSizes.xs - 4,
         right: TSizes.xs,
@@ -42,6 +45,7 @@ class AppTabBarDesign extends StatelessWidget {
           ),
       indicatorWeight: 4,
       tabs: tabs,
+      
     );
   }
 }

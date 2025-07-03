@@ -1,12 +1,13 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class LoadingError extends StatelessWidget {
   const LoadingError({
     super.key,
     this.errorMessage,
     required this.retry,
-    this.padding = const EdgeInsets.fromLTRB(20, 20, 20, 0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 15),
     this.imageString = TImageTexts.disconnected,
     this.mainAxisAlignment,
     this.showRefresh = false,
@@ -25,31 +26,35 @@ class LoadingError extends StatelessWidget {
       padding: padding,
       child: Column(
         mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+        spacing: 10,
         children: [
-          Image(
-            height: 250,
-            image: AssetImage(
-              imageString,
-            ),
-          ),
           Text(
-            errorMessage ?? 'Something went wrong while fetching data. Please try again.',
-            style: Theme.of(context).textTheme.bodyMedium,
+            'OOPS!',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+              color: Theme.of(context).hintColor,
+            ),
             textAlign: TextAlign.center,
           ),
-          if (showRefresh)
-            const SizedBox(
-              height: 20,
+          Text(
+            errorMessage ?? 'Something went wrong while fetching requested data. Please try again.',
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).hintColor,
             ),
+            textAlign: TextAlign.center,
+          ),
+          if(showRefresh)
+            SizedBox(
+              height: 1,),
           if (showRefresh)
             SizedBox(
               height: 45,
-              child: ElevatedButton(
+              width: 250,
+              child: ContentSingleButton(
                 onPressed: retry,
-                child: Text(
-                  'Refresh',
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
                 ),
-              ),
+              
             ),
         ],
       ),

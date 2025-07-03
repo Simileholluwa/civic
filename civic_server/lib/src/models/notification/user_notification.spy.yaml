@@ -1,0 +1,6 @@
+class: UserNotification
+fields:
+  notification: Notification
+  title: String
+  mediaThumbnailUrl: String?
+  senderUsernames: List<String>

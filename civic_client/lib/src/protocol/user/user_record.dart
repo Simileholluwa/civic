@@ -12,6 +12,10 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i2;
 import '../user/political_status_enum.dart' as _i3;
+import '../post/post.dart' as _i4;
+import '../project/project.dart' as _i5;
+import '../project/project_bookmarks.dart' as _i6;
+import '../post/post_bookmarks.dart' as _i7;
 
 abstract class UserRecord implements _i1.SerializableModel {
   UserRecord._({
@@ -26,6 +30,10 @@ abstract class UserRecord implements _i1.SerializableModel {
     this.followers,
     this.politicalStatus,
     this.credibilityScore,
+    this.posts,
+    this.projects,
+    this.projectBookmarks,
+    this.postBookmarks,
   });
 
   factory UserRecord({
@@ -40,6 +48,10 @@ abstract class UserRecord implements _i1.SerializableModel {
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   }) = _UserRecordImpl;
 
   factory UserRecord.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -66,6 +78,19 @@ abstract class UserRecord implements _i1.SerializableModel {
               (jsonSerialization['politicalStatus'] as int)),
       credibilityScore:
           (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
+      posts: (jsonSerialization['posts'] as List?)
+          ?.map((e) => _i4.Post.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      projects: (jsonSerialization['projects'] as List?)
+          ?.map((e) => _i5.Project.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      projectBookmarks: (jsonSerialization['projectBookmarks'] as List?)
+          ?.map(
+              (e) => _i6.ProjectBookmarks.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      postBookmarks: (jsonSerialization['postBookmarks'] as List?)
+          ?.map((e) => _i7.PostBookmarks.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -94,6 +119,14 @@ abstract class UserRecord implements _i1.SerializableModel {
 
   double? credibilityScore;
 
+  List<_i4.Post>? posts;
+
+  List<_i5.Project>? projects;
+
+  List<_i6.ProjectBookmarks>? projectBookmarks;
+
+  List<_i7.PostBookmarks>? postBookmarks;
+
   /// Returns a shallow copy of this [UserRecord]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -109,6 +142,10 @@ abstract class UserRecord implements _i1.SerializableModel {
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -124,6 +161,14 @@ abstract class UserRecord implements _i1.SerializableModel {
       if (followers != null) 'followers': followers?.toJson(),
       if (politicalStatus != null) 'politicalStatus': politicalStatus?.toJson(),
       if (credibilityScore != null) 'credibilityScore': credibilityScore,
+      if (posts != null) 'posts': posts?.toJson(valueToJson: (v) => v.toJson()),
+      if (projects != null)
+        'projects': projects?.toJson(valueToJson: (v) => v.toJson()),
+      if (projectBookmarks != null)
+        'projectBookmarks':
+            projectBookmarks?.toJson(valueToJson: (v) => v.toJson()),
+      if (postBookmarks != null)
+        'postBookmarks': postBookmarks?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -148,6 +193,10 @@ class _UserRecordImpl extends UserRecord {
     List<int>? followers,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
+    List<_i4.Post>? posts,
+    List<_i5.Project>? projects,
+    List<_i6.ProjectBookmarks>? projectBookmarks,
+    List<_i7.PostBookmarks>? postBookmarks,
   }) : super._(
           id: id,
           bio: bio,
@@ -160,6 +209,10 @@ class _UserRecordImpl extends UserRecord {
           followers: followers,
           politicalStatus: politicalStatus,
           credibilityScore: credibilityScore,
+          posts: posts,
+          projects: projects,
+          projectBookmarks: projectBookmarks,
+          postBookmarks: postBookmarks,
         );
 
   /// Returns a shallow copy of this [UserRecord]
@@ -178,6 +231,10 @@ class _UserRecordImpl extends UserRecord {
     Object? followers = _Undefined,
     Object? politicalStatus = _Undefined,
     Object? credibilityScore = _Undefined,
+    Object? posts = _Undefined,
+    Object? projects = _Undefined,
+    Object? projectBookmarks = _Undefined,
+    Object? postBookmarks = _Undefined,
   }) {
     return UserRecord(
       id: id is int? ? id : this.id,
@@ -201,6 +258,18 @@ class _UserRecordImpl extends UserRecord {
       credibilityScore: credibilityScore is double?
           ? credibilityScore
           : this.credibilityScore,
+      posts: posts is List<_i4.Post>?
+          ? posts
+          : this.posts?.map((e0) => e0.copyWith()).toList(),
+      projects: projects is List<_i5.Project>?
+          ? projects
+          : this.projects?.map((e0) => e0.copyWith()).toList(),
+      projectBookmarks: projectBookmarks is List<_i6.ProjectBookmarks>?
+          ? projectBookmarks
+          : this.projectBookmarks?.map((e0) => e0.copyWith()).toList(),
+      postBookmarks: postBookmarks is List<_i7.PostBookmarks>?
+          ? postBookmarks
+          : this.postBookmarks?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

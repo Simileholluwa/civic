@@ -23,15 +23,6 @@ class FeedScreen extends ConsumerWidget {
         true,
       ),
     );
-    final isVisibleNotifier = ref.read(
-      appBottomNavigationVisibilityProvider(
-        null,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.show(),
-    );
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: isVisible,
@@ -43,47 +34,44 @@ class FeedScreen extends ConsumerWidget {
           onPressed: () {},
         ),
         titleSpacing: 0,
-        height: 45,
-        bottomHeight: 54,
         centerTitle: true,
-        title: Text(
-          'CIVIC',
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).primaryColor,
+        title: AppTabBarDesign(
+          dividerColor: Colors.transparent,
+          tabController: tabController,
+          tabAlignment: TabAlignment.center,
+          tabs: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
+              child: Icon(
+                currentPageState == 0 ? Iconsax.calendar_15 : Iconsax.calendar,
               ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30),
-          child: AppTabBarDesign(
-            dividerColor: Colors.transparent,
-            tabController: tabController,
-            tabs: [
-              Tab(
-                text: 'POSTS'
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
+              child: Icon(
+                currentPageState == 1 ? Iconsax.chart_26 : Iconsax.chart,
               ),
-              Tab(
-                text: 'POLLS'
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
+              child: Icon(
+                currentPageState == 2 ? Iconsax.archive_24 : Iconsax.archive_2,
               ),
-              Tab(
-                text: 'ARTICLES'
-              )
-            ],
+            ),
+          ],
+          indicator: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).primaryColor.withAlpha(50,),
+          
           ),
         ),
         actions: [
           IconButton(
             icon: Icon(
-              Iconsax.filter5,
+              Iconsax.search_normal,
               size: 26,
-              color: Theme.of(context).colorScheme.onSurface,
             ),
-            onPressed: () {
-              if (currentPageState == 0) {
-                ref.watch(projectScreenWidgetsProvider.notifier).toggleFilter();
-              }
-            },
+            onPressed: () {},
           ),
           const SizedBox(width: 5),
         ],

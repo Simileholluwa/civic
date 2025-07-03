@@ -44,7 +44,7 @@ class ProjectCardItem extends ConsumerWidget {
         spacing: 10,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 12, 5, 0),
             child: ContentCreatorInfo(
               creator: projectCardState.creator!,
               timeAgo: projectCardState.timeAgo!,

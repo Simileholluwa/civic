@@ -8,7 +8,13 @@ location:
   - searchLocation:
   - searchNearbyLocation:
 notification:
-  - sendNotification:
+  - markNotificationAsRead:
+  - markAllNotificationsAsRead:
+  - deleteNotification:
+  - deleteAllNotifications:
+  - getUnreadNotificationCount:
+  - getNotifications:
+  - notificationUpdates:
 post:
   - savePost:
   - savePoll:

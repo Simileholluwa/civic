@@ -33,15 +33,6 @@ class CreateProjectScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
-    final isVisibleNotifier = ref.read(
-      appBottomNavigationVisibilityProvider(
-        false,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.hide(),
-    );
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use

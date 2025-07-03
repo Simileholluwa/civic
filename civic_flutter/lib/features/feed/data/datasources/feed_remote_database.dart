@@ -84,14 +84,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     required Post post,
   }) async {
     try {
-      final result = await _client.post.savePost(post).timeout(
-            const Duration(
-              seconds: 60,
-            ),
-          );
-
+      final result = await _client.post.savePost(post);
       if (result == null) {
-        return null;
+        throw const ServerException(
+          message: 'Failed to save post',
+        );
       }
       return result;
     } on UserException catch (e) {
@@ -116,16 +113,16 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     required int limit,
   }) async {
     try {
-      final result = _client.post.getPosts(
+      final result = await _client.post.getPosts(
         limit: limit,
         page: page,
       );
       return result;
+    } on PostException catch (e) {
+      throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
           message: 'Failed to connect to server. Please try again.');
-    } on ServerException {
-      rethrow;
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -403,7 +400,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     required int limit,
   }) async {
     try {
-      final result = _client.post.getPolls(
+      final result = await _client.post.getPolls(
         limit: limit,
         page: page,
       );

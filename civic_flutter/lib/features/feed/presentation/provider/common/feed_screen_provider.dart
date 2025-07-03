@@ -17,24 +17,31 @@ final feedFilterVsyncProvider = Provider<TickerProvider>(
   (ref) => _VSync(),
 );
 
-
 @riverpod
 class FeedScreenTabController extends _$FeedScreenTabController {
   @override
   Raw<TabController> build() {
-    return TabController(
+    final currentPage = ref
+          .watch(feedCurrentPageProvider.notifier);        
+    final controller = TabController(
       length: 3,
       vsync: ref.watch(feedVsyncProvider),
     );
+    controller.addListener(() {
+      currentPage.setCurrentPage(controller.index);
+    });
+    ref.onDispose(() {
+      controller.dispose();
+    });
+    return controller;
   }
-  
 }
 
 @riverpod
 class FeedCurrentPage extends _$FeedCurrentPage {
   @override
   int build() => 0;
-  
+
   void setCurrentPage(int index) {
     state = index;
   }

@@ -6,17 +6,21 @@ import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 @riverpod
 GoRouter router(Ref ref) {
   ref.read(bootStrapProvider);
   return GoRouter(
     initialLocation: AppRoutes.initial,
+    navigatorKey: _rootNavigatorKey,
     routes: [
       // Onboarding routes
       GoRoute(

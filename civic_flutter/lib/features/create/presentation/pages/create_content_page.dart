@@ -21,15 +21,6 @@ class CreateContentScreen extends ConsumerWidget {
     final decoded = jsonDecode(savedRecordString.toString());
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
-    final isVisibleNotifier = ref.read(
-      appBottomNavigationVisibilityProvider(
-        null,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.show(),
-    );
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,

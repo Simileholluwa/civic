@@ -2,7 +2,7 @@ class: ProjectBookmarks
 table: project_bookmarks
 fields:
     project: Project?, relation(onDelete=Cascade)
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(name=user_project_bookmarks)
     dateCreated: DateTime, default=now
 
 indexes:

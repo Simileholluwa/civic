@@ -11,6 +11,13 @@ fields:
   followers: List<int>?
   politicalStatus: PoliticalStatus?
   credibilityScore: double?
+  posts: List<Post>?, relation(optional, name=user_posts)
+  projects: List<Project>?, relation(optional, name=user_projects)
+  projectBookmarks: List<ProjectBookmarks>?, relation(optional, name=user_project_bookmarks)
+  postBookmarks: List<PostBookmarks>?, relation(optional, name=user_post_bookmarks)
+
+
+
 
 indexes:
   user_info_id_unique_idx:

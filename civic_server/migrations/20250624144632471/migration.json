@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "notification",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "deliveryStatus"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"deliveryStatus\" of table \"notification\" will be dropped.",
+            "table": "notification",
+            "columns": [
+              "deliveryStatus"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"deliveryStatus\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "deliveryStatus"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

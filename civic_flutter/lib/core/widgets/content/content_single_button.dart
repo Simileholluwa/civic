@@ -13,7 +13,7 @@ class ContentSingleButton extends StatelessWidget {
     this.color = TColors.primary,
   });
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
   final IconData buttonIcon;
   final Color color;

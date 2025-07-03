@@ -1,7 +1,7 @@
 class: Post
 table: post
 fields:
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(name=user_posts)
     postType: PostType?
     text: String?
     imageUrls: List<String>?

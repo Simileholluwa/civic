@@ -1,0 +1,281 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "notification"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "notification",
+        "dartName": "Notification",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('notification_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "receiverId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "senderId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "groupedSenderIds",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<int>?"
+          },
+          {
+            "name": "groupKey",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "actionType",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "targetType",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "actionRoute",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "targetId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "targetOwnerId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          },
+          {
+            "name": "isRead",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "false",
+            "dartType": "bool"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": false,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "notification_fk_0",
+            "columns": [
+              "receiverId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "notification_fk_1",
+            "columns": [
+              "senderId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "notification_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"type\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "type"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"title\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "title"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"body\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "body"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"postId\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "postId"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"projectId\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "projectId"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"pollId\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "pollId"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"articleId\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "articleId"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"groupCount\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "groupCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"latestSenderName\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "latestSenderName"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"isSeen\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "isSeen"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"lastUpdatedAt\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "lastUpdatedAt"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column senderId of table notification is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "notification",
+      "columns": [
+        "senderId"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column actionRoute of table notification is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "notification",
+      "columns": [
+        "actionRoute"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column isRead of table notification is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "notification",
+      "columns": [
+        "isRead"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"notification\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "notification",
+      "columns": [
+        "actionType"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

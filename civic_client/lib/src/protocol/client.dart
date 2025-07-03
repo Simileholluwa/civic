@@ -12,23 +12,25 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i3;
-import 'package:civic_client/src/protocol/notification/notification_request.dart'
+import 'package:civic_client/src/protocol/notification/notification_list.dart'
     as _i4;
-import 'package:civic_client/src/protocol/post/post.dart' as _i5;
-import 'package:civic_client/src/protocol/post/post_list.dart' as _i6;
-import 'package:civic_client/src/protocol/project/project.dart' as _i7;
-import 'package:civic_client/src/protocol/project/project_review.dart' as _i8;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i9;
+import 'package:civic_client/src/protocol/notification/user_notification.dart'
+    as _i5;
+import 'package:civic_client/src/protocol/post/post.dart' as _i6;
+import 'package:civic_client/src/protocol/post/post_list.dart' as _i7;
+import 'package:civic_client/src/protocol/project/project.dart' as _i8;
+import 'package:civic_client/src/protocol/project/project_review.dart' as _i9;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i10;
 import 'package:civic_client/src/protocol/project/project_review_list.dart'
-    as _i10;
-import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i11;
+    as _i11;
+import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i12;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
-    as _i12;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i13;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i14;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i15;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i16;
-import 'protocol.dart' as _i17;
+    as _i13;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i14;
+import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i15;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i16;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i17;
+import 'protocol.dart' as _i18;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -114,11 +116,60 @@ class EndpointNotification extends _i1.EndpointRef {
   @override
   String get name => 'notification';
 
-  _i2.Future<void> sendNotification(_i4.NotificationRequest request) =>
+  _i2.Future<void> markNotificationAsRead(int notificationId) =>
       caller.callServerEndpoint<void>(
         'notification',
-        'sendNotification',
-        {'request': request},
+        'markNotificationAsRead',
+        {'notificationId': notificationId},
+      );
+
+  _i2.Future<void> markAllNotificationsAsRead() =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'markAllNotificationsAsRead',
+        {},
+      );
+
+  _i2.Future<void> deleteNotification(int notificationId) =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'deleteNotification',
+        {'notificationId': notificationId},
+      );
+
+  _i2.Future<void> deleteAllNotifications() => caller.callServerEndpoint<void>(
+        'notification',
+        'deleteAllNotifications',
+        {},
+      );
+
+  _i2.Future<int> getUnreadNotificationCount() =>
+      caller.callServerEndpoint<int>(
+        'notification',
+        'getUnreadNotificationCount',
+        {},
+      );
+
+  _i2.Future<_i4.NotificationList> getNotifications({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i4.NotificationList>(
+        'notification',
+        'getNotifications',
+        {
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Stream<_i5.UserNotification> notificationUpdates(int notificationId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i5.UserNotification>,
+          _i5.UserNotification>(
+        'notification',
+        'notificationUpdates',
+        {'notificationId': notificationId},
+        {},
       );
 }
 
@@ -129,22 +180,22 @@ class EndpointPost extends _i1.EndpointRef {
   @override
   String get name => 'post';
 
-  _i2.Future<_i5.Post?> savePost(_i5.Post post) =>
-      caller.callServerEndpoint<_i5.Post?>(
+  _i2.Future<_i6.Post?> savePost(_i6.Post post) =>
+      caller.callServerEndpoint<_i6.Post?>(
         'post',
         'savePost',
         {'post': post},
       );
 
-  _i2.Future<_i5.Post?> savePoll(_i5.Post post) =>
-      caller.callServerEndpoint<_i5.Post?>(
+  _i2.Future<_i6.Post?> savePoll(_i6.Post post) =>
+      caller.callServerEndpoint<_i6.Post?>(
         'post',
         'savePoll',
         {'post': post},
       );
 
-  _i2.Future<_i5.Post?> saveArticle(_i5.Post post) =>
-      caller.callServerEndpoint<_i5.Post?>(
+  _i2.Future<_i6.Post?> saveArticle(_i6.Post post) =>
+      caller.callServerEndpoint<_i6.Post?>(
         'post',
         'saveArticle',
         {'post': post},
@@ -169,11 +220,11 @@ class EndpointPost extends _i1.EndpointRef {
         {'pollId': pollId},
       );
 
-  _i2.Future<_i6.PostList> getPolls({
+  _i2.Future<_i7.PostList> getPolls({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i6.PostList>(
+      caller.callServerEndpoint<_i7.PostList>(
         'post',
         'getPolls',
         {
@@ -182,11 +233,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i6.PostList> getArticles({
+  _i2.Future<_i7.PostList> getArticles({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i6.PostList>(
+      caller.callServerEndpoint<_i7.PostList>(
         'post',
         'getArticles',
         {
@@ -195,11 +246,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.Post?> savePostComment(
-    _i5.Post comment,
+  _i2.Future<_i6.Post?> savePostComment(
+    _i6.Post comment,
     bool isReply,
   ) =>
-      caller.callServerEndpoint<_i5.Post?>(
+      caller.callServerEndpoint<_i6.Post?>(
         'post',
         'savePostComment',
         {
@@ -208,12 +259,12 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i6.PostList> getPostComments(
+  _i2.Future<_i7.PostList> getPostComments(
     int postId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i6.PostList>(
+      caller.callServerEndpoint<_i7.PostList>(
         'post',
         'getPostComments',
         {
@@ -223,11 +274,11 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.Post> getComment(
+  _i2.Future<_i6.Post> getComment(
     int commentId,
     bool isComment,
   ) =>
-      caller.callServerEndpoint<_i5.Post>(
+      caller.callServerEndpoint<_i6.Post>(
         'post',
         'getComment',
         {
@@ -236,12 +287,12 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i6.PostList> getPostCommentReplies(
+  _i2.Future<_i7.PostList> getPostCommentReplies(
     int commentId, {
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i6.PostList>(
+      caller.callServerEndpoint<_i7.PostList>(
         'post',
         'getPostCommentReplies',
         {
@@ -252,7 +303,7 @@ class EndpointPost extends _i1.EndpointRef {
       );
 
   _i2.Future<void> schedulePost(
-    _i5.Post post,
+    _i6.Post post,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -264,18 +315,18 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.Post> getRootPost(_i5.Post post) =>
-      caller.callServerEndpoint<_i5.Post>(
+  _i2.Future<_i6.Post> getRootPost(_i6.Post post) =>
+      caller.callServerEndpoint<_i6.Post>(
         'post',
         'getRootPost',
         {'post': post},
       );
 
-  _i2.Future<_i5.Post> quoteProject(
+  _i2.Future<_i6.Post> quoteProject(
     int projectId,
-    _i5.Post quoteContent,
+    _i6.Post quoteContent,
   ) =>
-      caller.callServerEndpoint<_i5.Post>(
+      caller.callServerEndpoint<_i6.Post>(
         'post',
         'quoteProject',
         {
@@ -284,17 +335,17 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i5.Post> getPost(int id) => caller.callServerEndpoint<_i5.Post>(
+  _i2.Future<_i6.Post> getPost(int id) => caller.callServerEndpoint<_i6.Post>(
         'post',
         'getPost',
         {'id': id},
       );
 
-  _i2.Future<_i6.PostList> getPosts({
+  _i2.Future<_i7.PostList> getPosts({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i6.PostList>(
+      caller.callServerEndpoint<_i7.PostList>(
         'post',
         'getPosts',
         {
@@ -335,8 +386,8 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Stream<_i5.Post> postUpdates(int postId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i5.Post>, _i5.Post>(
+  _i2.Stream<_i6.Post> postUpdates(int postId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i6.Post>, _i6.Post>(
         'post',
         'postUpdates',
         {'postId': postId},
@@ -368,8 +419,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [projectId]: The unique identifier of the project to retrieve.
   ///
   /// Returns the [Project] if found, otherwise throws an exception.
-  _i2.Future<_i7.Project> getProject(int projectId) =>
-      caller.callServerEndpoint<_i7.Project>(
+  _i2.Future<_i8.Project> getProject(int projectId) =>
+      caller.callServerEndpoint<_i8.Project>(
         'project',
         'getProject',
         {'projectId': projectId},
@@ -385,8 +436,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [projectId]: The ID of the project to retrieve the review for.
   ///
   /// Returns the [ProjectReview] if found, otherwise returns `null`.
-  _i2.Future<_i8.ProjectReview?> getProjectReview(int projectId) =>
-      caller.callServerEndpoint<_i8.ProjectReview?>(
+  _i2.Future<_i9.ProjectReview?> getProjectReview(int projectId) =>
+      caller.callServerEndpoint<_i9.ProjectReview?>(
         'project',
         'getProjectReview',
         {'projectId': projectId},
@@ -406,8 +457,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [project]: The project to save or update.
   ///
   /// Returns the saved or updated [Project].
-  _i2.Future<_i7.Project> saveProject(_i7.Project project) =>
-      caller.callServerEndpoint<_i7.Project>(
+  _i2.Future<_i8.Project> saveProject(_i8.Project project) =>
+      caller.callServerEndpoint<_i8.Project>(
         'project',
         'saveProject',
         {'project': project},
@@ -434,9 +485,9 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// - [projectReview]: The review to be saved or updated.
-  _i2.Future<_i8.ProjectReview> saveProjectReview(
-          _i8.ProjectReview projectReview) =>
-      caller.callServerEndpoint<_i8.ProjectReview>(
+  _i2.Future<_i9.ProjectReview> saveProjectReview(
+          _i9.ProjectReview projectReview) =>
+      caller.callServerEndpoint<_i9.ProjectReview>(
         'project',
         'saveProjectReview',
         {'projectReview': projectReview},
@@ -497,7 +548,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// [project] - The project to be scheduled.
   /// [dateTime] - The date and time when the future call should be executed.
   _i2.Future<void> scheduleProject(
-    _i7.Project project,
+    _i8.Project project,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -526,11 +577,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// Parameters:
   /// - [limit]: Maximum number of projects to return per page (default: 50).
   /// - [page]: The page number to retrieve (default: 1).
-  _i2.Future<_i9.ProjectList> getProjects({
+  _i2.Future<_i10.ProjectList> getProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i9.ProjectList>(
+      caller.callServerEndpoint<_i10.ProjectList>(
         'project',
         'getProjects',
         {
@@ -553,14 +604,14 @@ class EndpointProject extends _i1.EndpointRef {
   /// Throws a [UserException] if pagination parameters are invalid or if an invalid
   /// rating category is provided.
   /// Throws a [PostException] if an error occurs while fetching reviews.
-  _i2.Future<_i10.ProjectReviewList> getProjectReviews(
+  _i2.Future<_i11.ProjectReviewList> getProjectReviews(
     int projectId, {
     required int limit,
     required int page,
     double? rating,
     String? cardinal,
   }) =>
-      caller.callServerEndpoint<_i10.ProjectReviewList>(
+      caller.callServerEndpoint<_i11.ProjectReviewList>(
         'project',
         'getProjectReviews',
         {
@@ -590,11 +641,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [isLike]: `true` for a like, `false` for a dislike.
   ///
   /// Returns the updated [ProjectReview] object.
-  _i2.Future<_i8.ProjectReview> reactToReview(
+  _i2.Future<_i9.ProjectReview> reactToReview(
     int reviewId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i8.ProjectReview>(
+      caller.callServerEndpoint<_i9.ProjectReview>(
         'project',
         'reactToReview',
         {
@@ -621,11 +672,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// Parameters:
   /// - [vettingId]: The ID of the vetting to react to.
   /// - [isLike]: `true` for a like, `false` for a dislike.
-  _i2.Future<_i11.ProjectVetting> reactToVetting(
+  _i2.Future<_i12.ProjectVetting> reactToVetting(
     int vettingId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i11.ProjectVetting>(
+      caller.callServerEndpoint<_i12.ProjectVetting>(
         'project',
         'reactToVetting',
         {
@@ -729,9 +780,9 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// - [projectVetting]: The project vetting object to be processed.
-  _i2.Future<_i11.ProjectVetting> vetProject(
-          _i11.ProjectVetting projectVetting) =>
-      caller.callServerEndpoint<_i11.ProjectVetting>(
+  _i2.Future<_i12.ProjectVetting> vetProject(
+          _i12.ProjectVetting projectVetting) =>
+      caller.callServerEndpoint<_i12.ProjectVetting>(
         'project',
         'vetProject',
         {'projectVetting': projectVetting},
@@ -750,8 +801,8 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve.
-  _i2.Future<_i11.ProjectVetting?> getVettedProject(int projectId) =>
-      caller.callServerEndpoint<_i11.ProjectVetting?>(
+  _i2.Future<_i12.ProjectVetting?> getVettedProject(int projectId) =>
+      caller.callServerEndpoint<_i12.ProjectVetting?>(
         'project',
         'getVettedProject',
         {'projectId': projectId},
@@ -771,11 +822,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// - The list of vetted project results for the requested page.
   /// - The total number of pages.
   /// - Whether more pages can be loaded.
-  _i2.Future<_i12.ProjectVetList> getVettedProjects({
+  _i2.Future<_i13.ProjectVetList> getVettedProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i12.ProjectVetList>(
+      caller.callServerEndpoint<_i13.ProjectVetList>(
         'project',
         'getVettedProjects',
         {
@@ -797,8 +848,8 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Returns:
   ///   - The authenticated [UserRecord] with included [UserInfo].
-  _i2.Future<_i13.UserRecord> authUser() =>
-      caller.callServerEndpoint<_i13.UserRecord>(
+  _i2.Future<_i14.UserRecord> authUser() =>
+      caller.callServerEndpoint<_i14.UserRecord>(
         'project',
         'authUser',
         {},
@@ -813,7 +864,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// [user] - The user attempting the operation.
   _i2.Future<void> validateProjectOwnership(
     int projectId,
-    _i13.UserRecord user,
+    _i14.UserRecord user,
   ) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -833,7 +884,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// [user] - The user attempting the operation.
   _i2.Future<void> validateProjectReviewOwnership(
     int projectReviewId,
-    _i13.UserRecord user,
+    _i14.UserRecord user,
   ) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -857,8 +908,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [Project] details.
   ///   - Subsequent [Project] updates as they occur.
-  _i2.Stream<_i7.Project> projectUpdates(int projectId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i7.Project>, _i7.Project>(
+  _i2.Stream<_i8.Project> projectUpdates(int projectId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i8.Project>, _i8.Project>(
         'project',
         'projectUpdates',
         {'projectId': projectId},
@@ -873,7 +924,7 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// This method first updates the project in the database, then posts a message
   /// to all clients subscribed to the project's channel to notify them of the update.
-  _i2.Future<void> updateProject(_i7.Project project) =>
+  _i2.Future<void> updateProject(_i8.Project project) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProject',
@@ -893,9 +944,9 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [ProjectReview] object (if found).
   ///   - Subsequent updates to the [ProjectReview] as they occur.
-  _i2.Stream<_i8.ProjectReview> projectReviewUpdates(int reviewId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i8.ProjectReview>,
-          _i8.ProjectReview>(
+  _i2.Stream<_i9.ProjectReview> projectReviewUpdates(int reviewId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i9.ProjectReview>,
+          _i9.ProjectReview>(
         'project',
         'projectReviewUpdates',
         {'reviewId': reviewId},
@@ -911,7 +962,7 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// [session]: The current database session.
   /// [projectReview]: The project review object to update.
-  _i2.Future<void> updateProjectReview(_i8.ProjectReview projectReview) =>
+  _i2.Future<void> updateProjectReview(_i9.ProjectReview projectReview) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProjectReview',
@@ -930,9 +981,9 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [ProjectVetting] object if found.
   ///   - Any subsequent updates to the [ProjectVetting] object.
-  _i2.Stream<_i11.ProjectVetting> projectVettingUpdates(int vettingId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i11.ProjectVetting>,
-          _i11.ProjectVetting>(
+  _i2.Stream<_i12.ProjectVetting> projectVettingUpdates(int vettingId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i12.ProjectVetting>,
+          _i12.ProjectVetting>(
         'project',
         'projectVettingUpdates',
         {'vettingId': vettingId},
@@ -949,7 +1000,7 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// [projectVetting]: The project vetting object to update.
-  _i2.Future<void> updateProjectVetting(_i11.ProjectVetting projectVetting) =>
+  _i2.Future<void> updateProjectVetting(_i12.ProjectVetting projectVetting) =>
       caller.callServerEndpoint<void>(
         'project',
         'updateProjectVetting',
@@ -991,8 +1042,8 @@ class EndpointUserNin extends _i1.EndpointRef {
   @override
   String get name => 'userNin';
 
-  _i2.Future<_i14.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i14.UserNinRecord?>(
+  _i2.Future<_i15.UserNinRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i15.UserNinRecord?>(
         'userNin',
         'getNinDetails',
         {'ninNumber': ninNumber},
@@ -1006,15 +1057,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUser(_i13.UserRecord userRecord) =>
+  _i2.Future<void> saveUser(_i14.UserRecord userRecord) =>
       caller.callServerEndpoint<void>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i13.UserRecord?> getUser() =>
-      caller.callServerEndpoint<_i13.UserRecord?>(
+  _i2.Future<_i14.UserRecord?> getUser() =>
+      caller.callServerEndpoint<_i14.UserRecord?>(
         'userRecord',
         'getUser',
         {},
@@ -1034,12 +1085,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<_i15.UsersList> getUsers({
+  _i2.Future<_i16.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i15.UsersList>(
+      caller.callServerEndpoint<_i16.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -1049,11 +1100,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i13.UserRecord>> mentionUsers({
+  _i2.Future<List<_i14.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i13.UserRecord>>(
+      caller.callServerEndpoint<List<_i14.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {
@@ -1072,10 +1123,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i16.Caller(client);
+    auth = _i17.Caller(client);
   }
 
-  late final _i16.Caller auth;
+  late final _i17.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1094,7 +1145,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i17.Protocol(),
+          _i18.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

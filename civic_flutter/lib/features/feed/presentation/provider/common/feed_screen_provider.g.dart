@@ -7,7 +7,7 @@ part of 'feed_screen_provider.dart';
 // **************************************************************************
 
 String _$feedScreenTabControllerHash() =>
-    r'8aded316046390dd1118c62c972824e6fad627ab';
+    r'2ebdf0a32deec4c58e73eb62e6e82129810b42b1';
 
 /// See also [FeedScreenTabController].
 @ProviderFor(FeedScreenTabController)

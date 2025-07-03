@@ -16,11 +16,11 @@ class AppWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final screenHeight = MediaQuery.sizeOf(context).height;
-    final isBottomNavVisible = ref.watch(
-      appBottomNavigationVisibilityProvider(
-        null,
-      ),
-    );
+    final location =
+        navigatorShell.shellRouteContext.routerState.uri.toString();
+    final hideBottomNav = location.contains('/project/') ||
+        location.contains('/feed/') ||
+        location.contains('/create/');
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
@@ -30,7 +30,7 @@ class AppWrapper extends ConsumerWidget {
             ? null
             : AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                height: isBottomNavVisible ? 60 : 0,
+                height: hideBottomNav ? 0 : 60,
                 child: BottomNavigationBar(
                   currentIndex: navigatorShell.currentIndex,
                   onTap: (index) {
@@ -42,7 +42,7 @@ class AppWrapper extends ConsumerWidget {
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   items: [
                     BottomNavigationBarItem(
-                        activeIcon: Icon(Iconsax.note5),
+                        activeIcon: Icon(Iconsax.note),
                         icon: Icon(Iconsax.note),
                         label: 'Projects'),
                     BottomNavigationBarItem(
@@ -50,12 +50,8 @@ class AppWrapper extends ConsumerWidget {
                         icon: Icon(Iconsax.airdrop),
                         label: 'Feed'),
                     BottomNavigationBarItem(
-                        activeIcon: Icon(
-                          Iconsax.magicpen5,
-                        ),
-                        icon: Icon(
-                          Iconsax.magicpen,
-                        ),
+                        activeIcon: Icon(Iconsax.magicpen5),
+                        icon: Icon(Iconsax.magicpen),
                         label: 'Create'),
                     BottomNavigationBarItem(
                         activeIcon: Icon(Iconsax.notification5),

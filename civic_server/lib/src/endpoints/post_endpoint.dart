@@ -16,23 +16,17 @@ class PostEndpoint extends Endpoint {
           session,
         );
         if (post.id != null) {
-          await validatePostOwnership(
+          final existingPost = await validatePostOwnership(
             session,
             post.id!,
             user,
-          );
-
-          final existingPost = await Post.db.findById(
-            session,
-            post.id!,
-            transaction: transaction,
           );
 
           await updatePost(
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingPost!.likedBy,
+              likedBy: existingPost.likedBy,
               bookmarkedBy: existingPost.bookmarkedBy,
               projectId: existingPost.projectId,
               parentId: existingPost.parentId,
@@ -89,23 +83,17 @@ class PostEndpoint extends Endpoint {
         final user = await authUser(session);
 
         if (post.id != null) {
-          await validatePostOwnership(
+          final existingPost = await validatePostOwnership(
             session,
             post.id!,
             user,
-          );
-
-          final existingPost = await Post.db.findById(
-            session,
-            post.id!,
-            transaction: transaction,
           );
 
           await updatePost(
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingPost!.likedBy,
+              likedBy: existingPost.likedBy,
               bookmarkedBy: existingPost.bookmarkedBy,
               pollId: existingPost.pollId,
               commentCount: existingPost.commentCount,
@@ -203,26 +191,11 @@ class PostEndpoint extends Endpoint {
       try {
         final user = await authUser(session);
         if (post.id != null) {
-          await validatePostOwnership(
+          final existingPost = await validatePostOwnership(
             session,
             post.id!,
             user,
           );
-
-          final existingPost = await Post.db.findById(
-            session,
-            post.id!,
-            include: Post.include(
-              article: Article.include(),
-            ),
-            transaction: transaction,
-          );
-
-          if (existingPost == null) {
-            throw PostException(
-              message: 'Article not found. It may have been deleted.',
-            );
-          }
 
           await updatePost(
             session,
@@ -398,17 +371,15 @@ class PostEndpoint extends Endpoint {
       if (post.ownerId != user.id) {
         await NotificationEndpoint().sendNotification(
           session,
-          NotificationRequest(
-            receiverId: poll.ownerId,
-            senderId: user.id!,
-            title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
-            body:
-                '${user.userInfo?.fullName ?? user.userInfo?.fullName} voted in your poll.',
-            pollId: poll.id,
-            type: NotificationType.vote,
-            groupKey: 'votes_poll_${poll.id}',
-            actionRoute: '/feed/poll/${poll.id}',
-          ),
+          receiverId: post.ownerId,
+          senderId: user.id!,
+          actionType: 'vote',
+          targetType: 'poll',
+          targetId: post.id!,
+          actionRoute: '/feed/poll/${poll.id}',
+          content: post.text!.length > 100
+              ? '${post.text!.substring(0, 100)}...'
+              : post.text!,
         );
       }
 
@@ -580,7 +551,7 @@ class PostEndpoint extends Endpoint {
       final user = await authUser(session);
 
       if (comment.id != null) {
-        await validateCommentOwnership(
+        final existingCommentOrReply = await validateCommentOwnership(
           session,
           comment.id!,
           comment.parentId!,
@@ -588,16 +559,11 @@ class PostEndpoint extends Endpoint {
           isReply,
         );
 
-        final existingCommentOrReply = await Post.db.findById(
-          session,
-          comment.id!,
-        );
-
         await updatePost(
           session,
           comment.copyWith(
             updatedAt: DateTime.now(),
-            likedBy: existingCommentOrReply!.likedBy,
+            likedBy: existingCommentOrReply.likedBy,
             bookmarkedBy: existingCommentOrReply.bookmarkedBy,
             commentCount: existingCommentOrReply.commentCount,
             postType: existingCommentOrReply.postType,
@@ -636,17 +602,15 @@ class PostEndpoint extends Endpoint {
         if (parent!.ownerId != user.id) {
           await NotificationEndpoint().sendNotification(
             session,
-            NotificationRequest(
-              receiverId: parent.ownerId,
-              senderId: user.id!,
-              title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
-              body:
-                  '${user.userInfo?.fullName ?? user.userInfo?.fullName} commented on your post.',
-              postId: parent.id,
-              type: NotificationType.comment,
-              groupKey: 'post_comments_${parent.id}',
-              actionRoute: '/feed/post/${parent.id}/comments',
-            ),
+            receiverId: parent.ownerId,
+            senderId: user.id!,
+            actionType: isReply ? 'reply' : 'comment',
+            targetType: 'post',
+            targetId: sentComment.id!,
+            actionRoute: '/feed/post/${parent.id}/comments',
+            content: sentComment.text!.length > 100
+                ? '${sentComment.text!.substring(0, 100)}...'
+                : sentComment.text!,
           );
         }
 
@@ -825,23 +789,17 @@ class PostEndpoint extends Endpoint {
     return await session.db.transaction((transaction) async {
       try {
         if (quoteContent.id != null) {
-          await validatePostOwnership(
+          final existingQuote = await validatePostOwnership(
             session,
             quoteContent.id!,
             user,
-          );
-
-          final existingQuote = await Post.db.findById(
-            session,
-            quoteContent.id!,
-            transaction: transaction,
           );
 
           await updatePost(
             session,
             quoteContent.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingQuote!.likedBy,
+              likedBy: existingQuote.likedBy,
               bookmarkedBy: existingQuote.bookmarkedBy,
               projectId: existingQuote.projectId,
               quotedOrRepostedFromUserId:
@@ -890,17 +848,17 @@ class PostEndpoint extends Endpoint {
           if (selectedProject.ownerId != user.id) {
             await NotificationEndpoint().sendNotification(
               session,
-              NotificationRequest(
-                receiverId: selectedProject.ownerId,
-                senderId: user.id!,
-                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
-                body:
-                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} quoted your project.',
-                projectId: selectedProject.id,
-                type: NotificationType.quote,
-                groupKey: 'project_quote_${selectedProject.id}',
-                actionRoute: '/feed/post/${sentPost.id}',
-              ),
+              receiverId: selectedProject.ownerId,
+              senderId: user.id!,
+              actionType: 'quote',
+              targetType: 'project',
+              targetId: sentPost.id!,
+              actionRoute: '/feed/post/${sentPost.id}',
+              content: sentPost.text == null
+                  ? null
+                  : sentPost.text!.length > 100
+                      ? '${sentPost.text!.substring(0, 100)}...'
+                      : sentPost.text!,
             );
           }
 
@@ -969,7 +927,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw UserException(
+      throw PostException(
         message: 'Invalid pagination parameters',
       );
     }
@@ -1033,21 +991,11 @@ class PostEndpoint extends Endpoint {
     final user = await authUser(
       session,
     );
-    await validatePostOwnership(
+    final post = await validatePostOwnership(
       session,
       id,
       user,
     );
-    final post = await Post.db.findById(
-      session,
-      id,
-    );
-
-    if (post == null) {
-      throw PostException(
-        message: 'Post not found',
-      );
-    }
 
     if (post.postType == PostType.comment ||
         post.postType == PostType.commentReply) {
@@ -1135,20 +1083,19 @@ class PostEndpoint extends Endpoint {
             transaction: transaction,
           );
           post!.bookmarkedBy?.add(user.id!);
+
           if (post!.ownerId != user.id) {
             await NotificationEndpoint().sendNotification(
               session,
-              NotificationRequest(
-                receiverId: post!.ownerId,
-                senderId: user.id!,
-                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}}',
-                body:
-                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} bookmarked your post.',
-                postId: post!.id,
-                type: NotificationType.like,
-                groupKey: 'post_bookmarks_${post!.id}',
-                actionRoute: '/feed/post/${post!.id}',
-              ),
+              receiverId: post!.ownerId,
+              senderId: user.id!,
+              actionType: 'bookmark',
+              targetType: 'post',
+              targetId: post!.id!,
+              actionRoute: '/feed/post/${post!.id}',
+              content: post!.text!.length > 100
+                ? '${post!.text!.substring(0, 100)}...'
+                : post!.text!,
             );
           }
         }
@@ -1219,17 +1166,15 @@ class PostEndpoint extends Endpoint {
           if (post.ownerId != user.id) {
             await NotificationEndpoint().sendNotification(
               session,
-              NotificationRequest(
-                receiverId: post.ownerId,
-                senderId: user.id!,
-                title: '${user.userInfo?.fullName ?? user.userInfo?.fullName}',
-                body:
-                    '${user.userInfo?.fullName ?? user.userInfo?.fullName} liked your post.',
-                postId: post.id,
-                type: NotificationType.comment,
-                groupKey: 'post_likes_${post.id}',
-                actionRoute: '/feed/post/${post.id}',
-              ),
+              receiverId: post.ownerId,
+              senderId: user.id!,
+              actionType: 'like',
+              targetType: 'post',
+              targetId: post.id!,
+              actionRoute: '/feed/post/${post.id}',
+              content: post.text!.length > 100
+                ? '${post.text!.substring(0, 100)}...'
+                : post.text!,
             );
           }
         }
@@ -1354,7 +1299,7 @@ class PostEndpoint extends Endpoint {
   }
 
   @doNotGenerate
-  Future<void> validatePostOwnership(
+  Future<Post> validatePostOwnership(
     Session session,
     int postId,
     UserRecord user,
@@ -1373,10 +1318,11 @@ class PostEndpoint extends Endpoint {
         message: 'Unauthorised operation',
       );
     }
+    return post;
   }
 
   @doNotGenerate
-  Future<void> validateCommentOwnership(
+  Future<Post> validateCommentOwnership(
     Session session,
     int commentId,
     int postId,
@@ -1403,6 +1349,7 @@ class PostEndpoint extends Endpoint {
         message: 'Unauthorised operation',
       );
     }
+    return comment;
   }
 
   @doNotGenerate

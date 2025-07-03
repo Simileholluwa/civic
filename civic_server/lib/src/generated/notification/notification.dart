@@ -12,13 +12,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../notification/notification_delivery_status.dart' as _i2;
-import '../user/user_record.dart' as _i3;
-import '../notification/notification_type_enum.dart' as _i4;
-import '../post/post.dart' as _i5;
-import '../project/project.dart' as _i6;
-import '../poll/poll.dart' as _i7;
-import '../article/article.dart' as _i8;
+import '../user/user_record.dart' as _i2;
 
 abstract class Notification
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -26,61 +20,37 @@ abstract class Notification
     this.id,
     required this.receiverId,
     this.receiver,
-    this.senderId,
+    required this.senderId,
     this.sender,
-    required this.type,
-    required this.title,
-    required this.body,
-    this.postId,
-    this.post,
-    this.projectId,
-    this.project,
-    this.pollId,
-    this.poll,
-    this.articleId,
-    this.article,
-    this.actionRoute,
+    this.groupedSenderIds,
+    this.content,
     this.groupKey,
-    int? groupCount,
-    this.latestSenderName,
+    required this.actionType,
+    required this.targetType,
+    required this.actionRoute,
+    required this.targetId,
     bool? isRead,
-    bool? isSeen,
-    _i2.NotificationDeliveryStatus? deliveryStatus,
     DateTime? createdAt,
-    this.lastUpdatedAt,
-  })  : groupCount = groupCount ?? 1,
-        isRead = isRead ?? false,
-        isSeen = isSeen ?? false,
-        deliveryStatus =
-            deliveryStatus ?? _i2.NotificationDeliveryStatus.pending,
+    this.updatedAt,
+  })  : isRead = isRead ?? false,
         createdAt = createdAt ?? DateTime.now();
 
   factory Notification({
     int? id,
     required int receiverId,
-    _i3.UserRecord? receiver,
-    int? senderId,
-    _i3.UserRecord? sender,
-    required _i4.NotificationType type,
-    required String title,
-    required String body,
-    int? postId,
-    _i5.Post? post,
-    int? projectId,
-    _i6.Project? project,
-    int? pollId,
-    _i7.Poll? poll,
-    int? articleId,
-    _i8.Article? article,
-    String? actionRoute,
+    _i2.UserRecord? receiver,
+    required int senderId,
+    _i2.UserRecord? sender,
+    List<int>? groupedSenderIds,
+    String? content,
     String? groupKey,
-    int? groupCount,
-    String? latestSenderName,
+    required String actionType,
+    required String targetType,
+    required String actionRoute,
+    required int targetId,
     bool? isRead,
-    bool? isSeen,
-    _i2.NotificationDeliveryStatus? deliveryStatus,
     DateTime? createdAt,
-    DateTime? lastUpdatedAt,
+    DateTime? updatedAt,
   }) = _NotificationImpl;
 
   factory Notification.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -89,50 +59,28 @@ abstract class Notification
       receiverId: jsonSerialization['receiverId'] as int,
       receiver: jsonSerialization['receiver'] == null
           ? null
-          : _i3.UserRecord.fromJson(
+          : _i2.UserRecord.fromJson(
               (jsonSerialization['receiver'] as Map<String, dynamic>)),
-      senderId: jsonSerialization['senderId'] as int?,
+      senderId: jsonSerialization['senderId'] as int,
       sender: jsonSerialization['sender'] == null
           ? null
-          : _i3.UserRecord.fromJson(
+          : _i2.UserRecord.fromJson(
               (jsonSerialization['sender'] as Map<String, dynamic>)),
-      type: _i4.NotificationType.fromJson((jsonSerialization['type'] as int)),
-      title: jsonSerialization['title'] as String,
-      body: jsonSerialization['body'] as String,
-      postId: jsonSerialization['postId'] as int?,
-      post: jsonSerialization['post'] == null
-          ? null
-          : _i5.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
-      projectId: jsonSerialization['projectId'] as int?,
-      project: jsonSerialization['project'] == null
-          ? null
-          : _i6.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
-      pollId: jsonSerialization['pollId'] as int?,
-      poll: jsonSerialization['poll'] == null
-          ? null
-          : _i7.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
-      articleId: jsonSerialization['articleId'] as int?,
-      article: jsonSerialization['article'] == null
-          ? null
-          : _i8.Article.fromJson(
-              (jsonSerialization['article'] as Map<String, dynamic>)),
-      actionRoute: jsonSerialization['actionRoute'] as String?,
+      groupedSenderIds: (jsonSerialization['groupedSenderIds'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      content: jsonSerialization['content'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
-      groupCount: jsonSerialization['groupCount'] as int?,
-      latestSenderName: jsonSerialization['latestSenderName'] as String?,
-      isRead: jsonSerialization['isRead'] as bool?,
-      isSeen: jsonSerialization['isSeen'] as bool?,
-      deliveryStatus: _i2.NotificationDeliveryStatus.fromJson(
-          (jsonSerialization['deliveryStatus'] as int)),
+      actionType: jsonSerialization['actionType'] as String,
+      targetType: jsonSerialization['targetType'] as String,
+      actionRoute: jsonSerialization['actionRoute'] as String,
+      targetId: jsonSerialization['targetId'] as int,
+      isRead: jsonSerialization['isRead'] as bool,
       createdAt:
           _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
-      lastUpdatedAt: jsonSerialization['lastUpdatedAt'] == null
+      updatedAt: jsonSerialization['updatedAt'] == null
           ? null
-          : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['lastUpdatedAt']),
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
     );
   }
 
@@ -145,51 +93,31 @@ abstract class Notification
 
   int receiverId;
 
-  _i3.UserRecord? receiver;
+  _i2.UserRecord? receiver;
 
-  int? senderId;
+  int senderId;
 
-  _i3.UserRecord? sender;
+  _i2.UserRecord? sender;
 
-  _i4.NotificationType type;
+  List<int>? groupedSenderIds;
 
-  String title;
-
-  String body;
-
-  int? postId;
-
-  _i5.Post? post;
-
-  int? projectId;
-
-  _i6.Project? project;
-
-  int? pollId;
-
-  _i7.Poll? poll;
-
-  int? articleId;
-
-  _i8.Article? article;
-
-  String? actionRoute;
+  String? content;
 
   String? groupKey;
 
-  int? groupCount;
+  String actionType;
 
-  String? latestSenderName;
+  String targetType;
 
-  bool? isRead;
+  String actionRoute;
 
-  bool? isSeen;
+  int targetId;
 
-  _i2.NotificationDeliveryStatus deliveryStatus;
+  bool isRead;
 
   DateTime createdAt;
 
-  DateTime? lastUpdatedAt;
+  DateTime? updatedAt;
 
   @override
   _i1.Table<int?> get table => t;
@@ -200,29 +128,19 @@ abstract class Notification
   Notification copyWith({
     int? id,
     int? receiverId,
-    _i3.UserRecord? receiver,
+    _i2.UserRecord? receiver,
     int? senderId,
-    _i3.UserRecord? sender,
-    _i4.NotificationType? type,
-    String? title,
-    String? body,
-    int? postId,
-    _i5.Post? post,
-    int? projectId,
-    _i6.Project? project,
-    int? pollId,
-    _i7.Poll? poll,
-    int? articleId,
-    _i8.Article? article,
-    String? actionRoute,
+    _i2.UserRecord? sender,
+    List<int>? groupedSenderIds,
+    String? content,
     String? groupKey,
-    int? groupCount,
-    String? latestSenderName,
+    String? actionType,
+    String? targetType,
+    String? actionRoute,
+    int? targetId,
     bool? isRead,
-    bool? isSeen,
-    _i2.NotificationDeliveryStatus? deliveryStatus,
     DateTime? createdAt,
-    DateTime? lastUpdatedAt,
+    DateTime? updatedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -230,28 +148,19 @@ abstract class Notification
       if (id != null) 'id': id,
       'receiverId': receiverId,
       if (receiver != null) 'receiver': receiver?.toJson(),
-      if (senderId != null) 'senderId': senderId,
+      'senderId': senderId,
       if (sender != null) 'sender': sender?.toJson(),
-      'type': type.toJson(),
-      'title': title,
-      'body': body,
-      if (postId != null) 'postId': postId,
-      if (post != null) 'post': post?.toJson(),
-      if (projectId != null) 'projectId': projectId,
-      if (project != null) 'project': project?.toJson(),
-      if (pollId != null) 'pollId': pollId,
-      if (poll != null) 'poll': poll?.toJson(),
-      if (articleId != null) 'articleId': articleId,
-      if (article != null) 'article': article?.toJson(),
-      if (actionRoute != null) 'actionRoute': actionRoute,
+      if (groupedSenderIds != null)
+        'groupedSenderIds': groupedSenderIds?.toJson(),
+      if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
-      if (groupCount != null) 'groupCount': groupCount,
-      if (latestSenderName != null) 'latestSenderName': latestSenderName,
-      if (isRead != null) 'isRead': isRead,
-      if (isSeen != null) 'isSeen': isSeen,
-      'deliveryStatus': deliveryStatus.toJson(),
+      'actionType': actionType,
+      'targetType': targetType,
+      'actionRoute': actionRoute,
+      'targetId': targetId,
+      'isRead': isRead,
       'createdAt': createdAt.toJson(),
-      if (lastUpdatedAt != null) 'lastUpdatedAt': lastUpdatedAt?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
     };
   }
 
@@ -261,46 +170,29 @@ abstract class Notification
       if (id != null) 'id': id,
       'receiverId': receiverId,
       if (receiver != null) 'receiver': receiver?.toJsonForProtocol(),
-      if (senderId != null) 'senderId': senderId,
+      'senderId': senderId,
       if (sender != null) 'sender': sender?.toJsonForProtocol(),
-      'type': type.toJson(),
-      'title': title,
-      'body': body,
-      if (postId != null) 'postId': postId,
-      if (post != null) 'post': post?.toJsonForProtocol(),
-      if (projectId != null) 'projectId': projectId,
-      if (project != null) 'project': project?.toJsonForProtocol(),
-      if (pollId != null) 'pollId': pollId,
-      if (poll != null) 'poll': poll?.toJsonForProtocol(),
-      if (articleId != null) 'articleId': articleId,
-      if (article != null) 'article': article?.toJsonForProtocol(),
-      if (actionRoute != null) 'actionRoute': actionRoute,
+      if (groupedSenderIds != null)
+        'groupedSenderIds': groupedSenderIds?.toJson(),
+      if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
-      if (groupCount != null) 'groupCount': groupCount,
-      if (latestSenderName != null) 'latestSenderName': latestSenderName,
-      if (isRead != null) 'isRead': isRead,
-      if (isSeen != null) 'isSeen': isSeen,
-      'deliveryStatus': deliveryStatus.toJson(),
+      'actionType': actionType,
+      'targetType': targetType,
+      'actionRoute': actionRoute,
+      'targetId': targetId,
+      'isRead': isRead,
       'createdAt': createdAt.toJson(),
-      if (lastUpdatedAt != null) 'lastUpdatedAt': lastUpdatedAt?.toJson(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
     };
   }
 
   static NotificationInclude include({
-    _i3.UserRecordInclude? receiver,
-    _i3.UserRecordInclude? sender,
-    _i5.PostInclude? post,
-    _i6.ProjectInclude? project,
-    _i7.PollInclude? poll,
-    _i8.ArticleInclude? article,
+    _i2.UserRecordInclude? receiver,
+    _i2.UserRecordInclude? sender,
   }) {
     return NotificationInclude._(
       receiver: receiver,
       sender: sender,
-      post: post,
-      project: project,
-      poll: poll,
-      article: article,
     );
   }
 
@@ -336,55 +228,35 @@ class _NotificationImpl extends Notification {
   _NotificationImpl({
     int? id,
     required int receiverId,
-    _i3.UserRecord? receiver,
-    int? senderId,
-    _i3.UserRecord? sender,
-    required _i4.NotificationType type,
-    required String title,
-    required String body,
-    int? postId,
-    _i5.Post? post,
-    int? projectId,
-    _i6.Project? project,
-    int? pollId,
-    _i7.Poll? poll,
-    int? articleId,
-    _i8.Article? article,
-    String? actionRoute,
+    _i2.UserRecord? receiver,
+    required int senderId,
+    _i2.UserRecord? sender,
+    List<int>? groupedSenderIds,
+    String? content,
     String? groupKey,
-    int? groupCount,
-    String? latestSenderName,
+    required String actionType,
+    required String targetType,
+    required String actionRoute,
+    required int targetId,
     bool? isRead,
-    bool? isSeen,
-    _i2.NotificationDeliveryStatus? deliveryStatus,
     DateTime? createdAt,
-    DateTime? lastUpdatedAt,
+    DateTime? updatedAt,
   }) : super._(
           id: id,
           receiverId: receiverId,
           receiver: receiver,
           senderId: senderId,
           sender: sender,
-          type: type,
-          title: title,
-          body: body,
-          postId: postId,
-          post: post,
-          projectId: projectId,
-          project: project,
-          pollId: pollId,
-          poll: poll,
-          articleId: articleId,
-          article: article,
-          actionRoute: actionRoute,
+          groupedSenderIds: groupedSenderIds,
+          content: content,
           groupKey: groupKey,
-          groupCount: groupCount,
-          latestSenderName: latestSenderName,
+          actionType: actionType,
+          targetType: targetType,
+          actionRoute: actionRoute,
+          targetId: targetId,
           isRead: isRead,
-          isSeen: isSeen,
-          deliveryStatus: deliveryStatus,
           createdAt: createdAt,
-          lastUpdatedAt: lastUpdatedAt,
+          updatedAt: updatedAt,
         );
 
   /// Returns a shallow copy of this [Notification]
@@ -395,59 +267,38 @@ class _NotificationImpl extends Notification {
     Object? id = _Undefined,
     int? receiverId,
     Object? receiver = _Undefined,
-    Object? senderId = _Undefined,
+    int? senderId,
     Object? sender = _Undefined,
-    _i4.NotificationType? type,
-    String? title,
-    String? body,
-    Object? postId = _Undefined,
-    Object? post = _Undefined,
-    Object? projectId = _Undefined,
-    Object? project = _Undefined,
-    Object? pollId = _Undefined,
-    Object? poll = _Undefined,
-    Object? articleId = _Undefined,
-    Object? article = _Undefined,
-    Object? actionRoute = _Undefined,
+    Object? groupedSenderIds = _Undefined,
+    Object? content = _Undefined,
     Object? groupKey = _Undefined,
-    Object? groupCount = _Undefined,
-    Object? latestSenderName = _Undefined,
-    Object? isRead = _Undefined,
-    Object? isSeen = _Undefined,
-    _i2.NotificationDeliveryStatus? deliveryStatus,
+    String? actionType,
+    String? targetType,
+    String? actionRoute,
+    int? targetId,
+    bool? isRead,
     DateTime? createdAt,
-    Object? lastUpdatedAt = _Undefined,
+    Object? updatedAt = _Undefined,
   }) {
     return Notification(
       id: id is int? ? id : this.id,
       receiverId: receiverId ?? this.receiverId,
       receiver:
-          receiver is _i3.UserRecord? ? receiver : this.receiver?.copyWith(),
-      senderId: senderId is int? ? senderId : this.senderId,
-      sender: sender is _i3.UserRecord? ? sender : this.sender?.copyWith(),
-      type: type ?? this.type,
-      title: title ?? this.title,
-      body: body ?? this.body,
-      postId: postId is int? ? postId : this.postId,
-      post: post is _i5.Post? ? post : this.post?.copyWith(),
-      projectId: projectId is int? ? projectId : this.projectId,
-      project: project is _i6.Project? ? project : this.project?.copyWith(),
-      pollId: pollId is int? ? pollId : this.pollId,
-      poll: poll is _i7.Poll? ? poll : this.poll?.copyWith(),
-      articleId: articleId is int? ? articleId : this.articleId,
-      article: article is _i8.Article? ? article : this.article?.copyWith(),
-      actionRoute: actionRoute is String? ? actionRoute : this.actionRoute,
+          receiver is _i2.UserRecord? ? receiver : this.receiver?.copyWith(),
+      senderId: senderId ?? this.senderId,
+      sender: sender is _i2.UserRecord? ? sender : this.sender?.copyWith(),
+      groupedSenderIds: groupedSenderIds is List<int>?
+          ? groupedSenderIds
+          : this.groupedSenderIds?.map((e0) => e0).toList(),
+      content: content is String? ? content : this.content,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
-      groupCount: groupCount is int? ? groupCount : this.groupCount,
-      latestSenderName: latestSenderName is String?
-          ? latestSenderName
-          : this.latestSenderName,
-      isRead: isRead is bool? ? isRead : this.isRead,
-      isSeen: isSeen is bool? ? isSeen : this.isSeen,
-      deliveryStatus: deliveryStatus ?? this.deliveryStatus,
+      actionType: actionType ?? this.actionType,
+      targetType: targetType ?? this.targetType,
+      actionRoute: actionRoute ?? this.actionRoute,
+      targetId: targetId ?? this.targetId,
+      isRead: isRead ?? this.isRead,
       createdAt: createdAt ?? this.createdAt,
-      lastUpdatedAt:
-          lastUpdatedAt is DateTime? ? lastUpdatedAt : this.lastUpdatedAt,
+      updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
     );
   }
 }
@@ -462,50 +313,32 @@ class NotificationTable extends _i1.Table<int?> {
       'senderId',
       this,
     );
-    type = _i1.ColumnEnum(
-      'type',
-      this,
-      _i1.EnumSerialization.byIndex,
-    );
-    title = _i1.ColumnString(
-      'title',
+    groupedSenderIds = _i1.ColumnSerializable(
+      'groupedSenderIds',
       this,
     );
-    body = _i1.ColumnString(
-      'body',
-      this,
-    );
-    postId = _i1.ColumnInt(
-      'postId',
-      this,
-    );
-    projectId = _i1.ColumnInt(
-      'projectId',
-      this,
-    );
-    pollId = _i1.ColumnInt(
-      'pollId',
-      this,
-    );
-    articleId = _i1.ColumnInt(
-      'articleId',
-      this,
-    );
-    actionRoute = _i1.ColumnString(
-      'actionRoute',
+    content = _i1.ColumnString(
+      'content',
       this,
     );
     groupKey = _i1.ColumnString(
       'groupKey',
       this,
     );
-    groupCount = _i1.ColumnInt(
-      'groupCount',
+    actionType = _i1.ColumnString(
+      'actionType',
       this,
-      hasDefault: true,
     );
-    latestSenderName = _i1.ColumnString(
-      'latestSenderName',
+    targetType = _i1.ColumnString(
+      'targetType',
+      this,
+    );
+    actionRoute = _i1.ColumnString(
+      'actionRoute',
+      this,
+    );
+    targetId = _i1.ColumnInt(
+      'targetId',
       this,
     );
     isRead = _i1.ColumnBool(
@@ -513,152 +346,69 @@ class NotificationTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
-    isSeen = _i1.ColumnBool(
-      'isSeen',
-      this,
-      hasDefault: true,
-    );
-    deliveryStatus = _i1.ColumnEnum(
-      'deliveryStatus',
-      this,
-      _i1.EnumSerialization.byIndex,
-      hasDefault: true,
-    );
     createdAt = _i1.ColumnDateTime(
       'createdAt',
       this,
       hasDefault: true,
     );
-    lastUpdatedAt = _i1.ColumnDateTime(
-      'lastUpdatedAt',
+    updatedAt = _i1.ColumnDateTime(
+      'updatedAt',
       this,
     );
   }
 
   late final _i1.ColumnInt receiverId;
 
-  _i3.UserRecordTable? _receiver;
+  _i2.UserRecordTable? _receiver;
 
   late final _i1.ColumnInt senderId;
 
-  _i3.UserRecordTable? _sender;
+  _i2.UserRecordTable? _sender;
 
-  late final _i1.ColumnEnum<_i4.NotificationType> type;
+  late final _i1.ColumnSerializable groupedSenderIds;
 
-  late final _i1.ColumnString title;
-
-  late final _i1.ColumnString body;
-
-  late final _i1.ColumnInt postId;
-
-  _i5.PostTable? _post;
-
-  late final _i1.ColumnInt projectId;
-
-  _i6.ProjectTable? _project;
-
-  late final _i1.ColumnInt pollId;
-
-  _i7.PollTable? _poll;
-
-  late final _i1.ColumnInt articleId;
-
-  _i8.ArticleTable? _article;
-
-  late final _i1.ColumnString actionRoute;
+  late final _i1.ColumnString content;
 
   late final _i1.ColumnString groupKey;
 
-  late final _i1.ColumnInt groupCount;
+  late final _i1.ColumnString actionType;
 
-  late final _i1.ColumnString latestSenderName;
+  late final _i1.ColumnString targetType;
+
+  late final _i1.ColumnString actionRoute;
+
+  late final _i1.ColumnInt targetId;
 
   late final _i1.ColumnBool isRead;
 
-  late final _i1.ColumnBool isSeen;
-
-  late final _i1.ColumnEnum<_i2.NotificationDeliveryStatus> deliveryStatus;
-
   late final _i1.ColumnDateTime createdAt;
 
-  late final _i1.ColumnDateTime lastUpdatedAt;
+  late final _i1.ColumnDateTime updatedAt;
 
-  _i3.UserRecordTable get receiver {
+  _i2.UserRecordTable get receiver {
     if (_receiver != null) return _receiver!;
     _receiver = _i1.createRelationTable(
       relationFieldName: 'receiver',
       field: Notification.t.receiverId,
-      foreignField: _i3.UserRecord.t.id,
+      foreignField: _i2.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i3.UserRecordTable(tableRelation: foreignTableRelation),
+          _i2.UserRecordTable(tableRelation: foreignTableRelation),
     );
     return _receiver!;
   }
 
-  _i3.UserRecordTable get sender {
+  _i2.UserRecordTable get sender {
     if (_sender != null) return _sender!;
     _sender = _i1.createRelationTable(
       relationFieldName: 'sender',
       field: Notification.t.senderId,
-      foreignField: _i3.UserRecord.t.id,
+      foreignField: _i2.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i3.UserRecordTable(tableRelation: foreignTableRelation),
+          _i2.UserRecordTable(tableRelation: foreignTableRelation),
     );
     return _sender!;
-  }
-
-  _i5.PostTable get post {
-    if (_post != null) return _post!;
-    _post = _i1.createRelationTable(
-      relationFieldName: 'post',
-      field: Notification.t.postId,
-      foreignField: _i5.Post.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i5.PostTable(tableRelation: foreignTableRelation),
-    );
-    return _post!;
-  }
-
-  _i6.ProjectTable get project {
-    if (_project != null) return _project!;
-    _project = _i1.createRelationTable(
-      relationFieldName: 'project',
-      field: Notification.t.projectId,
-      foreignField: _i6.Project.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i6.ProjectTable(tableRelation: foreignTableRelation),
-    );
-    return _project!;
-  }
-
-  _i7.PollTable get poll {
-    if (_poll != null) return _poll!;
-    _poll = _i1.createRelationTable(
-      relationFieldName: 'poll',
-      field: Notification.t.pollId,
-      foreignField: _i7.Poll.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i7.PollTable(tableRelation: foreignTableRelation),
-    );
-    return _poll!;
-  }
-
-  _i8.ArticleTable get article {
-    if (_article != null) return _article!;
-    _article = _i1.createRelationTable(
-      relationFieldName: 'article',
-      field: Notification.t.articleId,
-      foreignField: _i8.Article.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i8.ArticleTable(tableRelation: foreignTableRelation),
-    );
-    return _article!;
   }
 
   @override
@@ -666,22 +416,16 @@ class NotificationTable extends _i1.Table<int?> {
         id,
         receiverId,
         senderId,
-        type,
-        title,
-        body,
-        postId,
-        projectId,
-        pollId,
-        articleId,
-        actionRoute,
+        groupedSenderIds,
+        content,
         groupKey,
-        groupCount,
-        latestSenderName,
+        actionType,
+        targetType,
+        actionRoute,
+        targetId,
         isRead,
-        isSeen,
-        deliveryStatus,
         createdAt,
-        lastUpdatedAt,
+        updatedAt,
       ];
 
   @override
@@ -692,59 +436,27 @@ class NotificationTable extends _i1.Table<int?> {
     if (relationField == 'sender') {
       return sender;
     }
-    if (relationField == 'post') {
-      return post;
-    }
-    if (relationField == 'project') {
-      return project;
-    }
-    if (relationField == 'poll') {
-      return poll;
-    }
-    if (relationField == 'article') {
-      return article;
-    }
     return null;
   }
 }
 
 class NotificationInclude extends _i1.IncludeObject {
   NotificationInclude._({
-    _i3.UserRecordInclude? receiver,
-    _i3.UserRecordInclude? sender,
-    _i5.PostInclude? post,
-    _i6.ProjectInclude? project,
-    _i7.PollInclude? poll,
-    _i8.ArticleInclude? article,
+    _i2.UserRecordInclude? receiver,
+    _i2.UserRecordInclude? sender,
   }) {
     _receiver = receiver;
     _sender = sender;
-    _post = post;
-    _project = project;
-    _poll = poll;
-    _article = article;
   }
 
-  _i3.UserRecordInclude? _receiver;
+  _i2.UserRecordInclude? _receiver;
 
-  _i3.UserRecordInclude? _sender;
-
-  _i5.PostInclude? _post;
-
-  _i6.ProjectInclude? _project;
-
-  _i7.PollInclude? _poll;
-
-  _i8.ArticleInclude? _article;
+  _i2.UserRecordInclude? _sender;
 
   @override
   Map<String, _i1.Include?> get includes => {
         'receiver': _receiver,
         'sender': _sender,
-        'post': _post,
-        'project': _project,
-        'poll': _poll,
-        'article': _article,
       };
 
   @override
@@ -775,8 +487,6 @@ class NotificationRepository {
   const NotificationRepository._();
 
   final attachRow = const NotificationAttachRowRepository._();
-
-  final detachRow = const NotificationDetachRowRepository._();
 
   /// Returns a list of [Notification]s matching the given query parameters.
   ///
@@ -1002,7 +712,7 @@ class NotificationAttachRowRepository {
   Future<void> receiver(
     _i1.Session session,
     Notification notification,
-    _i3.UserRecord receiver, {
+    _i2.UserRecord receiver, {
     _i1.Transaction? transaction,
   }) async {
     if (notification.id == null) {
@@ -1025,7 +735,7 @@ class NotificationAttachRowRepository {
   Future<void> sender(
     _i1.Session session,
     Notification notification,
-    _i3.UserRecord sender, {
+    _i2.UserRecord sender, {
     _i1.Transaction? transaction,
   }) async {
     if (notification.id == null) {
@@ -1039,212 +749,6 @@ class NotificationAttachRowRepository {
     await session.db.updateRow<Notification>(
       $notification,
       columns: [Notification.t.senderId],
-      transaction: transaction,
-    );
-  }
-
-  /// Creates a relation between the given [Notification] and [Post]
-  /// by setting the [Notification]'s foreign key `postId` to refer to the [Post].
-  Future<void> post(
-    _i1.Session session,
-    Notification notification,
-    _i5.Post post, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-    if (post.id == null) {
-      throw ArgumentError.notNull('post.id');
-    }
-
-    var $notification = notification.copyWith(postId: post.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.postId],
-      transaction: transaction,
-    );
-  }
-
-  /// Creates a relation between the given [Notification] and [Project]
-  /// by setting the [Notification]'s foreign key `projectId` to refer to the [Project].
-  Future<void> project(
-    _i1.Session session,
-    Notification notification,
-    _i6.Project project, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-    if (project.id == null) {
-      throw ArgumentError.notNull('project.id');
-    }
-
-    var $notification = notification.copyWith(projectId: project.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.projectId],
-      transaction: transaction,
-    );
-  }
-
-  /// Creates a relation between the given [Notification] and [Poll]
-  /// by setting the [Notification]'s foreign key `pollId` to refer to the [Poll].
-  Future<void> poll(
-    _i1.Session session,
-    Notification notification,
-    _i7.Poll poll, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-    if (poll.id == null) {
-      throw ArgumentError.notNull('poll.id');
-    }
-
-    var $notification = notification.copyWith(pollId: poll.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.pollId],
-      transaction: transaction,
-    );
-  }
-
-  /// Creates a relation between the given [Notification] and [Article]
-  /// by setting the [Notification]'s foreign key `articleId` to refer to the [Article].
-  Future<void> article(
-    _i1.Session session,
-    Notification notification,
-    _i8.Article article, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-    if (article.id == null) {
-      throw ArgumentError.notNull('article.id');
-    }
-
-    var $notification = notification.copyWith(articleId: article.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.articleId],
-      transaction: transaction,
-    );
-  }
-}
-
-class NotificationDetachRowRepository {
-  const NotificationDetachRowRepository._();
-
-  /// Detaches the relation between this [Notification] and the [UserRecord] set in `sender`
-  /// by setting the [Notification]'s foreign key `senderId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> sender(
-    _i1.Session session,
-    Notification notification, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-
-    var $notification = notification.copyWith(senderId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.senderId],
-      transaction: transaction,
-    );
-  }
-
-  /// Detaches the relation between this [Notification] and the [Post] set in `post`
-  /// by setting the [Notification]'s foreign key `postId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> post(
-    _i1.Session session,
-    Notification notification, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-
-    var $notification = notification.copyWith(postId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.postId],
-      transaction: transaction,
-    );
-  }
-
-  /// Detaches the relation between this [Notification] and the [Project] set in `project`
-  /// by setting the [Notification]'s foreign key `projectId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> project(
-    _i1.Session session,
-    Notification notification, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-
-    var $notification = notification.copyWith(projectId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.projectId],
-      transaction: transaction,
-    );
-  }
-
-  /// Detaches the relation between this [Notification] and the [Poll] set in `poll`
-  /// by setting the [Notification]'s foreign key `pollId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> poll(
-    _i1.Session session,
-    Notification notification, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-
-    var $notification = notification.copyWith(pollId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.pollId],
-      transaction: transaction,
-    );
-  }
-
-  /// Detaches the relation between this [Notification] and the [Article] set in `article`
-  /// by setting the [Notification]'s foreign key `articleId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> article(
-    _i1.Session session,
-    Notification notification, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
-    }
-
-    var $notification = notification.copyWith(articleId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.articleId],
       transaction: transaction,
     );
   }

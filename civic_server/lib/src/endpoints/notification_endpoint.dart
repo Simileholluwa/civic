@@ -3,99 +3,353 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/module.dart';
 
 class NotificationEndpoint extends Endpoint {
+  @doNotGenerate
   Future<void> sendNotification(
-    Session session,
-    NotificationRequest request,
-  ) async {
-    final receiver = await UserRecord.db.findById(session, request.receiverId);
-    if (receiver == null) throw Exception('Receiver not found');
+    Session session, {
+    required int receiverId,
+    required int senderId,
+    required String actionType,
+    required String targetType,
+    required int targetId,
+    required String actionRoute,
+    String? content,
+  }) async {
+    final groupKey = '${actionType}_${targetType}_$targetId';
 
-    final sender = request.senderId != null
-        ? await UserRecord.db.findById(
-            session,
-            request.senderId!,
-            include: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
-          )
-        : null;
-
-    final now = DateTime.now();
-
-    final baseNotification = Notification(
-      receiverId: receiver.id!,
-      senderId: sender?.id,
-      type: request.type,
-      title: request.title,
-      body: request.body,
-      postId: request.postId,
-      projectId: request.projectId,
-      pollId: request.pollId,
-      actionRoute: request.actionRoute,
-      groupKey: request.groupKey,
-      groupCount: 1,
-      latestSenderName:
-          sender?.userInfo?.fullName ?? sender?.userInfo?.userName ?? 'Someone',
-      isRead: false,
-      isSeen: false,
-      deliveryStatus: NotificationDeliveryStatus.pending,
-      createdAt: now,
-      lastUpdatedAt: now,
+    final existing = await Notification.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.receiverId.equals(receiverId) & t.groupKey.equals(groupKey),
     );
 
-    // Grouping logic
-    if (request.groupKey != null) {
-      final existing = await Notification.db.findFirstRow(
-        session,
-        where: (t) =>
-            t.receiverId.equals(receiver.id!) &
-            t.groupKey.equals(request.groupKey!),
+    if (existing != null) {
+
+      if (existing.groupedSenderIds!.contains(senderId)) return;
+
+      final updatedGroupedIds = {
+        ...?existing.groupedSenderIds,
+        existing.senderId,
+        senderId,
+      }.toList();
+
+      final updatedNotification = existing.copyWith(
+        senderId: senderId,
+        groupedSenderIds: updatedGroupedIds,
+        createdAt: DateTime.now(),
       );
 
-      // Define time window for grouping (e.g., 5 minutes)
-      const groupWindow = Duration(minutes: 5);
+      await Notification.db.updateRow(
+        session,
+        updatedNotification,
+      );
+    } else {
+      final notification = Notification(
+        receiverId: receiverId,
+        senderId: senderId,
+        groupedSenderIds: [senderId],
+        groupKey: groupKey,
+        actionType: actionType,
+        targetType: targetType,
+        targetId: targetId,
+        actionRoute: actionRoute,
+        content: content,
+        isRead: false,
+        createdAt: DateTime.now(),
+      );
 
-      if (existing != null &&
-          now
-                  .difference(existing.lastUpdatedAt ?? existing.createdAt)
-                  .inMinutes <=
-              groupWindow.inMinutes) {
-        final newCount = (existing.groupCount ?? 1) + 1;
-
-        final updated = existing.copyWith(
-          groupCount: newCount,
-          title: _generateGroupedTitle(
-            senderName: sender?.userInfo?.fullName ??
-                sender?.userInfo?.userName ??
-                'Someone',
-            baseTitle: request.title,
-            count: newCount,
-          ),
-          body: request.body,
-          latestSenderName: sender?.userInfo?.fullName ??
-              sender?.userInfo?.userName ??
-              'Someone',
-          lastUpdatedAt: now,
-          isSeen: false,
-        );
-
-        await Notification.db.updateRow(session, updated);
-        session.messages.postMessage('user-${receiver.id}', updated);
-        return;
-      }
+      await Notification.db.insertRow(
+        session,
+        notification,
+      );
     }
-
-    final inserted = await Notification.db.insertRow(session, baseNotification);
-    session.messages.postMessage('user-${receiver.id}', inserted);
   }
 
-  String _generateGroupedTitle({
-    required String senderName,
-    required String baseTitle,
-    required int count,
+  Future<void> markNotificationAsRead(
+    Session session,
+    int notificationId,
+  ) async {
+    final user = await authUser(session);
+
+    final notification = await validateNotificationOwnership(
+      session,
+      notificationId,
+      user,
+    );
+
+    await updateNotification(
+      session,
+      notification.copyWith(
+        isRead: true,
+      ),
+    );
+  }
+
+  Future<void> markAllNotificationsAsRead(Session session) async {
+    final user = await authUser(session);
+
+    final unread = await Notification.db.find(
+      session,
+      where: (t) => t.receiverId.equals(user.id) & t.isRead.equals(false),
+    );
+
+    for (final notification in unread) {
+      await updateNotification(
+        session,
+        notification.copyWith(
+          isRead: true,
+        ),
+      );
+    }
+  }
+
+  Future<void> deleteNotification(Session session, int notificationId) async {
+    final user = await authUser(session);
+
+    final notification = await validateNotificationOwnership(
+      session,
+      notificationId,
+      user,
+    );
+
+    await Notification.db.deleteRow(
+      session,
+      notification,
+    );
+  }
+
+  Future<void> deleteAllNotifications(Session session) async {
+    final user = await authUser(session);
+
+    await Notification.db.deleteWhere(
+      session,
+      where: (t) => t.receiverId.equals(user.id),
+    );
+  }
+
+  Future<int> getUnreadNotificationCount(Session session) async {
+    final user = await authUser(session);
+
+    return await Notification.db.count(
+      session,
+      where: (t) => t.receiverId.equals(user.id) & t.isRead.equals(false),
+    );
+  }
+
+  Future<NotificationList> getNotifications(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    final user = await authUser(session);
+    final count = await Notification.db.count(
+      session,
+      where: (t) => t.receiverId.equals(user.id),
+    );
+    final notifications = await Notification.db.find(
+      session,
+      where: (t) => t.receiverId.equals(user.id),
+      limit: limit,
+      offset: (page * limit) - limit,
+      orderBy: (t) => t.createdAt,
+      orderDescending: true,
+    );
+
+    final List<UserNotification> results = [];
+
+    for (final notif in notifications) {
+      final notifParams = await userNotificationParams(
+        session,
+        notif,
+      );
+      results.add(
+        UserNotification(
+          notification: notif,
+          title: formatNotificationTitle(
+            actionType: notif.actionType,
+            targetType: notif.targetType,
+          ),
+          mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
+        senderUsernames: notifParams['usernames'],
+        ),
+      );
+    }
+
+    return NotificationList(
+      count: count,
+      limit: limit,
+      page: page,
+      results: results,
+      numPages: (count / limit).ceil(),
+      canLoadMore: page * limit < count,
+    );
+  }
+
+  @doNotGenerate
+  String formatNotificationTitle({
+    required String actionType,
+    required String targetType,
   }) {
-    if (count <= 1) return '$senderName $baseTitle';
-    if (count == 2) return '$senderName and 1 other $baseTitle';
-    return '$senderName and ${count - 1} others $baseTitle';
+    final target = targetType.toLowerCase();
+
+    switch (actionType) {
+      case 'like':
+        return 'liked your $target';
+      case 'comment':
+        return 'commented on your $target';
+      case 'quote':
+        return 'quoted your $target';
+      case 'follow':
+        return 'followed you';
+      case 'reply':
+        return 'replied you';
+      case 'vote':
+        return 'voted in your poll';
+      case 'bookmark':
+        return 'bookmarked your $target';
+      case 'repost':
+        return 'reposted your $target';
+      default:
+        return 'interacted with your $target';
+    }
+  }
+
+  @doNotGenerate
+  Future<UserRecord> authUser(
+    Session session,
+  ) async {
+    final authInfo = await session.authenticated;
+    if (authInfo == null) {
+      throw UserException(
+        message: 'You must be logged in',
+      );
+    }
+
+    final user = await UserRecord.db.findFirstRow(
+      session,
+      where: (row) => row.userInfoId.equals(
+        authInfo.userId,
+      ),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (user == null) {
+      throw UserException(
+        message: 'User not found',
+      );
+    }
+
+    return user;
+  }
+
+  @doNotGenerate
+  Future<void> updateNotification(Session session, Notification n) async {
+    // Update the project in the database
+    await Notification.db.updateRow(session, n);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'notification_${n.id}',
+      n,
+    );
+  }
+
+  @doNotGenerate
+  Future<Notification> validateNotificationOwnership(
+    Session session,
+    int notificationId,
+    UserRecord user,
+  ) async {
+    final notification = await Notification.db.findById(
+      session,
+      notificationId,
+    );
+    if (notification == null) {
+      throw PostException(
+        message: 'Notification not found',
+      );
+    }
+    if (notification.receiverId != user.userInfoId) {
+      throw PostException(
+        message: 'Unauthorised operation',
+      );
+    }
+    return notification;
+  }
+
+  @doNotGenerate
+  Future<Map<String, dynamic>> userNotificationParams(
+    Session session,
+    Notification notification,
+  ) async {
+    final senderIds = notification.groupedSenderIds ?? [notification.senderId];
+
+    final senders = await UserRecord.db.find(
+      session,
+      where: (t) => t.id.inSet(senderIds.toSet()),
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    senders.sort((a, b) => b.id!.compareTo(a.id!));
+
+    final usernames = senders
+        .map((u) => u.userInfo!.fullName ?? u.userInfo!.userName!)
+        .toList();
+    final profileImage = senders.first.userInfo?.imageUrl;
+    return {
+      'usernames': usernames,
+      'mediaThumbnailUrl': profileImage,
+    };
+  }
+
+  Stream<UserNotification> notificationUpdates(
+    Session session,
+    int notificationId,
+  ) async* {
+    // Create a message stream for this post
+    var updateStream = session.messages
+        .createStream<Notification>('notification_$notificationId');
+
+    // Yield the latest post details when the client subscribes
+    var notification = await Notification.db.findById(
+      session,
+      notificationId,
+    );
+    if (notification != null) {
+      final notifParams = await userNotificationParams(
+        session,
+        notification,
+      );
+
+      yield UserNotification(
+        notification: notification,
+        title: formatNotificationTitle(
+          actionType: notification.actionType,
+          targetType: notification.targetType,
+        ),
+        mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
+        senderUsernames: notifParams['usernames'],
+      );
+    }
+
+    // Send updates when changes occur
+    await for (var notificationUpdate in updateStream) {
+      final notifParams = await userNotificationParams(
+        session,
+        notificationUpdate,
+      );
+      yield UserNotification(
+        notification: notificationUpdate,
+        title: formatNotificationTitle(
+          actionType: notificationUpdate.actionType,
+          targetType: notificationUpdate.targetType,
+        ),
+        mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
+        senderUsernames: notifParams['usernames'],
+      );
+    }
   }
 }

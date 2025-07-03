@@ -37,15 +37,6 @@ class CreatePollScreen extends ConsumerWidget {
     final canSendPoll = postState.text.isNotEmpty &&
         postState.optionText.every((text) => text.isNotEmpty);
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
-    final isVisibleNotifier = ref.watch(
-      appBottomNavigationVisibilityProvider(
-        false,
-      ).notifier,
-    );
-    Future.delayed(
-      Duration.zero,
-      () => isVisibleNotifier.hide(),
-    );
     return PopScope(
       canPop: false,
       // ignore: deprecated_member_use
