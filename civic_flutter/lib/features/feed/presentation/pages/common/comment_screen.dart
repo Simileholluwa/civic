@@ -66,7 +66,7 @@ class CommentScreen extends ConsumerWidget {
             title: Text(
               'Comments',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
             ),
           ),

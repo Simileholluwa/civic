@@ -20,7 +20,6 @@ class ArticleTitleField extends ConsumerWidget {
     return TextFormField(
       style: Theme.of(context).textTheme.headlineLarge!.copyWith(
             fontSize: 25,
-            fontWeight: FontWeight.w700,
           ),
       textCapitalization: TextCapitalization.sentences,
       decoration: const InputDecoration(

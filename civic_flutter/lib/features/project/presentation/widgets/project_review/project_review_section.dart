@@ -24,9 +24,7 @@ class ProjectReviewSection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 20,
-              ),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
           subTitle,

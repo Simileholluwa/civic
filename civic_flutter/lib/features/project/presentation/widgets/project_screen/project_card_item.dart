@@ -81,9 +81,8 @@ class ProjectCardItem extends ConsumerWidget {
                 children: [
                   Text(
                     projectCardState.title!,
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 23,
-                        ),
+                    style: Theme.of(context).textTheme.headlineLarge,
+                        
                   ),
                   ContentExpandableText(
                     text: projectCardState.description!,

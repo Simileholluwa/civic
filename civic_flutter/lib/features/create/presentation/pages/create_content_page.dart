@@ -41,7 +41,7 @@ class CreateContentScreen extends ConsumerWidget {
             child: Text(
               'What would you like to create?',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 30,
+                    fontSize: 25,
                   ),
               textAlign: TextAlign.center,
             ),

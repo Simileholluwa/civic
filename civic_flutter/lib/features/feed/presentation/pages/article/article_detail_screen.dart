@@ -55,14 +55,7 @@ class ArticleDetailScreen extends ConsumerWidget {
             ),
           ),
           child: AppBar(
-            title: Text(
-              data.hasValue && !data.hasError
-                  ? "${data.value?.owner?.userInfo?.userName}'s Article"
-                  : 'Article',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
-                  ),
-            ),
+            
             titleSpacing: 0,
             leading: IconButton(
               icon: const Icon(

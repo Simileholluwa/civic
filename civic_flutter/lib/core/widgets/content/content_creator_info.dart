@@ -22,29 +22,20 @@ class ContentCreatorInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 15,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          spacing: 15,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: radius,
-              backgroundImage: CachedNetworkImageProvider(
-                creator.userInfo!.imageUrl!,
-              ),
-            ),
-            CreatorNameAndAccountInfo(
-              creator: creator,
-              timeAgo: timeAgo,
-              showPoliticalStatus: showPoliticalStatus,
-            ),
-          ],
+        CircleAvatar(
+          radius: radius,
+          backgroundImage: CachedNetworkImageProvider(
+            creator.userInfo!.imageUrl!,
+          ),
         ),
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(Icons.person_2),
-        // ),
+        CreatorNameAndAccountInfo(
+          creator: creator,
+          timeAgo: timeAgo,
+          showPoliticalStatus: showPoliticalStatus,
+        ),
       ],
     );
   }

@@ -45,7 +45,7 @@ class ProjectVettingScreen extends ConsumerWidget {
             title: Text(
               'Vet Project',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
             ),
             centerTitle: true,

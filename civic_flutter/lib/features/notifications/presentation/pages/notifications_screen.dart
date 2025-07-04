@@ -23,7 +23,6 @@ class NotificationsScreen extends ConsumerWidget {
         true,
       ),
     );
-    final textStyle = DefaultTextStyle.of(context).style;
     final notificationNotifier = ref.read(
       notifProvider.notifier,
     );
@@ -57,6 +56,22 @@ class NotificationsScreen extends ConsumerWidget {
             onPressed: () {},
           ),
           const SizedBox(width: 5),
+          IconButton(
+            icon: Icon(
+              Iconsax.tick_circle,
+              size: 26,
+            ),
+            onPressed: () {},
+          ),
+          const SizedBox(width: 5),
+          IconButton(
+            icon: Icon(
+              Iconsax.setting_2,
+              size: 26,
+            ),
+            onPressed: () {},
+          ),
+          const SizedBox(width: 5),
         ],
       ),
       body: AppInfiniteList<UserNotification>(
@@ -73,11 +88,10 @@ class NotificationsScreen extends ConsumerWidget {
             onTap: () async {
               notificationNotifier.markAsRead(
                 notification.notification.id!,
-              );       
+              );
               context.push(
                 notification.notification.actionRoute,
               );
-              
             },
             child: ColoredBox(
               color: notification.notification.isRead
@@ -90,38 +104,46 @@ class NotificationsScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 15,
                   children: [
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundImage: CachedNetworkImageProvider(
-                        notification.mediaThumbnailUrl ?? '',
-                      ),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundImage: CachedNetworkImageProvider(
+                            notification.mediaThumbnailUrl ?? '',
+                          ),
+                        ),
+                        Container(
+                          height: 22,
+                          width: 22,
+                          decoration: BoxDecoration(
+                            color: TColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.ac_unit,
+                            color: TColors.light,
+                            size: 15,
+                          ),
+                        ),
+                      ],
                     ),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 5,
                         children: [
-                          Text.rich(
+                          RichText(
+                            text:
+                                NotificationsHelper.formatNotificationRichText(
+                              context,
+                              content: notification.notification.content,
+                              usernames: notification.senderUsernames,
+                              actionType: notification.notification.actionType,
+                              targetType: notification.notification.targetType,
+                            ),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: textStyle,
-                            TextSpan(
-                              text: NotificationsHelper.formatGroupedUserNames(
-                                notification.senderUsernames,
-                              ),
-                              style: textStyle.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                              
-                              children: [
-                                TextSpan(
-                                  text: " ${notification.title}: ${notification.notification.content ?? ''}",
-                                  style: textStyle.copyWith(
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                           Text(
                             DateFormat('hh:mm a • MMM d, y')

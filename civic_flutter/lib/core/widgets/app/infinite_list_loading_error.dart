@@ -32,6 +32,7 @@ class LoadingError extends StatelessWidget {
             'OOPS!',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
               color: Theme.of(context).hintColor,
+              fontSize: 30,
             ),
             textAlign: TextAlign.center,
           ),

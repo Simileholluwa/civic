@@ -5,16 +5,16 @@ class TTextTheme {
 
   static TextTheme lightTextTheme = TextTheme(
     headlineLarge: const TextStyle().copyWith(
-      fontSize: 30,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
       fontFamily: 'Outfit',
     ),
     headlineMedium: const TextStyle().copyWith(
-      fontSize: 30,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
     ),
     headlineSmall: const TextStyle().copyWith(
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
     ),
     titleLarge: const TextStyle().copyWith(
@@ -53,16 +53,16 @@ class TTextTheme {
 
   static TextTheme darkTextTheme = TextTheme(
     headlineLarge: const TextStyle().copyWith(
-      fontSize: 30,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
       fontFamily: 'Outfit',
     ),
     headlineMedium: const TextStyle().copyWith(
-      fontSize: 30,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
     ),
     headlineSmall: const TextStyle().copyWith(
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: FontWeight.w600,
     ),
     titleLarge: const TextStyle().copyWith(

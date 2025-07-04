@@ -89,7 +89,7 @@ class TAppTheme {
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
     swapLegacyOnMaterial3: true,
-    fontFamily: 'Montserrat',
+    fontFamily: GoogleFonts.raleway().fontFamily,
   );
 
   static ThemeData darkTheme = FlexThemeData.dark(
@@ -169,6 +169,6 @@ class TAppTheme {
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
     swapLegacyOnMaterial3: true,
-    fontFamily: GoogleFonts.nunitoSans().fontFamily,
+    fontFamily: GoogleFonts.raleway().fontFamily,
   );
 }

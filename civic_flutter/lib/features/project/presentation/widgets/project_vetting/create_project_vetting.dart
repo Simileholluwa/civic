@@ -36,9 +36,7 @@ class CreateProjectVetting extends ConsumerWidget {
             children: [
               Text(
                 'Project status',
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
                 'This project has been marked completed based on the dates provided. Confirm the current status from the dropdown.',
@@ -65,9 +63,7 @@ class CreateProjectVetting extends ConsumerWidget {
             children: [
               Text(
                 'Image evidence',
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
                 'Add up to five images of the current state of the project as proof.',
@@ -88,9 +84,7 @@ class CreateProjectVetting extends ConsumerWidget {
             children: [
               Text(
                 'Write a comment',
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
                 'How do you feel about the execution of this project?',

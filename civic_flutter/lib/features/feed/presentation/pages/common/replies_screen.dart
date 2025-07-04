@@ -69,7 +69,7 @@ class RepliesScreen extends ConsumerWidget {
             title: Text(
               'Replies',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
             ),
           ),

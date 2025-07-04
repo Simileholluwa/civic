@@ -23,7 +23,6 @@ class NotificationEndpoint extends Endpoint {
     );
 
     if (existing != null) {
-
       if (existing.groupedSenderIds!.contains(senderId)) return;
 
       final updatedGroupedIds = {
@@ -164,12 +163,8 @@ class NotificationEndpoint extends Endpoint {
       results.add(
         UserNotification(
           notification: notif,
-          title: formatNotificationTitle(
-            actionType: notif.actionType,
-            targetType: notif.targetType,
-          ),
           mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
-        senderUsernames: notifParams['usernames'],
+          senderUsernames: notifParams['usernames'],
         ),
       );
     }
@@ -182,35 +177,6 @@ class NotificationEndpoint extends Endpoint {
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
     );
-  }
-
-  @doNotGenerate
-  String formatNotificationTitle({
-    required String actionType,
-    required String targetType,
-  }) {
-    final target = targetType.toLowerCase();
-
-    switch (actionType) {
-      case 'like':
-        return 'liked your $target';
-      case 'comment':
-        return 'commented on your $target';
-      case 'quote':
-        return 'quoted your $target';
-      case 'follow':
-        return 'followed you';
-      case 'reply':
-        return 'replied you';
-      case 'vote':
-        return 'voted in your poll';
-      case 'bookmark':
-        return 'bookmarked your $target';
-      case 'repost':
-        return 'reposted your $target';
-      default:
-        return 'interacted with your $target';
-    }
   }
 
   @doNotGenerate
@@ -326,10 +292,6 @@ class NotificationEndpoint extends Endpoint {
 
       yield UserNotification(
         notification: notification,
-        title: formatNotificationTitle(
-          actionType: notification.actionType,
-          targetType: notification.targetType,
-        ),
         mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
         senderUsernames: notifParams['usernames'],
       );
@@ -343,10 +305,6 @@ class NotificationEndpoint extends Endpoint {
       );
       yield UserNotification(
         notification: notificationUpdate,
-        title: formatNotificationTitle(
-          actionType: notificationUpdate.actionType,
-          targetType: notificationUpdate.targetType,
-        ),
         mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
         senderUsernames: notifParams['usernames'],
       );

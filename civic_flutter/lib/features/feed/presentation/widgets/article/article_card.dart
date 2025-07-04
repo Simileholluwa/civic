@@ -81,10 +81,7 @@ class ArticleCard extends ConsumerWidget {
                       Text(
                         postCardState.text,
                         style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            Theme.of(context).textTheme.headlineLarge!,
                         textAlign: TextAlign.left,
                       ),
                       ContentExpandableText(

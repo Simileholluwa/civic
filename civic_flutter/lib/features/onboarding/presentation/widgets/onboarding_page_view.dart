@@ -28,7 +28,7 @@ class OnBoardingPageView extends StatelessWidget {
             children: [
               Text(
                 onboardingEntity.title,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 30,),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

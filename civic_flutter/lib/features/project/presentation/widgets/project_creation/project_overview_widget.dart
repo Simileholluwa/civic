@@ -111,10 +111,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                             .percentageElapsedInString!,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headlineLarge!
-                                            .copyWith(
-                                              fontSize: 20,
-                                            ),
+                                            .headlineLarge,
                                       ),
                                       Text(
                                         'complete',

@@ -21,7 +21,7 @@ class ProjectDeleteConsequences extends StatelessWidget {
         Text(
           number,
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 20,
+                
                 color: TColors.secondary,
               ),
         ),

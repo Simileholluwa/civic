@@ -49,7 +49,7 @@ class InitialOnBoardingScreen extends StatelessWidget {
               ),
               Text(
                 TTexts.onBoardingTitle1,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 30,),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

@@ -24,9 +24,7 @@ class ProjectDetailTitleAndSubtitle extends StatelessWidget {
         ),
         Text(
           subtitle,
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 20,
-              ),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
       ],
     );

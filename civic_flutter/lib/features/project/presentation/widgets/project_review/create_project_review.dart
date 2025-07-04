@@ -106,9 +106,7 @@ class CreateProjectReview extends ConsumerWidget {
             children: [
               Text(
                 'Review',
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 20,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               AppTextField(
                 validator: (value) {

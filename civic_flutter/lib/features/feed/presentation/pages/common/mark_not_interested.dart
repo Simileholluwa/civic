@@ -51,7 +51,7 @@ class MarkNotInterested extends ConsumerWidget {
             title: Text(
               'Tell us why',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 25,
+                    fontSize: 23,
                   ),
             ),
           ),

@@ -15,14 +15,12 @@ import '../notification/notification.dart' as _i2;
 abstract class UserNotification implements _i1.SerializableModel {
   UserNotification._({
     required this.notification,
-    required this.title,
     this.mediaThumbnailUrl,
     required this.senderUsernames,
   });
 
   factory UserNotification({
     required _i2.Notification notification,
-    required String title,
     String? mediaThumbnailUrl,
     required List<String> senderUsernames,
   }) = _UserNotificationImpl;
@@ -31,7 +29,6 @@ abstract class UserNotification implements _i1.SerializableModel {
     return UserNotification(
       notification: _i2.Notification.fromJson(
           (jsonSerialization['notification'] as Map<String, dynamic>)),
-      title: jsonSerialization['title'] as String,
       mediaThumbnailUrl: jsonSerialization['mediaThumbnailUrl'] as String?,
       senderUsernames: (jsonSerialization['senderUsernames'] as List)
           .map((e) => e as String)
@@ -40,8 +37,6 @@ abstract class UserNotification implements _i1.SerializableModel {
   }
 
   _i2.Notification notification;
-
-  String title;
 
   String? mediaThumbnailUrl;
 
@@ -52,7 +47,6 @@ abstract class UserNotification implements _i1.SerializableModel {
   @_i1.useResult
   UserNotification copyWith({
     _i2.Notification? notification,
-    String? title,
     String? mediaThumbnailUrl,
     List<String>? senderUsernames,
   });
@@ -60,7 +54,6 @@ abstract class UserNotification implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       'notification': notification.toJson(),
-      'title': title,
       if (mediaThumbnailUrl != null) 'mediaThumbnailUrl': mediaThumbnailUrl,
       'senderUsernames': senderUsernames.toJson(),
     };
@@ -77,12 +70,10 @@ class _Undefined {}
 class _UserNotificationImpl extends UserNotification {
   _UserNotificationImpl({
     required _i2.Notification notification,
-    required String title,
     String? mediaThumbnailUrl,
     required List<String> senderUsernames,
   }) : super._(
           notification: notification,
-          title: title,
           mediaThumbnailUrl: mediaThumbnailUrl,
           senderUsernames: senderUsernames,
         );
@@ -93,13 +84,11 @@ class _UserNotificationImpl extends UserNotification {
   @override
   UserNotification copyWith({
     _i2.Notification? notification,
-    String? title,
     Object? mediaThumbnailUrl = _Undefined,
     List<String>? senderUsernames,
   }) {
     return UserNotification(
       notification: notification ?? this.notification.copyWith(),
-      title: title ?? this.title,
       mediaThumbnailUrl: mediaThumbnailUrl is String?
           ? mediaThumbnailUrl
           : this.mediaThumbnailUrl,
