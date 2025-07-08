@@ -20,6 +20,10 @@ class ProjectQuickDetails extends ConsumerWidget {
         project,
       ),
     );
+    final textStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        );
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       scrollDirection: Axis.horizontal,
@@ -30,28 +34,19 @@ class ProjectQuickDetails extends ConsumerWidget {
             icon: Iconsax.buy_crypto5,
             title: '${projectCardState.currency} ${projectCardState.amount}',
             color: TColors.primary,
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            textStyle: textStyle,
           ),
           ProjectQuickDetailWidget(
             icon: Iconsax.percentage_circle5,
             title: projectCardState.completionRate!,
             color: TColors.warning,
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            textStyle: textStyle,
           ),
           ProjectQuickDetailWidget(
             icon: Iconsax.calendar_25,
             title: projectCardState.duration!,
             color: Colors.blue,
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            textStyle: textStyle,
           ),
         ],
       ),

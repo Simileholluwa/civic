@@ -67,13 +67,11 @@ project:
   - updateProjectVetting:
 sendEmail:
   - sendEmail:
-userNin:
-  - getNinDetails:
 userRecord:
   - saveUser:
   - getUser:
   - checkIfNewUser:
-  - fetchUsernames:
   - getUsers:
   - mentionUsers:
   - followUnfollowUser:
+  - getNinDetails:

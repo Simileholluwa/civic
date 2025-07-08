@@ -17,15 +17,14 @@ import '../endpoints/notification_endpoint.dart' as _i5;
 import '../endpoints/post_endpoint.dart' as _i6;
 import '../endpoints/project_endpoint.dart' as _i7;
 import '../endpoints/send_email_endpoint.dart' as _i8;
-import '../endpoints/user_nin_endpoint.dart' as _i9;
-import '../endpoints/user_record_endpoint.dart' as _i10;
-import 'package:civic_server/src/generated/post/post.dart' as _i11;
-import 'package:civic_server/src/generated/project/project.dart' as _i12;
-import 'package:civic_server/src/generated/project/project_review.dart' as _i13;
+import '../endpoints/user_record_endpoint.dart' as _i9;
+import 'package:civic_server/src/generated/post/post.dart' as _i10;
+import 'package:civic_server/src/generated/project/project.dart' as _i11;
+import 'package:civic_server/src/generated/project/project_review.dart' as _i12;
 import 'package:civic_server/src/generated/project/project_vetting.dart'
-    as _i14;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i15;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i16;
+    as _i13;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i14;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i15;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -73,13 +72,7 @@ class Endpoints extends _i1.EndpointDispatch {
           'sendEmail',
           null,
         ),
-      'userNin': _i9.UserNinEndpoint()
-        ..initialize(
-          server,
-          'userNin',
-          null,
-        ),
-      'userRecord': _i10.UserRecordEndpoint()
+      'userRecord': _i9.UserRecordEndpoint()
         ..initialize(
           server,
           'userRecord',
@@ -355,7 +348,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             )
           },
@@ -373,7 +366,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             )
           },
@@ -391,7 +384,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             )
           },
@@ -499,7 +492,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'comment': _i1.ParameterDescription(
               name: 'comment',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             ),
             'isReply': _i1.ParameterDescription(
@@ -607,7 +600,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -631,7 +624,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             )
           },
@@ -654,7 +647,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i11.Post>(),
+              type: _i1.getType<_i10.Post>(),
               nullable: false,
             ),
           },
@@ -856,7 +849,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i12.Project>(),
+              type: _i1.getType<_i11.Project>(),
               nullable: false,
             )
           },
@@ -874,7 +867,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i13.ProjectReview>(),
+              type: _i1.getType<_i12.ProjectReview>(),
               nullable: false,
             )
           },
@@ -929,7 +922,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i12.Project>(),
+              type: _i1.getType<_i11.Project>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -1139,7 +1132,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i14.ProjectVetting>(),
+              type: _i1.getType<_i13.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1213,7 +1206,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1238,7 +1231,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'user': _i1.ParameterDescription(
               name: 'user',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             ),
           },
@@ -1258,7 +1251,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i12.Project>(),
+              type: _i1.getType<_i11.Project>(),
               nullable: false,
             )
           },
@@ -1276,7 +1269,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i13.ProjectReview>(),
+              type: _i1.getType<_i12.ProjectReview>(),
               nullable: false,
             )
           },
@@ -1294,7 +1287,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i14.ProjectVetting>(),
+              type: _i1.getType<_i13.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1423,30 +1416,6 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
-    connectors['userNin'] = _i1.EndpointConnector(
-      name: 'userNin',
-      endpoint: endpoints['userNin']!,
-      methodConnectors: {
-        'getNinDetails': _i1.MethodConnector(
-          name: 'getNinDetails',
-          params: {
-            'ninNumber': _i1.ParameterDescription(
-              name: 'ninNumber',
-              type: _i1.getType<String>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['userNin'] as _i9.UserNinEndpoint).getNinDetails(
-            session,
-            params['ninNumber'],
-          ),
-        )
-      },
-    );
     connectors['userRecord'] = _i1.EndpointConnector(
       name: 'userRecord',
       endpoint: endpoints['userRecord']!,
@@ -1456,7 +1425,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i15.UserRecord>(),
+              type: _i1.getType<_i14.UserRecord>(),
               nullable: false,
             )
           },
@@ -1464,7 +1433,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint).saveUser(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).saveUser(
             session,
             params['userRecord'],
           ),
@@ -1476,7 +1445,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .getUser(session),
         ),
         'checkIfNewUser': _i1.MethodConnector(
@@ -1492,21 +1461,11 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .checkIfNewUser(
             session,
             params['email'],
           ),
-        ),
-        'fetchUsernames': _i1.MethodConnector(
-          name: 'fetchUsernames',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
-                  .fetchUsernames(session),
         ),
         'getUsers': _i1.MethodConnector(
           name: 'getUsers',
@@ -1531,7 +1490,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint).getUsers(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).getUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -1556,7 +1515,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint).mentionUsers(
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).mentionUsers(
             session,
             query: params['query'],
             limit: params['limit'],
@@ -1575,14 +1534,32 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i10.UserRecordEndpoint)
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
                   .followUnfollowUser(
             session,
             params['userId'],
           ),
         ),
+        'getNinDetails': _i1.MethodConnector(
+          name: 'getNinDetails',
+          params: {
+            'ninNumber': _i1.ParameterDescription(
+              name: 'ninNumber',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).getNinDetails(
+            session,
+            params['ninNumber'],
+          ),
+        ),
       },
     );
-    modules['serverpod_auth'] = _i16.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i15.Endpoints()..initializeEndpoints(server);
   }
 }

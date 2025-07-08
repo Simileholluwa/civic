@@ -26,6 +26,7 @@ class PostCommentCard extends ConsumerWidget {
       pagingController: commentController.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      canCreate: false,
       itemBuilder: (context, value, index) {
         final liveComment = ref.watch(
           postStreamProvider(

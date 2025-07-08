@@ -17,6 +17,7 @@ class ProjectVettingsList extends ConsumerWidget {
     return AppInfiniteList<ProjectVetting>(
       pagingController: pagingControllerNotifier.pagingController,
       shrinkWrap: true,
+      canCreate: false,
       itemBuilder: (context, vetting, index) {
         final liveProjectVetting = ref.watch(
           projectVettingStreamProvider(

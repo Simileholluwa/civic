@@ -84,13 +84,6 @@ SearchUserNinUseCase searchUserNin(Ref ref) {
 }
 
 @riverpod
-FetchAllUsernamesUseCase fetchAllUsernames(Ref ref) {
-  return FetchAllUsernamesUseCase(
-    authRepository: ref.read(authRepositoryProvider),
-  );
-}
-
-@riverpod
 UploadProfileImageUseCase uploadProfileImage(Ref ref) {
   return UploadProfileImageUseCase(
     authRepository: ref.read(authRepositoryProvider),

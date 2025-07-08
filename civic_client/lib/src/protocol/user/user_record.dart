@@ -23,29 +23,43 @@ abstract class UserRecord implements _i1.SerializableModel {
     this.bio,
     this.nin,
     this.phoneNumber,
-    required this.userInfoId,
+    this.userInfoId,
     this.userInfo,
-    this.verifiedAccount,
+    this.firstName,
+    this.lastName,
+    this.gender,
+    this.birthdate,
+    this.middleName,
+    this.email,
+    this.profileImage,
     this.following,
     this.followers,
+    DateTime? createdAt,
     this.politicalStatus,
     this.credibilityScore,
     this.posts,
     this.projects,
     this.projectBookmarks,
     this.postBookmarks,
-  });
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory UserRecord({
     int? id,
     String? bio,
     String? nin,
     String? phoneNumber,
-    required int userInfoId,
+    int? userInfoId,
     _i2.UserInfo? userInfo,
-    bool? verifiedAccount,
+    String? firstName,
+    String? lastName,
+    String? gender,
+    String? birthdate,
+    String? middleName,
+    String? email,
+    String? profileImage,
     List<int>? following,
     List<int>? followers,
+    DateTime? createdAt,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
     List<_i4.Post>? posts,
@@ -60,18 +74,27 @@ abstract class UserRecord implements _i1.SerializableModel {
       bio: jsonSerialization['bio'] as String?,
       nin: jsonSerialization['nin'] as String?,
       phoneNumber: jsonSerialization['phoneNumber'] as String?,
-      userInfoId: jsonSerialization['userInfoId'] as int,
+      userInfoId: jsonSerialization['userInfoId'] as int?,
       userInfo: jsonSerialization['userInfo'] == null
           ? null
           : _i2.UserInfo.fromJson(
               (jsonSerialization['userInfo'] as Map<String, dynamic>)),
-      verifiedAccount: jsonSerialization['verifiedAccount'] as bool?,
+      firstName: jsonSerialization['firstName'] as String?,
+      lastName: jsonSerialization['lastName'] as String?,
+      gender: jsonSerialization['gender'] as String?,
+      birthdate: jsonSerialization['birthdate'] as String?,
+      middleName: jsonSerialization['middleName'] as String?,
+      email: jsonSerialization['email'] as String?,
+      profileImage: jsonSerialization['profileImage'] as String?,
       following: (jsonSerialization['following'] as List?)
           ?.map((e) => e as int)
           .toList(),
       followers: (jsonSerialization['followers'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      createdAt: jsonSerialization['createdAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
       politicalStatus: jsonSerialization['politicalStatus'] == null
           ? null
           : _i3.PoliticalStatus.fromJson(
@@ -105,15 +128,29 @@ abstract class UserRecord implements _i1.SerializableModel {
 
   String? phoneNumber;
 
-  int userInfoId;
+  int? userInfoId;
 
   _i2.UserInfo? userInfo;
 
-  bool? verifiedAccount;
+  String? firstName;
+
+  String? lastName;
+
+  String? gender;
+
+  String? birthdate;
+
+  String? middleName;
+
+  String? email;
+
+  String? profileImage;
 
   List<int>? following;
 
   List<int>? followers;
+
+  DateTime? createdAt;
 
   _i3.PoliticalStatus? politicalStatus;
 
@@ -137,9 +174,16 @@ abstract class UserRecord implements _i1.SerializableModel {
     String? phoneNumber,
     int? userInfoId,
     _i2.UserInfo? userInfo,
-    bool? verifiedAccount,
+    String? firstName,
+    String? lastName,
+    String? gender,
+    String? birthdate,
+    String? middleName,
+    String? email,
+    String? profileImage,
     List<int>? following,
     List<int>? followers,
+    DateTime? createdAt,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
     List<_i4.Post>? posts,
@@ -154,11 +198,18 @@ abstract class UserRecord implements _i1.SerializableModel {
       if (bio != null) 'bio': bio,
       if (nin != null) 'nin': nin,
       if (phoneNumber != null) 'phoneNumber': phoneNumber,
-      'userInfoId': userInfoId,
+      if (userInfoId != null) 'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJson(),
-      if (verifiedAccount != null) 'verifiedAccount': verifiedAccount,
+      if (firstName != null) 'firstName': firstName,
+      if (lastName != null) 'lastName': lastName,
+      if (gender != null) 'gender': gender,
+      if (birthdate != null) 'birthdate': birthdate,
+      if (middleName != null) 'middleName': middleName,
+      if (email != null) 'email': email,
+      if (profileImage != null) 'profileImage': profileImage,
       if (following != null) 'following': following?.toJson(),
       if (followers != null) 'followers': followers?.toJson(),
+      if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (politicalStatus != null) 'politicalStatus': politicalStatus?.toJson(),
       if (credibilityScore != null) 'credibilityScore': credibilityScore,
       if (posts != null) 'posts': posts?.toJson(valueToJson: (v) => v.toJson()),
@@ -186,11 +237,18 @@ class _UserRecordImpl extends UserRecord {
     String? bio,
     String? nin,
     String? phoneNumber,
-    required int userInfoId,
+    int? userInfoId,
     _i2.UserInfo? userInfo,
-    bool? verifiedAccount,
+    String? firstName,
+    String? lastName,
+    String? gender,
+    String? birthdate,
+    String? middleName,
+    String? email,
+    String? profileImage,
     List<int>? following,
     List<int>? followers,
+    DateTime? createdAt,
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
     List<_i4.Post>? posts,
@@ -204,9 +262,16 @@ class _UserRecordImpl extends UserRecord {
           phoneNumber: phoneNumber,
           userInfoId: userInfoId,
           userInfo: userInfo,
-          verifiedAccount: verifiedAccount,
+          firstName: firstName,
+          lastName: lastName,
+          gender: gender,
+          birthdate: birthdate,
+          middleName: middleName,
+          email: email,
+          profileImage: profileImage,
           following: following,
           followers: followers,
+          createdAt: createdAt,
           politicalStatus: politicalStatus,
           credibilityScore: credibilityScore,
           posts: posts,
@@ -224,11 +289,18 @@ class _UserRecordImpl extends UserRecord {
     Object? bio = _Undefined,
     Object? nin = _Undefined,
     Object? phoneNumber = _Undefined,
-    int? userInfoId,
+    Object? userInfoId = _Undefined,
     Object? userInfo = _Undefined,
-    Object? verifiedAccount = _Undefined,
+    Object? firstName = _Undefined,
+    Object? lastName = _Undefined,
+    Object? gender = _Undefined,
+    Object? birthdate = _Undefined,
+    Object? middleName = _Undefined,
+    Object? email = _Undefined,
+    Object? profileImage = _Undefined,
     Object? following = _Undefined,
     Object? followers = _Undefined,
+    Object? createdAt = _Undefined,
     Object? politicalStatus = _Undefined,
     Object? credibilityScore = _Undefined,
     Object? posts = _Undefined,
@@ -241,17 +313,23 @@ class _UserRecordImpl extends UserRecord {
       bio: bio is String? ? bio : this.bio,
       nin: nin is String? ? nin : this.nin,
       phoneNumber: phoneNumber is String? ? phoneNumber : this.phoneNumber,
-      userInfoId: userInfoId ?? this.userInfoId,
+      userInfoId: userInfoId is int? ? userInfoId : this.userInfoId,
       userInfo:
           userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
-      verifiedAccount:
-          verifiedAccount is bool? ? verifiedAccount : this.verifiedAccount,
+      firstName: firstName is String? ? firstName : this.firstName,
+      lastName: lastName is String? ? lastName : this.lastName,
+      gender: gender is String? ? gender : this.gender,
+      birthdate: birthdate is String? ? birthdate : this.birthdate,
+      middleName: middleName is String? ? middleName : this.middleName,
+      email: email is String? ? email : this.email,
+      profileImage: profileImage is String? ? profileImage : this.profileImage,
       following: following is List<int>?
           ? following
           : this.following?.map((e0) => e0).toList(),
       followers: followers is List<int>?
           ? followers
           : this.followers?.map((e0) => e0).toList(),
+      createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       politicalStatus: politicalStatus is _i3.PoliticalStatus?
           ? politicalStatus
           : this.politicalStatus,

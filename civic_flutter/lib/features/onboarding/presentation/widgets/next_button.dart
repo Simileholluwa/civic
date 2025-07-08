@@ -22,7 +22,7 @@ class OnBoardingNextButton extends StatelessWidget {
           child: FilledButton(
             onPressed: () {
               ref.read(onboardingProvider.notifier).cacheFirstTimer();
-              context.goNamed(
+              context.go(
                 AppRoutes.auth,
               );
             },

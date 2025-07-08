@@ -14,7 +14,7 @@ import 'dart:async' as _i2;
 import 'package:civic_client/src/protocol/general/aws_places.dart' as _i3;
 import 'package:civic_client/src/protocol/notification/notification_list.dart'
     as _i4;
-import 'package:civic_client/src/protocol/notification/user_notification.dart'
+import 'package:civic_client/src/protocol/notification/notification.dart'
     as _i5;
 import 'package:civic_client/src/protocol/post/post.dart' as _i6;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i7;
@@ -27,10 +27,9 @@ import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i12;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
     as _i13;
 import 'package:civic_client/src/protocol/user/user_record.dart' as _i14;
-import 'package:civic_client/src/protocol/user/user_nin_record.dart' as _i15;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i16;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i17;
-import 'protocol.dart' as _i18;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i15;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i16;
+import 'protocol.dart' as _i17;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -163,9 +162,9 @@ class EndpointNotification extends _i1.EndpointRef {
         },
       );
 
-  _i2.Stream<_i5.UserNotification> notificationUpdates(int notificationId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i5.UserNotification>,
-          _i5.UserNotification>(
+  _i2.Stream<_i5.Notification> notificationUpdates(int notificationId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i5.Notification>,
+          _i5.Notification>(
         'notification',
         'notificationUpdates',
         {'notificationId': notificationId},
@@ -1036,29 +1035,14 @@ class EndpointSendEmail extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
-class EndpointUserNin extends _i1.EndpointRef {
-  EndpointUserNin(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'userNin';
-
-  _i2.Future<_i15.UserNinRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i15.UserNinRecord?>(
-        'userNin',
-        'getNinDetails',
-        {'ninNumber': ninNumber},
-      );
-}
-
-/// {@category Endpoint}
 class EndpointUserRecord extends _i1.EndpointRef {
   EndpointUserRecord(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'userRecord';
 
-  _i2.Future<void> saveUser(_i14.UserRecord userRecord) =>
-      caller.callServerEndpoint<void>(
+  _i2.Future<_i14.UserRecord> saveUser(_i14.UserRecord userRecord) =>
+      caller.callServerEndpoint<_i14.UserRecord>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
@@ -1078,19 +1062,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'email': email},
       );
 
-  _i2.Future<List<String>> fetchUsernames() =>
-      caller.callServerEndpoint<List<String>>(
-        'userRecord',
-        'fetchUsernames',
-        {},
-      );
-
-  _i2.Future<_i16.UsersList> getUsers({
+  _i2.Future<_i15.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i16.UsersList>(
+      caller.callServerEndpoint<_i15.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -1119,14 +1096,21 @@ class EndpointUserRecord extends _i1.EndpointRef {
         'followUnfollowUser',
         {'userId': userId},
       );
+
+  _i2.Future<_i14.UserRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i14.UserRecord?>(
+        'userRecord',
+        'getNinDetails',
+        {'ninNumber': ninNumber},
+      );
 }
 
 class Modules {
   Modules(Client client) {
-    auth = _i17.Caller(client);
+    auth = _i16.Caller(client);
   }
 
-  late final _i17.Caller auth;
+  late final _i16.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1145,7 +1129,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i18.Protocol(),
+          _i17.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -1162,7 +1146,6 @@ class Client extends _i1.ServerpodClientShared {
     post = EndpointPost(this);
     project = EndpointProject(this);
     sendEmail = EndpointSendEmail(this);
-    userNin = EndpointUserNin(this);
     userRecord = EndpointUserRecord(this);
     modules = Modules(this);
   }
@@ -1181,8 +1164,6 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointSendEmail sendEmail;
 
-  late final EndpointUserNin userNin;
-
   late final EndpointUserRecord userRecord;
 
   late final Modules modules;
@@ -1196,7 +1177,6 @@ class Client extends _i1.ServerpodClientShared {
         'post': post,
         'project': project,
         'sendEmail': sendEmail,
-        'userNin': userNin,
         'userRecord': userRecord,
       };
 

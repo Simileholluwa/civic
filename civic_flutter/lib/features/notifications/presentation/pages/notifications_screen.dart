@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:civic_client/civic_client.dart';
+import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:civic_flutter/features/notifications/presentation/helpers/notifications_helper.dart';
@@ -74,12 +74,13 @@ class NotificationsScreen extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
       ),
-      body: AppInfiniteList<UserNotification>(
+      body: AppInfiniteList<cc.Notification>(
         pagingController: pagingControllerNotifier.pagingController,
+        canCreate: false,
         itemBuilder: (context, notif, index) {
           final data = ref.watch(
             userNotificationStreamProvider(
-              notif.notification.id!,
+              notif.id!,
               notif,
             ),
           );
@@ -87,14 +88,14 @@ class NotificationsScreen extends ConsumerWidget {
           return InkWell(
             onTap: () async {
               notificationNotifier.markAsRead(
-                notification.notification.id!,
+                notification.id!,
               );
               context.push(
-                notification.notification.actionRoute,
+                notification.actionRoute,
               );
             },
             child: ColoredBox(
-              color: notification.notification.isRead
+              color: notification.isRead
                   ? Colors.transparent
                   : Theme.of(context).cardColor,
               child: Padding(
@@ -110,7 +111,7 @@ class NotificationsScreen extends ConsumerWidget {
                         CircleAvatar(
                           radius: 25,
                           backgroundImage: CachedNetworkImageProvider(
-                            notification.mediaThumbnailUrl ?? '',
+                            notification.mediaThumbnailUrl,
                           ),
                         ),
                         Container(
@@ -137,17 +138,17 @@ class NotificationsScreen extends ConsumerWidget {
                             text:
                                 NotificationsHelper.formatNotificationRichText(
                               context,
-                              content: notification.notification.content,
-                              usernames: notification.senderUsernames,
-                              actionType: notification.notification.actionType,
-                              targetType: notification.notification.targetType,
+                              content: notification.content,
+                              usernames: notification.groupedSenderNames!,
+                              actionType: notification.actionType,
+                              targetType: notification.targetType,
                             ),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             DateFormat('hh:mm a • MMM d, y')
-                                .format(notification.notification.createdAt),
+                                .format(notification.createdAt),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium!

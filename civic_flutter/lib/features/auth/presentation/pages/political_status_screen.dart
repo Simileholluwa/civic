@@ -23,7 +23,7 @@ class PoliticalStatusScreen extends StatelessWidget {
               const AuthHeader(
                 authTitle: 'Political status',
                 authSubTitle:
-                    'Civic will be configured based on your political status',
+                    'Civic will be configured based on your political status.',
               ),
               const SizedBox(
                 height: TSizes.spaceBtwSections,

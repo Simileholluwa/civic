@@ -1,4 +1,3 @@
-import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 Future<Widget?> chooseVerificationMethod(
   BuildContext context,
-  UserNinRecord userNinRecord,
 ) {
   //final controller = AuthController.instance;
   return showModalBottomSheet<Widget>(
@@ -68,7 +66,7 @@ Future<Widget?> chooseVerificationMethod(
                 title: 'Phone verification',
                 subTitle: 'An SMS containing your OTP will be '
                     'sent to ${THelperFunctions.redactString(
-                  userNinRecord.telephone!,
+                  '',
                   3,
                   start: 6,
                 )} to verify your identity.',
@@ -81,7 +79,7 @@ Future<Widget?> chooseVerificationMethod(
                 title: 'Email verification',
                 subTitle: 'An email containing your OTP will be '
                     'sent to ${THelperFunctions.redactEmail(
-                  userNinRecord.email!,
+                  '',
                 )} to verify your identity.',
               ),
               const SizedBox(

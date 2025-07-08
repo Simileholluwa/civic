@@ -1,8 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -14,11 +11,9 @@ class ConfirmNinDetails extends StatelessWidget {
   });
   final String ninRecord;
 
- 
-
   @override
   Widget build(BuildContext context) {
-    final userNinRecord = jsonDecode(ninRecord,) as UserNinRecord;
+    final userNinRecord = jsonDecode(ninRecord,);
     final isDark = THelperFunctions.isDarkMode(context);
     return AppAndroidBottomNav(
       child: Scaffold(
@@ -166,7 +161,6 @@ class ConfirmNinDetails extends StatelessWidget {
                 child: FilledButton(
                   onPressed: () => chooseVerificationMethod(
                     context,
-                    userNinRecord,
                   ),
                   child: const Center(
                     child: Text(

@@ -10,7 +10,7 @@ part 'paginated_notifications_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
-  final PagingController<int, UserNotification> pagingController =
+  final PagingController<int, Notification> pagingController =
       PagingController(firstPageKey: 1);
 
   @override
@@ -27,7 +27,7 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       pagingController.dispose();
     });
 
-    ref.listen<AsyncValue<UserNotification>>(
+    ref.listen<AsyncValue<Notification>>(
       userNotificationStreamProvider(null, null),
       (previous, next) {
         next.whenData((event) {
@@ -77,9 +77,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     pagingController.refresh();
   }
 
-  void _handleNotification(UserNotification notif) {
+  void _handleNotification(Notification notif) {
     final itemList = pagingController.itemList ?? [];
-    final alreadyExists = itemList.any((n) => n.notification.id == notif.notification.id);
+    final alreadyExists = itemList.any((n) => n.id == notif.id);
     if (alreadyExists) {
       return;
     }
@@ -91,8 +91,8 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
 
   void removeNotificationById(int? notificationId) {
     if (pagingController.itemList != null && notificationId != null) {
-      final updatedList = List<UserNotification>.from(pagingController.itemList ?? []);
-      updatedList.removeWhere((element) => element.notification.id == notificationId);
+      final updatedList = List<Notification>.from(pagingController.itemList ?? []);
+      updatedList.removeWhere((element) => element.id == notificationId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,

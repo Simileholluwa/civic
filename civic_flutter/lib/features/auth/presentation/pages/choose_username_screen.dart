@@ -27,9 +27,9 @@ class UsernameScreen extends StatelessWidget {
           child: Column(
             children: [
               const AuthHeader(
-                authTitle: 'Choose a username',
+                authTitle: "Confirm your details",
                 authSubTitle:
-                    'Enter a username that uniquely identifies you.',
+                    'This data has been retrieved from your NIN. Ensure they are correct.',
               ),
               UsernameForm(),
             ],

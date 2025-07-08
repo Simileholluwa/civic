@@ -8,10 +8,12 @@ class NotificationEndpoint extends Endpoint {
     Session session, {
     required int receiverId,
     required int senderId,
+    required String senderName,
     required String actionType,
     required String targetType,
     required int targetId,
     required String actionRoute,
+    required String mediaThumbnailUrl,
     String? content,
   }) async {
     final groupKey = '${actionType}_${targetType}_$targetId';
@@ -23,17 +25,17 @@ class NotificationEndpoint extends Endpoint {
     );
 
     if (existing != null) {
-      if (existing.groupedSenderIds!.contains(senderId)) return;
+      if (existing.groupedSenderNames!.contains(senderName)) return;
 
-      final updatedGroupedIds = {
-        ...?existing.groupedSenderIds,
-        existing.senderId,
-        senderId,
+      final updatedGroupedNames = {
+        ...?existing.groupedSenderNames,
+        existing.senderName!,
+        senderName,
       }.toList();
 
       final updatedNotification = existing.copyWith(
         senderId: senderId,
-        groupedSenderIds: updatedGroupedIds,
+        groupedSenderNames: updatedGroupedNames,
         createdAt: DateTime.now(),
       );
 
@@ -45,10 +47,11 @@ class NotificationEndpoint extends Endpoint {
       final notification = Notification(
         receiverId: receiverId,
         senderId: senderId,
-        groupedSenderIds: [senderId],
+        groupedSenderNames: [senderName],
         groupKey: groupKey,
         actionType: actionType,
         targetType: targetType,
+        mediaThumbnailUrl: mediaThumbnailUrl,
         targetId: targetId,
         actionRoute: actionRoute,
         content: content,
@@ -144,7 +147,7 @@ class NotificationEndpoint extends Endpoint {
       session,
       where: (t) => t.receiverId.equals(user.id),
     );
-    final notifications = await Notification.db.find(
+    final results = await Notification.db.find(
       session,
       where: (t) => t.receiverId.equals(user.id),
       limit: limit,
@@ -152,22 +155,6 @@ class NotificationEndpoint extends Endpoint {
       orderBy: (t) => t.createdAt,
       orderDescending: true,
     );
-
-    final List<UserNotification> results = [];
-
-    for (final notif in notifications) {
-      final notifParams = await userNotificationParams(
-        session,
-        notif,
-      );
-      results.add(
-        UserNotification(
-          notification: notif,
-          mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
-          senderUsernames: notifParams['usernames'],
-        ),
-      );
-    }
 
     return NotificationList(
       count: count,
@@ -244,34 +231,7 @@ class NotificationEndpoint extends Endpoint {
     return notification;
   }
 
-  @doNotGenerate
-  Future<Map<String, dynamic>> userNotificationParams(
-    Session session,
-    Notification notification,
-  ) async {
-    final senderIds = notification.groupedSenderIds ?? [notification.senderId];
-
-    final senders = await UserRecord.db.find(
-      session,
-      where: (t) => t.id.inSet(senderIds.toSet()),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
-
-    senders.sort((a, b) => b.id!.compareTo(a.id!));
-
-    final usernames = senders
-        .map((u) => u.userInfo!.fullName ?? u.userInfo!.userName!)
-        .toList();
-    final profileImage = senders.first.userInfo?.imageUrl;
-    return {
-      'usernames': usernames,
-      'mediaThumbnailUrl': profileImage,
-    };
-  }
-
-  Stream<UserNotification> notificationUpdates(
+  Stream<Notification> notificationUpdates(
     Session session,
     int notificationId,
   ) async* {
@@ -285,29 +245,12 @@ class NotificationEndpoint extends Endpoint {
       notificationId,
     );
     if (notification != null) {
-      final notifParams = await userNotificationParams(
-        session,
-        notification,
-      );
-
-      yield UserNotification(
-        notification: notification,
-        mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
-        senderUsernames: notifParams['usernames'],
-      );
+      yield notification;
     }
 
     // Send updates when changes occur
     await for (var notificationUpdate in updateStream) {
-      final notifParams = await userNotificationParams(
-        session,
-        notificationUpdate,
-      );
-      yield UserNotification(
-        notification: notificationUpdate,
-        mediaThumbnailUrl: notifParams['mediaThumbnailUrl'],
-        senderUsernames: notifParams['usernames'],
-      );
+      yield notificationUpdate;
     }
   }
 }

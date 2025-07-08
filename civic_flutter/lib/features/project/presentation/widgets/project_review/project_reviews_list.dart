@@ -50,6 +50,7 @@ class ProjectReviewsList extends ConsumerWidget {
           AppInfiniteList<ProjectReview>(
             pagingController: pagingControllerNotifier.pagingController,
             shrinkWrap: true,
+            canCreate: false,
             scrollPhysics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, review, index) {
               final liveProjectReview = ref.watch(

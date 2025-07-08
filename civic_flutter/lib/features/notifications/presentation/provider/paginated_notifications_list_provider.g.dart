@@ -7,7 +7,7 @@ part of 'paginated_notifications_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedNotificationsListHash() =>
-    r'6ca48bddd6da625ab18ea67e47debacb4195ae51';
+    r'd8adbc823e6f5830697178a8c462e3fda310819b';
 
 /// See also [PaginatedNotificationsList].
 @ProviderFor(PaginatedNotificationsList)

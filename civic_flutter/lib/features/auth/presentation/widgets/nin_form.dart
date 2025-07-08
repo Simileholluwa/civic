@@ -1,34 +1,21 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class NinForm extends ConsumerStatefulWidget {
+class NinForm extends ConsumerWidget {
   const NinForm({
     super.key,
   });
 
   @override
-  ConsumerState<NinForm> createState() => _NinFormState();
-}
-
-class _NinFormState extends ConsumerState<NinForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _ninController = TextEditingController();
-
-  @override
-  void dispose() {
-    _ninController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
     return Form(
-      key: _formKey,
+      key: authState.ninFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,
@@ -36,31 +23,42 @@ class _NinFormState extends ConsumerState<NinForm> {
         child: Column(
           children: [
             AppTextField(
-              textController: _ninController,
+              textController: authState.ninController,
               hintText: 'National Identification Number',
               validator: TValidator.validateNin,
               textInputType: TextInputType.number,
               prefixIcon: FontAwesomeIcons.idCardClip,
               iconSize: 22,
+              onChanged: (value) {
+                authNotifier.setNin(
+                  authState.ninController.text,
+                );
+              },
             ),
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
-            AppDualButton(
-              onTapSkipButton: () {
-                context.go(
-                  ProjectRoutes.namespace,
-                );
-                ref.invalidate(authProvider);
-              },
-              activeButtonText: TTexts.tContinue,
-              onTapActiveButton: () =>
-                  ref.read(authProvider.notifier).searchNinRecord(
-                        ninNumber: _ninController.text.trim(),
-                        formKey: _formKey,
-                      ),
-              activeButtonLoading: ref.watch(searchNinLoadingProvider),
-              skipButtonLoading: false,
+            SizedBox(
+              height: 55,
+              width: double.maxFinite,
+              child: FilledButton(
+                onPressed: () async {
+                  final isValid = authState.ninFormKey.currentState!.validate();
+                  if (!isValid) return;
+                  final result = await authNotifier.searchNinRecord(
+                      ninNumber: authState.nin);
+                  if (result) {
+                    if (context.mounted) {
+                      context.push(
+                        '/auth/signUp/confirmDetails',
+                      );
+                    }
+                  }
+                },
+                child: const Text(
+                  TTexts.tContinue,
+                ),
+              ),
             ),
           ],
         ),

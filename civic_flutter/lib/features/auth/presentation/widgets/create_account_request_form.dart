@@ -38,24 +38,25 @@ class CreateAccountRequestForm extends ConsumerWidget {
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
-            FilledButton(
-              onPressed: () async {
-                final isValid = authState
-                    .newAccountPasswordFormKey.currentState!
-                    .validate();
-                if (!isValid) return;
-                final created = await authNotifier.createAccountRequest();
-                if (created) {
-                  context.pushNamed(
-                    AppRoutes.validateCreateAccount,
+            SizedBox(
+              height: 55,
+              child: FilledButton(
+                onPressed: () async {
+                  final isValid = authState
+                      .newAccountPasswordFormKey.currentState!
+                      .validate();
+                  if (!isValid) return;
+                  await authNotifier.createAccountRequest();
+                  context.push(
+                    '/auth/signUp/validateCreateAccount',
                   );
-                }
-              },
-              child: const Text(
-                TTexts.tContinue,
+                },
+                child: const Text(
+                  TTexts.tContinue,
+                ),
+              ).withLoading(
+                loading: ref.watch(createAccountLoadingProvider),
               ),
-            ).withLoading(
-              loading: ref.watch(createAccountLoadingProvider),
             ),
           ],
         ),

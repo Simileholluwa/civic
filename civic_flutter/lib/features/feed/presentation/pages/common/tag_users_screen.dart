@@ -132,6 +132,7 @@ class TagUsersScreen extends ConsumerWidget {
         body: AppInfiniteList<UserRecord>(
           key: Key('post_tag_users_screen_$query'),
           pagingController: pagingController.pagingController,
+          canCreate: false,
           itemBuilder: (context, user, index) {
             final isSelected = postState.taggedUsers.contains(user);
             return Column(

@@ -31,7 +31,7 @@ class LoginScreen extends ConsumerWidget {
           child: Column(
             children: [
               AuthHeader(
-                authTitle: authState.username == '' ? 'Hi there' : 'Hi ${authState.username}',
+                authTitle: authState.firstName == '' ? 'Hi there' : 'Hi ${authState.firstName}',
                 authSubTitle: 'Provide the password to your account.',
               ),
               const LoginForm(),

@@ -5,21 +5,26 @@ fields:
   bio: String?
   nin: String?
   phoneNumber: String?
-  userInfo: module:auth:UserInfo?, relation
-  verifiedAccount: bool?
+  userInfo: module:auth:UserInfo?, relation(optional)
+  firstName: String?
+  lastName: String?
+  gender: String?
+  birthdate: String?
+  middleName: String?
+  email: String?
+  profileImage: String?
   following: List<int>?
   followers: List<int>?
+  createdAt: DateTime?, default=now
   politicalStatus: PoliticalStatus?
-  credibilityScore: double?
+  credibilityScore: double?, default=1
   posts: List<Post>?, relation(optional, name=user_posts)
   projects: List<Project>?, relation(optional, name=user_projects)
   projectBookmarks: List<ProjectBookmarks>?, relation(optional, name=user_project_bookmarks)
   postBookmarks: List<PostBookmarks>?, relation(optional, name=user_post_bookmarks)
 
 
-
-
 indexes:
   user_info_id_unique_idx:
-    fields: userInfoId
+    fields: userInfoId, email
     unique: true

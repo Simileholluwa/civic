@@ -78,13 +78,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, bool>> createAccountRequest({
     required String email,
     required String password,
-    required String userName,
+    required String firstName,
   }) async {
     try {
       final result = await _remoteDatabase.createAccountRequest(
         email: email,
         password: password,
-        userName: userName,
+        firstName: firstName,
       );
       return Right(result);
     } on SocketException catch (e) {
@@ -106,15 +106,15 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserInfo>> validateCreateAccount({
     required String email,
     required String code,
-    required PoliticalStatus politicalStatus,
     required String password,
+    required UserRecord userRecord,
   }) async {
     try {
       final result = await _remoteDatabase.validateCreateAccount(
         email: email,
         code: code,
-        politicalStatus: politicalStatus,
         password: password,
+        userRecord: userRecord,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -141,7 +141,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserNinRecord?>> searchNinDetails({
+  Future<Either<Failure, UserRecord?>> searchNinDetails({
     required String ninNumber,
   }) async {
     try {
@@ -153,20 +153,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(
         Failure(
           message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<String>>> fetchAllUsernames() async {
-    try {
-      final result = await _remoteDatabase.fetchAllUsernames();
-      return Right(result);
-    } catch (e) {
-      return Left(
-        Failure(
-          message: e.toString(),
         ),
       );
     }

@@ -23,6 +23,7 @@ class PostCommentReplyCard extends ConsumerWidget {
       pagingController: repliesController.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      canCreate: false,
       itemBuilder: (context, value, index) {
         final liveReply = ref.watch(
           postStreamProvider(

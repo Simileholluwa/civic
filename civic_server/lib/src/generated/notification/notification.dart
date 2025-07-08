@@ -22,10 +22,12 @@ abstract class Notification
     this.receiver,
     required this.senderId,
     this.sender,
-    this.groupedSenderIds,
+    this.senderName,
+    this.groupedSenderNames,
     this.content,
     this.groupKey,
     required this.actionType,
+    required this.mediaThumbnailUrl,
     required this.targetType,
     required this.actionRoute,
     required this.targetId,
@@ -41,10 +43,12 @@ abstract class Notification
     _i2.UserRecord? receiver,
     required int senderId,
     _i2.UserRecord? sender,
-    List<int>? groupedSenderIds,
+    String? senderName,
+    List<String>? groupedSenderNames,
     String? content,
     String? groupKey,
     required String actionType,
+    required String mediaThumbnailUrl,
     required String targetType,
     required String actionRoute,
     required int targetId,
@@ -66,12 +70,14 @@ abstract class Notification
           ? null
           : _i2.UserRecord.fromJson(
               (jsonSerialization['sender'] as Map<String, dynamic>)),
-      groupedSenderIds: (jsonSerialization['groupedSenderIds'] as List?)
-          ?.map((e) => e as int)
+      senderName: jsonSerialization['senderName'] as String?,
+      groupedSenderNames: (jsonSerialization['groupedSenderNames'] as List?)
+          ?.map((e) => e as String)
           .toList(),
       content: jsonSerialization['content'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
       actionType: jsonSerialization['actionType'] as String,
+      mediaThumbnailUrl: jsonSerialization['mediaThumbnailUrl'] as String,
       targetType: jsonSerialization['targetType'] as String,
       actionRoute: jsonSerialization['actionRoute'] as String,
       targetId: jsonSerialization['targetId'] as int,
@@ -99,13 +105,17 @@ abstract class Notification
 
   _i2.UserRecord? sender;
 
-  List<int>? groupedSenderIds;
+  String? senderName;
+
+  List<String>? groupedSenderNames;
 
   String? content;
 
   String? groupKey;
 
   String actionType;
+
+  String mediaThumbnailUrl;
 
   String targetType;
 
@@ -131,10 +141,12 @@ abstract class Notification
     _i2.UserRecord? receiver,
     int? senderId,
     _i2.UserRecord? sender,
-    List<int>? groupedSenderIds,
+    String? senderName,
+    List<String>? groupedSenderNames,
     String? content,
     String? groupKey,
     String? actionType,
+    String? mediaThumbnailUrl,
     String? targetType,
     String? actionRoute,
     int? targetId,
@@ -150,11 +162,13 @@ abstract class Notification
       if (receiver != null) 'receiver': receiver?.toJson(),
       'senderId': senderId,
       if (sender != null) 'sender': sender?.toJson(),
-      if (groupedSenderIds != null)
-        'groupedSenderIds': groupedSenderIds?.toJson(),
+      if (senderName != null) 'senderName': senderName,
+      if (groupedSenderNames != null)
+        'groupedSenderNames': groupedSenderNames?.toJson(),
       if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
       'actionType': actionType,
+      'mediaThumbnailUrl': mediaThumbnailUrl,
       'targetType': targetType,
       'actionRoute': actionRoute,
       'targetId': targetId,
@@ -172,11 +186,13 @@ abstract class Notification
       if (receiver != null) 'receiver': receiver?.toJsonForProtocol(),
       'senderId': senderId,
       if (sender != null) 'sender': sender?.toJsonForProtocol(),
-      if (groupedSenderIds != null)
-        'groupedSenderIds': groupedSenderIds?.toJson(),
+      if (senderName != null) 'senderName': senderName,
+      if (groupedSenderNames != null)
+        'groupedSenderNames': groupedSenderNames?.toJson(),
       if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
       'actionType': actionType,
+      'mediaThumbnailUrl': mediaThumbnailUrl,
       'targetType': targetType,
       'actionRoute': actionRoute,
       'targetId': targetId,
@@ -231,10 +247,12 @@ class _NotificationImpl extends Notification {
     _i2.UserRecord? receiver,
     required int senderId,
     _i2.UserRecord? sender,
-    List<int>? groupedSenderIds,
+    String? senderName,
+    List<String>? groupedSenderNames,
     String? content,
     String? groupKey,
     required String actionType,
+    required String mediaThumbnailUrl,
     required String targetType,
     required String actionRoute,
     required int targetId,
@@ -247,10 +265,12 @@ class _NotificationImpl extends Notification {
           receiver: receiver,
           senderId: senderId,
           sender: sender,
-          groupedSenderIds: groupedSenderIds,
+          senderName: senderName,
+          groupedSenderNames: groupedSenderNames,
           content: content,
           groupKey: groupKey,
           actionType: actionType,
+          mediaThumbnailUrl: mediaThumbnailUrl,
           targetType: targetType,
           actionRoute: actionRoute,
           targetId: targetId,
@@ -269,10 +289,12 @@ class _NotificationImpl extends Notification {
     Object? receiver = _Undefined,
     int? senderId,
     Object? sender = _Undefined,
-    Object? groupedSenderIds = _Undefined,
+    Object? senderName = _Undefined,
+    Object? groupedSenderNames = _Undefined,
     Object? content = _Undefined,
     Object? groupKey = _Undefined,
     String? actionType,
+    String? mediaThumbnailUrl,
     String? targetType,
     String? actionRoute,
     int? targetId,
@@ -287,12 +309,14 @@ class _NotificationImpl extends Notification {
           receiver is _i2.UserRecord? ? receiver : this.receiver?.copyWith(),
       senderId: senderId ?? this.senderId,
       sender: sender is _i2.UserRecord? ? sender : this.sender?.copyWith(),
-      groupedSenderIds: groupedSenderIds is List<int>?
-          ? groupedSenderIds
-          : this.groupedSenderIds?.map((e0) => e0).toList(),
+      senderName: senderName is String? ? senderName : this.senderName,
+      groupedSenderNames: groupedSenderNames is List<String>?
+          ? groupedSenderNames
+          : this.groupedSenderNames?.map((e0) => e0).toList(),
       content: content is String? ? content : this.content,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
       actionType: actionType ?? this.actionType,
+      mediaThumbnailUrl: mediaThumbnailUrl ?? this.mediaThumbnailUrl,
       targetType: targetType ?? this.targetType,
       actionRoute: actionRoute ?? this.actionRoute,
       targetId: targetId ?? this.targetId,
@@ -313,8 +337,12 @@ class NotificationTable extends _i1.Table<int?> {
       'senderId',
       this,
     );
-    groupedSenderIds = _i1.ColumnSerializable(
-      'groupedSenderIds',
+    senderName = _i1.ColumnString(
+      'senderName',
+      this,
+    );
+    groupedSenderNames = _i1.ColumnSerializable(
+      'groupedSenderNames',
       this,
     );
     content = _i1.ColumnString(
@@ -327,6 +355,10 @@ class NotificationTable extends _i1.Table<int?> {
     );
     actionType = _i1.ColumnString(
       'actionType',
+      this,
+    );
+    mediaThumbnailUrl = _i1.ColumnString(
+      'mediaThumbnailUrl',
       this,
     );
     targetType = _i1.ColumnString(
@@ -365,13 +397,17 @@ class NotificationTable extends _i1.Table<int?> {
 
   _i2.UserRecordTable? _sender;
 
-  late final _i1.ColumnSerializable groupedSenderIds;
+  late final _i1.ColumnString senderName;
+
+  late final _i1.ColumnSerializable groupedSenderNames;
 
   late final _i1.ColumnString content;
 
   late final _i1.ColumnString groupKey;
 
   late final _i1.ColumnString actionType;
+
+  late final _i1.ColumnString mediaThumbnailUrl;
 
   late final _i1.ColumnString targetType;
 
@@ -416,10 +452,12 @@ class NotificationTable extends _i1.Table<int?> {
         id,
         receiverId,
         senderId,
-        groupedSenderIds,
+        senderName,
+        groupedSenderNames,
         content,
         groupKey,
         actionType,
+        mediaThumbnailUrl,
         targetType,
         actionRoute,
         targetId,

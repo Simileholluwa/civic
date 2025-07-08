@@ -3,6 +3,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ArticlesScreen extends ConsumerWidget {
   const ArticlesScreen({super.key});
@@ -15,6 +16,12 @@ class ArticlesScreen extends ConsumerWidget {
     return AppInfiniteList<Post>(
       pagingController: pagingControllerNotifier.pagingController,
       scrollController: ref.read(articleScrollControllerProvider),
+      createText: 'Create article',
+      onCreate: () {
+        context.push(
+          '/create/article/0',
+        );
+      },
       itemBuilder: (context, post, index) {
         return ArticleCard(post: post);
       },

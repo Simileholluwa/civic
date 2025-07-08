@@ -12,6 +12,13 @@ import 'package:intl/intl.dart';
 class THelperFunctions {
   THelperFunctions._();
 
+  static String getFullName(String firstName, String? middleName, String lastName,) {
+    if (middleName == null || middleName.trim().isEmpty) {
+      return '$firstName $lastName';
+    }
+    return '$firstName $middleName $lastName';
+  }
+
   static const colorizeColors = [
     TColors.primary,
     Colors.blue,

@@ -59,102 +59,65 @@ GoRouter router(Ref ref) {
         },
       ),
 
-      // Login, Sign up, password reset and account verification routes
       GoRoute(
         path: AppRoutes.auth,
-        name: AppRoutes.auth,
-        builder: (context, state) => const AuthLandingScreen(),
+        builder: (context, state) => const EmailScreen(),
         routes: [
           GoRoute(
-            path: AppRoutes.checkIfNewUser,
-            name: AppRoutes.checkIfNewUser,
-            builder: (context, state) => const EmailScreen(),
-          ),
-
-          // Login
-          GoRoute(
             path: AppRoutes.login,
-            name: AppRoutes.login,
             builder: (context, state) {
               return LoginScreen();
             },
+          ),
+          GoRoute(
+            path: AppRoutes.resetPassword,
+            builder: (context, state) {
+              return ResetPasswordScreen();
+            },
             routes: [
-              // Password reset
               GoRoute(
-                path: AppRoutes.resetPassword,
-                name: AppRoutes.resetPassword,
+                path: AppRoutes.verifyResetPasswordCode,
                 builder: (context, state) {
-                  return ResetPasswordScreen();
+                  return VerifyPasswordResetCodeScreen();
                 },
-                routes: [
-                  GoRoute(
-                      path: AppRoutes.verifyResetPasswordCode,
-                      name: AppRoutes.verifyResetPasswordCode,
-                      builder: (context, state) {
-                        return VerifyPasswordResetCodeScreen();
-                      }),
-                  GoRoute(
-                      path: AppRoutes.createNewPassword,
-                      name: AppRoutes.createNewPassword,
-                      builder: (context, state) {
-                        return NewPasswordScreen();
-                      }),
-                ],
+              ),
+              GoRoute(
+                path: AppRoutes.createNewPassword,
+                builder: (context, state) {
+                  return NewPasswordScreen();
+                },
               ),
             ],
           ),
-
-          // Sign up
           GoRoute(
-            path: AppRoutes.politicalStatus,
-            name: AppRoutes.politicalStatus,
+            path: AppRoutes.signUp,
             builder: (context, state) {
-              return const PoliticalStatusScreen();
+              return const VerifyIdentityScreen();
             },
-          ),
-          GoRoute(
-              path: AppRoutes.chooseUsername,
-              name: AppRoutes.chooseUsername,
-              builder: (context, state) {
-                return UsernameScreen();
-              }),
-          GoRoute(
-              path: AppRoutes.createAccountRequest,
-              name: AppRoutes.createAccountRequest,
-              builder: (context, state) {
-                return CreateAccountRequestScreen();
-              }),
-          GoRoute(
-              path: AppRoutes.validateCreateAccount,
-              name: AppRoutes.validateCreateAccount,
-              builder: (context, state) {
-                return ValidateCreateAccountScreen();
-              }),
-
-          // Account verification
-          GoRoute(
-            path: AppRoutes.verifyAccount,
-            name: AppRoutes.verifyAccount,
-            builder: (context, state) => const VerifyIdentityScreen(),
             routes: [
               GoRoute(
-                path: AppRoutes.confirmNinDetails,
-                name: AppRoutes.confirmNinDetails,
-                builder: (context, state) => const ConfirmNinDetails(
-                  ninRecord: '',
-                ),
+                path: AppRoutes.confirmDetails,
+                builder: (context, state) {
+                  return UsernameScreen();
+                },
               ),
               GoRoute(
-                path: AppRoutes.verifyNinPhoneOTP,
-                name: AppRoutes.verifyNinPhoneOTP,
-                builder: (context, state) => const VerifyNinPhoneOTPScreen(
-                  verificationId: '',
-                ),
+                path: AppRoutes.selectStatus,
+                builder: (context, state) {
+                  return PoliticalStatusScreen();
+                },
               ),
               GoRoute(
-                path: AppRoutes.verifyNinEmailOTP,
-                name: AppRoutes.verifyNinEmailOTP,
-                builder: (context, state) => const VerifyNinEmailOTPScreen(),
+                path: AppRoutes.createAccountRequest,
+                builder: (context, state) {
+                  return CreateAccountRequestScreen();
+                },
+              ),
+              GoRoute(
+                path: AppRoutes.validateCreateAccount,
+                builder: (context, state) {
+                  return ValidateCreateAccountScreen();
+                },
               ),
             ],
           ),

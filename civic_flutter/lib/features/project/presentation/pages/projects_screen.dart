@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProjectsScreen extends ConsumerWidget {
@@ -12,6 +15,16 @@ class ProjectsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final savedRecordString = ref
+        .read(
+          localStorageProvider,
+        )
+        .getString(
+          'userRecord',
+        );
+    final decoded = jsonDecode(savedRecordString.toString());
+    final userRecord = UserRecord.fromJson(decoded);
+    final isLeader = userRecord.politicalStatus!.index != 3;
     final pagingControllerNotifier =
         ref.watch(paginatedProjectListProvider.notifier);
     final isVisible = ref.watch(
@@ -37,7 +50,6 @@ class ProjectsScreen extends ConsumerWidget {
             icon: Icon(
               Iconsax.search_normal,
               size: 26,
-              color: Theme.of(context).colorScheme.onSurface,
             ),
             onPressed: () {},
           ),
@@ -47,6 +59,12 @@ class ProjectsScreen extends ConsumerWidget {
       body: AppInfiniteList<Project>(
         pagingController: pagingControllerNotifier.pagingController,
         scrollController: ref.read(projectScrollControllerProvider),
+        canCreate: isLeader,
+        onCreate: () {
+          context.push(
+            '/create/project/0',
+          );
+        },
         itemBuilder: (__, project, _) {
           return ProjectCard(
             project: project,

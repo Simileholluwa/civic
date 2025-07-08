@@ -20,6 +20,7 @@ class TTextTheme {
     titleLarge: const TextStyle().copyWith(
       fontSize: 20,
       fontWeight: FontWeight.w600,
+      fontFamily: 'Montserrat',
     ),
     titleMedium: const TextStyle().copyWith(
       fontSize: 20,
@@ -68,6 +69,7 @@ class TTextTheme {
     titleLarge: const TextStyle().copyWith(
       fontSize: 20,
       fontWeight: FontWeight.w600,
+      fontFamily: 'Montserrat',
     ),
     titleMedium: const TextStyle().copyWith(
       fontSize: 20,

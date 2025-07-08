@@ -190,24 +190,6 @@ final searchUserNinProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SearchUserNinRef = AutoDisposeProviderRef<SearchUserNinUseCase>;
-String _$fetchAllUsernamesHash() => r'850ed57946f632d715fb3dea341435687c890342';
-
-/// See also [fetchAllUsernames].
-@ProviderFor(fetchAllUsernames)
-final fetchAllUsernamesProvider =
-    AutoDisposeProvider<FetchAllUsernamesUseCase>.internal(
-  fetchAllUsernames,
-  name: r'fetchAllUsernamesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchAllUsernamesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef FetchAllUsernamesRef = AutoDisposeProviderRef<FetchAllUsernamesUseCase>;
 String _$uploadProfileImageHash() =>
     r'ca5bf8b6f7e98b567ffd163d25c5f19a8b1ac2be';
 

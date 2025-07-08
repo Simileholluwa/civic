@@ -31,6 +31,10 @@ class ProjectQuickDetailWidget extends StatelessWidget {
             color: color,
             width: .3,
           ),
+          left: BorderSide(
+            color: color,
+            width: .3,
+          ),
         ),
       ),
       child: Row(

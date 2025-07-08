@@ -3,10 +3,12 @@ table: notification
 fields:
   receiver: UserRecord?, relation
   sender: UserRecord?, relation
-  groupedSenderIds: List<int>?
+  senderName: String?
+  groupedSenderNames: List<String>?
   content: String?
   groupKey: String?
   actionType: String
+  mediaThumbnailUrl: String
   targetType: String
   actionRoute: String
   targetId: int

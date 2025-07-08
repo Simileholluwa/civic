@@ -1,18 +1,20 @@
+import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class UserRecordEndpoint extends Endpoint {
-  Future<void> saveUser(Session session, UserRecord userRecord) async {
+  Future<UserRecord> saveUser(Session session, UserRecord userRecord) async {
     // Save the user record to the database
-    await UserRecord.db.insertRow(
+    final savedRecord = await UserRecord.db.insertRow(
       session,
       userRecord.copyWith(
         followers: [],
         following: [],
-        verifiedAccount: false,
       ),
     );
+
+    return savedRecord;
   }
 
   Future<UserRecord?> getUser(
@@ -54,26 +56,16 @@ class UserRecordEndpoint extends Endpoint {
 
   Future<String?> checkIfNewUser(Session session, String email) async {
     // Check if the user already exists in the database
-    var userInfo = await UserInfo.db.findFirstRow(
+    var userRecord = await UserRecord.db.findFirstRow(
       session,
       where: (user) => user.email.equals(email),
     );
 
     // If the user does not exist, return null
-    if (userInfo == null) return null;
+    if (userRecord == null) return null;
 
     // If the user already exists, return the username
-    return userInfo.userName;
-  }
-
-  Future<List<String>> fetchUsernames(Session session) async {
-    // Fetch all user records from the database
-    var userInfos = await UserInfo.db.find(
-      session,
-    );
-
-    // Return a list of all usernames
-    return userInfos.map((user) => user.userName!).toList();
+    return userRecord.firstName;
   }
 
   Future<UsersList> getUsers(
@@ -242,10 +234,89 @@ class UserRecordEndpoint extends Endpoint {
       // Follow the user
       currentUser.following!.add(userId);
       followedUser.followers!.add(authInfo.userId);
+
+      if (currentUser.id != userId) {
+        await NotificationEndpoint().sendNotification(
+          session,
+          receiverId: userId,
+          senderId: currentUser.id!,
+          actionType: 'followed you',
+          targetType: '',
+          mediaThumbnailUrl: currentUser.userInfo!.imageUrl!,
+          targetId: currentUser.id!,
+          senderName: getFullName(currentUser.firstName!,
+              currentUser.middleName, currentUser.lastName!),
+          actionRoute: '',
+          content: null,
+        );
+      }
     }
 
     // Save changes to both users
     await UserRecord.db.updateRow(session, currentUser);
     await UserRecord.db.updateRow(session, followedUser);
+  }
+
+  Future<UserRecord?> getNinDetails(Session session, String ninNumber) async {
+    final userRecord = await UserRecord.db.findFirstRow(
+      session,
+      where: (t) => t.nin.equals(ninNumber),
+    );
+    if (userRecord == null) {
+      return UserRecord(
+        firstName: 'Oluwatosin',
+        middleName: 'Ezekiel',
+        lastName: 'Ajanaku',
+        gender: 'Male',
+        birthdate: '1990-01-01',
+      );
+    }
+    return null;
+  }
+
+    Stream<UserRecord> userUpdates(Session session, int userId) async* {
+    // Create a message stream for this user
+    var updateStream = session.messages.createStream<UserRecord>('user_$userId');
+
+    // Yield the latest user details when the client subscribes
+    var user = await UserRecord.db.findById(
+      session,
+      userId,
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
+    );
+
+    if (user != null) {
+      yield user;
+    }
+
+    // Send updates when changes occur
+    await for (var userUpdate in updateStream) {
+      yield userUpdate.copyWith(
+        userInfo: user!.userInfo,
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> updateUser(
+      Session session, UserRecord userRecord) async {
+    // Update the project in the database
+    await UserRecord.db.updateRow(session, userRecord);
+
+    // Send an update to all clients subscribed to this project
+    session.messages.postMessage(
+      'user_${userRecord.id}',
+      userRecord,
+    );
+  }
+
+  @doNotGenerate
+  String getFullName(String firstName, String? middleName, String lastName) {
+    if (middleName == null || middleName.trim().isEmpty) {
+      return '$firstName $lastName';
+    }
+    return '$firstName $middleName $lastName';
   }
 }

@@ -621,22 +621,21 @@ class _ProjectVettingStreamProviderElement
 }
 
 String _$userNotificationStreamHash() =>
-    r'61b2acac0a590d2072717c23adf1517b64585594';
+    r'9a487873964bf21f0bf6c31ac97f8777b0419c85';
 
 /// See also [userNotificationStream].
 @ProviderFor(userNotificationStream)
 const userNotificationStreamProvider = UserNotificationStreamFamily();
 
 /// See also [userNotificationStream].
-class UserNotificationStreamFamily
-    extends Family<AsyncValue<UserNotification>> {
+class UserNotificationStreamFamily extends Family<AsyncValue<Notification>> {
   /// See also [userNotificationStream].
   const UserNotificationStreamFamily();
 
   /// See also [userNotificationStream].
   UserNotificationStreamProvider call(
     int? notificationId,
-    UserNotification? notification,
+    Notification? notification,
   ) {
     return UserNotificationStreamProvider(
       notificationId,
@@ -670,11 +669,11 @@ class UserNotificationStreamFamily
 }
 
 /// See also [userNotificationStream].
-class UserNotificationStreamProvider extends StreamProvider<UserNotification> {
+class UserNotificationStreamProvider extends StreamProvider<Notification> {
   /// See also [userNotificationStream].
   UserNotificationStreamProvider(
     int? notificationId,
-    UserNotification? notification,
+    Notification? notification,
   ) : this._internal(
           (ref) => userNotificationStream(
             ref as UserNotificationStreamRef,
@@ -706,12 +705,11 @@ class UserNotificationStreamProvider extends StreamProvider<UserNotification> {
   }) : super.internal();
 
   final int? notificationId;
-  final UserNotification? notification;
+  final Notification? notification;
 
   @override
   Override overrideWith(
-    Stream<UserNotification> Function(UserNotificationStreamRef provider)
-        create,
+    Stream<Notification> Function(UserNotificationStreamRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -729,7 +727,7 @@ class UserNotificationStreamProvider extends StreamProvider<UserNotification> {
   }
 
   @override
-  StreamProviderElement<UserNotification> createElement() {
+  StreamProviderElement<Notification> createElement() {
     return _UserNotificationStreamProviderElement(this);
   }
 
@@ -752,24 +750,23 @@ class UserNotificationStreamProvider extends StreamProvider<UserNotification> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin UserNotificationStreamRef on StreamProviderRef<UserNotification> {
+mixin UserNotificationStreamRef on StreamProviderRef<Notification> {
   /// The parameter `notificationId` of this provider.
   int? get notificationId;
 
   /// The parameter `notification` of this provider.
-  UserNotification? get notification;
+  Notification? get notification;
 }
 
 class _UserNotificationStreamProviderElement
-    extends StreamProviderElement<UserNotification>
-    with UserNotificationStreamRef {
+    extends StreamProviderElement<Notification> with UserNotificationStreamRef {
   _UserNotificationStreamProviderElement(super.provider);
 
   @override
   int? get notificationId =>
       (origin as UserNotificationStreamProvider).notificationId;
   @override
-  UserNotification? get notification =>
+  Notification? get notification =>
       (origin as UserNotificationStreamProvider).notification;
 }
 // ignore_for_file: type=lint

@@ -68,10 +68,10 @@ Stream<ProjectVetting> projectVettingStream(
 }
 
 @Riverpod(keepAlive: true)
-Stream<UserNotification> userNotificationStream(
+Stream<Notification> userNotificationStream(
   Ref ref,
   int? notificationId,
-  UserNotification? notification,
+  Notification? notification,
 ) async* {
   if (notification != null) {
     yield notification;

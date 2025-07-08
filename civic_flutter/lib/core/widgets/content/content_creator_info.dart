@@ -22,20 +22,52 @@ class ContentCreatorInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      spacing: 15,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundImage: CachedNetworkImageProvider(
-            creator.userInfo!.imageUrl!,
-          ),
+        Row(
+          spacing: 15,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: radius,
+              backgroundImage: CachedNetworkImageProvider(
+                creator.userInfo!.imageUrl!,
+              ),
+            ),
+            CreatorNameAndAccountInfo(
+              creator: creator,
+              timeAgo: timeAgo,
+              showPoliticalStatus: showPoliticalStatus,
+            ),
+          ],
         ),
-        CreatorNameAndAccountInfo(
-          creator: creator,
-          timeAgo: timeAgo,
-          showPoliticalStatus: showPoliticalStatus,
-        ),
+        // const SizedBox(width: 10),
+        // Stack(
+        //   alignment: Alignment.center,
+        //   children: [
+        //     Container(
+        //       height: 45,
+        //       width: 45,
+        //       decoration: BoxDecoration(
+        //         color: Theme.of(context).cardColor,
+        //         shape: BoxShape.circle,
+        //       ),
+        //       child: CircularProgressIndicator(
+        //         value: creator.credibilityScore! / 100,
+        //         strokeWidth: 3,
+        //         backgroundColor: Theme.of(context).cardColor,
+        //       ),
+        //     ),
+        //     Text(
+        //       '99.7',
+        //       textAlign: TextAlign.center,
+        //       style: Theme.of(context)
+        //           .textTheme
+        //           .titleLarge!
+        //           .copyWith(fontSize: 15),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
@@ -66,7 +98,11 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  creator.userInfo!.fullName ?? creator.userInfo!.userName!,
+                  THelperFunctions.getFullName(
+                    creator.firstName!,
+                    creator.middleName,
+                    creator.lastName!,
+                  ),
                   style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -100,31 +136,21 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
                   color: TColors.primary,
                   textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                         fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
                 ),
-                if (creator.verifiedAccount!)
-                  ProjectQuickDetailWidget(
-                    size: 20,
-                    icon: Iconsax.verify5,
-                    title: 'Verified',
-                    color: TColors.primary,
-                    textStyle:
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                              fontSize: 12,
-                              color: TColors.primary,
-                            ),
-                  )
-                else
-                  ProjectQuickDetailWidget(
-                    size: 20,
-                    icon: Iconsax.verify5,
-                    title: 'Unverified',
-                    color: TColors.secondary,
-                    textStyle:
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                              fontSize: 12,
-                            ),
-                  ),
+                ProjectQuickDetailWidget(
+                  size: 20,
+                  icon: Iconsax.people5,
+                  title: '${THelperFunctions.humanizeNumber(
+                    creator.followers!.length,
+                  )} followers',
+                  color: Colors.blue,
+                  textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ],
             ),
         ],

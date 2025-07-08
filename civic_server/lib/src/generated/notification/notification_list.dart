@@ -10,7 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../notification/user_notification.dart' as _i2;
+import '../notification/notification.dart' as _i2;
 
 abstract class NotificationList
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -24,7 +24,7 @@ abstract class NotificationList
   });
 
   factory NotificationList({
-    required List<_i2.UserNotification> results,
+    required List<_i2.Notification> results,
     required int count,
     required int page,
     required int numPages,
@@ -35,8 +35,7 @@ abstract class NotificationList
   factory NotificationList.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificationList(
       results: (jsonSerialization['results'] as List)
-          .map(
-              (e) => _i2.UserNotification.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
           .toList(),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
@@ -46,7 +45,7 @@ abstract class NotificationList
     );
   }
 
-  List<_i2.UserNotification> results;
+  List<_i2.Notification> results;
 
   int count;
 
@@ -62,7 +61,7 @@ abstract class NotificationList
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   NotificationList copyWith({
-    List<_i2.UserNotification>? results,
+    List<_i2.Notification>? results,
     int? count,
     int? page,
     int? numPages,
@@ -101,7 +100,7 @@ abstract class NotificationList
 
 class _NotificationListImpl extends NotificationList {
   _NotificationListImpl({
-    required List<_i2.UserNotification> results,
+    required List<_i2.Notification> results,
     required int count,
     required int page,
     required int numPages,
@@ -121,7 +120,7 @@ class _NotificationListImpl extends NotificationList {
   @_i1.useResult
   @override
   NotificationList copyWith({
-    List<_i2.UserNotification>? results,
+    List<_i2.Notification>? results,
     int? count,
     int? page,
     int? numPages,

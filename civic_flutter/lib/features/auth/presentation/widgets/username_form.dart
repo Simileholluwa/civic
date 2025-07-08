@@ -12,13 +12,6 @@ class UsernameForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var usernames = <String>[];
-    Future.delayed(
-      Duration.zero,
-      () async {
-        usernames = await ref.read(authProvider.notifier).fetchAllUsernames();
-      },
-    );
     final authState = ref.watch(authProvider);
     final authNotifier = ref.watch(authProvider.notifier);
     return Form(
@@ -31,33 +24,60 @@ class UsernameForm extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppTextField(
-              textController: authState.usernameController,
-              prefixIcon: Iconsax.user,
-              hintText: 'Enter a unique username',
-              validator: (value) => TValidator.validateUsername(
-                value!,
-                usernames,
-              ),
-              onChanged: (value) {
-                authNotifier.setUsername(
-                  authState.usernameController.text,
-                );
-              },
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 15,
+              children: [
+                AppTextField(
+                  textController: authState.firstNameController,
+                  prefixIcon: Iconsax.user,
+                  hintText: 'First name',
+                  validator: (value) =>
+                      TValidator.validateEmptyText('First name', value),
+                  onChanged: (value) {
+                    authNotifier.setFirstName(
+                      authState.firstNameController.text,
+                    );
+                  },
+                ),
+                AppTextField(
+                  textController: authState.middleNameController,
+                  prefixIcon: Iconsax.user,
+                  hintText: 'Middle name',
+                  validator: (value) => null,
+                  onChanged: (value) {
+                    authNotifier.setMiddleName(
+                      authState.middleNameController.text,
+                    );
+                  },
+                ),
+                AppTextField(
+                  textController: authState.lastNameController,
+                  prefixIcon: Iconsax.user,
+                  hintText: 'Last name',
+                  validator: (value) =>
+                      TValidator.validateEmptyText('Last name', value),
+                  onChanged: (value) {
+                    authNotifier.setLastName(
+                      authState.lastNameController.text,
+                    );
+                  },
+                ),
+              ],
             ),
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
             SizedBox(
-              height: 60,
+              height: 55,
               width: double.maxFinite,
               child: FilledButton(
                 onPressed: () {
                   final isValid =
                       authState.usernameFormKey.currentState!.validate();
                   if (!isValid) return;
-                  context.pushNamed(
-                    AppRoutes.createAccountRequest,
+                  context.push(
+                    '/auth/signUp/selectStatus',
                   );
                 },
                 child: const Text(

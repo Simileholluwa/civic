@@ -28,7 +28,6 @@ class PollOptionsTextField extends ConsumerWidget {
       child: TextFormField(
         enabled: !isEditing,
         textCapitalization: TextCapitalization.sentences,
-        readOnly: !isEditing,
         maxLength: 35,
         decoration: InputDecoration(
           hintText: 'Option ${index + 1}',

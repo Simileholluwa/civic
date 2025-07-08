@@ -88,7 +88,7 @@ class ProjectCardItem extends ConsumerWidget {
                     text: projectCardState.description!,
                     onToggleTextTap: () {},
                     hasImage: true,
-                    maxLines: 4,
+                    maxLines: 3,
                   ),
                 ],
               ),

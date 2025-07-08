@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -52,20 +53,31 @@ class ValidateCreateAccountForm extends ConsumerWidget {
           const SizedBox(
             height: TSizes.spaceBtwSections,
           ),
-          FilledButton(
-            onPressed: () async {
-              final validated = await authNotifier.validateCreateAccount();
-              if (validated) {
-                context.pushNamed(
-                  AppRoutes.verifyAccount,
-                );
-              }
-            },
-            child: const Text(
-              TTexts.tContinue,
+          SizedBox(
+            height: 55,
+            child: FilledButton(
+              onPressed: () async {
+                final validated = await authNotifier.validateCreateAccount();
+                if (validated) {
+                  context.push(
+                    ProjectRoutes.namespace,
+                  );
+                }
+              },
+              child: const Text(
+                TTexts.tContinue,
+              ),
+            ).withLoading(
+              loading: ref.watch(validatCreateAccountLoadingProvider),
             ),
-          ).withLoading(
-            loading: ref.watch(validatCreateAccountLoadingProvider),
+          ),
+          const SizedBox(
+            height: TSizes.spaceBtwItems,
+          ),
+          AppResendLink(
+            onTap: () {
+              authNotifier.createAccountRequest();
+            },
           ),
         ],
       ),

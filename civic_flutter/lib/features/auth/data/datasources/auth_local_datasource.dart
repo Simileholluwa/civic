@@ -25,7 +25,7 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
       await _prefs.setString('userRecord', jsonString);
       await _prefs.setInt(
         'userId',
-        userRecord.userInfoId,
+        userRecord.id!,
       );
     } catch (e) {
       log(e.toString());

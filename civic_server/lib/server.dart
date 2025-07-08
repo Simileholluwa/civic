@@ -50,13 +50,15 @@ void run(List<String> args) async {
 
   // Future calls
   pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
-  pod.registerFutureCall(ScheduleProjectFutureCall(), 'scheduleProjectFutureCall');
+  pod.registerFutureCall(
+      ScheduleProjectFutureCall(), 'scheduleProjectFutureCall');
 
   // Auth
   auth.AuthConfig.set(
     auth.AuthConfig(
       validationCodeLength: 6,
       sendValidationEmail: (session, email, validationCode) async {
+        print(validationCode);
         return await SendEmailEndpoint().sendEmail(
           session,
           email,
@@ -64,6 +66,19 @@ void run(List<String> args) async {
           'Your email verification code is $validationCode',
           null,
           true,
+        );
+      },
+      onUserCreated: (session, userInfo) async {
+        final userRecord = await UserRecord.db.findById(
+          session,
+          userInfo.id!,
+        );
+        if (userRecord == null) return;
+        await UserRecord.db.updateRow(
+          session,
+          userRecord.copyWith(
+            profileImage: userInfo.imageUrl,
+          ),
         );
       },
       sendPasswordResetEmail: (session, userInfo, validationCode) async {

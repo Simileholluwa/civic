@@ -16,8 +16,8 @@ class ValidateCreateAccountUseCase
     final result = await _authRepository.validateCreateAccount(
       email: params.email,
       code: params.code,
-      politicalStatus: params.politicalStatus,
       password: params.password,
+      userRecord: params.userRecord,
     );
     return result;
   }
@@ -27,11 +27,11 @@ class ValidateCreateAccountParams {
   ValidateCreateAccountParams({
     required this.code,
     required this.email,
-    required this.politicalStatus,
     required this.password,
+    required this.userRecord,
   });
   final String code;
   final String email;
-  final PoliticalStatus politicalStatus;
   final String password;
+  final UserRecord userRecord;
 }

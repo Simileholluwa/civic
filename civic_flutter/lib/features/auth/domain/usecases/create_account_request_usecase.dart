@@ -12,7 +12,7 @@ class CreateAccountRequestUseCase implements UseCase<bool, CreateAccountRequestP
     final result = await _authRepository.createAccountRequest(
       email: params.email,
       password: params.password,
-      userName: params.userName,
+      firstName: params.firstName,
     );
     return result;
   }
@@ -22,9 +22,9 @@ class CreateAccountRequestParams {
   CreateAccountRequestParams(
     this.password,
     this.email,
-    this.userName,
+    this.firstName,
   );
   final String password;
   final String email;
-  final String userName;
+  final String firstName;
 }

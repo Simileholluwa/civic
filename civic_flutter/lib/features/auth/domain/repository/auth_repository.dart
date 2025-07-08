@@ -7,22 +7,20 @@ abstract class AuthRepository {
   Future<Either<Failure, bool>> createAccountRequest({
     required String email,
     required String password,
-    required String userName,
+    required String firstName,
   });
 
   Future<Either<Failure, UserInfo>> validateCreateAccount({
     required String email,
     required String code,
-    required PoliticalStatus politicalStatus,
     required String password,
+    required UserRecord userRecord,
   });
 
   Future<Either<Failure, UserRecord?>> signInWithEmailAndPassword({
     required String email,
     required String password,
   });
-
-  Future<Either<Failure, List<String>>> fetchAllUsernames();
 
   Future<Either<Failure, bool>> resetUserPassword({
     required String email,
@@ -52,7 +50,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> removeUserRecord();
 
-  Future<Either<Failure, UserNinRecord?>> searchNinDetails({
+  Future<Either<Failure, UserRecord?>> searchNinDetails({
     required String ninNumber,
   });
 }

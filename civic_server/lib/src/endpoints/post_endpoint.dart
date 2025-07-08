@@ -376,6 +376,9 @@ class PostEndpoint extends Endpoint {
           actionType: 'voted in',
           targetType: 'poll',
           targetId: post.id!,
+          mediaThumbnailUrl: user.userInfo!.imageUrl!,
+          senderName:
+              getFullName(user.firstName!, user.middleName, user.lastName!),
           actionRoute: '/feed/poll/${poll.id}',
           content: post.text!.length > 100
               ? '${post.text!.substring(0, 100)}...'
@@ -607,6 +610,9 @@ class PostEndpoint extends Endpoint {
             actionType: isReply ? 'replied to' : 'commented on',
             targetType: isReply ? 'comment' : 'post',
             targetId: sentComment.id!,
+            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderName:
+                getFullName(user.firstName!, user.middleName, user.lastName!),
             actionRoute: '/feed/post/${parent.id}/comments',
             content: sentComment.text!.length > 100
                 ? '${sentComment.text!.substring(0, 100)}...'
@@ -852,7 +858,10 @@ class PostEndpoint extends Endpoint {
               senderId: user.id!,
               actionType: 'quoted',
               targetType: 'project',
+              mediaThumbnailUrl: user.userInfo!.imageUrl!,
               targetId: sentPost.id!,
+              senderName:
+                  getFullName(user.firstName!, user.middleName, user.lastName!),
               actionRoute: '/feed/post/${sentPost.id}',
               content: sentPost.text == null
                   ? null
@@ -1078,7 +1087,7 @@ class PostEndpoint extends Endpoint {
             session,
             PostBookmarks(
               postId: postId,
-              ownerId: user.userInfoId,
+              ownerId: user.id!,
             ),
             transaction: transaction,
           );
@@ -1092,10 +1101,13 @@ class PostEndpoint extends Endpoint {
               actionType: 'bookmarked',
               targetType: 'post',
               targetId: post!.id!,
+              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderName:
+                  getFullName(user.firstName!, user.middleName, user.lastName!),
               actionRoute: '/feed/post/${post!.id}',
               content: post!.text!.length > 100
-                ? '${post!.text!.substring(0, 100)}...'
-                : post!.text!,
+                  ? '${post!.text!.substring(0, 100)}...'
+                  : post!.text!,
             );
           }
         }
@@ -1156,12 +1168,12 @@ class PostEndpoint extends Endpoint {
             session,
             PostLikes(
               postId: postId,
-              ownerId: user.userInfoId,
+              ownerId: user.id!,
               dateCreated: DateTime.now(),
             ),
             transaction: transaction,
           );
-          post.likedBy?.add(user.userInfoId);
+          post.likedBy?.add(user.id!);
 
           if (post.ownerId != user.id) {
             await NotificationEndpoint().sendNotification(
@@ -1171,10 +1183,13 @@ class PostEndpoint extends Endpoint {
               actionType: 'liked',
               targetType: 'post',
               targetId: post.id!,
+              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderName:
+                  getFullName(user.firstName!, user.middleName, user.lastName!),
               actionRoute: '/feed/post/${post.id}',
               content: post.text!.length > 100
-                ? '${post.text!.substring(0, 100)}...'
-                : post.text!,
+                  ? '${post.text!.substring(0, 100)}...'
+                  : post.text!,
             );
           }
         }
@@ -1362,5 +1377,13 @@ class PostEndpoint extends Endpoint {
       'post_${post.id}',
       post,
     );
+  }
+
+  @doNotGenerate
+  String getFullName(String firstName, String? middleName, String lastName) {
+    if (middleName == null || middleName.trim().isEmpty) {
+      return '$firstName $lastName';
+    }
+    return '$firstName $middleName $lastName';
   }
 }

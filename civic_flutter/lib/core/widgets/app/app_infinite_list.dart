@@ -10,6 +10,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
     required this.pagingController,
     required this.itemBuilder,
     required this.onRefresh,
+    this.canCreate = true,
+    this.onCreate,
+    this.createText = 'Create project',
     this.noItemsFound,
     this.scrollController,
     this.scrollPhysics,
@@ -37,6 +40,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
   final Widget? firstPageProgressIndicator;
   final Widget? firstPageErrorIndicator;
   final String? errorMessage;
+  final bool canCreate;
+  final String createText;
+  final VoidCallback? onCreate;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -90,16 +96,39 @@ class AppInfiniteList<T> extends ConsumerWidget {
               child: noItemsFound ??
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 10,
                     children: [
-                      const Icon(
-                        Iconsax.search_normal,
-                        size: 100,
+                      Text(
+                        'Nothing Here.',
+                        style:
+                            Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: 30,
+                                ),
+                        textAlign: TextAlign.center,
                       ),
                       Text(
                         "We've searched far and wide, but we couldn't find any results.",
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                ),
                         textAlign: TextAlign.center,
                       ),
+                      if (canCreate)
+                        SizedBox(
+                          height: 1,
+                        ),
+                      if (canCreate)
+                        SizedBox(
+                          height: 45,
+                          width: 250,
+                          child: ContentSingleButton(
+                            onPressed: onCreate,
+                            text: createText,
+                            buttonIcon: Iconsax.magicpen,
+                          ),
+                        ),
                     ],
                   ),
             );

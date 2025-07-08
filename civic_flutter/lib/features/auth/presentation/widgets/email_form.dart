@@ -42,31 +42,31 @@ class EmailForm extends ConsumerWidget {
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
-            FilledButton(
-              onPressed: () async {
-                final isValid =
-                    authState.emailFormKey.currentState!.validate();
-                if (!isValid) return;
-                final newUser = await authNotifier.checkIfNewUser();
-                if (newUser != null) {
-                  if (!newUser) {
-                    context.pushNamed(
-                      AppRoutes.login,
-                    );
-                  } else {
-                    context.pushNamed(
-                      AppRoutes.politicalStatus,
-                    );
-                  }
-                } else {
-                  return;
-                }
-              },
-              child: const Text(
-                'Get started',
+            SizedBox(
+              height: 55,
+              child: FilledButton(
+                onPressed: () async {
+                  final isValid =
+                      authState.emailFormKey.currentState!.validate();
+                  if (!isValid) return;
+                  final newUser = await authNotifier.checkIfNewUser();
+                  
+                    if (!newUser) {
+                      context.push(
+                        '/auth/login',
+                      );
+                    } else {
+                      context.push(
+                        '/auth/signUp',
+                      );
+                    }
+                },
+                child: const Text(
+                  'Continue',
+                ),
+              ).withLoading(
+                loading: ref.watch(checkEmailLoadingProvider),
               ),
-            ).withLoading(
-              loading: ref.watch(checkEmailLoadingProvider),
             ),
           ],
         ),

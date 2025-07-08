@@ -4,7 +4,6 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
@@ -13,6 +12,17 @@ part 'auth_provider.g.dart';
 class Auth extends _$Auth {
   @override
   AuthState build() {
+    ref.onDispose(() {
+      state.firstNameController.dispose();
+      state.emailController.dispose();
+      state.lastNameController.dispose();
+      state.middleNameController.dispose();
+      state.verificationCodeController.dispose();
+      state.newPasswordController.dispose();
+      state.passwordResetCodeController.dispose();
+      state.newAccountPasswordController.dispose();
+      state.resetPasswordEmailController.dispose();
+    });
     return AuthState.empty();
   }
 
@@ -20,8 +30,22 @@ class Auth extends _$Auth {
     state = state.copyWith(email: email);
   }
 
-  void setUsername(String username) {
-    state = state.copyWith(username: username);
+  void setFirstName(String firstName) {
+    state = state.copyWith(
+      firstName: firstName,
+    );
+  }
+
+  void setNin(String nin) {
+    state = state.copyWith(nin: nin);
+  }
+
+  void setLastName(String lastName) {
+    state = state.copyWith(lastName: lastName);
+  }
+
+  void setMiddleName(String middleName) {
+    state = state.copyWith(middleName: middleName);
   }
 
   void setPassword(String password) {
@@ -32,7 +56,7 @@ class Auth extends _$Auth {
     state = state.copyWith(politicalStatus: politicalStatus);
   }
 
-  void setNewAccountPassword (String password) {
+  void setNewAccountPassword(String password) {
     state = state.copyWith(newAccountPassword: password);
   }
 
@@ -64,7 +88,7 @@ class Auth extends _$Auth {
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
-      }, (r) {
+    }, (r) {
       ref.invalidate(paginatedProjectListProvider);
       ref.invalidate(paginatedPostListProvider);
       ref.invalidate(paginatedPollListProvider);
@@ -91,7 +115,7 @@ class Auth extends _$Auth {
     });
   }
 
-  Future<bool?> checkIfNewUser() async {
+  Future<bool> checkIfNewUser() async {
     final newUserUseCase = ref.read(checkIfNewUserProvider);
     ref.read(checkEmailLoadingProvider.notifier).setValue(true);
     final result = await newUserUseCase(
@@ -102,10 +126,10 @@ class Auth extends _$Auth {
     ref.read(checkEmailLoadingProvider.notifier).setValue(false);
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
-      return null;
-    }, (username) {
-      if (username != null) {
-        setUsername(username);
+      return false;
+    }, (firstName) {
+      if (firstName != null) {
+        setFirstName(firstName);
         return false;
       } else {
         return true;
@@ -113,27 +137,12 @@ class Auth extends _$Auth {
     });
   }
 
-  Future<List<String>> fetchAllUsernames() async {
-    final usernameUseCase = ref.read(fetchAllUsernamesProvider);
-    final result = await usernameUseCase(
-      NoParams(),
-    );
-    var usernames = <String>[];
-    result.fold(
-      (l) => null,
-      (allUsernames) {
-        usernames = allUsernames;
-      },
-    );
-    return usernames;
-  }
-
   Future<bool> createAccountRequest() async {
     final createAccountRequest = ref.read(createAccountRequestProvider);
     if (!state.acceptTerms) {
-        TToastMessages.errorToast(
-          'Read and accept privacy policy and terms of use.',
-        );     
+      TToastMessages.errorToast(
+        'Read and accept privacy policy and terms of use.',
+      );
       return false;
     }
     ref.read(createAccountLoadingProvider.notifier).setValue(true);
@@ -141,7 +150,7 @@ class Auth extends _$Auth {
       CreateAccountRequestParams(
         state.newAccountPassword,
         state.email,
-        state.username,
+        state.firstName,
       ),
     );
     ref.read(createAccountLoadingProvider.notifier).setValue(false);
@@ -160,12 +169,19 @@ class Auth extends _$Auth {
     final validateAccount = ref.read(validateCreateAccountProvider);
 
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(true);
+    final userRecord = UserRecord(
+      nin: state.nin,
+      firstName: state.firstName,
+      lastName: state.lastName,
+      middleName: state.middleName,
+      politicalStatus: PoliticalStatus.fromJson(state.politicalStatus.index),
+    );
     final result = await validateAccount(
       ValidateCreateAccountParams(
         code: state.verificationCode,
         email: state.email,
-        politicalStatus: PoliticalStatus.fromJson(state.politicalStatus.index),
         password: state.newAccountPassword,
+        userRecord: userRecord,
       ),
     );
     ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
@@ -249,28 +265,30 @@ class Auth extends _$Auth {
     );
   }
 
-  Future<void> searchNinRecord({
+  Future<bool> searchNinRecord({
     required String ninNumber,
-    required GlobalKey<FormState> formKey,
   }) async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
     final ninUseCase = ref.read(searchUserNinProvider);
     ref.read(searchNinLoadingProvider.notifier).setValue(true);
     final result = await ninUseCase(
       NinUseCaseParams(ninNumber),
     );
     ref.read(searchNinLoadingProvider.notifier).setValue(false);
-    result.fold((error) => TToastMessages.errorToast(error.message), (r) {
+    return result.fold((error) {
+      TToastMessages.errorToast(error.message);
+      return false;
+    }, (r) {
       if (r != null) {
-        // context.goNamed(
-        //   AppRoutes.confirmNinDetails,
-        //   extra: {
-        //     'ninRecord': r,
-        //   },
-        // );
+        setFirstName(r.firstName ?? '');
+        setMiddleName(r.middleName ?? '');
+        setLastName(r.lastName ?? '');
+        state.firstNameController.text = state.firstName;
+        state.middleNameController.text = state.middleName;
+        state.lastNameController.text = state.lastName;
+        return true;
       } else {
         TToastMessages.errorToast('NIN already exists');
+        return false;
       }
     });
   }

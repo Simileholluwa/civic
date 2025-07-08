@@ -12,6 +12,7 @@ class EmailScreen extends StatelessWidget {
       child: Scaffold(
         appBar: const AuthAppBar(
           icon: Iconsax.arrow_left_2,
+          showLeading: false,
         ),
         body: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
