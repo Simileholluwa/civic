@@ -1,4 +1,6 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class NotificationsHelper {
   static String formatGroupedUserNames(List<String> usernames) {
@@ -32,18 +34,77 @@ class NotificationsHelper {
       }
     }
 
-    spans.add(TextSpan(
-      text: ' $actionType your $targetType',
-      style: style,
-    ));
+    spans.add(
+      TextSpan(
+        text: ' $actionType',
+        style: style,
+      ),
+    );
+
+    if (targetType.isNotEmpty) {
+      spans.add(
+        TextSpan(
+          text: ' your $targetType',
+          style: style,
+        ),
+      );
+    }
 
     if (content != null) {
-      spans.add(TextSpan(
-        text: ': $content',
-        style: style,
-      ));
+      spans.add(
+        TextSpan(
+          text: ': $content',
+          style: style,
+        ),
+      );
     }
 
     return TextSpan(children: spans);
   }
+
+  static Widget notifIcon(String actionType) {
+    switch(actionType) {
+      case 'liked':
+        return Icon(Iconsax.heart5, color: Colors.white, size: 15,);
+      case 'commented on':
+        return Icon(Iconsax.message5, color: Colors.white, size: 15,);
+      case 'followed you':
+        return Icon(Iconsax.user_add, color: Colors.white, size: 15,);
+      case 'bookmarked':
+        return Icon(Icons.bookmark_rounded, color: Colors.white, size: 15,);
+      case 'quoted':
+        return Icon(Iconsax.repeat, color: Colors.white, size: 15,);
+      case 'mentioned':
+        return Icon(Iconsax.tag_user, color: Colors.white, size: 15,);
+      case 'reviewed':
+        return Icon(Iconsax.magic_star5, color: Colors.white, size: 15,);
+      case 'vetted':
+        return Icon(Iconsax.medal_star5, color: Colors.white, size: 15,);
+      default:
+        return Icon(Iconsax.notification, color: Colors.white, size: 15,);
+    }
+  }  
+
+  static Color getIconColor(String actionType) {
+    switch(actionType) {
+      case 'liked':
+        return TColors.secondary;
+      case 'commented on':
+        return TColors.primary;
+      case 'followed you':
+        return Colors.blue;
+      case 'bookmarked':
+        return Colors.indigo;
+      case 'quoted':
+        return Colors.purple;
+      case 'mentioned':
+        return Colors.orange;
+      case 'reviewed':
+        return Colors.green;
+      case 'vetted':
+        return Colors.red;
+      default:
+        return Colors.orange;
+    }
+  }  
 }

@@ -23,22 +23,25 @@ class FeedRoutes {
               builder: (context, state) {
                 final type = state.pathParameters['type'];
                 if (type == 'post') {
-                  return PostDetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
-                        0,
+                  return DetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                     post: state.extra as Post?,
+                    postType: PostType.regular,
+                    draftType: 'postDraft',
                   );
                 } else if (type == 'poll') {
-                  return PollDetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
-                        0,
+                  return DetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                     post: state.extra as Post?,
+                    postType: PostType.poll,
+                    draftType: 'pollDraft',
                   );
                 } else {
-                  return ArticleDetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ??
-                        0,
+                  return DetailScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                     post: state.extra as Post?,
+                    postType: PostType.article,
+                    draftType: 'articleDraft',
                   );
                 }
               },
@@ -47,9 +50,7 @@ class FeedRoutes {
                   path: 'comments',
                   builder: (_, state) {
                     return CommentScreen(
-                      id:
-                          int.tryParse(state.pathParameters['id'] ?? '') ??
-                              0,
+                      id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
                     );
                   },
                 ),

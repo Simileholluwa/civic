@@ -2210,6 +2210,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.doublePrecision,
           isNullable: true,
           dartType: 'double?',
+          columnDefault: '1',
         ),
       ],
       foreignKeys: [

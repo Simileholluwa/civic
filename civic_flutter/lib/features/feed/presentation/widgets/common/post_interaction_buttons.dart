@@ -17,6 +17,7 @@ class PostInteractionButtons extends ConsumerWidget {
     this.isComment = false,
     this.isPoll = false,
     this.isArticle = false,
+    this.iconSize = 24,
   });
 
   final Post post;
@@ -28,6 +29,7 @@ class PostInteractionButtons extends ConsumerWidget {
   final bool isComment;
   final int originalPostId;
   final bool isArticle;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,16 +52,18 @@ class PostInteractionButtons extends ConsumerWidget {
                 post.id!,
               );
             },
+            iconSize: iconSize,
             color: postCardState.hasLiked == true
                 ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
+                : Theme.of(context).hintColor,
             text: postCardState.numberOfLikes,
           ),
           ContentInteractionButton(
             icon: replyIcon1,
             text: postCardState.numberOfComments,
             onTap: onReply,
-            color: Theme.of(context).iconTheme.color!,
+            color: Theme.of(context).hintColor,
+            iconSize: iconSize,
           ),
           ContentInteractionButton(
             icon: postCardState.hasBookmarked
@@ -70,16 +74,18 @@ class PostInteractionButtons extends ConsumerWidget {
                 post.id!,
               );
             },
+            iconSize: iconSize,
             text: postCardState.numberOfBookmarks,
             color: postCardState.hasBookmarked
                 ? TColors.primary
-                : Theme.of(context).textTheme.labelMedium!.color!,
+                : Theme.of(context).hintColor,
           ),
           ContentInteractionButton(
             icon: Icons.share,
             showText: false,
             onTap: () {},
-            color: Theme.of(context).colorScheme.onSurface,
+            color: Theme.of(context).hintColor,
+            iconSize: iconSize,
           ),
           ContentInteractionButton(
             icon: Iconsax.more_circle,
@@ -102,7 +108,8 @@ class PostInteractionButtons extends ConsumerWidget {
                 },
               );
             },
-            color: Theme.of(context).colorScheme.onSurface,
+            iconSize: iconSize,
+            color: Theme.of(context).hintColor,
           ),
         ],
       ),

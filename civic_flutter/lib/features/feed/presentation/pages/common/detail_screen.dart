@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,21 +8,24 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class ArticleDetailScreen extends ConsumerWidget {
-  const ArticleDetailScreen({
+class DetailScreen extends ConsumerWidget {
+  const DetailScreen({
     super.key,
     required this.id,
+    required this.draftType,
+    required this.postType,
     this.post,
   });
 
   final int id;
   final Post? post;
+  final String draftType;
+  final PostType postType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final defaultTextStyle = DefaultTextStyle.of(context);
     final data = ref.watch(
-      postDetailProvider(id, 'articleDraft', post),
+      postDetailProvider(id, draftType, post),
     );
     final livePost = ref.watch(
       postStreamProvider(
@@ -55,7 +57,6 @@ class ArticleDetailScreen extends ConsumerWidget {
             ),
           ),
           child: AppBar(
-            
             titleSpacing: 0,
             leading: IconButton(
               icon: const Icon(
@@ -67,24 +68,34 @@ class ArticleDetailScreen extends ConsumerWidget {
             ),
             actions: data.hasValue && !data.hasError
                 ? [
-                    if (!postCardState.isOwner)
-                      IconButton(
-                        onPressed: () async {
-                          await postCardNotifier.toggleFollow(
-                            data.value!.ownerId,
-                            data.value!.owner!.userInfo!.userName!,
-                          );
-                        },
-                        icon: Icon(
-                          postCardState.isFollower
-                              ? Icons.person_remove_sharp
-                              : Icons.person_add_sharp,
-                          color: !postCardState.isFollower
-                              ? TColors.primary
-                              : null,
-                          size: 30,
-                        ),
+                    IconButton(
+                      onPressed: postCardState.isOwner
+                          ? null
+                          : () async {
+                              await postCardNotifier.toggleFollow(
+                                data.value!.ownerId,
+                                data.value!.owner!.userInfo!.userName!,
+                              );
+                            },
+                      icon: Icon(
+                        postCardState.isFollower
+                            ? Icons.person_remove_sharp
+                            : Icons.person_add_sharp,
+                        color: postCardState.isOwner
+                            ? null
+                            : Theme.of(context).iconTheme.color,
+                        size: 30,
                       ),
+                    ),
+                    IconButton(
+                      onPressed: postCardState.isOwner ? null : () async {},
+                      icon: Icon(
+                        Iconsax.notification_bing,
+                        color: postCardState.isOwner
+                            ? null
+                            : Theme.of(context).iconTheme.color,
+                      ),
+                    ),
                     const SizedBox(
                       width: 5,
                     ),
@@ -102,60 +113,23 @@ class ArticleDetailScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 10,
-                    children: [
-                      ContentCreatorInfo(
-                        creator: postCardState.creator!,
-                        timeAgo: postCardState.timeAgo,
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          TSizes.md,
-                        ),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: ContentCachedImage(
-                            url: postCardState.articleBanner,
-                            height: 200,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        postCardState.text,
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                        textAlign: TextAlign.left,
-                      ),
-                      QuillEditor.basic(
-                        controller: QuillController(
-                          document: postCardState.rawContent!,
-                          selection: const TextSelection.collapsed(
-                            offset: 0,
-                          ),
-                          readOnly: true,
-                        ),
-                        config: QuillEditorConfig(
-                          customStyles:
-                              THelperFunctions.articleTextEditorStyles(
-                            context,
-                            defaultTextStyle,
-                          ),
-                          scrollPhysics: const NeverScrollableScrollPhysics(),
-                        ),
-                      ),
-                    ],
+                if (postType == PostType.regular)
+                  PostCardDetail(
+                    post: newPost,
+                    showInteractions: false,
+                    hasProject: newPost.project != null,
+                    onTap: null,
+                    noMaxLines: true,
                   ),
+                if (postType == PostType.poll)
+                  PollDetailCard(newPost: newPost),
+                if (postType == PostType.article)
+                  ArticleDetailCard(
+                  newPost: newPost,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
+                    horizontal: 17,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -179,25 +153,39 @@ class ArticleDetailScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Column(
-                  children: [
-                    const Divider(
-                      height: 0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
+                if (newPost.commentCount! == 0)
+                  const Divider(
+                    height: 0,
+                  ),
+                if (newPost.commentCount! > 0)
+                  Column(
+                    children: [
+                      const Divider(
+                        height: 0,
                       ),
-                      child: PostDetailOptions(
-                        post: newPost,
-                        isArticle: true,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(17, 0, 7, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Comments',
+                              style: Theme.of(context).textTheme.titleLarge!,
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Iconsax.filter5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(
-                      height: 0,
-                    ),
-                  ],
-                ),
+                      const Divider(
+                        height: 0,
+                      ),
+                    ],
+                  ),
                 PostCommentCard(
                   id: value.id!,
                   firstPageProgressIndicator: Padding(
@@ -235,17 +223,30 @@ class ArticleDetailScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: ContentSingleButton(
-              onPressed: () {
-                context.push('/create/post/0', extra: {
-                  'parent': value,
-                });
-              },
-              text: 'Share your opinion',
-              buttonIcon: Iconsax.magicpen5,
-            ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+                child: ContentSingleButton(
+                  onPressed: () {
+                    context.push('/create/post/0', extra: {
+                      'parent': value,
+                    });
+                  },
+                  text: 'Share your opinion',
+                  buttonIcon: Iconsax.magicpen5,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                child: PostDetailOptions(
+                  post: newPost!,
+                ),
+              ),
+            ],
           );
         },
         error: (error, st) {

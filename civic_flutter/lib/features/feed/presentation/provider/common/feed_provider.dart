@@ -251,7 +251,7 @@ class Feed extends _$Feed {
       videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
     );
     final savePost = ref.read(savePostDraftProvider);
@@ -497,7 +497,7 @@ class Feed extends _$Feed {
       taggedUsers: state.taggedUsers,
       postType: PostType.regular,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
     );
     if (scheduledDateTime == null &&
@@ -533,6 +533,7 @@ class Feed extends _$Feed {
           imageUrls: state.imageUrls,
           locations: state.locations,
           taggedUsers: state.taggedUsers,
+          mentions: ref.watch(selectedMentionsProvider),
           parentId: postId,
         ),
         false,
@@ -574,6 +575,7 @@ class Feed extends _$Feed {
           imageUrls: state.imageUrls,
           locations: state.locations,
           taggedUsers: state.taggedUsers,
+          mentions: ref.watch(selectedMentionsProvider),
           parentId: parentId,
         ),
         true,
@@ -617,7 +619,7 @@ class Feed extends _$Feed {
       imageUrls: state.imageUrls,
       taggedUsers: state.taggedUsers,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
       poll: poll,
     );
@@ -656,7 +658,7 @@ class Feed extends _$Feed {
       imageUrls: state.imageUrls,
       taggedUsers: state.taggedUsers,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
       article: article,
     );
@@ -770,7 +772,7 @@ class Feed extends _$Feed {
       taggedUsers: state.taggedUsers,
       postType: PostType.poll,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
       poll: poll,
     );

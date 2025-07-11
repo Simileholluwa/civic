@@ -240,7 +240,7 @@ class UserRecordEndpoint extends Endpoint {
           session,
           receiverId: userId,
           senderId: currentUser.id!,
-          actionType: 'followed you',
+          actionType: 'followed you.',
           targetType: '',
           mediaThumbnailUrl: currentUser.userInfo!.imageUrl!,
           targetId: currentUser.id!,

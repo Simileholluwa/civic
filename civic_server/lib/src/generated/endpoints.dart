@@ -303,6 +303,16 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
+            'targetType': _i1.ParameterDescription(
+              name: 'targetType',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'isRead': _i1.ParameterDescription(
+              name: 'isRead',
+              type: _i1.getType<bool>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
@@ -313,6 +323,8 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
+            targetType: params['targetType'],
+            isRead: params['isRead'],
           ),
         ),
         'notificationUpdates': _i1.MethodStreamConnector(
@@ -1187,120 +1199,6 @@ class Endpoints extends _i1.EndpointDispatch {
             page: params['page'],
           ),
         ),
-        'authUser': _i1.MethodConnector(
-          name: 'authUser',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint).authUser(session),
-        ),
-        'validateProjectOwnership': _i1.MethodConnector(
-          name: 'validateProjectOwnership',
-          params: {
-            'projectId': _i1.ParameterDescription(
-              name: 'projectId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint)
-                  .validateProjectOwnership(
-            session,
-            params['projectId'],
-            params['user'],
-          ),
-        ),
-        'validateProjectReviewOwnership': _i1.MethodConnector(
-          name: 'validateProjectReviewOwnership',
-          params: {
-            'projectReviewId': _i1.ParameterDescription(
-              name: 'projectReviewId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i14.UserRecord>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint)
-                  .validateProjectReviewOwnership(
-            session,
-            params['projectReviewId'],
-            params['user'],
-          ),
-        ),
-        'updateProject': _i1.MethodConnector(
-          name: 'updateProject',
-          params: {
-            'project': _i1.ParameterDescription(
-              name: 'project',
-              type: _i1.getType<_i11.Project>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint).updateProject(
-            session,
-            params['project'],
-          ),
-        ),
-        'updateProjectReview': _i1.MethodConnector(
-          name: 'updateProjectReview',
-          params: {
-            'projectReview': _i1.ParameterDescription(
-              name: 'projectReview',
-              type: _i1.getType<_i12.ProjectReview>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint).updateProjectReview(
-            session,
-            params['projectReview'],
-          ),
-        ),
-        'updateProjectVetting': _i1.MethodConnector(
-          name: 'updateProjectVetting',
-          params: {
-            'projectVetting': _i1.ParameterDescription(
-              name: 'projectVetting',
-              type: _i1.getType<_i13.ProjectVetting>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['project'] as _i7.ProjectEndpoint)
-                  .updateProjectVetting(
-            session,
-            params['projectVetting'],
-          ),
-        ),
         'projectUpdates': _i1.MethodStreamConnector(
           name: 'projectUpdates',
           params: {
@@ -1556,6 +1454,27 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['userRecord'] as _i9.UserRecordEndpoint).getNinDetails(
             session,
             params['ninNumber'],
+          ),
+        ),
+        'userUpdates': _i1.MethodStreamConnector(
+          name: 'userUpdates',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).userUpdates(
+            session,
+            params['userId'],
           ),
         ),
       },

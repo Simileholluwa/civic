@@ -36,12 +36,13 @@ abstract class UserRecord implements _i1.SerializableModel {
     this.followers,
     DateTime? createdAt,
     this.politicalStatus,
-    this.credibilityScore,
+    double? credibilityScore,
     this.posts,
     this.projects,
     this.projectBookmarks,
     this.postBookmarks,
-  }) : createdAt = createdAt ?? DateTime.now();
+  })  : createdAt = createdAt ?? DateTime.now(),
+        credibilityScore = credibilityScore ?? 1.0;
 
   factory UserRecord({
     int? id,

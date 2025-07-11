@@ -7,8 +7,12 @@ abstract class NotificationRemoteDatasource {
   Future<void> deleteAllNotification();
   Future<void> markAllNotificationsAsRead();
   Future<void> markNotificationsAsRead({required int id});
-  Future<NotificationList> getNotifications(
-      {required int limit, required int page});
+  Future<NotificationList> getNotifications({
+    required int limit,
+    required int page,
+    String targetType = '',
+    bool isRead = true,
+  });
 }
 
 class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
@@ -53,11 +57,15 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
   Future<NotificationList> getNotifications({
     required int limit,
     required int page,
+    String targetType = '',
+    bool isRead = true,
   }) async {
     try {
       final result = await _client.notification.getNotifications(
         limit: limit,
         page: page,
+        targetType: targetType,
+        isRead: isRead,
       );
       return result;
     } on PostException catch (e) {

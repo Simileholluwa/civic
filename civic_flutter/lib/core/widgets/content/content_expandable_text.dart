@@ -32,7 +32,7 @@ class ContentExpandableText extends StatelessWidget {
       collapseText: 'see less',
       mentionStyle: defaultTextStyle.copyWith(
         color: TColors.primary,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
       toggleTextStyle: defaultTextStyle.copyWith(
         color: Theme.of(context).hintColor,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/endpoints/project_endpoint.dart';
@@ -369,20 +371,20 @@ class PostEndpoint extends Endpoint {
       );
 
       if (post.ownerId != user.id) {
-        await NotificationEndpoint().sendNotification(
-          session,
-          receiverId: post.ownerId,
-          senderId: user.id!,
-          actionType: 'voted in',
-          targetType: 'poll',
-          targetId: post.id!,
-          mediaThumbnailUrl: user.userInfo!.imageUrl!,
-          senderName:
-              getFullName(user.firstName!, user.middleName, user.lastName!),
-          actionRoute: '/feed/poll/${poll.id}',
-          content: post.text!.length > 100
-              ? '${post.text!.substring(0, 100)}...'
-              : post.text!,
+        unawaited(
+          NotificationEndpoint().sendNotification(
+            session,
+            receiverId: post.ownerId,
+            senderId: user.id!,
+            actionType: 'voted in',
+            targetType: 'poll',
+            targetId: post.id!,
+            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderName:
+                getFullName(user.firstName!, user.middleName, user.lastName!),
+            actionRoute: '/feed/post/${post.id}',
+            content: 'You have a new vote on your poll.',
+          ),
         );
       }
 

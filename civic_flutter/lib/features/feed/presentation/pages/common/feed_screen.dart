@@ -35,34 +35,19 @@ class FeedScreen extends ConsumerWidget {
         ),
         titleSpacing: 0,
         centerTitle: true,
-        title: AppTabBarDesign(
-          dividerColor: Colors.transparent,
-          tabController: tabController,
-          tabAlignment: TabAlignment.center,
-          tabs: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
-              child: Icon(
-                currentPageState == 0 ? Iconsax.calendar_15 : Iconsax.calendar,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
-              child: Icon(
-                currentPageState == 1 ? Iconsax.chart_26 : Iconsax.chart,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 6),
-              child: Icon(
-                currentPageState == 2 ? Iconsax.archive_24 : Iconsax.archive_2,
-              ),
-            ),
-          ],
-          indicator: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).primaryColor.withAlpha(50,),
-          
+        bottomHeight: 54,
+        title: const SizedBox(),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: AppTabBarDesign(
+            dividerColor: Colors.transparent,
+            tabController: tabController,
+            showTopBorder: true,
+            tabs: [
+              Tab(text: 'POSTS'),
+              Tab(text: 'POLLS'),
+              Tab(text: 'ARTICLES'),
+            ],
           ),
         ),
         actions: [

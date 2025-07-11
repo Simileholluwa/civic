@@ -152,6 +152,8 @@ class EndpointNotification extends _i1.EndpointRef {
   _i2.Future<_i4.NotificationList> getNotifications({
     required int limit,
     required int page,
+    required String targetType,
+    required bool isRead,
   }) =>
       caller.callServerEndpoint<_i4.NotificationList>(
         'notification',
@@ -159,6 +161,8 @@ class EndpointNotification extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
+          'targetType': targetType,
+          'isRead': isRead,
         },
       );
 
@@ -834,66 +838,6 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  /// Authenticates the current user based on the provided [session].
-  ///
-  /// Retrieves authentication information from the [session]. If the user is not
-  /// authenticated, a [UserException] is thrown with an appropriate message.
-  /// If authenticated, attempts to find the corresponding [UserRecord] in the database,
-  /// including related [UserInfo]. If the user record is not found, another [UserException]
-  /// is thrown. Otherwise, returns the authenticated [UserRecord].
-  ///
-  /// Throws:
-  ///   - [UserException] if the user is not logged in or the user record is not found.
-  ///
-  /// Returns:
-  ///   - The authenticated [UserRecord] with included [UserInfo].
-  _i2.Future<_i14.UserRecord> authUser() =>
-      caller.callServerEndpoint<_i14.UserRecord>(
-        'project',
-        'authUser',
-        {},
-      );
-
-  /// Validates that the given [user] is the owner of the project with the specified [projectId].
-  ///
-  /// Throws a [PostException] if the project does not exist or if the user is not the owner.
-  ///
-  /// Parameters:
-  /// [projectId] - The ID of the project to validate ownership for.
-  /// [user] - The user attempting the operation.
-  _i2.Future<void> validateProjectOwnership(
-    int projectId,
-    _i14.UserRecord user,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'validateProjectOwnership',
-        {
-          'projectId': projectId,
-          'user': user,
-        },
-      );
-
-  /// Validates that the given [user] is the owner of the project review with the specified [projectReviewId].
-  ///
-  /// Throws a [PostException] if the project review is not found or if the user is not the owner.
-  ///
-  /// Parameters:
-  /// [projectReviewId] - The ID of the project review to validate.
-  /// [user] - The user attempting the operation.
-  _i2.Future<void> validateProjectReviewOwnership(
-    int projectReviewId,
-    _i14.UserRecord user,
-  ) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'validateProjectReviewOwnership',
-        {
-          'projectReviewId': projectReviewId,
-          'user': user,
-        },
-      );
-
   /// Returns a stream of [Project] updates for the specified [projectId].
   ///
   /// When a client subscribes, this method first yields the latest project details,
@@ -913,21 +857,6 @@ class EndpointProject extends _i1.EndpointRef {
         'projectUpdates',
         {'projectId': projectId},
         {},
-      );
-
-  /// Updates the given [project] in the database and notifies all clients
-  /// subscribed to this project by sending an update message.
-  ///
-  /// Parameters:
-  /// - [project]: The project instance to be updated.
-  ///
-  /// This method first updates the project in the database, then posts a message
-  /// to all clients subscribed to the project's channel to notify them of the update.
-  _i2.Future<void> updateProject(_i8.Project project) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'updateProject',
-        {'project': project},
       );
 
   /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
@@ -952,22 +881,6 @@ class EndpointProject extends _i1.EndpointRef {
         {},
       );
 
-  /// Updates a [ProjectReview] in the database and notifies all clients subscribed to this review.
-  ///
-  /// This method performs the following actions:
-  /// - Updates the specified [projectReview] in the database using the provided [session].
-  /// - Sends a message to all clients subscribed to the review channel identified by `'review_${projectReview.id}'`,
-  ///   containing the updated [projectReview] data.
-  ///
-  /// [session]: The current database session.
-  /// [projectReview]: The project review object to update.
-  _i2.Future<void> updateProjectReview(_i9.ProjectReview projectReview) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'updateProjectReview',
-        {'projectReview': projectReview},
-      );
-
   /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
   ///
   /// When a client subscribes, the latest [ProjectVetting] details are yielded first,
@@ -987,23 +900,6 @@ class EndpointProject extends _i1.EndpointRef {
         'projectVettingUpdates',
         {'vettingId': vettingId},
         {},
-      );
-
-  /// Updates the given [projectVetting] in the database and notifies all clients
-  /// subscribed to updates for this project.
-  ///
-  /// This method performs the following actions:
-  /// - Updates the [ProjectVetting] record in the database using the provided [session].
-  /// - Posts a message to all clients subscribed to the review channel for the specific project,
-  ///   notifying them of the update.
-  ///
-  /// Parameters:
-  /// [projectVetting]: The project vetting object to update.
-  _i2.Future<void> updateProjectVetting(_i12.ProjectVetting projectVetting) =>
-      caller.callServerEndpoint<void>(
-        'project',
-        'updateProjectVetting',
-        {'projectVetting': projectVetting},
       );
 }
 
@@ -1102,6 +998,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
         'userRecord',
         'getNinDetails',
         {'ninNumber': ninNumber},
+      );
+
+  _i2.Stream<_i14.UserRecord> userUpdates(int userId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i14.UserRecord>,
+          _i14.UserRecord>(
+        'userRecord',
+        'userUpdates',
+        {'userId': userId},
+        {},
       );
 }
 

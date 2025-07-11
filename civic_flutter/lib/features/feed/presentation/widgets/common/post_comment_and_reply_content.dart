@@ -60,6 +60,7 @@ class PostCommentAndReplyContent extends StatelessWidget {
           isReply: isReply,
           isComment: isComment,
           originalPostId: originalPostId,
+          iconSize: 20,
         ),
         if (replyOrComment.commentCount == 0)
           const SizedBox(

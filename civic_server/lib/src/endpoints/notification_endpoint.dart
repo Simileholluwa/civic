@@ -136,20 +136,32 @@ class NotificationEndpoint extends Endpoint {
       where: (t) => t.receiverId.equals(user.id) & t.isRead.equals(false),
     );
   }
-
+  
   Future<NotificationList> getNotifications(
     Session session, {
     int limit = 50,
     int page = 1,
+    String targetType = '',
+    bool isRead = true,
   }) async {
     final user = await authUser(session);
+    whereClause(t) {
+      var clause = t.receiverId.equals(user.id);
+      if (isRead == true) {
+        clause = clause & t.targetType.ilike('%$targetType%');
+      }
+      if (isRead == false) {
+        clause = clause & t.isRead.equals(false);
+      }
+      return clause;
+    }
     final count = await Notification.db.count(
       session,
-      where: (t) => t.receiverId.equals(user.id),
+      where: (t) => whereClause(t),
     );
     final results = await Notification.db.find(
       session,
-      where: (t) => t.receiverId.equals(user.id),
+      where: (t) => whereClause(t),
       limit: limit,
       offset: (page * limit) - limit,
       orderBy: (t) => t.createdAt,

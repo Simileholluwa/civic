@@ -43,11 +43,15 @@ class NotificationRepositoryImpl implements NotificationRepository {
   Future<Either<Failure, NotificationList>> getNotifications({
     required int limit,
     required int page,
+    String targetType = '',
+    bool isRead = true,
   }) async {
     try {
       final result = await _remoteDatabase.getNotifications(
         limit: limit,
         page: page,
+        targetType: targetType,
+        isRead: isRead,
       );
       return Right(result);
     } on ServerException catch (e) {

@@ -11,6 +11,7 @@ class AppTabBarDesign extends StatelessWidget {
     this.dividerHeight,
     this.indicator,
     this.indicatorPadding = EdgeInsets.zero,
+    this.showTopBorder = false,
   });
 
   final TabController tabController;
@@ -20,32 +21,43 @@ class AppTabBarDesign extends StatelessWidget {
   final double? dividerHeight;
   final EdgeInsetsGeometry indicatorPadding;
   final Decoration? indicator;
+  final bool showTopBorder;
 
   @override
   Widget build(BuildContext context) {
-    return TabBar(
-      controller: tabController,
-      tabAlignment: tabAlignment ?? TabAlignment.start,
-      isScrollable: true,
-      indicator: indicator,
-      indicatorPadding: indicatorPadding,
-      padding: const EdgeInsets.only(
-        left: TSizes.xs - 4,
-        right: TSizes.xs,
+    return Container(
+      decoration: BoxDecoration(
+        border: showTopBorder
+            ? Border(
+                top: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                ),
+              )
+            : null,
       ),
-      dividerHeight: dividerHeight,
-      unselectedLabelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-            fontSize: 14,
-            color: Theme.of(context).dividerColor,
-          ),
-      dividerColor: dividerColor ?? Theme.of(context).dividerColor,
-      labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-      indicatorWeight: 4,
-      tabs: tabs,
-      
+      child: TabBar(
+        controller: tabController,
+        tabAlignment: tabAlignment ?? TabAlignment.start,
+        isScrollable: true,
+        indicator: indicator,
+        indicatorPadding: indicatorPadding,
+        padding: const EdgeInsets.only(
+          left: TSizes.xs - 4,
+          right: TSizes.xs,
+        ),
+        dividerHeight: dividerHeight,
+        unselectedLabelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+              fontSize: 14,
+              color: Theme.of(context).dividerColor,
+            ),
+        dividerColor: dividerColor ?? Theme.of(context).dividerColor,
+        labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+        indicatorWeight: 4,
+        tabs: tabs,
+      ),
     );
   }
 }

@@ -56,15 +56,9 @@ project:
   - vetProject:
   - getVettedProject:
   - getVettedProjects:
-  - authUser:
-  - validateProjectOwnership:
-  - validateProjectReviewOwnership:
   - projectUpdates:
-  - updateProject:
   - projectReviewUpdates:
-  - updateProjectReview:
   - projectVettingUpdates:
-  - updateProjectVetting:
 sendEmail:
   - sendEmail:
 userRecord:
@@ -75,3 +69,4 @@ userRecord:
   - mentionUsers:
   - followUnfollowUser:
   - getNinDetails:
+  - userUpdates:

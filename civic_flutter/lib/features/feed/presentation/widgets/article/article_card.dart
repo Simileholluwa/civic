@@ -56,42 +56,35 @@ class ArticleCard extends ConsumerWidget {
                 color: Theme.of(context).dividerColor,
               ),
             ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                TSizes.md,
+              ),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: ContentCachedImage(
+                  url: postCardState.articleBanner,
+                  height: 200,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 5,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(TSizes.md),
-                    topRight: Radius.circular(TSizes.md),
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: ContentCachedImage(
-                      url: postCardState.articleBanner,
-                      height: 200,
-                    ),
-                  ),
+                Text(
+                  postCardState.text,
+                  style: Theme.of(context).textTheme.headlineLarge!,
+                  textAlign: TextAlign.left,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 5,
-                    children: [
-                      Text(
-                        postCardState.text,
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!,
-                        textAlign: TextAlign.left,
-                      ),
-                      ContentExpandableText(
-                        text: postCardState.articleContent,
-                        hasImage: true,
-                        maxLines: 4,
-                        onToggleTextTap: () {},
-                      ),
-                    ],
-                  ),
+                ContentExpandableText(
+                  text: postCardState.articleContent,
+                  hasImage: true,
+                  maxLines: 3,
+                  onToggleTextTap: () {},
                 ),
               ],
             ),

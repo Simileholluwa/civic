@@ -7,5 +7,10 @@ abstract class NotificationRepository {
   Future<Either<Failure, void>> deleteNotification({required int id});
   Future<Either<Failure, void>> markAllNotificationAsRead();
   Future<Either<Failure, void>> deleteAllNotification();
-  Future<Either<Failure, NotificationList>> getNotifications({required int limit, required int page});
+  Future<Either<Failure, NotificationList>> getNotifications({
+    required int limit,
+    required int page,
+    String targetType = '',
+    bool isRead = true,
+  });
 }

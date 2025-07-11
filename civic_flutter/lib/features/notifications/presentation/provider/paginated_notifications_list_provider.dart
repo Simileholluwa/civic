@@ -8,13 +8,13 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'paginated_notifications_list_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   final PagingController<int, Notification> pagingController =
       PagingController(firstPageKey: 1);
 
   @override
-  PagingStatus build() {
+  PagingStatus build(String targetType, [bool isRead = true]) {
     pagingController.addPageRequestListener((page) {
       fetchPage(page);
     });
@@ -31,7 +31,7 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       userNotificationStreamProvider(null, null),
       (previous, next) {
         next.whenData((event) {
-          log (event.toString());
+          log(event.toString());
           _handleNotification(event);
         });
       },
@@ -44,7 +44,12 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     try {
       final listNotifications = ref.read(getNotificationsProvider);
       final result = await listNotifications(
-        GetNotificationsParams(page, limit,),
+        GetNotificationsParams(
+          page,
+          limit,
+          targetType: targetType,
+          isRead: isRead,
+        ),
       );
       result.fold((error) {
         log(error.toString(), name: 'PaginatedNotificationList');
@@ -91,7 +96,8 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
 
   void removeNotificationById(int? notificationId) {
     if (pagingController.itemList != null && notificationId != null) {
-      final updatedList = List<Notification>.from(pagingController.itemList ?? []);
+      final updatedList =
+          List<Notification>.from(pagingController.itemList ?? []);
       updatedList.removeWhere((element) => element.id == notificationId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,

@@ -65,7 +65,7 @@ class LoginForm extends ConsumerWidget {
                 final userRecord =
                     await authNotifier.signInWithEmailAndPassword();
                 if (userRecord != null) {
-                  context.goNamed(ProjectRoutes.namespace);
+                  context.go(ProjectRoutes.namespace);
                   ref.invalidate(authProvider);
                 } else {
                   return;
