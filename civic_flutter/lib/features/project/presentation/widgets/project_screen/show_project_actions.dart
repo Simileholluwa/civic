@@ -85,12 +85,13 @@ class ShowProjectActions extends ConsumerWidget {
               }
             },
           ),
-        MoreActionsListTile(
-          title: 'Share',
-          subTitle: "Invite others to vet or review this project.",
-          icon: Icons.share,
-          onTap: () async {},
-        ),
+        if (!projectCardState.canEdit)
+          MoreActionsListTile(
+            title: 'Share',
+            subTitle: "Invite others to vet or review this project.",
+            icon: Icons.share,
+            onTap: () async {},
+          ),
         if (!projectCardState.isOwner!)
           MoreActionsListTile(
             title: 'Not interested',
@@ -147,7 +148,8 @@ class ShowProjectActions extends ConsumerWidget {
         if (projectCardState.isOwner!)
           MoreActionsListTile(
             title: 'Delete',
-            subTitle: "Ensure you understand the consequences of deleting a project.",
+            subTitle:
+                "Ensure you understand the consequences of deleting a project.",
             icon: Iconsax.trash,
             color: Colors.red,
             onTap: () async {

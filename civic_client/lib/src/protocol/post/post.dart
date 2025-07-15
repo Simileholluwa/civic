@@ -38,6 +38,7 @@ abstract class Post implements _i1.SerializableModel {
     this.likedBy,
     this.bookmarkedBy,
     int? commentCount,
+    this.subscribers,
     this.pollId,
     this.poll,
     this.articleId,
@@ -72,6 +73,7 @@ abstract class Post implements _i1.SerializableModel {
     List<int>? likedBy,
     List<int>? bookmarkedBy,
     int? commentCount,
+    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -130,6 +132,9 @@ abstract class Post implements _i1.SerializableModel {
           ?.map((e) => e as int)
           .toList(),
       commentCount: jsonSerialization['commentCount'] as int?,
+      subscribers: (jsonSerialization['subscribers'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
       pollId: jsonSerialization['pollId'] as int?,
       poll: jsonSerialization['poll'] == null
           ? null
@@ -199,6 +204,8 @@ abstract class Post implements _i1.SerializableModel {
 
   int? commentCount;
 
+  List<int>? subscribers;
+
   int? pollId;
 
   _i6.Poll? poll;
@@ -242,6 +249,7 @@ abstract class Post implements _i1.SerializableModel {
     List<int>? likedBy,
     List<int>? bookmarkedBy,
     int? commentCount,
+    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -278,6 +286,7 @@ abstract class Post implements _i1.SerializableModel {
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (commentCount != null) 'commentCount': commentCount,
+      if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
       if (articleId != null) 'articleId': articleId,
@@ -321,6 +330,7 @@ class _PostImpl extends Post {
     List<int>? likedBy,
     List<int>? bookmarkedBy,
     int? commentCount,
+    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -350,6 +360,7 @@ class _PostImpl extends Post {
           likedBy: likedBy,
           bookmarkedBy: bookmarkedBy,
           commentCount: commentCount,
+          subscribers: subscribers,
           pollId: pollId,
           poll: poll,
           articleId: articleId,
@@ -385,6 +396,7 @@ class _PostImpl extends Post {
     Object? likedBy = _Undefined,
     Object? bookmarkedBy = _Undefined,
     Object? commentCount = _Undefined,
+    Object? subscribers = _Undefined,
     Object? pollId = _Undefined,
     Object? poll = _Undefined,
     Object? articleId = _Undefined,
@@ -429,6 +441,9 @@ class _PostImpl extends Post {
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
       commentCount: commentCount is int? ? commentCount : this.commentCount,
+      subscribers: subscribers is List<int>?
+          ? subscribers
+          : this.subscribers?.map((e0) => e0).toList(),
       pollId: pollId is int? ? pollId : this.pollId,
       poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
       articleId: articleId is int? ? articleId : this.articleId,

@@ -74,6 +74,13 @@ GetProjectReviewUseCase getProjectReview(Ref ref) {
 }
 
 @riverpod
+SubToProjectNotifUseCase subToProjectNotif(Ref ref) {
+  return SubToProjectNotifUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
 ScheduleProjectUseCase scheduleProject(Ref ref) {
   return ScheduleProjectUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),

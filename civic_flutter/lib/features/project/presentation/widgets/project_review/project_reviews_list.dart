@@ -1,4 +1,5 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/features/project/presentation/widgets/project_details/show_filter_reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -16,42 +17,100 @@ class ProjectReviewsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedProjectReviewListProvider(project.id!).notifier);
-    final liveProject = ref.watch(
-      projectStreamProvider(
+    final pagingControllerNotifier = ref.watch(
+      paginatedProjectReviewListProvider(
         project.id!,
-        project,
-      ),
+      ).notifier,
     );
-    final projectReviewStateNotifier =
-        ref.watch(projectReviewListQueryProvider.notifier);
-    final projectReviewState = ref.watch(projectReviewListQueryProvider);
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          liveProject.when(data: (newProject) {
-            if (newProject.overAllCategoryRating == null) {
-              return const SizedBox.shrink();
-            }
-            return ProjectRatingSummary(
-              project: newProject,
-            );
-          }, error: (_, __) {
-            if (project.overAllCategoryRating == null) {
-              return const SizedBox.shrink();
-            }
-            return ProjectRatingSummary(
-              project: project,
-            );
-          }, loading: () {
-            return const SizedBox();
-          }),
-          AppInfiniteList<ProjectReview>(
+    final projectReviewStateNotifier = ref.watch(
+      projectReviewListQueryProvider.notifier,
+    );
+    final projectReviewState = ref.watch(
+      projectReviewListQueryProvider,
+    );
+    return Stack(
+      children: [
+        if (project.overAllCategoryRating != null)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ProjectRatingSummary(
+                project: project,
+              ),
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: projectReviewState.cardinal == null
+                          ? null
+                          : () {
+                              projectReviewStateNotifier.clearQuery();
+                              pagingControllerNotifier.refresh();
+                            },
+                      child: Ink(
+                        child: Text(
+                          'Clear filters',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium!
+                              .copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: projectReviewState.cardinal == null
+                                    ? Theme.of(context).disabledColor
+                                    : Theme.of(context).colorScheme.onSurface,
+                              ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                      child: VerticalDivider(),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              contentPadding: const EdgeInsets.only(
+                                bottom: 16,
+                              ),
+                              content: ShowFilterReviews(
+                                pagingController: pagingControllerNotifier,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Ink(
+                        child: Text(
+                          'Filter reviews',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        Padding(
+          padding: const EdgeInsets.only(top: 110),
+          child: AppInfiniteList<ProjectReview>(
             pagingController: pagingControllerNotifier.pagingController,
-            shrinkWrap: true,
             canCreate: false,
-            scrollPhysics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, review, index) {
               final liveProjectReview = ref.watch(
                 projectReviewStreamProvider(
@@ -61,39 +120,10 @@ class ProjectReviewsList extends ConsumerWidget {
               );
               return ProjectReviewCard(
                 projectReview: liveProjectReview.value ?? review,
-                projectId: project.id!,
+                project: project,
               );
             },
             onRefresh: pagingControllerNotifier.refresh,
-            noItemsFound: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Column(
-                children: [
-                  Image(
-                    height: 250,
-                    image: AssetImage(
-                      TImageTexts.noData,
-                    ),
-                  ),
-                  Text(
-                    text ??
-                        (projectReviewState.rating != null
-                            ? "There are no items matching your query. Try another query or clear the filters."
-                            : "There are no reviews... yet. Be the first! Tap on the review button to get started."),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  if (projectReviewState.rating != null)
-                    TextButton(
-                      onPressed: () {
-                        projectReviewStateNotifier.clearQuery();
-                        pagingControllerNotifier.refresh();
-                      },
-                      child: const Text('Clear filters'),
-                    ),
-                ],
-              ),
-            ),
             firstPageProgressIndicator: Padding(
               padding: const EdgeInsets.only(
                 top: 50,
@@ -101,8 +131,8 @@ class ProjectReviewsList extends ConsumerWidget {
               child: AppLoadingWidget(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

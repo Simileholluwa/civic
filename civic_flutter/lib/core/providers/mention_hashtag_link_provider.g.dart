@@ -458,7 +458,7 @@ final mentionSuggestionsProvider =
 );
 
 typedef _$MentionSuggestions = AutoDisposeNotifier<List<UserRecord>>;
-String _$selectedMentionsHash() => r'3862850f3df7aa0e347bae699b89e2e9ecbf0f43';
+String _$selectedMentionsHash() => r'c7376ce7e9fe19772764285658b28558b557ac5d';
 
 /// See also [SelectedMentions].
 @ProviderFor(SelectedMentions)

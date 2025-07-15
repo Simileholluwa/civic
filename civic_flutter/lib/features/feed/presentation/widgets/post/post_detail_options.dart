@@ -71,7 +71,7 @@ class PostDetailOptions extends ConsumerWidget {
             Icons.share,
           ),
         ),
-        if (postCardState.isOwner)
+        if (postCardState.canEdit)
           IconButton(
             onPressed: () async {
               if (isPoll) {

@@ -12,104 +12,99 @@ class ProjectRatingSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 5,
-      ),
-      child: Column(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-            ),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 10,
-              children: [
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      project.overallLocationRating.toString().substring(0, 3),
-                  rating: project.overallLocationRating!,
-                  title: 'Location',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-                const SizedBox(
-                  height: 65,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber: project.overallDescriptionRating
-                      .toString()
-                      .substring(0, 3),
-                  rating: project.overallDescriptionRating!,
-                  title: 'Description',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-                const SizedBox(
-                  height: 65,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber: project.overallAttachmentsRating
-                      .toString()
-                      .substring(0, 3),
-                  rating: project.overallAttachmentsRating!,
-                  title: 'Attachments',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-                const SizedBox(
-                  height: 65,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      project.overAllCategoryRating.toString().substring(0, 3),
-                  rating: project.overAllCategoryRating!,
-                  title: 'Category',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-                const SizedBox(
-                  height: 65,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      project.overallFundingRating.toString().substring(0, 3),
-                  rating: project.overallFundingRating!,
-                  title: 'Funding',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-                const SizedBox(
-                  height: 65,
-                  child: VerticalDivider(),
-                ),
-                ProjectTitleAndRating(
-                  ratingNumber:
-                      project.overallDatesRating.toString().substring(0, 3),
-                  rating: project.overallDatesRating!,
-                  title: 'Dates',
-                  titleSize: 50,
-                  ratingSize: 18,
-                  titleSize2: 15,
-                ),
-              ],
-            ),
+    return Column(
+      children: [
+        SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
           ),
-          const Divider(
-            height: 3,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            spacing: 10,
+            children: [
+              ProjectTitleAndRating(
+                ratingNumber:
+                    project.overallLocationRating.toString().substring(0, 3),
+                rating: project.overallLocationRating!,
+                title: 'Location',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+              const SizedBox(
+                height: 65,
+                child: VerticalDivider(),
+              ),
+              ProjectTitleAndRating(
+                ratingNumber: project.overallDescriptionRating
+                    .toString()
+                    .substring(0, 3),
+                rating: project.overallDescriptionRating!,
+                title: 'Description',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+              const SizedBox(
+                height: 65,
+                child: VerticalDivider(),
+              ),
+              ProjectTitleAndRating(
+                ratingNumber: project.overallAttachmentsRating
+                    .toString()
+                    .substring(0, 3),
+                rating: project.overallAttachmentsRating!,
+                title: 'Attachments',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+              const SizedBox(
+                height: 65,
+                child: VerticalDivider(),
+              ),
+              ProjectTitleAndRating(
+                ratingNumber:
+                    project.overAllCategoryRating.toString().substring(0, 3),
+                rating: project.overAllCategoryRating!,
+                title: 'Category',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+              const SizedBox(
+                height: 65,
+                child: VerticalDivider(),
+              ),
+              ProjectTitleAndRating(
+                ratingNumber:
+                    project.overallFundingRating.toString().substring(0, 3),
+                rating: project.overallFundingRating!,
+                title: 'Funding',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+              const SizedBox(
+                height: 65,
+                child: VerticalDivider(),
+              ),
+              ProjectTitleAndRating(
+                ratingNumber:
+                    project.overallDatesRating.toString().substring(0, 3),
+                rating: project.overallDatesRating!,
+                title: 'Dates',
+                titleSize: 50,
+                ratingSize: 18,
+                titleSize2: 15,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        const Divider(
+          height: 3,
+        ),
+      ],
     );
   }
 }

@@ -8,7 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'paginated_notifications_list_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   final PagingController<int, Notification> pagingController =
       PagingController(firstPageKey: 1);

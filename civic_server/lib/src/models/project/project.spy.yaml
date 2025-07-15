@@ -24,6 +24,7 @@ fields:
     reviewedBy: List<int>?
     bookmarkedBy: List<int>?
     vettedBy: List<int>?
+    subscribers: List<int>?
     quoteCount: int?, default=0
     overallRating: double?
     overallLocationRating: double?

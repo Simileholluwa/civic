@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
@@ -33,8 +35,9 @@ class ProjectEndpoint extends Endpoint {
     );
     if (result == null) {
       throw PostException(
-          message:
-              'This project cannot be found. It may have been permanently deleted.');
+        message:
+            'This project cannot be found. It may have been permanently deleted.',
+      );
     }
     return result;
   }
@@ -141,6 +144,7 @@ class ProjectEndpoint extends Endpoint {
           overallFundingRating: existingProject.overallFundingRating,
           quoteCount: existingProject.quoteCount,
           dateCreated: existingProject.dateCreated,
+          subscribers: existingProject.subscribers ?? [],
         );
         await updateProject(
           session,
@@ -160,6 +164,7 @@ class ProjectEndpoint extends Endpoint {
             reviewedBy: [],
             bookmarkedBy: [],
             vettedBy: [],
+            subscribers: [],
           ),
         );
       }
@@ -350,20 +355,45 @@ class ProjectEndpoint extends Endpoint {
           );
 
           if (project.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: project.ownerId,
-              senderId: user.id!,
-              actionType: 'reviewed',
-              targetType: 'project',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: sentReview.projectId,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${project.id}',
-              content: sentReview.review!.length > 100
-                  ? '${sentReview.review!.substring(0, 100)}...'
-                  : sentReview.review!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: project.ownerId,
+                senderId: user.id!,
+                actionType: 'reviewed',
+                targetType: 'project',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: sentReview.projectId,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project.id}',
+                content: sentReview.review!.length > 100
+                    ? '${sentReview.review!.substring(0, 100)}...'
+                    : sentReview.review!,
+              ),
+            );
+
+            unawaited(
+              NotificationEndpoint().notifyProjectSubscribers(
+                session,
+                projectId: sentReview.projectId,
+                senderId: user.id!,
+                actionType: 'reviewed',
+                targetType: 'project',
+                triggerUser: getFullName(
+                  project.owner!.firstName!,
+                  project.owner!.middleName,
+                  project.owner!.lastName!,
+                ),
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: sentReview.projectId,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project.id}',
+                content: sentReview.review!.length > 100
+                    ? '${sentReview.review!.substring(0, 100)}...'
+                    : sentReview.review!,
+              ),
             );
           }
 
@@ -868,20 +898,22 @@ class ProjectEndpoint extends Endpoint {
               : review!.dislikedBy?.add(user.id!);
 
           if (review!.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: review!.ownerId,
-              senderId: user.id!,
-              actionType: 'reacted to',
-              targetType: 'project review',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: review!.projectId,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${review!.projectId}',
-              content: review!.review!.length > 100
-                  ? '${review!.review!.substring(0, 100)}...'
-                  : review!.review!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: review!.ownerId,
+                senderId: user.id!,
+                actionType: 'reacted to',
+                targetType: 'project review',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: review!.projectId,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${review!.projectId}',
+                content: review!.review!.length > 100
+                    ? '${review!.review!.substring(0, 100)}...'
+                    : review!.review!,
+              ),
             );
           }
         }
@@ -1007,20 +1039,22 @@ class ProjectEndpoint extends Endpoint {
               : vetting!.dislikedBy?.add(user.id!);
 
           if (vetting!.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: vetting!.ownerId,
-              senderId: user.id!,
-              actionType: 'reacted to',
-              targetType: 'project vetting',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: vetting!.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${vetting!.projectId}',
-              content: vetting!.comment!.length > 100
-                  ? '${vetting!.comment!.substring(0, 100)}...'
-                  : vetting!.comment!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: vetting!.ownerId,
+                senderId: user.id!,
+                actionType: 'reacted to',
+                targetType: 'project vetting',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: vetting!.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${vetting!.projectId}',
+                content: vetting!.comment!.length > 100
+                    ? '${vetting!.comment!.substring(0, 100)}...'
+                    : vetting!.comment!,
+              ),
             );
           }
         }
@@ -1144,20 +1178,44 @@ class ProjectEndpoint extends Endpoint {
           project!.bookmarkedBy?.add(user.id!);
 
           if (project!.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: project!.ownerId,
-              senderId: user.id!,
-              actionType: 'bookmarked',
-              targetType: 'project',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: project!.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${project!.id!}',
-              content: project!.title!.length > 100
-                  ? '${project!.title!.substring(0, 100)}...'
-                  : project!.title!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: project!.ownerId,
+                senderId: user.id!,
+                actionType: 'bookmarked',
+                targetType: 'project',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project!.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project!.id!}',
+                content: project!.title!.length > 100
+                    ? '${project!.title!.substring(0, 100)}...'
+                    : project!.title!,
+              ),
+            );
+            unawaited(
+              NotificationEndpoint().notifyProjectSubscribers(
+                session,
+                projectId: project!.id!,
+                senderId: user.id!,
+                actionType: 'bookmarked',
+                targetType: 'project',
+                triggerUser: getFullName(
+                  project!.owner!.firstName!,
+                  project!.owner!.middleName,
+                  project!.owner!.lastName!,
+                ),
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project!.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project!.id}',
+                content: project!.title!.length > 100
+                    ? '${project!.title!.substring(0, 100)}...'
+                    : project!.title!,
+              ),
             );
           }
         }
@@ -1236,20 +1294,44 @@ class ProjectEndpoint extends Endpoint {
           project!.likedBy?.add(user.id!);
 
           if (project!.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: project!.ownerId,
-              senderId: user.id!,
-              actionType: 'liked',
-              targetType: 'project',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: project!.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${project!.id!}',
-              content: project!.title!.length > 100
-                  ? '${project!.title!.substring(0, 100)}...'
-                  : project!.title!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: project!.ownerId,
+                senderId: user.id!,
+                actionType: 'liked',
+                targetType: 'project',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project!.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project!.id!}',
+                content: project!.title!.length > 100
+                    ? '${project!.title!.substring(0, 100)}...'
+                    : project!.title!,
+              ),
+            );
+            unawaited(
+              NotificationEndpoint().notifyProjectSubscribers(
+                session,
+                projectId: project!.id!,
+                senderId: user.id!,
+                actionType: 'liked',
+                targetType: 'project',
+                triggerUser: getFullName(
+                  project!.owner!.firstName!,
+                  project!.owner!.middleName,
+                  project!.owner!.lastName!,
+                ),
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project!.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project!.id}',
+                content: project!.title!.length > 100
+                    ? '${project!.title!.substring(0, 100)}...'
+                    : project!.title!,
+              ),
             );
           }
         }
@@ -1368,20 +1450,45 @@ class ProjectEndpoint extends Endpoint {
           );
 
           if (project.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: project.ownerId,
-              senderId: user.id!,
-              actionType: 'vetted',
-              targetType: 'project',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: project.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/project/${project.id!}',
-              content: newVetting.comment!.length > 100
-                  ? '${newVetting.comment!.substring(0, 100)}...'
-                  : newVetting.comment!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: project.ownerId,
+                senderId: user.id!,
+                actionType: 'vetted',
+                targetType: 'project',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project.id!}',
+                content: newVetting.comment!.length > 100
+                    ? '${newVetting.comment!.substring(0, 100)}...'
+                    : newVetting.comment!,
+              ),
+            );
+
+            unawaited(
+              NotificationEndpoint().notifyProjectSubscribers(
+                session,
+                projectId: project.id!,
+                senderId: user.id!,
+                actionType: 'vetted',
+                targetType: 'project',
+                triggerUser: getFullName(
+                  project.owner!.firstName!,
+                  project.owner!.middleName,
+                  project.owner!.lastName!,
+                ),
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: project.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/project/${project.id}',
+                content: project.title!.length > 100
+                    ? '${project.title!.substring(0, 100)}...'
+                    : project.title!,
+              ),
             );
           }
           return newVetting;
@@ -1577,7 +1684,7 @@ class ProjectEndpoint extends Endpoint {
   /// Parameters:
   /// [projectReviewId] - The ID of the project review to validate.
   /// [user] - The user attempting the operation.
-   @doNotGenerate
+  @doNotGenerate
   Future<void> validateProjectReviewOwnership(
     Session session,
     int projectReviewId,
@@ -1639,6 +1746,65 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  Future<void> subscribeToProject(Session session, int projectId) async {
+    return await session.db.transaction((transaction) async {
+      // Authenticate the user
+      final user = await authUser(session);
+
+      final project = await Project.db.findById(
+        session,
+        projectId,
+      );
+
+      if (project == null) {
+        throw PostException(
+          message: 'Project not found',
+        );
+      }
+
+      final exists = await ProjectSubscription.db.findFirstRow(
+        session,
+        where: (t) => t.userId.equals(user.id!) & t.projectId.equals(projectId),
+      );
+
+      if (exists != null) {
+        await ProjectSubscription.db.deleteWhere(
+          session,
+          where: (t) =>
+              t.userId.equals(user.id!) & t.projectId.equals(projectId),
+        );
+        await updateProject(
+          session,
+          project.copyWith(
+            subscribers: project.subscribers
+                    ?.where(
+                      (id) => id != user.id!,
+                    )
+                    .toList() ??
+                [],
+          ),
+        );
+        return;
+      }
+
+      await ProjectSubscription.db.insertRow(
+        session,
+        ProjectSubscription(
+          userId: user.id!,
+          projectId: projectId,
+          createdAt: DateTime.now(),
+        ),
+      );
+
+      await updateProject(
+        session,
+        project.copyWith(
+          subscribers: [...project.subscribers ?? [], user.id!],
+        ),
+      );
+    });
+  }
+
   /// Updates the given [project] in the database and notifies all clients
   /// subscribed to this project by sending an update message.
   ///
@@ -1647,7 +1813,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// This method first updates the project in the database, then posts a message
   /// to all clients subscribed to the project's channel to notify them of the update.
-   @doNotGenerate
+  @doNotGenerate
   Future<void> updateProject(Session session, Project project) async {
     // Update the project in the database
     await Project.db.updateRow(session, project);
@@ -1711,8 +1877,8 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// [session]: The current database session.
   /// [projectReview]: The project review object to update.
-  /// 
-   @doNotGenerate
+  ///
+  @doNotGenerate
   Future<void> updateProjectReview(
       Session session, ProjectReview projectReview) async {
     await ProjectReview.db.updateRow(session, projectReview);
@@ -1776,7 +1942,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Parameters:
   /// [projectVetting]: The project vetting object to update.
-   @doNotGenerate
+  @doNotGenerate
   Future<void> updateProjectVetting(
       Session session, ProjectVetting projectVetting) async {
     // Update the project in the database
@@ -1789,7 +1955,15 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-   @doNotGenerate
+  @doNotGenerate
+  String getFullName(String firstName, String? middleName, String lastName) {
+    if (middleName == null || middleName.trim().isEmpty) {
+      return '$firstName $lastName';
+    }
+    return '$firstName $middleName $lastName';
+  }
+
+  @doNotGenerate
   double _calculateNewAverage({
     required double? current,
     required int currentCount,
@@ -1799,13 +1973,5 @@ class ProjectEndpoint extends Endpoint {
     final effectiveNew = newValue ?? 0;
     return (effectiveCurrent * currentCount + effectiveNew) /
         (currentCount + 1);
-  }
-
-  @doNotGenerate
-  String getFullName(String firstName, String? middleName, String lastName) {
-    if (middleName == null || middleName.trim().isEmpty) {
-      return '$firstName $lastName';
-    }
-    return '$firstName $middleName $lastName';
   }
 }

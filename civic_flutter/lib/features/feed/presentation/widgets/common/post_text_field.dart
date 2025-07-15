@@ -10,11 +10,13 @@ class PostTextField extends ConsumerWidget {
     required this.userName,
     required this.controller,
     required this.post,
+    required this.isCommentOrReply,
   });
 
   final String userName;
   final MentionHashtagLinkTextEditingController controller;
   final Post post;
+  final bool isCommentOrReply;
 
   @override
   Widget build(
@@ -43,7 +45,7 @@ class PostTextField extends ConsumerWidget {
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             hintMaxLines: 2,
-            hintText: postNotifier.hintText(userName),
+            hintText: postNotifier.hintText(userName, isCommentOrReply),
             counter: const SizedBox(),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: TSizes.md + 2,

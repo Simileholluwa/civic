@@ -107,6 +107,23 @@ class FeedButtons extends _$FeedButtons {
     });
   }
 
+  Future<void> subscribeToNotifications(int postId) async {
+    final subscribeToNotif = ref.read(subscribeToNotifProvider);
+    final result = await subscribeToNotif(
+      SubscribeToNotifParams(postId),
+    );
+    return result.fold((error) {
+      log(error.message);
+      TToastMessages.errorToast(
+        'Subscription failed. Please try again.',
+      );
+    }, (success) {
+      TToastMessages.successToast(
+        'Yo will receive notifications on this post.',
+      );
+    });
+  }
+
   Future<void> saveComment(Post comment, int postId) async {
     final saveComment = ref.read(savePostCommentProvider);
     final result = await saveComment(

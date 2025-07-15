@@ -28,11 +28,9 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 500),
       height: !isVisible
-          ? bottom == null
-              ? 0
-              : bottomHeight!
+          ? 0
           : bottom == null
               ? height
               : height + bottomHeight!,

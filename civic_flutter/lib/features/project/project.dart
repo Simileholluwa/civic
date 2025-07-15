@@ -9,6 +9,7 @@ export './domain/usecases/save_project_draft_use_case.dart';
 export './domain/usecases/delete_project_draft_use_case.dart';
 export './domain/usecases/get_projects_use_case.dart';
 export './domain/usecases/save_project_use_case.dart';
+export './domain/usecases/sub_to_project_notif_use_case.dart';
 export './domain/usecases/get_project_review_use_case.dart';
 export './domain/usecases/get_project_reviews_use_case.dart';
 export './domain/usecases/save_project_review_use_case.dart';

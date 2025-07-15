@@ -168,6 +168,24 @@ final getProjectReviewProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetProjectReviewRef = AutoDisposeProviderRef<GetProjectReviewUseCase>;
+String _$subToProjectNotifHash() => r'b291a1dd992869a364084ead0c3b858ca39b6007';
+
+/// See also [subToProjectNotif].
+@ProviderFor(subToProjectNotif)
+final subToProjectNotifProvider =
+    AutoDisposeProvider<SubToProjectNotifUseCase>.internal(
+  subToProjectNotif,
+  name: r'subToProjectNotifProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$subToProjectNotifHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SubToProjectNotifRef = AutoDisposeProviderRef<SubToProjectNotifUseCase>;
 String _$scheduleProjectHash() => r'92b6eeb0dc4bb039e784f9b256f4e7d738da469d';
 
 /// See also [scheduleProject].

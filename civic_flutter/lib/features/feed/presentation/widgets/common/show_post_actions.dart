@@ -116,7 +116,7 @@ class ShowPostActions extends ConsumerWidget {
             color: Colors.red,
             onTap: () async {},
           ),
-        if (postCardState.isOwner)
+        if (postCardState.canEdit)
           MoreActionsListTile(
             title: 'Edit',
             subTitle:

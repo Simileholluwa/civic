@@ -19,6 +19,16 @@ class CommentScreen extends ConsumerWidget {
         true,
       ),
     );
+    final postCardState = ref.watch(
+      feedButtonsProvider(
+        data.value,
+      ),
+    );
+    final postCardNotifier = ref.watch(
+      feedButtonsProvider(
+        data.value,
+      ).notifier,
+    );
     final pagingController = ref
         .watch(
           paginatedCommentListProvider(id).notifier,
@@ -45,7 +55,7 @@ class CommentScreen extends ConsumerWidget {
               },
             ),
             actions: data.when(
-              data: (_) {
+              data: (value) {
                 return [
                   IconButton(
                     icon: const Icon(Iconsax.refresh),
@@ -54,8 +64,31 @@ class CommentScreen extends ConsumerWidget {
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Iconsax.filter),
-                    onPressed: () {},
+                    icon: Icon(Iconsax.filter,
+                        color: value.commentCount! <= 2
+                            ? Theme.of(context).disabledColor
+                            : Theme.of(context).iconTheme.color),
+                    onPressed: value.commentCount! <= 2 ? null : () {},
+                  ),
+                  IconButton(
+                    onPressed: postCardState.isOwner
+                        ? null
+                        : () async {
+                            await postCardNotifier.subscribeToNotifications(
+                              data.value!.id!,
+                            );
+                          },
+                    icon: Icon(
+                      postCardState.isSubscribed
+                          ? Iconsax.notification_bing5
+                          : Iconsax.notification_bing,
+                      color: postCardState.isOwner
+                          ? Theme.of(context).disabledColor
+                          : postCardState.isSubscribed
+                              ? TColors.primary
+                              : Theme.of(context).iconTheme.color,
+                      size: 26,
+                    ),
                   ),
                   const SizedBox(width: 5),
                 ];
@@ -78,12 +111,9 @@ class CommentScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
               onPressed: () {
-                context.push(
-                    '/create/post/0',
-                    extra: {
-                      'parent': data,
-                    }
-                  );
+                context.push('/create/post/0', extra: {
+                  'parent': data,
+                });
               },
               text: 'Share your opinion',
               buttonIcon: Iconsax.magicpen5,
@@ -120,7 +150,9 @@ class CommentScreen extends ConsumerWidget {
             child: PostCommentCard(
               id: id,
               firstPageProgressIndicator: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50,),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 50,
+                ),
                 child: LoadingAnimationWidget.progressiveDots(
                   color: TColors.primary,
                   size: 50,

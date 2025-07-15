@@ -14,6 +14,9 @@ abstract class FeedRemoteDatabase {
   Future<Post> getPost({
     required int postId,
   });
+  Future<void> subscribeToNotifications({
+    required int postId,
+  });
   Future<Post> quoteProject({
     required int projectId,
     required Post quoteContent,
@@ -139,6 +142,32 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         postId,
       );
       return result;
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } on PostException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: null,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+        action: 'retry',
+      );
+    }
+  }
+  
+  @override
+  Future<void> subscribeToNotifications({
+    required int postId,
+  }) async {
+    try {
+      await _client.post.subscribeToPost(
+        postId,
+      );
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',

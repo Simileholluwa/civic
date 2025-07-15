@@ -42,6 +42,7 @@ class CreatePollWidget extends ConsumerWidget {
                   userName: post.owner!.userInfo!.userName!,
                   post: post,
                   controller: postState.controller,
+                  isCommentOrReply: false,
                 ),
                 ...postState.controllers.asMap().entries.map((entry) {
                   final index = entry.key;

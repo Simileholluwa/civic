@@ -6,7 +6,7 @@ part of 'feed_buttons_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedButtonsHash() => r'2ac4833a3cecd0fa276a7708c6f5b03df8f49e4e';
+String _$feedButtonsHash() => r'654c1ccea61f67b2b8ecafe06f528dfe27387887';
 
 /// Copied from Dart SDK
 class _SystemHash {

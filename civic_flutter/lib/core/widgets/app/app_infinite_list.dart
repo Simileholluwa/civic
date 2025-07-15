@@ -139,31 +139,32 @@ class AppInfiniteList<T> extends ConsumerWidget {
                 vertical: 20,
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 10,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: 30,
                     child: Divider(
                       color: Theme.of(context).dividerColor,
                       thickness: 1,
                       height: 0,
-                      indent: 100,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'END',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 8,
+                    children: [
+                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
+                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
+                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
+                    ],
                   ),
-                  Expanded(
+                  SizedBox(
+                    width: 30,
                     child: Divider(
                       color: Theme.of(context).dividerColor,
                       thickness: 1,
                       height: 0,
-                      endIndent: 100,
                     ),
                   ),
                 ],

@@ -81,6 +81,13 @@ DeletePostUseCase deletePost(Ref ref) {
 }
 
 @riverpod
+SubscribeToNotifUseCase subscribeToNotif(Ref ref) {
+  return SubscribeToNotifUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
 SchedulePostUseCase schedulePost(Ref ref) {
   return SchedulePostUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),

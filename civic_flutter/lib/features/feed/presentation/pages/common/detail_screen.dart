@@ -82,18 +82,29 @@ class DetailScreen extends ConsumerWidget {
                             ? Icons.person_remove_sharp
                             : Icons.person_add_sharp,
                         color: postCardState.isOwner
-                            ? null
+                            ? Theme.of(context).disabledColor
                             : Theme.of(context).iconTheme.color,
                         size: 30,
                       ),
                     ),
                     IconButton(
-                      onPressed: postCardState.isOwner ? null : () async {},
+                      onPressed: postCardState.isOwner
+                          ? null
+                          : () async {
+                              await postCardNotifier.subscribeToNotifications(
+                                data.value!.id!,
+                              );
+                            },
                       icon: Icon(
-                        Iconsax.notification_bing,
+                        postCardState.isSubscribed
+                            ? Iconsax.notification_bing5
+                            : Iconsax.notification_bing,
                         color: postCardState.isOwner
-                            ? null
-                            : Theme.of(context).iconTheme.color,
+                            ? Theme.of(context).disabledColor
+                            : postCardState.isSubscribed
+                                ? TColors.primary
+                                : Theme.of(context).iconTheme.color,
+                        size: 26,
                       ),
                     ),
                     const SizedBox(
@@ -121,12 +132,11 @@ class DetailScreen extends ConsumerWidget {
                     onTap: null,
                     noMaxLines: true,
                   ),
-                if (postType == PostType.poll)
-                  PollDetailCard(newPost: newPost),
+                if (postType == PostType.poll) PollDetailCard(newPost: newPost),
                 if (postType == PostType.article)
                   ArticleDetailCard(
-                  newPost: newPost,
-                ),
+                    newPost: newPost,
+                  ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 17,
@@ -153,53 +163,47 @@ class DetailScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                if (newPost.commentCount! == 0)
-                  const Divider(
-                    height: 0,
-                  ),
-                if (newPost.commentCount! > 0)
-                  Column(
-                    children: [
-                      const Divider(
-                        height: 0,
+                Column(
+                  children: [
+                    const Divider(
+                      height: 0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(17, 0, 7, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Comments',
-                              style: Theme.of(context).textTheme.titleLarge!,
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.filter5,
-                              ),
-                            ),
-                          ],
+                      child: PostDetailOptions(
+                        post: newPost,
+                      ),
+                    ),
+                    const Divider(
+                      height: 0,
+                    ),
+                  ],
+                ),
+                if (newPost.postType == PostType.commentReply ||
+                    newPost.postType == PostType.comment)
+                  PostCommentReplyCard(
+                    postId: value.id!,
+                  ),
+                if (newPost.postType == PostType.regular ||
+                    newPost.postType == PostType.poll ||
+                    newPost.postType == PostType.article ||
+                    newPost.postType == PostType.projectRepost)
+                  PostCommentCard(
+                    id: value.id!,
+                    firstPageProgressIndicator: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                      ),
+                      child: Center(
+                        child: LoadingAnimationWidget.progressiveDots(
+                          color: TColors.primary,
+                          size: 50,
                         ),
                       ),
-                      const Divider(
-                        height: 0,
-                      ),
-                    ],
-                  ),
-                PostCommentCard(
-                  id: value.id!,
-                  firstPageProgressIndicator: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 30,
-                    ),
-                    child: Center(
-                      child: LoadingAnimationWidget.progressiveDots(
-                        color: TColors.primary,
-                        size: 50,
-                      ),
                     ),
                   ),
-                ),
               ],
             ),
           );
@@ -223,30 +227,20 @@ class DetailScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                child: ContentSingleButton(
-                  onPressed: () {
-                    context.push('/create/post/0', extra: {
-                      'parent': value,
-                    });
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+            child: ContentSingleButton(
+              text: 'Share your thoughts...',
+              buttonIcon: Iconsax.pen_tool5,
+              onPressed: () {
+                context.push(
+                  '/create/post/0',
+                  extra: {
+                    'parent': value,
                   },
-                  text: 'Share your opinion',
-                  buttonIcon: Iconsax.magicpen5,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                child: PostDetailOptions(
-                  post: newPost!,
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           );
         },
         error: (error, st) {

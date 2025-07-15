@@ -5,6 +5,7 @@ fields:
   sender: UserRecord?, relation
   senderName: String?
   groupedSenderNames: List<String>?
+  triggerUser: String?
   content: String?
   groupKey: String?
   actionType: String

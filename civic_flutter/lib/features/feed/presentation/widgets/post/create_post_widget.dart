@@ -46,6 +46,7 @@ class CreatePostWidget extends ConsumerWidget {
                   userName: post.owner!.userInfo!.userName!,
                   controller: postState.controller,
                   post: post,
+                  isCommentOrReply: isReplyOrComment,
                 ),
                 if (postState.imageUrls.isNotEmpty)
                   PostImagePost(

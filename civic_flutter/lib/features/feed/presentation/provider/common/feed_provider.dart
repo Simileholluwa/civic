@@ -230,13 +230,15 @@ class Feed extends _$Feed {
     state = state.copyWith(videoUrl: '');
   }
 
-  String hintText(String username) {
+  String hintText(String username, bool? isCommentOrReply) {
     if (isImages()) {
       return '$username, caption your images';
     } else if (isImage()) {
       return '$username, caption your image';
     } else if (isVideo()) {
       return '$username, caption your video';
+    } else if (isCommentOrReply == true) {
+      return "$username, share your thoughts...";
     } else {
       return "$username, what's happening in politics? Tap here to start typing.";
     }
@@ -427,7 +429,7 @@ class Feed extends _$Feed {
       videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
       locations: state.locations,
-      mentions: state.mentions,
+      mentions: ref.watch(selectedMentionsProvider),
       tags: state.tags,
       postType: PostType.projectRepost,
       projectId: projectId,
@@ -535,6 +537,7 @@ class Feed extends _$Feed {
           taggedUsers: state.taggedUsers,
           mentions: ref.watch(selectedMentionsProvider),
           parentId: postId,
+          subscribers: [],
         ),
         false,
       ),
@@ -577,6 +580,7 @@ class Feed extends _$Feed {
           taggedUsers: state.taggedUsers,
           mentions: ref.watch(selectedMentionsProvider),
           parentId: parentId,
+          subscribers: [],
         ),
         true,
       ),
@@ -918,7 +922,7 @@ class Feed extends _$Feed {
       tags: state.tags,
       article: article,
       postType: PostType.article,
-    ); 
+    );
 
     if (scheduledDateTime == null &&
         !scheduledDateTimeProvider.canSendLater()) {

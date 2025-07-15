@@ -1,0 +1,12 @@
+class: PostSubscription
+table: post_subscription
+
+fields:
+  user: UserRecord?, relation(onDelete=Cascade)
+  post: Post?, relation(onDelete=Cascade)
+  createdAt: DateTime?, default=now
+
+indexes:
+  post_notif_unique_idx:
+    fields: userId, postId
+    unique: true

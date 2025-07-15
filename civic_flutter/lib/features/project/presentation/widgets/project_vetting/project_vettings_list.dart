@@ -16,7 +16,6 @@ class ProjectVettingsList extends ConsumerWidget {
     );
     return AppInfiniteList<ProjectVetting>(
       pagingController: pagingControllerNotifier.pagingController,
-      shrinkWrap: true,
       canCreate: false,
       itemBuilder: (context, vetting, index) {
         final liveProjectVetting = ref.watch(
@@ -31,24 +30,6 @@ class ProjectVettingsList extends ConsumerWidget {
         
       },
       onRefresh: pagingControllerNotifier.refresh,
-      noItemsFound: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          children: [
-            Image(
-              height: 250,
-              image: AssetImage(
-                TImageTexts.noData,
-              ),
-            ),
-            Text(
-              "There are no vettings... yet. Be the first! Tap on the vet button to get started.",
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
       firstPageProgressIndicator: Padding(
         padding: const EdgeInsets.only(
           top: 50,

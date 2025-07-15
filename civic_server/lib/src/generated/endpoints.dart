@@ -769,6 +769,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['postId'],
           ),
         ),
+        'subscribeToPost': _i1.MethodConnector(
+          name: 'subscribeToPost',
+          params: {
+            'postId': _i1.ParameterDescription(
+              name: 'postId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i6.PostEndpoint).subscribeToPost(
+            session,
+            params['postId'],
+          ),
+        ),
         'markNotInterested': _i1.MethodConnector(
           name: 'markNotInterested',
           params: {
@@ -1197,6 +1215,24 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
+          ),
+        ),
+        'subscribeToProject': _i1.MethodConnector(
+          name: 'subscribeToProject',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i7.ProjectEndpoint).subscribeToProject(
+            session,
+            params['projectId'],
           ),
         ),
         'projectUpdates': _i1.MethodStreamConnector(

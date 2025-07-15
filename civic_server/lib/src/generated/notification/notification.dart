@@ -24,6 +24,7 @@ abstract class Notification
     this.sender,
     this.senderName,
     this.groupedSenderNames,
+    this.triggerUser,
     this.content,
     this.groupKey,
     required this.actionType,
@@ -45,6 +46,7 @@ abstract class Notification
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
+    String? triggerUser,
     String? content,
     String? groupKey,
     required String actionType,
@@ -74,6 +76,7 @@ abstract class Notification
       groupedSenderNames: (jsonSerialization['groupedSenderNames'] as List?)
           ?.map((e) => e as String)
           .toList(),
+      triggerUser: jsonSerialization['triggerUser'] as String?,
       content: jsonSerialization['content'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
       actionType: jsonSerialization['actionType'] as String,
@@ -109,6 +112,8 @@ abstract class Notification
 
   List<String>? groupedSenderNames;
 
+  String? triggerUser;
+
   String? content;
 
   String? groupKey;
@@ -143,6 +148,7 @@ abstract class Notification
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
+    String? triggerUser,
     String? content,
     String? groupKey,
     String? actionType,
@@ -165,6 +171,7 @@ abstract class Notification
       if (senderName != null) 'senderName': senderName,
       if (groupedSenderNames != null)
         'groupedSenderNames': groupedSenderNames?.toJson(),
+      if (triggerUser != null) 'triggerUser': triggerUser,
       if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
       'actionType': actionType,
@@ -189,6 +196,7 @@ abstract class Notification
       if (senderName != null) 'senderName': senderName,
       if (groupedSenderNames != null)
         'groupedSenderNames': groupedSenderNames?.toJson(),
+      if (triggerUser != null) 'triggerUser': triggerUser,
       if (content != null) 'content': content,
       if (groupKey != null) 'groupKey': groupKey,
       'actionType': actionType,
@@ -249,6 +257,7 @@ class _NotificationImpl extends Notification {
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
+    String? triggerUser,
     String? content,
     String? groupKey,
     required String actionType,
@@ -267,6 +276,7 @@ class _NotificationImpl extends Notification {
           sender: sender,
           senderName: senderName,
           groupedSenderNames: groupedSenderNames,
+          triggerUser: triggerUser,
           content: content,
           groupKey: groupKey,
           actionType: actionType,
@@ -291,6 +301,7 @@ class _NotificationImpl extends Notification {
     Object? sender = _Undefined,
     Object? senderName = _Undefined,
     Object? groupedSenderNames = _Undefined,
+    Object? triggerUser = _Undefined,
     Object? content = _Undefined,
     Object? groupKey = _Undefined,
     String? actionType,
@@ -313,6 +324,7 @@ class _NotificationImpl extends Notification {
       groupedSenderNames: groupedSenderNames is List<String>?
           ? groupedSenderNames
           : this.groupedSenderNames?.map((e0) => e0).toList(),
+      triggerUser: triggerUser is String? ? triggerUser : this.triggerUser,
       content: content is String? ? content : this.content,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
       actionType: actionType ?? this.actionType,
@@ -343,6 +355,10 @@ class NotificationTable extends _i1.Table<int?> {
     );
     groupedSenderNames = _i1.ColumnSerializable(
       'groupedSenderNames',
+      this,
+    );
+    triggerUser = _i1.ColumnString(
+      'triggerUser',
       this,
     );
     content = _i1.ColumnString(
@@ -401,6 +417,8 @@ class NotificationTable extends _i1.Table<int?> {
 
   late final _i1.ColumnSerializable groupedSenderNames;
 
+  late final _i1.ColumnString triggerUser;
+
   late final _i1.ColumnString content;
 
   late final _i1.ColumnString groupKey;
@@ -454,6 +472,7 @@ class NotificationTable extends _i1.Table<int?> {
         senderId,
         senderName,
         groupedSenderNames,
+        triggerUser,
         content,
         groupKey,
         actionType,

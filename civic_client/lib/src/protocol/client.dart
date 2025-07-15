@@ -376,6 +376,13 @@ class EndpointPost extends _i1.EndpointRef {
         {'postId': postId},
       );
 
+  _i2.Future<void> subscribeToPost(int postId) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'subscribeToPost',
+        {'postId': postId},
+      );
+
   _i2.Future<void> markNotInterested(
     int postId,
     String reason,
@@ -857,6 +864,13 @@ class EndpointProject extends _i1.EndpointRef {
         'projectUpdates',
         {'projectId': projectId},
         {},
+      );
+
+  _i2.Future<void> subscribeToProject(int projectId) =>
+      caller.callServerEndpoint<void>(
+        'project',
+        'subscribeToProject',
+        {'projectId': projectId},
       );
 
   /// Returns a stream of [ProjectReview] updates for the specified [reviewId].

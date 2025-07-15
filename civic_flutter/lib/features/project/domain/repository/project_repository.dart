@@ -35,6 +35,10 @@ abstract class ProjectRepository {
     required int id,
   });
 
+  Future<Either<Failure, void>> subscribeToNotifications({
+    required int id,
+  });
+
   Future<Either<Failure, Project>> getProjectDraft();
 
   Future<Either<Failure, void>> saveProjectDraft({required Project project,});

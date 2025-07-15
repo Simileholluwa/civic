@@ -46,8 +46,10 @@ class FeedWidgetsState {
     this.articleContent = '',
     this.articleTags = const <String>[],
     this.totalVotes = 0,
+    this.isSubscribed = false,
     this.votedOption,
     this.rawContent,
+    this.canEdit = false,
   });
 
   factory FeedWidgetsState.empty() {
@@ -84,6 +86,7 @@ class FeedWidgetsState {
       tags: post.taggedUsers ?? [],
       hasTags: post.taggedUsers?.isNotEmpty ?? false,
       creator: post.owner!,
+      isSubscribed: post.subscribers!.contains(userId),
       hasLiked: post.likedBy!.contains(userId),
       mentions: [],
       hasBookmarked: post.bookmarkedBy!.contains(userId),
@@ -117,6 +120,13 @@ class FeedWidgetsState {
                 ).toPlainText()
               : ''
           : '',
+      canEdit: DateTime.now()
+                  .difference(
+                    post.dateCreated!,
+                  )
+                  .inMinutes <
+              30 &&
+          userId == post.ownerId,
       rawContent: post.article != null
           ? post.article!.content!.isNotEmpty
               ? Document.fromJson(
@@ -140,6 +150,7 @@ class FeedWidgetsState {
   final bool hasVoted;
   final List<String> imageUrls;
   final bool isFollower;
+  final bool isSubscribed;
   final bool isOwner;
   final bool isSendingNotInterested;
   final bool isSendingPoll;
@@ -167,6 +178,7 @@ class FeedWidgetsState {
   final String articleContent;
   final List<String> articleTags;
   final Document? rawContent;
+  final bool canEdit;
 
   FeedWidgetsState copyWith({
     UserRecord? creator,

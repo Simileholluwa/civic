@@ -16,6 +16,8 @@ abstract class ProjectRemoteDataSource {
 
   Future<Project> getProject({required int id});
 
+  Future<void> subscribeToNotifications({required int id});
+
   Future<Project> saveProject({required Project project});
 
   Future<ProjectReviewList> getProjectReviews({
@@ -103,6 +105,31 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   Future<Project> getProject({required int id}) async {
     try {
       final result = await _client.project.getProject(
+        id,
+      );
+      return result;
+    } on PostException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: e.action,
+      );
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+        action: 'retry',
+      );
+    }
+  }
+
+  @override
+  Future<void> subscribeToNotifications({required int id}) async {
+    try {
+      final result = await _client.project.subscribeToProject(
         id,
       );
       return result;

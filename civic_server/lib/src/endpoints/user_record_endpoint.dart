@@ -214,6 +214,9 @@ class UserRecordEndpoint extends Endpoint {
     final currentUser = await UserRecord.db.findById(
       session,
       authInfo.userId,
+      include: UserRecord.include(
+        userInfo: UserInfo.include(),
+      ),
     );
     final followedUser = await UserRecord.db.findById(
       session,

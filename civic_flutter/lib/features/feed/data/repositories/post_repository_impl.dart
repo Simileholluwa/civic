@@ -70,6 +70,25 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, void>> subscribeToNotifications({
+    required int postId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.subscribeToNotifications(
+        postId: postId,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, Post>> getComment({
     required int commentId,
     required bool isComment,

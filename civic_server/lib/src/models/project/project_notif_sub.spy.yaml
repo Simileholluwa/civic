@@ -1,0 +1,12 @@
+class: ProjectSubscription
+table: project_subscription
+
+fields:
+  user: UserRecord?, relation(onDelete=Cascade)
+  project: Project?, relation(onDelete=Cascade)
+  createdAt: DateTime?, default=now
+
+indexes:
+  project_notif_unique_idx:
+    fields: userId, projectId
+    unique: true

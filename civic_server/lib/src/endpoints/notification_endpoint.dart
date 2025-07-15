@@ -14,6 +14,7 @@ class NotificationEndpoint extends Endpoint {
     required int targetId,
     required String actionRoute,
     required String mediaThumbnailUrl,
+    String? triggerUser,
     String? content,
   }) async {
     final groupKey = '${actionType}_${targetType}_$targetId';
@@ -29,7 +30,6 @@ class NotificationEndpoint extends Endpoint {
 
       final updatedGroupedNames = {
         ...?existing.groupedSenderNames,
-        existing.senderName!,
         senderName,
       }.toList();
 
@@ -55,13 +55,101 @@ class NotificationEndpoint extends Endpoint {
         targetId: targetId,
         actionRoute: actionRoute,
         content: content,
+        triggerUser: triggerUser,
         isRead: false,
         createdAt: DateTime.now(),
       );
 
-      await Notification.db.insertRow(
+      final notif = await Notification.db.insertRow(
         session,
         notification,
+      );
+
+      await updateNotification(
+        session,
+        notif,
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> notifyProjectSubscribers(
+    Session session, {
+    required int senderId,
+    required String senderName,
+    required String actionType,
+    required String targetType,
+    required int targetId,
+    required String actionRoute,
+    required String mediaThumbnailUrl,
+    required int projectId,
+    required String triggerUser,
+    String? content,
+  }) async {
+    final subscribers = await ProjectSubscription.db.find(
+      session,
+      where: (t) => t.projectId.equals(projectId),
+    );
+
+    if (subscribers.isEmpty) return;  
+
+    for (final sub in subscribers) {
+      // Don't notify the sender themselves
+      if (sub.userId == senderId) continue;
+
+      await sendNotification(
+        session,
+        receiverId: sub.userId,
+        senderId: senderId,
+        senderName: senderName,
+        actionType: actionType,
+        targetType: targetType,
+        targetId: targetId,
+        actionRoute: actionRoute,
+        mediaThumbnailUrl: mediaThumbnailUrl,
+        triggerUser: triggerUser,
+        content: content,
+      );
+    }
+  }
+
+  @doNotGenerate
+  Future<void> notifyPostSubscribers(
+    Session session, {
+    required int senderId,
+    required String senderName,
+    required String actionType,
+    required String targetType,
+    required int targetId,
+    required String actionRoute,
+    required String mediaThumbnailUrl,
+    required int postId,
+    required String triggerUser,
+    String? content,
+  }) async {
+    final subscribers = await PostSubscription.db.find(
+      session,
+      where: (t) => t.postId.equals(postId),
+    );
+
+    if (subscribers.isEmpty) return;  
+
+    for (final sub in subscribers) {
+      // Don't notify the sender themselves
+      if (sub.userId == senderId) continue;
+
+      await sendNotification(
+        session,
+        receiverId: sub.userId,
+        senderId: senderId,
+        senderName: senderName,
+        actionType: actionType,
+        targetType: targetType,
+        targetId: targetId,
+        actionRoute: actionRoute,
+        mediaThumbnailUrl: mediaThumbnailUrl,
+        triggerUser: triggerUser,
+        content: content,
       );
     }
   }
@@ -136,7 +224,7 @@ class NotificationEndpoint extends Endpoint {
       where: (t) => t.receiverId.equals(user.id) & t.isRead.equals(false),
     );
   }
-  
+
   Future<NotificationList> getNotifications(
     Session session, {
     int limit = 50,
@@ -155,6 +243,7 @@ class NotificationEndpoint extends Endpoint {
       }
       return clause;
     }
+
     final count = await Notification.db.count(
       session,
       where: (t) => whereClause(t),

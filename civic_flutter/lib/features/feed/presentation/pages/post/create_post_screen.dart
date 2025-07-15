@@ -45,8 +45,6 @@ class CreatePostScreen extends ConsumerWidget {
     final isRepost = project != null;
     bool isReplyOrComment = false;
     bool isComment = false;
-    bool isReply = false;
-    String username = '';
     if (data.hasValue && !data.hasError) {
       isReplyOrComment = parent != null;
       if (isReplyOrComment) {
@@ -54,9 +52,6 @@ class CreatePostScreen extends ConsumerWidget {
             parent!.postType == PostType.projectRepost ||
             parent!.postType == PostType.poll ||
             parent!.postType == PostType.article);
-
-        isReply = parent!.postType == PostType.comment;
-        username = parent!.owner!.userInfo!.userName!;
       }
     }
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
@@ -151,28 +146,6 @@ class CreatePostScreen extends ConsumerWidget {
             data: (_) {
               if (scheduledDateTimeState != null) {
                 return const CreateContentSchedule();
-              } else if (parent != null) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                  ),
-                  child: ContentExpandableText(
-                    text: isComment
-                        ? "Commenting on @$username's post"
-                        : isReply
-                            ? "Replying to @$username's comment"
-                            : "Replying to @$username's reply",
-                    onToggleTextTap: null,
-                  ),
-                );
               } else {
                 return null;
               }

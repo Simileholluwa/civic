@@ -401,4 +401,20 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> subscribeToNotifications({required int id}) async {
+    try {
+      final result = await _remoteDatasource.subscribeToNotifications(
+        id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
 }

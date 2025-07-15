@@ -19,7 +19,7 @@ class ArticleDetailCard extends ConsumerWidget {
     final defaultTextStyle = DefaultTextStyle.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
@@ -30,9 +30,9 @@ class ArticleDetailCard extends ConsumerWidget {
               ),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
-                child: ContentCachedImage(
-                  url: postCardState.articleBanner,
-                  height: 200,
+                child: ContentSingleCachedImage(
+                  useMargin: false,
+                  imageUrl: postCardState.articleBanner,
                 ),
               ),
             ),

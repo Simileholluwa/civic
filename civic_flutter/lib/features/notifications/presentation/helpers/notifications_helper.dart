@@ -18,6 +18,7 @@ class NotificationsHelper {
     required List<String> usernames,
     required String actionType,
     required String targetType,
+    required String? triggerUser,
   }) {
     final style = DefaultTextStyle.of(context).style;
     final boldStyle = style.copyWith(fontWeight: FontWeight.bold);
@@ -41,10 +42,19 @@ class NotificationsHelper {
       ),
     );
 
+    if (triggerUser != null) {
+      spans.add(
+        TextSpan(
+          text: " $triggerUser",
+          style: boldStyle,
+        ),
+      );
+    }
+
     if (targetType.isNotEmpty) {
       spans.add(
         TextSpan(
-          text: ' your $targetType',
+          text: " ${triggerUser != null ? "'s" : 'your'} $targetType",
           style: style,
         ),
       );
@@ -63,48 +73,98 @@ class NotificationsHelper {
   }
 
   static Widget notifIcon(String actionType) {
-    switch(actionType) {
-      case 'liked':
-        return Icon(Iconsax.heart5, color: Colors.white, size: 15,);
-      case 'commented on':
-        return Icon(Iconsax.message5, color: Colors.white, size: 15,);
-      case 'followed you':
-        return Icon(Iconsax.user_add, color: Colors.white, size: 15,);
-      case 'bookmarked':
-        return Icon(Icons.bookmark_rounded, color: Colors.white, size: 15,);
-      case 'quoted':
-        return Icon(Iconsax.repeat, color: Colors.white, size: 15,);
-      case 'mentioned':
-        return Icon(Iconsax.tag_user, color: Colors.white, size: 15,);
-      case 'reviewed':
-        return Icon(Iconsax.magic_star5, color: Colors.white, size: 15,);
-      case 'vetted':
-        return Icon(Iconsax.medal_star5, color: Colors.white, size: 15,);
-      default:
-        return Icon(Iconsax.notification, color: Colors.white, size: 15,);
+    if (actionType == 'liked') {
+      return Icon(
+        Iconsax.heart5,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'commented on') {
+      return Icon(
+        Iconsax.message5,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType.contains('reacted')) {
+      return Icon(
+        Icons.thumb_up_alt_rounded,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'followed you') {
+      return Icon(
+        Iconsax.user_add,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType.contains('tagged')) {
+      return Icon(
+        Iconsax.tag_user5,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'bookmarked') {
+      return Icon(
+        Icons.bookmark_rounded,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'quoted') {
+      return Icon(
+        Iconsax.repeat,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'mentioned') {
+      return Icon(
+        Iconsax.tag_user,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'reviewed') {
+      return Icon(
+        Iconsax.magic_star5,
+        color: Colors.white,
+        size: 15,
+      );
+    } else if (actionType == 'vetted') {
+      return Icon(
+        Iconsax.medal_star5,
+        color: Colors.white,
+        size: 15,
+      );
+    } else {
+      return Icon(
+        Iconsax.notification,
+        color: Colors.white,
+        size: 15,
+      );
     }
-  }  
+  }
 
   static Color getIconColor(String actionType) {
-    switch(actionType) {
-      case 'liked':
-        return TColors.secondary;
-      case 'commented on':
-        return TColors.primary;
-      case 'followed you':
-        return Colors.blue;
-      case 'bookmarked':
-        return Colors.indigo;
-      case 'quoted':
-        return Colors.purple;
-      case 'mentioned':
-        return Colors.orange;
-      case 'reviewed':
-        return Colors.green;
-      case 'vetted':
-        return Colors.red;
-      default:
-        return Colors.orange;
+    if (actionType == 'liked') {
+      return TColors.secondary;
+    } else if (actionType == 'commented on') {
+      return TColors.primary;
+    } else if (actionType == 'followed you') {
+      return Colors.blue;
+    } else if (actionType == 'bookmarked') {
+      return Colors.indigo;
+    } else if (actionType.contains('tagged')) {
+      return Colors.teal;
+    } else if (actionType.contains('reacted')) {
+      return Colors.pink;
+    } else if (actionType == 'quoted') {
+      return Colors.purple;
+    } else if (actionType == 'mentioned') {
+      return Colors.orange;
+    } else if (actionType == 'reviewed') {
+      return Colors.green;
+    } else if (actionType == 'vetted') {
+      return Colors.red;
+    } else {
+      return Colors.orange;
     }
-  }  
+  }
 }

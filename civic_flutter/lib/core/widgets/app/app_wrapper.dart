@@ -26,7 +26,7 @@ class AppWrapper extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: 0,
         ),
-        bottomNavigationBar: screenWidth > 450
+        bottomNavigationBar: screenWidth > 700
             ? null
             : AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
@@ -65,7 +65,7 @@ class AppWrapper extends ConsumerWidget {
           children: [
             Row(
               children: [
-                if (screenWidth > 450)
+                if (screenWidth > 700)
                   Row(
                     children: [
                       Row(

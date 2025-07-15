@@ -22,6 +22,7 @@ class NotificationsScreen extends ConsumerWidget {
       ),
     );
     final tabController = ref.watch(notificationTabControllerProvider);
+    final notifNotifier = ref.watch(notifProvider.notifier);
     return Scaffold(
       appBar: ContentAppBar(
         isVisible: isVisible,
@@ -72,7 +73,9 @@ class NotificationsScreen extends ConsumerWidget {
               Iconsax.tick_circle,
               size: 26,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              await notifNotifier.markAllAsRead();
+            },
           ),
           const SizedBox(width: 5),
           IconButton(
@@ -202,6 +205,7 @@ class NotificationCard extends ConsumerWidget {
                             usernames: notification.groupedSenderNames!,
                             actionType: notification.actionType,
                             targetType: notification.targetType,
+                            triggerUser: notification.triggerUser,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,

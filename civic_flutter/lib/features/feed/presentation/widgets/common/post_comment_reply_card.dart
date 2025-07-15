@@ -21,9 +21,9 @@ class PostCommentReplyCard extends ConsumerWidget {
     );
     return AppInfiniteList<Post>(
       pagingController: repliesController.pagingController,
-      scrollPhysics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
       canCreate: false,
+      shrinkWrap: true,
+      scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, value, index) {
         final liveReply = ref.watch(
           postStreamProvider(

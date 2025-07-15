@@ -1,21 +1,19 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewCard extends ConsumerWidget {
   const ProjectReviewCard({
     super.key,
     required this.projectReview,
-    required this.projectId,
+    required this.project,
   });
 
+  final Project project;
   final ProjectReview projectReview;
-  final int projectId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,17 +32,7 @@ class ProjectReviewCard extends ConsumerWidget {
         projectReview,
       ).notifier,
     );
-    final pagingControllerNotifier = ref.watch(
-      paginatedProjectReviewListProvider(
-        projectId,
-      ).notifier,
-    );
-    final projectReviewStateNotifier = ref.watch(
-      projectReviewListQueryProvider.notifier,
-    );
-    final projectReviewState = ref.watch(
-      projectReviewListQueryProvider,
-    );
+    
     final userId = ref
         .read(
           localStorageProvider,
@@ -53,106 +41,7 @@ class ProjectReviewCard extends ConsumerWidget {
           'userId',
         );
     return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (projectReviewState.cardinal != null)
-                Row(
-                  spacing: 10,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        projectReviewStateNotifier.clearQuery();
-                        pagingControllerNotifier.refresh();
-                      },
-                      child: Ink(
-                        child: Icon(
-                          Iconsax.filter_remove5,
-                          color: TColors.secondary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 35,
-                      child: VerticalDivider(),
-                    ),
-                  ],
-                ),
-              InkWell(
-                onTap: () {
-                  ProjectHelperFunctions.projectReviewsFilterDialog(
-                    context,
-                    projectId,
-                  );
-                },
-                child: Ink(
-                  child: Text(
-                    'Filter',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-                child: VerticalDivider(),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Ink(
-                  child: Text(
-                    'By date',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-                child: VerticalDivider(),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Ink(
-                  child: Text(
-                    'By likes',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-                child: VerticalDivider(),
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Icon(
-                  Icons.arrow_upward_rounded,
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-                child: VerticalDivider(),
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Icon(
-                  Icons.arrow_downward_rounded,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Divider(
-          height: 0,
-        ),
+      children: [      
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 18,
@@ -265,7 +154,7 @@ class ProjectReviewCard extends ConsumerWidget {
                   ProjectHelperFunctions.deleteProjectReviewDialog(
                     context,
                     projectReviewNotiier,
-                    projectId,
+                    project.id!,
                     projectReview.id!,
                     false,
                   );

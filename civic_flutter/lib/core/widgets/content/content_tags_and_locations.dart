@@ -12,6 +12,7 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
     this.hasLocations = false,
     this.onTaggedUsersTap,
     this.onLocationTap,
+    this.usePadding = true,
   });
 
   final List<UserRecord> tags;
@@ -20,14 +21,14 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
   final bool hasLocations;
   final VoidCallback? onTaggedUsersTap;
   final VoidCallback? onLocationTap;
-
+  final bool usePadding;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
+      padding: EdgeInsets.symmetric(
+        horizontal: usePadding ? 15 : 0,
       ),
       child: Row(
         spacing: 10,

@@ -42,7 +42,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
               ? Theme.of(context).disabledColor
               : projectCardState.hasLiked!
                   ? TColors.primary
-                  : Theme.of(context).iconTheme.color!,
+                  : Theme.of(context).hintColor,
         ),
         ContentInteractionButton(
           icon: Iconsax.repeate_music,
@@ -59,7 +59,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
           text: projectCardState.numberOfReposts!,
           color: projectCardState.isDeleted!
               ? Theme.of(context).disabledColor
-              : Theme.of(context).iconTheme.color!,
+              : Theme.of(context).hintColor,
         ),
         if (!projectCardState.isOwner!)
           ContentInteractionButton(
@@ -79,7 +79,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? Theme.of(context).disabledColor
                 : projectCardState.hasReviewed!
                     ? TColors.primary
-                    : Theme.of(context).iconTheme.color!,
+                    : Theme.of(context).hintColor,
           )
         else
           ContentInteractionButton(
@@ -98,7 +98,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? Theme.of(context).disabledColor
                 : projectCardState.isBookmarked!
                     ? Theme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.onSurface,
+                    : Theme.of(context).hintColor,
           ),
         if (projectCardState.canVet! && !projectCardState.isOwner!)
           ContentInteractionButton(
@@ -118,9 +118,9 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? Theme.of(context).disabledColor
                 : projectCardState.hasVetted!
                     ? TColors.primary
-                    : Theme.of(context).iconTheme.color!,
+                    : Theme.of(context).hintColor,
           ),
-        if (projectCardState.isOwner!)
+        if (projectCardState.canEdit)
           ContentInteractionButton(
             icon: Iconsax.edit,
             text: '',
@@ -129,7 +129,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? Theme.of(context).disabledColor
                 : projectCardState.hasVetted!
                     ? TColors.primary
-                    : Theme.of(context).iconTheme.color!,
+                    : Theme.of(context).hintColor,
             onTap: projectCardState.isDeleted!
                 ? null
                 : () {
@@ -156,7 +156,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? Theme.of(context).disabledColor
                 : projectCardState.isBookmarked!
                     ? Theme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.onSurface,
+                    : Theme.of(context).hintColor,
           ),
         ContentInteractionButton(
           icon: Iconsax.more_circle,
@@ -179,7 +179,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 },
           color: projectCardState.isDeleted!
               ? Theme.of(context).disabledColor
-              : Theme.of(context).colorScheme.onSurface,
+              : Theme.of(context).hintColor,
         ),
       ],
     );

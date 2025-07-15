@@ -33,20 +33,26 @@ class ContentExpandableText extends StatelessWidget {
       mentionStyle: defaultTextStyle.copyWith(
         color: TColors.primary,
         fontWeight: FontWeight.w600,
+        fontSize: fontSize,
       ),
       toggleTextStyle: defaultTextStyle.copyWith(
         color: Theme.of(context).hintColor,
+        fontSize: fontSize,
       ),
       hashtagStyle: defaultTextStyle.copyWith(
         color: TColors.primary,
         fontWeight: FontWeight.w500,
+        fontSize: fontSize,
       ),
       urlStyle: defaultTextStyle.copyWith(
         color: TColors.primary,
         fontWeight: FontWeight.w500,
+        fontSize: fontSize,
       ),
       toggleTextColor: TColors.primary,
-      style: defaultTextStyle,
+      style: defaultTextStyle.copyWith(
+        fontSize: fontSize,
+      ),
       maxLines: maxLines ?? (noMaxLines ? 100 : (hasVideo || hasImage ? 3 : 6)),
     );
   }

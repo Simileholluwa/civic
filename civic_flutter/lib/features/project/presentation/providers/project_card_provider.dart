@@ -89,6 +89,26 @@ class ProjectCardWidget extends _$ProjectCardWidget {
     });
   }
 
+  Future<void> subscribeToNotifications(int projectId) async {
+    final subscribe = ref.read(subToProjectNotifProvider);
+    final result = await subscribe(
+      SubscribeToProjectNotifParams(
+        projectId,
+      ),
+    );
+    return result.fold((error) {
+      TToastMessages.errorToast(
+        error.message,
+      );
+      return;
+    }, (_) {
+      TToastMessages.successToast(
+        'You will be notified about updates on this project.',
+      );
+      return;
+    });
+  }
+
   Future<void> deleteProject(
     int projectId,
   ) async {

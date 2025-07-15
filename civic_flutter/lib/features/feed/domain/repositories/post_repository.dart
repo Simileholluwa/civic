@@ -28,6 +28,9 @@ abstract class FeedRepository {
   Future<Either<Failure, Post>> getPost({
     required int postId,
   });
+  Future<Either<Failure, void>> subscribeToNotifications({
+    required int postId,
+  });
   Future<Either<Failure, Post>> quoteProject({
     required int projectId,
     required Post quoteContent,

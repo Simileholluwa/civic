@@ -38,6 +38,7 @@ class PostEndpoint extends Endpoint {
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
               dateCreated: existingPost.dateCreated,
+              subscribers: existingPost.subscribers,
             ),
           );
           await HashtagEndpoint().sendPostHashtags(
@@ -47,7 +48,7 @@ class PostEndpoint extends Endpoint {
           );
           return existingPost;
         } else {
-          final sentPost = await Post.db.insertRow(
+          final savedPost = await Post.db.insertRow(
             session,
             post.copyWith(
               ownerId: user.id,
@@ -55,6 +56,7 @@ class PostEndpoint extends Endpoint {
               postType: PostType.regular,
               likedBy: [],
               bookmarkedBy: [],
+              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -62,10 +64,19 @@ class PostEndpoint extends Endpoint {
           await HashtagEndpoint().sendPostHashtags(
             session,
             post.tags ?? [],
-            sentPost.id!,
+            savedPost.id!,
           );
 
-          return sentPost;
+          unawaited(
+            notifyTaggedOrMentionedUsers(
+              session,
+              user,
+              savedPost,
+              'post',
+            ),
+          );
+
+          return savedPost;
         }
       } catch (e, stackTrace) {
         session.log(
@@ -101,6 +112,7 @@ class PostEndpoint extends Endpoint {
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
               dateCreated: existingPost.dateCreated,
+              subscribers: existingPost.subscribers,
             ),
           );
           await HashtagEndpoint().sendPostHashtags(
@@ -117,6 +129,7 @@ class PostEndpoint extends Endpoint {
               ownerId: user.id!,
               likedBy: [],
               bookmarkedBy: [],
+              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -161,6 +174,15 @@ class PostEndpoint extends Endpoint {
               pollId: updatedPoll.id,
             ),
             transaction: transaction,
+          );
+
+          unawaited(
+            notifyTaggedOrMentionedUsers(
+              session,
+              user,
+              savedPost,
+              'poll',
+            ),
           );
 
           // 6. Return the fully populated post with poll and options
@@ -209,6 +231,7 @@ class PostEndpoint extends Endpoint {
               postType: existingPost.postType,
               articleId: existingPost.articleId,
               dateCreated: existingPost.dateCreated,
+              subscribers: existingPost.subscribers,
               article: existingPost.article!.copyWith(
                 content: post.article!.content,
                 tag: [...existingPost.article!.tag!, ...post.article!.tag!],
@@ -223,6 +246,7 @@ class PostEndpoint extends Endpoint {
               ownerId: user.id!,
               likedBy: [],
               bookmarkedBy: [],
+              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -239,6 +263,15 @@ class PostEndpoint extends Endpoint {
               articleId: savedArticle.id,
             ),
             transaction: transaction,
+          );
+
+          unawaited(
+            notifyTaggedOrMentionedUsers(
+              session,
+              user,
+              savedPost,
+              'article',
+            ),
           );
 
           return await Post.db.findById(
@@ -265,6 +298,61 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  @doNotGenerate
+  Future<void> notifyTaggedOrMentionedUsers(
+    Session session,
+    UserRecord user,
+    Post savedPost,
+    String type,
+  ) async {
+    if (savedPost.taggedUsers!.isNotEmpty) {
+      for (final tag in savedPost.taggedUsers!) {
+        unawaited(
+          NotificationEndpoint().sendNotification(
+            session,
+            receiverId: tag.id!,
+            senderId: user.id!,
+            actionType: 'tagged you in an $type',
+            targetType: '',
+            targetId: savedPost.id!,
+            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
+            actionRoute: '/feed/$type/${savedPost.id}',
+            content: savedPost.text!.length > 100
+                ? '${savedPost.text!.substring(0, 100)}...'
+                : savedPost.text!,
+          ),
+        );
+      }
+    }
+
+    if (savedPost.mentions!.isNotEmpty) {
+      for (final mention in savedPost.mentions!) {
+        unawaited(
+          NotificationEndpoint().sendNotification(
+            session,
+            receiverId: mention.id!,
+            senderId: user.id!,
+            actionType: 'mentioned you in a $type',
+            targetType: '',
+            targetId: savedPost.id!,
+            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderName:
+                getFullName(user.firstName!, user.middleName, user.lastName!),
+            actionRoute: '/feed/$type/${savedPost.id}',
+            content: savedPost.text!.length > 100
+                ? '${savedPost.text!.substring(0, 100)}...'
+                : savedPost.text!,
+          ),
+        );
+      }
+    }
+  }
+
   Future<void> castVote(
     Session session,
     int postId,
@@ -281,6 +369,7 @@ class PostEndpoint extends Endpoint {
           poll: Poll.include(
             options: PollOption.includeList(),
           ),
+          owner: UserRecord.include(),
         ),
         transaction: transaction,
       );
@@ -382,8 +471,33 @@ class PostEndpoint extends Endpoint {
             mediaThumbnailUrl: user.userInfo!.imageUrl!,
             senderName:
                 getFullName(user.firstName!, user.middleName, user.lastName!),
-            actionRoute: '/feed/post/${post.id}',
-            content: 'You have a new vote on your poll.',
+            actionRoute: '/feed/poll/${post.id}',
+            content: post.text!.length > 100
+                ? '${post.text!.substring(0, 100)}...'
+                : post.text!,
+          ),
+        );
+
+        unawaited(
+          NotificationEndpoint().notifyPostSubscribers(
+            session,
+            senderId: user.id!,
+            postId: post.id!,
+            triggerUser: getFullName(
+              post.owner!.firstName!,
+              post.owner!.middleName,
+              post.owner!.lastName!,
+            ),
+            actionType: 'voted in',
+            targetType: 'poll',
+            targetId: post.id!,
+            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderName:
+                getFullName(user.firstName!, user.middleName, user.lastName!),
+            actionRoute: '/feed/poll/${post.id}',
+            content: post.text!.length > 100
+                ? '${post.text!.substring(0, 100)}...'
+                : post.text!,
           ),
         );
       }
@@ -573,6 +687,7 @@ class PostEndpoint extends Endpoint {
             commentCount: existingCommentOrReply.commentCount,
             postType: existingCommentOrReply.postType,
             dateCreated: existingCommentOrReply.dateCreated,
+            subscribers: existingCommentOrReply.subscribers,
           ),
         );
 
@@ -583,6 +698,9 @@ class PostEndpoint extends Endpoint {
           parent = await Post.db.findById(
             session,
             comment.parentId!,
+            include: Post.include(
+              owner: UserRecord.include(),
+            ),
           );
           if (parent != null) {
             await updatePost(
@@ -601,26 +719,67 @@ class PostEndpoint extends Endpoint {
             postType: isReply ? PostType.commentReply : PostType.comment,
             likedBy: [],
             bookmarkedBy: [],
+            subscribers: [],
           ),
         );
 
         if (parent!.ownerId != user.id) {
-          await NotificationEndpoint().sendNotification(
-            session,
-            receiverId: parent.ownerId,
-            senderId: user.id!,
-            actionType: isReply ? 'replied to' : 'commented on',
-            targetType: isReply ? 'comment' : 'post',
-            targetId: sentComment.id!,
-            mediaThumbnailUrl: user.userInfo!.imageUrl!,
-            senderName:
-                getFullName(user.firstName!, user.middleName, user.lastName!),
-            actionRoute: '/feed/post/${parent.id}/comments',
-            content: sentComment.text!.length > 100
-                ? '${sentComment.text!.substring(0, 100)}...'
-                : sentComment.text!,
+          unawaited(
+            NotificationEndpoint().sendNotification(
+              session,
+              receiverId: parent.ownerId,
+              senderId: user.id!,
+              actionType: isReply ? 'replied to' : 'commented on',
+              targetType: isReply ? 'comment' : 'post',
+              targetId: sentComment.id!,
+              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
+              actionRoute: '/feed/post/${sentComment.id!}',
+              content: sentComment.text!.length > 100
+                  ? '${sentComment.text!.substring(0, 100)}...'
+                  : sentComment.text!,
+            ),
+          );
+
+          unawaited(
+            NotificationEndpoint().notifyPostSubscribers(
+              session,
+              senderId: user.id!,
+              actionType: isReply ? 'replied to' : 'commented on',
+              targetType: isReply ? 'comment' : 'post',
+              targetId: sentComment.id!,
+              triggerUser: getFullName(
+                parent.owner!.firstName!,
+                parent.owner!.middleName,
+                parent.owner!.lastName!,
+              ),
+              postId: parent.id!,
+              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
+              actionRoute: '/feed/post/${parent.id}/comments',
+              content: sentComment.text!.length > 100
+                  ? '${sentComment.text!.substring(0, 100)}...'
+                  : sentComment.text!,
+            ),
           );
         }
+
+        unawaited(
+          notifyTaggedOrMentionedUsers(
+            session,
+            user,
+            sentComment,
+            'post',
+          ),
+        );
 
         return sentComment;
       }
@@ -814,6 +973,8 @@ class PostEndpoint extends Endpoint {
                   existingQuote.quotedOrRepostedFromUserId,
               commentCount: existingQuote.commentCount,
               dateCreated: existingQuote.dateCreated,
+              postType: existingQuote.postType,
+              subscribers: existingQuote.subscribers,
             ),
           );
 
@@ -823,6 +984,9 @@ class PostEndpoint extends Endpoint {
             session,
             projectId,
             transaction: transaction,
+            include: Project.include(
+              owner: UserRecord.include(),
+            ),
           );
 
           if (selectedProject == null) {
@@ -836,6 +1000,7 @@ class PostEndpoint extends Endpoint {
               projectId: selectedProject.id,
               likedBy: [],
               bookmarkedBy: [],
+              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -854,24 +1019,59 @@ class PostEndpoint extends Endpoint {
           );
 
           if (selectedProject.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: selectedProject.ownerId,
-              senderId: user.id!,
-              actionType: 'quoted',
-              targetType: 'project',
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              targetId: sentPost.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/feed/post/${sentPost.id}',
-              content: sentPost.text == null
-                  ? null
-                  : sentPost.text!.length > 100
-                      ? '${sentPost.text!.substring(0, 100)}...'
-                      : sentPost.text!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: selectedProject.ownerId,
+                senderId: user.id!,
+                actionType: 'quoted',
+                targetType: 'project',
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: sentPost.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/feed/post/${sentPost.id}',
+                content: sentPost.text == null
+                    ? null
+                    : sentPost.text!.length > 100
+                        ? '${sentPost.text!.substring(0, 100)}...'
+                        : sentPost.text!,
+              ),
+            );
+            unawaited(
+              NotificationEndpoint().notifyProjectSubscribers(
+                session,
+                senderId: user.id!,
+                actionType: 'quoted',
+                targetType: 'project',
+                triggerUser: getFullName(
+                  selectedProject.owner!.firstName!,
+                  selectedProject.owner!.middleName,
+                  selectedProject.owner!.lastName!,
+                ),
+                projectId: selectedProject.id!,
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                targetId: sentPost.id!,
+                senderName: getFullName(
+                    user.firstName!, user.middleName, user.lastName!),
+                actionRoute: '/feed/post/${sentPost.id}',
+                content: sentPost.text == null
+                    ? null
+                    : sentPost.text!.length > 100
+                        ? '${sentPost.text!.substring(0, 100)}...'
+                        : sentPost.text!,
+              ),
             );
           }
+
+          unawaited(
+            notifyTaggedOrMentionedUsers(
+              session,
+              user,
+              sentPost,
+              'article',
+            ),
+          );
 
           return sentPost.copyWith(
             quotedOrRepostedFromUser: user,
@@ -1049,15 +1249,17 @@ class PostEndpoint extends Endpoint {
     Session session,
     int postId,
   ) async {
-    Post? post;
     final user = await authUser(session);
 
     await session.db.transaction((transaction) async {
       try {
-        post = await Post.db.findById(
+        final post = await Post.db.findById(
           session,
           postId,
           transaction: transaction,
+          include: Post.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (post == null) {
           throw PostException(
@@ -1083,7 +1285,7 @@ class PostEndpoint extends Endpoint {
             existingBookmark,
             transaction: transaction,
           );
-          post!.bookmarkedBy?.remove(user.id!);
+          post.bookmarkedBy?.remove(user.id!);
         } else {
           await PostBookmarks.db.insertRow(
             session,
@@ -1093,27 +1295,61 @@ class PostEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          post!.bookmarkedBy?.add(user.id!);
+          post.bookmarkedBy?.add(user.id!);
 
-          if (post!.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: post!.ownerId,
-              senderId: user.id!,
-              actionType: 'bookmarked',
-              targetType: 'post',
-              targetId: post!.id!,
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/feed/post/${post!.id}',
-              content: post!.text!.length > 100
-                  ? '${post!.text!.substring(0, 100)}...'
-                  : post!.text!,
+          if (post.ownerId != user.id) {
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: post.ownerId,
+                senderId: user.id!,
+                actionType: 'bookmarked',
+                targetType: 'post',
+                targetId: post.id!,
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderName: getFullName(
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/feed/post/${post.id}',
+                content: post.text == null
+                    ? null
+                    : post.text!.length > 100
+                        ? '${post.text!.substring(0, 100)}...'
+                        : post.text!,
+              ),
+            );
+            unawaited(
+              NotificationEndpoint().notifyPostSubscribers(
+                session,
+                triggerUser: getFullName(
+                  post.owner!.firstName!,
+                  post.owner!.middleName,
+                  post.owner!.lastName!,
+                ),
+                postId: post.id!,
+                senderId: user.id!,
+                actionType: 'bookmarked',
+                targetType: 'post',
+                targetId: post.id!,
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderName: getFullName(
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/feed/post/${post.id}',
+                content: post.text == null
+                    ? null
+                    : post.text!.length > 100
+                        ? '${post.text!.substring(0, 100)}...'
+                        : post.text!,
+              ),
             );
           }
         }
-        await updatePost(session, post!);
+        await updatePost(session, post);
       } catch (e, stackTrace) {
         session.log(
           'Error in toggleBookmark: $e',
@@ -1139,6 +1375,9 @@ class PostEndpoint extends Endpoint {
           session,
           postId,
           transaction: transaction,
+          include: Post.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (post == null) {
           throw PostException(
@@ -1178,20 +1417,54 @@ class PostEndpoint extends Endpoint {
           post.likedBy?.add(user.id!);
 
           if (post.ownerId != user.id) {
-            await NotificationEndpoint().sendNotification(
-              session,
-              receiverId: post.ownerId,
-              senderId: user.id!,
-              actionType: 'liked',
-              targetType: 'post',
-              targetId: post.id!,
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
-              actionRoute: '/feed/post/${post.id}',
-              content: post.text!.length > 100
-                  ? '${post.text!.substring(0, 100)}...'
-                  : post.text!,
+            unawaited(
+              NotificationEndpoint().sendNotification(
+                session,
+                receiverId: post.ownerId,
+                senderId: user.id!,
+                actionType: 'liked',
+                targetType: 'post',
+                targetId: post.id!,
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderName: getFullName(
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/feed/post/${post.id}',
+                content: post.text == null
+                    ? null
+                    : post.text!.length > 100
+                        ? '${post.text!.substring(0, 100)}...'
+                        : post.text!,
+              ),
+            );
+            unawaited(
+              NotificationEndpoint().notifyPostSubscribers(
+                session,
+                postId: post.id!,
+                triggerUser: getFullName(
+                  post.owner!.firstName!,
+                  post.owner!.middleName,
+                  post.owner!.lastName!,
+                ),
+                senderId: user.id!,
+                actionType: 'liked',
+                targetType: 'post',
+                targetId: post.id!,
+                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderName: getFullName(
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/feed/post/${post.id}',
+                content: post.text == null
+                    ? null
+                    : post.text!.length > 100
+                        ? '${post.text!.substring(0, 100)}...'
+                        : post.text!,
+              ),
             );
           }
         }
@@ -1204,6 +1477,64 @@ class PostEndpoint extends Endpoint {
           stackTrace: stackTrace,
         );
       }
+    });
+  }
+
+  Future<void> subscribeToPost(Session session, int postId) async {
+    return await session.db.transaction((transaction) async {
+      // Authenticate the user
+      final user = await authUser(session);
+
+      final post = await Post.db.findById(
+        session,
+        postId,
+      );
+
+      if (post == null) {
+        throw PostException(
+          message: 'Post not found',
+        );
+      }
+
+      final exists = await PostSubscription.db.findFirstRow(
+        session,
+        where: (t) => t.userId.equals(user.id!) & t.postId.equals(postId),
+      );
+
+      if (exists != null) {
+        await PostSubscription.db.deleteWhere(
+          session,
+          where: (t) => t.userId.equals(user.id!) & t.postId.equals(postId),
+        );
+        await updatePost(
+          session,
+          post.copyWith(
+            subscribers: post.subscribers
+                    ?.where(
+                      (id) => id != user.id!,
+                    )
+                    .toList() ??
+                [],
+          ),
+        );
+        return;
+      }
+
+      await PostSubscription.db.insertRow(
+        session,
+        PostSubscription(
+          userId: user.id!,
+          postId: postId,
+          createdAt: DateTime.now(),
+        ),
+      );
+
+      await updatePost(
+        session,
+        post.copyWith(
+          subscribers: [...post.subscribers ?? [], user.id!],
+        ),
+      );
     });
   }
 

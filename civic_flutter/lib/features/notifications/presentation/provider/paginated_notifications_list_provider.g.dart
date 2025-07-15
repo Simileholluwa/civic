@@ -7,7 +7,7 @@ part of 'paginated_notifications_list_provider.dart';
 // **************************************************************************
 
 String _$paginatedNotificationsListHash() =>
-    r'a0b81d9a9ec4e528939c65514bdb3f0aba7142d1';
+    r'c39caca83ce0ddf3b182ed87d608521eb62ebf7e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$PaginatedNotificationsList
-    extends BuildlessAutoDisposeNotifier<PagingStatus> {
+    extends BuildlessNotifier<PagingStatus> {
   late final String targetType;
   late final bool isRead;
 
@@ -88,8 +88,7 @@ class PaginatedNotificationsListFamily extends Family<PagingStatus> {
 
 /// See also [PaginatedNotificationsList].
 class PaginatedNotificationsListProvider
-    extends AutoDisposeNotifierProviderImpl<PaginatedNotificationsList,
-        PagingStatus> {
+    extends NotifierProviderImpl<PaginatedNotificationsList, PagingStatus> {
   /// See also [PaginatedNotificationsList].
   PaginatedNotificationsListProvider(
     String targetType, [
@@ -155,7 +154,7 @@ class PaginatedNotificationsListProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<PaginatedNotificationsList, PagingStatus>
+  NotifierProviderElement<PaginatedNotificationsList, PagingStatus>
       createElement() {
     return _PaginatedNotificationsListProviderElement(this);
   }
@@ -179,8 +178,7 @@ class PaginatedNotificationsListProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PaginatedNotificationsListRef
-    on AutoDisposeNotifierProviderRef<PagingStatus> {
+mixin PaginatedNotificationsListRef on NotifierProviderRef<PagingStatus> {
   /// The parameter `targetType` of this provider.
   String get targetType;
 
@@ -189,8 +187,8 @@ mixin PaginatedNotificationsListRef
 }
 
 class _PaginatedNotificationsListProviderElement
-    extends AutoDisposeNotifierProviderElement<PaginatedNotificationsList,
-        PagingStatus> with PaginatedNotificationsListRef {
+    extends NotifierProviderElement<PaginatedNotificationsList, PagingStatus>
+    with PaginatedNotificationsListRef {
   _PaginatedNotificationsListProviderElement(super.provider);
 
   @override

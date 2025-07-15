@@ -9,45 +9,6 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectCardState {
-  final String? timeAgo;
-  final String? numberOfViews;
-  final List<String>? imagesUrl;
-  final String? description;
-  final String? title;
-  final String? currency;
-  final String? amount;
-  final String? completionRate;
-  final String? duration;
-  final String? numberOfLikes;
-  final String? numberOfReviews;
-  final String? numberOfReposts;
-  final String? numberOfVettings;
-  final String? numberOfBookmarks;
-  final bool? hasLiked;
-  final bool? hasReviewed;
-  final bool? hasVetted;
-  final UserRecord? creator;
-  final bool? canVet;
-  final bool? isBookmarked;
-  final String? startDateISO;
-  final String? endDateISO;
-  final double? percentageElapsedInDouble;
-  final String? percentageElapsedInString;
-  final String? category;
-  final String? subCategory;
-  final String? fundingAmount;
-  final String? fundingCategory;
-  final String? fundingSubCategory;
-  final Document? rawDescription;
-  final List<String>? pdfAttachments;
-  final bool? hasPdf;
-  final List<AWSPlaces>? locations;
-  final bool? hasLocation;
-  final bool? toggleFilter;
-  final bool? isOwner;
-  final bool? isFollower;
-  final bool? isDeleted;
-  final bool? canDelete;
   ProjectCardState({
     required this.timeAgo,
     required this.numberOfViews,
@@ -69,6 +30,8 @@ class ProjectCardState {
     required this.creator,
     required this.canVet,
     this.isBookmarked = false,
+    this.isSubscribed = false,
+    this.canEdit = false,
     required this.startDateISO,
     required this.endDateISO,
     required this.percentageElapsedInDouble,
@@ -89,6 +52,186 @@ class ProjectCardState {
     this.toggleFilter = false,
     this.canDelete = false,
   });
+
+  factory ProjectCardState.empty() {
+    return ProjectCardState(
+      timeAgo: null,
+      numberOfViews: null,
+      imagesUrl: null,
+      description: null,
+      title: null,
+      currency: null,
+      amount: null,
+      completionRate: null,
+      duration: null,
+      numberOfLikes: null,
+      numberOfReviews: null,
+      numberOfReposts: null,
+      numberOfVettings: null,
+      numberOfBookmarks: null,
+      hasReviewed: null,
+      hasVetted: null,
+      creator: null,
+      canVet: null,
+      startDateISO: null,
+      endDateISO: null,
+      percentageElapsedInDouble: null,
+      percentageElapsedInString: null,
+      category: null,
+      subCategory: null,
+      fundingAmount: null,
+      fundingCategory: null,
+      fundingSubCategory: null,
+      rawDescription: null,
+      pdfAttachments: null,
+      hasPdf: null,
+      locations: null,
+      hasLocation: null,
+      isOwner: null,
+      isFollower: null,
+    );
+  }
+
+  factory ProjectCardState.populate(
+    Project project,
+    Ref ref,
+  ) {
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    return ProjectCardState(
+      creator: project.owner!,
+      timeAgo: THelperFunctions.humanizeDateTime(
+        project.dateCreated!,
+      ),
+      numberOfViews: '100',
+      imagesUrl: project.projectImageAttachments!,
+      description: Document.fromJson(
+        jsonDecode(
+          project.description!,
+        ),
+      ).toPlainText(),
+      rawDescription: Document.fromJson(
+        jsonDecode(
+          project.description!,
+        ),
+      ),
+      canEdit: DateTime.now().difference(project.dateCreated!).inMinutes < 30 &&
+          userId == project.ownerId,
+      title: project.title!,
+      currency: project.currency!,
+      amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),
+      completionRate: ProjectHelperFunctions.percentageElapsed(
+        project.startDate!,
+        project.endDate!,
+      ),
+      duration: ProjectHelperFunctions.humanizeProjectDuration(
+        project.startDate!,
+        project.endDate!,
+      ),
+      numberOfLikes: THelperFunctions.humanizeNumber(
+        project.likedBy!.length,
+      ),
+      isSubscribed: project.subscribers!.contains(userId),
+      numberOfReviews: THelperFunctions.humanizeNumber(
+        project.reviewedBy!.length,
+      ),
+      numberOfVettings: THelperFunctions.humanizeNumber(
+        project.vettedBy!.length,
+      ),
+      numberOfBookmarks: THelperFunctions.humanizeNumber(
+        project.bookmarkedBy!.length,
+      ),
+      hasLiked: project.likedBy!.contains(
+        userId,
+      ),
+      hasReviewed: project.reviewedBy!.contains(
+        userId,
+      ),
+      hasVetted: project.vettedBy!.contains(
+        userId,
+      ),
+      isBookmarked: project.bookmarkedBy!.contains(
+        userId,
+      ),
+      numberOfReposts: THelperFunctions.humanizeNumber(
+        project.quoteCount!,
+      ),
+      canVet: ProjectHelperFunctions.canVet(
+        project.startDate!,
+        project.endDate!,
+      ),
+      startDateISO: project.startDate!.toIso8601String().substring(0, 10),
+      endDateISO: project.endDate!.toIso8601String().substring(0, 10),
+      percentageElapsedInDouble:
+          ProjectHelperFunctions.percentageElapsedInDouble(
+        project.startDate!,
+        project.endDate!,
+      ),
+      percentageElapsedInString:
+          ProjectHelperFunctions.percentageElapsedInString(
+        project.startDate!,
+        project.endDate!,
+      ),
+      category: project.projectCategory!,
+      subCategory: project.projectSubCategory!,
+      fundingAmount: '${project.currency} ${ProjectHelperFunctions.formatNumber(
+        project.projectCost!,
+      )}',
+      fundingCategory: project.fundingCategory!,
+      fundingSubCategory: project.fundingSubCategory!,
+      hasPdf: project.projectPDFAttachments?.isNotEmpty ?? false,
+      pdfAttachments: project.projectPDFAttachments ?? [],
+      locations: project.physicalLocations ?? [],
+      hasLocation: project.physicalLocations?.isNotEmpty ?? false,
+      isOwner: userId == project.ownerId,
+      isFollower: userId != project.ownerId &&
+          project.owner!.followers!.contains(
+            userId,
+          ),
+      isDeleted: project.isDeleted!,
+    );
+  }
+
+  final String? amount;
+  final bool? canDelete;
+  final bool canEdit;
+  final bool? canVet;
+  final String? category;
+  final String? completionRate;
+  final UserRecord? creator;
+  final String? currency;
+  final String? description;
+  final String? duration;
+  final String? endDateISO;
+  final String? fundingAmount;
+  final String? fundingCategory;
+  final String? fundingSubCategory;
+  final bool? hasLiked;
+  final bool? hasLocation;
+  final bool? hasPdf;
+  final bool? hasReviewed;
+  final bool? hasVetted;
+  final List<String>? imagesUrl;
+  final bool? isBookmarked;
+  final bool? isDeleted;
+  final bool? isFollower;
+  final bool? isOwner;
+  final bool isSubscribed;
+  final List<AWSPlaces>? locations;
+  final String? numberOfBookmarks;
+  final String? numberOfLikes;
+  final String? numberOfReposts;
+  final String? numberOfReviews;
+  final String? numberOfVettings;
+  final String? numberOfViews;
+  final List<String>? pdfAttachments;
+  final double? percentageElapsedInDouble;
+  final String? percentageElapsedInString;
+  final Document? rawDescription;
+  final String? startDateISO;
+  final String? subCategory;
+  final String? timeAgo;
+  final String? title;
+  final bool? toggleFilter;
 
   ProjectCardState copyWith({
     String? timeAgo,
@@ -172,141 +315,6 @@ class ProjectCardState {
       isOwner: isOwner ?? this.isOwner,
       isFollower: isFollower ?? this.isFollower,
       canDelete: canDelete ?? this.canDelete,
-    );
-  }
-
-  factory ProjectCardState.populate(
-    Project project,
-    Ref ref,
-  ) {
-    final userId = ref.read(localStorageProvider).getInt('userId');
-    return ProjectCardState(
-      creator: project.owner!,
-      timeAgo: THelperFunctions.humanizeDateTime(
-        project.dateCreated!,
-      ),
-      numberOfViews: '100',
-      imagesUrl: project.projectImageAttachments!,
-      description: Document.fromJson(
-        jsonDecode(
-          project.description!,
-        ),
-      ).toPlainText(),
-      rawDescription: Document.fromJson(
-        jsonDecode(
-          project.description!,
-        ),
-      ),
-      title: project.title!,
-      currency: project.currency!,
-      amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),
-      completionRate: ProjectHelperFunctions.percentageElapsed(
-        project.startDate!,
-        project.endDate!,
-      ),
-      duration: ProjectHelperFunctions.humanizeProjectDuration(
-        project.startDate!,
-        project.endDate!,
-      ),
-      numberOfLikes: THelperFunctions.humanizeNumber(
-        project.likedBy!.length,
-      ),
-      numberOfReviews: THelperFunctions.humanizeNumber(
-        project.reviewedBy!.length,
-      ),
-      numberOfVettings: THelperFunctions.humanizeNumber(
-        project.vettedBy!.length,
-      ),
-      numberOfBookmarks: THelperFunctions.humanizeNumber(
-        project.bookmarkedBy!.length,
-      ),
-      hasLiked: project.likedBy!.contains(
-        userId,
-      ),
-      hasReviewed: project.reviewedBy!.contains(
-        userId,
-      ),
-      hasVetted: project.vettedBy!.contains(
-        userId,
-      ),
-      isBookmarked: project.bookmarkedBy!.contains(
-        userId,
-      ),
-      numberOfReposts: THelperFunctions.humanizeNumber(
-        project.quoteCount!,
-      ),
-      canVet: ProjectHelperFunctions.canVet(
-        project.startDate!,
-        project.endDate!,
-      ),
-      startDateISO: project.startDate!.toIso8601String().substring(0, 10),
-      endDateISO: project.endDate!.toIso8601String().substring(0, 10),
-      percentageElapsedInDouble:
-          ProjectHelperFunctions.percentageElapsedInDouble(
-        project.startDate!,
-        project.endDate!,
-      ),
-      percentageElapsedInString:
-          ProjectHelperFunctions.percentageElapsedInString(
-        project.startDate!,
-        project.endDate!,
-      ),
-      category: project.projectCategory!,
-      subCategory: project.projectSubCategory!,
-      fundingAmount: '${project.currency} ${ProjectHelperFunctions.formatNumber(
-        project.projectCost!,
-      )}',
-      fundingCategory: project.fundingCategory!,
-      fundingSubCategory: project.fundingSubCategory!,
-      hasPdf: project.projectPDFAttachments?.isNotEmpty ?? false,
-      pdfAttachments: project.projectPDFAttachments ?? [],
-      locations: project.physicalLocations ?? [],
-      hasLocation: project.physicalLocations?.isNotEmpty ?? false,
-      isOwner: userId == project.ownerId,
-      isFollower: userId != project.ownerId &&
-          project.owner!.followers!.contains(
-            userId,
-          ),
-      isDeleted: project.isDeleted!,
-    );
-  }
-
-  factory ProjectCardState.empty() {
-    return ProjectCardState(
-      timeAgo: null,
-      numberOfViews: null,
-      imagesUrl: null,
-      description: null,
-      title: null,
-      currency: null,
-      amount: null,
-      completionRate: null,
-      duration: null,
-      numberOfLikes: null,
-      numberOfReviews: null,
-      numberOfReposts: null,
-      numberOfVettings: null,
-      numberOfBookmarks: null,
-      hasReviewed: null,
-      hasVetted: null,
-      creator: null,
-      canVet: null,
-      startDateISO: null,
-      endDateISO: null,
-      percentageElapsedInDouble: null,
-      percentageElapsedInString: null,
-      category: null,
-      subCategory: null,
-      fundingAmount: null,
-      fundingCategory: null,
-      fundingSubCategory: null,
-      rawDescription: null,
-      pdfAttachments: null,
-      hasPdf: null,
-      locations: null,
-      hasLocation: null,
-      isOwner: null,
-      isFollower: null,
     );
   }
 }

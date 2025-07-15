@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,10 +21,16 @@ class RepliesScreen extends ConsumerWidget {
         false,
       ),
     );
-    final commentController = ref.watch(
-      paginatedRepliesListProvider(replyId).notifier,
+    final postCardState = ref.watch(
+      feedButtonsProvider(
+        data.value,
+      ),
     );
-    log(replyId.toString());
+    final postCardNotifier = ref.watch(
+      feedButtonsProvider(
+        data.value,
+      ).notifier,
+    );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -51,14 +55,28 @@ class RepliesScreen extends ConsumerWidget {
               data: (_) {
                 return [
                   IconButton(
-                    icon: const Icon(Iconsax.refresh),
-                    onPressed: () {
-                      commentController.refresh();
-                    },
-                  ),
-                  IconButton(
                     icon: const Icon(Iconsax.filter),
                     onPressed: () {},
+                  ),
+                  IconButton(
+                    onPressed: postCardState.isOwner
+                        ? null
+                        : () async {
+                            await postCardNotifier.subscribeToNotifications(
+                              data.value!.id!,
+                            );
+                          },
+                    icon: Icon(
+                      postCardState.isSubscribed
+                          ? Iconsax.notification_bing5
+                          : Iconsax.notification_bing,
+                      color: postCardState.isOwner
+                          ? Theme.of(context).disabledColor
+                          : postCardState.isSubscribed
+                              ? TColors.primary
+                              : Theme.of(context).iconTheme.color,
+                      size: 26,
+                    ),
                   ),
                   const SizedBox(width: 5),
                 ];
@@ -113,10 +131,8 @@ class RepliesScreen extends ConsumerWidget {
       ),
       body: data.when(
         data: (_) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
+          return Padding(
+            padding: const EdgeInsets.only(top: 10),
             child: PostCommentReplyCard(
               postId: replyId,
             ),

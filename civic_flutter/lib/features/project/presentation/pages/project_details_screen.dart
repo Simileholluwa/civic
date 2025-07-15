@@ -18,16 +18,25 @@ class ProjectDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(projectDetailProvider(projectId, project),);
+    final data = ref.watch(
+      projectDetailProvider(projectId, project),
+    );
+    final liveProject = ref.watch(
+      projectStreamProvider(
+        projectId,
+        project,
+      ),
+    );
+    final newProject = liveProject.value ?? data.value;
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
-        data.value,
+        newProject
       ),
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
-        data.value,
+        newProject
       ).notifier,
     );
     return Scaffold(
@@ -57,11 +66,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                 : Theme.of(context).iconTheme.color!,
                       ),
                     ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     IconButton(
                       onPressed: projectCardState.isDeleted!
                           ? null
                           : () {
-                            
                               context.push(
                                 '/create/post/0',
                                 extra: {
@@ -76,23 +87,45 @@ class ProjectDetailsScreen extends ConsumerWidget {
                             : Theme.of(context).iconTheme.color!,
                       ),
                     ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    IconButton(
+                      onPressed: projectCardState.isOwner!
+                          ? null
+                          : () async {
+                              await projectCardNotifier
+                                  .subscribeToNotifications(
+                                data.value!.id!,
+                              );
+                            },
+                      icon: Icon(
+                        projectCardState.isSubscribed
+                            ? Iconsax.notification_bing5
+                            : Iconsax.notification_bing,
+                        color: projectCardState.isOwner!
+                            ? null
+                            : projectCardState.isSubscribed
+                                ? TColors.primary
+                                : Theme.of(context).iconTheme.color,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     IconButton(
                       onPressed: projectCardState.isDeleted!
                           ? null
                           : () {
-                              showModalBottomSheet(
+                              showDialog(
                                 context: context,
-                                constraints: BoxConstraints(
-                                  maxHeight: projectCardState.isOwner!
-                                      ? 240
-                                      : projectCardState.canVet!
-                                          ? 480
-                                          : 430,
-                                ),
                                 builder: (ctx) {
-                                  return ShowProjectActions(
-                                    project: data.value!,
-                                    fromDetails: true,
+                                  return AlertDialog(
+                                    contentPadding: const EdgeInsets.only(bottom: 16,),
+                                    content: ShowProjectActions(
+                                      project: newProject!,
+                                      fromDetails: true,
+                                    ),
                                   );
                                 },
                               );
@@ -110,10 +143,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   ]
             : [],
         bottomHeight: 54,
-        height: 45,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppTabBarDesign(
+            showTopBorder: true,
             tabController: tabController,
             dividerColor: Colors.transparent,
             tabs: [
@@ -135,7 +168,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
             return null;
           }
           return ProjectDetailsBottomNavigationWidget(
-            project: value,
+            project: newProject!,
           );
         },
         error: (error, st) {
@@ -165,16 +198,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
             controller: tabController,
             children: [
               ProjectDetailsWidget(
-                project: project,
+                project: newProject!,
               ),
               ProjectOverviewWidget(
-                project: project,
+                project: newProject,
               ),
               ProjectReviewsList(
-                project: project,
-                text: projectCardState.isDeleted! && data.value == null
-                    ? 'There are no reviews available for this project'
-                    : null,
+                project: newProject,
               ),
               const ProjectVettingsList(),
             ],

@@ -25,9 +25,7 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
     pagingController.addStatusListener((status) {
       state = status;
     });
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    
     return PagingStatus.loadingFirstPage;
   }
 

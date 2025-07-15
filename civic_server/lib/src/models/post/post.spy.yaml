@@ -16,6 +16,7 @@ fields:
     likedBy: List<int>?
     bookmarkedBy: List<int>?
     commentCount: int?, default=0
+    subscribers: List<int>?
     poll: Poll?, relation(optional, onDelete=cascade)
     article: Article?, relation(optional, onDelete=cascade)
     project: Project?, relation(optional, onDelete=NoAction)

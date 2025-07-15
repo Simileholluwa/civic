@@ -2,6 +2,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PostCommentAndReplyContent extends StatelessWidget {
   const PostCommentAndReplyContent({
@@ -25,48 +26,65 @@ class PostCommentAndReplyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 10,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CreatorNameAndAccountInfo(
-          creator: replyOrComment.owner!,
-          timeAgo: THelperFunctions.humanizeDateTime(
-            replyOrComment.dateCreated ?? DateTime.now(),
+    return InkWell(
+      onTap: () {
+        context.push(
+          '/feed/post/${replyOrComment.id}',
+          extra: replyOrComment,
+          
+        );
+      },
+      child: Column(
+        spacing: 10,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CreatorNameAndAccountInfo(
+            creator: replyOrComment.owner!,
+            timeAgo: THelperFunctions.humanizeDateTime(
+              replyOrComment.dateCreated ?? DateTime.now(),
+            ),
           ),
-        ),
-        if (replyOrComment.text != null)
-          ContentExpandableText(
-            text: replyOrComment.text!,
-            noMaxLines: true,
-            onToggleTextTap: () {},
+          if (replyOrComment.text != null)
+            ContentExpandableText(
+              text: replyOrComment.text!,
+              noMaxLines: true,
+              onToggleTextTap: () {},
+            ),
+          if (replyOrComment.imageUrls?.isNotEmpty ?? false)
+            replyOrComment.imageUrls!.length == 1
+                ? ContentSingleCachedImage(
+                    imageUrl: replyOrComment.imageUrls!.first,
+                    useMargin: false,
+                  )
+                : ContentMultipleCachedImage(
+                    imageUrls: replyOrComment.imageUrls!,
+                    useMargin: false,
+                  ),
+          if (replyOrComment.taggedUsers!.isNotEmpty || replyOrComment.locations!.isNotEmpty)
+            ContentEngagementTagsAndLocations(
+              usePadding: false,
+              tags: replyOrComment.taggedUsers!,
+              locations: replyOrComment.locations!,
+              hasTags: replyOrComment.taggedUsers!.isNotEmpty,
+              hasLocations: replyOrComment.locations!.isNotEmpty,
+            ),
+          PostInteractionButtons(
+            post: replyOrComment,
+            hasPadding: false,
+            onReply: onReply,
+            replyIcon1: Icons.reply_rounded,
+            isReply: isReply,
+            isComment: isComment,
+            originalPostId: originalPostId,
+            iconSize: 20,
           ),
-        if (replyOrComment.imageUrls?.isNotEmpty ?? false)
-          replyOrComment.imageUrls!.length == 1
-              ? ContentSingleCachedImage(
-                  imageUrl: replyOrComment.imageUrls!.first,
-                  useMargin: false,
-                )
-              : ContentMultipleCachedImage(
-                  imageUrls: replyOrComment.imageUrls!,
-                  useMargin: false,
-                ),
-        PostInteractionButtons(
-          post: replyOrComment,
-          hasPadding: false,
-          onReply: onReply,
-          replyIcon1: Icons.reply_rounded,
-          isReply: isReply,
-          isComment: isComment,
-          originalPostId: originalPostId,
-          iconSize: 20,
-        ),
-        if (replyOrComment.commentCount == 0)
-          const SizedBox(
-            height: 5,
-          ),
-      ],
+          if (replyOrComment.commentCount == 0)
+            const SizedBox(
+              height: 5,
+            ),
+        ],
+      ),
     );
   }
 }

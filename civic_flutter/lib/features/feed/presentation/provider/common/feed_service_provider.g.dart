@@ -178,6 +178,24 @@ final deletePostProvider = AutoDisposeProvider<DeletePostUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DeletePostRef = AutoDisposeProviderRef<DeletePostUseCase>;
+String _$subscribeToNotifHash() => r'86e000194bcb5bb390ae0a6002bf802a76fa3237';
+
+/// See also [subscribeToNotif].
+@ProviderFor(subscribeToNotif)
+final subscribeToNotifProvider =
+    AutoDisposeProvider<SubscribeToNotifUseCase>.internal(
+  subscribeToNotif,
+  name: r'subscribeToNotifProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$subscribeToNotifHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SubscribeToNotifRef = AutoDisposeProviderRef<SubscribeToNotifUseCase>;
 String _$schedulePostHash() => r'8948010478ff7b49dd72477f1b5b3d0985918ab7';
 
 /// See also [schedulePost].
