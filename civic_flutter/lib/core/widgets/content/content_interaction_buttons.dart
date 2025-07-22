@@ -49,6 +49,7 @@ class ContentInteractionButton extends StatelessWidget {
                             color: color,
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'Montserrat',
                           ),
                     ),
                   ),

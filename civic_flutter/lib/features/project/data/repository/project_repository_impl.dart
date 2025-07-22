@@ -50,11 +50,13 @@ class ProjectRepositoryImpl extends ProjectRepository {
   Future<Either<Failure, ProjectList>> getProjects({
     required int page,
     required int limit,
+    required String sortBy,
   }) async {
     try {
       final result = await _remoteDatasource.getProjects(
         page: page,
         limit: limit,
+        sortBy: sortBy,
       );
       return Right(result);
     } on ServerException catch (e) {

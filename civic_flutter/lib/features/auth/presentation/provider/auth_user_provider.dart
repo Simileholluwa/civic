@@ -23,7 +23,9 @@ class AuthUser extends _$AuthUser {
   Future<void> fetchUser() async {
     final me = ref.read(fetchUserProvider);
     final result = await me(
-      NoParams(),
+      GetUserParams(
+        userId: null,
+      ),
     );
     return result.fold((error) {
       log(error.message);

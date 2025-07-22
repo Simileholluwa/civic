@@ -100,6 +100,7 @@ export 'presentation/widgets/project_screen/project_date_filter.dart';
 export 'presentation/widgets/project_screen/project_filter_buttons.dart';
 export 'presentation/widgets/project_screen/project_funding_filter.dart';
 export 'presentation/widgets/project_screen/project_location_filter.dart';
+export 'presentation/widgets/project_screen/projects_infinite_list.dart';
 export 'presentation/widgets/project_screen/project_status_filter.dart';
 export 'presentation/widgets/project_screen/project_filter_column_divider.dart';
 export 'presentation/widgets/project_screen/project_card.dart';

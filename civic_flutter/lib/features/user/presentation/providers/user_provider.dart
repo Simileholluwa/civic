@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_provider.g.dart';
@@ -26,10 +25,12 @@ class CurrentActiveUser extends _$CurrentActiveUser {
     });
   }
 
-  Future<bool> fetchUser() async {
+  Future<bool> fetchUser(int userId) async {
     final fetchUser = ref.read(fetchUserProvider);
     final result = await fetchUser(
-      NoParams(),
+      GetUserParams(
+        userId: userId,
+      ),
     );
     return result.fold(
       (l) {

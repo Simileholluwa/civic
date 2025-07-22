@@ -30,7 +30,7 @@ class AppWrapper extends ConsumerWidget {
             ? null
             : AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                height: hideBottomNav ? 0 : 60,
+                height: hideBottomNav ? 0 : 55,
                 child: BottomNavigationBar(
                   currentIndex: navigatorShell.currentIndex,
                   onTap: (index) {
@@ -39,24 +39,55 @@ class AppWrapper extends ConsumerWidget {
                       initialLocation: index == navigatorShell.currentIndex,
                     );
                   },
+                  iconSize: 30,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   items: [
                     BottomNavigationBarItem(
-                        activeIcon: Icon(Iconsax.note),
-                        icon: Icon(Iconsax.note),
-                        label: 'Projects'),
+                      activeIcon: Icon(
+                        Iconsax.note,
+                        size: 26,
+                      ),
+                      icon: Icon(
+                        Iconsax.note,
+                        size: 26,
+                      ),
+                      label: '',
+                    ),
                     BottomNavigationBarItem(
-                        activeIcon: Icon(Iconsax.airdrop5),
-                        icon: Icon(Iconsax.airdrop),
-                        label: 'Feed'),
+                      activeIcon: Icon(
+                        Iconsax.airdrop5,
+                        size: 26,
+                      ),
+                      icon: Icon(
+                        Iconsax.airdrop,
+                        size: 26,
+                      ),
+                      label: '',
+                    ),
                     BottomNavigationBarItem(
-                        activeIcon: Icon(Iconsax.magicpen5),
-                        icon: Icon(Iconsax.magicpen),
-                        label: 'Create'),
+                      activeIcon: Icon(
+                        Iconsax.pen_tool5,
+                        size: 26,
+                      ),
+                      icon: Icon(
+                        Iconsax.pen_tool,
+                        size: 26,
+                      ),
+                      label: '',
+                    ),
                     BottomNavigationBarItem(
-                        activeIcon: Icon(Iconsax.notification5),
-                        icon: Icon(Iconsax.notification),
-                        label: 'Updates'),
+                      activeIcon: Icon(
+                        Iconsax.notification5,
+                        size: 26,
+                      ),
+                      icon: Icon(
+                        Iconsax.notification,
+                        size: 26,
+                      ),
+                      label: '',
+                    ),
                   ],
                 ),
               ),

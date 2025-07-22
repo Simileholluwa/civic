@@ -6,6 +6,7 @@ abstract class ProjectRepository {
   Future<Either<Failure, ProjectList>> getProjects({
     required int page,
     required int limit,
+    required String sortBy,
   });
 
   Future<Either<Failure, ProjectVetList>> getVettedProjects({

@@ -19,22 +19,29 @@ class UserRecordEndpoint extends Endpoint {
 
   Future<UserRecord?> getUser(
     Session session,
+    int? userId,
   ) async {
     // Fetch the authenticated user
-    final authInfo = await session.authenticated;
-
-    // If the user is not authenticated, return null
-    if (authInfo == null) return null;
+    int? id;
+    if (userId == null) {
+      final authInfo = await session.authenticated;
+      if (authInfo == null) return null;
+      id = authInfo.userId;
+    } else {
+      id = userId;
+    }
 
     // Fetch the user record from the local database
-    var cacheKey = 'UserData-${authInfo.userId}';
-    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
+    var cacheKey = 'UserData-$id';
+    var userRecord = await session.caches.localPrio.get<UserRecord>(
+      cacheKey,
+    );
 
     // If the user record is not in the cache, fetch it from the database
     if (userRecord == null) {
       userRecord = await UserRecord.db.findFirstRow(
         session,
-        where: (row) => row.userInfoId.equals(authInfo.userId),
+        where: (row) => row.userInfoId.equals(id),
         include: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
@@ -277,9 +284,10 @@ class UserRecordEndpoint extends Endpoint {
     return null;
   }
 
-    Stream<UserRecord> userUpdates(Session session, int userId) async* {
+  Stream<UserRecord> userUpdates(Session session, int userId) async* {
     // Create a message stream for this user
-    var updateStream = session.messages.createStream<UserRecord>('user_$userId');
+    var updateStream =
+        session.messages.createStream<UserRecord>('user_$userId');
 
     // Yield the latest user details when the client subscribes
     var user = await UserRecord.db.findById(
@@ -303,8 +311,7 @@ class UserRecordEndpoint extends Endpoint {
   }
 
   @doNotGenerate
-  Future<void> updateUser(
-      Session session, UserRecord userRecord) async {
+  Future<void> updateUser(Session session, UserRecord userRecord) async {
     // Update the project in the database
     await UserRecord.db.updateRow(session, userRecord);
 

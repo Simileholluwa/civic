@@ -1518,23 +1518,28 @@ class PostEndpoint extends Endpoint {
           ),
         );
         return;
+      } else {
+        await PostSubscription.db.insertRow(
+          session,
+          PostSubscription(
+            userId: user.id!,
+            postId: postId,
+            createdAt: DateTime.now(),
+          ),
+        );
+
+        await updatePost(
+          session,
+          post.copyWith(
+            subscribers: <int>{
+              ...post.subscribers ?? [],
+              user.id!,
+            }.toList(),
+          ),
+        );
+
+        return;
       }
-
-      await PostSubscription.db.insertRow(
-        session,
-        PostSubscription(
-          userId: user.id!,
-          postId: postId,
-          createdAt: DateTime.now(),
-        ),
-      );
-
-      await updatePost(
-        session,
-        post.copyWith(
-          subscribers: [...post.subscribers ?? [], user.id!],
-        ),
-      );
     });
   }
 
@@ -1627,23 +1632,33 @@ class PostEndpoint extends Endpoint {
       );
     }
 
-    final user = await UserRecord.db.findFirstRow(
-      session,
-      where: (row) => row.userInfoId.equals(
-        authInfo.userId,
-      ),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
+    // Fetch the user record from the local database
+    var cacheKey = 'UserData-${authInfo.userId}';
+    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
 
-    if (user == null) {
-      throw UserException(
-        message: 'User not found',
+    if (userRecord == null) {
+      userRecord = await UserRecord.db.findFirstRow(
+        session,
+        where: (row) => row.userInfoId.equals(authInfo.userId),
+        include: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
       );
+      if (userRecord != null) {
+        await session.caches.localPrio.put(
+          cacheKey,
+          userRecord,
+          lifetime: Duration(
+            days: 1,
+          ),
+        );
+        return userRecord;
+      }
     }
-
-    return user;
+    if (userRecord == null) {
+      throw UserException(message: 'User not found');
+    }
+    return userRecord;
   }
 
   @doNotGenerate

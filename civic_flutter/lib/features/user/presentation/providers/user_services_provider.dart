@@ -1,5 +1,3 @@
-
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/user/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,8 +28,8 @@ ToggleFollowUseCase toggleFollow(Ref ref) {
 }
 
 @riverpod
-FetchUserUseCase fetchUser(Ref ref) {
-  return FetchUserUseCase(
+GetUserUseCase fetchUser(Ref ref) {
+  return GetUserUseCase(
     userRepository: ref.read(userRepositoryImplProvider,),
   );
 }

@@ -26,9 +26,9 @@ class UserRepositoryImpl extends UserRepository{
   }
 
   @override
-  Future<Either<Failure, UserRecord>> fetchUser() async {
+  Future<Either<Failure, UserRecord>> getUser({required int? userId,}) async {
     try {
-      final result = await _remoteDatasource.fetchUser();
+      final result = await _remoteDatasource.getUser(userId: userId,);
       return Right(result);
     } on ServerException catch (e) {
       return Left(

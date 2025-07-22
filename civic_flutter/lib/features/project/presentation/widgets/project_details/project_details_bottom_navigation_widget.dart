@@ -71,7 +71,8 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
                   color: TColors.textWhite,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor:
+                      projectCardState.canVet! ? Colors.blue : TColors.primary,
                   foregroundColor: TColors.textWhite,
                   padding: const EdgeInsets.symmetric(
                     vertical: 10,

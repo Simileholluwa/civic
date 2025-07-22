@@ -214,6 +214,9 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectReview.projectId,
           transaction: transaction,
+          include: Project.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (project == null) {
           throw PostException(
@@ -388,7 +391,10 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: sentReview.projectId,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${project.id}',
                 content: sentReview.review!.length > 100
                     ? '${sentReview.review!.substring(0, 100)}...'
@@ -641,6 +647,7 @@ class ProjectEndpoint extends Endpoint {
     Session session, {
     int limit = 50,
     int page = 1,
+    String sortBy = '',
   }) async {
     try {
       if (limit <= 0 || page <= 0) {
@@ -659,7 +666,8 @@ class ProjectEndpoint extends Endpoint {
         session,
         where: (t) => t.id.notInSet(ignoredIds),
       );
-      final results = await Project.db.find(
+
+      var results = await Project.db.find(
         session,
         limit: limit,
         offset: (page - 1) * limit,
@@ -669,9 +677,23 @@ class ProjectEndpoint extends Endpoint {
           ),
         ),
         where: (t) => t.id.notInSet(ignoredIds),
-        orderBy: (t) => t.dateCreated,
-        orderDescending: true,
       );
+
+      if (sortBy == 'new') {
+        results.sort(
+          (a, b) => b.dateCreated!.compareTo(a.dateCreated!),
+        );
+      } else if (sortBy == 'trending') {
+        results.sort(
+          (a, b) => engagementScore(b).compareTo(
+            engagementScore(a),
+          ),
+        );
+      } else if (sortBy == 'rating') {
+        results.sort(
+          (a, b) => b.overallRating!.compareTo(a.overallRating!),
+        );
+      }
 
       return ProjectList(
         count: count,
@@ -692,6 +714,15 @@ class ProjectEndpoint extends Endpoint {
         message: 'Error fetching projects',
       );
     }
+  }
+
+  @doNotGenerate
+  double engagementScore(Project p) {
+    return (p.likedBy!.length * 2) +
+        (p.quoteCount! * 2) +
+        (p.bookmarkedBy!.length * 1) +
+        (p.reviewedBy!.length * 3) +
+        (p.vettedBy!.length * 4);
   }
 
   /// Retrieves a paginated list of project reviews for a specific project.
@@ -908,7 +939,7 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: review!.projectId,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                    user.firstName!, user.middleName, user.lastName!,),
                 actionRoute: '/project/${review!.projectId}',
                 content: review!.review!.length > 100
                     ? '${review!.review!.substring(0, 100)}...'
@@ -1049,7 +1080,7 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: vetting!.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                    user.firstName!, user.middleName, user.lastName!,),
                 actionRoute: '/project/${vetting!.projectId}',
                 content: vetting!.comment!.length > 100
                     ? '${vetting!.comment!.substring(0, 100)}...'
@@ -1131,15 +1162,16 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int projectId,
   ) async {
-    Project? project;
-    final user = await authUser(session);
-
     await session.db.transaction((transaction) async {
       try {
-        project = await Project.db.findById(
+        final user = await authUser(session);
+        final project = await Project.db.findById(
           session,
           projectId,
           transaction: transaction,
+          include: Project.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (project == null) {
           throw PostException(
@@ -1165,7 +1197,7 @@ class ProjectEndpoint extends Endpoint {
             existingBookmark,
             transaction: transaction,
           );
-          project!.bookmarkedBy?.remove(user.id!);
+          project.bookmarkedBy?.remove(user.id!);
         } else {
           await ProjectBookmarks.db.insertRow(
             session,
@@ -1175,51 +1207,57 @@ class ProjectEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          project!.bookmarkedBy?.add(user.id!);
+          project.bookmarkedBy?.add(user.id!);
 
-          if (project!.ownerId != user.id) {
+          if (project.ownerId != user.id) {
             unawaited(
               NotificationEndpoint().sendNotification(
                 session,
-                receiverId: project!.ownerId,
+                receiverId: project.ownerId,
                 senderId: user.id!,
                 actionType: 'bookmarked',
                 targetType: 'project',
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project!.id!,
+                targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/project/${project!.id!}',
-                content: project!.title!.length > 100
-                    ? '${project!.title!.substring(0, 100)}...'
-                    : project!.title!,
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/project/${project.id!}',
+                content: project.title!.length > 100
+                    ? '${project.title!.substring(0, 100)}...'
+                    : project.title!,
               ),
             );
             unawaited(
               NotificationEndpoint().notifyProjectSubscribers(
                 session,
-                projectId: project!.id!,
+                projectId: project.id!,
                 senderId: user.id!,
                 actionType: 'bookmarked',
                 targetType: 'project',
                 triggerUser: getFullName(
-                  project!.owner!.firstName!,
-                  project!.owner!.middleName,
-                  project!.owner!.lastName!,
+                  project.owner!.firstName!,
+                  project.owner!.middleName,
+                  project.owner!.lastName!,
                 ),
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project!.id!,
+                targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/project/${project!.id}',
-                content: project!.title!.length > 100
-                    ? '${project!.title!.substring(0, 100)}...'
-                    : project!.title!,
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/project/${project.id}',
+                content: project.title!.length > 100
+                    ? '${project.title!.substring(0, 100)}...'
+                    : project.title!,
               ),
             );
           }
         }
-        await updateProject(session, project!);
+        await updateProject(session, project);
       } catch (e, stackTrace) {
         session.log(
           'Error in toggleBookmark: $e',
@@ -1247,14 +1285,16 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int projectId,
   ) async {
-    Project? project;
-    final user = await authUser(session);
     await session.db.transaction((transaction) async {
       try {
-        project = await Project.db.findById(
+        final user = await authUser(session);
+        final project = await Project.db.findById(
           session,
           projectId,
           transaction: transaction,
+          include: Project.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (project == null) {
           throw PostException(
@@ -1280,7 +1320,7 @@ class ProjectEndpoint extends Endpoint {
             existingLike,
             transaction: transaction,
           );
-          project!.likedBy?.remove(user.id!);
+          project.likedBy?.remove(user.id!);
         } else {
           await ProjectLikes.db.insertRow(
             session,
@@ -1291,51 +1331,57 @@ class ProjectEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          project!.likedBy?.add(user.id!);
+          project.likedBy?.add(user.id!);
 
-          if (project!.ownerId != user.id) {
+          if (project.ownerId != user.id) {
             unawaited(
               NotificationEndpoint().sendNotification(
                 session,
-                receiverId: project!.ownerId,
+                receiverId: project.ownerId,
                 senderId: user.id!,
                 actionType: 'liked',
                 targetType: 'project',
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project!.id!,
+                targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/project/${project!.id!}',
-                content: project!.title!.length > 100
-                    ? '${project!.title!.substring(0, 100)}...'
-                    : project!.title!,
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/project/${project.id!}',
+                content: project.title!.length > 100
+                    ? '${project.title!.substring(0, 100)}...'
+                    : project.title!,
               ),
             );
             unawaited(
               NotificationEndpoint().notifyProjectSubscribers(
                 session,
-                projectId: project!.id!,
+                projectId: project.id!,
                 senderId: user.id!,
                 actionType: 'liked',
                 targetType: 'project',
                 triggerUser: getFullName(
-                  project!.owner!.firstName!,
-                  project!.owner!.middleName,
-                  project!.owner!.lastName!,
+                  project.owner!.firstName!,
+                  project.owner!.middleName,
+                  project.owner!.lastName!,
                 ),
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project!.id!,
+                targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/project/${project!.id}',
-                content: project!.title!.length > 100
-                    ? '${project!.title!.substring(0, 100)}...'
-                    : project!.title!,
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
+                actionRoute: '/project/${project.id}',
+                content: project.title!.length > 100
+                    ? '${project.title!.substring(0, 100)}...'
+                    : project.title!,
               ),
             );
           }
         }
-        await updateProject(session, project!);
+        await updateProject(session, project);
       } catch (e, stackTrace) {
         session.log(
           'Error in toggleLike: $e',
@@ -1412,6 +1458,9 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectVetting.projectId,
           transaction: transaction,
+          include: Project.include(
+            owner: UserRecord.include(),
+          ),
         );
         if (project == null) {
           throw PostException(
@@ -1460,7 +1509,10 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${project.id!}',
                 content: newVetting.comment!.length > 100
                     ? '${newVetting.comment!.substring(0, 100)}...'
@@ -1483,7 +1535,10 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${project.id}',
                 content: project.title!.length > 100
                     ? '${project.title!.substring(0, 100)}...'
@@ -1629,23 +1684,33 @@ class ProjectEndpoint extends Endpoint {
       );
     }
 
-    final user = await UserRecord.db.findFirstRow(
-      session,
-      where: (row) => row.userInfoId.equals(
-        authInfo.userId,
-      ),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
+    // Fetch the user record from the local database
+    var cacheKey = 'UserData-${authInfo.userId}';
+    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
 
-    if (user == null) {
-      throw UserException(
-        message: 'User not found',
+    if (userRecord == null) {
+      userRecord = await UserRecord.db.findFirstRow(
+        session,
+        where: (row) => row.userInfoId.equals(authInfo.userId),
+        include: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
       );
+      if (userRecord != null) {
+        await session.caches.localPrio.put(
+          cacheKey,
+          userRecord,
+          lifetime: Duration(
+            days: 1,
+          ),
+        );
+        return userRecord;
+      }
     }
-
-    return user;
+    if (userRecord == null) {
+      throw UserException(message: 'User not found');
+    }
+    return userRecord;
   }
 
   /// Validates that the given [user] is the owner of the project with the specified [projectId].

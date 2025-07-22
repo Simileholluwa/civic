@@ -103,6 +103,12 @@ class NotificationsHelper {
         color: Colors.white,
         size: 15,
       );
+    } else if (actionType.contains('mentioned')) {
+      return Icon(
+        Icons.person,
+        color: Colors.white,
+        size: 15,
+      );
     } else if (actionType == 'bookmarked') {
       return Icon(
         Icons.bookmark_rounded,
@@ -135,7 +141,7 @@ class NotificationsHelper {
       );
     } else {
       return Icon(
-        Iconsax.notification,
+        Iconsax.notification5,
         color: Colors.white,
         size: 15,
       );

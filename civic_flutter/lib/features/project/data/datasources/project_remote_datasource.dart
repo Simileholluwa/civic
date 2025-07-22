@@ -7,6 +7,7 @@ abstract class ProjectRemoteDataSource {
   Future<ProjectList> getProjects({
     required int limit,
     required int page,
+    required String sortBy,
   });
 
   Future<ProjectVetList> getVettedProjects({
@@ -155,11 +156,13 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   Future<ProjectList> getProjects({
     required int limit,
     required int page,
+    required String sortBy,
   }) async {
     try {
       final result = _client.project.getProjects(
         limit: limit,
         page: page,
+        sortBy: sortBy,
       );
       return result;
     } on PostException catch (e) {

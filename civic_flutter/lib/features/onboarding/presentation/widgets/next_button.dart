@@ -18,7 +18,7 @@ class OnBoardingNextButton extends StatelessWidget {
         ),
         child: SizedBox(
           width: double.maxFinite,
-          height: 60,
+          height: 55,
           child: FilledButton(
             onPressed: () {
               ref.read(onboardingProvider.notifier).cacheFirstTimer();

@@ -14,7 +14,7 @@ class PollsScreen extends ConsumerWidget {
         ref.watch(paginatedPollListProvider.notifier);
     return AppInfiniteList<Post>(
       pagingController: pagingControllerNotifier.pagingController,
-      scrollController: ref.read(pollScrollControllerProvider),
+      scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, post, index) {
         return PollCard(post: post);
       },

@@ -72,39 +72,20 @@ class DetailScreen extends ConsumerWidget {
                       onPressed: postCardState.isOwner
                           ? null
                           : () async {
-                              await postCardNotifier.toggleFollow(
-                                data.value!.ownerId,
-                                data.value!.owner!.userInfo!.userName!,
-                              );
-                            },
-                      icon: Icon(
-                        postCardState.isFollower
-                            ? Icons.person_remove_sharp
-                            : Icons.person_add_sharp,
-                        color: postCardState.isOwner
-                            ? Theme.of(context).disabledColor
-                            : Theme.of(context).iconTheme.color,
-                        size: 30,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: postCardState.isOwner
-                          ? null
-                          : () async {
                               await postCardNotifier.subscribeToNotifications(
                                 data.value!.id!,
                               );
                             },
                       icon: Icon(
                         postCardState.isSubscribed
-                            ? Iconsax.notification_bing5
-                            : Iconsax.notification_bing,
+                            ? Iconsax.notification5
+                            : Iconsax.notification,
                         color: postCardState.isOwner
                             ? Theme.of(context).disabledColor
                             : postCardState.isSubscribed
                                 ? TColors.primary
                                 : Theme.of(context).iconTheme.color,
-                        size: 26,
+                        size: 30,
                       ),
                     ),
                     const SizedBox(

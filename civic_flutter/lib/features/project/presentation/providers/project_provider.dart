@@ -807,7 +807,7 @@ class ProjectProvider extends _$ProjectProvider {
       if (projectId == null) {
         ref
             .watch(
-              paginatedProjectListProvider.notifier,
+              paginatedProjectListProvider('').notifier,
             )
             .addProject(
               response,

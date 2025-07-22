@@ -16,95 +16,141 @@ class NotificationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isVisible = ref.watch(
-      appScrollVisibilityProvider(
-        true,
-      ),
-    );
     final tabController = ref.watch(notificationTabControllerProvider);
     final notifNotifier = ref.watch(notifProvider.notifier);
     return Scaffold(
-      appBar: ContentAppBar(
-        isVisible: isVisible,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.apps,
-            size: 30,
-          ),
-          onPressed: () {},
+      drawer: AppDrawer(),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              toolbarHeight: 60,
+              floating: true,
+              snap: true,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.apps,
+                  size: 30,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(65),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      spacing: 10,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
+                            padding: const EdgeInsets.all(
+                              5,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                100,
+                              ),
+                              color: Theme.of(context).cardColor,
+                              border: Border.all(
+                                color: Theme.of(context).dividerColor,
+                              ),
+                            ),
+                            child: AppTabBarDesign(
+                              height: 35,
+                              tabController: tabController,
+                              dividerColor: Colors.transparent,
+                              tabAlignment: TabAlignment.start,
+                              isScrollable: true,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicator: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              activeColor: Colors.white,
+                              tabs: [
+                                Tab(text: 'ALL'),
+                                Tab(text: 'UNREAD'),
+                                Tab(text: 'PROJECT'),
+                                Tab(text: 'SOCIAL'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 46,
+                          width: 98,
+                          margin: const EdgeInsets.only(right: 15, bottom: 13),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                              color: Theme.of(context).dividerColor,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Iconsax.trash,
+                                ),
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Iconsax.tick_circle,
+                                  size: 26,
+                                ),
+                                onPressed: () async {
+                                  await notifNotifier.markAllAsRead();
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    const Divider(
+                      height: 0,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Iconsax.search_normal,
+                    size: 26,
+                  ),
+                  onPressed: () {},
+                ),
+                const SizedBox(width: 5),
+              ],
+            ),
+          ];
+        },
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            NotificationCard(
+              targetType: '',
+            ),
+            NotificationCard(
+              targetType: '',
+              isRead: false,
+            ),
+            NotificationCard(
+              targetType: 'project',
+            ),
+            NotificationCard(
+              targetType: 'post',
+            ),
+          ],
         ),
-        bottomHeight: 54,
-        titleSpacing: 0,
-        title: const SizedBox(),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: AppTabBarDesign(
-            tabController: tabController,
-            showTopBorder: true,
-            dividerColor: Colors.transparent,
-            tabs: [
-              Tab(text: 'ALL'),
-              Tab(text: 'UNREAD'),
-              Tab(text: 'PROJECT'),
-              Tab(text: 'SOCIAL'),
-            ],
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Iconsax.search_normal,
-              size: 26,
-            ),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: Icon(
-              Iconsax.trash,
-              size: 26,
-            ),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: Icon(
-              Iconsax.tick_circle,
-              size: 26,
-            ),
-            onPressed: () async {
-              await notifNotifier.markAllAsRead();
-            },
-          ),
-          const SizedBox(width: 5),
-          IconButton(
-            icon: Icon(
-              Iconsax.setting_2,
-              size: 26,
-            ),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 5),
-        ],
-      ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          NotificationCard(
-            targetType: '',
-          ),
-          NotificationCard(
-            targetType: '',
-            isRead: false,
-          ),
-          NotificationCard(
-            targetType: 'project',
-          ),
-          NotificationCard(
-            targetType: 'post',
-          ),
-        ],
       ),
     );
   }
@@ -176,8 +222,8 @@ class NotificationCard extends ConsumerWidget {
                           width: 25,
                           decoration: BoxDecoration(
                             color: NotificationsHelper.getIconColor(
-                                notification.actionType,
-                              ),
+                              notification.actionType,
+                            ),
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: Theme.of(context).scaffoldBackgroundColor,

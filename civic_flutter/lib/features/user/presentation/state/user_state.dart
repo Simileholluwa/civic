@@ -27,7 +27,9 @@ class UserState {
         .getString(
           'userRecord',
         );
-    final decoded = jsonDecode(userRecord.toString());
+    final decoded = jsonDecode(
+      userRecord.toString(),
+    );
     return UserState(
       currentUser: UserRecord.fromJson(decoded),
     );

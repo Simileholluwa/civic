@@ -41,7 +41,7 @@ final projectPageControllerProvider = AutoDisposeNotifierProvider<
 
 typedef _$ProjectPageController = AutoDisposeNotifier<Raw<PageController>>;
 String _$projectTabControllerHash() =>
-    r'6ea2f06e38261e90691973b4b5f55899a4f865a0';
+    r'db3e83e0f42c5af6de5d1b00532bd86b6d6a723b';
 
 /// See also [ProjectTabController].
 @ProviderFor(ProjectTabController)

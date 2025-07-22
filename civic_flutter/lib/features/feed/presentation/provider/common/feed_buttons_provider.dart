@@ -118,9 +118,15 @@ class FeedButtons extends _$FeedButtons {
         'Subscription failed. Please try again.',
       );
     }, (success) {
-      TToastMessages.successToast(
-        'Yo will receive notifications on this post.',
-      );
+      if (!state.isSubscribed) {
+        TToastMessages.successToast(
+          'You will now receive notifications on this post.',
+        );
+      } else {
+        TToastMessages.infoToast(
+          'You will no longer receive notifications on this post.',
+        );
+      }
     });
   }
 

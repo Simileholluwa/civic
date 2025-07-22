@@ -3,7 +3,9 @@ import 'package:civic_flutter/core/core.dart';
 
 abstract class UserRemoteDatasource {
   Future<void> toggleFollow({required int userId,});
-  Future<UserRecord> fetchUser();
+  Future<UserRecord> getUser({
+    required int? userId,
+  });
 }
 
 class UserRemoteDatasourceImpl extends UserRemoteDatasource {
@@ -27,9 +29,9 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
   }
   
   @override
-  Future<UserRecord> fetchUser() async {
+  Future<UserRecord> getUser({required int? userId,}) async {
     try {
-      final userRecord = await _client.userRecord.getUser();
+      final userRecord = await _client.userRecord.getUser(userId);
       if (userRecord == null) {
         throw ServerException(message: 'User not found');
       }

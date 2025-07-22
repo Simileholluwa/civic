@@ -61,11 +61,11 @@ final toggleFollowProvider = AutoDisposeProvider<ToggleFollowUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ToggleFollowRef = AutoDisposeProviderRef<ToggleFollowUseCase>;
-String _$fetchUserHash() => r'8a459466d5212e3a0766d0492c8df5dd324c5bd3';
+String _$fetchUserHash() => r'0183ce54db7382a8413345f8fed7d0ce4e4cd511';
 
 /// See also [fetchUser].
 @ProviderFor(fetchUser)
-final fetchUserProvider = AutoDisposeProvider<FetchUserUseCase>.internal(
+final fetchUserProvider = AutoDisposeProvider<GetUserUseCase>.internal(
   fetchUser,
   name: r'fetchUserProvider',
   debugGetCreateSourceHash:
@@ -76,6 +76,6 @@ final fetchUserProvider = AutoDisposeProvider<FetchUserUseCase>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef FetchUserRef = AutoDisposeProviderRef<FetchUserUseCase>;
+typedef FetchUserRef = AutoDisposeProviderRef<GetUserUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -984,6 +984,11 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
+            'sortBy': _i1.ParameterDescription(
+              name: 'sortBy',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
           },
           call: (
             _i1.Session session,
@@ -993,6 +998,7 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
+            sortBy: params['sortBy'],
           ),
         ),
         'getProjectReviews': _i1.MethodConnector(
@@ -1374,13 +1380,21 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
         'getUser': _i1.MethodConnector(
           name: 'getUser',
-          params: {},
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int?>(),
+              nullable: true,
+            )
+          },
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
-                  .getUser(session),
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint).getUser(
+            session,
+            params['userId'],
+          ),
         ),
         'checkIfNewUser': _i1.MethodConnector(
           name: 'checkIfNewUser',

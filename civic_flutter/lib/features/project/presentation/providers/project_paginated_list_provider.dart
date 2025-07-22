@@ -13,7 +13,7 @@ class PaginatedProjectList extends _$PaginatedProjectList {
       PagingController(firstPageKey: 1);
 
   @override
-  PagingStatus build() {
+  PagingStatus build(String sortBy) {
     pagingController.addPageRequestListener((page) {
       fetchPage(page);
     });
@@ -35,6 +35,7 @@ class PaginatedProjectList extends _$PaginatedProjectList {
         GetProjectsParams(
           page,
           limit,
+          sortBy,
         ),
       );
       result.fold((error) {

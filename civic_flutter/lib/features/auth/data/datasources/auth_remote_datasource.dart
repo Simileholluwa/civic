@@ -180,7 +180,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
 
       await _sessionManager.refreshSession();
 
-      final userRecord = await _client.userRecord.getUser();
+      final userRecord = await _client.userRecord.getUser(null);
       if (userRecord == null) {
         throw const ServerException(
           message: 'User record not found',

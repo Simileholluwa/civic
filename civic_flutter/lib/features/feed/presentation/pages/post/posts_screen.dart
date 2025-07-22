@@ -15,7 +15,7 @@ class PostsScreen extends ConsumerWidget {
 
     return AppInfiniteList<Post>(
       pagingController: pagingControllerNotifier.pagingController,
-      scrollController: ref.read(postScrollControllerProvider),
+      scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, post, index) {
         return PostCard(
           post: post,

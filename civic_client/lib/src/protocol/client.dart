@@ -590,6 +590,7 @@ class EndpointProject extends _i1.EndpointRef {
   _i2.Future<_i10.ProjectList> getProjects({
     required int limit,
     required int page,
+    required String sortBy,
   }) =>
       caller.callServerEndpoint<_i10.ProjectList>(
         'project',
@@ -597,6 +598,7 @@ class EndpointProject extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
+          'sortBy': sortBy,
         },
       );
 
@@ -958,11 +960,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i14.UserRecord?> getUser() =>
+  _i2.Future<_i14.UserRecord?> getUser(int? userId) =>
       caller.callServerEndpoint<_i14.UserRecord?>(
         'userRecord',
         'getUser',
-        {},
+        {'userId': userId},
       );
 
   _i2.Future<String?> checkIfNewUser(String email) =>

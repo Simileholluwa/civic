@@ -53,7 +53,9 @@ class FeedWidgetsState {
   });
 
   factory FeedWidgetsState.empty() {
-    return FeedWidgetsState();
+    return FeedWidgetsState(
+
+    );
   }
 
   factory FeedWidgetsState.populate(
@@ -215,6 +217,7 @@ class FeedWidgetsState {
     int? totalVotes,
     String? videoUrl,
     PollOption? votedOption,
+    bool? isSubscribed,
   }) {
     return FeedWidgetsState(
       creator: creator ?? this.creator,
@@ -246,6 +249,7 @@ class FeedWidgetsState {
       quoteCount: quoteCount ?? this.quoteCount,
       quoteOrRepostUser: quoteOrRepostUser ?? this.quoteOrRepostUser,
       reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
       tags: tags ?? this.tags,
       text: text ?? this.text,
       timeAgo: timeAgo ?? this.timeAgo,

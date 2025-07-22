@@ -3,6 +3,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
+import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -81,6 +82,11 @@ class Auth extends _$Auth {
   }
 
   Future<bool> logout() async {
+    ref.invalidate(paginatedProjectListProvider);
+    ref.invalidate(paginatedPostListProvider);
+    ref.invalidate(paginatedPollListProvider);
+    ref.invalidate(paginatedArticleListProvider);
+    ref.invalidate(paginatedNotificationsListProvider);
     final logOutUseCase = ref.read(logOutProvider);
     final result = await logOutUseCase(
       NoParams(),
@@ -89,10 +95,6 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return false;
     }, (r) {
-      ref.invalidate(paginatedProjectListProvider);
-      ref.invalidate(paginatedPostListProvider);
-      ref.invalidate(paginatedPollListProvider);
-      ref.invalidate(paginatedArticleListProvider);
       return true;
     });
   }

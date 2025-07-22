@@ -19,4 +19,5 @@ class AppRoutes {
   static const createAccountRequest = 'createAccountRequest';
   static const verifyAccount = 'verifyAccount';
   static const login = 'login';
+  static const profile = '/profile/:userId';
 }

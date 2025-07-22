@@ -13,6 +13,7 @@ class GetProjectsUseCase implements UseCase<ProjectList, GetProjectsParams> {
     final result = await _projectRepository.getProjects(
       page: params.page,
       limit: params.limit,
+      sortBy: params.sortBy,
     );
     return result;
   }
@@ -22,7 +23,9 @@ class GetProjectsParams {
   GetProjectsParams(
     this.page,
     this.limit,
+    this.sortBy,
   );
   final int page;
   final int limit;
+  final String sortBy;
 }

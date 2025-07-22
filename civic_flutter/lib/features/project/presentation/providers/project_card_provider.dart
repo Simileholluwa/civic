@@ -82,7 +82,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       log(error.message);
       return false;
     }, (_) async {
-      ref.read(paginatedProjectListProvider.notifier).removeProjectById(
+      ref.read(paginatedProjectListProvider('').notifier).removeProjectById(
             projectId,
           );
       return true;

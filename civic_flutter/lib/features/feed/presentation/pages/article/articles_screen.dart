@@ -15,7 +15,7 @@ class ArticlesScreen extends ConsumerWidget {
 
     return AppInfiniteList<Post>(
       pagingController: pagingControllerNotifier.pagingController,
-      scrollController: ref.read(articleScrollControllerProvider),
+      scrollPhysics: const NeverScrollableScrollPhysics(),
       createText: 'Create article',
       onCreate: () {
         context.push(
