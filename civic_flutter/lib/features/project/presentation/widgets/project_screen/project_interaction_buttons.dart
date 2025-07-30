@@ -91,7 +91,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () async {
                     await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!,
+                      project.id!, projectCardState.isBookmarked!,
                     );
                   },
             color: projectCardState.isDeleted!
@@ -149,7 +149,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () async {
                     await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!,
+                      project.id!, projectCardState.isBookmarked!,
                     );
                   },
             color: projectCardState.isDeleted!

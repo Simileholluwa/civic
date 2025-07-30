@@ -36,7 +36,9 @@ abstract class Post implements _i1.SerializableModel {
     this.updatedAt,
     this.hashtags,
     this.likedBy,
+    int? likesCount,
     this.bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     this.subscribers,
     this.pollId,
@@ -52,6 +54,8 @@ abstract class Post implements _i1.SerializableModel {
     bool? isDeleted,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
+        likesCount = likesCount ?? 0,
+        bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
         isDeleted = isDeleted ?? false;
 
@@ -71,7 +75,9 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -128,9 +134,11 @@ abstract class Post implements _i1.SerializableModel {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      likesCount: jsonSerialization['likesCount'] as int?,
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
       subscribers: (jsonSerialization['subscribers'] as List?)
           ?.map((e) => e as int)
@@ -200,7 +208,11 @@ abstract class Post implements _i1.SerializableModel {
 
   List<int>? likedBy;
 
+  int? likesCount;
+
   List<int>? bookmarkedBy;
+
+  int? bookmarksCount;
 
   int? commentCount;
 
@@ -247,7 +259,9 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -284,7 +298,9 @@ abstract class Post implements _i1.SerializableModel {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
@@ -328,7 +344,9 @@ class _PostImpl extends Post {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -358,7 +376,9 @@ class _PostImpl extends Post {
           updatedAt: updatedAt,
           hashtags: hashtags,
           likedBy: likedBy,
+          likesCount: likesCount,
           bookmarkedBy: bookmarkedBy,
+          bookmarksCount: bookmarksCount,
           commentCount: commentCount,
           subscribers: subscribers,
           pollId: pollId,
@@ -394,7 +414,9 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likedBy = _Undefined,
+    Object? likesCount = _Undefined,
     Object? bookmarkedBy = _Undefined,
+    Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
     Object? subscribers = _Undefined,
     Object? pollId = _Undefined,
@@ -437,9 +459,12 @@ class _PostImpl extends Post {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
+      likesCount: likesCount is int? ? likesCount : this.likesCount,
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
+      bookmarksCount:
+          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
       subscribers: subscribers is List<int>?
           ? subscribers

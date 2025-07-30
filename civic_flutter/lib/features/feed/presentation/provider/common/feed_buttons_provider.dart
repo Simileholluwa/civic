@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_flutter/features/user/user.dart';
+import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'feed_buttons_provider.g.dart';
 
@@ -44,7 +44,25 @@ class FeedButtons extends _$FeedButtons {
 
   Future<bool> togglePostBookmarkStatus(
     int postId,
+    bool isBookmarked,
   ) async {
+    if (isBookmarked) {
+      ref
+          .read(
+            paginatedPostBookmarkListProvider.notifier,
+          )
+          .removePostById(
+            postId,
+          );
+    } else {
+      ref
+          .read(
+            paginatedPostBookmarkListProvider.notifier,
+          )
+          .addPost(
+            post!,
+          );
+    }
     final toggleBookmark = ref.read(togglePostBookmarkProvider);
     final result = await toggleBookmark(
       TogglePostBookmarkParams(

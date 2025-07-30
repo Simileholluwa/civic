@@ -110,6 +110,46 @@ final getPostProvider = AutoDisposeProvider<GetPostUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetPostRef = AutoDisposeProviderRef<GetPostUseCase>;
+String _$getUserPostBookmarksHash() =>
+    r'4c962c94866873332f7dc6d6802622f254c0c51b';
+
+/// See also [getUserPostBookmarks].
+@ProviderFor(getUserPostBookmarks)
+final getUserPostBookmarksProvider =
+    AutoDisposeProvider<GetUserPostBookmarksUseCase>.internal(
+  getUserPostBookmarks,
+  name: r'getUserPostBookmarksProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getUserPostBookmarksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetUserPostBookmarksRef
+    = AutoDisposeProviderRef<GetUserPostBookmarksUseCase>;
+String _$clearPostBookmarksHash() =>
+    r'8ce4d099125b97827102e5391a37bab7a1fc5af8';
+
+/// See also [clearPostBookmarks].
+@ProviderFor(clearPostBookmarks)
+final clearPostBookmarksProvider =
+    AutoDisposeProvider<ClearPostBookmarksUseCase>.internal(
+  clearPostBookmarks,
+  name: r'clearPostBookmarksProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$clearPostBookmarksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClearPostBookmarksRef
+    = AutoDisposeProviderRef<ClearPostBookmarksUseCase>;
 String _$savePostDraftHash() => r'931581affc97199eedc569b2658174fbe7908bbc';
 
 /// See also [savePostDraft].

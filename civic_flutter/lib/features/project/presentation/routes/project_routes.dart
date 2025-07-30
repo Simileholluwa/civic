@@ -19,6 +19,12 @@ class ProjectRoutes {
         },
         routes: [
           GoRoute(
+            path: 'bookmarks',
+            builder: (context, state) {
+              return const ProjectBookmarksScreen();
+            },
+          ),
+          GoRoute(
             path: ':projectId',
             builder: (_, state) {
               return ProjectDetailsScreen(

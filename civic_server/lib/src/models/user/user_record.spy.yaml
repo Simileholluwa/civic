@@ -15,13 +15,11 @@ fields:
   profileImage: String?
   following: List<int>?
   followers: List<int>?
+  followersCount: int?, default=0
+  followingCount: int?, default=0
   createdAt: DateTime?, default=now
   politicalStatus: PoliticalStatus?
   credibilityScore: double?, default=1
-  posts: List<Post>?, relation(optional, name=user_posts)
-  projects: List<Project>?, relation(optional, name=user_projects)
-  projectBookmarks: List<ProjectBookmarks>?, relation(optional, name=user_project_bookmarks)
-  postBookmarks: List<PostBookmarks>?, relation(optional, name=user_post_bookmarks)
 
 
 indexes:

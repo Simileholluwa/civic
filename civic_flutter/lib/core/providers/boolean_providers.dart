@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BooleanNotifier extends StateNotifier<bool> {
-  BooleanNotifier() : super(false);
+  BooleanNotifier([bool? show]) : super(show ?? false);
 
   void setValue(bool value) {
     state = value;
@@ -9,6 +9,10 @@ class BooleanNotifier extends StateNotifier<bool> {
 }
 
 final checkEmailLoadingProvider = StateNotifierProvider<BooleanNotifier, bool>(
+  (ref) => BooleanNotifier(),
+);
+
+final showBottomNav = StateNotifierProvider<BooleanNotifier, bool>(
   (ref) => BooleanNotifier(),
 );
 

@@ -86,7 +86,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If the user is not authenticated, throw an exception
     if (authInfo == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch the current user record
@@ -100,7 +100,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If the current user does not exist, throw an exception
     if (currentUser == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch users that the current user follows and whose usernames match the query
@@ -156,7 +156,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If the user is not authenticated, throw an exception
     if (authInfo == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch the current user record
@@ -170,7 +170,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If the current user does not exist, throw an exception
     if (currentUser == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch users that the current user follows and whose usernames match the query
@@ -214,7 +214,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If the user is not authenticated, throw an exception
     if (authInfo == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch current user and the user to be followed
@@ -232,7 +232,7 @@ class UserRecordEndpoint extends Endpoint {
 
     // If either user does not exist, throw an exception
     if (currentUser == null || followedUser == null) {
-      throw UserException(message: 'User not found');
+      throw ServerSideException(message: 'User not found');
     }
 
     // Check if the current user is already following the target user

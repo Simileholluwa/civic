@@ -53,7 +53,7 @@ class PostDetailOptions extends ConsumerWidget {
         IconButton(
           onPressed: () async {
             await postCardNotifier.togglePostBookmarkStatus(
-              post.id!,
+              post.id!, postCardState.hasBookmarked
             );
           },
           icon: Icon(

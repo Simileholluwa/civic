@@ -3,10 +3,10 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/presentation/routes/create_route.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
+import 'package:civic_flutter/features/network/network.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
 import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:civic_flutter/features/user/presentation/pages/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +65,6 @@ GoRouter router(Ref ref) {
         path: AppRoutes.auth,
         builder: (context, state) => const EmailScreen(),
         routes: [
-
           // Login
           GoRoute(
             path: AppRoutes.login,
@@ -138,22 +137,12 @@ GoRouter router(Ref ref) {
           ProjectRoutes.branch,
           FeedRoutes.branch,
           CreateRoutes.branch,
+          NetworkRoutes.branch,
           NotificationsRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
           return AppWrapper(
             navigatorShell: navigationShell,
-          );
-        },
-      ),
-
-      // User
-      GoRoute(
-        path: AppRoutes.profile,
-        builder: (context, state) {
-          final userId = int.tryParse(state.pathParameters['userId'] ?? '0') ?? 0;
-          return UserProfile(
-            userId: userId,
           );
         },
       ),

@@ -733,6 +733,15 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'clearBookmarks': _i1.MethodConnector(
+          name: 'clearBookmarks',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i6.PostEndpoint).clearBookmarks(session),
+        ),
         'toggleBookmark': _i1.MethodConnector(
           name: 'toggleBookmark',
           params: {
@@ -785,6 +794,30 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['post'] as _i6.PostEndpoint).subscribeToPost(
             session,
             params['postId'],
+          ),
+        ),
+        'getUserPostBookmarks': _i1.MethodConnector(
+          name: 'getUserPostBookmarks',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i6.PostEndpoint).getUserPostBookmarks(
+            session,
+            limit: params['limit'],
+            page: params['page'],
           ),
         ),
         'markNotInterested': _i1.MethodConnector(
@@ -1043,6 +1076,16 @@ class Endpoints extends _i1.EndpointDispatch {
             cardinal: params['cardinal'],
           ),
         ),
+        'clearBookmarks': _i1.MethodConnector(
+          name: 'clearBookmarks',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i7.ProjectEndpoint)
+                  .clearBookmarks(session),
+        ),
         'reactToReview': _i1.MethodConnector(
           name: 'reactToReview',
           params: {
@@ -1218,6 +1261,31 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['project'] as _i7.ProjectEndpoint).getVettedProjects(
+            session,
+            limit: params['limit'],
+            page: params['page'],
+          ),
+        ),
+        'getUserProjectBookmarks': _i1.MethodConnector(
+          name: 'getUserProjectBookmarks',
+          params: {
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['project'] as _i7.ProjectEndpoint)
+                  .getUserProjectBookmarks(
             session,
             limit: params['limit'],
             page: params['page'],

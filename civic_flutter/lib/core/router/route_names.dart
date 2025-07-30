@@ -19,5 +19,11 @@ class AppRoutes {
   static const createAccountRequest = 'createAccountRequest';
   static const verifyAccount = 'verifyAccount';
   static const login = 'login';
+
+  // User profile
   static const profile = '/profile/:userId';
+
+  // Menu
+  static const menu = '/menu';
+  static const bookmarks = 'bookmarks';
 }

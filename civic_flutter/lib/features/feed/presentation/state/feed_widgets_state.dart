@@ -69,13 +69,13 @@ class FeedWidgetsState {
         post.dateCreated ?? DateTime.now(),
       ),
       numberOfLikes: THelperFunctions.humanizeNumber(
-        post.likedBy!.length,
+        post.likesCount!,
       ),
       numberOfComments: THelperFunctions.humanizeNumber(
         post.commentCount!,
       ),
       numberOfBookmarks: THelperFunctions.humanizeNumber(
-        post.bookmarkedBy!.length,
+        post.bookmarksCount!,
       ),
       text: post.text!,
       hasText: post.text?.isNotEmpty ?? false,

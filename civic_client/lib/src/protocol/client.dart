@@ -363,6 +363,12 @@ class EndpointPost extends _i1.EndpointRef {
         {'id': id},
       );
 
+  _i2.Future<void> clearBookmarks() => caller.callServerEndpoint<void>(
+        'post',
+        'clearBookmarks',
+        {},
+      );
+
   _i2.Future<void> toggleBookmark(int postId) =>
       caller.callServerEndpoint<void>(
         'post',
@@ -381,6 +387,19 @@ class EndpointPost extends _i1.EndpointRef {
         'post',
         'subscribeToPost',
         {'postId': postId},
+      );
+
+  _i2.Future<_i7.PostList> getUserPostBookmarks({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i7.PostList>(
+        'post',
+        'getUserPostBookmarks',
+        {
+          'limit': limit,
+          'page': page,
+        },
       );
 
   _i2.Future<void> markNotInterested(
@@ -423,7 +442,7 @@ class EndpointProject extends _i1.EndpointRef {
 
   /// Retrieves a [Project] by its [projectId] from the database, including its owner and associated user info.
   ///
-  /// Throws a [PostException] if the project cannot be found, possibly due to deletion.
+  /// Throws a [ServerSideException] if the project cannot be found, possibly due to deletion.
   ///
   /// Parameters:
   /// - [projectId]: The unique identifier of the project to retrieve.
@@ -438,7 +457,7 @@ class EndpointProject extends _i1.EndpointRef {
 
   /// Retrieves the [ProjectReview] for a given project and the authenticated user.
   ///
-  /// Throws a [PostException] if:
+  /// Throws a [ServerSideException] if:
   /// - The project has been deleted by its owner.
   /// - The authenticated user is the owner of the project (owners cannot review their own projects).
   ///
@@ -461,7 +480,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// If the [project] does not have an `id`, it creates a new project with the current user
   /// as the owner and initializes various list fields (e.g., `likedBy`, `repostedBy`) as empty.
   ///
-  /// Logs and throws a [PostException] if an error occurs during the process.
+  /// Logs and throws a [ServerSideException] if an error occurs during the process.
   ///
   /// Parameters:
   /// - [project]: The project to save or update.
@@ -487,9 +506,9 @@ class EndpointProject extends _i1.EndpointRef {
   ///    - Updates the project's overall ratings by including the new review.
   ///    - Adds the user to the list of reviewers.
   ///    - Inserts the new review record with initial values and timestamps.
-  /// 5. Handles and logs exceptions, rethrowing known `PostException` errors.
+  /// 5. Handles and logs exceptions, rethrowing known `ServerSideException` errors.
   ///
-  /// Throws a [PostException] if the project or review cannot be found, or if any other error occurs.
+  /// Throws a [ServerSideException] if the project or review cannot be found, or if any other error occurs.
   ///
   /// Returns the saved [ProjectReview] object (either newly created or updated).
   ///
@@ -507,15 +526,15 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// This method performs the following steps within a database transaction:
   /// 1. Authenticates the user from the [session].
-  /// 2. Finds the review by [reviewId]. Throws a [PostException] if not found.
-  /// 3. Checks if the authenticated user is the owner of the review. Throws a [PostException] if unauthorized.
-  /// 4. Retrieves the associated project. Throws a [PostException] if the project is not found.
+  /// 2. Finds the review by [reviewId]. Throws a [ServerSideException] if not found.
+  /// 3. Checks if the authenticated user is the owner of the review. Throws a [ServerSideException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [ServerSideException] if the project is not found.
   /// 5. Updates the project's overall ratings and `reviewedBy` list:
   ///    - If this is the only review, resets all ratings and clears the `reviewedBy` list.
   ///    - Otherwise, recalculates each rating by removing the deleted review's contribution and updates the `reviewedBy` list.
   /// 6. Deletes the review from the database.
   ///
-  /// Throws a [PostException] on any error, including database or authorization failures.
+  /// Throws a [ServerSideException] on any error, including database or authorization failures.
   ///
   /// Parameters:
   /// - [reviewId]: The id of the review to be deleted.
@@ -530,16 +549,16 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// This method performs the following steps within a database transaction:
   /// 1. Authenticates the current user.
-  /// 2. Finds the vetting entry by [vettingId]. Throws a [PostException] if not found.
+  /// 2. Finds the vetting entry by [vettingId]. Throws a [ServerSideException] if not found.
   /// 3. Checks that the authenticated user is the owner of the vetting entry.
-  ///    -  Throws a [PostException] if unauthorized.
-  /// 4. Retrieves the associated project. Throws a [PostException] if not found.
+  ///    -  Throws a [ServerSideException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [ServerSideException] if not found.
   /// 5. Updates the project's `vettedBy` list to remove the user's ID.
   /// 6. Deletes the vetting entry from the database.
   ///
-  /// If any error occurs during the process, logs the error and throws a [PostException].
+  /// If any error occurs during the process, logs the error and throws a [ServerSideException].
   ///
-  /// Throws a [PostException] for not found, unauthorized, or other errors.
+  /// Throws a [ServerSideException] for not found, unauthorized, or other errors.
   ///
   /// Parameters:
   /// - [vettingId]: The id of the vetting to be deleted.
@@ -572,7 +591,7 @@ class EndpointProject extends _i1.EndpointRef {
 
   /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
   ///
-  /// Throws a [UserException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
+  /// Throws a [ServerSideException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
   ///
   /// The returned [ProjectList] contains:
   /// - [count]: Total number of projects available (excluding ignored).
@@ -582,7 +601,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [numPages]: The total number of pages.
   /// - [canLoadMore]: Whether there are more projects to load.
   ///
-  /// Logs and throws a [PostException] if an error occurs during fetching.
+  /// Logs and throws a [ServerSideException] if an error occurs during fetching.
   ///
   /// Parameters:
   /// - [limit]: Maximum number of projects to return per page (default: 50).
@@ -613,9 +632,9 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
   ///
-  /// Throws a [UserException] if pagination parameters are invalid or if an invalid
+  /// Throws a [ServerSideException] if pagination parameters are invalid or if an invalid
   /// rating category is provided.
-  /// Throws a [PostException] if an error occurs while fetching reviews.
+  /// Throws a [ServerSideException] if an error occurs while fetching reviews.
   _i2.Future<_i11.ProjectReviewList> getProjectReviews(
     int projectId, {
     required int limit,
@@ -635,18 +654,24 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
+  _i2.Future<void> clearBookmarks() => caller.callServerEndpoint<void>(
+        'project',
+        'clearBookmarks',
+        {},
+      );
+
   /// Handles user reactions (like/dislike) to a project review.
   ///
   /// This method allows an authenticated user to like or dislike a specific project review.
   /// It manages the following scenarios within a database transaction:
-  /// - If the review does not exist, throws a [PostException].
+  /// - If the review does not exist, throws a [ServerSideException].
   /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
   /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
   /// - If the user switches between like and dislike, it updates the reaction accordingly.
   /// - If the user has not reacted before, it creates a new reaction.
   /// The method also updates the `likedBy` and `dislikedBy` lists on the review and persists the changes.
   ///
-  /// Throws a [PostException] if the review cannot be found or if any error occurs during the process.
+  /// Throws a [ServerSideException] if the review cannot be found or if any error occurs during the process.
   ///
   /// Parameters:
   /// - [reviewId]: The ID of the review to react to.
@@ -670,14 +695,14 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// This method allows an authenticated user to like or dislike a specific project vetting.
   /// It manages the following scenarios within a database transaction:
-  /// - If the vetting does not exist, throws a [PostException].
+  /// - If the vetting does not exist, throws a [ServerSideException].
   /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
   /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
   /// - If the user switches between like and dislike, it updates the reaction accordingly.
   /// - If the user has not reacted before, it creates a new reaction.
   /// The method also updates the `likedBy` and `dislikedBy` lists on the vetting and persists the changes.
   ///
-  /// Throws a [PostException] if any error occurs during the process.
+  /// Throws a [ServerSideException] if any error occurs during the process.
   ///
   /// Returns the updated [ProjectVetting] object.
   ///
@@ -703,11 +728,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// 1. Authenticates the user from the session.
   /// 2. Validates that the authenticated user owns the project with the given [projectId].
   /// 3. Retrieves the project from the database.
-  /// 4. If the project does not exist, throws a [PostException].
+  /// 4. If the project does not exist, throws a [ServerSideException].
   /// 5. Marks the project as deleted by setting its `isDeleted` property to `true`.
   /// 6. Updates the project in the database.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Parameters:
   /// [projectId] - The ID of the project to delete.
@@ -725,7 +750,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// - The operation is performed within a database transaction to ensure consistency.
   /// - Updates the `bookmarkedBy` field of the project accordingly.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Logs any errors encountered during the process.
   ///
@@ -744,7 +769,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// - If the user has not liked the project yet, this method will add a like.
   /// - The operation is performed within a database transaction to ensure consistency.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Logs any errors encountered during the operation.
   ///
@@ -779,14 +804,14 @@ class EndpointProject extends _i1.EndpointRef {
   /// This method performs the following steps within a database transaction:
   /// - Authenticates the user from the session.
   /// - Checks if the project with the given [projectVetting.projectId] exists.
-  ///   - Throws a [PostException] if the project cannot be found.
+  ///   - Throws a [ServerSideException] if the project cannot be found.
   /// - Checks if the user has already vetted the project.
   ///   - If an existing vetting record is found, updates its `updatedAt` timestamp and returns the updated record.
   ///   - If no vetting record exists, adds the user's ID to the project's `vettedBy` list,
   ///     creates a new vetting record with empty `likedBy` and `dislikedBy` lists, and returns it.
-  /// - Logs and rethrows any [PostException], or wraps other exceptions in a [PostException].
+  /// - Logs and rethrows any [ServerSideException], or wraps other exceptions in a [ServerSideException].
   ///
-  /// Throws a [PostException] if the project does not exist or if an unexpected error occurs.
+  /// Throws a [ServerSideException] if the project does not exist or if an unexpected error occurs.
   ///
   /// Returns the updated or newly created [ProjectVetting] record.
   ///
@@ -803,13 +828,13 @@ class EndpointProject extends _i1.EndpointRef {
   /// Retrieves the vetted project for the authenticated user and specified project ID.
   ///
   /// This method first authenticates the user from the provided [session], then attempts to find
-  /// the project with the given [projectId]. If the project does not exist, a [PostException] is thrown.
+  /// the project with the given [projectId]. If the project does not exist, a [ServerSideException] is thrown.
   /// If the project exists, it searches for a [ProjectVetting] record associated with both the project
   /// and the authenticated user. The related [Project] is also included in the result.
   ///
   /// Returns a [ProjectVetting] instance if found, or `null` if no matching record exists.
   ///
-  /// Throws a [PostException] if the project does not exist.
+  /// Throws a [ServerSideException] if the project does not exist.
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve.
@@ -822,7 +847,7 @@ class EndpointProject extends _i1.EndpointRef {
 
   /// Retrieves a paginated list of vetted projects.
   ///
-  /// Throws a [UserException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
+  /// Throws a [ServerSideException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
   ///
   /// Parameters:
   /// - [limit]: The maximum number of projects to return per page (default is 50).
@@ -841,6 +866,19 @@ class EndpointProject extends _i1.EndpointRef {
       caller.callServerEndpoint<_i13.ProjectVetList>(
         'project',
         'getVettedProjects',
+        {
+          'limit': limit,
+          'page': page,
+        },
+      );
+
+  _i2.Future<_i10.ProjectList> getUserProjectBookmarks({
+    required int limit,
+    required int page,
+  }) =>
+      caller.callServerEndpoint<_i10.ProjectList>(
+        'project',
+        'getUserProjectBookmarks',
         {
           'limit': limit,
           'page': page,

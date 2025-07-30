@@ -53,6 +53,20 @@ GetPostUseCase getPost(Ref ref) {
 }
 
 @riverpod
+GetUserPostBookmarksUseCase getUserPostBookmarks(Ref ref) {
+  return GetUserPostBookmarksUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
+ClearPostBookmarksUseCase clearPostBookmarks(Ref ref) {
+  return ClearPostBookmarksUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
 SavePostDraftUseCase savePostDraft(Ref ref) {
   return SavePostDraftUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),

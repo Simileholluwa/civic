@@ -1,3 +1,5 @@
+//ignore_for_file:avoid_manual_providers_as_generated_provider_dependency
+
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -54,7 +56,25 @@ class ProjectCardWidget extends _$ProjectCardWidget {
 
   Future<bool> toggleBookmarkStatus(
     int projectId,
+    bool isBookmarked,
   ) async {
+    if (isBookmarked) {
+      ref
+          .read(
+            paginatedProjectBookmarksListProvider.notifier,
+          )
+          .removeProjectById(
+            projectId,
+          );
+    } else {
+      ref
+          .read(
+            paginatedProjectBookmarksListProvider.notifier,
+          )
+          .addProject(
+            project,
+          );
+    }
     final toggleBookmark = ref.read(toggleBookmarkProvider);
     final result = await toggleBookmark(
       ToggleBookmarkParams(

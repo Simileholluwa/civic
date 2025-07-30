@@ -11,6 +11,10 @@ abstract class FeedRemoteDatabase {
     required int page,
     required int limit,
   });
+  Future<PostList> getUserPostBookmarks({
+    required int page,
+    required int limit,
+  });
   Future<Post> getPost({
     required int postId,
   });
@@ -59,6 +63,7 @@ abstract class FeedRemoteDatabase {
   Future<Post> savePoll({
     required Post post,
   });
+  Future<void> clearPostBookmarks();
   Future<Post> saveArticle({
     required Post post,
   });
@@ -94,9 +99,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         );
       }
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -121,7 +124,30 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         page: page,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<PostList> getUserPostBookmarks({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _client.post.getUserPostBookmarks(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -147,7 +173,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         message: 'Failed to connect to server. Please try again.',
         action: 'retry',
       );
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: null,
@@ -159,7 +185,30 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     }
   }
-  
+
+  @override
+  Future<void> clearPostBookmarks() async {
+    try {
+      final result = await _client.post.clearBookmarks();
+      return result;
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: null,
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+        action: 'retry',
+      );
+    }
+  }
+
   @override
   Future<void> subscribeToNotifications({
     required int postId,
@@ -173,7 +222,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         message: 'Failed to connect to server. Please try again.',
         action: 'retry',
       );
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: null,
@@ -200,7 +249,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         message: 'Failed to connect to server. Please try again.',
         action: 'retry',
       );
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
       );
@@ -237,9 +286,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       return await _client.post.toggleLike(
         id,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -258,11 +305,9 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         projectId,
         quoteContent,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
     } on ServerException {
       rethrow;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: e.action,
@@ -282,9 +327,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       return await _client.post.toggleBookmark(
         id,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -303,9 +346,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         id,
         reason,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -320,9 +361,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }) async {
     try {
       return await _client.post.deletePost(postId);
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -343,7 +382,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         page: page,
         limit: limit,
       );
-    } on UserException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -366,7 +405,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         throw ServerException(message: 'Failed to save comment');
       }
       return result;
-    } on UserException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on ServerException catch (_) {
       rethrow;
@@ -389,7 +428,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         page: page,
         limit: limit,
       );
-    } on UserException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -409,7 +448,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         optionId,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -434,7 +473,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         page: page,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -462,7 +501,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         );
       }
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -487,7 +526,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         limit: limit,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -515,7 +554,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         );
       }
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(

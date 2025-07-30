@@ -22,6 +22,10 @@ abstract class FeedRepository {
     required int page,
     required int limit,
   });
+  Future<Either<Failure, PostList>> getUserPostBookmarks({
+    required int page,
+    required int limit,
+  });
   Future<Either<Failure, Post>> getDraft({
     required String draftType,
   });
@@ -52,6 +56,7 @@ abstract class FeedRepository {
   Future<Either<Failure, void>> deletePost({
     required int postId,
   });
+  Future<Either<Failure, void>> clearPostBookmarks();
   Future<Either<Failure, Post>> savePostComment({
     required Post comment,
     required bool isReply,

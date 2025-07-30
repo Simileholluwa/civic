@@ -60,7 +60,7 @@ class HashtagEndpoint extends Endpoint {
 
     // If the user is not authenticated, throw an exception
     if (authInfo == null) {
-      throw UserException(message: 'You must be logged in');
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch hashtags that match the query

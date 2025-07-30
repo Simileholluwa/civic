@@ -1,7 +1,7 @@
 class: Post
 table: post
 fields:
-    owner: UserRecord?, relation(name=user_posts)
+    owner: UserRecord?, relation
     postType: PostType?
     text: String?
     imageUrls: List<String>?
@@ -14,7 +14,9 @@ fields:
     updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)
     likedBy: List<int>?
+    likesCount: int?, default=0
     bookmarkedBy: List<int>?
+    bookmarksCount: int?, default=0
     commentCount: int?, default=0
     subscribers: List<int>?
     poll: Poll?, relation(optional, onDelete=cascade)
@@ -23,3 +25,7 @@ fields:
     parent: Post?, relation(optional, onDelete=NoAction,)
     quotedOrRepostedFromUser: UserRecord?, relation(optional)
     isDeleted: bool?, default=false
+
+indexes:
+  post_idx:
+    fields: ownerId, postType, pollId, articleId, projectId, parentId, quotedOrRepostedFromUserId

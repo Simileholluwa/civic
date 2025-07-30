@@ -17,7 +17,7 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 class ProjectEndpoint extends Endpoint {
   /// Retrieves a [Project] by its [projectId] from the database, including its owner and associated user info.
   ///
-  /// Throws a [PostException] if the project cannot be found, possibly due to deletion.
+  /// Throws a [ServerSideException] if the project cannot be found, possibly due to deletion.
   ///
   /// Parameters:
   /// - [projectId]: The unique identifier of the project to retrieve.
@@ -34,7 +34,7 @@ class ProjectEndpoint extends Endpoint {
       ),
     );
     if (result == null) {
-      throw PostException(
+      throw ServerSideException(
         message:
             'This project cannot be found. It may have been permanently deleted.',
       );
@@ -44,7 +44,7 @@ class ProjectEndpoint extends Endpoint {
 
   /// Retrieves the [ProjectReview] for a given project and the authenticated user.
   ///
-  /// Throws a [PostException] if:
+  /// Throws a [ServerSideException] if:
   /// - The project has been deleted by its owner.
   /// - The authenticated user is the owner of the project (owners cannot review their own projects).
   ///
@@ -66,13 +66,13 @@ class ProjectEndpoint extends Endpoint {
 
     if (project != null) {
       if (project.isDeleted!) {
-        throw PostException(
+        throw ServerSideException(
           message:
               'This project has been deleted by its owner. Reviews are not allowed.',
         );
       }
       if (user.userInfoId == project.ownerId) {
-        throw PostException(
+        throw ServerSideException(
           message:
               'Projects you create can only be reviewed by your constituents. Try sharing this project.',
           action: 'share',
@@ -102,7 +102,7 @@ class ProjectEndpoint extends Endpoint {
   /// If the [project] does not have an `id`, it creates a new project with the current user
   /// as the owner and initializes various list fields (e.g., `likedBy`, `repostedBy`) as empty.
   ///
-  /// Logs and throws a [PostException] if an error occurs during the process.
+  /// Logs and throws a [ServerSideException] if an error occurs during the process.
   ///
   /// Parameters:
   /// - [project]: The project to save or update.
@@ -175,7 +175,7 @@ class ProjectEndpoint extends Endpoint {
         exception: e,
         stackTrace: stackTrace,
       );
-      throw PostException(message: e.toString());
+      throw ServerSideException(message: e.toString());
     }
   }
 
@@ -192,9 +192,9 @@ class ProjectEndpoint extends Endpoint {
   ///    - Updates the project's overall ratings by including the new review.
   ///    - Adds the user to the list of reviewers.
   ///    - Inserts the new review record with initial values and timestamps.
-  /// 5. Handles and logs exceptions, rethrowing known `PostException` errors.
+  /// 5. Handles and logs exceptions, rethrowing known `ServerSideException` errors.
   ///
-  /// Throws a [PostException] if the project or review cannot be found, or if any other error occurs.
+  /// Throws a [ServerSideException] if the project or review cannot be found, or if any other error occurs.
   ///
   /// Returns the saved [ProjectReview] object (either newly created or updated).
   ///
@@ -219,7 +219,7 @@ class ProjectEndpoint extends Endpoint {
           ),
         );
         if (project == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This project cannot be found. It may have been permanently deleted.');
         }
@@ -246,7 +246,7 @@ class ProjectEndpoint extends Endpoint {
             transaction: transaction,
           );
           if (existingReview == null) {
-            throw PostException(message: 'Review not found');
+            throw ServerSideException(message: 'Review not found');
           }
 
           await validateProjectReviewOwnership(
@@ -405,7 +405,7 @@ class ProjectEndpoint extends Endpoint {
 
           return sentReview;
         }
-      } on PostException {
+      } on ServerSideException {
         rethrow;
       } catch (e, stackTrace) {
         session.log(
@@ -414,7 +414,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
   }
@@ -423,15 +423,15 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// This method performs the following steps within a database transaction:
   /// 1. Authenticates the user from the [session].
-  /// 2. Finds the review by [reviewId]. Throws a [PostException] if not found.
-  /// 3. Checks if the authenticated user is the owner of the review. Throws a [PostException] if unauthorized.
-  /// 4. Retrieves the associated project. Throws a [PostException] if the project is not found.
+  /// 2. Finds the review by [reviewId]. Throws a [ServerSideException] if not found.
+  /// 3. Checks if the authenticated user is the owner of the review. Throws a [ServerSideException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [ServerSideException] if the project is not found.
   /// 5. Updates the project's overall ratings and `reviewedBy` list:
   ///    - If this is the only review, resets all ratings and clears the `reviewedBy` list.
   ///    - Otherwise, recalculates each rating by removing the deleted review's contribution and updates the `reviewedBy` list.
   /// 6. Deletes the review from the database.
   ///
-  /// Throws a [PostException] on any error, including database or authorization failures.
+  /// Throws a [ServerSideException] on any error, including database or authorization failures.
   ///
   /// Parameters:
   /// - [reviewId]: The id of the review to be deleted.
@@ -447,13 +447,13 @@ class ProjectEndpoint extends Endpoint {
         );
 
         if (existingReview == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This review cannot be found. It may have been permanently deleted.');
         }
 
         if (existingReview.ownerId != user.id) {
-          throw PostException(message: 'Unauthorized to delete this review');
+          throw ServerSideException(message: 'Unauthorized to delete this review');
         }
 
         final project = await Project.db.findById(
@@ -463,7 +463,7 @@ class ProjectEndpoint extends Endpoint {
         );
 
         if (project == null) {
-          throw PostException(message: 'Associated project not found');
+          throw ServerSideException(message: 'Associated project not found');
         }
 
         final reviewedBy = project.reviewedBy ?? [];
@@ -532,7 +532,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
   }
@@ -541,16 +541,16 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// This method performs the following steps within a database transaction:
   /// 1. Authenticates the current user.
-  /// 2. Finds the vetting entry by [vettingId]. Throws a [PostException] if not found.
+  /// 2. Finds the vetting entry by [vettingId]. Throws a [ServerSideException] if not found.
   /// 3. Checks that the authenticated user is the owner of the vetting entry.
-  ///    -  Throws a [PostException] if unauthorized.
-  /// 4. Retrieves the associated project. Throws a [PostException] if not found.
+  ///    -  Throws a [ServerSideException] if unauthorized.
+  /// 4. Retrieves the associated project. Throws a [ServerSideException] if not found.
   /// 5. Updates the project's `vettedBy` list to remove the user's ID.
   /// 6. Deletes the vetting entry from the database.
   ///
-  /// If any error occurs during the process, logs the error and throws a [PostException].
+  /// If any error occurs during the process, logs the error and throws a [ServerSideException].
   ///
-  /// Throws a [PostException] for not found, unauthorized, or other errors.
+  /// Throws a [ServerSideException] for not found, unauthorized, or other errors.
   ///
   /// Parameters:
   /// - [vettingId]: The id of the vetting to be deleted.
@@ -566,13 +566,13 @@ class ProjectEndpoint extends Endpoint {
         );
 
         if (existingVetting == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This vetting cannot be found. It may have been permanently deleted.');
         }
 
         if (existingVetting.ownerId != user.id) {
-          throw PostException(message: 'Unauthorized to delete this vetting');
+          throw ServerSideException(message: 'Unauthorized to delete this vetting');
         }
 
         final project = await Project.db.findById(
@@ -582,7 +582,7 @@ class ProjectEndpoint extends Endpoint {
         );
 
         if (project == null) {
-          throw PostException(message: 'Associated project not found');
+          throw ServerSideException(message: 'Associated project not found');
         }
 
         final updatedProject = project.copyWith(
@@ -602,7 +602,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
   }
@@ -628,7 +628,7 @@ class ProjectEndpoint extends Endpoint {
 
   /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
   ///
-  /// Throws a [UserException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
+  /// Throws a [ServerSideException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
   ///
   /// The returned [ProjectList] contains:
   /// - [count]: Total number of projects available (excluding ignored).
@@ -638,7 +638,7 @@ class ProjectEndpoint extends Endpoint {
   /// - [numPages]: The total number of pages.
   /// - [canLoadMore]: Whether there are more projects to load.
   ///
-  /// Logs and throws a [PostException] if an error occurs during fetching.
+  /// Logs and throws a [ServerSideException] if an error occurs during fetching.
   ///
   /// Parameters:
   /// - [limit]: Maximum number of projects to return per page (default: 50).
@@ -651,7 +651,7 @@ class ProjectEndpoint extends Endpoint {
   }) async {
     try {
       if (limit <= 0 || page <= 0) {
-        throw UserException(
+        throw ServerSideException(
           message: 'Invalid pagination parameters',
         );
       }
@@ -710,7 +710,7 @@ class ProjectEndpoint extends Endpoint {
         exception: e,
         stackTrace: stackTrace,
       );
-      throw PostException(
+      throw ServerSideException(
         message: 'Error fetching projects',
       );
     }
@@ -736,9 +736,9 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
   ///
-  /// Throws a [UserException] if pagination parameters are invalid or if an invalid
+  /// Throws a [ServerSideException] if pagination parameters are invalid or if an invalid
   /// rating category is provided.
-  /// Throws a [PostException] if an error occurs while fetching reviews.
+  /// Throws a [ServerSideException] if an error occurs while fetching reviews.
   Future<ProjectReviewList> getProjectReviews(
     Session session,
     int projectId, {
@@ -749,7 +749,7 @@ class ProjectEndpoint extends Endpoint {
   }) async {
     try {
       if (limit <= 0 || page <= 0) {
-        throw UserException(
+        throw ServerSideException(
           message: 'Invalid pagination parameters',
         );
       }
@@ -769,7 +769,7 @@ class ProjectEndpoint extends Endpoint {
         };
 
         if (!ratingMap.containsKey(cardinal)) {
-          throw UserException(
+          throw ServerSideException(
             message: 'Invalid cardinal parameter',
           );
         }
@@ -818,24 +818,59 @@ class ProjectEndpoint extends Endpoint {
         exception: e,
         stackTrace: stackTrace,
       );
-      throw PostException(
+      throw ServerSideException(
         message: 'Error fetching project reviews',
       );
     }
+  }
+
+    Future<void> clearBookmarks(Session session) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+        final userBookmarks = await ProjectBookmarks.db.find(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+          include: ProjectBookmarks.include(
+            project: Project.include(),
+          ),
+        );
+        final projects = userBookmarks.map((e) => e.project!);
+        for (final project in projects) {
+          project.bookmarkedBy!.remove(user.id!);
+          project.bookmarksCount = project.bookmarksCount! - 1;
+          await updateProject(session, project);
+        }
+        await ProjectBookmarks.db.deleteWhere(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+        );
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in clearProjectBookmarks: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        throw ServerSideException(
+          message: 'Error clearing bookmarks',
+        );
+      }
+    });
   }
 
   /// Handles user reactions (like/dislike) to a project review.
   ///
   /// This method allows an authenticated user to like or dislike a specific project review.
   /// It manages the following scenarios within a database transaction:
-  /// - If the review does not exist, throws a [PostException].
+  /// - If the review does not exist, throws a [ServerSideException].
   /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
   /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
   /// - If the user switches between like and dislike, it updates the reaction accordingly.
   /// - If the user has not reacted before, it creates a new reaction.
   /// The method also updates the `likedBy` and `dislikedBy` lists on the review and persists the changes.
   ///
-  /// Throws a [PostException] if the review cannot be found or if any error occurs during the process.
+  /// Throws a [ServerSideException] if the review cannot be found or if any error occurs during the process.
   ///
   /// Parameters:
   /// - [reviewId]: The ID of the review to react to.
@@ -860,7 +895,7 @@ class ProjectEndpoint extends Endpoint {
           transaction: transaction,
         );
         if (review == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This review cannot be found. It may have been permanently deleted.');
         }
@@ -939,7 +974,10 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: review!.projectId,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!,),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${review!.projectId}',
                 content: review!.review!.length > 100
                     ? '${review!.review!.substring(0, 100)}...'
@@ -958,7 +996,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
     return review!;
@@ -968,14 +1006,14 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// This method allows an authenticated user to like or dislike a specific project vetting.
   /// It manages the following scenarios within a database transaction:
-  /// - If the vetting does not exist, throws a [PostException].
+  /// - If the vetting does not exist, throws a [ServerSideException].
   /// - If the user has previously reacted and the reaction was soft-deleted, it reactivates the reaction.
   /// - If the user repeats the same reaction, it soft-deletes the reaction (removes the like/dislike).
   /// - If the user switches between like and dislike, it updates the reaction accordingly.
   /// - If the user has not reacted before, it creates a new reaction.
   /// The method also updates the `likedBy` and `dislikedBy` lists on the vetting and persists the changes.
   ///
-  /// Throws a [PostException] if any error occurs during the process.
+  /// Throws a [ServerSideException] if any error occurs during the process.
   ///
   /// Returns the updated [ProjectVetting] object.
   ///
@@ -1000,7 +1038,7 @@ class ProjectEndpoint extends Endpoint {
           transaction: transaction,
         );
         if (vetting == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This review cannot be found. It may have been permanently deleted.');
         }
@@ -1080,7 +1118,10 @@ class ProjectEndpoint extends Endpoint {
                 mediaThumbnailUrl: user.userInfo!.imageUrl!,
                 targetId: vetting!.id!,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!,),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${vetting!.projectId}',
                 content: vetting!.comment!.length > 100
                     ? '${vetting!.comment!.substring(0, 100)}...'
@@ -1099,7 +1140,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
     return vetting!;
@@ -1111,11 +1152,11 @@ class ProjectEndpoint extends Endpoint {
   /// 1. Authenticates the user from the session.
   /// 2. Validates that the authenticated user owns the project with the given [projectId].
   /// 3. Retrieves the project from the database.
-  /// 4. If the project does not exist, throws a [PostException].
+  /// 4. If the project does not exist, throws a [ServerSideException].
   /// 5. Marks the project as deleted by setting its `isDeleted` property to `true`.
   /// 6. Updates the project in the database.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Parameters:
   /// [projectId] - The ID of the project to delete.
@@ -1135,7 +1176,7 @@ class ProjectEndpoint extends Endpoint {
     final project = await Project.db.findById(session, projectId);
 
     if (project == null) {
-      throw PostException(message: 'Project not found');
+      throw ServerSideException(message: 'Project not found');
     }
 
     final newProject = project.copyWith(
@@ -1152,7 +1193,7 @@ class ProjectEndpoint extends Endpoint {
   /// - The operation is performed within a database transaction to ensure consistency.
   /// - Updates the `bookmarkedBy` field of the project accordingly.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Logs any errors encountered during the process.
   ///
@@ -1174,7 +1215,7 @@ class ProjectEndpoint extends Endpoint {
           ),
         );
         if (project == null) {
-          throw PostException(
+          throw ServerSideException(
             message: "Project not found",
           );
         }
@@ -1275,7 +1316,7 @@ class ProjectEndpoint extends Endpoint {
   /// - If the user has not liked the project yet, this method will add a like.
   /// - The operation is performed within a database transaction to ensure consistency.
   ///
-  /// Throws a [PostException] if the project is not found.
+  /// Throws a [ServerSideException] if the project is not found.
   ///
   /// Logs any errors encountered during the operation.
   ///
@@ -1297,7 +1338,7 @@ class ProjectEndpoint extends Endpoint {
           ),
         );
         if (project == null) {
-          throw PostException(
+          throw ServerSideException(
             message: "Project not found",
           );
         }
@@ -1434,14 +1475,14 @@ class ProjectEndpoint extends Endpoint {
   /// This method performs the following steps within a database transaction:
   /// - Authenticates the user from the session.
   /// - Checks if the project with the given [projectVetting.projectId] exists.
-  ///   - Throws a [PostException] if the project cannot be found.
+  ///   - Throws a [ServerSideException] if the project cannot be found.
   /// - Checks if the user has already vetted the project.
   ///   - If an existing vetting record is found, updates its `updatedAt` timestamp and returns the updated record.
   ///   - If no vetting record exists, adds the user's ID to the project's `vettedBy` list,
   ///     creates a new vetting record with empty `likedBy` and `dislikedBy` lists, and returns it.
-  /// - Logs and rethrows any [PostException], or wraps other exceptions in a [PostException].
+  /// - Logs and rethrows any [ServerSideException], or wraps other exceptions in a [ServerSideException].
   ///
-  /// Throws a [PostException] if the project does not exist or if an unexpected error occurs.
+  /// Throws a [ServerSideException] if the project does not exist or if an unexpected error occurs.
   ///
   /// Returns the updated or newly created [ProjectVetting] record.
   ///
@@ -1463,7 +1504,7 @@ class ProjectEndpoint extends Endpoint {
           ),
         );
         if (project == null) {
-          throw PostException(
+          throw ServerSideException(
               message:
                   'This project cannot be found. It may have been permanently deleted.');
         }
@@ -1548,7 +1589,7 @@ class ProjectEndpoint extends Endpoint {
           }
           return newVetting;
         }
-      } on PostException {
+      } on ServerSideException {
         rethrow;
       } catch (e, stackTrace) {
         session.log(
@@ -1557,7 +1598,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(message: e.toString());
+        throw ServerSideException(message: e.toString());
       }
     });
   }
@@ -1565,13 +1606,13 @@ class ProjectEndpoint extends Endpoint {
   /// Retrieves the vetted project for the authenticated user and specified project ID.
   ///
   /// This method first authenticates the user from the provided [session], then attempts to find
-  /// the project with the given [projectId]. If the project does not exist, a [PostException] is thrown.
+  /// the project with the given [projectId]. If the project does not exist, a [ServerSideException] is thrown.
   /// If the project exists, it searches for a [ProjectVetting] record associated with both the project
   /// and the authenticated user. The related [Project] is also included in the result.
   ///
   /// Returns a [ProjectVetting] instance if found, or `null` if no matching record exists.
   ///
-  /// Throws a [PostException] if the project does not exist.
+  /// Throws a [ServerSideException] if the project does not exist.
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve.
@@ -1589,7 +1630,7 @@ class ProjectEndpoint extends Endpoint {
     );
 
     if (project == null) {
-      throw PostException(
+      throw ServerSideException(
         message:
             'This project does not exist. It may have been permanently deleted.',
       );
@@ -1611,7 +1652,7 @@ class ProjectEndpoint extends Endpoint {
 
   /// Retrieves a paginated list of vetted projects.
   ///
-  /// Throws a [UserException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
+  /// Throws a [ServerSideException] if the provided [limit] or [page] parameters are invalid (less than or equal to zero).
   ///
   /// Parameters:
   /// - [limit]: The maximum number of projects to return per page (default is 50).
@@ -1629,7 +1670,7 @@ class ProjectEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw UserException(
+      throw ServerSideException(
         message: 'Invalid pagination parameters',
       );
     }
@@ -1660,16 +1701,66 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
+  Future<ProjectList> getUserProjectBookmarks(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session);
+        final count = await ProjectBookmarks.db.count(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+        );
+        final bookmarks = await ProjectBookmarks.db.find(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+          limit: limit,
+          offset: (page - 1) * limit,
+          include: ProjectBookmarks.include(
+            project: Project.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+            ),
+          ),
+          orderBy: (t) => t.dateCreated,
+          orderDescending: true,
+        );
+        final results = bookmarks.map((bookmark) => bookmark.project!).toList();
+        return ProjectList(
+          results: results,
+          count: count,
+          page: page,
+          numPages: (count / limit).ceil(),
+          limit: limit,
+          canLoadMore: page * limit < count,
+        );
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in getUserProjectBookmarks: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        throw ServerSideException(
+          message: e.toString(),
+        );
+      }
+    });
+  }
+
   /// Authenticates the current user based on the provided [session].
   ///
   /// Retrieves authentication information from the [session]. If the user is not
-  /// authenticated, a [UserException] is thrown with an appropriate message.
+  /// authenticated, a [ServerSideException] is thrown with an appropriate message.
   /// If authenticated, attempts to find the corresponding [UserRecord] in the database,
-  /// including related [UserInfo]. If the user record is not found, another [UserException]
+  /// including related [UserInfo]. If the user record is not found, another [ServerSideException]
   /// is thrown. Otherwise, returns the authenticated [UserRecord].
   ///
   /// Throws:
-  ///   - [UserException] if the user is not logged in or the user record is not found.
+  ///   - [ServerSideException] if the user is not logged in or the user record is not found.
   ///
   /// Returns:
   ///   - The authenticated [UserRecord] with included [UserInfo].
@@ -1679,7 +1770,7 @@ class ProjectEndpoint extends Endpoint {
   ) async {
     final authInfo = await session.authenticated;
     if (authInfo == null) {
-      throw UserException(
+      throw ServerSideException(
         message: 'You must be logged in',
       );
     }
@@ -1708,14 +1799,14 @@ class ProjectEndpoint extends Endpoint {
       }
     }
     if (userRecord == null) {
-      throw UserException(message: 'User not found');
+      throw ServerSideException(message: 'User not found');
     }
     return userRecord;
   }
 
   /// Validates that the given [user] is the owner of the project with the specified [projectId].
   ///
-  /// Throws a [PostException] if the project does not exist or if the user is not the owner.
+  /// Throws a [ServerSideException] if the project does not exist or if the user is not the owner.
   ///
   /// Parameters:
   /// [projectId] - The ID of the project to validate ownership for.
@@ -1731,12 +1822,12 @@ class ProjectEndpoint extends Endpoint {
       projectId,
     );
     if (project == null) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Project not found',
       );
     }
     if (project.ownerId != user.userInfoId) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Unauthorised operation',
       );
     }
@@ -1744,7 +1835,7 @@ class ProjectEndpoint extends Endpoint {
 
   /// Validates that the given [user] is the owner of the project review with the specified [projectReviewId].
   ///
-  /// Throws a [PostException] if the project review is not found or if the user is not the owner.
+  /// Throws a [ServerSideException] if the project review is not found or if the user is not the owner.
   ///
   /// Parameters:
   /// [projectReviewId] - The ID of the project review to validate.
@@ -1760,12 +1851,12 @@ class ProjectEndpoint extends Endpoint {
       projectReviewId,
     );
     if (projectReview == null) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Project review not found',
       );
     }
     if (projectReview.ownerId != user.userInfoId) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Unauthorised operation',
       );
     }
@@ -1822,7 +1913,7 @@ class ProjectEndpoint extends Endpoint {
       );
 
       if (project == null) {
-        throw PostException(
+        throw ServerSideException(
           message: 'Project not found',
         );
       }

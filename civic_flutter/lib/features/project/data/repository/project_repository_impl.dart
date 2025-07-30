@@ -69,6 +69,40 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
+  Future<Either<Failure, void>> clearProjectBookmarks() async {
+    try {
+      final result = await _remoteDatasource.clearProjectBookmarks();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProjectList>> getUserProjectBookmarks({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatasource.getUserProjectBookmarks(
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, ProjectVetList>> getVettedProjects({
     required int page,
     required int limit,

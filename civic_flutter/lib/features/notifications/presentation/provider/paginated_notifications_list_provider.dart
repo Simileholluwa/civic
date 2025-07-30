@@ -40,6 +40,13 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     return pagingController.value.status;
   }
 
+  void removeAllNotifications() {
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: [],
+    );
+  }
+
   Future<void> fetchPage(int page, {int limit = 50}) async {
     try {
       final listNotifications = ref.read(getNotificationsProvider);

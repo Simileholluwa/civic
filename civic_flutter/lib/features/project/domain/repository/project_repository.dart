@@ -9,6 +9,11 @@ abstract class ProjectRepository {
     required String sortBy,
   });
 
+  Future<Either<Failure, ProjectList>> getUserProjectBookmarks({
+    required int page,
+    required int limit,
+  });
+
   Future<Either<Failure, ProjectVetList>> getVettedProjects({
     required int page,
     required int limit,
@@ -45,6 +50,8 @@ abstract class ProjectRepository {
   Future<Either<Failure, void>> saveProjectDraft({required Project project,});
 
   Future<Either<Failure, void>> deleteProjectDraft();
+
+  Future<Either<Failure, void>> clearProjectBookmarks();
 
   Future<Either<Failure, Project>> saveProject({
     required Project project,

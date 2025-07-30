@@ -75,6 +75,12 @@ class FeedRoutes {
                   },
                 ),
               ]),
+          GoRoute(
+            path: 'bookmarks',
+            builder: (context, state) {
+              return const PostBookmarksScreen();
+            },
+          ),
         ],
       ),
     ],

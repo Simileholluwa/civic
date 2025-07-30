@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
-import 'package:civic_flutter/features/notifications/presentation/helpers/notifications_helper.dart';
-import 'package:civic_flutter/features/notifications/presentation/provider/notification_page_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,139 +17,135 @@ class NotificationsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = ref.watch(notificationTabControllerProvider);
-    final notifNotifier = ref.watch(notifProvider.notifier);
+    final notifNotifier = ref.read(notifProvider.notifier);
+    final pagingController = ref.watch(
+      paginatedNotificationsListProvider('').notifier,
+    );
+    final isEmpty = pagingController.pagingController.itemList?.isEmpty ?? true;
+
     return Scaffold(
-      drawer: AppDrawer(),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              toolbarHeight: 60,
-              floating: true,
-              snap: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.apps,
-                  size: 30,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(65),
-                child: Column(
+      body: ContentScrollWrapper(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                toolbarHeight: 60,
+                floating: true,
+                snap: true,
+                actions: [
+                  IconButton(
+                    onPressed: isEmpty
+                        ? null
+                        : () async {
+                            await NotificationsHelper.deleteNotificationsDialog(
+                              ref,
+                              context,
+                            );
+                          },
+                    icon: const Icon(
+                      Iconsax.trash,
+                      size: 26,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: isEmpty
+                        ? null
+                        : () {
+                            unawaited(
+                              notifNotifier.markAllAsRead(),
+                            );
+                          },
+                    icon: const Icon( 
+                      Iconsax.tick_circle,
+                      size: 26,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+                title: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      spacing: 10,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
-                            padding: const EdgeInsets.all(
-                              5,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                100,
+                    Text(
+                      'NOTIFICATIONS',
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 25,
                               ),
-                              color: Theme.of(context).cardColor,
-                              border: Border.all(
-                                color: Theme.of(context).dividerColor,
-                              ),
-                            ),
-                            child: AppTabBarDesign(
-                              height: 35,
-                              tabController: tabController,
-                              dividerColor: Colors.transparent,
-                              tabAlignment: TabAlignment.start,
-                              isScrollable: true,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              indicator: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              activeColor: Colors.white,
-                              tabs: [
-                                Tab(text: 'ALL'),
-                                Tab(text: 'UNREAD'),
-                                Tab(text: 'PROJECT'),
-                                Tab(text: 'SOCIAL'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 46,
-                          width: 98,
-                          margin: const EdgeInsets.only(right: 15, bottom: 13),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Iconsax.trash,
-                                ),
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Iconsax.tick_circle,
-                                  size: 26,
-                                ),
-                                onPressed: () async {
-                                  await notifNotifier.markAllAsRead();
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
                     ),
-                    const Divider(
-                      height: 0,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 21, left: 1),
+                      child: AppDecorationDot(),
                     ),
                   ],
                 ),
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Iconsax.search_normal,
-                    size: 26,
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(65),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
+                        padding: const EdgeInsets.all(
+                          5,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            100,
+                          ),
+                          color: Theme.of(context).cardColor,
+                          border: Border.all(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
+                        child: AppTabBarDesign(
+                          height: 35,
+                          tabController: tabController,
+                          dividerColor: Colors.transparent,
+                          tabAlignment: TabAlignment.fill,
+                          isScrollable: false,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicator: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          activeColor: Colors.white,
+                          tabs: [
+                            Tab(text: 'ALL'),
+                            Tab(text: 'UNREAD'),
+                            Tab(text: 'PROJECT'),
+                            Tab(text: 'SOCIAL'),
+                          ],
+                        ),
+                      ),
+                      const Divider(
+                        height: 0,
+                      ),
+                    ],
                   ),
-                  onPressed: () {},
                 ),
-                const SizedBox(width: 5),
-              ],
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            NotificationCard(
-              targetType: '',
-            ),
-            NotificationCard(
-              targetType: '',
-              isRead: false,
-            ),
-            NotificationCard(
-              targetType: 'project',
-            ),
-            NotificationCard(
-              targetType: 'post',
-            ),
-          ],
+              ),
+            ];
+          },
+          body: TabBarView(
+            controller: tabController,
+            children: [
+              NotificationCard(
+                targetType: '',
+              ),
+              NotificationCard(
+                targetType: '',
+                isRead: false,
+              ),
+              NotificationCard(
+                targetType: 'project',
+              ),
+              NotificationCard(
+                targetType: 'post',
+              ),
+            ],
+          ),
         ),
       ),
     );

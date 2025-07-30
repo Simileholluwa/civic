@@ -9,11 +9,13 @@ class ArticleCard extends ConsumerWidget {
   const ArticleCard({
     super.key,
     required this.post,
+    this.onTap,
     this.fromDetails = false,
   });
 
   final Post post;
   final bool fromDetails;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +30,7 @@ class ArticleCard extends ConsumerWidget {
     return InkWell(
       onTap: fromDetails
           ? null
-          : () {
+          : onTap ?? () {
               context.push(
                 '/feed/article/${post.id}',
                 extra: newPost,

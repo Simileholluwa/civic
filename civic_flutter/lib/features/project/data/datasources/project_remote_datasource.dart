@@ -10,6 +10,11 @@ abstract class ProjectRemoteDataSource {
     required String sortBy,
   });
 
+  Future<ProjectList> getUserProjectBookmarks({
+    required int limit,
+    required int page,
+  });
+
   Future<ProjectVetList> getVettedProjects({
     required int limit,
     required int page,
@@ -32,6 +37,8 @@ abstract class ProjectRemoteDataSource {
   Future<ProjectReview?> getProjectReview({required int id});
 
   Future<void> deleteProjectReview({required int id});
+
+  Future<void> clearProjectBookmarks();
 
   Future<void> deleteProjectVetting({required int vettingId});
 
@@ -88,9 +95,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       return await _client.project.deleteProject(
         id,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    }  on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -103,13 +108,35 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
+  Future<void> clearProjectBookmarks() async {
+    try {
+      return await _client.project.clearBookmarks();
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
+        action: e.action,
+      );
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+        action: 'retry',
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+        action: 'retry',
+      );
+    }
+  }
+
+  @override
   Future<Project> getProject({required int id}) async {
     try {
       final result = await _client.project.getProject(
         id,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: e.action,
@@ -134,7 +161,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         id,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: e.action,
@@ -165,9 +192,30 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         sortBy: sortBy,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } on UserException catch (e) {
+    } on SocketException catch (_) {
+      throw const ServerException(
+          message: 'Failed to connect to server. Please try again.');
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ProjectList> getUserProjectBookmarks({
+    required int limit,
+    required int page,
+  }) async {
+    try {
+      final result = _client.project.getUserProjectBookmarks(
+        limit: limit,
+        page: page,
+      );
+      return result;
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -190,7 +238,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         page: page,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -209,9 +257,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         project,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -248,9 +294,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       return await _client.project.toggleLike(
         projectId,
       );
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    }  on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -266,7 +310,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         id,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
         action: e.action,
@@ -301,9 +345,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         cardinal: cardinal,
       );
       return result;
-    } on PostException catch (e) {
-      throw ServerException(message: e.message);
-    } on UserException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -324,9 +366,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectReview,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -349,9 +389,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         isLike,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -374,9 +412,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         isLike,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -397,9 +433,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectId,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -417,9 +451,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectId,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -434,7 +466,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       await _client.project.deleteProjectReview(
         id,
       );
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -452,7 +484,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       await _client.project.deleteProjectVetting(
         vettingId,
       );
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -473,9 +505,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectVetting,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    }  on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -491,9 +521,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectId,
       );
       return result;
-    } on UserException catch (e) {
-      throw ServerException(message: e.message);
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(

@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NotificationsHelper {
@@ -172,5 +177,38 @@ class NotificationsHelper {
     } else {
       return Colors.orange;
     }
+  }
+
+  static Future<bool?> deleteNotificationsDialog(
+    WidgetRef ref,
+    BuildContext context,
+  ) {
+    final notifNotifier = ref.read(
+      notifProvider.notifier,
+    );
+    return postDialog(
+      context: context,
+      title: 'Delete all notifications?',
+      description:
+          'Are you sure you want to delete all notifications? This action cannot be undone.',
+      onTapSkipButton: () {
+        context.pop();
+      },
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: "Cancel",
+      onTapActiveButton: () async {
+        if (context.mounted) {
+          context.pop();
+        }
+        ref
+            .read(paginatedNotificationsListProvider('').notifier)
+            .removeAllNotifications();
+        unawaited(
+          notifNotifier.deleteAllNotification(),
+        );
+      },
+    );
   }
 }

@@ -8,12 +8,13 @@ class PostCard extends ConsumerWidget {
   const PostCard({
     super.key,
     required this.post,
-    this.noMaxLines = false,
     this.showInteractions = true,
+    this.onTap,
   });
   final Post post;
-  final bool noMaxLines;
   final bool showInteractions;
+  final VoidCallback? onTap;
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,7 @@ class PostCard extends ConsumerWidget {
       post: post,
       showInteractions: true,
       hasProject: post.postType == PostType.projectRepost,
-      onTap: () {
+      onTap: onTap ?? () {
         context.push(
           '/feed/post/${post.id}',
           extra: post,

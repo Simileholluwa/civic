@@ -5,60 +5,43 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final bool isVisible;
   final List<Widget> actions;
-  final PreferredSizeWidget? bottom;
-  final double? bottomHeight;
   final Widget? leading;
   final bool? centerTitle;
-  final bool showBorder;
   final double? titleSpacing;
+  final PreferredSizeWidget? bottom;
+
   const ContentAppBar({
     super.key,
     required this.title,
-    this.height = 65,
+    this.height = 60,
     required this.isVisible,
     this.actions = const [],
-    this.bottom,
-    this.bottomHeight,
     this.leading,
     this.centerTitle,
     this.titleSpacing,
-    this.showBorder = true,
+    this.bottom,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
+    return AnimatedSlide(
       duration: const Duration(milliseconds: 500),
-      height: !isVisible
-          ? 0
-          : bottom == null
-              ? height
-              : height + bottomHeight!,
-      padding: const EdgeInsets.only(
-        top: 3,
-      ),
-      decoration: showBorder
-          ? BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
+      offset: isVisible ? const Offset(0, 0) : const Offset(0, -1),
+      child: isVisible
+          ? AppBar(
+              title: title,
+              actions: actions,
+              leading: leading,
+              centerTitle: centerTitle,
+              titleSpacing: titleSpacing,
+              bottom: bottom,
             )
           : null,
-      child: AppBar(
-        title: title,
-        actions: actions,
-        bottom: bottom,
-        leading: leading,
-        centerTitle: centerTitle,
-        titleSpacing: titleSpacing,
-      ),
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(
-        bottom == null ? height : height + bottomHeight!,
+        bottom == null ? height : height + bottom!.preferredSize.height,
       );
 }

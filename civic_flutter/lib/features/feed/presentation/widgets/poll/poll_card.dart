@@ -9,11 +9,13 @@ class PollCard extends ConsumerWidget {
   const PollCard({
     super.key,
     required this.post,
+    this.onTap,
     this.fromDetails = false,
   });
 
   final Post post;
   final bool fromDetails;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,7 +35,7 @@ class PollCard extends ConsumerWidget {
     return InkWell(
       onTap: fromDetails
           ? null
-          : () {
+          : onTap ?? () {
               context.push(
                 '/feed/poll/${post.id}',
                 extra: newPost,

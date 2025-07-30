@@ -71,7 +71,7 @@ class PostInteractionButtons extends ConsumerWidget {
                 : Icons.bookmark_add_outlined,
             onTap: () async {
               await postCardNotifier.togglePostBookmarkStatus(
-                post.id!,
+                post.id!, postCardState.hasBookmarked
               );
             },
             iconSize: iconSize,

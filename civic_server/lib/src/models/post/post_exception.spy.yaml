@@ -1,4 +1,0 @@
-exception: PostException
-fields:
-  message: String
-  action: String?, default='nothing'

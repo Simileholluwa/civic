@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProjectsScreen extends ConsumerWidget {
@@ -16,7 +17,6 @@ class ProjectsScreen extends ConsumerWidget {
     final tabController = ref.watch(
       projectTabControllerProvider,
     );
-    final width = MediaQuery.sizeOf(context).width;
     final savedRecordString = ref
         .read(
           localStorageProvider,
@@ -27,8 +27,8 @@ class ProjectsScreen extends ConsumerWidget {
     final decoded = jsonDecode(savedRecordString.toString());
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
+    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      drawer: AppDrawer(),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -36,83 +36,88 @@ class ProjectsScreen extends ConsumerWidget {
               toolbarHeight: 60,
               floating: true,
               snap: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.apps,
-                  size: 30,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.push(
+                      '/project/bookmarks',
+                    );
+                  },
+                  icon: const Icon(
+                    Iconsax.note_1,
+                    size: 26,
+                  ),
                 ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Iconsax.search_normal,
+                    size: 26,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Iconsax.setting_3,
+                    size: 26,
+                  ),
+                ),
+                const SizedBox(width: 5,),
+              ],
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'PROJECTS',
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 25,
+                        ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 21, left: 1),
+                    child: AppDecorationDot(),
+                  ),
+                ],
               ),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(65),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      spacing: 10,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
-                            padding: const EdgeInsets.all(
-                              5,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                100,
-                              ),
-                              color: Theme.of(context).cardColor,
-                              border: Border.all(
-                                color: Theme.of(context).dividerColor,
-                              ),
-                            ),
-                            child: AppTabBarDesign(
-                              height: 35,
-                              tabController: tabController,
-                              dividerColor: Colors.transparent,
-                              tabAlignment: width > 450
-                                  ? TabAlignment.fill
-                                  : TabAlignment.start,
-                              isScrollable: width > 450 ? false : true,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              indicator: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              activeColor: Colors.white,
-                              tabs: [
-                                Tab(
-                                  text: 'ALL',
-                                ),
-                                Tab(text: 'NEW'),
-                                Tab(text: 'TRENDING'),
-                                Tab(text: 'TOP RATING'),
-                              ],
-                            ),
-                          ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
+                      padding: const EdgeInsets.all(
+                        5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          100,
                         ),
-                        Container(
-                          height: 46,
-                          width: 46,
-                          margin: const EdgeInsets.only(right: 15, bottom: 13),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Iconsax.filter,
-                            ),
-                            onPressed: () {},
-                          ),
-                        )
-                      ],
+                        color: Theme.of(context).cardColor,
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                      child: AppTabBarDesign(
+                        height: 35,
+                        tabController: tabController,
+                        dividerColor: Colors.transparent,
+                        tabAlignment: width > 450
+                            ? TabAlignment.fill : TabAlignment.start,
+                        isScrollable: width > 450 ? false : true,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        activeColor: Colors.white,
+                        tabs: [
+                          Tab(text: 'ALL PROJECTS'),
+                          Tab(text: 'NEW'),
+                          Tab(text: 'TRENDING'),
+                          Tab(text: 'TOP RATINGS'),
+                        ],
+                      ),
                     ),
                     const Divider(
                       height: 0,
@@ -120,16 +125,6 @@ class ProjectsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Iconsax.search_normal,
-                    size: 26,
-                  ),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 5),
-              ],
             ),
           ];
         },

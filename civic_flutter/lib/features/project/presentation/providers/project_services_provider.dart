@@ -74,6 +74,13 @@ GetProjectReviewUseCase getProjectReview(Ref ref) {
 }
 
 @riverpod
+GetUserProjectBookmarksUseCase getPaginatedBookmarks(Ref ref) {
+  return GetUserProjectBookmarksUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
 SubToProjectNotifUseCase subToProjectNotif(Ref ref) {
   return SubToProjectNotifUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -90,6 +97,13 @@ ScheduleProjectUseCase scheduleProject(Ref ref) {
 @riverpod
 ToggleLikeUseCase toggleLike(Ref ref) {
   return ToggleLikeUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+ClearProjectBookmarksUseCase clearProjectBookmarks(Ref ref) {
+  return ClearProjectBookmarksUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

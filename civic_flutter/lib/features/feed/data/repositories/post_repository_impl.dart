@@ -51,6 +51,26 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, PostList>> getUserPostBookmarks({
+    required int page,
+    required int limit,
+  }) async {
+    try {
+      final result = await _remoteDatabase.getUserPostBookmarks(
+        page: page,
+        limit: limit,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, Post>> getPost({
     required int postId,
   }) async {
@@ -58,6 +78,21 @@ class FeedRepositoryImpl implements FeedRepository {
       final result = await _remoteDatabase.getPost(
         postId: postId,
       );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> clearPostBookmarks() async {
+    try {
+      final result = await _remoteDatabase.clearPostBookmarks();
       return Right(result);
     } on ServerException catch (e) {
       return Left(

@@ -2,8 +2,9 @@ class: PostBookmarks
 table: post_bookmarks
 fields:
     post: Post?, relation(onDelete=Cascade)
-    owner: UserRecord?, relation(name=user_post_bookmarks)
+    owner: UserRecord?, relation
     dateCreated: DateTime, default=now
+    
 
 indexes:
   post_bookmarks_id_unique_idx:

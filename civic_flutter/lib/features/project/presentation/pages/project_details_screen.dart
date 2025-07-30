@@ -40,9 +40,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ).notifier,
     );
     return Scaffold(
-      appBar: ContentAppBar(
-        title: const SizedBox(),
-        isVisible: true,
+      appBar: AppBar(
         actions: data.hasValue && !data.hasError
             ? data.value == null
                 ? []
@@ -142,13 +140,11 @@ class ProjectDetailsScreen extends ConsumerWidget {
                     ),
                   ]
             : [],
-        bottomHeight: 54,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppTabBarDesign(
             showTopBorder: true,
             tabController: tabController,
-            dividerColor: Colors.transparent,
             tabs: [
               Tab(text: 'DETAILS'),
               Tab(text: 'OVERVIEW'),

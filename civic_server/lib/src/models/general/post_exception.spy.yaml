@@ -1,0 +1,4 @@
+exception: ServerSideException
+fields:
+  message: String
+  action: String?, default='nothing'

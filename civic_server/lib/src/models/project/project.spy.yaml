@@ -1,7 +1,7 @@
 class: Project
 table: project
 fields:
-    owner: UserRecord?, relation(name=user_projects)
+    owner: UserRecord?, relation
     title: String?
     description: String?
     projectCategory: String?
@@ -21,10 +21,15 @@ fields:
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     likedBy: List<int>?
+    likesCount: int?, default=0
     reviewedBy: List<int>?
+    reviewsCount: int?, default=0
     bookmarkedBy: List<int>?
+    bookmarksCount: int?, default=0
     vettedBy: List<int>?
+    vettingsCount: int?, default=0
     subscribers: List<int>?
+    quotedBy: List<int>?
     quoteCount: int?, default=0
     overallRating: double?
     overallLocationRating: double?
@@ -34,3 +39,7 @@ fields:
     overAllCategoryRating: double?
     overallFundingRating: double?
     isDeleted: bool?, default=false
+
+indexes:
+  project_idx:
+    fields: ownerId, title

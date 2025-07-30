@@ -40,10 +40,15 @@ abstract class Project
     DateTime? dateCreated,
     this.updatedAt,
     this.likedBy,
+    int? likesCount,
     this.reviewedBy,
+    int? reviewsCount,
     this.bookmarkedBy,
+    int? bookmarksCount,
     this.vettedBy,
+    int? vettingsCount,
     this.subscribers,
+    this.quotedBy,
     int? quoteCount,
     this.overallRating,
     this.overallLocationRating,
@@ -54,6 +59,10 @@ abstract class Project
     this.overallFundingRating,
     bool? isDeleted,
   })  : dateCreated = dateCreated ?? DateTime.now(),
+        likesCount = likesCount ?? 0,
+        reviewsCount = reviewsCount ?? 0,
+        bookmarksCount = bookmarksCount ?? 0,
+        vettingsCount = vettingsCount ?? 0,
         quoteCount = quoteCount ?? 0,
         isDeleted = isDeleted ?? false;
 
@@ -80,10 +89,15 @@ abstract class Project
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? reviewedBy,
+    int? reviewsCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     List<int>? vettedBy,
+    int? vettingsCount,
     List<int>? subscribers,
+    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -143,16 +157,23 @@ abstract class Project
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      likesCount: jsonSerialization['likesCount'] as int?,
       reviewedBy: (jsonSerialization['reviewedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      reviewsCount: jsonSerialization['reviewsCount'] as int?,
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       vettedBy: (jsonSerialization['vettedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      vettingsCount: jsonSerialization['vettingsCount'] as int?,
       subscribers: (jsonSerialization['subscribers'] as List?)
+          ?.map((e) => e as int)
+          .toList(),
+      quotedBy: (jsonSerialization['quotedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
       quoteCount: jsonSerialization['quoteCount'] as int?,
@@ -222,13 +243,23 @@ abstract class Project
 
   List<int>? likedBy;
 
+  int? likesCount;
+
   List<int>? reviewedBy;
+
+  int? reviewsCount;
 
   List<int>? bookmarkedBy;
 
+  int? bookmarksCount;
+
   List<int>? vettedBy;
 
+  int? vettingsCount;
+
   List<int>? subscribers;
+
+  List<int>? quotedBy;
 
   int? quoteCount;
 
@@ -277,10 +308,15 @@ abstract class Project
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? reviewedBy,
+    int? reviewsCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     List<int>? vettedBy,
+    int? vettingsCount,
     List<int>? subscribers,
+    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -321,10 +357,15 @@ abstract class Project
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
+      if (reviewsCount != null) 'reviewsCount': reviewsCount,
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
+      if (vettingsCount != null) 'vettingsCount': vettingsCount,
       if (subscribers != null) 'subscribers': subscribers?.toJson(),
+      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
@@ -372,10 +413,15 @@ abstract class Project
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
       if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
+      if (reviewsCount != null) 'reviewsCount': reviewsCount,
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
+      if (vettingsCount != null) 'vettingsCount': vettingsCount,
       if (subscribers != null) 'subscribers': subscribers?.toJson(),
+      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
       if (quoteCount != null) 'quoteCount': quoteCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
@@ -449,10 +495,15 @@ class _ProjectImpl extends Project {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? reviewedBy,
+    int? reviewsCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     List<int>? vettedBy,
+    int? vettingsCount,
     List<int>? subscribers,
+    List<int>? quotedBy,
     int? quoteCount,
     double? overallRating,
     double? overallLocationRating,
@@ -485,10 +536,15 @@ class _ProjectImpl extends Project {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           likedBy: likedBy,
+          likesCount: likesCount,
           reviewedBy: reviewedBy,
+          reviewsCount: reviewsCount,
           bookmarkedBy: bookmarkedBy,
+          bookmarksCount: bookmarksCount,
           vettedBy: vettedBy,
+          vettingsCount: vettingsCount,
           subscribers: subscribers,
+          quotedBy: quotedBy,
           quoteCount: quoteCount,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
@@ -527,10 +583,15 @@ class _ProjectImpl extends Project {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? likedBy = _Undefined,
+    Object? likesCount = _Undefined,
     Object? reviewedBy = _Undefined,
+    Object? reviewsCount = _Undefined,
     Object? bookmarkedBy = _Undefined,
+    Object? bookmarksCount = _Undefined,
     Object? vettedBy = _Undefined,
+    Object? vettingsCount = _Undefined,
     Object? subscribers = _Undefined,
+    Object? quotedBy = _Undefined,
     Object? quoteCount = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
@@ -581,18 +642,26 @@ class _ProjectImpl extends Project {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
+      likesCount: likesCount is int? ? likesCount : this.likesCount,
       reviewedBy: reviewedBy is List<int>?
           ? reviewedBy
           : this.reviewedBy?.map((e0) => e0).toList(),
+      reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
+      bookmarksCount:
+          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       vettedBy: vettedBy is List<int>?
           ? vettedBy
           : this.vettedBy?.map((e0) => e0).toList(),
+      vettingsCount: vettingsCount is int? ? vettingsCount : this.vettingsCount,
       subscribers: subscribers is List<int>?
           ? subscribers
           : this.subscribers?.map((e0) => e0).toList(),
+      quotedBy: quotedBy is List<int>?
+          ? quotedBy
+          : this.quotedBy?.map((e0) => e0).toList(),
       quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
@@ -702,20 +771,44 @@ class ProjectTable extends _i1.Table<int?> {
       'likedBy',
       this,
     );
+    likesCount = _i1.ColumnInt(
+      'likesCount',
+      this,
+      hasDefault: true,
+    );
     reviewedBy = _i1.ColumnSerializable(
       'reviewedBy',
       this,
+    );
+    reviewsCount = _i1.ColumnInt(
+      'reviewsCount',
+      this,
+      hasDefault: true,
     );
     bookmarkedBy = _i1.ColumnSerializable(
       'bookmarkedBy',
       this,
     );
+    bookmarksCount = _i1.ColumnInt(
+      'bookmarksCount',
+      this,
+      hasDefault: true,
+    );
     vettedBy = _i1.ColumnSerializable(
       'vettedBy',
       this,
     );
+    vettingsCount = _i1.ColumnInt(
+      'vettingsCount',
+      this,
+      hasDefault: true,
+    );
     subscribers = _i1.ColumnSerializable(
       'subscribers',
+      this,
+    );
+    quotedBy = _i1.ColumnSerializable(
+      'quotedBy',
       this,
     );
     quoteCount = _i1.ColumnInt(
@@ -800,13 +893,23 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnSerializable likedBy;
 
+  late final _i1.ColumnInt likesCount;
+
   late final _i1.ColumnSerializable reviewedBy;
+
+  late final _i1.ColumnInt reviewsCount;
 
   late final _i1.ColumnSerializable bookmarkedBy;
 
+  late final _i1.ColumnInt bookmarksCount;
+
   late final _i1.ColumnSerializable vettedBy;
 
+  late final _i1.ColumnInt vettingsCount;
+
   late final _i1.ColumnSerializable subscribers;
+
+  late final _i1.ColumnSerializable quotedBy;
 
   late final _i1.ColumnInt quoteCount;
 
@@ -862,10 +965,15 @@ class ProjectTable extends _i1.Table<int?> {
         dateCreated,
         updatedAt,
         likedBy,
+        likesCount,
         reviewedBy,
+        reviewsCount,
         bookmarkedBy,
+        bookmarksCount,
         vettedBy,
+        vettingsCount,
         subscribers,
+        quotedBy,
         quoteCount,
         overallRating,
         overallLocationRating,

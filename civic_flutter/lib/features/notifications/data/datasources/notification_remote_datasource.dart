@@ -41,7 +41,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
     try {
       final result = await _client.notification.deleteAllNotifications();
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -68,7 +68,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
         isRead: isRead,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -85,7 +85,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
     try {
       final result = await _client.notification.markAllNotificationsAsRead();
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
@@ -104,7 +104,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
         id,
       );
       return result;
-    } on PostException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(

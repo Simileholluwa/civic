@@ -33,9 +33,11 @@ post:
   - getPost:
   - getPosts:
   - deletePost:
+  - clearBookmarks:
   - toggleBookmark:
   - toggleLike:
   - subscribeToPost:
+  - getUserPostBookmarks:
   - markNotInterested:
   - postUpdates:
 project:
@@ -48,6 +50,7 @@ project:
   - scheduleProject:
   - getProjects:
   - getProjectReviews:
+  - clearBookmarks:
   - reactToReview:
   - reactToVetting:
   - deleteProject:
@@ -57,6 +60,7 @@ project:
   - vetProject:
   - getVettedProject:
   - getVettedProjects:
+  - getUserProjectBookmarks:
   - projectUpdates:
   - subscribeToProject:
   - projectReviewUpdates:

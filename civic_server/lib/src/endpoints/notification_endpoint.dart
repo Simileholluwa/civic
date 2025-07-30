@@ -273,7 +273,7 @@ class NotificationEndpoint extends Endpoint {
   ) async {
     final authInfo = await session.authenticated;
     if (authInfo == null) {
-      throw UserException(
+      throw ServerSideException(
         message: 'You must be logged in',
       );
     }
@@ -289,7 +289,7 @@ class NotificationEndpoint extends Endpoint {
     );
 
     if (user == null) {
-      throw UserException(
+      throw ServerSideException(
         message: 'User not found',
       );
     }
@@ -320,12 +320,12 @@ class NotificationEndpoint extends Endpoint {
       notificationId,
     );
     if (notification == null) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Notification not found',
       );
     }
     if (notification.receiverId != user.userInfoId) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Unauthorised operation',
       );
     }

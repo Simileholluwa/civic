@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:civic_flutter/features/user/user.dart';
+import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_user_provider.g.dart';
 

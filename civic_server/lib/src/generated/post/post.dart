@@ -38,7 +38,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.updatedAt,
     this.hashtags,
     this.likedBy,
+    int? likesCount,
     this.bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     this.subscribers,
     this.pollId,
@@ -54,6 +56,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     bool? isDeleted,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
+        likesCount = likesCount ?? 0,
+        bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
         isDeleted = isDeleted ?? false;
 
@@ -73,7 +77,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -130,9 +136,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       likedBy: (jsonSerialization['likedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      likesCount: jsonSerialization['likesCount'] as int?,
       bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
           ?.map((e) => e as int)
           .toList(),
+      bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
       subscribers: (jsonSerialization['subscribers'] as List?)
           ?.map((e) => e as int)
@@ -204,7 +212,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   List<int>? likedBy;
 
+  int? likesCount;
+
   List<int>? bookmarkedBy;
+
+  int? bookmarksCount;
 
   int? commentCount;
 
@@ -254,7 +266,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -291,7 +305,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
@@ -334,7 +350,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likedBy != null) 'likedBy': likedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
       if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
+      if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
@@ -419,7 +437,9 @@ class _PostImpl extends Post {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     List<int>? likedBy,
+    int? likesCount,
     List<int>? bookmarkedBy,
+    int? bookmarksCount,
     int? commentCount,
     List<int>? subscribers,
     int? pollId,
@@ -449,7 +469,9 @@ class _PostImpl extends Post {
           updatedAt: updatedAt,
           hashtags: hashtags,
           likedBy: likedBy,
+          likesCount: likesCount,
           bookmarkedBy: bookmarkedBy,
+          bookmarksCount: bookmarksCount,
           commentCount: commentCount,
           subscribers: subscribers,
           pollId: pollId,
@@ -485,7 +507,9 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likedBy = _Undefined,
+    Object? likesCount = _Undefined,
     Object? bookmarkedBy = _Undefined,
+    Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
     Object? subscribers = _Undefined,
     Object? pollId = _Undefined,
@@ -528,9 +552,12 @@ class _PostImpl extends Post {
       likedBy: likedBy is List<int>?
           ? likedBy
           : this.likedBy?.map((e0) => e0).toList(),
+      likesCount: likesCount is int? ? likesCount : this.likesCount,
       bookmarkedBy: bookmarkedBy is List<int>?
           ? bookmarkedBy
           : this.bookmarkedBy?.map((e0) => e0).toList(),
+      bookmarksCount:
+          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
       subscribers: subscribers is List<int>?
           ? subscribers
@@ -607,9 +634,19 @@ class PostTable extends _i1.Table<int?> {
       'likedBy',
       this,
     );
+    likesCount = _i1.ColumnInt(
+      'likesCount',
+      this,
+      hasDefault: true,
+    );
     bookmarkedBy = _i1.ColumnSerializable(
       'bookmarkedBy',
       this,
+    );
+    bookmarksCount = _i1.ColumnInt(
+      'bookmarksCount',
+      this,
+      hasDefault: true,
     );
     commentCount = _i1.ColumnInt(
       'commentCount',
@@ -677,7 +714,11 @@ class PostTable extends _i1.Table<int?> {
 
   late final _i1.ColumnSerializable likedBy;
 
+  late final _i1.ColumnInt likesCount;
+
   late final _i1.ColumnSerializable bookmarkedBy;
+
+  late final _i1.ColumnInt bookmarksCount;
 
   late final _i1.ColumnInt commentCount;
 
@@ -829,7 +870,9 @@ class PostTable extends _i1.Table<int?> {
         dateCreated,
         updatedAt,
         likedBy,
+        likesCount,
         bookmarkedBy,
+        bookmarksCount,
         commentCount,
         subscribers,
         pollId,

@@ -76,6 +76,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_map: ^8.0.0
   latlong2: ^0.9.1
+  animated_theme_switcher: ^2.0.10
 
 dev_dependencies:
   flutter_lints: ^5.0.0

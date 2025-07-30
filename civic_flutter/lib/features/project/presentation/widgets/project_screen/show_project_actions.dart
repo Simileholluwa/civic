@@ -1,7 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:civic_flutter/features/user/user.dart';
+import 'package:civic_flutter/features/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -74,6 +74,7 @@ class ShowProjectActions extends ConsumerWidget {
               }
               final result = await projectCardNotifier.toggleBookmarkStatus(
                 project.id!,
+                projectCardState.isBookmarked!,
               );
               if (result) {
                 if (!projectCardState.isBookmarked!) {

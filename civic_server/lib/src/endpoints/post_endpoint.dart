@@ -375,7 +375,7 @@ class PostEndpoint extends Endpoint {
       );
 
       if (post == null) {
-        throw PostException(message: 'Poll not found.');
+        throw ServerSideException(message: 'Poll not found.');
       }
 
       final poll = post.poll!;
@@ -391,7 +391,7 @@ class PostEndpoint extends Endpoint {
         // Find the one the user voted on
         PollOption? votedOption = options.firstWhere(
           (option) => option.votedBy!.contains(user.id!),
-          orElse: () => throw PostException(
+          orElse: () => throw ServerSideException(
             message: 'You have not voted for this option.',
           ),
         );
@@ -427,7 +427,7 @@ class PostEndpoint extends Endpoint {
       );
 
       if (option == null || option.pollId != poll.id) {
-        throw PostException(message: 'Invalid poll option selected.');
+        throw ServerSideException(message: 'Invalid poll option selected.');
       }
 
       // Update PollOption's votedBy
@@ -540,7 +540,7 @@ class PostEndpoint extends Endpoint {
       // Find the one the user voted on
       PollOption? votedOption = options.firstWhere(
         (option) => option.votedBy!.contains(userId),
-        orElse: () => throw PostException(
+        orElse: () => throw ServerSideException(
           message: 'You have not voted in this poll.',
         ),
       );
@@ -800,7 +800,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw UserException(
+      throw ServerSideException(
         message: 'Invalid pagination parameters',
       );
     }
@@ -861,7 +861,7 @@ class PostEndpoint extends Endpoint {
     );
 
     if (comment == null) {
-      throw PostException(
+      throw ServerSideException(
         message: isComment
             ? 'This comment does not exist. It may have been deleted.'
             : 'This reply does not exist. It may have been deleted.',
@@ -878,7 +878,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw UserException(
+      throw ServerSideException(
         message: 'Invalid pagination parameters',
       );
     }
@@ -990,7 +990,7 @@ class PostEndpoint extends Endpoint {
           );
 
           if (selectedProject == null) {
-            throw PostException(message: 'Project not found.');
+            throw ServerSideException(message: 'Project not found.');
           }
 
           final sentPost = await Post.db.insertRow(
@@ -1079,7 +1079,7 @@ class PostEndpoint extends Endpoint {
             project: selectedProject,
           );
         }
-      } on PostException {
+      } on ServerSideException {
         rethrow;
       } catch (e, stackTrace) {
         session.log(
@@ -1088,7 +1088,7 @@ class PostEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw PostException(
+        throw ServerSideException(
           message: 'Error reposting or quoting post',
         );
       }
@@ -1124,7 +1124,7 @@ class PostEndpoint extends Endpoint {
     );
 
     if (result == null) {
-      throw PostException(
+      throw ServerSideException(
         message: 'This post does not exist. It may have been deleted.',
       );
     }
@@ -1138,7 +1138,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Invalid pagination parameters',
       );
     }
@@ -1245,6 +1245,41 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  Future<void> clearBookmarks(Session session) async {
+    return await session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session,);
+        final userBookmarks = await PostBookmarks.db.find(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+          include: PostBookmarks.include(
+            post: Post.include(),
+          ),
+        );
+        final posts = userBookmarks.map((e) => e.post!);
+        for (final post in posts) {
+          post.bookmarkedBy!.remove(user.id!);
+          post.bookmarksCount = post.bookmarksCount! - 1;
+          await updatePost(session, post);
+        }
+        await PostBookmarks.db.deleteWhere(
+          session,
+          where: (t) => t.ownerId.equals(user.id!),
+        );
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in clearPostBookmarks: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
+        );
+        throw ServerSideException(
+          message: 'Error clearing bookmarks',
+        );
+      }
+    });
+  }
+
   Future<void> toggleBookmark(
     Session session,
     int postId,
@@ -1262,7 +1297,7 @@ class PostEndpoint extends Endpoint {
           ),
         );
         if (post == null) {
-          throw PostException(
+          throw ServerSideException(
             message: "Post not found",
           );
         }
@@ -1380,7 +1415,7 @@ class PostEndpoint extends Endpoint {
           ),
         );
         if (post == null) {
-          throw PostException(
+          throw ServerSideException(
             message: "Post not found",
           );
         }
@@ -1491,7 +1526,7 @@ class PostEndpoint extends Endpoint {
       );
 
       if (post == null) {
-        throw PostException(
+        throw ServerSideException(
           message: 'Post not found',
         );
       }
@@ -1540,6 +1575,63 @@ class PostEndpoint extends Endpoint {
 
         return;
       }
+    });
+  }
+
+  Future<PostList> getUserPostBookmarks(
+    Session session, {
+    int limit = 50,
+    int page = 1,
+  }) async {
+    return await session.db.transaction((transaction) async {
+      final user = await authUser(session);
+
+      final count = await PostBookmarks.db.count(
+        session,
+        where: (t) => t.ownerId.equals(user.id!),
+      );
+
+      final bookmarks = await PostBookmarks.db.find(
+        session,
+        where: (t) => t.ownerId.equals(user.id!),
+        limit: limit,
+        offset: (page - 1) * limit,
+        orderBy: (t) => t.dateCreated,
+        orderDescending: true,
+        include: PostBookmarks.include(
+          post: Post.include(
+            owner: UserRecord.include(
+              userInfo: UserInfo.include(),
+            ),
+            project: Project.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+            ),
+            poll: Poll.include(
+              options: PollOption.includeList(),
+            ),
+            article: Article.include(),
+            parent: Post.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+            ),
+            quotedOrRepostedFromUser: UserRecord.include(
+              userInfo: UserInfo.include(),
+            ),
+          ),
+        ),
+      );
+      final results = bookmarks.map((e) => e.post!).toList();
+      return PostList(
+        count: count,
+        limit: limit,
+        page: page,
+        results: results,
+        numPages: (count / limit).ceil(),
+        canLoadMore: page * limit < count,
+      );
     });
   }
 
@@ -1622,12 +1714,10 @@ class PostEndpoint extends Endpoint {
   }
 
   @doNotGenerate
-  Future<UserRecord> authUser(
-    Session session,
-  ) async {
+  Future<UserRecord> authUser(Session session,) async {
     final authInfo = await session.authenticated;
     if (authInfo == null) {
-      throw UserException(
+      throw ServerSideException(
         message: 'You must be logged in',
       );
     }
@@ -1656,7 +1746,7 @@ class PostEndpoint extends Endpoint {
       }
     }
     if (userRecord == null) {
-      throw UserException(message: 'User not found');
+      throw ServerSideException(message: 'User not found');
     }
     return userRecord;
   }
@@ -1672,12 +1762,12 @@ class PostEndpoint extends Endpoint {
       postId,
     );
     if (post == null) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Post not found',
       );
     }
     if (post.ownerId != user.userInfoId) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Unauthorised operation',
       );
     }
@@ -1703,12 +1793,12 @@ class PostEndpoint extends Endpoint {
               : t.postType.equals(PostType.comment)),
     );
     if (comment == null) {
-      throw PostException(
+      throw ServerSideException(
         message: isReply ? 'Reply not found' : 'Comment not found',
       );
     }
     if (comment.ownerId != user.userInfoId) {
-      throw PostException(
+      throw ServerSideException(
         message: 'Unauthorised operation',
       );
     }

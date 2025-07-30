@@ -168,6 +168,26 @@ final getProjectReviewProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetProjectReviewRef = AutoDisposeProviderRef<GetProjectReviewUseCase>;
+String _$getPaginatedBookmarksHash() =>
+    r'fe9a244c0f6ade60b14c2ddcfaf0fb0a244cd1a1';
+
+/// See also [getPaginatedBookmarks].
+@ProviderFor(getPaginatedBookmarks)
+final getPaginatedBookmarksProvider =
+    AutoDisposeProvider<GetUserProjectBookmarksUseCase>.internal(
+  getPaginatedBookmarks,
+  name: r'getPaginatedBookmarksProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getPaginatedBookmarksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetPaginatedBookmarksRef
+    = AutoDisposeProviderRef<GetUserProjectBookmarksUseCase>;
 String _$subToProjectNotifHash() => r'b291a1dd992869a364084ead0c3b858ca39b6007';
 
 /// See also [subToProjectNotif].
@@ -220,6 +240,26 @@ final toggleLikeProvider = AutoDisposeProvider<ToggleLikeUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ToggleLikeRef = AutoDisposeProviderRef<ToggleLikeUseCase>;
+String _$clearProjectBookmarksHash() =>
+    r'd17901b8c1ecedd747c49ab5038c805da2ea582c';
+
+/// See also [clearProjectBookmarks].
+@ProviderFor(clearProjectBookmarks)
+final clearProjectBookmarksProvider =
+    AutoDisposeProvider<ClearProjectBookmarksUseCase>.internal(
+  clearProjectBookmarks,
+  name: r'clearProjectBookmarksProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$clearProjectBookmarksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClearProjectBookmarksRef
+    = AutoDisposeProviderRef<ClearProjectBookmarksUseCase>;
 String _$reactToProjectReviewHash() =>
     r'd89d5f9dd4106b72aeea78d1b5f3aa5610379004';
 
