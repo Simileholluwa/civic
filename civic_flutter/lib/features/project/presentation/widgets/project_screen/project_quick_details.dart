@@ -20,7 +20,7 @@ class ProjectQuickDetails extends ConsumerWidget {
         project,
       ),
     );
-    final textStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+    final textStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         );

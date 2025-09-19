@@ -43,8 +43,8 @@ class ProjectQuickDetailWidget extends StatelessWidget {
             height: size,
             width: size,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 
-                0.1,
+              color: color.withValues(
+                alpha: 0.1,
               ),
               shape: BoxShape.circle,
             ),
@@ -55,7 +55,7 @@ class ProjectQuickDetailWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 5, right: 10),
+            padding: const EdgeInsets.only(left: 5, right: 10, bottom: 2),
             child: Text(
               title,
               style: textStyle,

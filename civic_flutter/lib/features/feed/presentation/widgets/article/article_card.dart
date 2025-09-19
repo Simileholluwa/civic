@@ -30,12 +30,13 @@ class ArticleCard extends ConsumerWidget {
     return InkWell(
       onTap: fromDetails
           ? null
-          : onTap ?? () {
-              context.push(
-                '/feed/article/${post.id}',
-                extra: newPost,
-              );
-            },
+          : onTap ??
+              () {
+                context.push(
+                  '/feed/article/${post.id}',
+                  extra: newPost,
+                );
+              },
       child: Column(
         spacing: 10,
         children: [
@@ -77,10 +78,38 @@ class ArticleCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 5,
               children: [
-                Text(
-                  postCardState.text,
-                  style: Theme.of(context).textTheme.headlineLarge!,
-                  textAlign: TextAlign.left,
+                Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        postCardState.text,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Text(
+                        'Article',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 ContentExpandableText(
                   text: postCardState.articleContent,

@@ -1,7 +1,6 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TAppTheme {
   TAppTheme._();
@@ -89,7 +88,7 @@ class TAppTheme {
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
     swapLegacyOnMaterial3: true,
-    fontFamily: GoogleFonts.raleway().fontFamily,
+    fontFamily: 'Satoshi',
   );
 
   static ThemeData darkTheme = FlexThemeData.dark(
@@ -131,7 +130,7 @@ class TAppTheme {
       filledButtonRadius: 10,
       chipRadius: 10,
       navigationBarIndicatorOpacity: 0,
-      bottomNavigationBarMutedUnselectedLabel: true,   
+      bottomNavigationBarMutedUnselectedLabel: true,
       bottomNavigationBarMutedUnselectedIcon: true,
       bottomNavigationBarElevation: 8,
       bottomNavigationBarType: BottomNavigationBarType.fixed,
@@ -169,6 +168,6 @@ class TAppTheme {
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
     swapLegacyOnMaterial3: true,
-    fontFamily: GoogleFonts.raleway().fontFamily,
+    fontFamily: 'Satoshi',
   );
 }

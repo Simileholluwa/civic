@@ -26,7 +26,7 @@ class NotificationsHelper {
     required String? triggerUser,
   }) {
     final style = DefaultTextStyle.of(context).style;
-    final boldStyle = style.copyWith(fontWeight: FontWeight.bold);
+    final boldStyle = style.copyWith(fontWeight: FontWeight.w600);
 
     final spans = <InlineSpan>[];
 

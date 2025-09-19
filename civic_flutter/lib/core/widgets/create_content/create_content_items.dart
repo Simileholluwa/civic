@@ -40,15 +40,14 @@ class CreateContentItems extends StatelessWidget {
                   children: [
                     Text(
                       itemName,
-                      style:
-                          Theme.of(context).textTheme.titleLarge!.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: textColor,
                           ),
                     ),
                     Text(
                       itemCaption,
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            fontSize: 15,
+                            fontSize: 16,
                             color: textColor,
                           ),
                     )

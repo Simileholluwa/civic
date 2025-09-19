@@ -1,2 +1,3 @@
 .vscode/settings.json
 *.env
+civic_server/config/passwords.yaml

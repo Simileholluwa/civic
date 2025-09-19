@@ -21,8 +21,7 @@ Future<bool?> savePostDraftDialog(
     title: 'Save $type as draft?',
     description: 'Would you like to save the changes you have made as draft?',
     onTapSkipButton: () {
-      context.pop();
-      context.pop();
+      context.pop(true);
     },
     activeButtonText: 'Save as draft',
     activeButtonLoading: false,
@@ -30,7 +29,7 @@ Future<bool?> savePostDraftDialog(
     skipText: "Don't save",
     onTapActiveButton: () async {
       if (context.mounted) {
-        context.pop();
+        context.pop(true);
       }
       final postNotifier = ref.read(
         feedProvider(

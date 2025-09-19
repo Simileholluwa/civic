@@ -11,7 +11,7 @@ class ContentExpandableText extends StatelessWidget {
     this.noMaxLines = false,
     required this.onToggleTextTap,
     this.maxLines,
-    this.fontSize = 17,
+    this.fontSize = 18,
   });
 
   final String text;

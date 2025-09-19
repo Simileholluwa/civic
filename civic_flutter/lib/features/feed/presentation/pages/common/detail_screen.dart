@@ -208,20 +208,25 @@ class DetailScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-            child: ContentSingleButton(
-              text: 'Share your thoughts...',
-              buttonIcon: Iconsax.pen_tool5,
-              onPressed: () {
-                context.push(
-                  '/create/post/0',
-                  extra: {
-                    'parent': value,
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Divider(height: 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                child: ShareOpinion(
+                  imageUrl: value.owner!.userInfo!.imageUrl!,
+                  onTap: () {
+                    context.push(
+                      '/create/post/0',
+                      extra: {
+                        'parent': value,
+                      },
+                    );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           );
         },
         error: (error, st) {

@@ -99,3 +99,4 @@ export 'presentation/widgets/post/post_video_options.dart';
 export 'presentation/widgets/post/post_video_post.dart';
 export 'presentation/widgets/post/repost_title.dart';
 export 'presentation/widgets/post/video_post.dart';
+export 'presentation/widgets/common/share_opinion.dart';

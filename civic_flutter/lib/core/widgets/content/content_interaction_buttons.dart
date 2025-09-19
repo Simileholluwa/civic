@@ -45,11 +45,9 @@ class ContentInteractionButton extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
                       ' $text',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: color,
-                            fontSize: 18,
                             fontWeight: FontWeight.w500,
-                            fontFamily: 'Montserrat',
                           ),
                     ),
                   ),

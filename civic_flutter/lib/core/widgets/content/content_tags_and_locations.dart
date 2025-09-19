@@ -45,7 +45,7 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
                         : 'With ${tags.first.userInfo!.userName} and ${tags.length - 1} others',
                 color: Colors.blue,
                 textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 12,
+                      fontSize: 14,
                     ),
               ),
             ),
@@ -61,7 +61,7 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
                         : 'At ${locations.first.place} and ${locations.length - 1} others',
                 color: Colors.orange,
                 textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 12,
+                      fontSize: 14,
                     ),
               ),
             ),

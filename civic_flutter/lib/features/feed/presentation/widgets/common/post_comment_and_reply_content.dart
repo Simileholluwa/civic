@@ -31,7 +31,6 @@ class PostCommentAndReplyContent extends StatelessWidget {
         context.push(
           '/feed/post/${replyOrComment.id}',
           extra: replyOrComment,
-          
         );
       },
       child: Column(
@@ -41,9 +40,6 @@ class PostCommentAndReplyContent extends StatelessWidget {
         children: [
           CreatorNameAndAccountInfo(
             creator: replyOrComment.owner!,
-            timeAgo: THelperFunctions.humanizeDateTime(
-              replyOrComment.dateCreated ?? DateTime.now(),
-            ),
           ),
           if (replyOrComment.text != null)
             ContentExpandableText(
@@ -61,7 +57,8 @@ class PostCommentAndReplyContent extends StatelessWidget {
                     imageUrls: replyOrComment.imageUrls!,
                     useMargin: false,
                   ),
-          if (replyOrComment.taggedUsers!.isNotEmpty || replyOrComment.locations!.isNotEmpty)
+          if (replyOrComment.taggedUsers!.isNotEmpty ||
+              replyOrComment.locations!.isNotEmpty)
             ContentEngagementTagsAndLocations(
               usePadding: false,
               tags: replyOrComment.taggedUsers!,

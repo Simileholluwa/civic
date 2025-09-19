@@ -92,10 +92,7 @@ class NetworkScreen extends ConsumerWidget {
               ),
             ];
           },
-          body: TabBarView(
-            controller: tabController,
-            children: [],
-          ),
+          body: Container(),
         ),
       ),
     );

@@ -12,7 +12,11 @@ import 'package:intl/intl.dart';
 class THelperFunctions {
   THelperFunctions._();
 
-  static String getFullName(String firstName, String? middleName, String lastName,) {
+  static String getFullName(
+    String firstName,
+    String? middleName,
+    String lastName,
+  ) {
     if (middleName == null || middleName.trim().isEmpty) {
       return '$firstName $lastName';
     }
@@ -100,7 +104,7 @@ class THelperFunctions {
       ),
       paragraph: DefaultTextBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
+              fontSize: 18,
             ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
@@ -109,7 +113,7 @@ class THelperFunctions {
       ),
       placeHolder: DefaultTextBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
+              fontSize: 18,
               color: Theme.of(context).hintColor,
             ),
         HorizontalSpacing.zero,
@@ -117,10 +121,10 @@ class THelperFunctions {
         VerticalSpacing.zero,
         null,
       ),
-      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 9),
+      sizeSmall: defaultTextStyle.style.copyWith(fontSize: 12),
       lists: DefaultListBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
+              fontSize: 18,
             ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
@@ -133,7 +137,7 @@ class THelperFunctions {
       ),
       leading: DefaultListBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 17,
+              fontSize: 18,
             ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,

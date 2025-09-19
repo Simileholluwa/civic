@@ -31,7 +31,7 @@ class PostTextField extends ConsumerWidget {
         TextFormField(
           controller: controller,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 17,
+                fontSize: 18,
               ),
           textCapitalization: TextCapitalization.sentences,
           onChanged: (text) => THelperFunctions.onTextChanged(

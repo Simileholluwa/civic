@@ -53,9 +53,7 @@ class ShowPostActions extends ConsumerWidget {
             children: [
               Text(
                 'More actions',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.left,
               ),
               GestureDetector(

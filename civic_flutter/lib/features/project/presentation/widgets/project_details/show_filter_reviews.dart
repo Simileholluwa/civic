@@ -7,7 +7,7 @@ import 'package:iconsax/iconsax.dart';
 
 class ShowFilterReviews extends ConsumerWidget {
   const ShowFilterReviews({super.key, required this.pagingController});
-  
+
   final PaginatedProjectReviewList pagingController;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,9 +25,7 @@ class ShowFilterReviews extends ConsumerWidget {
             children: [
               Text(
                 'Filter reviews',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.left,
               ),
               GestureDetector(
@@ -46,7 +44,10 @@ class ShowFilterReviews extends ConsumerWidget {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.fromLTRB(
-            16, 16, 16, 0,
+            16,
+            16,
+            16,
+            0,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -61,12 +62,17 @@ class ShowFilterReviews extends ConsumerWidget {
                       spacing: 5,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 4,),
+                          padding: const EdgeInsets.only(
+                            bottom: 4,
+                          ),
                           child: Text(
                             text.toString(),
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                         if (index > 0)
@@ -99,8 +105,11 @@ class ShowFilterReviews extends ConsumerWidget {
         if (projectReviewState.rating != null)
           SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
-            16, 16, 16, 0,
-          ),
+              16,
+              16,
+              16,
+              0,
+            ),
             scrollDirection: Axis.horizontal,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -144,7 +153,10 @@ class ShowFilterReviews extends ConsumerWidget {
           ),
         Padding(
           padding: const EdgeInsets.fromLTRB(
-            16, 0, 16, 0,
+            16,
+            0,
+            16,
+            0,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

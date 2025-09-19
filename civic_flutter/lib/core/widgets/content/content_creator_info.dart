@@ -24,6 +24,7 @@ class ContentCreatorInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           spacing: 15,
@@ -44,38 +45,16 @@ class ContentCreatorInfo extends StatelessWidget {
             ),
             CreatorNameAndAccountInfo(
               creator: creator,
-              timeAgo: timeAgo,
               showPoliticalStatus: showPoliticalStatus,
             ),
           ],
         ),
-        // const SizedBox(width: 10),
-        // Stack(
-        //   alignment: Alignment.center,
-        //   children: [
-        //     Container(
-        //       height: 45,
-        //       width: 45,
-        //       decoration: BoxDecoration(
-        //         color: Theme.of(context).cardColor,
-        //         shape: BoxShape.circle,
-        //       ),
-        //       child: CircularProgressIndicator(
-        //         value: creator.credibilityScore! / 100,
-        //         strokeWidth: 3,
-        //         backgroundColor: Theme.of(context).cardColor,
-        //       ),
-        //     ),
-        //     Text(
-        //       '99.7',
-        //       textAlign: TextAlign.center,
-        //       style: Theme.of(context)
-        //           .textTheme
-        //           .titleLarge!
-        //           .copyWith(fontSize: 15),
-        //     ),
-        //   ],
-        // ),
+        Text(
+          timeAgo,
+          style: Theme.of(context).textTheme.labelMedium,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ],
     );
   }
@@ -85,52 +64,39 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
   const CreatorNameAndAccountInfo({
     super.key,
     required this.creator,
-    required this.timeAgo,
     this.showPoliticalStatus = true,
   });
 
   final UserRecord creator;
-  final String timeAgo;
   final bool showPoliticalStatus;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 3,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  THelperFunctions.getFullName(
-                    creator.firstName!,
-                    creator.middleName,
-                    creator.lastName!,
-                  ),
-                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 3,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                THelperFunctions.getFullName(
+                  creator.firstName!,
+                  creator.middleName,
+                  creator.lastName!,
                 ),
-              ),
-              Text(
-                ' • $timeAgo',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
-          if (showPoliticalStatus)
-            UserQuickDetails(creator: creator),
-        ],
-      ),
+            ),
+          ],
+        ),
+        if (showPoliticalStatus) UserQuickDetails(creator: creator),
+      ],
     );
   }
 }
@@ -164,7 +130,6 @@ class UserQuickDetails extends StatelessWidget {
           color: TColors.primary,
           textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
               ),
         ),
         ProjectQuickDetailWidget(
@@ -176,7 +141,6 @@ class UserQuickDetails extends StatelessWidget {
           color: Colors.blue,
           textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
               ),
         ),
       ],

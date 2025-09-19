@@ -27,6 +27,7 @@ class PostCommentCard extends ConsumerWidget {
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       canCreate: false,
+      showDivider: false,
       itemBuilder: (context, value, index) {
         final liveComment = ref.watch(
           postStreamProvider(
@@ -73,7 +74,8 @@ class PostCommentCard extends ConsumerWidget {
       noItemsFound: ContentNoItemsFound(),
       firstPageErrorIndicator: CommentRepliesPageError(
         onTap: () => commentController.refresh(),
-        errorMessage: "We couldn't fetch comments for this post. Please try again.",
+        errorMessage:
+            "We couldn't fetch comments for this post. Please try again.",
       ),
       errorMessage: commentController.pagingController.error,
     );

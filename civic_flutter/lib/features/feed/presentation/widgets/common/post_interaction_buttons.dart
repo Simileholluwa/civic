@@ -40,7 +40,9 @@ class PostInteractionButtons extends ConsumerWidget {
       feedButtonsProvider(post).notifier,
     );
     return Padding(
-      padding: hasPadding ? const EdgeInsets.fromLTRB(12, 0, 12, 10) : EdgeInsets.zero,
+      padding: hasPadding
+          ? const EdgeInsets.fromLTRB(10, 0, 10, 10)
+          : EdgeInsets.zero,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -71,8 +73,7 @@ class PostInteractionButtons extends ConsumerWidget {
                 : Icons.bookmark_add_outlined,
             onTap: () async {
               await postCardNotifier.togglePostBookmarkStatus(
-                post.id!, postCardState.hasBookmarked
-              );
+                  post.id!, postCardState.hasBookmarked);
             },
             iconSize: iconSize,
             text: postCardState.numberOfBookmarks,
@@ -94,7 +95,9 @@ class PostInteractionButtons extends ConsumerWidget {
                 context: context,
                 builder: (ctx) {
                   return AlertDialog(
-                    contentPadding: const EdgeInsets.only(bottom: 16,),
+                    contentPadding: const EdgeInsets.only(
+                      bottom: 16,
+                    ),
                     content: ShowPostActions(
                       post: post,
                       fromDetails: true,

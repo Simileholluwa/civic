@@ -22,7 +22,7 @@ class MoreActionsListTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: color ?? Theme.of(context).colorScheme.primary,
+        color: color ?? Theme.of(context).colorScheme.onSurface,
         size: 24,
       ),
       title: Text(
@@ -35,8 +35,8 @@ class MoreActionsListTile extends StatelessWidget {
       subtitle: Text(
         subTitle,
         style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              fontSize: 14,
-              color: color,
+              fontSize: 16,
+              color: color ?? Theme.of(context).hintColor,
             ),
       ),
       onTap: onTap,

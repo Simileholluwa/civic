@@ -17,9 +17,11 @@ Future<bool?> postDialog({
       context: context,
       builder: (context) {
         return AlertDialog(
-          contentPadding: const EdgeInsets.only(bottom: 16,),
+          contentPadding: const EdgeInsets.only(
+            bottom: 16,
+          ),
           content: Column(
-            mainAxisSize: MainAxisSize.min,          
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -28,10 +30,8 @@ Future<bool?> postDialog({
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineLarge!,
+                      textAlign: TextAlign.left,
                     ),
                     GestureDetector(
                       onTap: context.pop,
@@ -57,7 +57,6 @@ Future<bool?> postDialog({
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.left,
                     ),
-                  
                     AppDualButton(
                       onTapActiveButton: onTapActiveButton,
                       activeButtonText: activeButtonText,

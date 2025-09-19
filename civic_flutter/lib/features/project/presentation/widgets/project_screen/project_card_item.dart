@@ -44,7 +44,7 @@ class ProjectCardItem extends ConsumerWidget {
         spacing: 10,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 12, 5, 0),
+            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
             child: ContentCreatorInfo(
               creator: projectCardState.creator!,
               timeAgo: projectCardState.timeAgo!,
@@ -81,8 +81,9 @@ class ProjectCardItem extends ConsumerWidget {
                 children: [
                   Text(
                     projectCardState.title!,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                        
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   ContentExpandableText(
                     text: projectCardState.description!,
@@ -95,7 +96,7 @@ class ProjectCardItem extends ConsumerWidget {
             ),
           if (showInteractions)
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
               child: ProjectInteractionButtons(
                 project: project,
               ),

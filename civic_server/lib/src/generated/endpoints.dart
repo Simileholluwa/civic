@@ -1451,7 +1451,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userId': _i1.ParameterDescription(
               name: 'userId',
-              type: _i1.getType<int?>(),
+              type: _i1.getType<String?>(),
               nullable: true,
             )
           },

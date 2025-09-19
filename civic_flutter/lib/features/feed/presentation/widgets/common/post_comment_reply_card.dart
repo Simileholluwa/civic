@@ -23,6 +23,7 @@ class PostCommentReplyCard extends ConsumerWidget {
       pagingController: repliesController.pagingController,
       canCreate: false,
       shrinkWrap: true,
+      showDivider: false,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, value, index) {
         final liveReply = ref.watch(
@@ -67,14 +68,15 @@ class PostCommentReplyCard extends ConsumerWidget {
       onRefresh: () => repliesController.refresh(),
       noItemsFound: ContentNoItemsFound(),
       firstPageProgressIndicator: Center(
-                child: LoadingAnimationWidget.progressiveDots(
-                  color: TColors.primary,
-                  size: 50,
-                ),
-              ),
+        child: LoadingAnimationWidget.progressiveDots(
+          color: TColors.primary,
+          size: 50,
+        ),
+      ),
       firstPageErrorIndicator: CommentRepliesPageError(
         onTap: () => repliesController.refresh(),
-        errorMessage: "We couldn't fetch replies for this post. Please try again.",
+        errorMessage:
+            "We couldn't fetch replies for this post. Please try again.",
       ),
     );
   }

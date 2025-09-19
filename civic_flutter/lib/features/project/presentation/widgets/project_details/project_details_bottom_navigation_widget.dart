@@ -22,7 +22,7 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
       ),
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
       child: Row(
         spacing: 10,
         children: [

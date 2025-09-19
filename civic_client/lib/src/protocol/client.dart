@@ -998,7 +998,7 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i14.UserRecord?> getUser(int? userId) =>
+  _i2.Future<_i14.UserRecord?> getUser(String? userId) =>
       caller.callServerEndpoint<_i14.UserRecord?>(
         'userRecord',
         'getUser',
