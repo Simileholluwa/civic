@@ -202,9 +202,6 @@ class NotificationsHelper {
         if (context.mounted) {
           context.pop();
         }
-        ref
-            .read(paginatedNotificationsListProvider('').notifier)
-            .removeAllNotifications();
         unawaited(
           notifNotifier.deleteAllNotification(),
         );

@@ -20,7 +20,6 @@ class NetworkScreen extends ConsumerWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                toolbarHeight: 60,
                 floating: true,
                 snap: true,
                 actions: [
@@ -64,48 +63,25 @@ class NetworkScreen extends ConsumerWidget {
                   ],
                 ),
                 bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(65),
+                  preferredSize: Size.fromHeight(50),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
-                        padding: const EdgeInsets.all(
-                          5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            100,
-                          ),
-                          color: Theme.of(context).cardColor,
-                          border: Border.all(
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                        child: AppTabBarDesign(
-                          height: 35,
-                          tabController: tabController,
-                          dividerColor: Colors.transparent,
-                          tabAlignment: TabAlignment.start,
-                          isScrollable: true,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicator: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          activeColor: Colors.white,
-                          tabs: [
-                            Tab(text: 'ALL'),
-                            Tab(text: 'SUGGESTED'),
-                            Tab(text: 'CURRENT LEADERS'),
-                            Tab(text: 'ASPIRING LEADERS'),
-                            Tab(text: 'FORMER LEADERS'),
-                            Tab(text: 'TOP LEADERS'),
-                            Tab(text: 'TOP VOICES'),
-                            Tab(text: 'POPULAR'),
-                            Tab(text: 'MUTUALS'),
-                          ],
-                        ),
+                      AppTabBarDesign(
+                        tabController: tabController,
+                        showTopBorder: true,
+                        dividerColor: Colors.transparent,
+                        tabs: [
+                          Tab(text: 'ALL'),
+                          Tab(text: 'SUGGESTED'),
+                          Tab(text: 'CURRENT LEADERS'),
+                          Tab(text: 'ASPIRING LEADERS'),
+                          Tab(text: 'FORMER LEADERS'),
+                          Tab(text: 'TOP LEADERS'),
+                          Tab(text: 'TOP VOICES'),
+                          Tab(text: 'POPULAR'),
+                          Tab(text: 'MUTUALS'),
+                        ],
                       ),
                       const Divider(
                         height: 0,
@@ -116,7 +92,10 @@ class NetworkScreen extends ConsumerWidget {
               ),
             ];
           },
-          body: Container(),
+          body: TabBarView(
+            controller: tabController,
+            children: [],
+          ),
         ),
       ),
     );

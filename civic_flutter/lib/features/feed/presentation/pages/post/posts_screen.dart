@@ -17,9 +17,19 @@ class PostsScreen extends ConsumerWidget {
       pagingController: pagingControllerNotifier.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, post, index) {
-        return PostCard(
-          post: post,
-        );
+        if (post.postType == PostType.article) {
+          return ArticleCard(
+            post: post,
+          );
+        } else if (post.postType == PostType.poll) {
+          return PollCard(
+            post: post,
+          );
+        } else {
+          return PostCard(
+            post: post,
+          );
+        }
       },
       createText: 'Create post',
       onCreate: () {

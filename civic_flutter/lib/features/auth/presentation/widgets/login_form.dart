@@ -41,8 +41,8 @@ class LoginForm extends ConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    context.pushNamed(
-                      AppRoutes.resetPassword,
+                    context.push(
+                      '/auth/${AppRoutes.resetPassword}',
                     );
                   },
                   child: Text(
@@ -57,25 +57,28 @@ class LoginForm extends ConsumerWidget {
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
-            FilledButton(
-              onPressed: () async {
-                final isValid =
-                    authState.passwordFormKey.currentState!.validate();
-                if (!isValid) return;
-                final userRecord =
-                    await authNotifier.signInWithEmailAndPassword();
-                if (userRecord != null) {
-                  context.go(ProjectRoutes.namespace);
-                  ref.invalidate(authProvider);
-                } else {
-                  return;
-                }
-              },
-              child: const Text(
-                TTexts.signIn,
+            SizedBox(
+              height: 55,
+              child: FilledButton(
+                onPressed: () async {
+                  final isValid =
+                      authState.passwordFormKey.currentState!.validate();
+                  if (!isValid) return;
+                  final userRecord =
+                      await authNotifier.signInWithEmailAndPassword();
+                  if (userRecord != null) {
+                    context.go(ProjectRoutes.namespace);
+                    ref.invalidate(authProvider);
+                  } else {
+                    return;
+                  }
+                },
+                child: const Text(
+                  TTexts.signIn,
+                ),
+              ).withLoading(
+                loading: ref.watch(signInLoadingProvider),
               ),
-            ).withLoading(
-              loading: ref.watch(signInLoadingProvider),
             ),
           ],
         ),

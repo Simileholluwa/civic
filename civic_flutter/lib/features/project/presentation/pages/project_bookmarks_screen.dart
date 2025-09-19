@@ -16,6 +16,8 @@ class ProjectBookmarksScreen extends ConsumerWidget {
     final pagingController = ref.watch(
       paginatedProjectBookmarksListProvider.notifier,
     );
+    final itemList = pagingController.pagingController.value.itemList;
+    final isEmpty = itemList?.isEmpty ?? true;
     return AppAndroidBottomNav(
       child: Scaffold(
         body: NestedScrollView(
@@ -42,8 +44,11 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                 ),
                 actions: [
                   IconButton(
-                    onPressed: () async {
-                      await pagingController.clearBookmarksList();
+                    onPressed: isEmpty ? null : () async {
+                      await ProjectHelperFunctions.clearBookmarksDialog(
+                        ref,
+                        context,
+                      );
                     },
                     icon: const Icon(
                       Iconsax.trash,

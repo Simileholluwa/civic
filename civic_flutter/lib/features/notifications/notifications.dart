@@ -13,3 +13,4 @@ export './presentation/provider/notification_services_provider.dart';
 export './presentation/provider/notifications_provider.dart';
 export './presentation/provider/paginated_notifications_list_provider.dart';
 export './presentation/routes/notifications_routes.dart';
+export './presentation/widgets/notifications_card.dart';

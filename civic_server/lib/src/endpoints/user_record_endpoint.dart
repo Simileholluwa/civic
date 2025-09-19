@@ -19,16 +19,17 @@ class UserRecordEndpoint extends Endpoint {
 
   Future<UserRecord?> getUser(
     Session session,
-    int? userId,
+    String? userId,
   ) async {
     // Fetch the authenticated user
+    final intUserId = int.tryParse(userId ?? '');
     int? id;
-    if (userId == null) {
+    if (intUserId == null) {
       final authInfo = await session.authenticated;
       if (authInfo == null) return null;
       id = authInfo.userId;
     } else {
-      id = userId;
+      id = intUserId;
     }
 
     // Fetch the user record from the local database

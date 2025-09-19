@@ -1150,18 +1150,16 @@ class PostEndpoint extends Endpoint {
     final ignoredIds = ignored.map((e) => e.postId).toSet();
     final count = await Post.db.count(
       session,
-      where: (t) => (t.postType.equals(PostType.regular) |
-          t.postType.equals(PostType.postRepost) |
-          t.postType.equals(PostType.projectRepost) &
-              t.id.notInSet(ignoredIds)),
+      where: (t) =>
+          t.postType.notInSet({PostType.comment, PostType.commentReply}) &
+          t.id.notInSet(ignoredIds),
     );
     final results = await Post.db.find(
       session,
       limit: limit,
-      where: (t) => (t.postType.equals(PostType.regular) |
-          t.postType.equals(PostType.postRepost) |
-          t.postType.equals(PostType.projectRepost) &
-              t.id.notInSet(ignoredIds)),
+      where: (t) =>
+          t.postType.notInSet({PostType.comment, PostType.commentReply}) &
+          t.id.notInSet(ignoredIds),
       offset: (page * limit) - limit,
       include: Post.include(
         owner: UserRecord.include(
@@ -1180,6 +1178,13 @@ class PostEndpoint extends Endpoint {
         quotedOrRepostedFromUser: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
+        poll: Poll.include(
+          options: PollOption.includeList(
+            orderBy: (p0) => p0.id,
+            orderDescending: false,
+          ),
+        ),
+        article: Article.include(),
       ),
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
@@ -1248,7 +1253,9 @@ class PostEndpoint extends Endpoint {
   Future<void> clearBookmarks(Session session) async {
     return await session.db.transaction((transaction) async {
       try {
-        final user = await authUser(session,);
+        final user = await authUser(
+          session,
+        );
         final userBookmarks = await PostBookmarks.db.find(
           session,
           where: (t) => t.ownerId.equals(user.id!),
@@ -1714,7 +1721,9 @@ class PostEndpoint extends Endpoint {
   }
 
   @doNotGenerate
-  Future<UserRecord> authUser(Session session,) async {
+  Future<UserRecord> authUser(
+    Session session,
+  ) async {
     final authInfo = await session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(

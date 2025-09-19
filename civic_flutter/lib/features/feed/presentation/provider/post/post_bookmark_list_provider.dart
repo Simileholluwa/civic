@@ -109,7 +109,7 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
     }
   }
 
-    Future<void> clearBookmarksList() async {
+  Future<void> clearBookmarksList() async {
     removeAllPosts();
     final clearBookmarks = ref.read(clearPostBookmarksProvider);
     final result = await clearBookmarks(NoParams());

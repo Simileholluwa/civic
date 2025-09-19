@@ -1,6 +1,8 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class UserProfile extends ConsumerWidget {
   const UserProfile({
@@ -17,23 +19,70 @@ class UserProfile extends ConsumerWidget {
         userId,
       ),
     );
+    final currentUser = ref.read(currentActiveUserProvider).currentUser;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: const Text('User Profile'),
-            floating: true,
-            snap: true,
+            toolbarHeight: 65,
+            pinned: true,
+            expandedHeight: 200,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Iconsax.arrow_left_2),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                margin: const EdgeInsets.fromLTRB(18, 65, 18, 15),
+                padding: const EdgeInsets.all(10),
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: TColors.primary,
+                  borderRadius: BorderRadius.circular(
+                    16,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 15,
+                  children: [
+                    AppUserProfileImage(
+                      imageUrl: currentUser.userInfo!.imageUrl!,
+                      radius: 30,
+                    ),
+                    Flexible(
+                      child: Column(
+                        children: [
+                          Text(
+                            THelperFunctions.getFullName(currentUser.firstName!,
+                                currentUser.middleName, currentUser.lastName!),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                                  color: TColors.white,
+                                  fontSize: 30,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 data.when(
                   data: (user) {
-                    return 
-                      Text(
-                        user.toString(),
-                      
+                    return Text(
+                      user.toString(),
                     );
                   },
                   error: (_, __) => const SizedBox(),

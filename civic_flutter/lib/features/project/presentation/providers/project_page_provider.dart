@@ -53,7 +53,7 @@ class ProjectPageController extends _$ProjectPageController {
   }
 }
 
-class _VSync implements TickerProvider{
+class _VSync implements TickerProvider {
   @override
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }
@@ -62,25 +62,36 @@ final vsyncProvider = Provider<TickerProvider>(
   (ref) => _VSync(),
 );
 
-
 @riverpod
 class ProjectTabController extends _$ProjectTabController {
   @override
-  Raw<TabController> build() => TabController(
-    length: 4,
-    vsync: ref.watch(vsyncProvider),
-  );
+  Raw<TabController> build() {
+    final currentPage = ref.watch(projectCurrentPageProvider.notifier);
+    final controller = TabController(
+      length: 4,
+      vsync: ref.watch(vsyncProvider),
+    );
+    controller.addListener(() {
+      currentPage.setCurrentPage(controller.index);
+    });
+    ref.onDispose(() {
+      controller.dispose();
+    });
+    return controller;
+  }
+  
 }
 
 @riverpod
 class ProjectDetailsTabController extends _$ProjectDetailsTabController {
   @override
-  Raw<TabController> build() { 
+  Raw<TabController> build() {
     return TabController(
-    length: 4,
-    vsync: ref.watch(vsyncProvider),
-    initialIndex: 0,
-  );}
+      length: 4,
+      vsync: ref.watch(vsyncProvider),
+      initialIndex: 0,
+    );
+  }
 }
 
 @riverpod

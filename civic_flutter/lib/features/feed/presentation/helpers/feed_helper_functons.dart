@@ -4,6 +4,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,6 +46,33 @@ class FeedHelperFunctions {
         return LocationsScreen(
           post: post,
         );
+      },
+    );
+  }
+
+  static Future<bool?> clearBookmarksDialog(
+    WidgetRef ref,
+    BuildContext context,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Clear all bookmarks?',
+      description:
+          'Are you sure you want to clear all your bookmarks? This action cannot be undone.',
+      onTapSkipButton: () {
+        context.pop();
+      },
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: "Cancel",
+      onTapActiveButton: () async {
+        if (context.mounted) {
+          context.pop();
+        }
+        ref
+            .read(paginatedPostBookmarkListProvider.notifier)
+            .clearBookmarksList();
       },
     );
   }

@@ -12,15 +12,11 @@ class FeedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = ref.watch(
-      feedScreenTabControllerProvider,
-    );
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              toolbarHeight: 60,
               floating: true,
               snap: true,
               actions: [
@@ -47,7 +43,9 @@ class FeedScreen extends ConsumerWidget {
                     size: 26,
                   ),
                 ),
-                const SizedBox(width: 5,),
+                const SizedBox(
+                  width: 5,
+                ),
               ],
               title: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -65,26 +63,15 @@ class FeedScreen extends ConsumerWidget {
                 ],
               ),
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(65),
-                child: FeedBottomWidget(),
+                preferredSize: Size.fromHeight(5),
+                child: const Divider(
+                  height: 0,
+                ),
               ),
             ),
           ];
         },
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            ContentKeepAliveWrapper(
-              child: const PostsScreen(),
-            ),
-            ContentKeepAliveWrapper(
-              child: const PollsScreen(),
-            ),
-            ContentKeepAliveWrapper(
-              child: const ArticlesScreen(),
-            )
-          ],
-        ),
+        body: const PostsScreen(),
       ),
     );
   }
@@ -103,40 +90,17 @@ class FeedBottomWidget extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
-          padding: const EdgeInsets.all(
-            5,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              100,
+        AppTabBarDesign(
+          tabController: tabController,
+          showTopBorder: true,
+          dividerColor: Colors.transparent,
+          tabs: [
+            Tab(
+              text: 'POSTS',
             ),
-            color: Theme.of(context).cardColor,
-            border: Border.all(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-          child: AppTabBarDesign(
-            height: 35,
-            tabController: tabController,
-            dividerColor: Colors.transparent,
-            tabAlignment: TabAlignment.fill,
-            isScrollable: false,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicator: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            activeColor: Colors.white,
-            tabs: [
-              Tab(
-                text: 'POSTS',
-              ),
-              Tab(text: 'POLLS'),
-              Tab(text: 'ARTICLES'),
-            ],
-          ),
+            Tab(text: 'POLLS'),
+            Tab(text: 'ARTICLES'),
+          ],
         ),
         const Divider(
           height: 0,

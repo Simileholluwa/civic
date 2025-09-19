@@ -35,6 +35,33 @@ class ProjectHelperFunctions {
     return itemsHeights;
   }
 
+  static Future<bool?> clearBookmarksDialog(
+    WidgetRef ref,
+    BuildContext context,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Clear all bookmarks?',
+      description:
+          'Are you sure you want to clear all your bookmarks? This action cannot be undone.',
+      onTapSkipButton: () {
+        context.pop();
+      },
+      activeButtonText: 'Delete all',
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: "Cancel",
+      onTapActiveButton: () async {
+        if (context.mounted) {
+          context.pop();
+        }
+        ref
+            .read(paginatedProjectBookmarksListProvider.notifier)
+            .clearBookmarksList();
+      },
+    );
+  }
+
   static List<DropdownMenuItem<String>> addDividersAfterItems(
     List<String> items,
     BuildContext context,

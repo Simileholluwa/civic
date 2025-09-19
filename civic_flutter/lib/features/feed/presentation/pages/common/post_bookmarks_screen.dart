@@ -13,7 +13,8 @@ class PostBookmarksScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingControllerNotifier =
         ref.watch(paginatedPostBookmarkListProvider.notifier);
-      
+    final itemList = pagingControllerNotifier.pagingController.value.itemList;
+    final isEmpty = itemList?.isEmpty ?? true;
     return AppAndroidBottomNav(
       child: Scaffold(
         body: NestedScrollView(
@@ -38,8 +39,11 @@ class PostBookmarksScreen extends ConsumerWidget {
                   ),
                 actions: [
                   IconButton(
-                    onPressed: () async {
-                      await pagingControllerNotifier.clearBookmarksList();
+                    onPressed: isEmpty ? null : () async {
+                      await FeedHelperFunctions.clearBookmarksDialog(
+                        ref,
+                        context,
+                      );
                     },
                     icon: const Icon(
                       Iconsax.trash,

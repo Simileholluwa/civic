@@ -14,9 +14,6 @@ class ProjectsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = ref.watch(
-      projectTabControllerProvider,
-    );
     final savedRecordString = ref
         .read(
           localStorageProvider,
@@ -27,13 +24,11 @@ class ProjectsScreen extends ConsumerWidget {
     final decoded = jsonDecode(savedRecordString.toString());
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
-    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              toolbarHeight: 60,
               floating: true,
               snap: true,
               actions: [
@@ -62,7 +57,9 @@ class ProjectsScreen extends ConsumerWidget {
                     size: 26,
                   ),
                 ),
-                const SizedBox(width: 5,),
+                const SizedBox(
+                  width: 5,
+                ),
               ],
               title: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -80,74 +77,17 @@ class ProjectsScreen extends ConsumerWidget {
                 ],
               ),
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(65),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(13, 0, 15, 15),
-                      padding: const EdgeInsets.all(
-                        5,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          100,
-                        ),
-                        color: Theme.of(context).cardColor,
-                        border: Border.all(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      child: AppTabBarDesign(
-                        height: 35,
-                        tabController: tabController,
-                        dividerColor: Colors.transparent,
-                        tabAlignment: width > 450
-                            ? TabAlignment.fill : TabAlignment.start,
-                        isScrollable: width > 450 ? false : true,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicator: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        activeColor: Colors.white,
-                        tabs: [
-                          Tab(text: 'ALL PROJECTS'),
-                          Tab(text: 'NEW'),
-                          Tab(text: 'TRENDING'),
-                          Tab(text: 'TOP RATINGS'),
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      height: 0,
-                    ),
-                  ],
+                preferredSize: Size.fromHeight(5),
+                child: const Divider(
+                  height: 0,
                 ),
               ),
             ),
           ];
         },
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            ProjectsInfiniteList(
-              sortBy: '',
-              isLeader: isLeader,
-            ),
-            ProjectsInfiniteList(
-              sortBy: 'new',
-              isLeader: isLeader,
-            ),
-            ProjectsInfiniteList(
-              sortBy: 'trending',
-              isLeader: isLeader,
-            ),
-            ProjectsInfiniteList(
-              sortBy: 'rating',
-              isLeader: isLeader,
-            ),
-          ],
+        body: ProjectsInfiniteList(
+          sortBy: '',
+          isLeader: isLeader,
         ),
       ),
     );
