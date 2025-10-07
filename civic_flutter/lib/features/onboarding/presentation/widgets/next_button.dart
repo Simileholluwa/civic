@@ -1,5 +1,4 @@
-import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/router/route_names.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/onboarding/presentation/providers/onboarding_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +20,11 @@ class OnBoardingNextButton extends StatelessWidget {
           height: 55,
           child: FilledButton(
             onPressed: () async {
-              await ref.read(onboardingProvider.notifier).cacheFirstTimer();
+              await ref
+                  .read(
+                    onboardingProvider.notifier,
+                  )
+                  .cacheFirstTimer();
               if (context.mounted) {
                 context.go(
                   AppRoutes.auth,
@@ -30,7 +33,7 @@ class OnBoardingNextButton extends StatelessWidget {
             },
             child: const Center(
               child: Text(
-                'Get started',
+                TTexts.getStarted,
               ),
             ),
           ),

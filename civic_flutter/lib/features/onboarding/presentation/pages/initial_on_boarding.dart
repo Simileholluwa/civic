@@ -77,7 +77,7 @@ class InitialOnBoardingScreen extends StatelessWidget {
                 indicatorColor: TColors.secondary,
                 title: TTexts.onBoardingTitle3,
                 subTitle: TTexts.onBoardingSubTitle3,
-                onTap: () => context.pushNamed(
+                onTap: () => context.push(
                   AppRoutes.onboarding,
                   extra: {
                     'isPolitical': false,

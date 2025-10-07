@@ -4,7 +4,7 @@ import 'package:civic_flutter/features/create/presentation/routes/create_route.d
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:civic_flutter/features/notifications/presentation/routes/notifications_routes.dart';
-import 'package:civic_flutter/features/onboarding/presentation/pages/onboarding_pages.dart';
+import 'package:civic_flutter/features/onboarding/onboarding.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -49,7 +49,6 @@ GoRouter router(Ref ref) {
       // Onboarding
       GoRoute(
         path: AppRoutes.onboarding,
-        name: AppRoutes.onboarding,
         builder: (context, state) {
           final data = state.extra! as Map<String, bool>;
           return OnBoardingScreen(

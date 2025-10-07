@@ -14,7 +14,6 @@ export './domain/usecases/search_user_nin_use_case.dart';
 export './domain/usecases/upload_profile_image_use_case.dart';
 export './domain/usecases/user_sign_in_use_case.dart';
 export './domain/usecases/validate_create_account_use_case.dart';
-export './presentation/pages/authentication_landing_screen.dart';
 export './presentation/pages/choose_username_screen.dart';
 export './presentation/pages/create_account_request_screen.dart';
 export './presentation/pages/email_screen.dart';

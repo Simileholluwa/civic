@@ -12,8 +12,7 @@ part of 'onboarding_provider.dart';
 @ProviderFor(Onboarding)
 const onboardingProvider = OnboardingProvider._();
 
-final class OnboardingProvider
-    extends $NotifierProvider<Onboarding, OnboardingState> {
+final class OnboardingProvider extends $NotifierProvider<Onboarding, void> {
   const OnboardingProvider._()
       : super(
           from: null,
@@ -33,28 +32,25 @@ final class OnboardingProvider
   Onboarding create() => Onboarding();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(OnboardingState value) {
+  Override overrideWithValue(void value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<OnboardingState>(value),
+      providerOverride: $SyncValueProvider<void>(value),
     );
   }
 }
 
-String _$onboardingHash() => r'adeb770408f262f673fc7e81b67e639f458ce744';
+String _$onboardingHash() => r'ce25635a198dd14eaf6771d1bf718000142342e8';
 
-abstract class _$Onboarding extends $Notifier<OnboardingState> {
-  OnboardingState build();
+abstract class _$Onboarding extends $Notifier<void> {
+  void build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<OnboardingState, OnboardingState>;
+    build();
+    final ref = this.ref as $Ref<void, void>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<OnboardingState, OnboardingState>,
-        OnboardingState,
-        Object?,
-        Object?>;
-    element.handleValue(ref, created);
+        AnyNotifier<void, void>, void, Object?, Object?>;
+    element.handleValue(ref, null);
   }
 }
