@@ -50,9 +50,9 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) {
-          final data = state.extra! as Map<String, bool>;
+          final data = state.extra! as bool?;
           return OnBoardingScreen(
-            isPolitical: data['isPolitical'] ?? true,
+            isPolitical: data ?? true,
           );
         },
       ),

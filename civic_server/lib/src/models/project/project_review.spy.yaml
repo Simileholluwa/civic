@@ -1,8 +1,8 @@
 class: ProjectReview
 table: project_review
 fields:
-    owner: UserRecord?, relation
-    project: Project?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
+    project: Project?, relation(onDelete=Cascade)
     review: String?
     locationRating: double?
     descriptionRating: double?

@@ -4,12 +4,15 @@ import 'package:fpdart/fpdart.dart';
 
 class CreateAccountRequestUseCase
     implements UseCase<bool, CreateAccountRequestParams> {
-  CreateAccountRequestUseCase({required AuthRepository authRepository})
-      : _authRepository = authRepository;
+  CreateAccountRequestUseCase({
+    required AuthRepository authRepository,
+  }) : _authRepository = authRepository;
   final AuthRepository _authRepository;
 
   @override
-  Future<Either<Failure, bool>> call(CreateAccountRequestParams params) async {
+  Future<Either<Failure, bool>> call(
+    CreateAccountRequestParams params,
+  ) async {
     final result = await _authRepository.createAccountRequest(
       email: params.email,
       password: params.password,
@@ -20,11 +23,11 @@ class CreateAccountRequestUseCase
 }
 
 class CreateAccountRequestParams {
-  CreateAccountRequestParams(
-    this.password,
-    this.email,
-    this.firstName,
-  );
+  CreateAccountRequestParams({
+    required this.password,
+    required this.email,
+    required this.firstName,
+  });
   final String password;
   final String email;
   final String firstName;

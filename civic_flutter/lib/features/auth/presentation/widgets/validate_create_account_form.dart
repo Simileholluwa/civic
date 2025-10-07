@@ -49,23 +49,24 @@ class ValidateCreateAccountForm extends ConsumerWidget {
           const SizedBox(
             height: TSizes.spaceBtwSections,
           ),
-          SizedBox(
-            height: 55,
-            child: FilledButton(
-              onPressed: () async {
-                final validated = await authNotifier.validateCreateAccount();
-                if (validated && context.mounted) {
-                  await context.push(
+          FilledButton(
+            onPressed: () async {
+              final validated = await authNotifier.validateCreateAccount();
+              if (validated && context.mounted) {
+                final res = await uploadProfilePicture(context);
+                if (res! && context.mounted) {
+                  context.go(
                     ProjectRoutes.namespace,
                   );
+                  ref.invalidate(authProvider);
                 }
-              },
-              child: const Text(
-                TTexts.tContinue,
-              ),
-            ).withLoading(
-              loading: ref.watch(validatCreateAccountLoadingProvider),
+              }
+            },
+            child: const Text(
+              TTexts.tContinue,
             ),
+          ).withLoading(
+            loading: authState.validatCreateAccountLoading,
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,

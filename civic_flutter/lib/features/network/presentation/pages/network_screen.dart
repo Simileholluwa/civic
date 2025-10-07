@@ -1,5 +1,8 @@
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/network/network.dart';
+import 'package:civic_flutter/features/notifications/notifications.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -90,7 +93,21 @@ class NetworkScreen extends ConsumerWidget {
             ),
           ];
         },
-        body: Container(),
+        body: Center(
+          child: TextButton(
+            onPressed: () async {
+              final res = await ref.read(sessionProvider).signOutDevice();
+              ref
+                ..invalidate(paginatedProjectListProvider)
+                ..invalidate(paginatedPostListProvider)
+                ..invalidate(paginatedNotificationsListProvider);
+              if (res && context.mounted) {
+                context.go(AppRoutes.auth);
+              }
+            },
+            child: const Text('Logout'),
+          ),
+        ),
       ),
     );
   }

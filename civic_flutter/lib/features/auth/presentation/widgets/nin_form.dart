@@ -16,6 +16,7 @@ class NinForm extends ConsumerWidget {
     final authNotifier = ref.watch(authProvider.notifier);
     return Form(
       key: authState.ninFormKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,

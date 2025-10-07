@@ -29,7 +29,9 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
       );
     } on Exception catch (e) {
       log(e.toString());
-      throw const CacheException(message: 'Something went wrong');
+      throw const CacheException(
+        message: 'Something went wrong while saving user record locally.',
+      );
     }
   }
 

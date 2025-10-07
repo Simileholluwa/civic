@@ -62,11 +62,9 @@ class InitialOnBoardingScreen extends StatelessWidget {
                 title: TTexts.onBoardingTitle2,
                 subTitle: TTexts.onBoardingSubTitle2,
                 onTap: () async {
-                  await context.pushNamed(
+                  await context.push(
                     AppRoutes.onboarding,
-                    extra: {
-                      'isPolitical': true,
-                    },
+                    extra: true,
                   );
                 },
               ),
@@ -79,9 +77,7 @@ class InitialOnBoardingScreen extends StatelessWidget {
                 subTitle: TTexts.onBoardingSubTitle3,
                 onTap: () => context.push(
                   AppRoutes.onboarding,
-                  extra: {
-                    'isPolitical': false,
-                  },
+                  extra: false,
                 ),
               ),
             ],

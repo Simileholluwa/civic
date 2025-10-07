@@ -51,7 +51,7 @@ class PasswordResetVerificationForm extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () async {
-              await context.pushNamed(
+              await context.push(
                 AppRoutes.createNewPassword,
               );
             },

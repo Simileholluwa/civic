@@ -44,8 +44,8 @@ class CreateAccountRequestForm extends ConsumerWidget {
                       .newAccountPasswordFormKey.currentState!
                       .validate();
                   if (!isValid) return;
-                  await authNotifier.createAccountRequest();
-                  if (context.mounted) {
+                  final res = await authNotifier.createAccountRequest();
+                  if (res && context.mounted) {
                     await context.push(
                       '/auth/signUp/validateCreateAccount',
                     );
@@ -55,7 +55,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
                   TTexts.tContinue,
                 ),
               ).withLoading(
-                loading: ref.watch(createAccountLoadingProvider),
+                loading: authState.createAccountLoading,
               ),
             ),
           ],

@@ -2,7 +2,7 @@ class: PostLikes
 table: post_likes
 fields:
     post: Post?, relation(onDelete=Cascade)
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
     dateCreated: DateTime?
 
 indexes:

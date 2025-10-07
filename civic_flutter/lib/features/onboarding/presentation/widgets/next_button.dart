@@ -15,28 +15,26 @@ class OnBoardingNextButton extends StatelessWidget {
           horizontal: TSizes.md,
           vertical: TSizes.xs,
         ),
-        child: SizedBox(
-          width: double.maxFinite,
-          height: 55,
-          child: FilledButton(
-            onPressed: () async {
-              await ref
-                  .read(
-                    onboardingProvider.notifier,
-                  )
-                  .cacheFirstTimer();
-              if (context.mounted) {
-                context.go(
-                  AppRoutes.auth,
-                );
-              }
-            },
-            child: const Center(
-              child: Text(
-                TTexts.getStarted,
-              ),
+        child: FilledButton(
+          onPressed: () async {
+            await ref
+                .read(
+                  onboardingProvider.notifier,
+                )
+                .cacheFirstTimer();
+            if (context.mounted) {
+              context.go(
+                AppRoutes.auth,
+              );
+            }
+          },
+          child: const Center(
+            child: Text(
+              TTexts.getStarted,
             ),
           ),
+        ).withLoading(
+          loading: false,
         ),
       ),
     );

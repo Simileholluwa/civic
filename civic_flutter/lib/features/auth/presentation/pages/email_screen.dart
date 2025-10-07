@@ -8,22 +8,20 @@ class EmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAndroidBottomNav(
+    return const AppAndroidBottomNav(
       child: Scaffold(
-        appBar: const AuthAppBar(
+        appBar: AuthAppBar(
           icon: Iconsax.arrow_left_2,
           showLeading: false,
         ),
         body: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
+          physics: ClampingScrollPhysics(),
           padding: EdgeInsets.only(
             left: TSizes.defaultSpace,
             right: TSizes.defaultSpace,
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: const Column(
+          child: Column(
             children: [
               AuthHeader(
                 authTitle: 'E-mail address',

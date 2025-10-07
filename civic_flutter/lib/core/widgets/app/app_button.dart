@@ -9,7 +9,7 @@ extension AppFilledButton on FilledButton {
     return loading
         ? SizedBox(
             width: double.infinity,
-            height: 50,
+            height: 55,
             child: FilledButton(
               onPressed: null,
               child: LoadingAnimationWidget.progressiveDots(
@@ -20,7 +20,7 @@ extension AppFilledButton on FilledButton {
           )
         : SizedBox(
             width: double.infinity,
-            height: 50,
+            height: 55,
             child: this,
           );
   }

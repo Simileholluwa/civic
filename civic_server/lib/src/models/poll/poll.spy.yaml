@@ -2,7 +2,7 @@ class: Poll
 table: poll
 
 fields:
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
     options: List<PollOption>?, relation(name=poll_options)
     expiresAt: DateTime?
     votedBy: List<int>?

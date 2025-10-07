@@ -1,8 +1,8 @@
 class: ProjectVetting
 table: project_vetting
 fields:
-    project: Project?, relation
-    owner: UserRecord?, relation
+    project: Project?, relation(onDelete=Cascade)
+    owner: UserRecord?, relation(onDelete=Cascade)
     images: List<String>?
     comment: String?
     status: String?

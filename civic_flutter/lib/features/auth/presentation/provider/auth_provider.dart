@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
@@ -13,6 +16,32 @@ class Auth extends _$Auth {
   @override
   AuthState build() {
     return AuthState.empty();
+  }
+
+  final imageHelper = ImageHelper();
+
+  void setCheckEmailLoading(bool value) {
+    state = state.copyWith(checkEmailLoading: value);
+  }
+
+  void setSignInLoading(bool value) {
+    state = state.copyWith(signInLoading: value);
+  }
+
+  void setCreateAccountLoading(bool value) {
+    state = state.copyWith(createAccountLoading: value);
+  }
+
+  void setValidatCreateAccountLoading(bool value) {
+    state = state.copyWith(validatCreateAccountLoading: value);
+  }
+
+  void setInitiatePasswordResetLoading(bool value) {
+    state = state.copyWith(initiatePasswordResetLoading: value);
+  }
+
+  void setResetPasswordLoading(bool value) {
+    state = state.copyWith(resetPasswordLoading: value);
   }
 
   void setEmail(String email) {
@@ -69,11 +98,45 @@ class Auth extends _$Auth {
     state = state.copyWith(acceptTerms: value);
   }
 
+  void clearImage() {
+    state = state.copyWith(imagePath: '');
+  }
+
+  void setPhotoUrlLoading(bool value) {
+    state = state.copyWith(photoUrlLoading: value);
+  }
+
+  Future<void> pickImage() async {
+    final image = await imageHelper.pickImage();
+    if (image != null) {
+      state = state.copyWith(
+        imagePath: image.first.path,
+      );
+    }
+  }
+
+  Future<void> takePicture() async {
+    final image = await imageHelper.takeImage();
+    if (image != null) {
+      state = state.copyWith(
+        imagePath: image.path,
+      );
+    }
+  }
+
+  Future<void> editImage() async {
+    final image = await imageHelper.crop(
+      file: File(state.imagePath),
+      cropStyle: CropStyle.circle,
+    );
+    if (image != null) {
+      state = state.copyWith(
+        imagePath: image.path,
+      );
+    }
+  }
+
   Future<bool> logout() async {
-    ref
-      ..invalidate(paginatedProjectListProvider)
-      ..invalidate(paginatedPostListProvider)
-      ..invalidate(paginatedNotificationsListProvider);
     final logOutUseCase = ref.read(logOutProvider);
     final result = await logOutUseCase(
       NoParams(),
@@ -82,40 +145,42 @@ class Auth extends _$Auth {
       TToastMessages.errorToast(error.message);
       return false;
     }, (r) {
+      ref
+        ..invalidate(paginatedProjectListProvider)
+        ..invalidate(paginatedPostListProvider)
+        ..invalidate(paginatedNotificationsListProvider);
       return true;
     });
   }
 
-  Future<UserRecord?> signInWithEmailAndPassword() async {
+  Future<bool> signInWithEmailAndPassword() async {
     final signInUseCase = ref.read(userSignInProvider);
-    ref.read(signInLoadingProvider.notifier).value = true;
+    setSignInLoading(true);
     final result = await signInUseCase(
       UserSignInParams(
-        state.email,
-        state.password,
+        email: state.email,
+        password: state.password,
       ),
     );
-    ref.read(signInLoadingProvider.notifier).value = false;
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return null;
-    }, (userRecord) {
-      return userRecord;
-    });
-  }
-
-  Future<bool> checkIfNewUser() async {
-    final newUserUseCase = ref.read(checkIfNewUserProvider);
-    ref.read(checkEmailLoadingProvider.notifier).value = true;
-    final result = await newUserUseCase(
-      CheckIfNewUserParams(
-        state.email,
-      ),
-    );
-    ref.read(checkEmailLoadingProvider.notifier).value = false;
+    setSignInLoading(false);
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
+    }, (_) {
+      return true;
+    });
+  }
+
+  Future<bool?> checkIfNewUser() async {
+    final newUserUseCase = ref.read(checkIfNewUserProvider);
+    setCheckEmailLoading(true);
+    final result = await newUserUseCase(
+      state.email,
+    );
+    setCheckEmailLoading(false);
+    return result.fold((error) {
+      TToastMessages.errorToast(error.message);
+      return null;
     }, (firstName) {
       if (firstName != null) {
         setFirstName(firstName);
@@ -134,15 +199,15 @@ class Auth extends _$Auth {
       );
       return false;
     }
-    ref.read(createAccountLoadingProvider.notifier).value = true;
+    setCreateAccountLoading(true);
     final result = await createAccountRequest(
       CreateAccountRequestParams(
-        state.newAccountPassword,
-        state.email,
-        state.firstName,
+        password: state.newAccountPassword,
+        email: state.email,
+        firstName: state.firstName,
       ),
     );
-    ref.read(createAccountLoadingProvider.notifier).value = false;
+    setCreateAccountLoading(false);
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -157,7 +222,7 @@ class Auth extends _$Auth {
   Future<bool> validateCreateAccount() async {
     final validateAccount = ref.read(validateCreateAccountProvider);
 
-    ref.read(validatCreateAccountLoadingProvider.notifier).value = true;
+    setValidatCreateAccountLoading(true);
     final userRecord = UserRecord(
       nin: state.nin,
       firstName: state.firstName,
@@ -173,7 +238,7 @@ class Auth extends _$Auth {
         userRecord: userRecord,
       ),
     );
-    ref.read(validatCreateAccountLoadingProvider.notifier).value = false;
+    setValidatCreateAccountLoading(false);
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -187,58 +252,35 @@ class Auth extends _$Auth {
 
   Future<bool> initiatePasswordRequest() async {
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    ref.read(initiatePasswordResetLoadingProvider.notifier).value = true;
+    setInitiatePasswordResetLoading(true);
     final result = await initiatePasswordReset(
-      InitiatePasswordResetParams(
-        state.resetPasswordEmail,
-      ),
+      state.resetPasswordEmail,
     );
-    ref.read(initiatePasswordResetLoadingProvider.notifier).value = false;
+    setInitiatePasswordResetLoading(false);
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
+      ref.read(countdownTimerProvider.notifier).resetTimer();
       return false;
     }, (r) {
       TToastMessages.successToast(
         'Password reset code has been sent to your email',
       );
-      return true;
-    });
-  }
-
-  Future<void> resendPasswordResetCode({
-    required String email,
-  }) async {
-    final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    ref.read(initiateResendPasswordResetLoadingProvider.notifier).value = true;
-    final result = await initiatePasswordReset(
-      InitiatePasswordResetParams(
-        email,
-      ),
-    );
-    ref.read(initiateResendPasswordResetLoadingProvider.notifier).value = false;
-    result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      ref.read(countdownTimerProvider.notifier).resetTimer();
-      return;
-    }, (r) {
-      TToastMessages.successToast(
-        'Password reset code has been sent to your email',
-      );
       ref.read(countdownTimerProvider.notifier).startCountdown();
+      return true;
     });
   }
 
   Future<bool> resetPassword() async {
     final resetPasswordUseCase = ref.read(resetUserPasswordProvider);
-    ref.read(resetPasswordLoadingProvider.notifier).value = true;
+    setResetPasswordLoading(true);
     final result = await resetPasswordUseCase(
       ResetUserPasswordParams(
-        state.resetPasswordEmail,
-        state.newPassword,
-        state.passwordResetCode,
+        email: state.resetPasswordEmail,
+        password: state.newPassword,
+        verificationCode: state.passwordResetCode,
       ),
     );
-    ref.read(resetPasswordLoadingProvider.notifier).value = false;
+    setResetPasswordLoading(false);
     return result.fold(
       (error) {
         TToastMessages.errorToast(error.message);
@@ -256,7 +298,7 @@ class Auth extends _$Auth {
     final ninUseCase = ref.read(searchUserNinProvider);
     ref.read(searchNinLoadingProvider.notifier).value = true;
     final result = await ninUseCase(
-      NinUseCaseParams(ninNumber),
+      ninNumber,
     );
     ref.read(searchNinLoadingProvider.notifier).value = false;
     return result.fold((error) {
@@ -275,6 +317,22 @@ class Auth extends _$Auth {
         TToastMessages.errorToast('NIN already exists');
         return false;
       }
+    });
+  }
+
+  Future<bool> uploadProfileImage() async {
+    final uploadImageUseCase = ref.read(uploadProfileImageProvider);
+    setPhotoUrlLoading(true);
+    final result = await uploadImageUseCase(
+      state.imagePath,
+    );
+    setPhotoUrlLoading(false);
+    return result.fold((l) {
+      TToastMessages.errorToast(l.message);
+      return false;
+    }, (r) {
+      TToastMessages.successToast('Profile image uploaded');
+      return true;
     });
   }
 }

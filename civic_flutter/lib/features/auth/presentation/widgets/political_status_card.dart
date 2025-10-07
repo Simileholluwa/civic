@@ -111,20 +111,17 @@ class PoliticalStatusOptions extends ConsumerWidget {
         const SizedBox(
           height: TSizes.spaceBtwSections,
         ),
-        SizedBox(
-          height: 55,
-          child: FilledButton(
-            onPressed: () async {
-              await context.push(
-                '/auth/signUp/createAccountRequest',
-              );
-            },
-            child: const Text(
-              TTexts.tContinue,
-            ),
-          ).withLoading(
-            loading: false,
+        FilledButton(
+          onPressed: () async {
+            await context.push(
+              '/auth/signUp/createAccountRequest',
+            );
+          },
+          child: const Text(
+            TTexts.tContinue,
           ),
+        ).withLoading(
+          loading: false,
         ),
       ],
     );

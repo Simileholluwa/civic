@@ -20,11 +20,11 @@ class ResetUserPasswordUseCase
 }
 
 class ResetUserPasswordParams {
-  ResetUserPasswordParams(
-    this.email,
-    this.password,
-    this.verificationCode,
-  );
+  ResetUserPasswordParams({
+    required this.email,
+    required this.password,
+    required this.verificationCode,
+  });
   final String password;
   final String email;
   final String verificationCode;

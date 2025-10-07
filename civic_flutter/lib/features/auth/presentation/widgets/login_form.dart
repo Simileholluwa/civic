@@ -65,18 +65,16 @@ class LoginForm extends ConsumerWidget {
                   if (!isValid) return;
                   final userRecord =
                       await authNotifier.signInWithEmailAndPassword();
-                  if (userRecord != null && context.mounted) {
+                  if (userRecord && context.mounted) {
                     context.go(ProjectRoutes.namespace);
                     ref.invalidate(authProvider);
-                  } else {
-                    return;
                   }
                 },
                 child: const Text(
                   TTexts.signIn,
                 ),
               ).withLoading(
-                loading: ref.watch(signInLoadingProvider),
+                loading: authState.signInLoading,
               ),
             ),
           ],

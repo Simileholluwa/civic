@@ -1,7 +1,7 @@
 class: ProjectVettingReaction
 table: project_vetting_reaction
 fields:
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
     vetting: ProjectVetting?, relation(onDelete=Cascade)
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?

@@ -11,7 +11,7 @@ class VerifyPasswordResetCodeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: const AuthAppBar(
@@ -31,7 +31,7 @@ class VerifyPasswordResetCodeScreen extends ConsumerWidget {
             children: [
               const AuthHeader(
                 authTitle: 'Authenticate request',
-                authSubTitle: 'Enter the 6-digit code sent to the e-mail '
+                authSubTitle: 'Enter the code sent to the e-mail '
                     'address you provided.',
               ),
               const SizedBox(
@@ -45,13 +45,7 @@ class VerifyPasswordResetCodeScreen extends ConsumerWidget {
                 builder: (context, ref, _) {
                   return AppResendLink(
                     onTap: () async {
-                      await ref
-                          .watch(
-                            authProvider.notifier,
-                          )
-                          .resendPasswordResetCode(
-                            email: authState.resetPasswordEmail,
-                          );
+                      await authNotifier.initiatePasswordRequest();
                     },
                   );
                 },

@@ -44,7 +44,7 @@ class ResetPasswordForm extends ConsumerWidget {
                 if (!isValid) return;
                 final initiated = await authNotifier.initiatePasswordRequest();
                 if (initiated && context.mounted) {
-                  await context.pushNamed(
+                  await context.push(
                     AppRoutes.verifyResetPasswordCode,
                   );
                 }
@@ -53,7 +53,7 @@ class ResetPasswordForm extends ConsumerWidget {
                 TTexts.tContinue,
               ),
             ).withLoading(
-              loading: ref.watch(initiatePasswordResetLoadingProvider),
+              loading: authState.initiatePasswordResetLoading,
             ),
           ],
         ),

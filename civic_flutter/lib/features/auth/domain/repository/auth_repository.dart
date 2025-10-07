@@ -17,7 +17,7 @@ abstract class AuthRepository {
     required UserRecord userRecord,
   });
 
-  Future<Either<Failure, UserRecord?>> signInWithEmailAndPassword({
+  Future<Either<Failure, bool>> signInWithEmailAndPassword({
     required String email,
     required String password,
   });

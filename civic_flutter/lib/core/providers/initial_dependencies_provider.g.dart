@@ -12,7 +12,7 @@ part of 'initial_dependencies_provider.dart';
 @ProviderFor(BootStrap)
 const bootStrapProvider = BootStrapProvider._();
 
-final class BootStrapProvider extends $NotifierProvider<BootStrap, bool> {
+final class BootStrapProvider extends $AsyncNotifierProvider<BootStrap, void> {
   const BootStrapProvider._()
       : super(
           from: null,
@@ -30,27 +30,22 @@ final class BootStrapProvider extends $NotifierProvider<BootStrap, bool> {
   @$internal
   @override
   BootStrap create() => BootStrap();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
-    );
-  }
 }
 
-String _$bootStrapHash() => r'0f0752d3495ade76cc06af937a2c5c348672d4af';
+String _$bootStrapHash() => r'9695688c7fd954a0d834ca8750175f7661e573bb';
 
-abstract class _$BootStrap extends $Notifier<bool> {
-  bool build();
+abstract class _$BootStrap extends $AsyncNotifier<void> {
+  FutureOr<void> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<bool, bool>;
+    build();
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<bool, bool>, bool, Object?, Object?>;
-    element.handleValue(ref, created);
+        AnyNotifier<AsyncValue<void>, void>,
+        AsyncValue<void>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, null);
   }
 }

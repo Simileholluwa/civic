@@ -1,8 +1,8 @@
 class: Notification
 table: notification
 fields:
-  receiver: UserRecord?, relation
-  sender: UserRecord?, relation
+  receiver: UserRecord?, relation(onDelete=Cascade)
+  sender: UserRecord?, relation(onDelete=Cascade)
   senderName: String?
   groupedSenderNames: List<String>?
   triggerUser: String?

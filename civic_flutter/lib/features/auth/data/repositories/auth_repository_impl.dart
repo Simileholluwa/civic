@@ -55,7 +55,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserRecord?>> signInWithEmailAndPassword({
+  Future<Either<Failure, bool>> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {

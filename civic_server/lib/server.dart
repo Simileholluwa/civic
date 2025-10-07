@@ -1,5 +1,5 @@
-import 'package:civic_server/env_settings.dart';
-import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
+// import 'package:civic_server/env_settings.dart';
+// import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
 import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:civic_server/src/future_calls/project_future_call.dart';
 import 'package:serverpod/serverpod.dart';
@@ -17,41 +17,24 @@ import 'src/generated/endpoints.dart';
 // configuring Relic (Serverpod's web-server), or need custom setup work.
 
 void run(List<String> args) async {
-  final envSettings = EnvironmentSettings();
+  // final envSettings = EnvironmentSettings();
   // Initialize Serverpod and connect it with your generated code.
   final pod = Serverpod(
     args,
     Protocol(),
     Endpoints(),
     authenticationHandler: auth.authenticationHandler,
-    config: ServerpodConfig(
-      apiServer: ServerConfig(
-        port: 8080,
-        publicHost: 'https://civic-4ifu.onrender.com',
-        publicPort: 8080,
-        publicScheme: 'https',
-      ),
-      webServer: ServerConfig(
-        port: 8082,
-        publicScheme: 'https',
-        publicHost: 'web.examplepod.com',
-        publicPort: 8082,
-      ),
-      insightsServer: ServerConfig(
-        port: 8081,
-        publicScheme: 'https',
-        publicHost: 'insights.examplepod.com',
-        publicPort: 8081,
-      ),
-      database: envSettings.databaseConfig,
-      serviceSecret: envSettings.serviceSecret,
-    ),
   );
 
   // Future calls
-  pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
   pod.registerFutureCall(
-      ScheduleProjectFutureCall(), 'scheduleProjectFutureCall');
+    SchedulePostFutureCall(),
+    'schedulePostFutureCall',
+  );
+  pod.registerFutureCall(
+    ScheduleProjectFutureCall(),
+    'scheduleProjectFutureCall',
+  );
 
   // Auth
   auth.AuthConfig.set(
@@ -59,40 +42,29 @@ void run(List<String> args) async {
       validationCodeLength: 6,
       sendValidationEmail: (session, email, validationCode) async {
         print(validationCode);
-        return await SendEmailEndpoint().sendEmail(
-          session,
-          email,
-          validationCode,
-          'Your email verification code is $validationCode',
-          null,
-          true,
-        );
-      },
-      onUserCreated: (session, userInfo) async {
-        final userRecord = await UserRecord.db.findById(
-          session,
-          userInfo.id!,
-        );
-        if (userRecord == null) return;
-        await UserRecord.db.updateRow(
-          session,
-          userRecord.copyWith(
-            profileImage: userInfo.imageUrl,
-          ),
-        );
+        return true;
+        // return await SendEmailEndpoint().sendEmail(
+        //   session,
+        //   email,
+        //   validationCode,
+        //   'Your email verification code is $validationCode',
+        //   null,
+        //   true,
+        // );
       },
       sendPasswordResetEmail: (session, userInfo, validationCode) async {
         if (userInfo.email == null) {
           throw Exception('No email address for user');
         }
-        return await SendEmailEndpoint().sendEmail(
-          session,
-          userInfo.email!,
-          validationCode,
-          'Your password reset verification code is $validationCode',
-          userInfo.userName,
-          false,
-        );
+        return true;
+        // return await SendEmailEndpoint().sendEmail(
+        //   session,
+        //   userInfo.email!,
+        //   validationCode,
+        //   'Your password reset verification code is $validationCode',
+        //   userInfo.userName,
+        //   false,
+        // );
       },
     ),
   );

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
@@ -15,7 +16,7 @@ abstract interface class AuthRemoteDatabase {
     required String firstName,
   });
 
-  Future<UserRecord?> signInWithEmailAndPassword({
+  Future<bool> signInWithEmailAndPassword({
     required String email,
     required String password,
   });
@@ -83,8 +84,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
       );
-    } on ServerException {
-      rethrow;
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
+      );
     } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -110,8 +113,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         );
       }
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
@@ -126,7 +127,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   }
 
   @override
-  Future<UserRecord?> signInWithEmailAndPassword({
+  Future<bool> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -192,12 +193,14 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       await _localDatabase.saveUserRecord(
         userRecord: userRecord,
       );
-      return userRecord;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
+      return true;
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
+      );
+    } on CacheException catch (e) {
+      throw ServerException(
+        message: e.message,
       );
     } on ServerException {
       rethrow;
@@ -227,8 +230,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         );
       }
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
@@ -250,6 +251,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required UserRecord userRecord,
   }) async {
     try {
+      log(email);
+      log(code);
+      log(password);
+      log(userRecord.toString());
       var bio = 'A Nigerian Citizen';
       final selectedPoliticalStatus = userRecord.politicalStatus!.name;
       final result = await _auth.validateAccount(
@@ -290,11 +295,17 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
 
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
+      );
+    } on CacheException catch (e) {
+      throw ServerException(
+        message: e.message,
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
       );
     } on ServerException {
       rethrow;
@@ -319,6 +330,8 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
       );
+    } on ServerException {
+      rethrow;
     } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -327,9 +340,13 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
   }
 
   @override
-  Future<UserRecord?> searchNinDetails({required String ninNumber}) async {
+  Future<UserRecord?> searchNinDetails({
+    required String ninNumber,
+  }) async {
     try {
-      final result = await _client.userRecord.getNinDetails(ninNumber);
+      final result = await _client.userRecord.getNinDetails(
+        ninNumber,
+      );
       if (result == null) {
         return null;
       }
@@ -338,9 +355,13 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
       );
-    } on Exception catch (_) {
-      throw const ServerException(
-        message: 'Unable to connect to server. Please try again.',
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
+      );
+    } on Exception catch (e) {
+      throw ServerException(
+        message: e.toString(),
       );
     }
   }
@@ -357,12 +378,27 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
           message: 'Failed to upload image',
         );
       }
+      final userRecord = await _client.userRecord.getUser(null);
+      if (userRecord == null) {
+        throw const ServerException(
+          message: 'User record not found',
+        );
+      }
+      await _localDatabase.saveUserRecord(
+        userRecord: userRecord,
+      );
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(
+        message: e.message,
+      );
+    } on CacheException catch (e) {
+      throw ServerException(
+        message: e.message,
       );
     } on ServerException {
       rethrow;
@@ -388,8 +424,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       }
 
       return result;
-    } on TimeoutException catch (_) {
-      throw const ServerException(message: 'Request timed out.');
     } on SocketException catch (_) {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',

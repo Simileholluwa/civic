@@ -39,14 +39,14 @@ class NewPasswordForm extends ConsumerWidget {
                 if (!isValid) return;
                 final success = await authNotifier.resetPassword();
                 if (success && context.mounted) {
-                  context.goNamed(AppRoutes.auth);
+                  context.go(AppRoutes.auth);
                 }
               },
               child: const Text(
                 TTexts.tContinue,
               ),
             ).withLoading(
-              loading: ref.watch(resetPasswordLoadingProvider),
+              loading: authState.resetPasswordLoading,
             ),
           ],
         ),

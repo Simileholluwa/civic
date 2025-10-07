@@ -1,6 +1,6 @@
 class: Article
 table: article
 fields:
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
     content: String?, default=''
     tag: List<String>?

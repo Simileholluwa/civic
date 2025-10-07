@@ -1,7 +1,7 @@
 class: Post
 table: post
 fields:
-    owner: UserRecord?, relation
+    owner: UserRecord?, relation(onDelete=Cascade)
     postType: PostType?
     text: String?
     imageUrls: List<String>?
@@ -19,10 +19,10 @@ fields:
     bookmarksCount: int?, default=0
     commentCount: int?, default=0
     subscribers: List<int>?
-    poll: Poll?, relation(optional, onDelete=cascade)
-    article: Article?, relation(optional, onDelete=cascade)
-    project: Project?, relation(optional, onDelete=NoAction)
-    parent: Post?, relation(optional, onDelete=NoAction,)
+    poll: Poll?, relation(optional, onDelete=Cascade)
+    article: Article?, relation(optional, onDelete=Cascade)
+    project: Project?, relation(optional, onDelete=Cascade)
+    parent: Post?, relation(optional, onDelete=Cascade,)
     quotedOrRepostedFromUser: UserRecord?, relation(optional)
     isDeleted: bool?, default=false
 

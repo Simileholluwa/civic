@@ -5,7 +5,7 @@ fields:
   bio: String?
   nin: String?
   phoneNumber: String?
-  userInfo: module:auth:UserInfo?, relation(optional)
+  userInfo: module:auth:UserInfo?, relation(optional, onDelete=Cascade)
   firstName: String?
   lastName: String?
   gender: String?
