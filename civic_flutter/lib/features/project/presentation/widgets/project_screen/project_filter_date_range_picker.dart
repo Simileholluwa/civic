@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +20,7 @@ Future<List<DateTime?>?> projectFilterDateRangePicker(
       );
     },
   );
-  if (startDate != null) {
+  if (startDate != null && context.mounted) {
     final endDate = await showDatePicker(
       context: context,
       switchToInputEntryModeIcon: const Icon(
@@ -63,8 +61,8 @@ Future<List<DateTime?>?> projectFilterDateRangePicker(
 
 class DateTimeWidgetTheme extends StatelessWidget {
   const DateTimeWidgetTheme({
-    super.key,
     required this.child,
+    super.key,
   });
 
   final Widget child;
@@ -81,9 +79,6 @@ class DateTimeWidgetTheme extends StatelessWidget {
           backgroundColor: THelperFunctions.isDarkMode(context)
               ? TColors.dark
               : TColors.light,
-        ),
-        dialogTheme: const DialogTheme(
-          elevation: 10,
         ),
       ),
       child: child,

@@ -1,4 +1,3 @@
-//ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:convert';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -167,13 +166,13 @@ class Feed extends _$Feed {
     if (state.imageUrls.length >= maxImageCount) return;
     final imageLength = maxImageCount - state.imageUrls.length;
     final image = await imageHelper.pickImage(
-      multipleImages: imageLength > 1 ? true : false,
+      multipleImages: imageLength > 1,
     );
     if (image != null) {
       if (isVideo()) {
         state = state.copyWith(videoUrl: '');
       }
-      var imagePaths = <String>[];
+      final imagePaths = <String>[];
       for (final img in image) {
         imagePaths.add(img.path);
       }
@@ -191,8 +190,8 @@ class Feed extends _$Feed {
     }
   }
 
-  void removeImageAtIndex(index) {
-    var images = state.imageUrls;
+  void removeImageAtIndex(int index) {
+    final images = state.imageUrls;
     if (images.length == 1) {
       state = state.copyWith(
         imageUrls: [],
@@ -237,10 +236,11 @@ class Feed extends _$Feed {
       return '$username, caption your image';
     } else if (isVideo()) {
       return '$username, caption your video';
-    } else if (isCommentOrReply == true) {
-      return "$username, share your thoughts...";
+    } else if (isCommentOrReply ?? false) {
+      return '$username, share your thoughts...';
     } else {
-      return "$username, what's happening in politics? Tap here to start typing.";
+      return "$username, what's happening in politics? Tap here "
+          'to start typing.';
     }
   }
 
@@ -277,8 +277,8 @@ class Feed extends _$Feed {
   }
 
   Future<bool> sendMediaImages(int? id, bool saveDraft) async {
-    var existingUpload = <String>[];
-    var newUpload = <String>[];
+    final existingUpload = <String>[];
+    final newUpload = <String>[];
     if (state.imageUrls.isNotEmpty) {
       for (final image in state.imageUrls) {
         final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
@@ -296,7 +296,7 @@ class Feed extends _$Feed {
           );
 
       return result.fold((error) async {
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
         log(error);
         if (saveDraft) {
           await savePostAsDraft(
@@ -328,7 +328,7 @@ class Feed extends _$Feed {
       );
 
       return result.fold((error) async {
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
         log(error);
         await savePostAsDraft(
           id,
@@ -367,7 +367,7 @@ class Feed extends _$Feed {
 
       return;
     }, (data) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       if (data == null) {
         await savePostAsDraft(
           post.id,
@@ -400,16 +400,17 @@ class Feed extends _$Feed {
     );
     return result.fold(
       (error) async {
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
         await savePostAsDraft(
           post.id,
           error.message,
         );
       },
       (r) {
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
         TToastMessages.successToast(
-          'Your post will be sent on ${scheduledDateTimeProvider.humanizeDateTimeForSend()}',
+          'Your post will be sent on'
+          ' ${scheduledDateTimeProvider.humanizeDateTimeForSend()}',
         );
       },
     );
@@ -452,12 +453,13 @@ class Feed extends _$Feed {
       return;
     }, (post) {
       if (postId == null) {
-        final postListNotifier = ref.watch(
-          paginatedPostListProvider.notifier,
-        );
-        postListNotifier.addPost(
-          post,
-        );
+        ref
+            .watch(
+              paginatedPostListProvider.notifier,
+            )
+            .addPost(
+              post,
+            );
       }
       TToastMessages.successToast(
         'Project successfully reposted',
@@ -470,7 +472,7 @@ class Feed extends _$Feed {
   Future<void> send(
     int? id,
   ) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
     final scheduledDateTimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,
@@ -521,7 +523,7 @@ class Feed extends _$Feed {
     int postId,
     int? id,
   ) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveComment = ref.read(savePostCommentProvider);
     final sentImages = await sendMediaImages(postId, true);
@@ -544,7 +546,7 @@ class Feed extends _$Feed {
     );
     result.fold((l) {
       TToastMessages.errorToast(l.message);
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
     }, (r) {
       TToastMessages.successToast('Your comment has been sent.');
       if (id == null) {
@@ -554,7 +556,7 @@ class Feed extends _$Feed {
             )
             .addComment(r!);
       }
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
     });
   }
 
@@ -562,7 +564,7 @@ class Feed extends _$Feed {
     int parentId,
     int? id,
   ) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     final saveReply = ref.read(
       savePostCommentProvider,
@@ -588,7 +590,7 @@ class Feed extends _$Feed {
     result.fold(
       (l) {
         TToastMessages.errorToast(l.message);
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
       },
       (r) {
         TToastMessages.successToast('Your reply has been sent.');
@@ -597,14 +599,13 @@ class Feed extends _$Feed {
               .read(paginatedRepliesListProvider(parentId).notifier)
               .addReply(r!);
         }
-        ref.read(sendPostLoadingProvider.notifier).setValue(false);
+        ref.read(sendPostLoadingProvider.notifier).value = false;
       },
     );
   }
 
   Future<void> savePollAsDraft(int? id, String? errorMesage) async {
-    List<PollOption> pollOptions =
-        state.optionText.asMap().entries.map((entry) {
+    final pollOptions = state.optionText.asMap().entries.map((entry) {
       final text = entry.value;
       return PollOption(
         option: text,
@@ -638,7 +639,7 @@ class Feed extends _$Feed {
     result.fold((error) {
       log(error.message);
     }, (data) {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       errorMesage != null
           ? TToastMessages.errorToast(
               '$errorMesage. Your poll was saved to draft.',
@@ -677,7 +678,7 @@ class Feed extends _$Feed {
     result.fold((error) {
       log(error.message);
     }, (data) {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       errorMesage != null
           ? TToastMessages.errorToast(
               '$errorMesage. Your article was saved to draft.',
@@ -708,7 +709,7 @@ class Feed extends _$Feed {
 
       return;
     }, (data) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       if (data == null) {
         await savePollAsDraft(
           post.id,
@@ -717,7 +718,7 @@ class Feed extends _$Feed {
         return;
       }
       if (addToList) {
-        ref.read(paginatedPollListProvider.notifier).addPoll(
+        ref.read(paginatedPostListProvider.notifier).addPost(
               data,
             );
       }
@@ -732,7 +733,7 @@ class Feed extends _$Feed {
     int? id,
     int? pollId,
   ) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
     final scheduledDateTimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,
@@ -753,8 +754,7 @@ class Feed extends _$Feed {
       await savePollAsDraft(id, 'Failed to upload images');
       return;
     }
-    List<PollOption> pollOptions =
-        state.optionText.asMap().entries.map((entry) {
+    final pollOptions = state.optionText.asMap().entries.map((entry) {
       final text = entry.value;
       return PollOption(
         option: text,
@@ -850,7 +850,7 @@ class Feed extends _$Feed {
 
       return;
     }, (data) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       if (data == null) {
         await saveArticleAsDraft(
           post.id,
@@ -859,7 +859,7 @@ class Feed extends _$Feed {
         return;
       }
       if (addToList) {
-        ref.read(paginatedArticleListProvider.notifier).addArticle(
+        ref.read(paginatedPostListProvider.notifier).addPost(
               data,
             );
       }
@@ -873,7 +873,7 @@ class Feed extends _$Feed {
   Future<void> sendAnArticle(
     int? id,
   ) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final scheduledDateTime = ref.watch(postScheduledDateTimeProvider);
     final scheduledDateTimeProvider = ref.read(
       postScheduledDateTimeProvider.notifier,
@@ -946,7 +946,7 @@ class Feed extends _$Feed {
       state.articleController?.dispose();
       state.focusNode?.dispose();
       state.scrollController?.dispose();
-      for (var ctr in state.controllers) {
+      for (final ctr in state.controllers) {
         ctr.dispose();
       }
     });

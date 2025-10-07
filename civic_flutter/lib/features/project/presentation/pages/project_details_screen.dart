@@ -1,15 +1,15 @@
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectDetailsScreen extends ConsumerWidget {
   const ProjectDetailsScreen({
-    super.key,
     required this.projectId,
+    super.key,
     this.project,
   });
 
@@ -30,14 +30,12 @@ class ProjectDetailsScreen extends ConsumerWidget {
     final newProject = liveProject.value ?? data.value;
     final projectCardState = ref.watch(
       projectCardWidgetProvider(
-        newProject
+        newProject,
       ),
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
     final projectCardNotifier = ref.watch(
-      projectCardWidgetProvider(
-        newProject
-      ).notifier,
+      projectCardWidgetProvider(newProject).notifier,
     );
     return Scaffold(
       appBar: AppBar(
@@ -70,8 +68,8 @@ class ProjectDetailsScreen extends ConsumerWidget {
                     IconButton(
                       onPressed: projectCardState.isDeleted!
                           ? null
-                          : () {
-                              context.push(
+                          : () async {
+                              await context.push(
                                 '/create/post/0',
                                 extra: {
                                   'project': project,
@@ -114,12 +112,14 @@ class ProjectDetailsScreen extends ConsumerWidget {
                     IconButton(
                       onPressed: projectCardState.isDeleted!
                           ? null
-                          : () {
-                              showDialog(
+                          : () async {
+                              await showDialog<dynamic>(
                                 context: context,
                                 builder: (ctx) {
                                   return AlertDialog(
-                                    contentPadding: const EdgeInsets.only(bottom: 16,),
+                                    contentPadding: const EdgeInsets.only(
+                                      bottom: 16,
+                                    ),
                                     content: ShowProjectActions(
                                       project: newProject!,
                                       fromDetails: true,
@@ -141,11 +141,11 @@ class ProjectDetailsScreen extends ConsumerWidget {
                   ]
             : [],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: AppTabBarDesign(
             showTopBorder: true,
             tabController: tabController,
-            tabs: [
+            tabs: const [
               Tab(text: 'DETAILS'),
               Tab(text: 'OVERVIEW'),
               Tab(text: 'REVIEWS'),
@@ -154,7 +154,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Iconsax.arrow_left_2),
+          icon: const Icon(Iconsax.arrow_left_2),
           onPressed: context.pop,
         ),
       ),
@@ -219,7 +219,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget();
+          return const AppLoadingWidget();
         },
       ),
     );

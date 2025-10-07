@@ -8,8 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProjectOverviewWidget extends ConsumerWidget {
   const ProjectOverviewWidget({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -205,7 +204,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                             MediaQuery.sizeOf(context).width *
                                                 .82,
                                         padding: const EdgeInsets.fromLTRB(
-                                            0, 6, 10, 6),
+                                            0, 6, 10, 6,),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                             TSizes.sm,
@@ -218,7 +217,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                         child: Row(
                                           children: [
                                             FadeInImage(
-                                              image: AssetImage(
+                                              image: const AssetImage(
                                                 'assets/images/pdf.png',
                                               ),
                                               placeholder: MemoryImage(
@@ -259,7 +258,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                             color:
                                                 Theme.of(context).primaryColor,
                                           ),
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             bottomRight: Radius.circular(
                                               TSizes.sm,
                                             ),

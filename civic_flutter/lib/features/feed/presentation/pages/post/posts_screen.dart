@@ -32,8 +32,8 @@ class PostsScreen extends ConsumerWidget {
         }
       },
       createText: 'Create post',
-      onCreate: () {
-        context.push(
+      onCreate: () async {
+        await context.push(
           '/create/post/0',
         );
       },

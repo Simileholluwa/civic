@@ -1,4 +1,3 @@
-//ignore_for_file:avoid_public_notifier_properties
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -18,60 +17,63 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
   PagingStatus build(
     int projectId,
   ) {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(projectId, page);
-    });
+    pagingController
+      ..addPageRequestListener(
+        (page) => fetchPage(projectId, page),
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-    
+    ref.onDispose(
+      pagingController.dispose,
+    );
+
     return PagingStatus.loadingFirstPage;
   }
 
   Future<void> fetchPage(int projectId, int page, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 1000);
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(debounceDuration, () async {
-      try {
-        final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);
-        final projectReviewStateQuery =
-            ref.watch(projectReviewListQueryProvider);
-        final result = await listReviewProjectUseCase(
-          GetProjectReviewsParams(
-            projectId,
-            page,
-            limit,
-            projectReviewStateQuery.rating,
-            projectReviewStateQuery.cardinal,
-          ),
-        );
-        result.fold((error) {
-          log(error.message, name: 'PaginatedReviewList');
-          pagingController.value = PagingState(
-            nextPageKey: null,
-            itemList: null,
-            error: error,
+    _debounce = Timer(
+      debounceDuration,
+      () async {
+        try {
+          final listReviewProjectUseCase = ref.read(getProjectReviewsProvider);
+          final projectReviewStateQuery =
+              ref.watch(projectReviewListQueryProvider);
+          final result = await listReviewProjectUseCase(
+            GetProjectReviewsParams(
+              projectId,
+              page,
+              limit,
+              projectReviewStateQuery.rating,
+              projectReviewStateQuery.cardinal,
+            ),
           );
-        }, (data) {
-          if (data.canLoadMore) {
-            pagingController.appendPage(
-              data.results,
-              data.page + 1,
+          result.fold((error) {
+            log(error.message, name: 'PaginatedReviewList');
+            pagingController.value = PagingState(
+              error: error,
             );
-          } else {
-            pagingController.appendLastPage(data.results);
-          }
-        });
-      } catch (e) {
-        log(e.toString(), name: 'PaginatedReviewList');
-        pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
-          error: e.toString(),
-        );
-      }
-    });
+          }, (data) {
+            if (data.canLoadMore) {
+              pagingController.appendPage(
+                data.results,
+                data.page + 1,
+              );
+            } else {
+              pagingController.appendLastPage(data.results);
+            }
+          });
+        } on Exception catch (e) {
+          log(e.toString(), name: 'PaginatedReviewList');
+          pagingController.value = PagingState(
+            error: e.toString(),
+          );
+        }
+      },
+    );
   }
 
   void refresh() {
@@ -88,8 +90,8 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
 
   void deleteReview(int reviewId) {
     final updatedList =
-        List<ProjectReview>.from(pagingController.itemList ?? []);
-    updatedList.removeWhere((element) => element.id == reviewId);
+        List<ProjectReview>.from(pagingController.itemList ?? [])
+          ..removeWhere((element) => element.id == reviewId);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,

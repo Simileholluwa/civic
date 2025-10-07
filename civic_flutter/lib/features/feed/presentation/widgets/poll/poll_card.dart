@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 
 class PollCard extends ConsumerWidget {
   const PollCard({
-    super.key,
     required this.post,
+    super.key,
     this.onTap,
     this.fromDetails = false,
   });
@@ -35,12 +35,13 @@ class PollCard extends ConsumerWidget {
     return InkWell(
       onTap: fromDetails
           ? null
-          : onTap ?? () {
-              context.push(
-                '/feed/poll/${post.id}',
-                extra: newPost,
-              );
-            },
+          : onTap ??
+              () async {
+                await context.push(
+                  '/feed/poll/${post.id}',
+                  extra: newPost,
+                );
+              },
       child: Column(
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,8 +112,8 @@ class PollCard extends ConsumerWidget {
           if (!fromDetails)
             PostInteractionButtons(
               post: newPost,
-              onReply: () {
-                context.push(
+              onReply: () async {
+                await context.push(
                   '/feed/post/${post.id}/comments',
                 );
               },

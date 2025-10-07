@@ -33,36 +33,43 @@ class PostBookmarksScreen extends ConsumerWidget {
                     context.pop();
                   },
                 ),
-                bottom: PreferredSize(
+                bottom: const PreferredSize(
                   preferredSize: Size.fromHeight(1),
-                  child: Divider(height: 0,),
+                  child: Divider(
+                    height: 0,
                   ),
+                ),
                 actions: [
                   IconButton(
-                    onPressed: isEmpty ? null : () async {
-                      await FeedHelperFunctions.clearBookmarksDialog(
-                        ref,
-                        context,
-                      );
-                    },
+                    onPressed: isEmpty
+                        ? null
+                        : () async {
+                            await FeedHelperFunctions.clearBookmarksDialog(
+                              ref,
+                              context,
+                            );
+                          },
                     icon: const Icon(
                       Iconsax.trash,
                       size: 26,
                     ),
                   ),
-                  const SizedBox(width: 5,),
+                  const SizedBox(
+                    width: 5,
+                  ),
                 ],
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'BOOKMARKS',
-                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                            fontSize: 25,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 25,
+                              ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 22, left: 1),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 22, left: 1),
                       child: AppDecorationDot(),
                     ),
                   ],
@@ -72,14 +79,14 @@ class PostBookmarksScreen extends ConsumerWidget {
           },
           body: AppInfiniteList<Post>(
             pagingController: pagingControllerNotifier.pagingController,
-            scrollPhysics: NeverScrollableScrollPhysics(),
+            scrollPhysics: const NeverScrollableScrollPhysics(),
             canCreate: false,
             itemBuilder: (__, post, _) {
               if (post.postType == PostType.article) {
                 return ArticleCard(
                   post: post,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/feed/article/${post.id}',
                       extra: post,
                     );
@@ -89,8 +96,8 @@ class PostBookmarksScreen extends ConsumerWidget {
               if (post.postType == PostType.poll) {
                 return PollCard(
                   post: post,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/feed/poll/${post.id}',
                       extra: post,
                     );
@@ -99,8 +106,8 @@ class PostBookmarksScreen extends ConsumerWidget {
               }
               return PostCard(
                 post: post,
-                onTap: () {
-                  context.push(
+                onTap: () async {
+                  await context.push(
                     '/feed/post/${post.id}',
                     extra: post,
                   );

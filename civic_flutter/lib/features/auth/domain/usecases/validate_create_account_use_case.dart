@@ -1,8 +1,8 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 
 class ValidateCreateAccountUseCase
     implements UseCase<UserInfo, ValidateCreateAccountParams> {
@@ -12,7 +12,7 @@ class ValidateCreateAccountUseCase
 
   @override
   Future<Either<Failure, UserInfo>> call(
-      ValidateCreateAccountParams params) async {
+      ValidateCreateAccountParams params,) async {
     final result = await _authRepository.validateCreateAccount(
       email: params.email,
       code: params.code,

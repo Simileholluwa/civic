@@ -14,7 +14,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
       return ProjectReviewState.empty();
     } else {
       return ProjectReviewState.populate(
-        projectReview, ref
+        projectReview, ref,
       );
     }
   }
@@ -93,7 +93,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
   }
 
   Future<bool> sendReview(int projectId, int? projectReviewId,
-      [bool addToList = true]) async {
+      [bool addToList = true,]) async {
     state = state.copyWith(
       isLoading: true,
     );

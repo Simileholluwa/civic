@@ -1,12 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class ValidateCreateAccountForm extends ConsumerWidget {
   const ValidateCreateAccountForm({
@@ -28,9 +26,7 @@ class ValidateCreateAccountForm extends ConsumerWidget {
             validator: TValidator.validateOTP,
             obscureText: true,
             keyboardType: TextInputType.text,
-            onChanged: (code) {
-              authNotifier.setVerificationCode(code);
-            },
+            onChanged: authNotifier.setVerificationCode,
             obscuringWidget: const Icon(
               Icons.circle,
               size: 15,
@@ -58,8 +54,8 @@ class ValidateCreateAccountForm extends ConsumerWidget {
             child: FilledButton(
               onPressed: () async {
                 final validated = await authNotifier.validateCreateAccount();
-                if (validated) {
-                  context.push(
+                if (validated && context.mounted) {
+                  await context.push(
                     ProjectRoutes.namespace,
                   );
                 }
@@ -75,9 +71,7 @@ class ValidateCreateAccountForm extends ConsumerWidget {
             height: TSizes.spaceBtwItems,
           ),
           AppResendLink(
-            onTap: () {
-              authNotifier.createAccountRequest();
-            },
+            onTap: authNotifier.createAccountRequest,
           ),
         ],
       ),

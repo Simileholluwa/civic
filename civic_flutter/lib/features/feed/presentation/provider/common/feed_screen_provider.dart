@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,30 +8,27 @@ class _VSync implements TickerProvider {
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }
 
-final feedVsyncProvider = Provider<TickerProvider>(
-  (ref) => _VSync(),
-);
+@riverpod
+TickerProvider feedVsync(Ref ref) => _VSync();
 
-final feedFilterVsyncProvider = Provider<TickerProvider>(
-  (ref) => _VSync(),
-);
+@riverpod
+TickerProvider feedFilterVsync(Ref ref) => _VSync();
 
 @riverpod
 class FeedScreenTabController extends _$FeedScreenTabController {
   @override
   Raw<TabController> build() {
-    final currentPage = ref
-          .watch(feedCurrentPageProvider.notifier);        
+    final currentPage = ref.watch(feedCurrentPageProvider.notifier);
     final controller = TabController(
       length: 3,
       vsync: ref.watch(feedVsyncProvider),
     );
     controller.addListener(() {
-      currentPage.setCurrentPage(controller.index);
+      currentPage.currentPage = controller.index;
     });
-    ref.onDispose(() {
-      controller.dispose();
-    });
+    ref.onDispose(
+      controller.dispose,
+    );
     return controller;
   }
 }
@@ -42,7 +38,7 @@ class FeedCurrentPage extends _$FeedCurrentPage {
   @override
   int build() => 0;
 
-  void setCurrentPage(int index) {
+  set currentPage(int index) {
     state = index;
   }
 }

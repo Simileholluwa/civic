@@ -13,7 +13,7 @@ class OnboardingRepositoryImpl extends OnboardingRepository {
     try {
       final result = await _localDatabase.cacheFirstTimer();
       return Right(result);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(
         Failure(
           message: e.toString(),

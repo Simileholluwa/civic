@@ -6,205 +6,192 @@ part of 'users_list_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersListServiceHash() => r'125d68440db5707cc3888b53e653b0f45b09bef7';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [usersListService].
 @ProviderFor(usersListService)
-final usersListServiceProvider = Provider<UsersListService>.internal(
-  usersListService,
-  name: r'usersListServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$usersListServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const usersListServiceProvider = UsersListServiceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef UsersListServiceRef = ProviderRef<UsersListService>;
-String _$paginatedUsersListHash() =>
-    r'b1333a9f373993068c46f42088d425f1d945684d';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$PaginatedUsersList extends BuildlessNotifier<PagingStatus> {
-  late final String query;
-
-  PagingStatus build(
-    String query,
-  );
-}
-
-/// See also [PaginatedUsersList].
-@ProviderFor(PaginatedUsersList)
-const paginatedUsersListProvider = PaginatedUsersListFamily();
-
-/// See also [PaginatedUsersList].
-class PaginatedUsersListFamily extends Family<PagingStatus> {
-  /// See also [PaginatedUsersList].
-  const PaginatedUsersListFamily();
-
-  /// See also [PaginatedUsersList].
-  PaginatedUsersListProvider call(
-    String query,
-  ) {
-    return PaginatedUsersListProvider(
-      query,
-    );
-  }
-
-  @override
-  PaginatedUsersListProvider getProviderOverride(
-    covariant PaginatedUsersListProvider provider,
-  ) {
-    return call(
-      provider.query,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'paginatedUsersListProvider';
-}
-
-/// See also [PaginatedUsersList].
-class PaginatedUsersListProvider
-    extends NotifierProviderImpl<PaginatedUsersList, PagingStatus> {
-  /// See also [PaginatedUsersList].
-  PaginatedUsersListProvider(
-    String query,
-  ) : this._internal(
-          () => PaginatedUsersList()..query = query,
-          from: paginatedUsersListProvider,
-          name: r'paginatedUsersListProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$paginatedUsersListHash,
-          dependencies: PaginatedUsersListFamily._dependencies,
-          allTransitiveDependencies:
-              PaginatedUsersListFamily._allTransitiveDependencies,
-          query: query,
+final class UsersListServiceProvider extends $FunctionalProvider<
+    UsersListService,
+    UsersListService,
+    UsersListService> with $Provider<UsersListService> {
+  const UsersListServiceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'usersListServiceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  PaginatedUsersListProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.query,
-  }) : super.internal();
+  @override
+  String debugGetCreateSourceHash() => _$usersListServiceHash();
 
-  final String query;
+  @$internal
+  @override
+  $ProviderElement<UsersListService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  PagingStatus runNotifierBuild(
-    covariant PaginatedUsersList notifier,
-  ) {
-    return notifier.build(
-      query,
-    );
+  UsersListService create(Ref ref) {
+    return usersListService(ref);
   }
 
-  @override
-  Override overrideWith(PaginatedUsersList Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UsersListService value) {
+    return $ProviderOverride(
       origin: this,
-      override: PaginatedUsersListProvider._internal(
-        () => create()..query = query,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        query: query,
-      ),
+      providerOverride: $SyncValueProvider<UsersListService>(value),
     );
   }
+}
+
+String _$usersListServiceHash() => r'125d68440db5707cc3888b53e653b0f45b09bef7';
+
+@ProviderFor(PaginatedUsersList)
+const paginatedUsersListProvider = PaginatedUsersListFamily._();
+
+final class PaginatedUsersListProvider
+    extends $NotifierProvider<PaginatedUsersList, PagingStatus> {
+  const PaginatedUsersListProvider._(
+      {required PaginatedUsersListFamily super.from,
+      required String super.argument})
+      : super(
+          retry: null,
+          name: r'paginatedUsersListProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
-  NotifierProviderElement<PaginatedUsersList, PagingStatus> createElement() {
-    return _PaginatedUsersListProviderElement(this);
+  String debugGetCreateSourceHash() => _$paginatedUsersListHash();
+
+  @override
+  String toString() {
+    return r'paginatedUsersListProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  PaginatedUsersList create() => PaginatedUsersList();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PagingStatus value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PagingStatus>(value),
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PaginatedUsersListProvider && other.query == query;
+    return other is PaginatedUsersListProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, query.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PaginatedUsersListRef on NotifierProviderRef<PagingStatus> {
-  /// The parameter `query` of this provider.
-  String get query;
-}
+String _$paginatedUsersListHash() =>
+    r'14eafed7688eb02f32b91328c9a8842a4176c1e6';
 
-class _PaginatedUsersListProviderElement
-    extends NotifierProviderElement<PaginatedUsersList, PagingStatus>
-    with PaginatedUsersListRef {
-  _PaginatedUsersListProviderElement(super.provider);
+final class PaginatedUsersListFamily extends $Family
+    with
+        $ClassFamilyOverride<PaginatedUsersList, PagingStatus, PagingStatus,
+            PagingStatus, String> {
+  const PaginatedUsersListFamily._()
+      : super(
+          retry: null,
+          name: r'paginatedUsersListProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
+
+  PaginatedUsersListProvider call(
+    String query,
+  ) =>
+      PaginatedUsersListProvider._(argument: query, from: this);
 
   @override
-  String get query => (origin as PaginatedUsersListProvider).query;
+  String toString() => r'paginatedUsersListProvider';
+}
+
+abstract class _$PaginatedUsersList extends $Notifier<PagingStatus> {
+  late final _$args = ref.$arg as String;
+  String get query => _$args;
+
+  PagingStatus build(
+    String query,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PagingStatus, PagingStatus>,
+        PagingStatus,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(SearchUsersListQuery)
+const searchUsersListQueryProvider = SearchUsersListQueryProvider._();
+
+final class SearchUsersListQueryProvider
+    extends $NotifierProvider<SearchUsersListQuery, String> {
+  const SearchUsersListQueryProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'searchUsersListQueryProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$searchUsersListQueryHash();
+
+  @$internal
+  @override
+  SearchUsersListQuery create() => SearchUsersListQuery();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
 }
 
 String _$searchUsersListQueryHash() =>
-    r'1f0723b0b2729a6277dd118e74684ab85037f479';
+    r'fa55e81a5cf037a95de90e1325b9ae4c566c8fbc';
 
-/// See also [SearchUsersListQuery].
-@ProviderFor(SearchUsersListQuery)
-final searchUsersListQueryProvider =
-    NotifierProvider<SearchUsersListQuery, String>.internal(
-  SearchUsersListQuery.new,
-  name: r'searchUsersListQueryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$searchUsersListQueryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$SearchUsersListQuery = Notifier<String>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$SearchUsersListQuery extends $Notifier<String> {
+  String build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<String, String>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<String, String>, String, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

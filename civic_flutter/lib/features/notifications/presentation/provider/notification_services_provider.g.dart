@@ -6,143 +6,322 @@ part of 'notification_services_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notificationRemoteDatasourceHash() =>
-    r'fbf1358afb8adceb3c26770cde6617660d0a4be7';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [notificationRemoteDatasource].
 @ProviderFor(notificationRemoteDatasource)
-final notificationRemoteDatasourceProvider =
-    AutoDisposeProvider<NotificationRemoteDatasourceImpl>.internal(
-  notificationRemoteDatasource,
-  name: r'notificationRemoteDatasourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$notificationRemoteDatasourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const notificationRemoteDatasourceProvider =
+    NotificationRemoteDatasourceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NotificationRemoteDatasourceRef
-    = AutoDisposeProviderRef<NotificationRemoteDatasourceImpl>;
-String _$notificationRepositoryImplHash() =>
-    r'7b0e0b0f2190d2d2357d636e9d807f94312ff22d';
+final class NotificationRemoteDatasourceProvider extends $FunctionalProvider<
+        NotificationRemoteDatasourceImpl,
+        NotificationRemoteDatasourceImpl,
+        NotificationRemoteDatasourceImpl>
+    with $Provider<NotificationRemoteDatasourceImpl> {
+  const NotificationRemoteDatasourceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notificationRemoteDatasourceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [notificationRepositoryImpl].
+  @override
+  String debugGetCreateSourceHash() => _$notificationRemoteDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<NotificationRemoteDatasourceImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  NotificationRemoteDatasourceImpl create(Ref ref) {
+    return notificationRemoteDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NotificationRemoteDatasourceImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<NotificationRemoteDatasourceImpl>(value),
+    );
+  }
+}
+
+String _$notificationRemoteDatasourceHash() =>
+    r'6f8294fcb8928df585deb76175f99985a4c8a34b';
+
 @ProviderFor(notificationRepositoryImpl)
-final notificationRepositoryImplProvider =
-    AutoDisposeProvider<NotificationRepositoryImpl>.internal(
-  notificationRepositoryImpl,
-  name: r'notificationRepositoryImplProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$notificationRepositoryImplHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const notificationRepositoryImplProvider =
+    NotificationRepositoryImplProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NotificationRepositoryImplRef
-    = AutoDisposeProviderRef<NotificationRepositoryImpl>;
-String _$getNotificationsHash() => r'903f424920f45d4a4e298e1194e4870dfa667827';
+final class NotificationRepositoryImplProvider extends $FunctionalProvider<
+    NotificationRepositoryImpl,
+    NotificationRepositoryImpl,
+    NotificationRepositoryImpl> with $Provider<NotificationRepositoryImpl> {
+  const NotificationRepositoryImplProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notificationRepositoryImplProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [getNotifications].
+  @override
+  String debugGetCreateSourceHash() => _$notificationRepositoryImplHash();
+
+  @$internal
+  @override
+  $ProviderElement<NotificationRepositoryImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  NotificationRepositoryImpl create(Ref ref) {
+    return notificationRepositoryImpl(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NotificationRepositoryImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<NotificationRepositoryImpl>(value),
+    );
+  }
+}
+
+String _$notificationRepositoryImplHash() =>
+    r'2ff9721dfb0fffe82b49936ef5ad557036352cca';
+
 @ProviderFor(getNotifications)
-final getNotificationsProvider =
-    AutoDisposeProvider<GetNotificationsUseCase>.internal(
-  getNotifications,
-  name: r'getNotificationsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getNotificationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const getNotificationsProvider = GetNotificationsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetNotificationsRef = AutoDisposeProviderRef<GetNotificationsUseCase>;
+final class GetNotificationsProvider extends $FunctionalProvider<
+    GetNotificationsUseCase,
+    GetNotificationsUseCase,
+    GetNotificationsUseCase> with $Provider<GetNotificationsUseCase> {
+  const GetNotificationsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getNotificationsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getNotificationsHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetNotificationsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetNotificationsUseCase create(Ref ref) {
+    return getNotifications(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetNotificationsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetNotificationsUseCase>(value),
+    );
+  }
+}
+
+String _$getNotificationsHash() => r'f789e9b2a96903caed8ecdb8ec31834556f6dcaa';
+
+@ProviderFor(deleteAllNotifications)
+const deleteAllNotificationsProvider = DeleteAllNotificationsProvider._();
+
+final class DeleteAllNotificationsProvider extends $FunctionalProvider<
+        DeleteAllNotificationsUseCase,
+        DeleteAllNotificationsUseCase,
+        DeleteAllNotificationsUseCase>
+    with $Provider<DeleteAllNotificationsUseCase> {
+  const DeleteAllNotificationsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteAllNotificationsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteAllNotificationsHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteAllNotificationsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteAllNotificationsUseCase create(Ref ref) {
+    return deleteAllNotifications(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteAllNotificationsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<DeleteAllNotificationsUseCase>(value),
+    );
+  }
+}
+
 String _$deleteAllNotificationsHash() =>
     r'03abb08d9fcc4e0bedd58f0524f31f025a4f1ab7';
 
-/// See also [deleteAllNotifications].
-@ProviderFor(deleteAllNotifications)
-final deleteAllNotificationsProvider =
-    AutoDisposeProvider<DeleteAllNotificationsUseCase>.internal(
-  deleteAllNotifications,
-  name: r'deleteAllNotificationsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteAllNotificationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(deleteNotification)
+const deleteNotificationProvider = DeleteNotificationProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteAllNotificationsRef
-    = AutoDisposeProviderRef<DeleteAllNotificationsUseCase>;
+final class DeleteNotificationProvider extends $FunctionalProvider<
+    DeleteNotificationUseCase,
+    DeleteNotificationUseCase,
+    DeleteNotificationUseCase> with $Provider<DeleteNotificationUseCase> {
+  const DeleteNotificationProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteNotificationProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteNotificationHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteNotificationUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteNotificationUseCase create(Ref ref) {
+    return deleteNotification(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteNotificationUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DeleteNotificationUseCase>(value),
+    );
+  }
+}
+
 String _$deleteNotificationHash() =>
     r'6b601b4b292530a6aea271fa7f04377d8ffb14a0';
 
-/// See also [deleteNotification].
-@ProviderFor(deleteNotification)
-final deleteNotificationProvider =
-    AutoDisposeProvider<DeleteNotificationUseCase>.internal(
-  deleteNotification,
-  name: r'deleteNotificationProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteNotificationHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(markNotificationAsRead)
+const markNotificationAsReadProvider = MarkNotificationAsReadProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteNotificationRef
-    = AutoDisposeProviderRef<DeleteNotificationUseCase>;
+final class MarkNotificationAsReadProvider extends $FunctionalProvider<
+        MarkNotificationAsReadUseCase,
+        MarkNotificationAsReadUseCase,
+        MarkNotificationAsReadUseCase>
+    with $Provider<MarkNotificationAsReadUseCase> {
+  const MarkNotificationAsReadProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'markNotificationAsReadProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$markNotificationAsReadHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkNotificationAsReadUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MarkNotificationAsReadUseCase create(Ref ref) {
+    return markNotificationAsRead(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkNotificationAsReadUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<MarkNotificationAsReadUseCase>(value),
+    );
+  }
+}
+
 String _$markNotificationAsReadHash() =>
     r'a9baa492a4ab5fe3836388f3d888fffab922735a';
 
-/// See also [markNotificationAsRead].
-@ProviderFor(markNotificationAsRead)
-final markNotificationAsReadProvider =
-    AutoDisposeProvider<MarkNotificationAsReadUseCase>.internal(
-  markNotificationAsRead,
-  name: r'markNotificationAsReadProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$markNotificationAsReadHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(markAllNotificationAsRead)
+const markAllNotificationAsReadProvider = MarkAllNotificationAsReadProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef MarkNotificationAsReadRef
-    = AutoDisposeProviderRef<MarkNotificationAsReadUseCase>;
+final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
+        MarkAllNotificationsAsReadUseCase,
+        MarkAllNotificationsAsReadUseCase,
+        MarkAllNotificationsAsReadUseCase>
+    with $Provider<MarkAllNotificationsAsReadUseCase> {
+  const MarkAllNotificationAsReadProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'markAllNotificationAsReadProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$markAllNotificationAsReadHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkAllNotificationsAsReadUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MarkAllNotificationsAsReadUseCase create(Ref ref) {
+    return markAllNotificationAsRead(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkAllNotificationsAsReadUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<MarkAllNotificationsAsReadUseCase>(value),
+    );
+  }
+}
+
 String _$markAllNotificationAsReadHash() =>
     r'c69418f099cf60d418a6174faf710da160776532';
-
-/// See also [markAllNotificationAsRead].
-@ProviderFor(markAllNotificationAsRead)
-final markAllNotificationAsReadProvider =
-    AutoDisposeProvider<MarkAllNotificationsAsReadUseCase>.internal(
-  markAllNotificationAsRead,
-  name: r'markAllNotificationAsReadProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$markAllNotificationAsReadHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef MarkAllNotificationAsReadRef
-    = AutoDisposeProviderRef<MarkAllNotificationsAsReadUseCase>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

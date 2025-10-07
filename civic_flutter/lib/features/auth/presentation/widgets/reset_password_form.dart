@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class ResetPasswordForm extends ConsumerWidget {
   const ResetPasswordForm({
@@ -45,8 +43,8 @@ class ResetPasswordForm extends ConsumerWidget {
                     .validate();
                 if (!isValid) return;
                 final initiated = await authNotifier.initiatePasswordRequest();
-                if (initiated) {
-                  context.pushNamed(
+                if (initiated && context.mounted) {
+                  await context.pushNamed(
                     AppRoutes.verifyResetPasswordCode,
                   );
                 }

@@ -13,7 +13,7 @@ class NetworkRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (context, state) => NetworkScreen(),
+        builder: (context, state) => const NetworkScreen(),
         routes: [
           GoRoute(
             path: ':userId',

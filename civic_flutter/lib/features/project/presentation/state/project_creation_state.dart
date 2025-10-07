@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-
-import 'package:civic_client/civic_client.dart';
 import 'package:intl/intl.dart';
 
 class ProjectCreationState {
@@ -20,11 +18,14 @@ class ProjectCreationState {
     required this.fundingNoteController,
     required this.virtualLocationController,
     required this.canAddLocations,
+    required this.title,
+    required this.description,
+    required this.projectCost,
+    required this.projectImageAttachments,
+    required this.physicalLocations,
     this.isValid = false,
     this.canSave = false,
     this.pdfAttachmentsThumbnail,
-    required this.title,
-    required this.description,
     this.projectCategory,
     this.projectSubCategory,
     this.status,
@@ -33,11 +34,8 @@ class ProjectCreationState {
     this.currency,
     this.fundingCategory,
     this.fundingSubCategory,
-    required this.projectCost,
     this.fundingNote,
-    required this.projectImageAttachments,
     this.projectPDFAttachments,
-    required this.physicalLocations,
     this.virtualLocations,
   });
 
@@ -54,7 +52,7 @@ class ProjectCreationState {
       virtualLocationController: TextEditingController(),
       title: '',
       description: '',
-      projectCost: 0.0,
+      projectCost: 0,
       projectImageAttachments: [],
       physicalLocations: [],
       canAddLocations: true,
@@ -65,7 +63,7 @@ class ProjectCreationState {
     Document? document;
     if (project.description != null) {
       document = Document.fromJson(
-        jsonDecode(project.description!),
+        jsonDecode(project.description!) as List,
       );
     } else {
       document = Document();
@@ -100,8 +98,8 @@ class ProjectCreationState {
       projectCostController: TextEditingController(
         text: project.projectCost == null
             ? null
-            : NumberFormat("#,##0.##").format(
-                project.projectCost!,
+            : NumberFormat('#,##0.##').format(
+                project.projectCost,
               ),
       ),
       projectCost: project.projectCost!,

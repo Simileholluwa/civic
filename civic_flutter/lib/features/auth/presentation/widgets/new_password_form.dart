@@ -1,9 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class NewPasswordForm extends ConsumerWidget {
@@ -40,7 +38,7 @@ class NewPasswordForm extends ConsumerWidget {
                     authState.newPasswordFormKey.currentState!.validate();
                 if (!isValid) return;
                 final success = await authNotifier.resetPassword();
-                if (success) {
+                if (success && context.mounted) {
                   context.goNamed(AppRoutes.auth);
                 }
               },

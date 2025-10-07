@@ -1,18 +1,16 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:civic_flutter/core/core.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CreateArticleScreen extends ConsumerWidget {
   const CreateArticleScreen({
-    super.key,
     required this.id,
     required this.post,
+    super.key,
   });
 
   final int id;
@@ -39,10 +37,9 @@ class CreateArticleScreen extends ConsumerWidget {
 
     return PopScope(
       canPop: false,
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) return;
-        final bool? shouldPop = canSend
+        final shouldPop = canSend
             ? await savePostDraftDialog(
                 ref,
                 context,
@@ -70,9 +67,9 @@ class CreateArticleScreen extends ConsumerWidget {
                   data.value?.id,
                 );
               },
-              title: CreateContentPrivacy(),
+              title: const CreateContentPrivacy(),
               onCanSendPost: () async {
-                final bool? shouldPop = canSend
+                final shouldPop = canSend
                     ? await savePostDraftDialog(
                         ref,
                         context,
@@ -98,7 +95,7 @@ class CreateArticleScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget();
+              return const AppLoadingWidget();
             },
           ),
           bottomNavigationBar: data.when(

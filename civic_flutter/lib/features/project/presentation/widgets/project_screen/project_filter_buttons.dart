@@ -22,9 +22,7 @@ class ProjectFilterButtons extends ConsumerWidget {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  projectWidgetsNotifier.toggleFilter();
-                },
+                onPressed: projectWidgetsNotifier.toggleFilter,
                 child: const Text(
                   'Cancel',
                 ),

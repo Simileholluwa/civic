@@ -1,13 +1,11 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArticleTitleField extends ConsumerWidget {
   const ArticleTitleField({
-    super.key,
-    required this.post,
+    required this.post, super.key,
   });
 
   final Post post;
@@ -31,9 +29,7 @@ class ArticleTitleField extends ConsumerWidget {
         counter: SizedBox(),
         contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 0),
       ),
-      onChanged: (value) {
-        postNotifier.setText(value);
-      },
+      onChanged: postNotifier.setText,
       maxLines: null,
       controller: postState.controller,
       textInputAction: TextInputAction.done,

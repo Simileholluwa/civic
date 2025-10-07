@@ -7,8 +7,7 @@ import 'package:video_player/video_player.dart';
 
 class PostVideoPost extends ConsumerWidget {
   const PostVideoPost({
-    super.key,
-    required this.post,
+    required this.post, super.key,
   });
 
   final Post post;

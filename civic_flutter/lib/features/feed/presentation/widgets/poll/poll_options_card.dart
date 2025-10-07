@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PollOptionsCard extends ConsumerWidget {
   const PollOptionsCard({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -100,7 +100,9 @@ class PollOptionsCard extends ConsumerWidget {
                     children: [
                       Text(
                         totalVotes != 0
-                            ? '${((numberOfVotes / totalVotes) * 100).toStringAsFixed(2)}%'
+                            ? '${((numberOfVotes / totalVotes) * 100).toStringAsFixed(
+                                2,
+                              )}%'
                             : '0.00%',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(

@@ -6,22 +6,181 @@ part of 'project_screen_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectScreenWidgetsHash() =>
-    r'4d3c7878d81fbe7dedce5565784eb3d673a2b1ac';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [ProjectScreenWidgets].
 @ProviderFor(ProjectScreenWidgets)
-final projectScreenWidgetsProvider = AutoDisposeNotifierProvider<
-    ProjectScreenWidgets, ProjectScreenState>.internal(
-  ProjectScreenWidgets.new,
-  name: r'projectScreenWidgetsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectScreenWidgetsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectScreenWidgetsProvider = ProjectScreenWidgetsProvider._();
 
-typedef _$ProjectScreenWidgets = AutoDisposeNotifier<ProjectScreenState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ProjectScreenWidgetsProvider
+    extends $NotifierProvider<ProjectScreenWidgets, ProjectScreenState> {
+  const ProjectScreenWidgetsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectScreenWidgetsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectScreenWidgetsHash();
+
+  @$internal
+  @override
+  ProjectScreenWidgets create() => ProjectScreenWidgets();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectScreenState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ProjectScreenState>(value),
+    );
+  }
+}
+
+String _$projectScreenWidgetsHash() =>
+    r'0bad9cd9a7d344024edbb8b226d622edb5264936';
+
+abstract class _$ProjectScreenWidgets extends $Notifier<ProjectScreenState> {
+  ProjectScreenState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<ProjectScreenState, ProjectScreenState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ProjectScreenState, ProjectScreenState>,
+        ProjectScreenState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(projectVsync)
+const projectVsyncProvider = ProjectVsyncProvider._();
+
+final class ProjectVsyncProvider
+    extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
+    with $Provider<TickerProvider> {
+  const ProjectVsyncProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectVsyncProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectVsyncHash();
+
+  @$internal
+  @override
+  $ProviderElement<TickerProvider> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TickerProvider create(Ref ref) {
+    return projectVsync(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TickerProvider value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TickerProvider>(value),
+    );
+  }
+}
+
+String _$projectVsyncHash() => r'53dc07f00685291f9ff2218ba8a82e87c06a06be';
+
+@ProviderFor(projectCardVsync)
+const projectCardVsyncProvider = ProjectCardVsyncProvider._();
+
+final class ProjectCardVsyncProvider
+    extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
+    with $Provider<TickerProvider> {
+  const ProjectCardVsyncProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectCardVsyncProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectCardVsyncHash();
+
+  @$internal
+  @override
+  $ProviderElement<TickerProvider> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TickerProvider create(Ref ref) {
+    return projectCardVsync(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TickerProvider value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TickerProvider>(value),
+    );
+  }
+}
+
+String _$projectCardVsyncHash() => r'97c42cc37d6e81e13ee416c489b1fa13aa1d6063';
+
+@ProviderFor(projectScreenTab)
+const projectScreenTabProvider = ProjectScreenTabProvider._();
+
+final class ProjectScreenTabProvider extends $FunctionalProvider<
+    Raw<TabController>,
+    Raw<TabController>,
+    Raw<TabController>> with $Provider<Raw<TabController>> {
+  const ProjectScreenTabProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectScreenTabProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectScreenTabHash();
+
+  @$internal
+  @override
+  $ProviderElement<Raw<TabController>> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Raw<TabController> create(Ref ref) {
+    return projectScreenTab(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<TabController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<TabController>>(value),
+    );
+  }
+}
+
+String _$projectScreenTabHash() => r'd64cbbe97676a69578ab6382451985a4a6449c90';

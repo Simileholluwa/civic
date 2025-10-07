@@ -15,7 +15,7 @@ class ProjectRoutes {
       GoRoute(
         path: namespace,
         builder: (_, state) {
-          return ProjectsScreen();
+          return const ProjectsScreen();
         },
         routes: [
           GoRoute(

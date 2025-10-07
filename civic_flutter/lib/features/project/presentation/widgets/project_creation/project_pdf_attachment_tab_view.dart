@@ -7,8 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectPDFAttachmentsTabView extends ConsumerWidget {
   const ProjectPDFAttachmentsTabView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;

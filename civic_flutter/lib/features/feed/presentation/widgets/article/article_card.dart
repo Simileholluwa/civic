@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 
 class ArticleCard extends ConsumerWidget {
   const ArticleCard({
-    super.key,
     required this.post,
+    super.key,
     this.onTap,
     this.fromDetails = false,
   });
@@ -31,8 +31,8 @@ class ArticleCard extends ConsumerWidget {
       onTap: fromDetails
           ? null
           : onTap ??
-              () {
-                context.push(
+              () async {
+                await context.push(
                   '/feed/article/${post.id}',
                   extra: newPost,
                 );
@@ -100,7 +100,7 @@ class ArticleCard extends ConsumerWidget {
                         ),
                         color: Theme.of(context).primaryColor,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Article',
                         style: TextStyle(
                           fontSize: 14,
@@ -130,8 +130,8 @@ class ArticleCard extends ConsumerWidget {
           if (!fromDetails)
             PostInteractionButtons(
               post: newPost,
-              onReply: () {
-                context.push(
+              onReply: () async {
+                await context.push(
                   '/feed/post/${post.id}/comments',
                 );
               },

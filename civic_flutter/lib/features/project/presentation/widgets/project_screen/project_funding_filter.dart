@@ -15,11 +15,10 @@ class ProjectFundingFilter extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16, 0, 20, 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...fundingSources.keys.toList().asMap().entries.map(
             (entry) {

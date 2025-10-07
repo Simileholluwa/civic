@@ -2,7 +2,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:fpdart/fpdart.dart';
 
-class TogglePostBookmarkUseCase implements UseCase<void, TogglePostBookmarkParams> {
+class TogglePostBookmarkUseCase
+    implements UseCase<void, TogglePostBookmarkParams> {
   TogglePostBookmarkUseCase({required FeedRepository feedRepository})
       : _feedRepository = feedRepository;
   final FeedRepository _feedRepository;

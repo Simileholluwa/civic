@@ -8,9 +8,9 @@ import 'package:iconsax/iconsax.dart';
 
 class ContentCreatorInfo extends StatelessWidget {
   const ContentCreatorInfo({
-    super.key,
     required this.creator,
     required this.timeAgo,
+    super.key,
     this.radius = 25,
     this.showPoliticalStatus = true,
   });
@@ -31,8 +31,8 @@ class ContentCreatorInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {
-                context.push(
+              onTap: () async {
+                await context.push(
                   '/profile/${creator.id}',
                 );
               },
@@ -62,8 +62,8 @@ class ContentCreatorInfo extends StatelessWidget {
 
 class CreatorNameAndAccountInfo extends StatelessWidget {
   const CreatorNameAndAccountInfo({
-    super.key,
     required this.creator,
+    super.key,
     this.showPoliticalStatus = true,
   });
 
@@ -103,8 +103,8 @@ class CreatorNameAndAccountInfo extends StatelessWidget {
 
 class UserQuickDetails extends StatelessWidget {
   const UserQuickDetails({
-    super.key,
     required this.creator,
+    super.key,
     this.alignment = MainAxisAlignment.start,
   });
 

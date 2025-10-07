@@ -6,173 +6,102 @@ part of 'paginated_replies_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedRepliesListHash() =>
-    r'bc505662cd24f662fb4e4c0d9f7997e6c8e18f90';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$PaginatedRepliesList
-    extends BuildlessAutoDisposeNotifier<PagingStatus> {
-  late final int commentId;
-
-  PagingStatus build(
-    int commentId,
-  );
-}
-
-/// See also [PaginatedRepliesList].
 @ProviderFor(PaginatedRepliesList)
-const paginatedRepliesListProvider = PaginatedRepliesListFamily();
+const paginatedRepliesListProvider = PaginatedRepliesListFamily._();
 
-/// See also [PaginatedRepliesList].
-class PaginatedRepliesListFamily extends Family<PagingStatus> {
-  /// See also [PaginatedRepliesList].
-  const PaginatedRepliesListFamily();
-
-  /// See also [PaginatedRepliesList].
-  PaginatedRepliesListProvider call(
-    int commentId,
-  ) {
-    return PaginatedRepliesListProvider(
-      commentId,
-    );
-  }
-
-  @override
-  PaginatedRepliesListProvider getProviderOverride(
-    covariant PaginatedRepliesListProvider provider,
-  ) {
-    return call(
-      provider.commentId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'paginatedRepliesListProvider';
-}
-
-/// See also [PaginatedRepliesList].
-class PaginatedRepliesListProvider extends AutoDisposeNotifierProviderImpl<
-    PaginatedRepliesList, PagingStatus> {
-  /// See also [PaginatedRepliesList].
-  PaginatedRepliesListProvider(
-    int commentId,
-  ) : this._internal(
-          () => PaginatedRepliesList()..commentId = commentId,
-          from: paginatedRepliesListProvider,
+final class PaginatedRepliesListProvider
+    extends $NotifierProvider<PaginatedRepliesList, PagingStatus> {
+  const PaginatedRepliesListProvider._(
+      {required PaginatedRepliesListFamily super.from,
+      required int super.argument})
+      : super(
+          retry: null,
           name: r'paginatedRepliesListProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$paginatedRepliesListHash,
-          dependencies: PaginatedRepliesListFamily._dependencies,
-          allTransitiveDependencies:
-              PaginatedRepliesListFamily._allTransitiveDependencies,
-          commentId: commentId,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  PaginatedRepliesListProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.commentId,
-  }) : super.internal();
-
-  final int commentId;
+  @override
+  String debugGetCreateSourceHash() => _$paginatedRepliesListHash();
 
   @override
-  PagingStatus runNotifierBuild(
-    covariant PaginatedRepliesList notifier,
-  ) {
-    return notifier.build(
-      commentId,
-    );
+  String toString() {
+    return r'paginatedRepliesListProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(PaginatedRepliesList Function() create) {
-    return ProviderOverride(
+  PaginatedRepliesList create() => PaginatedRepliesList();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PagingStatus value) {
+    return $ProviderOverride(
       origin: this,
-      override: PaginatedRepliesListProvider._internal(
-        () => create()..commentId = commentId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        commentId: commentId,
-      ),
+      providerOverride: $SyncValueProvider<PagingStatus>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<PaginatedRepliesList, PagingStatus>
-      createElement() {
-    return _PaginatedRepliesListProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PaginatedRepliesListProvider &&
-        other.commentId == commentId;
+    return other is PaginatedRepliesListProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, commentId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PaginatedRepliesListRef on AutoDisposeNotifierProviderRef<PagingStatus> {
-  /// The parameter `commentId` of this provider.
-  int get commentId;
-}
+String _$paginatedRepliesListHash() =>
+    r'f5ed95fc57c4a6529e2b265b35a87e8e0daba26b';
 
-class _PaginatedRepliesListProviderElement
-    extends AutoDisposeNotifierProviderElement<PaginatedRepliesList,
-        PagingStatus> with PaginatedRepliesListRef {
-  _PaginatedRepliesListProviderElement(super.provider);
+final class PaginatedRepliesListFamily extends $Family
+    with
+        $ClassFamilyOverride<PaginatedRepliesList, PagingStatus, PagingStatus,
+            PagingStatus, int> {
+  const PaginatedRepliesListFamily._()
+      : super(
+          retry: null,
+          name: r'paginatedRepliesListProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  PaginatedRepliesListProvider call(
+    int commentId,
+  ) =>
+      PaginatedRepliesListProvider._(argument: commentId, from: this);
 
   @override
-  int get commentId => (origin as PaginatedRepliesListProvider).commentId;
+  String toString() => r'paginatedRepliesListProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$PaginatedRepliesList extends $Notifier<PagingStatus> {
+  late final _$args = ref.$arg as int;
+  int get commentId => _$args;
+
+  PagingStatus build(
+    int commentId,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PagingStatus, PagingStatus>,
+        PagingStatus,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

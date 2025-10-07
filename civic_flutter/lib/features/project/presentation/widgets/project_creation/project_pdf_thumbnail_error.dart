@@ -1,7 +1,7 @@
-import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectPdfThumbnailError extends ConsumerWidget {
   const ProjectPdfThumbnailError({
@@ -50,7 +50,7 @@ class ProjectPdfThumbnailError extends ConsumerWidget {
             icon: const Icon(
               Icons.refresh_sharp,
             ),
-          )
+          ),
         ],
       ),
     );

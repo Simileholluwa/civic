@@ -6,172 +6,97 @@ part of 'get_comment_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getCommentHash() => r'fe3d3046939b7d2d362475b83848126eb589145e';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [getComment].
 @ProviderFor(getComment)
-const getCommentProvider = GetCommentFamily();
+const getCommentProvider = GetCommentFamily._();
 
-/// See also [getComment].
-class GetCommentFamily extends Family<AsyncValue<Post>> {
-  /// See also [getComment].
-  const GetCommentFamily();
-
-  /// See also [getComment].
-  GetCommentProvider call(
-    int commentId,
-    bool isComment,
-  ) {
-    return GetCommentProvider(
-      commentId,
-      isComment,
-    );
-  }
-
-  @override
-  GetCommentProvider getProviderOverride(
-    covariant GetCommentProvider provider,
-  ) {
-    return call(
-      provider.commentId,
-      provider.isComment,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'getCommentProvider';
-}
-
-/// See also [getComment].
-class GetCommentProvider extends AutoDisposeFutureProvider<Post> {
-  /// See also [getComment].
-  GetCommentProvider(
-    int commentId,
-    bool isComment,
-  ) : this._internal(
-          (ref) => getComment(
-            ref as GetCommentRef,
-            commentId,
-            isComment,
-          ),
-          from: getCommentProvider,
+final class GetCommentProvider
+    extends $FunctionalProvider<AsyncValue<Post>, Post, FutureOr<Post>>
+    with $FutureModifier<Post>, $FutureProvider<Post> {
+  const GetCommentProvider._(
+      {required GetCommentFamily super.from,
+      required (
+        int,
+        bool,
+      )
+          super.argument})
+      : super(
+          retry: null,
           name: r'getCommentProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$getCommentHash,
-          dependencies: GetCommentFamily._dependencies,
-          allTransitiveDependencies:
-              GetCommentFamily._allTransitiveDependencies,
-          commentId: commentId,
-          isComment: isComment,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  GetCommentProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.commentId,
-    required this.isComment,
-  }) : super.internal();
-
-  final int commentId;
-  final bool isComment;
+  @override
+  String debugGetCreateSourceHash() => _$getCommentHash();
 
   @override
-  Override overrideWith(
-    FutureOr<Post> Function(GetCommentRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: GetCommentProvider._internal(
-        (ref) => create(ref as GetCommentRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        commentId: commentId,
-        isComment: isComment,
-      ),
-    );
+  String toString() {
+    return r'getCommentProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  AutoDisposeFutureProviderElement<Post> createElement() {
-    return _GetCommentProviderElement(this);
+  $FutureProviderElement<Post> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Post> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      bool,
+    );
+    return getComment(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetCommentProvider &&
-        other.commentId == commentId &&
-        other.isComment == isComment;
+    return other is GetCommentProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, commentId.hashCode);
-    hash = _SystemHash.combine(hash, isComment.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin GetCommentRef on AutoDisposeFutureProviderRef<Post> {
-  /// The parameter `commentId` of this provider.
-  int get commentId;
+String _$getCommentHash() => r'b7bd071ba93305193cd7de075dc1c31b2f6ae489';
 
-  /// The parameter `isComment` of this provider.
-  bool get isComment;
-}
+final class GetCommentFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<Post>,
+            (
+              int,
+              bool,
+            )> {
+  const GetCommentFamily._()
+      : super(
+          retry: null,
+          name: r'getCommentProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
 
-class _GetCommentProviderElement extends AutoDisposeFutureProviderElement<Post>
-    with GetCommentRef {
-  _GetCommentProviderElement(super.provider);
+  GetCommentProvider call(
+    int commentId,
+    bool isComment,
+  ) =>
+      GetCommentProvider._(argument: (
+        commentId,
+        isComment,
+      ), from: this);
 
   @override
-  int get commentId => (origin as GetCommentProvider).commentId;
-  @override
-  bool get isComment => (origin as GetCommentProvider).isComment;
+  String toString() => r'getCommentProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -8,27 +8,27 @@ class PoliticalStatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppAndroidBottomNav(
+    return const AppAndroidBottomNav(
       child: Scaffold(
-        appBar: const AuthAppBar(
+        appBar: AuthAppBar(
           icon: Iconsax.arrow_left_2,
         ),
         body: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(
+          physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.all(
             TSizes.defaultSpace,
           ),
           child: Column(
             children: [
-              const AuthHeader(
+              AuthHeader(
                 authTitle: 'Political status',
                 authSubTitle:
                     'Civic will be configured based on your political status.',
               ),
-              const SizedBox(
+              SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              const PoliticalStatusOptions(),
+              PoliticalStatusOptions(),
             ],
           ),
         ),

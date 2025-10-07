@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_player/video_player.dart';
 part 'post_video_player_provider.g.dart';
@@ -9,84 +8,67 @@ part 'post_video_player_provider.g.dart';
 class PostVideoPlayer extends _$PostVideoPlayer {
   @override
   Raw<VideoPlayerController?> build(String videoUrl) {
-    ref.onDispose(() {
-      state?.dispose();
+    ref.onDispose(() async {
+      await state?.dispose();
     });
-    var videoFile = '';
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
     final isUrlVideo = regex.hasMatch(videoUrl);
     if (isUrlVideo) {
-      final data = ref.watch(
-        getVideoProvider(
-          videoUrl,
-        ),
-      );
-      data.when(
-        data: (value) {
-          videoFile = value;
-        },
-        loading: () {
-          videoFile = '';
-        },
-        error: (error, stack) {
-          videoFile = '';
-        },
-      );
-    } else {
-      videoFile = videoUrl;
-    }
-    if (videoFile.isNotEmpty) {
-      final file = File(
-        videoFile,
-      );
-      final player = VideoPlayerController?.file(
-        file,
-      )..initialize().then((_) {
-          state?.pause();
-          state?.setLooping(true);
+      final player = VideoPlayerController?.networkUrl(
+        Uri.parse(videoUrl),
+      )..initialize().then((_) async {
+          await state?.pause();
+          await state?.setLooping(true);
           ref.notifyListeners();
         });
 
       return player;
     } else {
-      return null;
+      final player = VideoPlayerController?.file(
+        File(videoUrl),
+      )..initialize().then((_) async {
+          await state?.pause();
+          await state?.setLooping(true);
+          ref.notifyListeners();
+        });
+
+      return player;
     }
-    
   }
 
-  void pausePlay() {
+  Future<void> pausePlay() async {
     if (state != null) {
       if (state!.value.isPlaying) {
-        state!.pause();
+        await state!.pause();
       } else {
-        state!.play();
+        await state!.play();
       }
       ref.notifyListeners();
     }
   }
 
-  void muteUnmute() {
+  Future<void> muteUnmute() async {
     if (state != null) {
       if (state!.value.volume > 0) {
-        state!.setVolume(0);
+        await state!.setVolume(0);
       } else {
-        state!.setVolume(1);
+        await state!.setVolume(1);
       }
       ref.notifyListeners();
     }
   }
 
-  void dispose() {
+  Future<void> dispose() async {
     if (state != null) {
-      state!.dispose();
+      await state!.dispose();
       ref.notifyListeners();
     }
   }
 
-  void pause() {
+  Future<void> pause() async {
     if (state != null) {
       if (state!.value.isPlaying) {
-        state!.pause();
+        await state!.pause();
       }
     }
   }

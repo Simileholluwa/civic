@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class ShareOpinion extends StatelessWidget {
   const ShareOpinion({
-    super.key,
-    required this.imageUrl,
-    required this.onTap,
+    required this.imageUrl, required this.onTap, super.key,
   });
 
   final String imageUrl;
@@ -29,7 +27,7 @@ class ShareOpinion extends StatelessWidget {
               imageUrl: imageUrl,
               radius: 23,
             ),
-            Text('Share your opinion'),
+            const Text('Share your opinion'),
           ],
         ),
       ),

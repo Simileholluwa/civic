@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectInteractionButtons extends ConsumerWidget {
   const ProjectInteractionButtons({
-    super.key,
     required this.project,
+    super.key,
   });
   final Project project;
 
@@ -48,8 +48,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
           icon: Iconsax.repeate_music,
           onTap: projectCardState.isDeleted!
               ? null
-              : () {
-                  context.push(
+              : () async {
+                  await context.push(
                     '/create/post/0',
                     extra: {
                       'project': project,
@@ -70,8 +70,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
             text: projectCardState.numberOfReviews!,
             onTap: projectCardState.isDeleted!
                 ? null
-                : () {
-                    context.push(
+                : () async {
+                    await context.push(
                       '/project/${project.id}/review',
                     );
                   },
@@ -91,7 +91,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () async {
                     await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!, projectCardState.isBookmarked!,
+                      project.id!,
+                      projectCardState.isBookmarked!,
                     );
                   },
             color: projectCardState.isDeleted!
@@ -108,10 +109,10 @@ class ProjectInteractionButtons extends ConsumerWidget {
             text: projectCardState.numberOfVettings!,
             onTap: projectCardState.isDeleted!
                 ? null
-                : () {
-                    context.push(
+                : () async {
+                    await context.push(
                       '/project/${project.id}/vet',
-                      extra: project.physicalLocations!,
+                      extra: project.physicalLocations,
                     );
                   },
             color: projectCardState.isDeleted!
@@ -123,7 +124,6 @@ class ProjectInteractionButtons extends ConsumerWidget {
         if (projectCardState.canEdit)
           ContentInteractionButton(
             icon: Iconsax.edit,
-            text: '',
             showText: false,
             color: projectCardState.isDeleted!
                 ? Theme.of(context).disabledColor
@@ -132,8 +132,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                     : Theme.of(context).hintColor,
             onTap: projectCardState.isDeleted!
                 ? null
-                : () {
-                    context.push(
+                : () async {
+                    await context.push(
                       '/create/project/${project.id}',
                       extra: project,
                     );
@@ -149,7 +149,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 ? null
                 : () async {
                     await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!, projectCardState.isBookmarked!,
+                      project.id!,
+                      projectCardState.isBookmarked!,
                     );
                   },
             color: projectCardState.isDeleted!
@@ -162,8 +163,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
           icon: Iconsax.more_circle,
           onTap: projectCardState.isDeleted!
               ? null
-              : () {
-                  showDialog(
+              : () async {
+                  await showDialog<dynamic>(
                     context: context,
                     builder: (ctx) {
                       return AlertDialog(

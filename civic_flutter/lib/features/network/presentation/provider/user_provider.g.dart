@@ -6,21 +6,52 @@ part of 'user_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(CurrentActiveUser)
+const currentActiveUserProvider = CurrentActiveUserProvider._();
+
+final class CurrentActiveUserProvider
+    extends $NotifierProvider<CurrentActiveUser, UserState> {
+  const CurrentActiveUserProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'currentActiveUserProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$currentActiveUserHash();
+
+  @$internal
+  @override
+  CurrentActiveUser create() => CurrentActiveUser();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UserState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UserState>(value),
+    );
+  }
+}
+
 String _$currentActiveUserHash() => r'ab84756f7d59ae7fe0ac7bd521cbfd7fbb0ae694';
 
-/// See also [CurrentActiveUser].
-@ProviderFor(CurrentActiveUser)
-final currentActiveUserProvider =
-    AutoDisposeNotifierProvider<CurrentActiveUser, UserState>.internal(
-  CurrentActiveUser.new,
-  name: r'currentActiveUserProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentActiveUserHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$CurrentActiveUser = AutoDisposeNotifier<UserState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$CurrentActiveUser extends $Notifier<UserState> {
+  UserState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<UserState, UserState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<UserState, UserState>, UserState, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

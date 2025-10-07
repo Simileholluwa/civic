@@ -7,10 +7,10 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectSelectedLocations extends ConsumerWidget {
   const ProjectSelectedLocations({
-    super.key,
     required this.project,
     required this.isVirtual,
     required this.isPhysical,
+    super.key,
   });
 
   final bool isPhysical;
@@ -23,8 +23,12 @@ class ProjectSelectedLocations extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     List<dynamic>? locations;
-    if (isVirtual) locations = projectCreationSate.virtualLocations ?? <String>[];
-    if (isPhysical) locations = projectCreationSate.physicalLocations;
+    if (isVirtual) {
+      locations = projectCreationSate.virtualLocations ?? <String>[];
+    }
+    if (isPhysical) {
+      locations = projectCreationSate.physicalLocations;
+    }
     return Flexible(
       child: ListView.separated(
         shrinkWrap: true,
@@ -37,12 +41,10 @@ class ProjectSelectedLocations extends ConsumerWidget {
                 child: AppTextField(
                   textController: TextEditingController(
                     text: isPhysical
-                        ? locations![index].place
-                        : locations![index],
+                        ? (locations![index] as AWSPlaces).place
+                        : '${locations![index]}',
                   ),
-                  prefixIcon: isVirtual
-                          ? Iconsax.link
-                          : Iconsax.location,
+                  prefixIcon: isVirtual ? Iconsax.link : Iconsax.location,
                   maxLines: 1,
                   validator: null,
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -73,14 +75,13 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         icon: const Icon(
                           Icons.edit,
                         ),
-                        onPressed: () {
-                          
+                        onPressed: () async {
                           if (isVirtual) {
-                            virtualLinkDialog(
+                            await virtualLinkDialog(
                               context: context,
                               project: project,
                               index: index,
-                              link: locations![index],
+                              link: locations![index] as String,
                             );
                           }
                         },
@@ -104,7 +105,6 @@ class ProjectSelectedLocations extends ConsumerWidget {
                         color: TColors.secondary,
                       ),
                       onPressed: () {
-                       
                         if (isVirtual) {
                           projectNotifier.removeVirtualLocation(
                             projectCreationSate.virtualLocations![index],

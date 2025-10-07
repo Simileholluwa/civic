@@ -10,8 +10,8 @@ import 'package:transparent_image/transparent_image.dart';
 
 class PostImagePost extends ConsumerWidget {
   const PostImagePost({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -19,10 +19,10 @@ class PostImagePost extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    int current = ref.watch(pageChangedProvider);
+    final current = ref.watch(pageChangedProvider);
     final postState = ref.watch(
       feedProvider(post),
-    );  
+    );
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 500,
@@ -39,9 +39,9 @@ class PostImagePost extends ConsumerWidget {
               maxHeight: 500,
             ),
             decoration: BoxDecoration(
-              border:  Border.all(
-                      color: Theme.of(context).dividerColor,
-                    ),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+              ),
               borderRadius: BorderRadius.circular(
                 TSizes.md,
               ),
@@ -49,23 +49,21 @@ class PostImagePost extends ConsumerWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(
-                      TSizes.md,
-                    )
-                  ,
+                TSizes.md,
+              ),
               child: CarouselSlider(
                 options: CarouselOptions(
-                    scrollPhysics: const ClampingScrollPhysics(),
-                    height: 498,
-                    enableInfiniteScroll: false,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      ref
-                          .read(pageChangedProvider.notifier)
-                          .carouselPageChanged(
-                            index,
-                            reason,
-                          );
-                    }),
+                  scrollPhysics: const ClampingScrollPhysics(),
+                  height: 498,
+                  enableInfiniteScroll: false,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    ref.read(pageChangedProvider.notifier).carouselPageChanged(
+                          index,
+                          reason,
+                        );
+                  },
+                ),
                 items: postState.imageUrls.map((image) {
                   return Builder(
                     builder: (BuildContext context) {
@@ -74,8 +72,8 @@ class PostImagePost extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(
-                                  TSizes.md,
-                                ),
+                            TSizes.md,
+                          ),
                         ),
                         child: FadeInImage(
                           image: regex.hasMatch(image)
@@ -116,23 +114,28 @@ class PostImagePost extends ConsumerWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: postState.imageUrls.asMap().entries.map((entry) {
+                      children:
+                          postState.imageUrls.asMap().entries.map((entry) {
                         return Container(
-                          width: 12.0,
-                          height: 12.0,
+                          width: 12,
+                          height: 12,
                           margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 4.0),
+                            vertical: 8,
+                            horizontal: 4,
+                          ),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withValues(alpha:
-                              current == entry.key ? 0.9 : 0.4,
+                            color: Colors.white.withValues(
+                              alpha: current == entry.key ? 0.9 : 0.4,
                             ),
                           ),
                         );
                       }).toList(),
                     ),
                   ),
-                PostImageOptions(post: post,),
+                PostImageOptions(
+                  post: post,
+                ),
               ],
             ),
         ],

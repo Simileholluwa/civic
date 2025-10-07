@@ -6,172 +6,101 @@ part of 'project_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectProviderHash() => r'9efbc9530400a7a98c6a393197e48a60f5c46200';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ProjectProvider
-    extends BuildlessAutoDisposeNotifier<ProjectCreationState> {
-  late final Project? project;
-
-  ProjectCreationState build(
-    Project? project,
-  );
-}
-
-/// See also [ProjectProvider].
 @ProviderFor(ProjectProvider)
-const projectProviderProvider = ProjectProviderFamily();
+const projectProviderProvider = ProjectProviderFamily._();
 
-/// See also [ProjectProvider].
-class ProjectProviderFamily extends Family<ProjectCreationState> {
-  /// See also [ProjectProvider].
-  const ProjectProviderFamily();
-
-  /// See also [ProjectProvider].
-  ProjectProviderProvider call(
-    Project? project,
-  ) {
-    return ProjectProviderProvider(
-      project,
-    );
-  }
-
-  @override
-  ProjectProviderProvider getProviderOverride(
-    covariant ProjectProviderProvider provider,
-  ) {
-    return call(
-      provider.project,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'projectProviderProvider';
-}
-
-/// See also [ProjectProvider].
-class ProjectProviderProvider extends AutoDisposeNotifierProviderImpl<
-    ProjectProvider, ProjectCreationState> {
-  /// See also [ProjectProvider].
-  ProjectProviderProvider(
-    Project? project,
-  ) : this._internal(
-          () => ProjectProvider()..project = project,
-          from: projectProviderProvider,
+final class ProjectProviderProvider
+    extends $NotifierProvider<ProjectProvider, ProjectCreationState> {
+  const ProjectProviderProvider._(
+      {required ProjectProviderFamily super.from,
+      required Project? super.argument})
+      : super(
+          retry: null,
           name: r'projectProviderProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$projectProviderHash,
-          dependencies: ProjectProviderFamily._dependencies,
-          allTransitiveDependencies:
-              ProjectProviderFamily._allTransitiveDependencies,
-          project: project,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ProjectProviderProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.project,
-  }) : super.internal();
-
-  final Project? project;
+  @override
+  String debugGetCreateSourceHash() => _$projectProviderHash();
 
   @override
-  ProjectCreationState runNotifierBuild(
-    covariant ProjectProvider notifier,
-  ) {
-    return notifier.build(
-      project,
-    );
+  String toString() {
+    return r'projectProviderProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(ProjectProvider Function() create) {
-    return ProviderOverride(
+  ProjectProvider create() => ProjectProvider();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectCreationState value) {
+    return $ProviderOverride(
       origin: this,
-      override: ProjectProviderProvider._internal(
-        () => create()..project = project,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        project: project,
-      ),
+      providerOverride: $SyncValueProvider<ProjectCreationState>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ProjectProvider, ProjectCreationState>
-      createElement() {
-    return _ProjectProviderProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectProviderProvider && other.project == project;
+    return other is ProjectProviderProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, project.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ProjectProviderRef
-    on AutoDisposeNotifierProviderRef<ProjectCreationState> {
-  /// The parameter `project` of this provider.
-  Project? get project;
-}
+String _$projectProviderHash() => r'f3fa335a3981c8d20a35421bab69bcd9647a264e';
 
-class _ProjectProviderProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectProvider,
-        ProjectCreationState> with ProjectProviderRef {
-  _ProjectProviderProviderElement(super.provider);
+final class ProjectProviderFamily extends $Family
+    with
+        $ClassFamilyOverride<ProjectProvider, ProjectCreationState,
+            ProjectCreationState, ProjectCreationState, Project?> {
+  const ProjectProviderFamily._()
+      : super(
+          retry: null,
+          name: r'projectProviderProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ProjectProviderProvider call(
+    Project? project,
+  ) =>
+      ProjectProviderProvider._(argument: project, from: this);
 
   @override
-  Project? get project => (origin as ProjectProviderProvider).project;
+  String toString() => r'projectProviderProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$ProjectProvider extends $Notifier<ProjectCreationState> {
+  late final _$args = ref.$arg as Project?;
+  Project? get project => _$args;
+
+  ProjectCreationState build(
+    Project? project,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<ProjectCreationState, ProjectCreationState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ProjectCreationState, ProjectCreationState>,
+        ProjectCreationState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

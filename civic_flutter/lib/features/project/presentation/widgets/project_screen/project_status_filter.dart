@@ -18,7 +18,7 @@ class ProjectStatusFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16, 0, 20, 0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,7 @@ class ProjectStatusFilter extends ConsumerWidget {
                     },
                     prefixIcon: Iconsax.percentage_square,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
                         ),
                   ),
                 ),
@@ -87,7 +87,7 @@ class ProjectStatusFilter extends ConsumerWidget {
                     textInputType: TextInputType.number,
                     prefixIcon: Iconsax.percentage_square5,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
                         ),
                   ),
                 ),

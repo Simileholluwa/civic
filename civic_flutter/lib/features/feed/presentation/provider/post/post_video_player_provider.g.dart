@@ -6,301 +6,180 @@ part of 'post_video_player_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getVideoHash() => r'76a72c5a928893586f4f5c664b03f092f596979c';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
+@ProviderFor(PostVideoPlayer)
+const postVideoPlayerProvider = PostVideoPlayerFamily._();
 
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [getVideo].
-@ProviderFor(getVideo)
-const getVideoProvider = GetVideoFamily();
-
-/// See also [getVideo].
-class GetVideoFamily extends Family<AsyncValue<String>> {
-  /// See also [getVideo].
-  const GetVideoFamily();
-
-  /// See also [getVideo].
-  GetVideoProvider call(
-    String videoUrl,
-  ) {
-    return GetVideoProvider(
-      videoUrl,
-    );
-  }
-
-  @override
-  GetVideoProvider getProviderOverride(
-    covariant GetVideoProvider provider,
-  ) {
-    return call(
-      provider.videoUrl,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'getVideoProvider';
-}
-
-/// See also [getVideo].
-class GetVideoProvider extends AutoDisposeFutureProvider<String> {
-  /// See also [getVideo].
-  GetVideoProvider(
-    String videoUrl,
-  ) : this._internal(
-          (ref) => getVideo(
-            ref as GetVideoRef,
-            videoUrl,
-          ),
-          from: getVideoProvider,
-          name: r'getVideoProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$getVideoHash,
-          dependencies: GetVideoFamily._dependencies,
-          allTransitiveDependencies: GetVideoFamily._allTransitiveDependencies,
-          videoUrl: videoUrl,
+final class PostVideoPlayerProvider
+    extends $NotifierProvider<PostVideoPlayer, Raw<VideoPlayerController?>?> {
+  const PostVideoPlayerProvider._(
+      {required PostVideoPlayerFamily super.from,
+      required String super.argument})
+      : super(
+          retry: null,
+          name: r'postVideoPlayerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  GetVideoProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.videoUrl,
-  }) : super.internal();
-
-  final String videoUrl;
+  @override
+  String debugGetCreateSourceHash() => _$postVideoPlayerHash();
 
   @override
-  Override overrideWith(
-    FutureOr<String> Function(GetVideoRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: GetVideoProvider._internal(
-        (ref) => create(ref as GetVideoRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        videoUrl: videoUrl,
-      ),
-    );
+  String toString() {
+    return r'postVideoPlayerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AutoDisposeFutureProviderElement<String> createElement() {
-    return _GetVideoProviderElement(this);
+  PostVideoPlayer create() => PostVideoPlayer();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<VideoPlayerController?>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<VideoPlayerController?>?>(value),
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetVideoProvider && other.videoUrl == videoUrl;
+    return other is PostVideoPlayerProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, videoUrl.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin GetVideoRef on AutoDisposeFutureProviderRef<String> {
-  /// The parameter `videoUrl` of this provider.
-  String get videoUrl;
-}
+String _$postVideoPlayerHash() => r'a8b69c316a53550bcf7f83ac08f38c76a812737c';
 
-class _GetVideoProviderElement extends AutoDisposeFutureProviderElement<String>
-    with GetVideoRef {
-  _GetVideoProviderElement(super.provider);
+final class PostVideoPlayerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+            PostVideoPlayer,
+            Raw<VideoPlayerController?>?,
+            Raw<VideoPlayerController?>?,
+            Raw<VideoPlayerController?>?,
+            String> {
+  const PostVideoPlayerFamily._()
+      : super(
+          retry: null,
+          name: r'postVideoPlayerProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
 
-  @override
-  String get videoUrl => (origin as GetVideoProvider).videoUrl;
-}
-
-String _$postVideoPlayerHash() => r'25bfdda1603977f9f8a830f3a40aa190a8aaa855';
-
-abstract class _$PostVideoPlayer
-    extends BuildlessAutoDisposeNotifier<Raw<VideoPlayerController?>> {
-  late final String videoUrl;
-
-  Raw<VideoPlayerController?> build(
-    String videoUrl,
-  );
-}
-
-/// See also [PostVideoPlayer].
-@ProviderFor(PostVideoPlayer)
-const postVideoPlayerProvider = PostVideoPlayerFamily();
-
-/// See also [PostVideoPlayer].
-class PostVideoPlayerFamily extends Family<Raw<VideoPlayerController?>> {
-  /// See also [PostVideoPlayer].
-  const PostVideoPlayerFamily();
-
-  /// See also [PostVideoPlayer].
   PostVideoPlayerProvider call(
     String videoUrl,
-  ) {
-    return PostVideoPlayerProvider(
-      videoUrl,
-    );
-  }
+  ) =>
+      PostVideoPlayerProvider._(argument: videoUrl, from: this);
 
   @override
-  PostVideoPlayerProvider getProviderOverride(
-    covariant PostVideoPlayerProvider provider,
-  ) {
-    return call(
-      provider.videoUrl,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'postVideoPlayerProvider';
+  String toString() => r'postVideoPlayerProvider';
 }
 
-/// See also [PostVideoPlayer].
-class PostVideoPlayerProvider extends AutoDisposeNotifierProviderImpl<
-    PostVideoPlayer, Raw<VideoPlayerController?>> {
-  /// See also [PostVideoPlayer].
-  PostVideoPlayerProvider(
+abstract class _$PostVideoPlayer
+    extends $Notifier<Raw<VideoPlayerController?>?> {
+  late final _$args = ref.$arg as String;
+  String get videoUrl => _$args;
+
+  Raw<VideoPlayerController?>? build(
     String videoUrl,
-  ) : this._internal(
-          () => PostVideoPlayer()..videoUrl = videoUrl,
-          from: postVideoPlayerProvider,
-          name: r'postVideoPlayerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$postVideoPlayerHash,
-          dependencies: PostVideoPlayerFamily._dependencies,
-          allTransitiveDependencies:
-              PostVideoPlayerFamily._allTransitiveDependencies,
-          videoUrl: videoUrl,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref
+        as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>,
+        Raw<VideoPlayerController?>?,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(getVideo)
+const getVideoProvider = GetVideoFamily._();
+
+final class GetVideoProvider
+    extends $FunctionalProvider<AsyncValue<String>, String, FutureOr<String>>
+    with $FutureModifier<String>, $FutureProvider<String> {
+  const GetVideoProvider._(
+      {required GetVideoFamily super.from, required String super.argument})
+      : super(
+          retry: null,
+          name: r'getVideoProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  PostVideoPlayerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.videoUrl,
-  }) : super.internal();
-
-  final String videoUrl;
+  @override
+  String debugGetCreateSourceHash() => _$getVideoHash();
 
   @override
-  Raw<VideoPlayerController?> runNotifierBuild(
-    covariant PostVideoPlayer notifier,
-  ) {
-    return notifier.build(
-      videoUrl,
-    );
+  String toString() {
+    return r'getVideoProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(PostVideoPlayer Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: PostVideoPlayerProvider._internal(
-        () => create()..videoUrl = videoUrl,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        videoUrl: videoUrl,
-      ),
-    );
-  }
+  $FutureProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  AutoDisposeNotifierProviderElement<PostVideoPlayer,
-      Raw<VideoPlayerController?>> createElement() {
-    return _PostVideoPlayerProviderElement(this);
+  FutureOr<String> create(Ref ref) {
+    final argument = this.argument as String;
+    return getVideo(
+      ref,
+      argument,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PostVideoPlayerProvider && other.videoUrl == videoUrl;
+    return other is GetVideoProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, videoUrl.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PostVideoPlayerRef
-    on AutoDisposeNotifierProviderRef<Raw<VideoPlayerController?>> {
-  /// The parameter `videoUrl` of this provider.
-  String get videoUrl;
-}
+String _$getVideoHash() => r'76a72c5a928893586f4f5c664b03f092f596979c';
 
-class _PostVideoPlayerProviderElement
-    extends AutoDisposeNotifierProviderElement<PostVideoPlayer,
-        Raw<VideoPlayerController?>> with PostVideoPlayerRef {
-  _PostVideoPlayerProviderElement(super.provider);
+final class GetVideoFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<String>, String> {
+  const GetVideoFamily._()
+      : super(
+          retry: null,
+          name: r'getVideoProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  GetVideoProvider call(
+    String videoUrl,
+  ) =>
+      GetVideoProvider._(argument: videoUrl, from: this);
 
   @override
-  String get videoUrl => (origin as PostVideoPlayerProvider).videoUrl;
+  String toString() => r'getVideoProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

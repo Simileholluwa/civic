@@ -23,7 +23,7 @@ class LocationServices {
       return left('The request timed out.');
     } on LocationException catch (e) {
       return left(e.message);
-    }catch (e) {
+    } on Exception catch (e) {
       return left(e.toString());
     }
   }
@@ -40,7 +40,7 @@ class LocationServices {
       return left('The request timed out.');
     } on LocationException catch (e) {
       return left(e.message);
-    }catch (e) {
+    } on Exception catch (e) {
       return left(e.toString());
     }
   }
@@ -49,11 +49,13 @@ class LocationServices {
     try {
       final position = await Geolocator.getCurrentPosition();
       return right([position.longitude, position.latitude]);
-    } catch (e) {
+    } on Exception catch (e) {
       log(
         e.toString(),
       );
-      return left(e.toString(),);
+      return left(
+        e.toString(),
+      );
     }
   }
 }

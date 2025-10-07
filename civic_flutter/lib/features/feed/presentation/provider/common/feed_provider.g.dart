@@ -6,164 +6,94 @@ part of 'feed_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedHash() => r'fd4a71568218034ba85b3380698de0b76fb04ebc';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$Feed extends BuildlessAutoDisposeNotifier<FeedState> {
-  late final Post? post;
-
-  FeedState build(
-    Post? post,
-  );
-}
-
-/// See also [Feed].
 @ProviderFor(Feed)
-const feedProvider = FeedFamily();
+const feedProvider = FeedFamily._();
 
-/// See also [Feed].
-class FeedFamily extends Family<FeedState> {
-  /// See also [Feed].
-  const FeedFamily();
-
-  /// See also [Feed].
-  FeedProvider call(
-    Post? post,
-  ) {
-    return FeedProvider(
-      post,
-    );
-  }
-
-  @override
-  FeedProvider getProviderOverride(
-    covariant FeedProvider provider,
-  ) {
-    return call(
-      provider.post,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'feedProvider';
-}
-
-/// See also [Feed].
-class FeedProvider extends AutoDisposeNotifierProviderImpl<Feed, FeedState> {
-  /// See also [Feed].
-  FeedProvider(
-    Post? post,
-  ) : this._internal(
-          () => Feed()..post = post,
-          from: feedProvider,
+final class FeedProvider extends $NotifierProvider<Feed, FeedState> {
+  const FeedProvider._(
+      {required FeedFamily super.from, required Post? super.argument})
+      : super(
+          retry: null,
           name: r'feedProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$feedHash,
-          dependencies: FeedFamily._dependencies,
-          allTransitiveDependencies: FeedFamily._allTransitiveDependencies,
-          post: post,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  FeedProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.post,
-  }) : super.internal();
-
-  final Post? post;
+  @override
+  String debugGetCreateSourceHash() => _$feedHash();
 
   @override
-  FeedState runNotifierBuild(
-    covariant Feed notifier,
-  ) {
-    return notifier.build(
-      post,
-    );
+  String toString() {
+    return r'feedProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(Feed Function() create) {
-    return ProviderOverride(
+  Feed create() => Feed();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FeedState value) {
+    return $ProviderOverride(
       origin: this,
-      override: FeedProvider._internal(
-        () => create()..post = post,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        post: post,
-      ),
+      providerOverride: $SyncValueProvider<FeedState>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<Feed, FeedState> createElement() {
-    return _FeedProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FeedProvider && other.post == post;
+    return other is FeedProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, post.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FeedRef on AutoDisposeNotifierProviderRef<FeedState> {
-  /// The parameter `post` of this provider.
-  Post? get post;
-}
+String _$feedHash() => r'696baac264ff8364c882a1bc25ecfa783774511a';
 
-class _FeedProviderElement
-    extends AutoDisposeNotifierProviderElement<Feed, FeedState> with FeedRef {
-  _FeedProviderElement(super.provider);
+final class FeedFamily extends $Family
+    with $ClassFamilyOverride<Feed, FeedState, FeedState, FeedState, Post?> {
+  const FeedFamily._()
+      : super(
+          retry: null,
+          name: r'feedProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  FeedProvider call(
+    Post? post,
+  ) =>
+      FeedProvider._(argument: post, from: this);
 
   @override
-  Post? get post => (origin as FeedProvider).post;
+  String toString() => r'feedProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$Feed extends $Notifier<FeedState> {
+  late final _$args = ref.$arg as Post?;
+  Post? get post => _$args;
+
+  FeedState build(
+    Post? post,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<FeedState, FeedState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<FeedState, FeedState>, FeedState, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

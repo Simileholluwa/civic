@@ -11,8 +11,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class ProjectImageAttachmentsTabView extends ConsumerWidget {
   const ProjectImageAttachmentsTabView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -24,7 +23,7 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     final imageUrls = projectCreationSate.projectImageAttachments;
-    int current = ref.watch(projectImageAttachmentPageChangedProvider);
+    final current = ref.watch(projectImageAttachmentPageChangedProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -120,7 +119,7 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                                   index,
                                   reason,
                                 );
-                          }),
+                          },),
                       items: imageUrls.map((image) {
                         return Builder(
                           builder: (BuildContext context) {
@@ -173,10 +172,10 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: imageUrls.asMap().entries.map((entry) {
                             return Container(
-                              width: 12.0,
-                              height: 12.0,
+                              width: 12,
+                              height: 12,
                               margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 4.0),
+                                  vertical: 8, horizontal: 4,),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white.withValues(alpha: 

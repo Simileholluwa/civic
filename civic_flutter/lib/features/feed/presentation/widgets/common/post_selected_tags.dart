@@ -7,8 +7,7 @@ import 'package:iconsax/iconsax.dart';
 
 class PostSelectedTags extends ConsumerWidget {
   const PostSelectedTags({
-    super.key,
-    required this.tags,
+    required this.tags, super.key,
     this.showRemoveTags = true,
     this.height = 50,
     this.showTopBorder = true,
@@ -68,9 +67,7 @@ class PostSelectedTags extends ConsumerWidget {
             ),
             if (showRemoveTags)
               GestureDetector(
-                onTap: () {
-                  postNotifier.clearSelections();
-                },
+                onTap: postNotifier.clearSelections,
                 child: const Icon(
                   Iconsax.close_square5,
                   color: TColors.secondary,

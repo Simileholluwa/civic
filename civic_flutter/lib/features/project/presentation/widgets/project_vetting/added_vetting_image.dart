@@ -10,8 +10,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class AddedVettingImage extends ConsumerWidget {
   const AddedVettingImage({
-    super.key,
-    required this.projectVetting,
+    required this.projectVetting, super.key,
   });
 
   final ProjectVetting? projectVetting;
@@ -61,7 +60,7 @@ class AddedVettingImage extends ConsumerWidget {
                       index,
                       reason,
                     );
-                  }),
+                  },),
               items: vettedProjectState.images.map((image) {
                 return Builder(
                   builder: (BuildContext context) {
@@ -115,10 +114,10 @@ class AddedVettingImage extends ConsumerWidget {
                     children:
                         vettedProjectState.images.asMap().entries.map((entry) {
                       return Container(
-                        width: 12.0,
-                        height: 12.0,
+                        width: 12,
+                        height: 12,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 4.0),
+                            vertical: 8, horizontal: 4,),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(

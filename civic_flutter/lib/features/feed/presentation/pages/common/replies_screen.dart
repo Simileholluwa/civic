@@ -1,14 +1,14 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class RepliesScreen extends ConsumerWidget {
   const RepliesScreen({
-    super.key,
     required this.replyId,
+    super.key,
   });
 
   final int replyId;
@@ -98,10 +98,13 @@ class RepliesScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
-              onPressed: () {
-                context.push('/create/post/0', extra: {
-                  'parent': data,
-                });
+              onPressed: () async {
+                await context.push(
+                  '/create/post/0',
+                  extra: {
+                    'parent': data,
+                  },
+                );
               },
               text: 'Add a reply',
               buttonIcon: Iconsax.magicpen5,
@@ -139,7 +142,7 @@ class RepliesScreen extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          final err = error as Map<String, dynamic>;
+          final err = error as Map<String, String>;
           return Center(
             child: LoadingError(
               retry: null,

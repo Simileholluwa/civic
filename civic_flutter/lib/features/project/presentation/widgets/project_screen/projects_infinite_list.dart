@@ -7,9 +7,9 @@ import 'package:go_router/go_router.dart';
 
 class ProjectsInfiniteList extends ConsumerWidget {
   const ProjectsInfiniteList({
-    super.key,
     required this.sortBy,
     required this.isLeader,
+    super.key,
   });
 
   final String sortBy;
@@ -21,10 +21,10 @@ class ProjectsInfiniteList extends ConsumerWidget {
         ref.watch(paginatedProjectListProvider(sortBy).notifier);
     return AppInfiniteList<Project>(
       pagingController: pagingControllerNotifier.pagingController,
-      scrollPhysics: NeverScrollableScrollPhysics(),
+      scrollPhysics: const NeverScrollableScrollPhysics(),
       canCreate: isLeader,
-      onCreate: () {
-        context.push(
+      onCreate: () async {
+        await context.push(
           '/create/project/0',
         );
       },

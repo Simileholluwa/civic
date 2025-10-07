@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'verify_user_proximity_provider.g.dart';
 
@@ -22,7 +21,7 @@ Future<double> verifyUserProximity(
       ),
     );
 
-    result.fold(
+    await result.fold(
       (error) {
         completer.completeError({
           'message': error,
@@ -57,7 +56,7 @@ Future<double> verifyUserProximity(
             {
               'message':
                   'This project has been deleted by its owner. Vettings can no longer be submitted.',
-              'action': 'nothing'
+              'action': 'nothing',
             },
           );
         } else {

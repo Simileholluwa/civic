@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -7,13 +5,7 @@ import 'package:flutter/material.dart';
 
 class ReactToReviewOrVetting extends StatelessWidget {
   const ReactToReviewOrVetting({
-    super.key,
-    required this.text,
-    required this.likesCount,
-    required this.likeTextColor,
-    required this.dislikeTextColor,
-    required this.likeTapped,
-    required this.dislikeTapped,
+    required this.text, required this.likesCount, required this.likeTextColor, required this.dislikeTextColor, required this.likeTapped, required this.dislikeTapped, super.key,
     this.onDelete,
     this.isOwner = false,
   });
@@ -94,7 +86,7 @@ class ReactToReviewOrVetting extends StatelessWidget {
                         onTap: onDelete,
                       ),
                     ],
-                  )
+                  ),
               ],
             ),
           ],

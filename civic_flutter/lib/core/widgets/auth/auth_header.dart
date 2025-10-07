@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,9 @@ class AuthHeader extends StatelessWidget {
           children: [
             Text(
               authTitle,
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 30,),
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 30,
+                  ),
               textAlign: TextAlign.start,
             ),
             const SizedBox(width: 3),

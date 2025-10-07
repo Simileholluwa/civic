@@ -1,15 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 
 class DeletedProjectPlaceholder extends ConsumerWidget {
   const DeletedProjectPlaceholder({
-    super.key,
-    required this.project,
+    required this.project, super.key,
     this.showInteractions = false,
   });
 
@@ -47,7 +45,6 @@ class DeletedProjectPlaceholder extends ConsumerWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           spacing: 5,
           children: [
             Icon(

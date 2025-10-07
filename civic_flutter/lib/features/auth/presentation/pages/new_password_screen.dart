@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class NewPasswordScreen extends StatelessWidget {
   const NewPasswordScreen({
@@ -25,9 +24,9 @@ class NewPasswordScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: Column(
+          child: const Column(
             children: [
-              const AuthHeader(
+              AuthHeader(
                 authTitle: 'Create new password',
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols',

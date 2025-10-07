@@ -7,9 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreatePostWidget extends ConsumerWidget {
   const CreatePostWidget({
-    super.key,
     required this.post,
     required this.isReplyOrComment,
+    super.key,
     this.project,
     this.parent,
   });
@@ -29,7 +29,7 @@ class CreatePostWidget extends ConsumerWidget {
       children: [
         PostBottomOptions(
           post: post,
-          isReplyOrComment: isReplyOrComment, 
+          isReplyOrComment: isReplyOrComment,
         ),
         const Divider(
           height: 0,
@@ -80,20 +80,22 @@ class CreatePostWidget extends ConsumerWidget {
                 if (postState.taggedUsers.isNotEmpty ||
                     postState.locations.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 10,),
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                    ),
                     child: ContentEngagementTagsAndLocations(
                       tags: postState.taggedUsers,
                       locations: postState.locations,
                       hasTags: postState.taggedUsers.isNotEmpty,
                       hasLocations: postState.locations.isNotEmpty,
-                      onTaggedUsersTap: () {
-                        FeedHelperFunctions.selectLocationBottomSheet(
+                      onTaggedUsersTap: () async {
+                        await FeedHelperFunctions.selectLocationBottomSheet(
                           context: context,
                           post: post,
                         );
                       },
-                      onLocationTap: () {
-                        FeedHelperFunctions.selectLocationBottomSheet(
+                      onLocationTap: () async {
+                        await FeedHelperFunctions.selectLocationBottomSheet(
                           context: context,
                           post: post,
                         );

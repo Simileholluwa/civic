@@ -1,7 +1,7 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 
 abstract class AuthRepository {
   Future<Either<Failure, bool>> createAccountRequest({

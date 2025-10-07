@@ -6,503 +6,1169 @@ part of 'project_services_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectRemoteDatasourceHash() =>
-    r'adadc34cecf2a72618cfaeeb1d1023c18aef1a49';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [projectRemoteDatasource].
 @ProviderFor(projectRemoteDatasource)
-final projectRemoteDatasourceProvider =
-    AutoDisposeProvider<ProjectRemoteDatasourceImpl>.internal(
-  projectRemoteDatasource,
-  name: r'projectRemoteDatasourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectRemoteDatasourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectRemoteDatasourceProvider = ProjectRemoteDatasourceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProjectRemoteDatasourceRef
-    = AutoDisposeProviderRef<ProjectRemoteDatasourceImpl>;
-String _$projectLocalDatasourceHash() =>
-    r'8a6731a4882fb13f2ca1dfd61bc886146d919a48';
+final class ProjectRemoteDatasourceProvider extends $FunctionalProvider<
+    ProjectRemoteDatasourceImpl,
+    ProjectRemoteDatasourceImpl,
+    ProjectRemoteDatasourceImpl> with $Provider<ProjectRemoteDatasourceImpl> {
+  const ProjectRemoteDatasourceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectRemoteDatasourceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [projectLocalDatasource].
+  @override
+  String debugGetCreateSourceHash() => _$projectRemoteDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ProjectRemoteDatasourceImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ProjectRemoteDatasourceImpl create(Ref ref) {
+    return projectRemoteDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectRemoteDatasourceImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ProjectRemoteDatasourceImpl>(value),
+    );
+  }
+}
+
+String _$projectRemoteDatasourceHash() =>
+    r'fc1ca9059415b14e6455b0c1ebc638ce01f7b4f9';
+
 @ProviderFor(projectLocalDatasource)
-final projectLocalDatasourceProvider =
-    AutoDisposeProvider<ProjectLocalDataSourceImpl>.internal(
-  projectLocalDatasource,
-  name: r'projectLocalDatasourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectLocalDatasourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectLocalDatasourceProvider = ProjectLocalDatasourceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProjectLocalDatasourceRef
-    = AutoDisposeProviderRef<ProjectLocalDataSourceImpl>;
-String _$projectRepositoryImplHash() =>
-    r'cfece601bff4555142bd2013b70fb0a22ac6a989';
+final class ProjectLocalDatasourceProvider extends $FunctionalProvider<
+    ProjectLocalDataSourceImpl,
+    ProjectLocalDataSourceImpl,
+    ProjectLocalDataSourceImpl> with $Provider<ProjectLocalDataSourceImpl> {
+  const ProjectLocalDatasourceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectLocalDatasourceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [projectRepositoryImpl].
+  @override
+  String debugGetCreateSourceHash() => _$projectLocalDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ProjectLocalDataSourceImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ProjectLocalDataSourceImpl create(Ref ref) {
+    return projectLocalDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectLocalDataSourceImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ProjectLocalDataSourceImpl>(value),
+    );
+  }
+}
+
+String _$projectLocalDatasourceHash() =>
+    r'9806cc200c6e52c6c553ca1fe33b0805a8b4baeb';
+
 @ProviderFor(projectRepositoryImpl)
-final projectRepositoryImplProvider =
-    AutoDisposeProvider<ProjectRepositoryImpl>.internal(
-  projectRepositoryImpl,
-  name: r'projectRepositoryImplProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectRepositoryImplHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectRepositoryImplProvider = ProjectRepositoryImplProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProjectRepositoryImplRef
-    = AutoDisposeProviderRef<ProjectRepositoryImpl>;
+final class ProjectRepositoryImplProvider extends $FunctionalProvider<
+    ProjectRepositoryImpl,
+    ProjectRepositoryImpl,
+    ProjectRepositoryImpl> with $Provider<ProjectRepositoryImpl> {
+  const ProjectRepositoryImplProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectRepositoryImplProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectRepositoryImplHash();
+
+  @$internal
+  @override
+  $ProviderElement<ProjectRepositoryImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ProjectRepositoryImpl create(Ref ref) {
+    return projectRepositoryImpl(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectRepositoryImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ProjectRepositoryImpl>(value),
+    );
+  }
+}
+
+String _$projectRepositoryImplHash() =>
+    r'193f8479e64433727d9aa4a154a29c51aa72a6b5';
+
+@ProviderFor(saveProject)
+const saveProjectProvider = SaveProjectProvider._();
+
+final class SaveProjectProvider extends $FunctionalProvider<SaveProjectUseCase,
+    SaveProjectUseCase, SaveProjectUseCase> with $Provider<SaveProjectUseCase> {
+  const SaveProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'saveProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveProjectUseCase create(Ref ref) {
+    return saveProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveProjectUseCase>(value),
+    );
+  }
+}
+
 String _$saveProjectHash() => r'507675307fc80c41dab9e59306f49c034a5e2bb1';
 
-/// See also [saveProject].
-@ProviderFor(saveProject)
-final saveProjectProvider = AutoDisposeProvider<SaveProjectUseCase>.internal(
-  saveProject,
-  name: r'saveProjectProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$saveProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SaveProjectRef = AutoDisposeProviderRef<SaveProjectUseCase>;
-String _$getProjectsHash() => r'2c83762c8d770bbdcb849994b3334bdd24572b68';
-
-/// See also [getProjects].
 @ProviderFor(getProjects)
-final getProjectsProvider = AutoDisposeProvider<GetProjectsUseCase>.internal(
-  getProjects,
-  name: r'getProjectsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$getProjectsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const getProjectsProvider = GetProjectsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetProjectsRef = AutoDisposeProviderRef<GetProjectsUseCase>;
+final class GetProjectsProvider extends $FunctionalProvider<GetProjectsUseCase,
+    GetProjectsUseCase, GetProjectsUseCase> with $Provider<GetProjectsUseCase> {
+  const GetProjectsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getProjectsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getProjectsHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetProjectsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetProjectsUseCase create(Ref ref) {
+    return getProjects(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetProjectsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetProjectsUseCase>(value),
+    );
+  }
+}
+
+String _$getProjectsHash() => r'277a8073e4733318649ca55c4890d69ed21b77e4';
+
+@ProviderFor(getProject)
+const getProjectProvider = GetProjectProvider._();
+
+final class GetProjectProvider extends $FunctionalProvider<GetProjectUseCase,
+    GetProjectUseCase, GetProjectUseCase> with $Provider<GetProjectUseCase> {
+  const GetProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetProjectUseCase create(Ref ref) {
+    return getProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetProjectUseCase>(value),
+    );
+  }
+}
+
 String _$getProjectHash() => r'34fc69c563165bf3169974155598aae3dde66437';
 
-/// See also [getProject].
-@ProviderFor(getProject)
-final getProjectProvider = AutoDisposeProvider<GetProjectUseCase>.internal(
-  getProject,
-  name: r'getProjectProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$getProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(saveProjectReview)
+const saveProjectReviewProvider = SaveProjectReviewProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetProjectRef = AutoDisposeProviderRef<GetProjectUseCase>;
+final class SaveProjectReviewProvider extends $FunctionalProvider<
+    SaveProjectReviewUseCase,
+    SaveProjectReviewUseCase,
+    SaveProjectReviewUseCase> with $Provider<SaveProjectReviewUseCase> {
+  const SaveProjectReviewProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'saveProjectReviewProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveProjectReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveProjectReviewUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveProjectReviewUseCase create(Ref ref) {
+    return saveProjectReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveProjectReviewUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveProjectReviewUseCase>(value),
+    );
+  }
+}
+
 String _$saveProjectReviewHash() => r'92a7b5986f4adaead3c5e26540f84620072fc4e0';
 
-/// See also [saveProjectReview].
-@ProviderFor(saveProjectReview)
-final saveProjectReviewProvider =
-    AutoDisposeProvider<SaveProjectReviewUseCase>.internal(
-  saveProjectReview,
-  name: r'saveProjectReviewProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$saveProjectReviewHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SaveProjectReviewRef = AutoDisposeProviderRef<SaveProjectReviewUseCase>;
-String _$getProjectReviewsHash() => r'ef227494be06fd72b08969eccc5dbeebcce67556';
-
-/// See also [getProjectReviews].
 @ProviderFor(getProjectReviews)
-final getProjectReviewsProvider =
-    AutoDisposeProvider<GetProjectReviewsUseCase>.internal(
-  getProjectReviews,
-  name: r'getProjectReviewsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getProjectReviewsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const getProjectReviewsProvider = GetProjectReviewsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetProjectReviewsRef = AutoDisposeProviderRef<GetProjectReviewsUseCase>;
+final class GetProjectReviewsProvider extends $FunctionalProvider<
+    GetProjectReviewsUseCase,
+    GetProjectReviewsUseCase,
+    GetProjectReviewsUseCase> with $Provider<GetProjectReviewsUseCase> {
+  const GetProjectReviewsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getProjectReviewsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getProjectReviewsHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetProjectReviewsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetProjectReviewsUseCase create(Ref ref) {
+    return getProjectReviews(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetProjectReviewsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetProjectReviewsUseCase>(value),
+    );
+  }
+}
+
+String _$getProjectReviewsHash() => r'36184da1c8a65301a2b59f327ba8c23aedc231ee';
+
+@ProviderFor(getProjectReview)
+const getProjectReviewProvider = GetProjectReviewProvider._();
+
+final class GetProjectReviewProvider extends $FunctionalProvider<
+    GetProjectReviewUseCase,
+    GetProjectReviewUseCase,
+    GetProjectReviewUseCase> with $Provider<GetProjectReviewUseCase> {
+  const GetProjectReviewProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getProjectReviewProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getProjectReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetProjectReviewUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetProjectReviewUseCase create(Ref ref) {
+    return getProjectReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetProjectReviewUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetProjectReviewUseCase>(value),
+    );
+  }
+}
+
 String _$getProjectReviewHash() => r'2f0aaa2efd3a5c28e84f8db96632efe52548811c';
 
-/// See also [getProjectReview].
-@ProviderFor(getProjectReview)
-final getProjectReviewProvider =
-    AutoDisposeProvider<GetProjectReviewUseCase>.internal(
-  getProjectReview,
-  name: r'getProjectReviewProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getProjectReviewHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetProjectReviewRef = AutoDisposeProviderRef<GetProjectReviewUseCase>;
-String _$getPaginatedBookmarksHash() =>
-    r'fe9a244c0f6ade60b14c2ddcfaf0fb0a244cd1a1';
-
-/// See also [getPaginatedBookmarks].
 @ProviderFor(getPaginatedBookmarks)
-final getPaginatedBookmarksProvider =
-    AutoDisposeProvider<GetUserProjectBookmarksUseCase>.internal(
-  getPaginatedBookmarks,
-  name: r'getPaginatedBookmarksProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getPaginatedBookmarksHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const getPaginatedBookmarksProvider = GetPaginatedBookmarksProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetPaginatedBookmarksRef
-    = AutoDisposeProviderRef<GetUserProjectBookmarksUseCase>;
+final class GetPaginatedBookmarksProvider extends $FunctionalProvider<
+        GetUserProjectBookmarksUseCase,
+        GetUserProjectBookmarksUseCase,
+        GetUserProjectBookmarksUseCase>
+    with $Provider<GetUserProjectBookmarksUseCase> {
+  const GetPaginatedBookmarksProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getPaginatedBookmarksProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getPaginatedBookmarksHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetUserProjectBookmarksUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetUserProjectBookmarksUseCase create(Ref ref) {
+    return getPaginatedBookmarks(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetUserProjectBookmarksUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<GetUserProjectBookmarksUseCase>(value),
+    );
+  }
+}
+
+String _$getPaginatedBookmarksHash() =>
+    r'4afd80e01131505697ac435afbf8fd385d90673d';
+
+@ProviderFor(subToProjectNotif)
+const subToProjectNotifProvider = SubToProjectNotifProvider._();
+
+final class SubToProjectNotifProvider extends $FunctionalProvider<
+    SubToProjectNotifUseCase,
+    SubToProjectNotifUseCase,
+    SubToProjectNotifUseCase> with $Provider<SubToProjectNotifUseCase> {
+  const SubToProjectNotifProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'subToProjectNotifProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$subToProjectNotifHash();
+
+  @$internal
+  @override
+  $ProviderElement<SubToProjectNotifUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SubToProjectNotifUseCase create(Ref ref) {
+    return subToProjectNotif(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SubToProjectNotifUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SubToProjectNotifUseCase>(value),
+    );
+  }
+}
+
 String _$subToProjectNotifHash() => r'b291a1dd992869a364084ead0c3b858ca39b6007';
 
-/// See also [subToProjectNotif].
-@ProviderFor(subToProjectNotif)
-final subToProjectNotifProvider =
-    AutoDisposeProvider<SubToProjectNotifUseCase>.internal(
-  subToProjectNotif,
-  name: r'subToProjectNotifProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$subToProjectNotifHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(scheduleProject)
+const scheduleProjectProvider = ScheduleProjectProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SubToProjectNotifRef = AutoDisposeProviderRef<SubToProjectNotifUseCase>;
+final class ScheduleProjectProvider extends $FunctionalProvider<
+    ScheduleProjectUseCase,
+    ScheduleProjectUseCase,
+    ScheduleProjectUseCase> with $Provider<ScheduleProjectUseCase> {
+  const ScheduleProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'scheduleProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<ScheduleProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ScheduleProjectUseCase create(Ref ref) {
+    return scheduleProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ScheduleProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ScheduleProjectUseCase>(value),
+    );
+  }
+}
+
 String _$scheduleProjectHash() => r'92b6eeb0dc4bb039e784f9b256f4e7d738da469d';
 
-/// See also [scheduleProject].
-@ProviderFor(scheduleProject)
-final scheduleProjectProvider =
-    AutoDisposeProvider<ScheduleProjectUseCase>.internal(
-  scheduleProject,
-  name: r'scheduleProjectProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$scheduleProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(toggleLike)
+const toggleLikeProvider = ToggleLikeProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ScheduleProjectRef = AutoDisposeProviderRef<ScheduleProjectUseCase>;
+final class ToggleLikeProvider extends $FunctionalProvider<ToggleLikeUseCase,
+    ToggleLikeUseCase, ToggleLikeUseCase> with $Provider<ToggleLikeUseCase> {
+  const ToggleLikeProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'toggleLikeProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$toggleLikeHash();
+
+  @$internal
+  @override
+  $ProviderElement<ToggleLikeUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ToggleLikeUseCase create(Ref ref) {
+    return toggleLike(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ToggleLikeUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ToggleLikeUseCase>(value),
+    );
+  }
+}
+
 String _$toggleLikeHash() => r'6610dd1971c4bc0f3245dfa3b80af78912f3420a';
 
-/// See also [toggleLike].
-@ProviderFor(toggleLike)
-final toggleLikeProvider = AutoDisposeProvider<ToggleLikeUseCase>.internal(
-  toggleLike,
-  name: r'toggleLikeProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$toggleLikeHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ToggleLikeRef = AutoDisposeProviderRef<ToggleLikeUseCase>;
-String _$clearProjectBookmarksHash() =>
-    r'd17901b8c1ecedd747c49ab5038c805da2ea582c';
-
-/// See also [clearProjectBookmarks].
 @ProviderFor(clearProjectBookmarks)
-final clearProjectBookmarksProvider =
-    AutoDisposeProvider<ClearProjectBookmarksUseCase>.internal(
-  clearProjectBookmarks,
-  name: r'clearProjectBookmarksProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$clearProjectBookmarksHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const clearProjectBookmarksProvider = ClearProjectBookmarksProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ClearProjectBookmarksRef
-    = AutoDisposeProviderRef<ClearProjectBookmarksUseCase>;
+final class ClearProjectBookmarksProvider extends $FunctionalProvider<
+    ClearProjectBookmarksUseCase,
+    ClearProjectBookmarksUseCase,
+    ClearProjectBookmarksUseCase> with $Provider<ClearProjectBookmarksUseCase> {
+  const ClearProjectBookmarksProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'clearProjectBookmarksProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$clearProjectBookmarksHash();
+
+  @$internal
+  @override
+  $ProviderElement<ClearProjectBookmarksUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ClearProjectBookmarksUseCase create(Ref ref) {
+    return clearProjectBookmarks(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ClearProjectBookmarksUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ClearProjectBookmarksUseCase>(value),
+    );
+  }
+}
+
+String _$clearProjectBookmarksHash() =>
+    r'a18ee814aa1f6ffd4a4793d40d35f1569c32a55d';
+
+@ProviderFor(reactToProjectReview)
+const reactToProjectReviewProvider = ReactToProjectReviewProvider._();
+
+final class ReactToProjectReviewProvider extends $FunctionalProvider<
+    ReactToProjectReviewUseCase,
+    ReactToProjectReviewUseCase,
+    ReactToProjectReviewUseCase> with $Provider<ReactToProjectReviewUseCase> {
+  const ReactToProjectReviewProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'reactToProjectReviewProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$reactToProjectReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReactToProjectReviewUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReactToProjectReviewUseCase create(Ref ref) {
+    return reactToProjectReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReactToProjectReviewUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReactToProjectReviewUseCase>(value),
+    );
+  }
+}
+
 String _$reactToProjectReviewHash() =>
     r'd89d5f9dd4106b72aeea78d1b5f3aa5610379004';
 
-/// See also [reactToProjectReview].
-@ProviderFor(reactToProjectReview)
-final reactToProjectReviewProvider =
-    AutoDisposeProvider<ReactToProjectReviewUseCase>.internal(
-  reactToProjectReview,
-  name: r'reactToProjectReviewProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$reactToProjectReviewHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(reactToProjectVetting)
+const reactToProjectVettingProvider = ReactToProjectVettingProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ReactToProjectReviewRef
-    = AutoDisposeProviderRef<ReactToProjectReviewUseCase>;
+final class ReactToProjectVettingProvider extends $FunctionalProvider<
+    ReactToProjectVettingUseCase,
+    ReactToProjectVettingUseCase,
+    ReactToProjectVettingUseCase> with $Provider<ReactToProjectVettingUseCase> {
+  const ReactToProjectVettingProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'reactToProjectVettingProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$reactToProjectVettingHash();
+
+  @$internal
+  @override
+  $ProviderElement<ReactToProjectVettingUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ReactToProjectVettingUseCase create(Ref ref) {
+    return reactToProjectVetting(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReactToProjectVettingUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReactToProjectVettingUseCase>(value),
+    );
+  }
+}
+
 String _$reactToProjectVettingHash() =>
     r'9e8923807419de17779357b2e98713dca75c9a94';
 
-/// See also [reactToProjectVetting].
-@ProviderFor(reactToProjectVetting)
-final reactToProjectVettingProvider =
-    AutoDisposeProvider<ReactToProjectVettingUseCase>.internal(
-  reactToProjectVetting,
-  name: r'reactToProjectVettingProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$reactToProjectVettingHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(toggleBookmark)
+const toggleBookmarkProvider = ToggleBookmarkProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ReactToProjectVettingRef
-    = AutoDisposeProviderRef<ReactToProjectVettingUseCase>;
+final class ToggleBookmarkProvider extends $FunctionalProvider<
+    ToggleBookmarkUseCase,
+    ToggleBookmarkUseCase,
+    ToggleBookmarkUseCase> with $Provider<ToggleBookmarkUseCase> {
+  const ToggleBookmarkProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'toggleBookmarkProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$toggleBookmarkHash();
+
+  @$internal
+  @override
+  $ProviderElement<ToggleBookmarkUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ToggleBookmarkUseCase create(Ref ref) {
+    return toggleBookmark(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ToggleBookmarkUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ToggleBookmarkUseCase>(value),
+    );
+  }
+}
+
 String _$toggleBookmarkHash() => r'fd9ae908bd8bf0829edc5f463e5ea18cd68a05e3';
 
-/// See also [toggleBookmark].
-@ProviderFor(toggleBookmark)
-final toggleBookmarkProvider =
-    AutoDisposeProvider<ToggleBookmarkUseCase>.internal(
-  toggleBookmark,
-  name: r'toggleBookmarkProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$toggleBookmarkHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(deleteProject)
+const deleteProjectProvider = DeleteProjectProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ToggleBookmarkRef = AutoDisposeProviderRef<ToggleBookmarkUseCase>;
+final class DeleteProjectProvider extends $FunctionalProvider<
+    DeleteProjectUseCase,
+    DeleteProjectUseCase,
+    DeleteProjectUseCase> with $Provider<DeleteProjectUseCase> {
+  const DeleteProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteProjectUseCase create(Ref ref) {
+    return deleteProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DeleteProjectUseCase>(value),
+    );
+  }
+}
+
 String _$deleteProjectHash() => r'b877c510c65d1a2eb25340af7864d168b1172672';
 
-/// See also [deleteProject].
-@ProviderFor(deleteProject)
-final deleteProjectProvider =
-    AutoDisposeProvider<DeleteProjectUseCase>.internal(
-  deleteProject,
-  name: r'deleteProjectProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(notInterestedProject)
+const notInterestedProjectProvider = NotInterestedProjectProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteProjectRef = AutoDisposeProviderRef<DeleteProjectUseCase>;
+final class NotInterestedProjectProvider extends $FunctionalProvider<
+    MarkNotInterestedUseCase,
+    MarkNotInterestedUseCase,
+    MarkNotInterestedUseCase> with $Provider<MarkNotInterestedUseCase> {
+  const NotInterestedProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notInterestedProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$notInterestedProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<MarkNotInterestedUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MarkNotInterestedUseCase create(Ref ref) {
+    return notInterestedProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MarkNotInterestedUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MarkNotInterestedUseCase>(value),
+    );
+  }
+}
+
 String _$notInterestedProjectHash() =>
     r'92aea445fa33ab0605be36d8fbc78160e7822f61';
 
-/// See also [notInterestedProject].
-@ProviderFor(notInterestedProject)
-final notInterestedProjectProvider =
-    AutoDisposeProvider<MarkNotInterestedUseCase>.internal(
-  notInterestedProject,
-  name: r'notInterestedProjectProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$notInterestedProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(deleteProjectReview)
+const deleteProjectReviewProvider = DeleteProjectReviewProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NotInterestedProjectRef
-    = AutoDisposeProviderRef<MarkNotInterestedUseCase>;
+final class DeleteProjectReviewProvider extends $FunctionalProvider<
+    DeleteProjectReviewUseCase,
+    DeleteProjectReviewUseCase,
+    DeleteProjectReviewUseCase> with $Provider<DeleteProjectReviewUseCase> {
+  const DeleteProjectReviewProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteProjectReviewProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteProjectReviewHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteProjectReviewUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteProjectReviewUseCase create(Ref ref) {
+    return deleteProjectReview(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteProjectReviewUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DeleteProjectReviewUseCase>(value),
+    );
+  }
+}
+
 String _$deleteProjectReviewHash() =>
     r'f92fcf710e91a889cf0121808f37a00e373eb748';
 
-/// See also [deleteProjectReview].
-@ProviderFor(deleteProjectReview)
-final deleteProjectReviewProvider =
-    AutoDisposeProvider<DeleteProjectReviewUseCase>.internal(
-  deleteProjectReview,
-  name: r'deleteProjectReviewProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteProjectReviewHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(deleteProjectVetting)
+const deleteProjectVettingProvider = DeleteProjectVettingProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteProjectReviewRef
-    = AutoDisposeProviderRef<DeleteProjectReviewUseCase>;
+final class DeleteProjectVettingProvider extends $FunctionalProvider<
+    DeleteProjectVettingUseCase,
+    DeleteProjectVettingUseCase,
+    DeleteProjectVettingUseCase> with $Provider<DeleteProjectVettingUseCase> {
+  const DeleteProjectVettingProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteProjectVettingProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteProjectVettingHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteProjectVettingUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteProjectVettingUseCase create(Ref ref) {
+    return deleteProjectVetting(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteProjectVettingUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DeleteProjectVettingUseCase>(value),
+    );
+  }
+}
+
 String _$deleteProjectVettingHash() =>
     r'31a81ff881a2909ab7943df3a8fe40b33f05dfa2';
 
-/// See also [deleteProjectVetting].
-@ProviderFor(deleteProjectVetting)
-final deleteProjectVettingProvider =
-    AutoDisposeProvider<DeleteProjectVettingUseCase>.internal(
-  deleteProjectVetting,
-  name: r'deleteProjectVettingProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteProjectVettingHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(vetProject)
+const vetProjectProvider = VetProjectProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteProjectVettingRef
-    = AutoDisposeProviderRef<DeleteProjectVettingUseCase>;
+final class VetProjectProvider extends $FunctionalProvider<VetProjectUseCase,
+    VetProjectUseCase, VetProjectUseCase> with $Provider<VetProjectUseCase> {
+  const VetProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'vetProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$vetProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<VetProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  VetProjectUseCase create(Ref ref) {
+    return vetProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(VetProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<VetProjectUseCase>(value),
+    );
+  }
+}
+
 String _$vetProjectHash() => r'2d819f29e6abd9622c251523f9b445a2cb85ed39';
 
-/// See also [vetProject].
-@ProviderFor(vetProject)
-final vetProjectProvider = AutoDisposeProvider<VetProjectUseCase>.internal(
-  vetProject,
-  name: r'vetProjectProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$vetProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(getVettedProject)
+const getVettedProjectProvider = GetVettedProjectProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef VetProjectRef = AutoDisposeProviderRef<VetProjectUseCase>;
+final class GetVettedProjectProvider extends $FunctionalProvider<
+    GetVettedProjectUseCase,
+    GetVettedProjectUseCase,
+    GetVettedProjectUseCase> with $Provider<GetVettedProjectUseCase> {
+  const GetVettedProjectProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getVettedProjectProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getVettedProjectHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetVettedProjectUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetVettedProjectUseCase create(Ref ref) {
+    return getVettedProject(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetVettedProjectUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetVettedProjectUseCase>(value),
+    );
+  }
+}
+
 String _$getVettedProjectHash() => r'50a007e5e425e0c0e2b53c1dc643d69126170eed';
 
-/// See also [getVettedProject].
-@ProviderFor(getVettedProject)
-final getVettedProjectProvider =
-    AutoDisposeProvider<GetVettedProjectUseCase>.internal(
-  getVettedProject,
-  name: r'getVettedProjectProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getVettedProjectHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetVettedProjectRef = AutoDisposeProviderRef<GetVettedProjectUseCase>;
-String _$getVettedProjectsHash() => r'69fc9fc2808164019bbc294f5128432453e0f567';
-
-/// See also [getVettedProjects].
 @ProviderFor(getVettedProjects)
-final getVettedProjectsProvider =
-    AutoDisposeProvider<GetVettedProjectsUseCase>.internal(
-  getVettedProjects,
-  name: r'getVettedProjectsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getVettedProjectsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const getVettedProjectsProvider = GetVettedProjectsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetVettedProjectsRef = AutoDisposeProviderRef<GetVettedProjectsUseCase>;
+final class GetVettedProjectsProvider extends $FunctionalProvider<
+    GetVettedProjectsUseCase,
+    GetVettedProjectsUseCase,
+    GetVettedProjectsUseCase> with $Provider<GetVettedProjectsUseCase> {
+  const GetVettedProjectsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getVettedProjectsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getVettedProjectsHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetVettedProjectsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetVettedProjectsUseCase create(Ref ref) {
+    return getVettedProjects(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetVettedProjectsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetVettedProjectsUseCase>(value),
+    );
+  }
+}
+
+String _$getVettedProjectsHash() => r'1b02c9a15613c3978265afe71745114ed76d20eb';
+
+@ProviderFor(getProjectDraft)
+const getProjectDraftProvider = GetProjectDraftProvider._();
+
+final class GetProjectDraftProvider extends $FunctionalProvider<
+    GetProjectDraftUseCase,
+    GetProjectDraftUseCase,
+    GetProjectDraftUseCase> with $Provider<GetProjectDraftUseCase> {
+  const GetProjectDraftProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getProjectDraftProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getProjectDraftHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetProjectDraftUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetProjectDraftUseCase create(Ref ref) {
+    return getProjectDraft(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetProjectDraftUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetProjectDraftUseCase>(value),
+    );
+  }
+}
+
 String _$getProjectDraftHash() => r'3cc4c60dbdef5bae77f090179223d58a60b0ef87';
 
-/// See also [getProjectDraft].
-@ProviderFor(getProjectDraft)
-final getProjectDraftProvider =
-    AutoDisposeProvider<GetProjectDraftUseCase>.internal(
-  getProjectDraft,
-  name: r'getProjectDraftProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getProjectDraftHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(saveProjectDraft)
+const saveProjectDraftProvider = SaveProjectDraftProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetProjectDraftRef = AutoDisposeProviderRef<GetProjectDraftUseCase>;
+final class SaveProjectDraftProvider extends $FunctionalProvider<
+    SaveProjectDraftUseCase,
+    SaveProjectDraftUseCase,
+    SaveProjectDraftUseCase> with $Provider<SaveProjectDraftUseCase> {
+  const SaveProjectDraftProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'saveProjectDraftProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveProjectDraftHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveProjectDraftUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveProjectDraftUseCase create(Ref ref) {
+    return saveProjectDraft(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveProjectDraftUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveProjectDraftUseCase>(value),
+    );
+  }
+}
+
 String _$saveProjectDraftHash() => r'7686d532f63383c0c09fa6242f7f124d1f37ab2d';
 
-/// See also [saveProjectDraft].
-@ProviderFor(saveProjectDraft)
-final saveProjectDraftProvider =
-    AutoDisposeProvider<SaveProjectDraftUseCase>.internal(
-  saveProjectDraft,
-  name: r'saveProjectDraftProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$saveProjectDraftHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(deleteProjectDraft)
+const deleteProjectDraftProvider = DeleteProjectDraftProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SaveProjectDraftRef = AutoDisposeProviderRef<SaveProjectDraftUseCase>;
+final class DeleteProjectDraftProvider extends $FunctionalProvider<
+    DeleteProjectDraftUseCase,
+    DeleteProjectDraftUseCase,
+    DeleteProjectDraftUseCase> with $Provider<DeleteProjectDraftUseCase> {
+  const DeleteProjectDraftProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteProjectDraftProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteProjectDraftHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteProjectDraftUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteProjectDraftUseCase create(Ref ref) {
+    return deleteProjectDraft(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteProjectDraftUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DeleteProjectDraftUseCase>(value),
+    );
+  }
+}
+
 String _$deleteProjectDraftHash() =>
     r'0f24e9c7305d30d7d8d64a0795c66562a338b43e';
-
-/// See also [deleteProjectDraft].
-@ProviderFor(deleteProjectDraft)
-final deleteProjectDraftProvider =
-    AutoDisposeProvider<DeleteProjectDraftUseCase>.internal(
-  deleteProjectDraft,
-  name: r'deleteProjectDraftProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteProjectDraftHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DeleteProjectDraftRef
-    = AutoDisposeProviderRef<DeleteProjectDraftUseCase>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

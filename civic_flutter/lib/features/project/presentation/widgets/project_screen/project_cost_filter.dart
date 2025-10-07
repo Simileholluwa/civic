@@ -16,7 +16,7 @@ class ProjectCostFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16, 0, 20, 0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class ProjectCostFilter extends ConsumerWidget {
                     },
                     prefixIcon: Iconsax.coin_15,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
                         ),
                   ),
                 ),
@@ -98,7 +98,7 @@ class ProjectCostFilter extends ConsumerWidget {
                     },
                     prefixIcon: Iconsax.coin_15,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
                         ),
                   ),
                 ),
@@ -113,9 +113,7 @@ class ProjectCostFilter extends ConsumerWidget {
             onChanged: (value) {
               projectWidgetsNotifier.toggleZeroCost();
             },
-            onTap: () {
-              projectWidgetsNotifier.toggleZeroCost();
-            },
+            onTap: projectWidgetsNotifier.toggleZeroCost,
             items: const ['Zero cost'],
           ),
         ],

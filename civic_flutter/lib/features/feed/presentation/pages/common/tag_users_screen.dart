@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class TagUsersScreen extends ConsumerWidget {
   const TagUsersScreen({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -17,7 +17,8 @@ class TagUsersScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final query = ref.watch(searchUsersListQueryProvider);
-    final pagingController = ref.watch(paginatedUsersListProvider(query).notifier);
+    final pagingController =
+        ref.watch(paginatedUsersListProvider(query).notifier);
     final queryProvider = ref.watch(searchUsersListQueryProvider.notifier);
     final postState = ref.watch(feedProvider(post));
     final postNotifier = ref.watch(feedProvider(post).notifier);
@@ -41,11 +42,7 @@ class TagUsersScreen extends ConsumerWidget {
                 automaticallyImplyLeading: false,
                 centerTitle: true,
                 title: CreateContentSearchBar(
-                  onChanged: (text) {
-                    queryProvider.setSearchQuery(
-                      text,
-                    );
-                  },
+                  onChanged: (value) => queryProvider.setSearchQuery = value,
                   trailingWidget: [
                     IconButton(
                       onPressed: () {},
@@ -100,7 +97,7 @@ class TagUsersScreen extends ConsumerWidget {
                 label: Text(
                   postState.taggedUsers[index].userInfo!.fullName ??
                       postState.taggedUsers[index].userInfo!.userName!,
-                  style: Theme.of(context).textTheme.labelMedium!,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 elevation: 0,
                 surfaceTintColor: Colors.transparent,

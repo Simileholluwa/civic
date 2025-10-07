@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 
 class PostCommentCard extends ConsumerWidget {
   const PostCommentCard({
-    super.key,
     required this.id,
+    super.key,
     this.scrollPhysics,
     this.firstPageProgressIndicator,
   });
@@ -55,10 +55,13 @@ class PostCommentCard extends ConsumerWidget {
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
-                    onReply: () {
-                      context.push('/create/post/0', extra: {
-                        'parent': comment,
-                      });
+                    onReply: () async {
+                      await context.push(
+                        '/create/post/0',
+                        extra: {
+                          'parent': comment,
+                        },
+                      );
                     },
                     originalPostId: id,
                     isComment: true,
@@ -69,15 +72,15 @@ class PostCommentCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: () => commentController.refresh(),
+      onRefresh: commentController.refresh,
       firstPageProgressIndicator: firstPageProgressIndicator,
-      noItemsFound: ContentNoItemsFound(),
+      noItemsFound: const ContentNoItemsFound(),
       firstPageErrorIndicator: CommentRepliesPageError(
-        onTap: () => commentController.refresh(),
+        onTap: commentController.refresh,
         errorMessage:
             "We couldn't fetch comments for this post. Please try again.",
       ),
-      errorMessage: commentController.pagingController.error,
+      errorMessage: commentController.pagingController.error as String,
     );
   }
 }

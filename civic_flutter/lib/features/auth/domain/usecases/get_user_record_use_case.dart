@@ -14,4 +14,3 @@ class GetUserRecordUseCase implements NotFutureUseCase<UserRecord?, NoParams> {
     return result;
   }
 }
-

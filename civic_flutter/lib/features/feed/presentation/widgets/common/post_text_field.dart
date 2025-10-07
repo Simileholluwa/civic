@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostTextField extends ConsumerWidget {
   const PostTextField({
-    super.key,
     required this.userName,
     required this.controller,
     required this.post,
     required this.isCommentOrReply,
+    super.key,
   });
 
   final String userName;

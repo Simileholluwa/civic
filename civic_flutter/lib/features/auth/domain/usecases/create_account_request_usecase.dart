@@ -2,7 +2,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:fpdart/fpdart.dart';
 
-class CreateAccountRequestUseCase implements UseCase<bool, CreateAccountRequestParams> {
+class CreateAccountRequestUseCase
+    implements UseCase<bool, CreateAccountRequestParams> {
   CreateAccountRequestUseCase({required AuthRepository authRepository})
       : _authRepository = authRepository;
   final AuthRepository _authRepository;

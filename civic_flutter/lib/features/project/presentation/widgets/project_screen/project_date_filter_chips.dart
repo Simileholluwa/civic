@@ -1,5 +1,3 @@
-
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -40,9 +38,7 @@ class ProjectDateFilterChips extends ConsumerWidget {
             filterHeading,
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 0,
-          ),
+          contentPadding: EdgeInsets.zero,
           trailing: Icon(
             isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
             color: TColors.primary,
@@ -104,7 +100,7 @@ class ProjectDateFilterChips extends ConsumerWidget {
                                 {
                                   entry: [
                                     startDateFilters[entry]!.start,
-                                    startDateFilters[entry]!.end
+                                    startDateFilters[entry]!.end,
                                   ],
                                 },
                               )
@@ -113,7 +109,7 @@ class ProjectDateFilterChips extends ConsumerWidget {
                                     {
                                       entry: [
                                         endDateFilters[entry]!.start,
-                                        endDateFilters[entry]!.end
+                                        endDateFilters[entry]!.end,
                                       ],
                                     },
                                   )
@@ -121,7 +117,7 @@ class ProjectDateFilterChips extends ConsumerWidget {
                                     {
                                       entry: [
                                         publishDateFilters[entry]!.start,
-                                        publishDateFilters[entry]!.end
+                                        publishDateFilters[entry]!.end,
                                       ],
                                     },
                                   );

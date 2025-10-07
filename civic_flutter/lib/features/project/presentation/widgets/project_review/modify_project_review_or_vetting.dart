@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class ModifyProjectReviewOrVetting extends StatelessWidget {
   const ModifyProjectReviewOrVetting({
-    super.key,
-    required this.information,
+    required this.information, super.key,
   });
 
   final String information;
@@ -18,7 +17,7 @@ class ModifyProjectReviewOrVetting extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image(
+          const Image(
             height: 250,
             image: AssetImage(
               TImageTexts.completed,

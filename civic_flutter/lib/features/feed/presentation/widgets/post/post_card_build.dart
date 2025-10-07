@@ -6,9 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostCardBuild extends ConsumerWidget {
   const PostCardBuild({
-    super.key,
-    required this.noMaxLines,
-    required this.post,
+    required this.noMaxLines, required this.post, super.key,
   });
 
   final bool noMaxLines;

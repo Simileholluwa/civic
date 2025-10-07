@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class UsernameScreen extends StatelessWidget {
   const UsernameScreen({
@@ -24,12 +24,12 @@ class UsernameScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: Column(
+          child: const Column(
             children: [
-              const AuthHeader(
-                authTitle: "Confirm your details",
-                authSubTitle:
-                    'This data has been retrieved from your NIN. Ensure they are correct.',
+              AuthHeader(
+                authTitle: 'Confirm your details',
+                authSubTitle: 'This data has been retrieved from your NIN. '
+                    'Ensure they are correct.',
               ),
               UsernameForm(),
             ],

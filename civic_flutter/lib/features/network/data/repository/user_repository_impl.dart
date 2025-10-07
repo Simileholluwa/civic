@@ -3,7 +3,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserRepositoryImpl extends UserRepository{
+class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl({
     required UserRemoteDatasource remoteDatasource,
   }) : _remoteDatasource = remoteDatasource;
@@ -26,9 +26,13 @@ class UserRepositoryImpl extends UserRepository{
   }
 
   @override
-  Future<Either<Failure, UserRecord>> getUser({required int? userId,}) async {
+  Future<Either<Failure, UserRecord>> getUser({
+    required int? userId,
+  }) async {
     try {
-      final result = await _remoteDatasource.getUser(userId: userId,);
+      final result = await _remoteDatasource.getUser(
+        userId: userId,
+      );
       return Right(result);
     } on ServerException catch (e) {
       return Left(
@@ -38,5 +42,4 @@ class UserRepositoryImpl extends UserRepository{
       );
     }
   }
-  
 }

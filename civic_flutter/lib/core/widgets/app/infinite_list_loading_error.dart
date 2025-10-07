@@ -4,9 +4,9 @@ import 'package:iconsax/iconsax.dart';
 
 class LoadingError extends StatelessWidget {
   const LoadingError({
+    required this.retry,
     super.key,
     this.errorMessage,
-    required this.retry,
     this.padding = const EdgeInsets.symmetric(horizontal: 15),
     this.imageString = TImageTexts.disconnected,
     this.mainAxisAlignment,
@@ -31,21 +31,24 @@ class LoadingError extends StatelessWidget {
           Text(
             'OOPS!',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-              color: Theme.of(context).hintColor,
-              fontSize: 30,
-            ),
+                  color: Theme.of(context).hintColor,
+                  fontSize: 30,
+                ),
             textAlign: TextAlign.center,
           ),
           Text(
-            errorMessage ?? 'Something went wrong while fetching requested data. Please try again.',
+            errorMessage ??
+                'Something went wrong while fetching '
+                    'requested data. Please try again.',
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: Theme.of(context).hintColor,
-            ),
+                  color: Theme.of(context).hintColor,
+                ),
             textAlign: TextAlign.center,
           ),
-          if(showRefresh)
-            SizedBox(
-              height: 1,),
+          if (showRefresh)
+            const SizedBox(
+              height: 1,
+            ),
           if (showRefresh)
             SizedBox(
               height: 45,
@@ -54,8 +57,7 @@ class LoadingError extends StatelessWidget {
                 onPressed: retry,
                 text: 'Retry',
                 buttonIcon: Iconsax.refresh,
-                ),
-              
+              ),
             ),
         ],
       ),

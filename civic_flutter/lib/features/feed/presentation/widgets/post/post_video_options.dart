@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class PostVideoOptions extends ConsumerWidget {
   const PostVideoOptions({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -56,8 +56,8 @@ class PostVideoOptions extends ConsumerWidget {
                 ),
               ),
               child: IconButton(
-                onPressed: () {
-                  videoControl?.dispose();
+                onPressed: () async {
+                  await videoControl?.dispose();
                   postNotifier.clearMedia();
                 },
                 icon: const Icon(

@@ -57,20 +57,20 @@ class FeedHelperFunctions {
     return postDialog(
       context: context,
       title: 'Clear all bookmarks?',
-      description:
-          'Are you sure you want to clear all your bookmarks? This action cannot be undone.',
+      description: 'Are you sure you want to clear all your bookmarks? '
+          'This action cannot be undone.',
       onTapSkipButton: () {
         context.pop();
       },
       activeButtonText: 'Delete all',
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: "Cancel",
+      skipText: 'Cancel',
       onTapActiveButton: () async {
         if (context.mounted) {
           context.pop();
         }
-        ref
+        await ref
             .read(paginatedPostBookmarkListProvider.notifier)
             .clearBookmarksList();
       },
@@ -113,10 +113,13 @@ class FeedHelperFunctions {
         await appRequestLocationPremissionDialog(context: context);
       }
     } else if (permission == LocationPermission.deniedForever) {
-      Geolocator.openLocationSettings();
+      await Geolocator.openLocationSettings();
     } else {
       if (context.mounted) {
-        selectLocationBottomSheet(context: context, post: post);
+        await selectLocationBottomSheet(
+          context: context,
+          post: post,
+        );
       }
     }
   }
@@ -139,7 +142,6 @@ class FeedHelperFunctions {
     );
   }
 
-
   static String formatTimeLeft(DateTime expiresAt) {
     final now = DateTime.now();
     final timeLeft = expiresAt.difference(now);
@@ -159,21 +161,22 @@ class FeedHelperFunctions {
   }
 
   static List<String> getAllImagesFromEditor(String content) {
-    final List<String> imageUrls = [];
+    final imageUrls = <String>[];
     // Convert the document to JSON
 
     final jsonDocument = jsonDecode(
       content,
-    );
+    ) as List<Map<String, Map<String, String>>>;
 
     // Loop through the document's operations
-    for (var operation in jsonDocument) {
-      if (operation['insert'] is Map &&
-          operation['insert'].containsKey('image')) {
-        // Add the image URL to the list
-        final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-        if (!operation['insert']['image'].toString().startsWith(regex)) {
-          imageUrls.add(operation['insert']['image']);
+    for (final operation in jsonDocument) {
+      if (operation['insert'] is Map && operation['insert'] != null) {
+        if (operation['insert']!.containsKey('image')) {
+          // Add the image URL to the list
+          final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
+          if (!operation['insert']!['image'].toString().startsWith(regex)) {
+            imageUrls.add(operation['insert']!['image']!);
+          }
         }
       }
     }
@@ -195,20 +198,22 @@ class FeedHelperFunctions {
     // Convert document to JSON
     final documentJson = jsonDecode(
       content,
-    );
+    ) as List<Map<String, Map<String, String>>>;
 
     // Update the JSON with new image paths
-    for (var block in documentJson) {
+    for (final block in documentJson) {
       if (block.containsKey('insert')) {
         final insert = block['insert'];
 
         // Check if the block is an image
-        if (insert is Map<String, dynamic> && insert.containsKey('image')) {
-          final oldPath = insert['image'] as String;
+        if (insert is Map && insert != null) {
+          if (insert.containsKey('image')) {
+            final oldPath = insert['image']!;
 
-          // If the image path has a replacement, update it
-          if (pathReplacements.containsKey(oldPath)) {
-            insert['image'] = pathReplacements[oldPath];
+            // If the image path has a replacement, update it
+            if (pathReplacements.containsKey(oldPath)) {
+              insert['image'] = pathReplacements[oldPath]!;
+            }
           }
         }
       }

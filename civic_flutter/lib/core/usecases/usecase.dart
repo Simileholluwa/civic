@@ -1,5 +1,3 @@
-// ignore_for_file: one_member_abstracts
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 

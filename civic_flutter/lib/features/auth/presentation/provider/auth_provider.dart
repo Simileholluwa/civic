@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
@@ -9,21 +8,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Auth extends _$Auth {
   @override
   AuthState build() {
-    ref.onDispose(() {
-      state.firstNameController.dispose();
-      state.emailController.dispose();
-      state.lastNameController.dispose();
-      state.middleNameController.dispose();
-      state.verificationCodeController.dispose();
-      state.newPasswordController.dispose();
-      state.passwordResetCodeController.dispose();
-      state.newAccountPasswordController.dispose();
-      state.resetPasswordEmailController.dispose();
-    });
     return AuthState.empty();
   }
 
@@ -82,11 +70,10 @@ class Auth extends _$Auth {
   }
 
   Future<bool> logout() async {
-    ref.invalidate(paginatedProjectListProvider);
-    ref.invalidate(paginatedPostListProvider);
-    ref.invalidate(paginatedPollListProvider);
-    ref.invalidate(paginatedArticleListProvider);
-    ref.invalidate(paginatedNotificationsListProvider);
+    ref
+      ..invalidate(paginatedProjectListProvider)
+      ..invalidate(paginatedPostListProvider)
+      ..invalidate(paginatedNotificationsListProvider);
     final logOutUseCase = ref.read(logOutProvider);
     final result = await logOutUseCase(
       NoParams(),
@@ -101,14 +88,14 @@ class Auth extends _$Auth {
 
   Future<UserRecord?> signInWithEmailAndPassword() async {
     final signInUseCase = ref.read(userSignInProvider);
-    ref.read(signInLoadingProvider.notifier).setValue(true);
+    ref.read(signInLoadingProvider.notifier).value = true;
     final result = await signInUseCase(
       UserSignInParams(
         state.email,
         state.password,
       ),
     );
-    ref.read(signInLoadingProvider.notifier).setValue(false);
+    ref.read(signInLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return null;
@@ -119,13 +106,13 @@ class Auth extends _$Auth {
 
   Future<bool> checkIfNewUser() async {
     final newUserUseCase = ref.read(checkIfNewUserProvider);
-    ref.read(checkEmailLoadingProvider.notifier).setValue(true);
+    ref.read(checkEmailLoadingProvider.notifier).value = true;
     final result = await newUserUseCase(
       CheckIfNewUserParams(
         state.email,
       ),
     );
-    ref.read(checkEmailLoadingProvider.notifier).setValue(false);
+    ref.read(checkEmailLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -147,7 +134,7 @@ class Auth extends _$Auth {
       );
       return false;
     }
-    ref.read(createAccountLoadingProvider.notifier).setValue(true);
+    ref.read(createAccountLoadingProvider.notifier).value = true;
     final result = await createAccountRequest(
       CreateAccountRequestParams(
         state.newAccountPassword,
@@ -155,7 +142,7 @@ class Auth extends _$Auth {
         state.firstName,
       ),
     );
-    ref.read(createAccountLoadingProvider.notifier).setValue(false);
+    ref.read(createAccountLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -170,7 +157,7 @@ class Auth extends _$Auth {
   Future<bool> validateCreateAccount() async {
     final validateAccount = ref.read(validateCreateAccountProvider);
 
-    ref.read(validatCreateAccountLoadingProvider.notifier).setValue(true);
+    ref.read(validatCreateAccountLoadingProvider.notifier).value = true;
     final userRecord = UserRecord(
       nin: state.nin,
       firstName: state.firstName,
@@ -186,7 +173,7 @@ class Auth extends _$Auth {
         userRecord: userRecord,
       ),
     );
-    ref.read(validatCreateAccountLoadingProvider.notifier).setValue(false);
+    ref.read(validatCreateAccountLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -200,13 +187,13 @@ class Auth extends _$Auth {
 
   Future<bool> initiatePasswordRequest() async {
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(true);
+    ref.read(initiatePasswordResetLoadingProvider.notifier).value = true;
     final result = await initiatePasswordReset(
       InitiatePasswordResetParams(
         state.resetPasswordEmail,
       ),
     );
-    ref.read(initiatePasswordResetLoadingProvider.notifier).setValue(false);
+    ref.read(initiatePasswordResetLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;
@@ -222,17 +209,13 @@ class Auth extends _$Auth {
     required String email,
   }) async {
     final initiatePasswordReset = ref.read(initiatePasswordResetProvider);
-    ref
-        .read(initiateResendPasswordResetLoadingProvider.notifier)
-        .setValue(true);
+    ref.read(initiateResendPasswordResetLoadingProvider.notifier).value = true;
     final result = await initiatePasswordReset(
       InitiatePasswordResetParams(
         email,
       ),
     );
-    ref
-        .read(initiateResendPasswordResetLoadingProvider.notifier)
-        .setValue(false);
+    ref.read(initiateResendPasswordResetLoadingProvider.notifier).value = false;
     result.fold((error) {
       TToastMessages.errorToast(error.message);
       ref.read(countdownTimerProvider.notifier).resetTimer();
@@ -247,7 +230,7 @@ class Auth extends _$Auth {
 
   Future<bool> resetPassword() async {
     final resetPasswordUseCase = ref.read(resetUserPasswordProvider);
-    ref.read(resetPasswordLoadingProvider.notifier).setValue(true);
+    ref.read(resetPasswordLoadingProvider.notifier).value = true;
     final result = await resetPasswordUseCase(
       ResetUserPasswordParams(
         state.resetPasswordEmail,
@@ -255,7 +238,7 @@ class Auth extends _$Auth {
         state.passwordResetCode,
       ),
     );
-    ref.read(resetPasswordLoadingProvider.notifier).setValue(false);
+    ref.read(resetPasswordLoadingProvider.notifier).value = false;
     return result.fold(
       (error) {
         TToastMessages.errorToast(error.message);
@@ -271,11 +254,11 @@ class Auth extends _$Auth {
     required String ninNumber,
   }) async {
     final ninUseCase = ref.read(searchUserNinProvider);
-    ref.read(searchNinLoadingProvider.notifier).setValue(true);
+    ref.read(searchNinLoadingProvider.notifier).value = true;
     final result = await ninUseCase(
       NinUseCaseParams(ninNumber),
     );
-    ref.read(searchNinLoadingProvider.notifier).setValue(false);
+    ref.read(searchNinLoadingProvider.notifier).value = false;
     return result.fold((error) {
       TToastMessages.errorToast(error.message);
       return false;

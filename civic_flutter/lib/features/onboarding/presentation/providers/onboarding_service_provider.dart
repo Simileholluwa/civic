@@ -3,10 +3,10 @@ import 'package:civic_flutter/features/onboarding/data/datasources/local_databas
 import 'package:civic_flutter/features/onboarding/data/repositories/onboarding_repository_impl.dart';
 import 'package:civic_flutter/features/onboarding/domain/usecases/cache_first_timer_usecase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'onboarding_service_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 OnboardingLocalDatabaseImpl onboardingLocalDatabase(Ref ref) {
   return OnboardingLocalDatabaseImpl(
     localStorage: ref.read(
@@ -15,7 +15,7 @@ OnboardingLocalDatabaseImpl onboardingLocalDatabase(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 OnboardingRepositoryImpl onboardingRepository(Ref ref) {
   return OnboardingRepositoryImpl(
     localDatabase: ref.read(
@@ -24,10 +24,9 @@ OnboardingRepositoryImpl onboardingRepository(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 CacheFirstTimerUseCase cacheFirstTimeUseCase(Ref ref) {
   return CacheFirstTimerUseCase(
     onboardingRepository: ref.read(onboardingRepositoryProvider),
   );
 }
-

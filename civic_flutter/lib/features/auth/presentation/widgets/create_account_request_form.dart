@@ -1,9 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateAccountRequestForm extends ConsumerWidget {
@@ -47,9 +45,11 @@ class CreateAccountRequestForm extends ConsumerWidget {
                       .validate();
                   if (!isValid) return;
                   await authNotifier.createAccountRequest();
-                  context.push(
-                    '/auth/signUp/validateCreateAccount',
-                  );
+                  if (context.mounted) {
+                    await context.push(
+                      '/auth/signUp/validateCreateAccount',
+                    );
+                  }
                 },
                 child: const Text(
                   TTexts.tContinue,

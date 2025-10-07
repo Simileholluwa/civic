@@ -20,12 +20,12 @@ class ReviewReaction extends _$ReviewReaction {
         isLike,
       ),
     );
-    result.fold((l) {
+    await result.fold((l) {
       log(
         l.message,
       );
       return;
-    }, (r) async{
+    }, (r) async {
       final userId = ref.read(localStorageProvider).getInt('userId');
       state = state.copyWith(
         likesCount: r.likedBy!.length,

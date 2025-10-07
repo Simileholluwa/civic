@@ -1,12 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class FeedWidgetsState {
   FeedWidgetsState({
@@ -53,9 +51,7 @@ class FeedWidgetsState {
   });
 
   factory FeedWidgetsState.empty() {
-    return FeedWidgetsState(
-
-    );
+    return FeedWidgetsState();
   }
 
   factory FeedWidgetsState.populate(
@@ -87,7 +83,7 @@ class FeedWidgetsState {
       hasLocation: post.locations?.isNotEmpty ?? false,
       tags: post.taggedUsers ?? [],
       hasTags: post.taggedUsers?.isNotEmpty ?? false,
-      creator: post.owner!,
+      creator: post.owner,
       isSubscribed: post.subscribers!.contains(userId),
       hasLiked: post.likedBy!.contains(userId),
       mentions: [],
@@ -97,7 +93,7 @@ class FeedWidgetsState {
       postType: post.postType!,
       isFollower:
           userId != post.ownerId && post.owner!.followers!.contains(userId),
-      numberOfVoters: NumberFormat("#,##0").format(poll?.votedBy?.length ?? 0),
+      numberOfVoters: NumberFormat('#,##0').format(poll?.votedBy?.length ?? 0),
       numberOfOptionVoters: poll?.options?.map((e) => e.votedBy).length ?? 0,
       options: poll?.options?.map((e) => e.option!).toList() ?? <String>[],
       pollOptions: poll?.options ?? <PollOption>[],
@@ -118,7 +114,7 @@ class FeedWidgetsState {
               ? Document.fromJson(
                   jsonDecode(
                     post.article!.content!,
-                  ),
+                  ) as List,
                 ).toPlainText()
               : ''
           : '',
@@ -134,7 +130,7 @@ class FeedWidgetsState {
               ? Document.fromJson(
                   jsonDecode(
                     post.article!.content!,
-                  ),
+                  ) as List,
                 )
               : Document()
           : Document(),

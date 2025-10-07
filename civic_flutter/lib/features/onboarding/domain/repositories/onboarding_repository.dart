@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/errors/failure.dart';
 import 'package:fpdart/fpdart.dart';
 

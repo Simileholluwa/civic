@@ -18,8 +18,8 @@ class GetUserUseCase implements UseCase<UserRecord, GetUserParams> {
 }
 
 class GetUserParams {
-  final int? userId;
   GetUserParams({
     required this.userId,
   });
+  final int? userId;
 }

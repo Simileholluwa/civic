@@ -1,12 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCategoryPageView extends ConsumerWidget {
   const ProjectCategoryPageView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -22,16 +21,14 @@ class ProjectCategoryPageView extends ConsumerWidget {
         children: [
           Text(
             'Choose a category and subcategory most suitable for this project.',
-            style: Theme.of(context).textTheme.bodyMedium!,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Project category',
             dropdownItems: projectCategories.keys.toList(),
             value: projectCreationSate.projectCategory,
-            onChanged: (String? value) {
-              projectNotifier.setProjectCategory(value);
-            },
+            onChanged: projectNotifier.setProjectCategory,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
@@ -39,9 +36,7 @@ class ProjectCategoryPageView extends ConsumerWidget {
             dropdownItems:
                 ProjectHelperFunctions.getSubcategories(projectCreationSate.projectCategory),
             value: projectCreationSate.projectSubCategory,
-            onChanged: (String? value) {
-              projectNotifier.setProjectSubCategory(value);
-            },
+            onChanged: projectNotifier.setProjectSubCategory,
           ),
         ],
       ),

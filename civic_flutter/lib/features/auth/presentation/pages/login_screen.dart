@@ -1,10 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({
@@ -31,7 +29,9 @@ class LoginScreen extends ConsumerWidget {
           child: Column(
             children: [
               AuthHeader(
-                authTitle: authState.firstName == '' ? 'Hi there' : 'Hi ${authState.firstName}',
+                authTitle: authState.firstName == ''
+                    ? 'Hi there'
+                    : 'Hi ${authState.firstName}',
                 authSubTitle: 'Provide the password to your account.',
               ),
               const LoginForm(),

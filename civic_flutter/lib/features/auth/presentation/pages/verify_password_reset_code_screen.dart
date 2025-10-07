@@ -1,8 +1,8 @@
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class VerifyPasswordResetCodeScreen extends ConsumerWidget {
   const VerifyPasswordResetCodeScreen({
@@ -37,20 +37,24 @@ class VerifyPasswordResetCodeScreen extends ConsumerWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              PasswordResetVerificationForm(),
+              const PasswordResetVerificationForm(),
               const SizedBox(
                 height: TSizes.spaceBtwItems,
               ),
               Consumer(
                 builder: (context, ref, _) {
                   return AppResendLink(
-                    onTap: () {
-                      ref.watch(authProvider.notifier).resendPasswordResetCode(
-                        email: authState.resetPasswordEmail,
-                      );
+                    onTap: () async {
+                      await ref
+                          .watch(
+                            authProvider.notifier,
+                          )
+                          .resendPasswordResetCode(
+                            email: authState.resetPasswordEmail,
+                          );
                     },
                   );
-                }
+                },
               ),
             ],
           ),

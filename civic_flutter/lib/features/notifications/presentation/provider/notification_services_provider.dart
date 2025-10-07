@@ -1,18 +1,16 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_services_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 NotificationRemoteDatasourceImpl notificationRemoteDatasource(Ref ref) {
   return NotificationRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 NotificationRepositoryImpl notificationRepositoryImpl(Ref ref) {
   return NotificationRepositoryImpl(
     remoteDatabase: ref.read(
@@ -21,7 +19,7 @@ NotificationRepositoryImpl notificationRepositoryImpl(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetNotificationsUseCase getNotifications(Ref ref) {
   return GetNotificationsUseCase(
     notificationRepository: ref.read(notificationRepositoryImplProvider),

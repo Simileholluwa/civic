@@ -103,10 +103,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -128,8 +129,9 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
-    } catch (e) {
+        message: 'Failed to connect to server. Please try again.',
+      );
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -151,8 +153,9 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
-    } catch (e) {
+        message: 'Failed to connect to server. Please try again.',
+      );
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -176,9 +179,8 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
-        action: null,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
         action: 'retry',
@@ -199,9 +201,8 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
-        action: null,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
         action: 'retry',
@@ -225,9 +226,8 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
-        action: null,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
         action: 'retry',
@@ -236,8 +236,10 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }
 
   @override
-  Future<Post> getComment(
-      {required int commentId, required bool isComment}) async {
+  Future<Post> getComment({
+    required int commentId,
+    required bool isComment,
+  }) async {
     try {
       final result = await _client.post.getComment(
         commentId,
@@ -253,7 +255,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(
         message: e.message,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
         action: 'retry',
@@ -271,7 +273,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         post,
         dateTime,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -288,7 +290,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -312,7 +314,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         message: e.message,
         action: e.action,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -329,7 +331,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -348,7 +350,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -363,7 +365,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       return await _client.post.deletePost(postId);
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -384,7 +386,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -402,14 +404,14 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         isReply,
       );
       if (result == null) {
-        throw ServerException(message: 'Failed to save comment');
+        throw const ServerException(message: 'Failed to save comment');
       }
       return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on ServerException catch (_) {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -430,7 +432,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -452,10 +454,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -477,10 +480,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -505,10 +509,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -530,10 +535,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );
@@ -558,10 +564,11 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+        message: 'Failed to connect to server. Please try again.',
+      );
     } on ServerException {
       rethrow;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),
       );

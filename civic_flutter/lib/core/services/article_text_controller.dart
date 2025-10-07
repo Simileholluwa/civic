@@ -7,7 +7,7 @@ class ArticleTextEditingController extends TextEditingController {
 
   // Method to apply style to a selected range
   void applyStyle(TextStyle style, int start, int end) {
-    for (int i = start; i < end; i++) {
+    for (var i = start; i < end; i++) {
       _styleMap[i] = style;
     }
     notifyListeners(); // Update the UI
@@ -84,17 +84,16 @@ class ArticleTextEditingController extends TextEditingController {
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
-    TextStyle? style,
-    required bool withComposing,
+    required bool withComposing, TextStyle? style,
   }) {
-    List<TextSpan> spans = [];
+    final spans = <TextSpan>[];
 
     // Iterate over the text and apply styles
-    for (int i = 0; i < text.length; i++) {
+    for (var i = 0; i < text.length; i++) {
       spans.add(TextSpan(
         text: text[i],
         style: _styleMap[i] ?? style, // Apply style if available
-      ));
+      ),);
     }
 
     return TextSpan(children: spans);

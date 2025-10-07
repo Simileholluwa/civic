@@ -1,4 +1,3 @@
-//ignore_for_file:avoid_public_notifier_properties
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -14,17 +13,17 @@ class PaginatedProjectList extends _$PaginatedProjectList {
 
   @override
   PagingStatus build(String sortBy) {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
+    pagingController
+      ..addPageRequestListener(
+        fetchPage,
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    ref.onDispose(
+      pagingController.dispose,
+    );
     return pagingController.value.status;
   }
 
@@ -41,8 +40,6 @@ class PaginatedProjectList extends _$PaginatedProjectList {
       result.fold((error) {
         log(error.toString(), name: 'PaginatedProjectList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: error.message,
         );
       }, (data) {
@@ -55,11 +52,9 @@ class PaginatedProjectList extends _$PaginatedProjectList {
           pagingController.appendLastPage(data.results);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString(), name: 'PaginatedProjectList');
       pagingController.value = PagingState(
-        nextPageKey: null,
-        itemList: null,
         error: e.toString(),
       );
     }
@@ -80,8 +75,8 @@ class PaginatedProjectList extends _$PaginatedProjectList {
   }
 
   void removeProject(Project project) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? []);
-    updatedList.remove(project);
+    final updatedList = List<Project>.from(pagingController.itemList ?? [])
+      ..remove(project);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,
@@ -89,8 +84,8 @@ class PaginatedProjectList extends _$PaginatedProjectList {
   }
 
   void removeProjectById(int projectId) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? []);
-    updatedList.removeWhere((element) => element.id == projectId);
+    final updatedList = List<Project>.from(pagingController.itemList ?? [])
+      ..removeWhere((element) => element.id == projectId);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,

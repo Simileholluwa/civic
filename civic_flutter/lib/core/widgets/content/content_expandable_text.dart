@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 
 class ContentExpandableText extends StatelessWidget {
   const ContentExpandableText({
-    super.key,
-    required this.text,
+    required this.text, required this.onToggleTextTap, super.key,
     this.hasVideo = false,
     this.hasImage = false,
     this.noMaxLines = false,
-    required this.onToggleTextTap,
     this.maxLines,
     this.fontSize = 18,
   });

@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class RatingBar extends StatelessWidget {
+  const RatingBar({
+    required this.rating, required this.ratingCount, super.key,
+    this.size = 18,
+  });
   final double rating;
   final double size;
   final int? ratingCount;
-  const RatingBar({
-    super.key,
-    required this.rating,
-    required this.ratingCount,
-    this.size = 18,
-  });
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> starList = [];
+    final starList = <Widget>[];
 
-    int realNumber = rating.floor();
-    int partNumber = ((rating - realNumber) * 10).ceil();
+    final realNumber = rating.floor();
+    final partNumber = ((rating - realNumber) * 10).ceil();
 
-    for (int i = 0; i < 5; i++) {
+    for (var i = 0; i < 5; i++) {
       if (i < realNumber) {
         starList.add(
           Icon(
@@ -48,7 +46,7 @@ class RatingBar extends StatelessWidget {
                     color: Theme.of(context).dividerColor,
                     size: size,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -66,7 +64,7 @@ class RatingBar extends StatelessWidget {
     ratingCount != null
         ? starList.add(
             Padding(
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               child: Text(
                 '($ratingCount)',
                 style: TextStyle(
@@ -76,7 +74,7 @@ class RatingBar extends StatelessWidget {
               ),
             ),
           )
-        : SizedBox();
+        : const SizedBox();
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -86,15 +84,15 @@ class RatingBar extends StatelessWidget {
 }
 
 class _Clipper extends CustomClipper<Rect> {
-  final int part;
 
   _Clipper({required this.part});
+  final int part;
 
   @override
   Rect getClip(Size size) {
     return Rect.fromLTRB(
       (size.width / 10) * part,
-      0.0,
+      0,
       size.width,
       size.height,
     );

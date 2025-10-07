@@ -28,7 +28,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+          message: 'Failed to connect to server. Please try again.',);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -45,7 +45,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+          message: 'Failed to connect to server. Please try again.',);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -72,7 +72,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+          message: 'Failed to connect to server. Please try again.',);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -89,7 +89,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+          message: 'Failed to connect to server. Please try again.',);
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -108,7 +108,7 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.');
+          message: 'Failed to connect to server. Please try again.',);
     } catch (e) {
       throw ServerException(
         message: e.toString(),

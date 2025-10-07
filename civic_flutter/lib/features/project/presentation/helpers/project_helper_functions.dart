@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -23,8 +24,8 @@ class ProjectHelperFunctions {
   }
 
   static List<double> getCustomItemsHeights(List<String> items) {
-    final List<double> itemsHeights = [];
-    for (int i = 0; i < (items.length * 2) - 1; i++) {
+    final itemsHeights = <double>[];
+    for (var i = 0; i < (items.length * 2) - 1; i++) {
       if (i.isEven) {
         itemsHeights.add(45);
       }
@@ -42,20 +43,20 @@ class ProjectHelperFunctions {
     return postDialog(
       context: context,
       title: 'Clear all bookmarks?',
-      description:
-          'Are you sure you want to clear all your bookmarks? This action cannot be undone.',
+      description: 'Are you sure you want to clear all your bookmarks? '
+          'This action cannot be undone.',
       onTapSkipButton: () {
         context.pop();
       },
       activeButtonText: 'Delete all',
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: "Cancel",
+      skipText: 'Cancel',
       onTapActiveButton: () async {
         if (context.mounted) {
           context.pop();
         }
-        ref
+        await ref
             .read(paginatedProjectBookmarksListProvider.notifier)
             .clearBookmarksList();
       },
@@ -66,14 +67,14 @@ class ProjectHelperFunctions {
     List<String> items,
     BuildContext context,
   ) {
-    final List<DropdownMenuItem<String>> menuItems = [];
-    for (final String item in items) {
+    final menuItems = <DropdownMenuItem<String>>[];
+    for (final item in items) {
       menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: item,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 item,
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -125,9 +126,6 @@ class ProjectHelperFunctions {
                   ? TColors.dark
                   : TColors.textWhite,
             ),
-            dialogTheme: const DialogTheme(
-              elevation: 10,
-            ),
           ),
           child: child!,
         );
@@ -142,8 +140,11 @@ class ProjectHelperFunctions {
     return pickedDate;
   }
 
-  static String percentageElapsed(DateTime startDate, DateTime endDate) {
-    DateTime currentDate = DateTime.now();
+  static String percentageElapsed(
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    final currentDate = DateTime.now();
 
     if (currentDate.isBefore(startDate)) {
       return 'Not started';
@@ -153,16 +154,18 @@ class ProjectHelperFunctions {
       return 'Completed';
     }
 
-    int totalDays = endDate.difference(startDate).inDays;
-    int daysPassed = currentDate.difference(startDate).inDays;
+    final totalDays = endDate.difference(startDate).inDays;
+    final daysPassed = currentDate.difference(startDate).inDays;
 
-    double percentagePassed = (daysPassed / totalDays) * 100;
+    final percentagePassed = (daysPassed / totalDays) * 100;
     return '${percentagePassed.toStringAsFixed(2)}% complete';
   }
 
   static String percentageElapsedInString(
-      DateTime startDate, DateTime endDate) {
-    DateTime currentDate = DateTime.now();
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    final currentDate = DateTime.now();
 
     if (currentDate.isBefore(startDate)) {
       return '0%';
@@ -172,16 +175,18 @@ class ProjectHelperFunctions {
       return '100%';
     }
 
-    int totalDays = endDate.difference(startDate).inDays;
-    int daysPassed = currentDate.difference(startDate).inDays;
+    final totalDays = endDate.difference(startDate).inDays;
+    final daysPassed = currentDate.difference(startDate).inDays;
 
-    double percentagePassed = (daysPassed / totalDays) * 100;
+    final percentagePassed = (daysPassed / totalDays) * 100;
     return '${percentagePassed.toStringAsFixed(1)}%';
   }
 
   static double percentageElapsedInDouble(
-      DateTime startDate, DateTime endDate) {
-    DateTime currentDate = DateTime.now();
+    DateTime startDate,
+    DateTime endDate,
+  ) {
+    final currentDate = DateTime.now();
 
     if (currentDate.isBefore(startDate)) {
       return 0;
@@ -191,15 +196,15 @@ class ProjectHelperFunctions {
       return 1;
     }
 
-    int totalDays = endDate.difference(startDate).inDays;
-    int daysPassed = currentDate.difference(startDate).inDays;
+    final totalDays = endDate.difference(startDate).inDays;
+    final daysPassed = currentDate.difference(startDate).inDays;
 
-    double percentagePassed = (daysPassed / totalDays);
+    final percentagePassed = daysPassed / totalDays;
     return percentagePassed;
   }
 
   static bool canVet(DateTime startDate, DateTime endDate) {
-    DateTime currentDate = DateTime.now();
+    final currentDate = DateTime.now();
 
     if (currentDate.isBefore(startDate)) {
       return false;
@@ -211,15 +216,15 @@ class ProjectHelperFunctions {
   }
 
   static String formatNumber(double number) {
-    final formatter = NumberFormat("#,###");
+    final formatter = NumberFormat('#,###');
     return formatter.format(number);
   }
 
-  static selectLocationBottomSheet({
+  static dynamic selectLocationBottomSheet({
     required BuildContext context,
     required Project project,
   }) {
-    return showModalBottomSheet(
+    return showModalBottomSheet<dynamic>(
       context: context,
       constraints: BoxConstraints(
         maxHeight: MediaQuery.sizeOf(context).height * .7,
@@ -245,152 +250,156 @@ class ProjectHelperFunctions {
       context: context,
       isScrollControlled: true,
       builder: (ctx) {
-        return Consumer(builder: (context, ref, child) {
-          final projectCardState = ref.watch(
-            projectCardWidgetProvider(
-              project,
-            ),
-          );
-          final projectCardNotifier = ref.watch(
-            projectCardWidgetProvider(
-              project,
-            ).notifier,
-          );
-          return Scaffold(
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 15,
-                children: [
-                  Icon(
-                    Iconsax.trash,
-                    color: Colors.red,
-                    size: 50,
-                  ),
-                  Text(
-                    'Delete this Project?',
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 30,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'Kindly take note of the following information associated with deleting a project.',
-                    style: Theme.of(context).textTheme.labelMedium!,
-                    textAlign: TextAlign.center,
-                  ),
-                  Divider(
-                    height: 0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 15,
-                    children: [
-                      ProjectDeleteConsequences(
-                        number: '1.',
-                        consequence:
-                            "Deleting a project can impact your credibility score based on users' engagement level.",
-                      ),
-                      ProjectDeleteConsequences(
-                        number: '2.',
-                        consequence:
-                            "All user engagements will be retained, but no further interactions will be allowed.",
-                      ),
-                      ProjectDeleteConsequences(
-                        number: '3.',
-                        consequence:
-                            "Deleted projects will be visible on the feed.",
-                      ),
-                      ProjectDeleteConsequences(
-                        number: '4.',
-                        consequence:
-                            "To restore a deleted project, a fee will be required.",
-                      ),
-                      ProjectDeleteConsequences(
-                        number: '5.',
-                        consequence:
-                            "Permanent deletion requires a fee and a popular vote.",
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          projectCardNotifier.toggleCanDelete();
-                        },
-                        child: Row(
-                          spacing: 15,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Checkbox(
-                                value: projectCardState.canDelete,
-                                onChanged: (_) {
-                                  projectCardNotifier.toggleCanDelete();
-                                },
+        return Consumer(
+          builder: (context, ref, child) {
+            final projectCardState = ref.watch(
+              projectCardWidgetProvider(
+                project,
+              ),
+            );
+            final projectCardNotifier = ref.watch(
+              projectCardWidgetProvider(
+                project,
+              ).notifier,
+            );
+            return Scaffold(
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                child: Column(
+                  spacing: 15,
+                  children: [
+                    const Icon(
+                      Iconsax.trash,
+                      color: Colors.red,
+                      size: 50,
+                    ),
+                    Text(
+                      'Delete this Project?',
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                fontSize: 30,
                               ),
-                            ),
-                            Text(
-                              'I understand and confirm the above',
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ],
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'Kindly take note of the following information '
+                      'associated with deleting a project.',
+                      style: Theme.of(context).textTheme.labelMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const Divider(
+                      height: 0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 15,
+                      children: [
+                        const ProjectDeleteConsequences(
+                          number: '1.',
+                          consequence:
+                              'Deleting a project can impact your credibility '
+                              "score based on users' engagement level.",
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const ProjectDeleteConsequences(
+                          number: '2.',
+                          consequence: 'All user engagements will be retained, '
+                              'but no further interactions will be allowed.',
+                        ),
+                        const ProjectDeleteConsequences(
+                          number: '3.',
+                          consequence:
+                              'Deleted projects will be visible on the feed.',
+                        ),
+                        const ProjectDeleteConsequences(
+                          number: '4.',
+                          consequence:
+                              'To restore a deleted project, a fee will '
+                              'be required.',
+                        ),
+                        const ProjectDeleteConsequences(
+                          number: '5.',
+                          consequence: 'Permanent deletion requires a fee '
+                              'and a popular vote.',
+                        ),
+                        GestureDetector(
+                          onTap: projectCardNotifier.toggleCanDelete,
+                          child: Row(
+                            spacing: 15,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Checkbox(
+                                  value: projectCardState.canDelete,
+                                  onChanged: (_) {
+                                    projectCardNotifier.toggleCanDelete();
+                                  },
+                                ),
+                              ),
+                              Text(
+                                'I understand and confirm the above',
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            bottomNavigationBar: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    child: FilledButton(
-                      onPressed: projectCardState.canDelete!
-                          ? () {
-                              context.pop();
-                              if (fromDetails) {
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: FilledButton(
+                        onPressed: projectCardState.canDelete!
+                            ? () async {
                                 context.pop();
+                                if (fromDetails) {
+                                  context.pop();
+                                }
+                                await ref
+                                    .read(
+                                      projectCardWidgetProvider(project)
+                                          .notifier,
+                                    )
+                                    .deleteProject(
+                                      project.id!,
+                                    );
                               }
-                              ref
-                                  .read(
-                                    projectCardWidgetProvider(project).notifier,
-                                  )
-                                  .deleteProject(
-                                    project.id!,
-                                  );
-                            }
-                          : null,
-                      style: ButtonStyle().copyWith(
-                        backgroundColor: WidgetStatePropertyAll(
-                          projectCardState.canDelete!
-                              ? Colors.red
-                              : Theme.of(context).disabledColor,
+                            : null,
+                        style: const ButtonStyle().copyWith(
+                          backgroundColor: WidgetStatePropertyAll(
+                            projectCardState.canDelete!
+                                ? Colors.red
+                                : Theme.of(context).disabledColor,
+                          ),
                         ),
+                        child: const Text(
+                          'Delete',
+                        ),
+                      ).withLoading(
+                        loading: false,
                       ),
+                    ),
+                    TextButton(
+                      onPressed: context.pop,
                       child: const Text(
-                        'Delete',
+                        'Cancel',
                       ),
-                    ).withLoading(
-                      loading: false,
                     ),
-                  ),
-                  TextButton(
-                    onPressed: context.pop,
-                    child: Text(
-                      'Cancel',
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }
@@ -410,7 +419,7 @@ class ProjectHelperFunctions {
         await appRequestLocationPremissionDialog(context: context);
       }
     } else if (permission == LocationPermission.deniedForever) {
-      Geolocator.openLocationSettings();
+      await Geolocator.openLocationSettings();
     } else {
       if (context.mounted) {
         selectLocationBottomSheet(context: context, project: project);
@@ -422,25 +431,25 @@ class ProjectHelperFunctions {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       TToastMessages.infoToast('Location services are disabled on your device');
-      throw Exception("Location services are disabled.");
+      throw Exception('Location services are disabled.');
     }
 
-    LocationPermission permission = await Geolocator.checkPermission();
+    var permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         TToastMessages.infoToast('Please enable location services.');
-        throw Exception("Location permissions are denied.");
+        throw Exception('Location permissions are denied.');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      Geolocator.openLocationSettings();
-      throw Exception("Location services are denied forever.");
+      await Geolocator.openLocationSettings();
+      throw Exception('Location services are denied forever.');
     }
 
-    return await Geolocator.getCurrentPosition(
-      locationSettings: LocationSettings(
+    return Geolocator.getCurrentPosition(
+      locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.high,
       ),
     );
@@ -453,16 +462,16 @@ class ProjectHelperFunctions {
     double lon2,
   ) {
     const earthRadius = 6371000;
-    double dLat = _degreesToRadians(lat2 - lat1);
-    double dLon = _degreesToRadians(lon2 - lon1);
+    final dLat = _degreesToRadians(lat2 - lat1);
+    final dLon = _degreesToRadians(lon2 - lon1);
 
-    double a = sin(dLat / 2) * sin(dLat / 2) +
+    final a = sin(dLat / 2) * sin(dLat / 2) +
         cos(_degreesToRadians(lat1)) *
             cos(_degreesToRadians(lat2)) *
             sin(dLon / 2) *
             sin(dLon / 2);
 
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return earthRadius * c;
   }
 
@@ -475,23 +484,27 @@ class ProjectHelperFunctions {
     ScrollController scrollController,
     BuildContext context,
   ) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (activeIndicatorKey.currentContext != null) {
-        final RenderBox renderBox =
-            activeIndicatorKey.currentContext!.findRenderObject() as RenderBox;
-        final position = renderBox.localToGlobal(Offset.zero);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        if (activeIndicatorKey.currentContext != null) {
+          final renderBox = activeIndicatorKey.currentContext!
+              .findRenderObject()! as RenderBox;
+          final position = renderBox.localToGlobal(Offset.zero);
 
-        final screenWidth = MediaQuery.sizeOf(context).width;
+          final screenWidth = MediaQuery.sizeOf(context).width;
 
-        if (position.dx < 0 || position.dx > screenWidth - 50) {
-          scrollController.animateTo(
-            position.dx,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
+          if (position.dx < 0 || position.dx > screenWidth - 50) {
+            unawaited(
+              scrollController.animateTo(
+                position.dx,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              ),
+            );
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   static String humanizeProjectCost(double number) {
@@ -523,9 +536,13 @@ class ProjectHelperFunctions {
     return parts.isEmpty ? 'just now' : parts.join(', ');
   }
 
-  static Future<bool?> deleteProjectReviewDialog(BuildContext context,
-      ProjectReviewProvider projectReviewNotifier, int projectId, int reviewId,
-      [bool shouldPop = true]) {
+  static Future<bool?> deleteProjectReviewDialog(
+    BuildContext context,
+    ProjectReviewProvider projectReviewNotifier,
+    int projectId,
+    int reviewId, [
+    bool shouldPop = true,
+  ]) {
     return postDialog(
       context: context,
       title: 'Delete review?',
@@ -552,8 +569,11 @@ class ProjectHelperFunctions {
   }
 
   static Future<bool?> deleteProjectVettingDialog(
-      BuildContext context, ProjectVet projectVettingNotifier, int vettingId,
-      [bool shouldPop = true]) {
+    BuildContext context,
+    ProjectVet projectVettingNotifier,
+    int vettingId, [
+    bool shouldPop = true,
+  ]) {
     return postDialog(
       context: context,
       title: 'Delete vetting?',

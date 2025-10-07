@@ -11,10 +11,10 @@ abstract class AuthLocalDatasource {
 }
 
 class AuthLocalDatasourceImpl implements AuthLocalDatasource {
-  final LocalStorage _prefs;
   AuthLocalDatasourceImpl({
     required LocalStorage prefs,
   }) : _prefs = prefs;
+  final LocalStorage _prefs;
 
   @override
   Future<void> saveUserRecord({
@@ -27,9 +27,9 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
         'userId',
         userRecord.id!,
       );
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString());
-      throw CacheException(message: 'Something went wrong');
+      throw const CacheException(message: 'Something went wrong');
     }
   }
 
@@ -38,12 +38,12 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
     final userRecord = _prefs.getString('userRecord');
     try {
       if (userRecord != null) {
-        final decoded = jsonDecode(userRecord.toString());
+        final decoded = jsonDecode(userRecord) as Map<String, dynamic>;
         return UserRecord.fromJson(decoded);
       } else {
         return null;
       }
-    } catch (e) {
+    } on Exception catch (e) {
       throw CacheException(message: e.toString());
     }
   }

@@ -9,16 +9,14 @@ import 'package:transparent_image/transparent_image.dart';
 
 class ProjectPdfThumbnailViewer extends ConsumerWidget {
   const ProjectPdfThumbnailViewer({
-    super.key,
-    required this.project,
-    required this.data,
+    required this.project, required this.data, super.key,
   });
   final Project project;
   final List<Uint8List> data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int current = ref.watch(projectPDFAttachmentPageChangedProvider);
+    final current = ref.watch(projectPDFAttachmentPageChangedProvider);
     return Container(
       constraints: const BoxConstraints(
         maxWidth: 500,
@@ -52,7 +50,7 @@ class ProjectPdfThumbnailViewer extends ConsumerWidget {
                           index,
                           reason,
                         );
-                  }),
+                  },),
               items: data.map((image) {
                 return Container(
                   width: double.maxFinite,
@@ -97,10 +95,10 @@ class ProjectPdfThumbnailViewer extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: data.asMap().entries.map((entry) {
                       return Container(
-                        width: 12.0,
-                        height: 12.0,
+                        width: 12,
+                        height: 12,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 4.0),
+                            vertical: 8, horizontal: 4,),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(alpha: 

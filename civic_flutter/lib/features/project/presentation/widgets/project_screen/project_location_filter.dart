@@ -15,7 +15,10 @@ class ProjectLocationFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16,
+        0,
+        20,
+        0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,9 +47,7 @@ class ProjectLocationFilter extends ConsumerWidget {
             onChanged: (value) {
               projectWidgetsNotifier.toggleVirtualLocation();
             },
-            onTap: () {
-              projectWidgetsNotifier.toggleVirtualLocation();
-            },
+            onTap: projectWidgetsNotifier.toggleVirtualLocation,
             items: const ['Virtual location'],
           ),
           const ProjectFilterColumnDivider(),
@@ -57,9 +58,7 @@ class ProjectLocationFilter extends ConsumerWidget {
                   'Physical locations only',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 0,
-                ),
+                contentPadding: EdgeInsets.zero,
                 trailing: Icon(
                   projectWidgetsState.isPhysicalLocationsExpanded
                       ? Icons.arrow_drop_up

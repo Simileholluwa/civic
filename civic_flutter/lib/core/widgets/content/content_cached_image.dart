@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class ContentCachedImage extends StatelessWidget {
   const ContentCachedImage({
-    super.key,
-    required this.url,
-    required this.height,
+    required this.url, required this.height, super.key,
   });
 
   final String url;

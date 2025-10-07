@@ -8,8 +8,7 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectImageAttachmentsOptions extends ConsumerWidget {
   const ProjectImageAttachmentsOptions({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;

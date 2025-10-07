@@ -8,8 +8,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PostCommentReplyCard extends ConsumerWidget {
   const PostCommentReplyCard({
-    super.key,
     required this.postId,
+    super.key,
   });
 
   final int postId;
@@ -51,10 +51,13 @@ class PostCommentReplyCard extends ConsumerWidget {
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
                     replyOrComment: reply,
-                    onReply: () {
-                      context.push('/create/post/0', extra: {
-                        'parent': reply,
-                      });
+                    onReply: () async {
+                      await context.push(
+                        '/create/post/0',
+                        extra: {
+                          'parent': reply,
+                        },
+                      );
                     },
                     isReply: true,
                     originalPostId: postId,
@@ -65,8 +68,8 @@ class PostCommentReplyCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: () => repliesController.refresh(),
-      noItemsFound: ContentNoItemsFound(),
+      onRefresh: repliesController.refresh,
+      noItemsFound: const ContentNoItemsFound(),
       firstPageProgressIndicator: Center(
         child: LoadingAnimationWidget.progressiveDots(
           color: TColors.primary,
@@ -74,7 +77,7 @@ class PostCommentReplyCard extends ConsumerWidget {
         ),
       ),
       firstPageErrorIndicator: CommentRepliesPageError(
-        onTap: () => repliesController.refresh(),
+        onTap: repliesController.refresh,
         errorMessage:
             "We couldn't fetch replies for this post. Please try again.",
       ),

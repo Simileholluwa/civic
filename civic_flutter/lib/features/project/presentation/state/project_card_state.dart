@@ -1,12 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCardState {
   ProjectCardState({
@@ -24,14 +22,10 @@ class ProjectCardState {
     required this.numberOfReposts,
     required this.numberOfVettings,
     required this.numberOfBookmarks,
-    this.hasLiked = false,
     required this.hasReviewed,
     required this.hasVetted,
     required this.creator,
     required this.canVet,
-    this.isBookmarked = false,
-    this.isSubscribed = false,
-    this.canEdit = false,
     required this.startDateISO,
     required this.endDateISO,
     required this.percentageElapsedInDouble,
@@ -48,6 +42,10 @@ class ProjectCardState {
     required this.hasLocation,
     required this.isOwner,
     required this.isFollower,
+    this.hasLiked = false,
+    this.isBookmarked = false,
+    this.isSubscribed = false,
+    this.canEdit = false,
     this.isDeleted = false,
     this.toggleFilter = false,
     this.canDelete = false,
@@ -98,26 +96,26 @@ class ProjectCardState {
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectCardState(
-      creator: project.owner!,
+      creator: project.owner,
       timeAgo: THelperFunctions.humanizeDateTime(
         project.dateCreated!,
       ),
       numberOfViews: '100',
-      imagesUrl: project.projectImageAttachments!,
+      imagesUrl: project.projectImageAttachments,
       description: Document.fromJson(
         jsonDecode(
           project.description!,
-        ),
+        ) as List,
       ).toPlainText(),
       rawDescription: Document.fromJson(
         jsonDecode(
           project.description!,
-        ),
+        ) as List,
       ),
       canEdit: DateTime.now().difference(project.dateCreated!).inMinutes < 30 &&
           userId == project.ownerId,
-      title: project.title!,
-      currency: project.currency!,
+      title: project.title,
+      currency: project.currency,
       amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),
       completionRate: ProjectHelperFunctions.percentageElapsed(
         project.startDate!,
@@ -171,13 +169,13 @@ class ProjectCardState {
         project.startDate!,
         project.endDate!,
       ),
-      category: project.projectCategory!,
-      subCategory: project.projectSubCategory!,
+      category: project.projectCategory,
+      subCategory: project.projectSubCategory,
       fundingAmount: '${project.currency} ${ProjectHelperFunctions.formatNumber(
         project.projectCost!,
       )}',
-      fundingCategory: project.fundingCategory!,
-      fundingSubCategory: project.fundingSubCategory!,
+      fundingCategory: project.fundingCategory,
+      fundingSubCategory: project.fundingSubCategory,
       hasPdf: project.projectPDFAttachments?.isNotEmpty ?? false,
       pdfAttachments: project.projectPDFAttachments ?? [],
       locations: project.physicalLocations ?? [],
@@ -187,7 +185,7 @@ class ProjectCardState {
           project.owner!.followers!.contains(
             userId,
           ),
-      isDeleted: project.isDeleted!,
+      isDeleted: project.isDeleted,
     );
   }
 

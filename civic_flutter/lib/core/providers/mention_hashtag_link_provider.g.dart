@@ -6,1087 +6,820 @@ part of 'mention_hashtag_link_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(mentionServices)
+const mentionServicesProvider = MentionServicesProvider._();
+
+final class MentionServicesProvider extends $FunctionalProvider<
+    MentionHashTagLinkServices,
+    MentionHashTagLinkServices,
+    MentionHashTagLinkServices> with $Provider<MentionHashTagLinkServices> {
+  const MentionServicesProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'mentionServicesProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$mentionServicesHash();
+
+  @$internal
+  @override
+  $ProviderElement<MentionHashTagLinkServices> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  MentionHashTagLinkServices create(Ref ref) {
+    return mentionServices(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(MentionHashTagLinkServices value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<MentionHashTagLinkServices>(value),
+    );
+  }
+}
+
 String _$mentionServicesHash() => r'bd3b5edaf82eee204df7723d0b3bc049d1fcc6e5';
 
-/// See also [mentionServices].
-@ProviderFor(mentionServices)
-final mentionServicesProvider =
-    AutoDisposeProvider<MentionHashTagLinkServices>.internal(
-  mentionServices,
-  name: r'mentionServicesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mentionServicesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(fetchUsersToMention)
+const fetchUsersToMentionProvider = FetchUsersToMentionFamily._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef MentionServicesRef = AutoDisposeProviderRef<MentionHashTagLinkServices>;
+final class FetchUsersToMentionProvider extends $FunctionalProvider<
+        AsyncValue<List<UserRecord>>,
+        List<UserRecord>,
+        FutureOr<List<UserRecord>>>
+    with $FutureModifier<List<UserRecord>>, $FutureProvider<List<UserRecord>> {
+  const FetchUsersToMentionProvider._(
+      {required FetchUsersToMentionFamily super.from,
+      required String super.argument})
+      : super(
+          retry: null,
+          name: r'fetchUsersToMentionProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$fetchUsersToMentionHash();
+
+  @override
+  String toString() {
+    return r'fetchUsersToMentionProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<UserRecord>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<UserRecord>> create(Ref ref) {
+    final argument = this.argument as String;
+    return fetchUsersToMention(
+      ref,
+      argument,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchUsersToMentionProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
 String _$fetchUsersToMentionHash() =>
     r'dd07560788a583979f3345feb854149cc164b104';
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
+final class FetchUsersToMentionFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<UserRecord>>, String> {
+  const FetchUsersToMentionFamily._()
+      : super(
+          retry: null,
+          name: r'fetchUsersToMentionProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
 
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [fetchUsersToMention].
-@ProviderFor(fetchUsersToMention)
-const fetchUsersToMentionProvider = FetchUsersToMentionFamily();
-
-/// See also [fetchUsersToMention].
-class FetchUsersToMentionFamily extends Family<AsyncValue<List<UserRecord>>> {
-  /// See also [fetchUsersToMention].
-  const FetchUsersToMentionFamily();
-
-  /// See also [fetchUsersToMention].
   FetchUsersToMentionProvider call(
     String query,
-  ) {
-    return FetchUsersToMentionProvider(
-      query,
-    );
-  }
+  ) =>
+      FetchUsersToMentionProvider._(argument: query, from: this);
 
   @override
-  FetchUsersToMentionProvider getProviderOverride(
-    covariant FetchUsersToMentionProvider provider,
-  ) {
-    return call(
-      provider.query,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fetchUsersToMentionProvider';
+  String toString() => r'fetchUsersToMentionProvider';
 }
 
-/// See also [fetchUsersToMention].
-class FetchUsersToMentionProvider
-    extends AutoDisposeFutureProvider<List<UserRecord>> {
-  /// See also [fetchUsersToMention].
-  FetchUsersToMentionProvider(
-    String query,
-  ) : this._internal(
-          (ref) => fetchUsersToMention(
-            ref as FetchUsersToMentionRef,
-            query,
-          ),
-          from: fetchUsersToMentionProvider,
-          name: r'fetchUsersToMentionProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchUsersToMentionHash,
-          dependencies: FetchUsersToMentionFamily._dependencies,
-          allTransitiveDependencies:
-              FetchUsersToMentionFamily._allTransitiveDependencies,
-          query: query,
+@ProviderFor(MentionSuggestions)
+const mentionSuggestionsProvider = MentionSuggestionsProvider._();
+
+final class MentionSuggestionsProvider
+    extends $NotifierProvider<MentionSuggestions, List<UserRecord>> {
+  const MentionSuggestionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'mentionSuggestionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  FetchUsersToMentionProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.query,
-  }) : super.internal();
-
-  final String query;
-
   @override
-  Override overrideWith(
-    FutureOr<List<UserRecord>> Function(FetchUsersToMentionRef provider) create,
-  ) {
-    return ProviderOverride(
+  String debugGetCreateSourceHash() => _$mentionSuggestionsHash();
+
+  @$internal
+  @override
+  MentionSuggestions create() => MentionSuggestions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<UserRecord> value) {
+    return $ProviderOverride(
       origin: this,
-      override: FetchUsersToMentionProvider._internal(
-        (ref) => create(ref as FetchUsersToMentionRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        query: query,
-      ),
+      providerOverride: $SyncValueProvider<List<UserRecord>>(value),
     );
   }
-
-  @override
-  AutoDisposeFutureProviderElement<List<UserRecord>> createElement() {
-    return _FetchUsersToMentionProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FetchUsersToMentionProvider && other.query == query;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, query.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FetchUsersToMentionRef on AutoDisposeFutureProviderRef<List<UserRecord>> {
-  /// The parameter `query` of this provider.
-  String get query;
-}
-
-class _FetchUsersToMentionProviderElement
-    extends AutoDisposeFutureProviderElement<List<UserRecord>>
-    with FetchUsersToMentionRef {
-  _FetchUsersToMentionProviderElement(super.provider);
-
-  @override
-  String get query => (origin as FetchUsersToMentionProvider).query;
-}
-
-String _$fetchHashtagsHash() => r'868cde6b8cb4f568a8c7d4d96e9220d758e55899';
-
-/// See also [fetchHashtags].
-@ProviderFor(fetchHashtags)
-const fetchHashtagsProvider = FetchHashtagsFamily();
-
-/// See also [fetchHashtags].
-class FetchHashtagsFamily extends Family<AsyncValue<List<String>>> {
-  /// See also [fetchHashtags].
-  const FetchHashtagsFamily();
-
-  /// See also [fetchHashtags].
-  FetchHashtagsProvider call(
-    String query,
-  ) {
-    return FetchHashtagsProvider(
-      query,
-    );
-  }
-
-  @override
-  FetchHashtagsProvider getProviderOverride(
-    covariant FetchHashtagsProvider provider,
-  ) {
-    return call(
-      provider.query,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fetchHashtagsProvider';
-}
-
-/// See also [fetchHashtags].
-class FetchHashtagsProvider extends AutoDisposeFutureProvider<List<String>> {
-  /// See also [fetchHashtags].
-  FetchHashtagsProvider(
-    String query,
-  ) : this._internal(
-          (ref) => fetchHashtags(
-            ref as FetchHashtagsRef,
-            query,
-          ),
-          from: fetchHashtagsProvider,
-          name: r'fetchHashtagsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchHashtagsHash,
-          dependencies: FetchHashtagsFamily._dependencies,
-          allTransitiveDependencies:
-              FetchHashtagsFamily._allTransitiveDependencies,
-          query: query,
-        );
-
-  FetchHashtagsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.query,
-  }) : super.internal();
-
-  final String query;
-
-  @override
-  Override overrideWith(
-    FutureOr<List<String>> Function(FetchHashtagsRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FetchHashtagsProvider._internal(
-        (ref) => create(ref as FetchHashtagsRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        query: query,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<List<String>> createElement() {
-    return _FetchHashtagsProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FetchHashtagsProvider && other.query == query;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, query.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FetchHashtagsRef on AutoDisposeFutureProviderRef<List<String>> {
-  /// The parameter `query` of this provider.
-  String get query;
-}
-
-class _FetchHashtagsProviderElement
-    extends AutoDisposeFutureProviderElement<List<String>>
-    with FetchHashtagsRef {
-  _FetchHashtagsProviderElement(super.provider);
-
-  @override
-  String get query => (origin as FetchHashtagsProvider).query;
-}
-
-String _$fetchLinkMetadataHash() => r'5d7175a6b91f0db953156ab6393a776b91c81b4c';
-
-/// See also [fetchLinkMetadata].
-@ProviderFor(fetchLinkMetadata)
-const fetchLinkMetadataProvider = FetchLinkMetadataFamily();
-
-/// See also [fetchLinkMetadata].
-class FetchLinkMetadataFamily extends Family<AsyncValue<LinkMetadata?>> {
-  /// See also [fetchLinkMetadata].
-  const FetchLinkMetadataFamily();
-
-  /// See also [fetchLinkMetadata].
-  FetchLinkMetadataProvider call(
-    String text,
-  ) {
-    return FetchLinkMetadataProvider(
-      text,
-    );
-  }
-
-  @override
-  FetchLinkMetadataProvider getProviderOverride(
-    covariant FetchLinkMetadataProvider provider,
-  ) {
-    return call(
-      provider.text,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fetchLinkMetadataProvider';
-}
-
-/// See also [fetchLinkMetadata].
-class FetchLinkMetadataProvider
-    extends AutoDisposeFutureProvider<LinkMetadata?> {
-  /// See also [fetchLinkMetadata].
-  FetchLinkMetadataProvider(
-    String text,
-  ) : this._internal(
-          (ref) => fetchLinkMetadata(
-            ref as FetchLinkMetadataRef,
-            text,
-          ),
-          from: fetchLinkMetadataProvider,
-          name: r'fetchLinkMetadataProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchLinkMetadataHash,
-          dependencies: FetchLinkMetadataFamily._dependencies,
-          allTransitiveDependencies:
-              FetchLinkMetadataFamily._allTransitiveDependencies,
-          text: text,
-        );
-
-  FetchLinkMetadataProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.text,
-  }) : super.internal();
-
-  final String text;
-
-  @override
-  Override overrideWith(
-    FutureOr<LinkMetadata?> Function(FetchLinkMetadataRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FetchLinkMetadataProvider._internal(
-        (ref) => create(ref as FetchLinkMetadataRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        text: text,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<LinkMetadata?> createElement() {
-    return _FetchLinkMetadataProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FetchLinkMetadataProvider && other.text == text;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, text.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FetchLinkMetadataRef on AutoDisposeFutureProviderRef<LinkMetadata?> {
-  /// The parameter `text` of this provider.
-  String get text;
-}
-
-class _FetchLinkMetadataProviderElement
-    extends AutoDisposeFutureProviderElement<LinkMetadata?>
-    with FetchLinkMetadataRef {
-  _FetchLinkMetadataProviderElement(super.provider);
-
-  @override
-  String get text => (origin as FetchLinkMetadataProvider).text;
 }
 
 String _$mentionSuggestionsHash() =>
-    r'b067b344d82516a0f9358cca3431d2604def08f7';
+    r'7fc5f8ae0e40b6ecefd2ad48efea7acc38e76374';
 
-/// See also [MentionSuggestions].
-@ProviderFor(MentionSuggestions)
-final mentionSuggestionsProvider =
-    AutoDisposeNotifierProvider<MentionSuggestions, List<UserRecord>>.internal(
-  MentionSuggestions.new,
-  name: r'mentionSuggestionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mentionSuggestionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$MentionSuggestions extends $Notifier<List<UserRecord>> {
+  List<UserRecord> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<UserRecord>, List<UserRecord>>,
+        List<UserRecord>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$MentionSuggestions = AutoDisposeNotifier<List<UserRecord>>;
-String _$selectedMentionsHash() => r'c7376ce7e9fe19772764285658b28558b557ac5d';
-
-/// See also [SelectedMentions].
 @ProviderFor(SelectedMentions)
-final selectedMentionsProvider =
-    NotifierProvider<SelectedMentions, List<UserRecord>>.internal(
-  SelectedMentions.new,
-  name: r'selectedMentionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$selectedMentionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const selectedMentionsProvider = SelectedMentionsProvider._();
 
-typedef _$SelectedMentions = Notifier<List<UserRecord>>;
-String _$extractedMentionsHash() => r'8947c65dd6f562e0c3599ebe1ccc9e989ea118a3';
+final class SelectedMentionsProvider
+    extends $NotifierProvider<SelectedMentions, List<UserRecord>> {
+  const SelectedMentionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'selectedMentionsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-abstract class _$ExtractedMentions
-    extends BuildlessAutoDisposeNotifier<List<String>> {
-  late final String text;
+  @override
+  String debugGetCreateSourceHash() => _$selectedMentionsHash();
+
+  @$internal
+  @override
+  SelectedMentions create() => SelectedMentions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<UserRecord> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<UserRecord>>(value),
+    );
+  }
+}
+
+String _$selectedMentionsHash() => r'2e4f4a4cceab7c71bf690e34d6405f49459be89e';
+
+abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
+  List<UserRecord> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<UserRecord>, List<UserRecord>>,
+        List<UserRecord>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(ExtractedMentions)
+const extractedMentionsProvider = ExtractedMentionsFamily._();
+
+final class ExtractedMentionsProvider
+    extends $NotifierProvider<ExtractedMentions, List<String>> {
+  const ExtractedMentionsProvider._(
+      {required ExtractedMentionsFamily super.from,
+      required String super.argument})
+      : super(
+          retry: null,
+          name: r'extractedMentionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$extractedMentionsHash();
+
+  @override
+  String toString() {
+    return r'extractedMentionsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  ExtractedMentions create() => ExtractedMentions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<String> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<String>>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExtractedMentionsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$extractedMentionsHash() => r'e2fc89a90c6c908b79b6fefc62ddd7497a29a8c4';
+
+final class ExtractedMentionsFamily extends $Family
+    with
+        $ClassFamilyOverride<ExtractedMentions, List<String>, List<String>,
+            List<String>, String> {
+  const ExtractedMentionsFamily._()
+      : super(
+          retry: null,
+          name: r'extractedMentionsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ExtractedMentionsProvider call(
+    String text,
+  ) =>
+      ExtractedMentionsProvider._(argument: text, from: this);
+
+  @override
+  String toString() => r'extractedMentionsProvider';
+}
+
+abstract class _$ExtractedMentions extends $Notifier<List<String>> {
+  late final _$args = ref.$arg as String;
+  String get text => _$args;
 
   List<String> build(
     String text,
   );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<List<String>, List<String>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<String>, List<String>>,
+        List<String>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
-/// See also [ExtractedMentions].
-@ProviderFor(ExtractedMentions)
-const extractedMentionsProvider = ExtractedMentionsFamily();
+@ProviderFor(ValidMentions)
+const validMentionsProvider = ValidMentionsFamily._();
 
-/// See also [ExtractedMentions].
-class ExtractedMentionsFamily extends Family<List<String>> {
-  /// See also [ExtractedMentions].
-  const ExtractedMentionsFamily();
-
-  /// See also [ExtractedMentions].
-  ExtractedMentionsProvider call(
-    String text,
-  ) {
-    return ExtractedMentionsProvider(
-      text,
-    );
-  }
-
-  @override
-  ExtractedMentionsProvider getProviderOverride(
-    covariant ExtractedMentionsProvider provider,
-  ) {
-    return call(
-      provider.text,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'extractedMentionsProvider';
-}
-
-/// See also [ExtractedMentions].
-class ExtractedMentionsProvider
-    extends AutoDisposeNotifierProviderImpl<ExtractedMentions, List<String>> {
-  /// See also [ExtractedMentions].
-  ExtractedMentionsProvider(
-    String text,
-  ) : this._internal(
-          () => ExtractedMentions()..text = text,
-          from: extractedMentionsProvider,
-          name: r'extractedMentionsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$extractedMentionsHash,
-          dependencies: ExtractedMentionsFamily._dependencies,
-          allTransitiveDependencies:
-              ExtractedMentionsFamily._allTransitiveDependencies,
-          text: text,
+final class ValidMentionsProvider
+    extends $NotifierProvider<ValidMentions, bool> {
+  const ValidMentionsProvider._(
+      {required ValidMentionsFamily super.from,
+      required (
+        String,
+        String,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'validMentionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ExtractedMentionsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.text,
-  }) : super.internal();
-
-  final String text;
+  @override
+  String debugGetCreateSourceHash() => _$validMentionsHash();
 
   @override
-  List<String> runNotifierBuild(
-    covariant ExtractedMentions notifier,
-  ) {
-    return notifier.build(
-      text,
-    );
+  String toString() {
+    return r'validMentionsProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  Override overrideWith(ExtractedMentions Function() create) {
-    return ProviderOverride(
+  ValidMentions create() => ValidMentions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
       origin: this,
-      override: ExtractedMentionsProvider._internal(
-        () => create()..text = text,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        text: text,
-      ),
+      providerOverride: $SyncValueProvider<bool>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ExtractedMentions, List<String>>
-      createElement() {
-    return _ExtractedMentionsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ExtractedMentionsProvider && other.text == text;
+    return other is ValidMentionsProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, text.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ExtractedMentionsRef on AutoDisposeNotifierProviderRef<List<String>> {
-  /// The parameter `text` of this provider.
-  String get text;
-}
+String _$validMentionsHash() => r'5115e7d306ad573e1d1448f0aec0b47ca62728ed';
 
-class _ExtractedMentionsProviderElement
-    extends AutoDisposeNotifierProviderElement<ExtractedMentions, List<String>>
-    with ExtractedMentionsRef {
-  _ExtractedMentionsProviderElement(super.provider);
+final class ValidMentionsFamily extends $Family
+    with
+        $ClassFamilyOverride<
+            ValidMentions,
+            bool,
+            bool,
+            bool,
+            (
+              String,
+              String,
+            )> {
+  const ValidMentionsFamily._()
+      : super(
+          retry: null,
+          name: r'validMentionsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ValidMentionsProvider call(
+    String username,
+    String text,
+  ) =>
+      ValidMentionsProvider._(argument: (
+        username,
+        text,
+      ), from: this);
 
   @override
-  String get text => (origin as ExtractedMentionsProvider).text;
+  String toString() => r'validMentionsProvider';
 }
 
-String _$validMentionsHash() => r'ac9e9b6d7a41c1d5cd184953bf925c931881d5c7';
-
-abstract class _$ValidMentions extends BuildlessAutoDisposeNotifier<bool> {
-  late final String username;
-  late final String text;
+abstract class _$ValidMentions extends $Notifier<bool> {
+  late final _$args = ref.$arg as (
+    String,
+    String,
+  );
+  String get username => _$args.$1;
+  String get text => _$args.$2;
 
   bool build(
     String username,
     String text,
   );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args.$1,
+      _$args.$2,
+    );
+    final ref = this.ref as $Ref<bool, bool>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<bool, bool>, bool, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
-/// See also [ValidMentions].
-@ProviderFor(ValidMentions)
-const validMentionsProvider = ValidMentionsFamily();
+@ProviderFor(Hashtags)
+const hashtagsProvider = HashtagsFamily._();
 
-/// See also [ValidMentions].
-class ValidMentionsFamily extends Family<bool> {
-  /// See also [ValidMentions].
-  const ValidMentionsFamily();
-
-  /// See also [ValidMentions].
-  ValidMentionsProvider call(
-    String username,
-    String text,
-  ) {
-    return ValidMentionsProvider(
-      username,
-      text,
-    );
-  }
-
-  @override
-  ValidMentionsProvider getProviderOverride(
-    covariant ValidMentionsProvider provider,
-  ) {
-    return call(
-      provider.username,
-      provider.text,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'validMentionsProvider';
-}
-
-/// See also [ValidMentions].
-class ValidMentionsProvider
-    extends AutoDisposeNotifierProviderImpl<ValidMentions, bool> {
-  /// See also [ValidMentions].
-  ValidMentionsProvider(
-    String username,
-    String text,
-  ) : this._internal(
-          () => ValidMentions()
-            ..username = username
-            ..text = text,
-          from: validMentionsProvider,
-          name: r'validMentionsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$validMentionsHash,
-          dependencies: ValidMentionsFamily._dependencies,
-          allTransitiveDependencies:
-              ValidMentionsFamily._allTransitiveDependencies,
-          username: username,
-          text: text,
+final class HashtagsProvider extends $NotifierProvider<Hashtags, List<String>> {
+  const HashtagsProvider._(
+      {required HashtagsFamily super.from, required String super.argument})
+      : super(
+          retry: null,
+          name: r'hashtagsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ValidMentionsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.username,
-    required this.text,
-  }) : super.internal();
-
-  final String username;
-  final String text;
+  @override
+  String debugGetCreateSourceHash() => _$hashtagsHash();
 
   @override
-  bool runNotifierBuild(
-    covariant ValidMentions notifier,
-  ) {
-    return notifier.build(
-      username,
-      text,
-    );
+  String toString() {
+    return r'hashtagsProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(ValidMentions Function() create) {
-    return ProviderOverride(
+  Hashtags create() => Hashtags();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<String> value) {
+    return $ProviderOverride(
       origin: this,
-      override: ValidMentionsProvider._internal(
-        () => create()
-          ..username = username
-          ..text = text,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        username: username,
-        text: text,
-      ),
+      providerOverride: $SyncValueProvider<List<String>>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ValidMentions, bool> createElement() {
-    return _ValidMentionsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ValidMentionsProvider &&
-        other.username == username &&
-        other.text == text;
+    return other is HashtagsProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, username.hashCode);
-    hash = _SystemHash.combine(hash, text.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ValidMentionsRef on AutoDisposeNotifierProviderRef<bool> {
-  /// The parameter `username` of this provider.
-  String get username;
+String _$hashtagsHash() => r'2183195b3766eed9369c2ddb72902179f78cc13b';
 
-  /// The parameter `text` of this provider.
-  String get text;
-}
+final class HashtagsFamily extends $Family
+    with
+        $ClassFamilyOverride<Hashtags, List<String>, List<String>, List<String>,
+            String> {
+  const HashtagsFamily._()
+      : super(
+          retry: null,
+          name: r'hashtagsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
 
-class _ValidMentionsProviderElement
-    extends AutoDisposeNotifierProviderElement<ValidMentions, bool>
-    with ValidMentionsRef {
-  _ValidMentionsProviderElement(super.provider);
+  HashtagsProvider call(
+    String text,
+  ) =>
+      HashtagsProvider._(argument: text, from: this);
 
   @override
-  String get username => (origin as ValidMentionsProvider).username;
-  @override
-  String get text => (origin as ValidMentionsProvider).text;
+  String toString() => r'hashtagsProvider';
 }
 
-String _$hashtagsHash() => r'c25b066f71c1b9fe384e2ee2f6771510d2aeac0d';
-
-abstract class _$Hashtags extends BuildlessNotifier<List<String>> {
-  late final String text;
+abstract class _$Hashtags extends $Notifier<List<String>> {
+  late final _$args = ref.$arg as String;
+  String get text => _$args;
 
   List<String> build(
     String text,
   );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<List<String>, List<String>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<String>, List<String>>,
+        List<String>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
 }
 
-/// See also [Hashtags].
-@ProviderFor(Hashtags)
-const hashtagsProvider = HashtagsFamily();
+@ProviderFor(fetchHashtags)
+const fetchHashtagsProvider = FetchHashtagsFamily._();
 
-/// See also [Hashtags].
-class HashtagsFamily extends Family<List<String>> {
-  /// See also [Hashtags].
-  const HashtagsFamily();
-
-  /// See also [Hashtags].
-  HashtagsProvider call(
-    String text,
-  ) {
-    return HashtagsProvider(
-      text,
-    );
-  }
-
-  @override
-  HashtagsProvider getProviderOverride(
-    covariant HashtagsProvider provider,
-  ) {
-    return call(
-      provider.text,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'hashtagsProvider';
-}
-
-/// See also [Hashtags].
-class HashtagsProvider extends NotifierProviderImpl<Hashtags, List<String>> {
-  /// See also [Hashtags].
-  HashtagsProvider(
-    String text,
-  ) : this._internal(
-          () => Hashtags()..text = text,
-          from: hashtagsProvider,
-          name: r'hashtagsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$hashtagsHash,
-          dependencies: HashtagsFamily._dependencies,
-          allTransitiveDependencies: HashtagsFamily._allTransitiveDependencies,
-          text: text,
+final class FetchHashtagsProvider extends $FunctionalProvider<
+        AsyncValue<List<String>>, List<String>, FutureOr<List<String>>>
+    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
+  const FetchHashtagsProvider._(
+      {required FetchHashtagsFamily super.from, required String super.argument})
+      : super(
+          retry: null,
+          name: r'fetchHashtagsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  HashtagsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.text,
-  }) : super.internal();
-
-  final String text;
+  @override
+  String debugGetCreateSourceHash() => _$fetchHashtagsHash();
 
   @override
-  List<String> runNotifierBuild(
-    covariant Hashtags notifier,
-  ) {
-    return notifier.build(
-      text,
-    );
+  String toString() {
+    return r'fetchHashtagsProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(Hashtags Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: HashtagsProvider._internal(
-        () => create()..text = text,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        text: text,
-      ),
-    );
-  }
+  $FutureProviderElement<List<String>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  NotifierProviderElement<Hashtags, List<String>> createElement() {
-    return _HashtagsProviderElement(this);
+  FutureOr<List<String>> create(Ref ref) {
+    final argument = this.argument as String;
+    return fetchHashtags(
+      ref,
+      argument,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is HashtagsProvider && other.text == text;
+    return other is FetchHashtagsProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, text.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin HashtagsRef on NotifierProviderRef<List<String>> {
-  /// The parameter `text` of this provider.
-  String get text;
-}
+String _$fetchHashtagsHash() => r'868cde6b8cb4f568a8c7d4d96e9220d758e55899';
 
-class _HashtagsProviderElement
-    extends NotifierProviderElement<Hashtags, List<String>> with HashtagsRef {
-  _HashtagsProviderElement(super.provider);
+final class FetchHashtagsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
+  const FetchHashtagsFamily._()
+      : super(
+          retry: null,
+          name: r'fetchHashtagsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  FetchHashtagsProvider call(
+    String query,
+  ) =>
+      FetchHashtagsProvider._(argument: query, from: this);
 
   @override
-  String get text => (origin as HashtagsProvider).text;
+  String toString() => r'fetchHashtagsProvider';
+}
+
+@ProviderFor(HashtagsSuggestions)
+const hashtagsSuggestionsProvider = HashtagsSuggestionsProvider._();
+
+final class HashtagsSuggestionsProvider
+    extends $NotifierProvider<HashtagsSuggestions, List<String>> {
+  const HashtagsSuggestionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'hashtagsSuggestionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$hashtagsSuggestionsHash();
+
+  @$internal
+  @override
+  HashtagsSuggestions create() => HashtagsSuggestions();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<String> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<String>>(value),
+    );
+  }
 }
 
 String _$hashtagsSuggestionsHash() =>
-    r'82a5c4e5c8f4565966d667a5e90788abb856ecf8';
+    r'4ddd628a4be4c97185d6d6b73d690bee3266ee9d';
 
-/// See also [HashtagsSuggestions].
-@ProviderFor(HashtagsSuggestions)
-final hashtagsSuggestionsProvider =
-    AutoDisposeNotifierProvider<HashtagsSuggestions, List<String>>.internal(
-  HashtagsSuggestions.new,
-  name: r'hashtagsSuggestionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$hashtagsSuggestionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$HashtagsSuggestions extends $Notifier<List<String>> {
+  List<String> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<String>, List<String>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<String>, List<String>>,
+        List<String>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$HashtagsSuggestions = AutoDisposeNotifier<List<String>>;
-String _$extractLinkHash() => r'664de337998e9978c3e1051d849ff29f084e94c1';
+@ProviderFor(fetchLinkMetadata)
+const fetchLinkMetadataProvider = FetchLinkMetadataFamily._();
 
-abstract class _$ExtractLink extends BuildlessAutoDisposeNotifier<String> {
-  late final String text;
+final class FetchLinkMetadataProvider extends $FunctionalProvider<
+        AsyncValue<LinkMetadata?>, LinkMetadata?, FutureOr<LinkMetadata?>>
+    with $FutureModifier<LinkMetadata?>, $FutureProvider<LinkMetadata?> {
+  const FetchLinkMetadataProvider._(
+      {required FetchLinkMetadataFamily super.from,
+      required String super.argument})
+      : super(
+          retry: null,
+          name: r'fetchLinkMetadataProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$fetchLinkMetadataHash();
+
+  @override
+  String toString() {
+    return r'fetchLinkMetadataProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<LinkMetadata?> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<LinkMetadata?> create(Ref ref) {
+    final argument = this.argument as String;
+    return fetchLinkMetadata(
+      ref,
+      argument,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchLinkMetadataProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$fetchLinkMetadataHash() => r'5d7175a6b91f0db953156ab6393a776b91c81b4c';
+
+final class FetchLinkMetadataFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<LinkMetadata?>, String> {
+  const FetchLinkMetadataFamily._()
+      : super(
+          retry: null,
+          name: r'fetchLinkMetadataProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  FetchLinkMetadataProvider call(
+    String text,
+  ) =>
+      FetchLinkMetadataProvider._(argument: text, from: this);
+
+  @override
+  String toString() => r'fetchLinkMetadataProvider';
+}
+
+@ProviderFor(ExtractLink)
+const extractLinkProvider = ExtractLinkFamily._();
+
+final class ExtractLinkProvider extends $NotifierProvider<ExtractLink, String> {
+  const ExtractLinkProvider._(
+      {required ExtractLinkFamily super.from, required String super.argument})
+      : super(
+          retry: null,
+          name: r'extractLinkProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$extractLinkHash();
+
+  @override
+  String toString() {
+    return r'extractLinkProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  ExtractLink create() => ExtractLink();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExtractLinkProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$extractLinkHash() => r'b04ec29c93e1c00eef28891b4cadf028ed19f101';
+
+final class ExtractLinkFamily extends $Family
+    with $ClassFamilyOverride<ExtractLink, String, String, String, String> {
+  const ExtractLinkFamily._()
+      : super(
+          retry: null,
+          name: r'extractLinkProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ExtractLinkProvider call(
+    String text,
+  ) =>
+      ExtractLinkProvider._(argument: text, from: this);
+
+  @override
+  String toString() => r'extractLinkProvider';
+}
+
+abstract class _$ExtractLink extends $Notifier<String> {
+  late final _$args = ref.$arg as String;
+  String get text => _$args;
 
   String build(
     String text,
   );
-}
-
-/// See also [ExtractLink].
-@ProviderFor(ExtractLink)
-const extractLinkProvider = ExtractLinkFamily();
-
-/// See also [ExtractLink].
-class ExtractLinkFamily extends Family<String> {
-  /// See also [ExtractLink].
-  const ExtractLinkFamily();
-
-  /// See also [ExtractLink].
-  ExtractLinkProvider call(
-    String text,
-  ) {
-    return ExtractLinkProvider(
-      text,
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
     );
-  }
-
-  @override
-  ExtractLinkProvider getProviderOverride(
-    covariant ExtractLinkProvider provider,
-  ) {
-    return call(
-      provider.text,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'extractLinkProvider';
-}
-
-/// See also [ExtractLink].
-class ExtractLinkProvider
-    extends AutoDisposeNotifierProviderImpl<ExtractLink, String> {
-  /// See also [ExtractLink].
-  ExtractLinkProvider(
-    String text,
-  ) : this._internal(
-          () => ExtractLink()..text = text,
-          from: extractLinkProvider,
-          name: r'extractLinkProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$extractLinkHash,
-          dependencies: ExtractLinkFamily._dependencies,
-          allTransitiveDependencies:
-              ExtractLinkFamily._allTransitiveDependencies,
-          text: text,
-        );
-
-  ExtractLinkProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.text,
-  }) : super.internal();
-
-  final String text;
-
-  @override
-  String runNotifierBuild(
-    covariant ExtractLink notifier,
-  ) {
-    return notifier.build(
-      text,
-    );
-  }
-
-  @override
-  Override overrideWith(ExtractLink Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: ExtractLinkProvider._internal(
-        () => create()..text = text,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        text: text,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ExtractLink, String> createElement() {
-    return _ExtractLinkProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ExtractLinkProvider && other.text == text;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, text.hashCode);
-
-    return _SystemHash.finish(hash);
+    final ref = this.ref as $Ref<String, String>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<String, String>, String, Object?, Object?>;
+    element.handleValue(ref, created);
   }
 }
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ExtractLinkRef on AutoDisposeNotifierProviderRef<String> {
-  /// The parameter `text` of this provider.
-  String get text;
-}
-
-class _ExtractLinkProviderElement
-    extends AutoDisposeNotifierProviderElement<ExtractLink, String>
-    with ExtractLinkRef {
-  _ExtractLinkProviderElement(super.provider);
-
-  @override
-  String get text => (origin as ExtractLinkProvider).text;
-}
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

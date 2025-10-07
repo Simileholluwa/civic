@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ContentAppBar({
+    required this.title,
+    required this.isVisible,
+    super.key,
+    this.height = 60,
+    this.actions = const [],
+    this.leading,
+    this.centerTitle,
+    this.titleSpacing,
+    this.bottom,
+  });
   final Widget title;
   final double height;
   final bool isVisible;
@@ -10,23 +21,11 @@ class ContentAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? titleSpacing;
   final PreferredSizeWidget? bottom;
 
-  const ContentAppBar({
-    super.key,
-    required this.title,
-    this.height = 60,
-    required this.isVisible,
-    this.actions = const [],
-    this.leading,
-    this.centerTitle,
-    this.titleSpacing,
-    this.bottom,
-  });
-
   @override
   Widget build(BuildContext context) {
     return AnimatedSlide(
       duration: const Duration(milliseconds: 500),
-      offset: isVisible ? const Offset(0, 0) : const Offset(0, -1),
+      offset: isVisible ? Offset.zero : const Offset(0, -1),
       child: isVisible
           ? AppBar(
               title: title,

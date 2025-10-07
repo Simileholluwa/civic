@@ -15,11 +15,10 @@ class ProjectCategoryFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16, 0, 20, 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...projectCategories.keys.toList().asMap().entries.map(
             (entry) {

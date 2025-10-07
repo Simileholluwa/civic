@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -9,9 +8,9 @@ import 'package:iconsax/iconsax.dart';
 
 class CreatePollScreen extends ConsumerWidget {
   const CreatePollScreen({
-    super.key,
     required this.id,
     required this.post,
+    super.key,
   });
 
   final Post? post;
@@ -39,10 +38,9 @@ class CreatePollScreen extends ConsumerWidget {
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     return PopScope(
       canPop: false,
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) return;
-        final bool? shouldPop = canSendPoll
+        final shouldPop = canSendPoll
             ? await savePostDraftDialog(
                 ref,
                 context,
@@ -67,11 +65,13 @@ class CreatePollScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await postNotifier.sendAPoll(
-                    data.value?.id, data.value?.pollId);
+                  data.value?.id,
+                  data.value?.pollId,
+                );
               },
-              title: CreateContentPrivacy(),
+              title: const CreateContentPrivacy(),
               onCanSendPost: () async {
-                final bool? shouldPop = canSendPoll
+                final shouldPop = canSendPoll
                     ? await savePostDraftDialog(
                         ref,
                         context,
@@ -150,7 +150,7 @@ class CreatePollScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget();
+              return const AppLoadingWidget();
             },
           ),
         ),

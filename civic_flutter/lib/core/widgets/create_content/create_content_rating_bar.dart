@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AnimatedStarRating extends StatefulWidget {
+
+  const AnimatedStarRating({
+    required this.onRatingSelected, super.key,
+    this.maxRating = 5,
+    this.size = 40,
+    this.selectedColor = Colors.amber,
+    this.unselectedColor = Colors.grey,
+    this.currentRating = 0,
+  });
   final int maxRating;
   final double size;
   final Color selectedColor;
   final Color unselectedColor;
   final ValueChanged<int> onRatingSelected;
   final int currentRating;
-
-  const AnimatedStarRating({
-    super.key,
-    this.maxRating = 5,
-    this.size = 40,
-    this.selectedColor = Colors.amber,
-    this.unselectedColor = Colors.grey,
-    this.currentRating = 0,
-    required this.onRatingSelected,
-  });
 
   @override
   AnimatedStarRatingState createState() => AnimatedStarRatingState();
@@ -47,7 +46,7 @@ class AnimatedStarRatingState extends State<AnimatedStarRating> {
         return GestureDetector(
           onTap: () => _setRating(index + 1),
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             child: Padding(
               padding: const EdgeInsets.only(right: 8),

@@ -2,11 +2,11 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class NumberInputFormatter extends TextInputFormatter {
-  final NumberFormat numberFormat = NumberFormat("#,##0.##");
+  final NumberFormat numberFormat = NumberFormat('#,##0.##');
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+      TextEditingValue oldValue, TextEditingValue newValue,) {
     if (newValue.text.isEmpty) {
       return newValue;
     }
@@ -15,7 +15,7 @@ class NumberInputFormatter extends TextInputFormatter {
     final cleanedText = newValue.text.replaceAll(',', '');
 
     // Try parsing as double to allow decimals
-    final double? value = double.tryParse(cleanedText);
+    final value = double.tryParse(cleanedText);
     if (value == null) {
       return oldValue; // Invalid number
     }
@@ -23,7 +23,7 @@ class NumberInputFormatter extends TextInputFormatter {
     final newFormatted = numberFormat.format(value);
 
     // Calculate new selection offset
-    final int newOffset =
+    final newOffset =
         newFormatted.length - (cleanedText.length - newValue.selection.end);
 
     return TextEditingValue(

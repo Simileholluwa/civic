@@ -30,7 +30,7 @@ Future<bool?> postDialog({
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.headlineLarge!,
+                      style: Theme.of(context).textTheme.headlineLarge,
                       textAlign: TextAlign.left,
                     ),
                     GestureDetector(
@@ -71,5 +71,5 @@ Future<bool?> postDialog({
             ],
           ),
         );
-      });
+      },);
 }

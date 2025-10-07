@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class CreateContentDraftsAppbar extends StatelessWidget {
   const CreateContentDraftsAppbar({
-    super.key,
     required this.actionPressed,
     required this.data,
     required this.leadingPressed,
+    super.key,
   });
 
   final VoidCallback actionPressed;

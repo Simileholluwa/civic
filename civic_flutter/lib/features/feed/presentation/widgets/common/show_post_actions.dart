@@ -8,9 +8,9 @@ import 'package:iconsax/iconsax.dart';
 
 class ShowPostActions extends ConsumerWidget {
   const ShowPostActions({
-    super.key,
     required this.post,
     required this.originalPostId,
+    super.key,
     this.fromDetails = false,
     this.isReply = false,
     this.isComment = false,
@@ -78,7 +78,7 @@ class ShowPostActions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
-              context.push(
+              await context.push(
                 '/feed/post/${post.id}/notInterested',
                 extra: {
                   'post': post,
@@ -91,8 +91,10 @@ class ShowPostActions extends ConsumerWidget {
           MoreActionsListTile(
             title: postCardState.isFollower ? 'Unfollow' : 'Follow',
             subTitle: postCardState.isFollower
-                ? '${post.owner!.userInfo!.userName} will be removed from the list of people you follow.'
-                : '${post.owner!.userInfo!.userName} will be added to the list of people you follow.',
+                ? '${post.owner!.userInfo!.userName} '
+                    'will be removed from the list of people you follow.'
+                : '${post.owner!.userInfo!.userName} '
+                    'will be added to the list of people you follow.',
             icon: postCardState.isFollower
                 ? Iconsax.user_remove
                 : Iconsax.user_cirlce_add,
@@ -109,7 +111,7 @@ class ShowPostActions extends ConsumerWidget {
         if (!postCardState.isOwner)
           MoreActionsListTile(
             title: 'Report',
-            subTitle: "This post is inappropriate or offensive.",
+            subTitle: 'This post is inappropriate or offensive.',
             icon: Iconsax.flag,
             color: Colors.red,
             onTap: () async {},
@@ -117,27 +119,27 @@ class ShowPostActions extends ConsumerWidget {
         if (postCardState.canEdit)
           MoreActionsListTile(
             title: 'Edit',
-            subTitle:
-                "You can change the content of this $type however, previous version(s) will be saved.",
+            subTitle: 'You can change the content of this $type however, '
+                'previous version(s) will be saved.',
             icon: Iconsax.edit,
-            onTap: () {
+            onTap: () async {
               context.pop();
               if (isPoll) {
-                context.push(
+                await context.push(
                   '/create/poll/${post.id}',
                   extra: {
                     'post': post,
                   },
                 );
               } else if (isArticle) {
-                context.push(
+                await context.push(
                   '/create/article/${post.id}',
                   extra: {
                     'post': post,
                   },
                 );
               } else {
-                context.push(
+                await context.push(
                   '/create/post/${post.id}',
                   extra: {
                     'post': post,

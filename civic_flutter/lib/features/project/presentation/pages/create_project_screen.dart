@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class CreateProjectScreen extends ConsumerWidget {
   const CreateProjectScreen({
-    super.key,
     required this.id,
+    super.key,
     this.project,
   });
 
@@ -19,10 +19,11 @@ class CreateProjectScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(
-            projectDetailProvider(
-              id, project,
-            ),
-          );
+      projectDetailProvider(
+        id,
+        project,
+      ),
+    );
     final projectCreationState = ref.watch(
       projectProviderProvider(
         data.value,
@@ -35,10 +36,9 @@ class CreateProjectScreen extends ConsumerWidget {
     );
     return PopScope(
       canPop: false,
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) return;
-        final bool? shouldPop = projectCreationState.canSave
+        final shouldPop = projectCreationState.canSave
             ? await saveProjectDraftDialog(
                 ref,
                 context,
@@ -51,7 +51,6 @@ class CreateProjectScreen extends ConsumerWidget {
           }
         }
       },
-
       child: AppAndroidBottomNav(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -61,7 +60,7 @@ class CreateProjectScreen extends ConsumerWidget {
             ),
             child: CreateContentAppbar(
               canSend: projectCreationState.isValid,
-              title: CreateProjectAppbarTitle(),
+              title: const CreateProjectAppbarTitle(),
               sendPressed: () async {
                 if (!projectNotifier.validateProject()) return;
                 context.pop();
@@ -103,7 +102,7 @@ class CreateProjectScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget();
+              return const AppLoadingWidget();
             },
           ),
           bottomNavigationBar: data.when(

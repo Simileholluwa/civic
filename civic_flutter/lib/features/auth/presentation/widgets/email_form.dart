@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -50,19 +48,21 @@ class EmailForm extends ConsumerWidget {
                       authState.emailFormKey.currentState!.validate();
                   if (!isValid) return;
                   final newUser = await authNotifier.checkIfNewUser();
-                  
-                    if (!newUser) {
-                      context.push(
-                        '/auth/login',
-                      );
-                    } else {
-                      context.push(
+
+                  if (!newUser && context.mounted) {
+                    await context.push(
+                      '/auth/login',
+                    );
+                  } else {
+                    if (context.mounted) {
+                      await context.push(
                         '/auth/signUp',
                       );
                     }
+                  }
                 },
                 child: const Text(
-                  'Continue',
+                  TTexts.tContinue,
                 ),
               ).withLoading(
                 loading: ref.watch(checkEmailLoadingProvider),

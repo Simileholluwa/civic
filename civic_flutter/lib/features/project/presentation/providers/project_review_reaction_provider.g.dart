@@ -6,173 +6,106 @@ part of 'project_review_reaction_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reviewReactionHash() => r'a664df76743134f52e13d784eaf6870c82274d03';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ReviewReaction
-    extends BuildlessAutoDisposeNotifier<ProjectReviewReactionState> {
-  late final ProjectReview projectReview;
-
-  ProjectReviewReactionState build(
-    ProjectReview projectReview,
-  );
-}
-
-/// See also [ReviewReaction].
 @ProviderFor(ReviewReaction)
-const reviewReactionProvider = ReviewReactionFamily();
+const reviewReactionProvider = ReviewReactionFamily._();
 
-/// See also [ReviewReaction].
-class ReviewReactionFamily extends Family<ProjectReviewReactionState> {
-  /// See also [ReviewReaction].
-  const ReviewReactionFamily();
-
-  /// See also [ReviewReaction].
-  ReviewReactionProvider call(
-    ProjectReview projectReview,
-  ) {
-    return ReviewReactionProvider(
-      projectReview,
-    );
-  }
-
-  @override
-  ReviewReactionProvider getProviderOverride(
-    covariant ReviewReactionProvider provider,
-  ) {
-    return call(
-      provider.projectReview,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'reviewReactionProvider';
-}
-
-/// See also [ReviewReaction].
-class ReviewReactionProvider extends AutoDisposeNotifierProviderImpl<
-    ReviewReaction, ProjectReviewReactionState> {
-  /// See also [ReviewReaction].
-  ReviewReactionProvider(
-    ProjectReview projectReview,
-  ) : this._internal(
-          () => ReviewReaction()..projectReview = projectReview,
-          from: reviewReactionProvider,
+final class ReviewReactionProvider
+    extends $NotifierProvider<ReviewReaction, ProjectReviewReactionState> {
+  const ReviewReactionProvider._(
+      {required ReviewReactionFamily super.from,
+      required ProjectReview super.argument})
+      : super(
+          retry: null,
           name: r'reviewReactionProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$reviewReactionHash,
-          dependencies: ReviewReactionFamily._dependencies,
-          allTransitiveDependencies:
-              ReviewReactionFamily._allTransitiveDependencies,
-          projectReview: projectReview,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ReviewReactionProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectReview,
-  }) : super.internal();
-
-  final ProjectReview projectReview;
+  @override
+  String debugGetCreateSourceHash() => _$reviewReactionHash();
 
   @override
-  ProjectReviewReactionState runNotifierBuild(
-    covariant ReviewReaction notifier,
-  ) {
-    return notifier.build(
-      projectReview,
-    );
+  String toString() {
+    return r'reviewReactionProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(ReviewReaction Function() create) {
-    return ProviderOverride(
+  ReviewReaction create() => ReviewReaction();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectReviewReactionState value) {
+    return $ProviderOverride(
       origin: this,
-      override: ReviewReactionProvider._internal(
-        () => create()..projectReview = projectReview,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectReview: projectReview,
-      ),
+      providerOverride: $SyncValueProvider<ProjectReviewReactionState>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ReviewReaction, ProjectReviewReactionState>
-      createElement() {
-    return _ReviewReactionProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ReviewReactionProvider &&
-        other.projectReview == projectReview;
+    return other is ReviewReactionProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectReview.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ReviewReactionRef
-    on AutoDisposeNotifierProviderRef<ProjectReviewReactionState> {
-  /// The parameter `projectReview` of this provider.
-  ProjectReview get projectReview;
-}
+String _$reviewReactionHash() => r'786587b67f4669dab9afe3585ae2e46800c7a82c';
 
-class _ReviewReactionProviderElement extends AutoDisposeNotifierProviderElement<
-    ReviewReaction, ProjectReviewReactionState> with ReviewReactionRef {
-  _ReviewReactionProviderElement(super.provider);
+final class ReviewReactionFamily extends $Family
+    with
+        $ClassFamilyOverride<
+            ReviewReaction,
+            ProjectReviewReactionState,
+            ProjectReviewReactionState,
+            ProjectReviewReactionState,
+            ProjectReview> {
+  const ReviewReactionFamily._()
+      : super(
+          retry: null,
+          name: r'reviewReactionProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ReviewReactionProvider call(
+    ProjectReview projectReview,
+  ) =>
+      ReviewReactionProvider._(argument: projectReview, from: this);
 
   @override
-  ProjectReview get projectReview =>
-      (origin as ReviewReactionProvider).projectReview;
+  String toString() => r'reviewReactionProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$ReviewReaction extends $Notifier<ProjectReviewReactionState> {
+  late final _$args = ref.$arg as ProjectReview;
+  ProjectReview get projectReview => _$args;
+
+  ProjectReviewReactionState build(
+    ProjectReview projectReview,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref
+        as $Ref<ProjectReviewReactionState, ProjectReviewReactionState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ProjectReviewReactionState, ProjectReviewReactionState>,
+        ProjectReviewReactionState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ScrollToHideAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ScrollToHideAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   const ScrollToHideAppBar({
     required this.controller,
     required this.visible,
@@ -20,10 +21,8 @@ class ScrollToHideAppBar extends StatelessWidget implements PreferredSizeWidget 
   final bool centerTitle;
   final Widget? leading;
 
-
   @override
   Widget build(BuildContext context) {
-    visible ? controller.reverse() : controller.forward();
     return SlideTransition(
       position:
           Tween<Offset>(begin: Offset.zero, end: const Offset(0, -1)).animate(
@@ -34,7 +33,7 @@ class ScrollToHideAppBar extends StatelessWidget implements PreferredSizeWidget 
       ),
       child: AppBar(
         title: title,
-        toolbarHeight: visible == true ? toolBarHeight : 0,
+        toolbarHeight: visible ? toolBarHeight : 0,
         actions: actions,
         centerTitle: centerTitle,
         leading: leading,
@@ -44,6 +43,6 @@ class ScrollToHideAppBar extends StatelessWidget implements PreferredSizeWidget 
 
   @override
   Size get preferredSize => Size.fromHeight(
-        visible == true ? toolBarHeight : 0,
+        visible ? toolBarHeight : 0,
       );
 }

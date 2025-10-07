@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectLocationPageView extends ConsumerWidget {
   const ProjectLocationPageView({
-    super.key,
     required this.project,
+    super.key,
   });
   final Project project;
 
@@ -28,7 +28,7 @@ class ProjectLocationPageView extends ConsumerWidget {
             'Make it effortless to find where this project is located. Whether physical or virtual or both.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 17,
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
                 ),
           ),
         ),
@@ -43,8 +43,8 @@ class ProjectLocationPageView extends ConsumerWidget {
               Expanded(
                 child: ProjectLocationOptions(
                   onTap: projectCreationSate.canAddLocations
-                      ? () {
-                          ProjectHelperFunctions.selectLocation(
+                      ? () async {
+                          await ProjectHelperFunctions.selectLocation(
                             context,
                             project,
                           );
@@ -59,8 +59,8 @@ class ProjectLocationPageView extends ConsumerWidget {
               Expanded(
                 child: ProjectLocationOptions(
                   onTap: projectCreationSate.canAddLocations
-                      ? () {
-                          virtualLinkDialog(
+                      ? () async {
+                          await virtualLinkDialog(
                             context: context,
                             project: project,
                           );

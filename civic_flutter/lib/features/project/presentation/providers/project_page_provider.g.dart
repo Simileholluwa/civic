@@ -6,90 +6,256 @@ part of 'project_page_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectCurrentPageHash() =>
-    r'0a0e5d45727c4e1f4503554c9d6adc22bc2b9d0d';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [ProjectCurrentPage].
 @ProviderFor(ProjectCurrentPage)
-final projectCurrentPageProvider =
-    AutoDisposeNotifierProvider<ProjectCurrentPage, int>.internal(
-  ProjectCurrentPage.new,
-  name: r'projectCurrentPageProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectCurrentPageHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectCurrentPageProvider = ProjectCurrentPageProvider._();
 
-typedef _$ProjectCurrentPage = AutoDisposeNotifier<int>;
-String _$projectPageControllerHash() =>
-    r'51b1a2cac9bd393263a473f7221276400b82ee84';
+final class ProjectCurrentPageProvider
+    extends $NotifierProvider<ProjectCurrentPage, int> {
+  const ProjectCurrentPageProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectCurrentPageProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [ProjectPageController].
+  @override
+  String debugGetCreateSourceHash() => _$projectCurrentPageHash();
+
+  @$internal
+  @override
+  ProjectCurrentPage create() => ProjectCurrentPage();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$projectCurrentPageHash() =>
+    r'4d0be1054b667fb452e6eb4d06ce94824c8bf36b';
+
+abstract class _$ProjectCurrentPage extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ProjectPageController)
-final projectPageControllerProvider = AutoDisposeNotifierProvider<
-    ProjectPageController, Raw<PageController>>.internal(
-  ProjectPageController.new,
-  name: r'projectPageControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectPageControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectPageControllerProvider = ProjectPageControllerProvider._();
 
-typedef _$ProjectPageController = AutoDisposeNotifier<Raw<PageController>>;
-String _$projectTabControllerHash() =>
-    r'db3e83e0f42c5af6de5d1b00532bd86b6d6a723b';
+final class ProjectPageControllerProvider
+    extends $NotifierProvider<ProjectPageController, Raw<PageController>> {
+  const ProjectPageControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectPageControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [ProjectTabController].
+  @override
+  String debugGetCreateSourceHash() => _$projectPageControllerHash();
+
+  @$internal
+  @override
+  ProjectPageController create() => ProjectPageController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<PageController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<PageController>>(value),
+    );
+  }
+}
+
+String _$projectPageControllerHash() =>
+    r'946772383fce29daf1f6afac9a9521dacead9803';
+
+abstract class _$ProjectPageController extends $Notifier<Raw<PageController>> {
+  Raw<PageController> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<PageController>, Raw<PageController>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Raw<PageController>, Raw<PageController>>,
+        Raw<PageController>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ProjectTabController)
-final projectTabControllerProvider = AutoDisposeNotifierProvider<
-    ProjectTabController, Raw<TabController>>.internal(
-  ProjectTabController.new,
-  name: r'projectTabControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectTabControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectTabControllerProvider = ProjectTabControllerProvider._();
 
-typedef _$ProjectTabController = AutoDisposeNotifier<Raw<TabController>>;
-String _$projectDetailsTabControllerHash() =>
-    r'9963a14b45300476d8c908e4aad2f3b395624e94';
+final class ProjectTabControllerProvider
+    extends $NotifierProvider<ProjectTabController, Raw<TabController>> {
+  const ProjectTabControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectTabControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [ProjectDetailsTabController].
+  @override
+  String debugGetCreateSourceHash() => _$projectTabControllerHash();
+
+  @$internal
+  @override
+  ProjectTabController create() => ProjectTabController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<TabController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<TabController>>(value),
+    );
+  }
+}
+
+String _$projectTabControllerHash() =>
+    r'165a372c21d4642c0aafbc0f5deabf87ee98a44e';
+
+abstract class _$ProjectTabController extends $Notifier<Raw<TabController>> {
+  Raw<TabController> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Raw<TabController>, Raw<TabController>>,
+        Raw<TabController>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ProjectDetailsTabController)
-final projectDetailsTabControllerProvider = AutoDisposeNotifierProvider<
-    ProjectDetailsTabController, Raw<TabController>>.internal(
-  ProjectDetailsTabController.new,
-  name: r'projectDetailsTabControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectDetailsTabControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectDetailsTabControllerProvider =
+    ProjectDetailsTabControllerProvider._();
 
-typedef _$ProjectDetailsTabController = AutoDisposeNotifier<Raw<TabController>>;
-String _$projectDetailCurrentPageHash() =>
-    r'a0ceaa7d102a7b23b0b0d4614f740fbea9f736e8';
+final class ProjectDetailsTabControllerProvider
+    extends $NotifierProvider<ProjectDetailsTabController, Raw<TabController>> {
+  const ProjectDetailsTabControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectDetailsTabControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [ProjectDetailCurrentPage].
+  @override
+  String debugGetCreateSourceHash() => _$projectDetailsTabControllerHash();
+
+  @$internal
+  @override
+  ProjectDetailsTabController create() => ProjectDetailsTabController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<TabController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<TabController>>(value),
+    );
+  }
+}
+
+String _$projectDetailsTabControllerHash() =>
+    r'70252c8d1c93e62594b1ce0d8916fae6fab0a78e';
+
+abstract class _$ProjectDetailsTabController
+    extends $Notifier<Raw<TabController>> {
+  Raw<TabController> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Raw<TabController>, Raw<TabController>>,
+        Raw<TabController>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ProjectDetailCurrentPage)
-final projectDetailCurrentPageProvider =
-    AutoDisposeNotifierProvider<ProjectDetailCurrentPage, int>.internal(
-  ProjectDetailCurrentPage.new,
-  name: r'projectDetailCurrentPageProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectDetailCurrentPageHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const projectDetailCurrentPageProvider = ProjectDetailCurrentPageProvider._();
 
-typedef _$ProjectDetailCurrentPage = AutoDisposeNotifier<int>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ProjectDetailCurrentPageProvider
+    extends $NotifierProvider<ProjectDetailCurrentPage, int> {
+  const ProjectDetailCurrentPageProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectDetailCurrentPageProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectDetailCurrentPageHash();
+
+  @$internal
+  @override
+  ProjectDetailCurrentPage create() => ProjectDetailCurrentPage();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$projectDetailCurrentPageHash() =>
+    r'219931fa6f966805c05b675702646b361a40bbce';
+
+abstract class _$ProjectDetailCurrentPage extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

@@ -1,7 +1,7 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:civic_flutter/features/network/network.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,8 +9,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ShowProjectActions extends ConsumerWidget {
   const ShowProjectActions({
-    super.key,
     required this.project,
+    super.key,
     this.fromDetails = false,
   });
 
@@ -79,7 +79,8 @@ class ShowProjectActions extends ConsumerWidget {
                   TToastMessages.infoToast('Project has been bookmarked');
                 } else {
                   TToastMessages.infoToast(
-                      'Project has been removed from bookmarks');
+                    'Project has been removed from bookmarks',
+                  );
                 }
               }
             },
@@ -87,7 +88,7 @@ class ShowProjectActions extends ConsumerWidget {
         if (!projectCardState.canEdit)
           MoreActionsListTile(
             title: 'Share',
-            subTitle: "Invite others to vet or review this project.",
+            subTitle: 'Invite others to vet or review this project.',
             icon: Icons.share,
             onTap: () async {},
           ),
@@ -148,14 +149,14 @@ class ShowProjectActions extends ConsumerWidget {
           MoreActionsListTile(
             title: 'Delete',
             subTitle:
-                "Ensure you understand the consequences of deleting a project.",
+                'Ensure you understand the consequences of deleting a project.',
             icon: Iconsax.trash,
             color: Colors.red,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
               }
-              ProjectHelperFunctions.deleteProjectBottomSheet(
+              await ProjectHelperFunctions.deleteProjectBottomSheet(
                 context,
                 project,
                 fromDetails,
@@ -165,7 +166,7 @@ class ShowProjectActions extends ConsumerWidget {
         if (!projectCardState.isOwner!)
           MoreActionsListTile(
             title: 'Report',
-            subTitle: "This project is inappropriate or offensive.",
+            subTitle: 'This project is inappropriate or offensive.',
             icon: Iconsax.flag,
             color: Colors.red,
             onTap: () async {},

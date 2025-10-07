@@ -5,20 +5,19 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PostCommentTreeWidget extends StatelessWidget {
+  const PostCommentTreeWidget(
+    this.rootComment,
+    this.hasReplies, {
+    required this.postId,
+    required this.commentId,
+    this.contentRoot,
+    super.key,
+  });
   final Post rootComment;
   final ContentBuilder<Post>? contentRoot;
   final bool hasReplies;
   final int postId;
   final int commentId;
-
-  const PostCommentTreeWidget(
-    this.rootComment,
-    this.hasReplies, {
-    this.contentRoot,
-    required this.postId,
-    required this.commentId,
-    super.key,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +37,11 @@ class PostCommentTreeWidget extends StatelessWidget {
             isLast: true,
             hasAvatar: false,
             content: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
                   onTap: () async {
                     if (context.mounted) {
-                      context.push(
+                      await context.push(
                         '/feed/post/$postId/replies/$commentId',
                       );
                     }
@@ -51,20 +49,26 @@ class PostCommentTreeWidget extends StatelessWidget {
                   child: SizedBox(
                     height: 60,
                     child: Center(
-                        child: Row(
-                      spacing: 5,
-                      children: [
-                        Icon(Iconsax.arrow_circle_right,
-                            size: 20, color: Theme.of(context).primaryColor),
-                        Text(
-                          'Show Replies',
-                          style:
-                              Theme.of(context).textTheme.labelLarge!.copyWith(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                        ),
-                      ],
-                    )),
+                      child: Row(
+                        spacing: 5,
+                        children: [
+                          Icon(
+                            Iconsax.arrow_circle_right,
+                            size: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          Text(
+                            'Show Replies',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],

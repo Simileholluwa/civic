@@ -1,16 +1,16 @@
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectVettingScreen extends ConsumerWidget {
   const ProjectVettingScreen({
+    required this.projectId,
     super.key,
     this.projectLocations,
-    required this.projectId,
   });
 
   final List<AWSPlaces>? projectLocations;
@@ -31,7 +31,7 @@ class ProjectVettingScreen extends ConsumerWidget {
     );
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65),
+        preferredSize: const Size.fromHeight(65),
         child: Container(
           decoration: BoxDecoration(
             border: Border(
@@ -51,7 +51,7 @@ class ProjectVettingScreen extends ConsumerWidget {
             centerTitle: true,
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: Icon(Iconsax.arrow_left_2),
+              icon: const Icon(Iconsax.arrow_left_2),
               onPressed: () {
                 context.pop();
               },
@@ -59,124 +59,132 @@ class ProjectVettingScreen extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: verifyUserProximity.when(data: (value) {
-        if (value <= 1.0) {
-          return vettedProject.when(data: (value) {
-            final vettedProjectState = ref.watch(
-              projectVetProvider(
-                value,
+      bottomNavigationBar: verifyUserProximity.when(
+        data: (value) {
+          if (value <= 1.0) {
+            return vettedProject.when(
+              data: (value) {
+                final vettedProjectState = ref.watch(
+                  projectVetProvider(
+                    value,
+                  ),
+                );
+                final vettedProjectNotifier = ref.watch(
+                  projectVetProvider(
+                    value,
+                  ).notifier,
+                );
+                if (vettedProjectState.isEditing) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    child: ContentDoubleButton(
+                      firstButtonOnPressed: () {
+                        vettedProjectNotifier.setIsEditing(false);
+                      },
+                      firstButtonIcon: Iconsax.edit,
+                      firstButtonText: 'Edit vetting',
+                      secondButtonOnPressed: () async {
+                        await ProjectHelperFunctions.deleteProjectVettingDialog(
+                          context,
+                          vettedProjectNotifier,
+                          value!.id!,
+                        );
+                      },
+                      secondButtonColor: Colors.red,
+                      secondButtonIcon: Iconsax.trash,
+                      secondButtonText: 'Delete vetting',
+                      seccondButtonLoading: vettedProjectState.isDeleting,
+                    ),
+                  );
+                } else {
+                  return CreateVettingBottomNavigation(
+                    projectVetting: value,
+                    projectId: projectId,
+                  );
+                }
+              },
+              error: (_, __) {
+                return const SizedBox.shrink();
+              },
+              loading: () {
+                return const SizedBox.shrink();
+              },
+            );
+          } else {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentSingleButton(
+                onPressed: () {
+                  ref.invalidate(verifyUserProximityProvider);
+                },
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
               ),
             );
-            final vettedProjectNotifier = ref.watch(
-              projectVetProvider(
-                value,
-              ).notifier,
+          }
+        },
+        error: (error, st) {
+          final err = error as Map<String, String>;
+          if (err['action']! == 'retry') {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentSingleButton(
+                onPressed: () {
+                  ref.invalidate(verifyUserProximityProvider);
+                },
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
+              ),
             );
-            if (vettedProjectState.isEditing) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: ContentDoubleButton(
-                  firstButtonOnPressed: () {
-                    vettedProjectNotifier.setIsEditing(false);
-                  },
-                  firstButtonIcon: Iconsax.edit,
-                  firstButtonText: 'Edit vetting',
-                  secondButtonOnPressed: () {
-                    ProjectHelperFunctions.deleteProjectVettingDialog(
-                      context,
-                      vettedProjectNotifier,
-                      value!.id!,
-                    );
-                  },
-                  secondButtonColor: Colors.red,
-                  secondButtonIcon: Iconsax.trash,
-                  secondButtonText: 'Delete vetting',
-                  seccondButtonLoading: vettedProjectState.isDeleting,
-                ),
-              );
-            } else {
-              return CreateVettingBottomNavigation(
-                projectVetting: value,
-                projectId: projectId,
-              );
-            }
-          }, error: (_, __) {
-            return SizedBox.shrink();
-          }, loading: () {
-            return SizedBox.shrink();
-          });
-        } else {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentSingleButton(
-              onPressed: () {
-                ref.invalidate(verifyUserProximityProvider);
-              },
-              text: 'Retry',
-              buttonIcon: Iconsax.refresh,
-            ),
-          );
-        }
-      }, error: (error, st) {
-        final err = error as Map<String, String>;
-        if (err['action']! == 'retry') {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentSingleButton(
-              onPressed: () {
-                ref.invalidate(verifyUserProximityProvider);
-              },
-              text: 'Retry',
-              buttonIcon: Iconsax.refresh,
-            ),
-          );
-        } else if (err['action']! == 'restore') {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentDoubleButton(
-              firstButtonOnPressed: () {},
-              firstButtonIcon: Iconsax.refresh,
-              firstButtonText: 'Restore',
-              secondButtonOnPressed: () {},
-              secondButtonColor: Colors.red,
-              secondButtonIcon: Iconsax.trash,
-              secondButtonText: 'Delete forever',
-            ),
-          );
-        } else if (err['action']! == 'share') {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentDoubleButton(
-              firstButtonOnPressed: () {},
-              firstButtonIcon: Iconsax.share,
-              firstButtonText: 'Share project',
-              secondButtonOnPressed: () {},
-              secondButtonColor: Colors.blue,
-              secondButtonIcon: Iconsax.copy,
-              secondButtonText: 'Copy link',
-            ),
-          );
-        } else {
+          } else if (err['action']! == 'restore') {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentDoubleButton(
+                firstButtonOnPressed: () {},
+                firstButtonIcon: Iconsax.refresh,
+                firstButtonText: 'Restore',
+                secondButtonOnPressed: () {},
+                secondButtonColor: Colors.red,
+                secondButtonIcon: Iconsax.trash,
+                secondButtonText: 'Delete forever',
+              ),
+            );
+          } else if (err['action']! == 'share') {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentDoubleButton(
+                firstButtonOnPressed: () {},
+                firstButtonIcon: Iconsax.share,
+                firstButtonText: 'Share project',
+                secondButtonOnPressed: () {},
+                secondButtonColor: Colors.blue,
+                secondButtonIcon: Iconsax.copy,
+                secondButtonText: 'Copy link',
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+        loading: () {
           return const SizedBox.shrink();
-        }
-      }, loading: () {
-        return const SizedBox.shrink();
-      }),
+        },
+      ),
       body: verifyUserProximity.when(
         data: (value) {
           if (value <= 1.0) {
@@ -188,7 +196,7 @@ class ProjectVettingScreen extends ConsumerWidget {
                   ),
                 );
                 if (vettedProjectState.isEditing) {
-                  return ModifyProjectReviewOrVetting(
+                  return const ModifyProjectReviewOrVetting(
                     information:
                         'You have already vetted this project. You can make changes to your vetting below.',
                   );
@@ -210,12 +218,12 @@ class ProjectVettingScreen extends ConsumerWidget {
                   ),
                 );
               },
-              loading: () => AppLoadingWidget(
+              loading: () => const AppLoadingWidget(
                 textWidget: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: EdgeInsets.only(
                     top: 10,
                   ),
-                  child: const Text('Verifying vetting eligibility...'),
+                  child: Text('Verifying vetting eligibility...'),
                 ),
               ),
             );
@@ -225,19 +233,19 @@ class ProjectVettingScreen extends ConsumerWidget {
             );
           }
         },
-        loading: () => AppLoadingWidget(
+        loading: () => const AppLoadingWidget(
           textWidget: Padding(
-            padding: const EdgeInsets.only(
+            padding: EdgeInsets.only(
               top: 10,
             ),
-            child: const Text('Verifying vetting eligibility...'),
+            child: Text('Verifying vetting eligibility...'),
           ),
         ),
         error: (error, stackTrace) {
           final err = error as Map<String, String>;
           return LoadingError(
             retry: null,
-            errorMessage: err['message']!,
+            errorMessage: err['message'],
             mainAxisAlignment: MainAxisAlignment.center,
             padding: const EdgeInsets.symmetric(
               horizontal: 20,

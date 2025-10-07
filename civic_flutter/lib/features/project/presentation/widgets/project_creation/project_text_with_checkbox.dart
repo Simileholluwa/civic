@@ -3,13 +3,7 @@ import 'package:flutter/material.dart';
 
 class ProjectTextWithCheckbox extends StatelessWidget {
   const ProjectTextWithCheckbox({
-    super.key,
-    required this.text,
-    required this.index,
-    required this.checkboxValue,
-    required this.onChanged,
-    required this.onTap,
-    required this.items,
+    required this.text, required this.index, required this.checkboxValue, required this.onChanged, required this.onTap, required this.items, super.key,
   });
 
   final bool checkboxValue;

@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MentionsSuggestionsWidget extends ConsumerWidget {
   const MentionsSuggestionsWidget({
-    super.key,
     required this.onSuggestionSelected,
+    super.key,
   });
+
   final void Function(String) onSuggestionSelected;
 
   @override
@@ -37,7 +38,7 @@ class MentionsSuggestionsWidget extends ConsumerWidget {
           return AppUserInfoWidget(
             onTap: () {
               onSuggestionSelected(
-                '@${suggestions[index].userInfo!.fullName ?? suggestions[index].userInfo!.userName!}',
+                '@${suggestions[index].userInfo!.userName!}',
               );
               ref
                   .watch(

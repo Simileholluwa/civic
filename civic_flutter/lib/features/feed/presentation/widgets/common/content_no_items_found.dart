@@ -22,7 +22,7 @@ class ContentNoItemsFound extends StatelessWidget {
             height: 5,
           ),
           Text(
-            "Be the first to share your opinion!",
+            'Be the first to share your opinion!',
             style: Theme.of(context).textTheme.labelMedium,
             textAlign: TextAlign.center,
           ),

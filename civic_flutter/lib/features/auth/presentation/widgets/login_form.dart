@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -40,8 +39,8 @@ class LoginForm extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/auth/${AppRoutes.resetPassword}',
                     );
                   },
@@ -66,7 +65,7 @@ class LoginForm extends ConsumerWidget {
                   if (!isValid) return;
                   final userRecord =
                       await authNotifier.signInWithEmailAndPassword();
-                  if (userRecord != null) {
+                  if (userRecord != null && context.mounted) {
                     context.go(ProjectRoutes.namespace);
                     ref.invalidate(authProvider);
                   } else {

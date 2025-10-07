@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:convert';
 import 'dart:developer';
 
@@ -12,11 +11,11 @@ part 'auth_user_provider.g.dart';
 class AuthUser extends _$AuthUser {
   @override
   AuthUserState build() {
-    return AuthUserStateInitial();
+    return const AuthUserStateInitial();
   }
 
   Future<void> init() async {
-    ref.read(sessionProvider).initialize();
+    await ref.read(sessionProvider).initialize();
     await fetchUser();
   }
 
@@ -29,19 +28,18 @@ class AuthUser extends _$AuthUser {
     );
     return result.fold((error) {
       log(error.message);
-      state = AuthUserStateError();
+      state = const AuthUserStateError();
       return;
-    }, (response) {
+    }, (response) async {
       state = AuthUserStateSuccess(
         userRecord: response,
       );
       final jsonString = jsonEncode(response);
-      ref.read(localStorageProvider).setString(
+      await ref.read(localStorageProvider).setString(
             'userRecord',
             jsonString,
           );
       return;
     });
   }
-
 }

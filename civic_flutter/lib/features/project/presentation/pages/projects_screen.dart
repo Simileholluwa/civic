@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:civic_client/civic_client.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -21,7 +22,9 @@ class ProjectsScreen extends ConsumerWidget {
         .getString(
           'userRecord',
         );
-    final decoded = jsonDecode(savedRecordString.toString());
+    final decoded = jsonDecode(
+      savedRecordString.toString(),
+    ) as Map<String, dynamic>;
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
     return Scaffold(
@@ -33,8 +36,8 @@ class ProjectsScreen extends ConsumerWidget {
               snap: true,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    context.push(
+                  onPressed: () async {
+                    await context.push(
                       '/project/bookmarks',
                     );
                   },
@@ -70,15 +73,15 @@ class ProjectsScreen extends ConsumerWidget {
                           fontSize: 25,
                         ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 21, left: 1),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 21, left: 1),
                     child: AppDecorationDot(),
                   ),
                 ],
               ),
-              bottom: PreferredSize(
+              bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(5),
-                child: const Divider(
+                child: Divider(
                   height: 0,
                 ),
               ),

@@ -115,7 +115,7 @@ class TValidator {
     final urlPattern = RegExp(
       r'^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:\d+)?(\/\S*)?$',
     );
-    
+
     if (value == null || value.isEmpty) {
       return 'URL is required';
     }
@@ -187,7 +187,6 @@ class TValidator {
       return 'Phone number is required.';
     }
 
-    // Regular expression for phone number validation (assuming a 10-digit US phone number format)
     final phoneRegExp = RegExp(r'^\d{10}$');
 
     if (!phoneRegExp.hasMatch(value)) {

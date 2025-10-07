@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/presentation/routes/create_route.dart';
@@ -10,7 +9,6 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
@@ -53,7 +51,7 @@ GoRouter router(Ref ref) {
         path: AppRoutes.onboarding,
         name: AppRoutes.onboarding,
         builder: (context, state) {
-          final data = state.extra as Map<String, bool>;
+          final data = state.extra! as Map<String, bool>;
           return OnBoardingScreen(
             isPolitical: data['isPolitical'] ?? true,
           );
@@ -69,7 +67,7 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: AppRoutes.login,
             builder: (context, state) {
-              return LoginScreen();
+              return const LoginScreen();
             },
           ),
 
@@ -77,19 +75,19 @@ GoRouter router(Ref ref) {
           GoRoute(
             path: AppRoutes.resetPassword,
             builder: (context, state) {
-              return ResetPasswordScreen();
+              return const ResetPasswordScreen();
             },
             routes: [
               GoRoute(
                 path: AppRoutes.verifyResetPasswordCode,
                 builder: (context, state) {
-                  return VerifyPasswordResetCodeScreen();
+                  return const VerifyPasswordResetCodeScreen();
                 },
               ),
               GoRoute(
                 path: AppRoutes.createNewPassword,
                 builder: (context, state) {
-                  return NewPasswordScreen();
+                  return const NewPasswordScreen();
                 },
               ),
             ],
@@ -105,25 +103,25 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: AppRoutes.confirmDetails,
                 builder: (context, state) {
-                  return UsernameScreen();
+                  return const UsernameScreen();
                 },
               ),
               GoRoute(
                 path: AppRoutes.selectStatus,
                 builder: (context, state) {
-                  return PoliticalStatusScreen();
+                  return const PoliticalStatusScreen();
                 },
               ),
               GoRoute(
                 path: AppRoutes.createAccountRequest,
                 builder: (context, state) {
-                  return CreateAccountRequestScreen();
+                  return const CreateAccountRequestScreen();
                 },
               ),
               GoRoute(
                 path: AppRoutes.validateCreateAccount,
                 builder: (context, state) {
-                  return ValidateCreateAccountScreen();
+                  return const ValidateCreateAccountScreen();
                 },
               ),
             ],

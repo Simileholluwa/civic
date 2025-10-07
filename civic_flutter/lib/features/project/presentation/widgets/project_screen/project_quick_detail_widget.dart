@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProjectQuickDetailWidget extends StatelessWidget {
   const ProjectQuickDetailWidget({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.color,
+    required this.icon, required this.title, required this.color, required this.textStyle, super.key,
     this.size = 30,
     this.iconSize = 15,
-    required this.textStyle,
   });
 
   final Color color;

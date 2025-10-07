@@ -6,21 +6,46 @@ part of 'local_storage_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$localStorageHash() => r'adca5231ccb62142164f9d15e676b8613d64567f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [localStorage].
 @ProviderFor(localStorage)
-final localStorageProvider = Provider<LocalStorage>.internal(
-  localStorage,
-  name: r'localStorageProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$localStorageHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const localStorageProvider = LocalStorageProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef LocalStorageRef = ProviderRef<LocalStorage>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class LocalStorageProvider
+    extends $FunctionalProvider<LocalStorage, LocalStorage, LocalStorage>
+    with $Provider<LocalStorage> {
+  const LocalStorageProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'localStorageProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$localStorageHash();
+
+  @$internal
+  @override
+  $ProviderElement<LocalStorage> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LocalStorage create(Ref ref) {
+    return localStorage(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LocalStorage value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LocalStorage>(value),
+    );
+  }
+}
+
+String _$localStorageHash() => r'adca5231ccb62142164f9d15e676b8613d64567f';

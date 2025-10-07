@@ -4,8 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 class RepostTitle extends StatelessWidget {
   const RepostTitle({
-    super.key,
-    required this.text,
+    required this.text, super.key,
   });
 
   final String text;

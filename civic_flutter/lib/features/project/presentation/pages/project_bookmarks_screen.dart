@@ -36,7 +36,7 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                     context.pop();
                   },
                 ),
-                bottom: PreferredSize(
+                bottom: const PreferredSize(
                   preferredSize: Size.fromHeight(1),
                   child: Divider(
                     height: 0,
@@ -44,12 +44,14 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                 ),
                 actions: [
                   IconButton(
-                    onPressed: isEmpty ? null : () async {
-                      await ProjectHelperFunctions.clearBookmarksDialog(
-                        ref,
-                        context,
-                      );
-                    },
+                    onPressed: isEmpty
+                        ? null
+                        : () async {
+                            await ProjectHelperFunctions.clearBookmarksDialog(
+                              ref,
+                              context,
+                            );
+                          },
                     icon: const Icon(
                       Iconsax.trash,
                       size: 26,
@@ -69,8 +71,8 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                                 fontSize: 25,
                               ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 22, left: 1),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 22, left: 1),
                       child: AppDecorationDot(),
                     ),
                   ],

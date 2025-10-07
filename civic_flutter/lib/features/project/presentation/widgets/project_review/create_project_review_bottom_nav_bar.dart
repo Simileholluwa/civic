@@ -7,10 +7,8 @@ import 'package:go_router/go_router.dart';
 
 class CreateProjectReviewBottomNavBar extends ConsumerWidget {
   const CreateProjectReviewBottomNavBar({
-    super.key,
-    required this.projectId,
+    required this.projectId, required this.fromDetails, super.key,
     this.projectReview,
-    required this.fromDetails,
   });
 
   final int projectId;

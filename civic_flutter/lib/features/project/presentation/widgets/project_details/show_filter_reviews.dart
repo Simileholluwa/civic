@@ -1,12 +1,12 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ShowFilterReviews extends ConsumerWidget {
-  const ShowFilterReviews({super.key, required this.pagingController});
+  const ShowFilterReviews({required this.pagingController, super.key});
 
   final PaginatedProjectReviewList pagingController;
   @override
@@ -50,7 +50,6 @@ class ShowFilterReviews extends ConsumerWidget {
             0,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             spacing: 15,
             children: [
               ...['All', 5, 4, 3, 2, 1].asMap().entries.map(
@@ -76,7 +75,7 @@ class ShowFilterReviews extends ConsumerWidget {
                           ),
                         ),
                         if (index > 0)
-                          Icon(
+                          const Icon(
                             Iconsax.magic_star5,
                             size: 16,
                           ),
@@ -112,7 +111,6 @@ class ShowFilterReviews extends ConsumerWidget {
             ),
             scrollDirection: Axis.horizontal,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               spacing: 15,
               children: [
                 ...[
@@ -122,7 +120,7 @@ class ShowFilterReviews extends ConsumerWidget {
                   'Attachments',
                   'Category',
                   'Funding',
-                  'Dates'
+                  'Dates',
                 ].asMap().entries.map(
                   (filter) {
                     final text = filter.value;
@@ -173,14 +171,16 @@ class ShowFilterReviews extends ConsumerWidget {
                 trailing: SizedBox(
                   width: 20,
                   height: 24,
-                  child: Radio(
-                    value: 0,
+                  child: RadioGroup(
                     groupValue: 0,
                     onChanged: (value) {},
+                    child: const Radio(
+                      value: 0,
+                    ),
                   ),
                 ),
               ),
-              Divider(
+              const Divider(
                 height: 0,
                 indent: 3,
                 endIndent: 3,
@@ -197,10 +197,12 @@ class ShowFilterReviews extends ConsumerWidget {
                 trailing: SizedBox(
                   width: 20,
                   height: 24,
-                  child: Radio(
-                    value: 1,
+                  child: RadioGroup(
                     groupValue: 0,
                     onChanged: (value) {},
+                    child: const Radio(
+                      value: 1,
+                    ),
                   ),
                 ),
               ),
@@ -211,7 +213,7 @@ class ShowFilterReviews extends ConsumerWidget {
           height: 20,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AppDualButton(
             onTapSkipButton: context.pop,
             activeButtonText: 'Apply filter',

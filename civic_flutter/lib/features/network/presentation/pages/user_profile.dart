@@ -1,13 +1,12 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class UserProfile extends ConsumerWidget {
   const UserProfile({
-    super.key,
-    required this.userId,
+    required this.userId, super.key,
   });
 
   final int userId;
@@ -46,7 +45,6 @@ class UserProfile extends ConsumerWidget {
                   ),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 15,
                   children: [
@@ -59,7 +57,7 @@ class UserProfile extends ConsumerWidget {
                         children: [
                           Text(
                             THelperFunctions.getFullName(currentUser.firstName!,
-                                currentUser.middleName, currentUser.lastName!),
+                                currentUser.middleName, currentUser.lastName!,),
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
@@ -88,13 +86,13 @@ class UserProfile extends ConsumerWidget {
                   error: (_, __) => const SizedBox(),
                   loading: () => const SizedBox(),
                 ),
-                ListTile(
-                  title: const Text('Name'),
-                  subtitle: const Text('John Doe'),
+                const ListTile(
+                  title: Text('Name'),
+                  subtitle: Text('John Doe'),
                 ),
-                ListTile(
-                  title: const Text('Email'),
-                  subtitle: const Text('john.doe@example.com'),
+                const ListTile(
+                  title: Text('Email'),
+                  subtitle: Text('john.doe@example.com'),
                 ),
               ],
             ),

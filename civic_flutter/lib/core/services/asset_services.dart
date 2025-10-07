@@ -7,16 +7,15 @@ import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AssetService {
-  final Client client;
-
   AssetService({required this.client});
+  final Client client;
   Future<Either<String, List<String>>> uploadMediaAssets(
     List<String> media,
     String folderName,
     String subFolderName,
   ) async {
     try {
-      var mediaUrls = <String>[];
+      final mediaUrls = <String>[];
       for (final mediaPath in media) {
         final file = XFile(mediaPath);
         final path = '$folderName/$subFolderName/${file.name}';
@@ -45,7 +44,7 @@ class AssetService {
       return left('The request timed out.');
     } on ServerpodClientException catch (e) {
       return left(e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString());
       return left(e.toString());
     }

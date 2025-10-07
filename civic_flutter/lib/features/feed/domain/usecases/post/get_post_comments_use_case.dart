@@ -3,7 +3,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetPostCommentsUseCase implements UseCase<PostList, GetPostCommentsParams> {
+class GetPostCommentsUseCase
+    implements UseCase<PostList, GetPostCommentsParams> {
   GetPostCommentsUseCase({required FeedRepository feedRepository})
       : _feedRepository = feedRepository;
   final FeedRepository _feedRepository;
@@ -14,7 +15,6 @@ class GetPostCommentsUseCase implements UseCase<PostList, GetPostCommentsParams>
       postId: params.postId,
       page: params.page,
       limit: params.limit,
-      
     );
     return result;
   }
@@ -29,5 +29,4 @@ class GetPostCommentsParams {
   final int postId;
   final int page;
   final int limit;
-  
 }

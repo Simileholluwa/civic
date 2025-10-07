@@ -1,10 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
+
 import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NotificationsScreen extends ConsumerWidget {
@@ -18,80 +18,77 @@ class NotificationsScreen extends ConsumerWidget {
     );
     final isEmpty = pagingController.pagingController.itemList?.isEmpty ?? true;
     return Scaffold(
-      body: ContentScrollWrapper(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                floating: true,
-                snap: true,
-                actions: [
-                  IconButton(
-                    onPressed: isEmpty
-                        ? null
-                        : () async {
-                            await NotificationsHelper.deleteNotificationsDialog(
-                              ref,
-                              context,
-                            );
-                          },
-                    icon: const Icon(
-                      Iconsax.trash,
-                      size: 26,
-                    ),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              actions: [
+                IconButton(
+                  onPressed: isEmpty
+                      ? null
+                      : () async {
+                          await NotificationsHelper.deleteNotificationsDialog(
+                            ref,
+                            context,
+                          );
+                        },
+                  icon: const Icon(
+                    Iconsax.trash,
+                    size: 26,
                   ),
-                  IconButton(
-                    onPressed: isEmpty
-                        ? null
-                        : () {
-                            unawaited(
-                              notifNotifier.markAllAsRead(),
-                            );
-                          },
-                    icon: const Icon(
-                      Iconsax.tick_circle,
-                      size: 26,
-                    ),
+                ),
+                IconButton(
+                  onPressed: isEmpty
+                      ? null
+                      : () {
+                          unawaited(
+                            notifNotifier.markAllAsRead(),
+                          );
+                        },
+                  icon: const Icon(
+                    Iconsax.tick_circle,
+                    size: 26,
                   ),
-                  IconButton(
-                    onPressed: isEmpty ? null : () {},
-                    icon: const Icon(
-                      Iconsax.setting_3,
-                      size: 26,
-                    ),
+                ),
+                IconButton(
+                  onPressed: isEmpty ? null : () {},
+                  icon: const Icon(
+                    Iconsax.setting_3,
+                    size: 26,
                   ),
-                  const SizedBox(
-                    width: 5,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+              ],
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'NOTIFICATIONS',
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          fontSize: 25,
+                        ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 21, left: 1),
+                    child: AppDecorationDot(),
                   ),
                 ],
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'NOTIFICATIONS',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 25,
-                              ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 21, left: 1),
-                      child: AppDecorationDot(),
-                    ),
-                  ],
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(5),
-                  child: const Divider(
-                    height: 0,
-                  ),
+              ),
+              bottom: const PreferredSize(
+                preferredSize: Size.fromHeight(5),
+                child: Divider(
+                  height: 0,
                 ),
               ),
-            ];
-          },
-          body: NotificationCard(
-            targetType: '',
-          ),
+            ),
+          ];
+        },
+        body: const NotificationCard(
+          targetType: '',
         ),
       ),
     );
@@ -100,8 +97,8 @@ class NotificationsScreen extends ConsumerWidget {
 
 class NotificationCard extends ConsumerWidget {
   const NotificationCard({
-    super.key,
     required this.targetType,
+    super.key,
     this.isRead = true,
   });
 

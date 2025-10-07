@@ -4,8 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectSearchBar extends StatelessWidget {
   const ProjectSearchBar({
-    super.key,
-    required this.onChanged,
+    required this.onChanged, super.key,
     this.height = 50,
     this.hintText = 'Search for projects',
   });

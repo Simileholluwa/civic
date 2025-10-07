@@ -68,8 +68,8 @@ class ImageHelper {
 
   Future<CroppedFile?> crop({
     required File file,
-    CropStyle cropStyle = CropStyle.rectangle,
     required BuildContext context,
+    CropStyle cropStyle = CropStyle.rectangle,
   }) async {
     final isDark = THelperFunctions.isDarkMode(context);
     return _imageCropper.cropImage(
@@ -77,7 +77,7 @@ class ImageHelper {
       uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
           toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-          statusBarColor: TColors.dark,
+          statusBarLight: true,
           toolbarWidgetColor: Theme.of(context).iconTheme.color,
           activeControlsWidgetColor: TColors.primary,
           dimmedLayerColor: Theme.of(context).scaffoldBackgroundColor,

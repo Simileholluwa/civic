@@ -8,8 +8,7 @@ import 'package:iconsax/iconsax.dart';
 
 class PostImageOptions extends ConsumerWidget {
   const PostImageOptions({
-    super.key,
-    required this.post,
+    required this.post, super.key,
   });
 
   final Post post;

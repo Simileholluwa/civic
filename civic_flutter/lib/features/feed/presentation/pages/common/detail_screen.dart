@@ -1,8 +1,8 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
@@ -10,10 +10,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class DetailScreen extends ConsumerWidget {
   const DetailScreen({
-    super.key,
     required this.id,
     required this.draftType,
     required this.postType,
+    super.key,
     this.post,
   });
 
@@ -190,11 +190,11 @@ class DetailScreen extends ConsumerWidget {
           );
         },
         error: (error, st) {
-          final err = error as Map<String, dynamic>;
+          final err = error as Map<String, String>;
           return Center(
             child: LoadingError(
               retry: null,
-              errorMessage: err['message'] ?? 'Something went wrong',
+              errorMessage: err['message'],
               mainAxisAlignment: MainAxisAlignment.center,
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -203,7 +203,7 @@ class DetailScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget();
+          return const AppLoadingWidget();
         },
       ),
       bottomNavigationBar: data.when(
@@ -216,8 +216,8 @@ class DetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                 child: ShareOpinion(
                   imageUrl: value.owner!.userInfo!.imageUrl!,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/create/post/0',
                       extra: {
                         'parent': value,

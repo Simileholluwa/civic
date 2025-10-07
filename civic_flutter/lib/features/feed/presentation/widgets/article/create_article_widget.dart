@@ -7,8 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateArticleWidget extends ConsumerWidget {
   const CreateArticleWidget({
-    super.key,
-    required this.post,
+    required this.post, super.key,
   });
 
   final Post post;

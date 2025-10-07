@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectLocationsScreen extends ConsumerWidget {
   const ProjectLocationsScreen({
-    super.key,
     required this.project,
+    super.key,
   });
 
   final Project project;
@@ -19,7 +19,9 @@ class ProjectLocationsScreen extends ConsumerWidget {
     final searchQueryProvider = ref.watch(locationSearchQueryProvider.notifier);
     final data = ref.watch(searchPlacesProvider);
     final projectCreationSate = ref.watch(projectProviderProvider(project));
-    final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
+    final projectNotifier = ref.watch(
+      projectProviderProvider(project).notifier,
+    );
     final locations = projectCreationSate.physicalLocations;
     return Scaffold(
       appBar: PreferredSize(
@@ -42,13 +44,14 @@ class ProjectLocationsScreen extends ConsumerWidget {
               centerTitle: true,
               title: CreateContentSearchBar(
                 onChanged: (text) {
-                  searchQueryProvider.setSearchQuery(text);
+                  searchQueryProvider.searchQuery = text;
                 },
                 trailingWidget: [
                   IconButton(
                     onPressed: () {
-                      ref.invalidate(searchNearbyPlacesProvider);
-                      ref.invalidate(searchPlacesProvider);
+                      ref
+                        ..invalidate(searchNearbyPlacesProvider)
+                        ..invalidate(searchPlacesProvider);
                     },
                     icon: const Icon(
                       Iconsax.refresh,
@@ -84,7 +87,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
         ),
       ),
       body: data.isLoading
-          ? AppLoadingWidget()
+          ? const AppLoadingWidget()
           : data.when(
               data: (data) {
                 if (data == null || data.isEmpty) {
@@ -137,11 +140,13 @@ class ProjectLocationsScreen extends ConsumerWidget {
                 return const CreateContentLocationError();
               },
               loading: () {
-                return AppLoadingWidget(
+                return const AppLoadingWidget(
                   textWidget: Padding(
-              padding: const EdgeInsets.only(top: 10,),
-              child: const Text('Searching nearby location...'),
-            ),
+                    padding: EdgeInsets.only(
+                      top: 10,
+                    ),
+                    child: Text('Searching nearby location...'),
+                  ),
                 );
               },
             ),
@@ -157,7 +162,7 @@ class ProjectLocationsScreen extends ConsumerWidget {
                   return Chip(
                     label: Text(
                       locations[index].place,
-                      style: Theme.of(context).textTheme.labelMedium!,
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
                     elevation: 0,
                     surfaceTintColor: Colors.transparent,

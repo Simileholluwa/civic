@@ -1,4 +1,3 @@
-//ignore_for_file:avoid_public_notifier_properties, avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -15,27 +14,27 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
 
   @override
   PagingStatus build(String targetType, [bool isRead = true]) {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
+    pagingController
+      ..addPageRequestListener(
+        fetchPage,
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
-
-    ref.listen<AsyncValue<Notification>>(
-      userNotificationStreamProvider(null, null),
-      (previous, next) {
-        next.whenData((event) {
-          log(event.toString());
-          _handleNotification(event);
-        });
-      },
-    );
+    ref
+      ..onDispose(
+        pagingController.dispose,
+      )
+      ..listen<AsyncValue<Notification>>(
+        userNotificationStreamProvider(null, null),
+        (previous, next) {
+          next.whenData((event) {
+            log(event.toString());
+            _handleNotification(event);
+          });
+        },
+      );
 
     return pagingController.value.status;
   }
@@ -43,7 +42,7 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   void removeAllNotifications() {
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
-      itemList: [],
+      itemList: const [],
     );
   }
 
@@ -61,8 +60,6 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       result.fold((error) {
         log(error.toString(), name: 'PaginatedNotificationList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: error.message,
         );
       }, (data) {
@@ -75,11 +72,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
           pagingController.appendLastPage(data.results);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString(), name: 'PaginatedNotificationList');
       pagingController.value = PagingState(
-        nextPageKey: null,
-        itemList: null,
         error: e.toString(),
       );
     }
@@ -104,8 +99,8 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   void removeNotificationById(int? notificationId) {
     if (pagingController.itemList != null && notificationId != null) {
       final updatedList =
-          List<Notification>.from(pagingController.itemList ?? []);
-      updatedList.removeWhere((element) => element.id == notificationId);
+          List<Notification>.from(pagingController.itemList ?? [])
+            ..removeWhere((element) => element.id == notificationId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,

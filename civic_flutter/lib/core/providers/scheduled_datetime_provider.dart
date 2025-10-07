@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'scheduled_datetime_provider.g.dart';
 
@@ -38,11 +38,11 @@ class PostScheduledDateTime extends _$PostScheduledDateTime {
   }
 
   String humanizeDateTime() {
-    return "Scheduled for ${formatDate()} at ${formatTime()}.";
+    return 'Scheduled for ${formatDate()} at ${formatTime()}.';
   }
 
   String humanizeDateTimeForSend() {
-    return "${formatDate()} at ${formatTime()}";
+    return '${formatDate()} at ${formatTime()}';
   }
 
   bool canSendLater() {

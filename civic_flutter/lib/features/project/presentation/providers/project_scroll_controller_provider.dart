@@ -1,8 +1,8 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:civic_flutter/core/core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'project_scroll_controller_provider.g.dart';
 
 @riverpod

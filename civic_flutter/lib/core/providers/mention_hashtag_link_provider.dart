@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'mention_hashtag_link_provider.g.dart';
 
 @riverpod
@@ -15,7 +15,9 @@ MentionHashTagLinkServices mentionServices(Ref ref) {
 
 @riverpod
 Future<List<UserRecord>> fetchUsersToMention(
-    Ref ref, String query) async {
+  Ref ref,
+  String query,
+) async {
   final result = await ref.watch(mentionServicesProvider).mentionUsers(query);
 
   return result.fold(
@@ -30,7 +32,7 @@ Future<List<UserRecord>> fetchUsersToMention(
 
 @riverpod
 class MentionSuggestions extends _$MentionSuggestions {
-  void setSuggestions(List<UserRecord> suggestions) {
+  set setSuggestions(List<UserRecord> suggestions) {
     state = suggestions;
   }
 
@@ -51,7 +53,7 @@ class SelectedMentions extends _$SelectedMentions {
   @override
   List<UserRecord> build() => [];
 
-  void setMentions(List<UserRecord> mentions) {
+  set setMentions(List<UserRecord> mentions) {
     state = mentions;
   }
 }
@@ -60,9 +62,8 @@ class SelectedMentions extends _$SelectedMentions {
 class ExtractedMentions extends _$ExtractedMentions {
   @override
   List<String> build(String text) {
-    final RegExp mentionRegExp = RegExp(r'@(\w+)', caseSensitive: false);
-    Iterable<Match> matches =
-        mentionRegExp.allMatches(text);
+    final mentionRegExp = RegExp(r'@(\w+)', caseSensitive: false);
+    final Iterable<Match> matches = mentionRegExp.allMatches(text);
     return matches.map((match) => match.group(1)!).toList();
   }
 }
@@ -76,8 +77,7 @@ class ValidMentions extends _$ValidMentions {
         .map((u) => u.userInfo!.fullName ?? u.userInfo!.userName!)
         .toList();
     final extractedMentions = ref.watch(extractedMentionsProvider(text));
-    return extractedMentions
-        .any((element) => selectedMentions.contains(element));
+    return extractedMentions.any(selectedMentions.contains);
   }
 }
 
@@ -91,13 +91,12 @@ class Hashtags extends _$Hashtags {
 
   @override
   List<String> build(String text) {
-    final RegExp mentionRegExp = RegExp(r'#(\w+)', caseSensitive: false);
-    Iterable<Match> matches =
-        mentionRegExp.allMatches(text);
+    final mentionRegExp = RegExp(r'#(\w+)', caseSensitive: false);
+    final Iterable<Match> matches = mentionRegExp.allMatches(text);
     return matches.map((match) => match.group(1)!).toList();
   }
 
-  void setTags(List<String> tags) {
+  set setTags(List<String> tags) {
     state = tags;
   }
 }
@@ -121,7 +120,7 @@ Future<List<String>> fetchHashtags(
 
 @riverpod
 class HashtagsSuggestions extends _$HashtagsSuggestions {
-  void setSuggestions(List<String> suggestions) {
+  set setSuggestions(List<String> suggestions) {
     state = suggestions;
   }
 
@@ -156,8 +155,8 @@ class ExtractLink extends _$ExtractLink {
     final matches = regExp.allMatches(text);
 
     if (matches.isNotEmpty) {
-      return matches.first.group(0) ?? "";
+      return matches.first.group(0) ?? '';
     }
-    return "";
+    return '';
   }
 }

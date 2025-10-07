@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +11,6 @@ class TDialogTheme {
 
   static final darkDialogTheme = DialogTheme(
     backgroundColor: TColors.dark,
-      titleTextStyle: TTextTheme.darkTextTheme.titleMedium,
+    titleTextStyle: TTextTheme.darkTextTheme.titleMedium,
   );
-
 }

@@ -11,7 +11,7 @@ class GetUserProjectBookmarksUseCase
 
   @override
   Future<Either<Failure, ProjectList>> call(
-      GetUserProjectBookmarksParams params) async {
+      GetUserProjectBookmarksParams params,) async {
     final result = await _projectRepository.getUserProjectBookmarks(
       page: params.page,
       limit: params.limit,

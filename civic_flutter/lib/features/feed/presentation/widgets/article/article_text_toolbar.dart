@@ -1,8 +1,7 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:io' as io show File;
-import 'package:flutter/material.dart';
+
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/internal.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -36,19 +35,19 @@ class ArticleTextToolbar extends StatelessWidget {
             CropAspectRatioPreset.ratio3x2,
             CropAspectRatioPreset.original,
             CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9
+            CropAspectRatioPreset.ratio16x9,
           ],
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
-          
           toolbarColor: Theme.of(context).scaffoldBackgroundColor,
-          statusBarColor: TColors.dark,
+          statusBarLight: true,
           toolbarWidgetColor: Theme.of(context).iconTheme.color,
           activeControlsWidgetColor: TColors.primary,
           dimmedLayerColor: Theme.of(context).scaffoldBackgroundColor,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          cropFrameColor: THelperFunctions.isDarkMode(context) ? TColors.textWhite : TColors.black,
-        
+          cropFrameColor: THelperFunctions.isDarkMode(context)
+              ? TColors.textWhite
+              : TColors.black,
         ),
         IOSUiSettings(
           title: 'Cropper',
@@ -57,7 +56,7 @@ class ArticleTextToolbar extends StatelessWidget {
             CropAspectRatioPreset.ratio3x2,
             CropAspectRatioPreset.original,
             CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9
+            CropAspectRatioPreset.ratio16x9,
           ],
         ),
         WebUiSettings(
@@ -69,18 +68,17 @@ class ArticleTextToolbar extends StatelessWidget {
     if (newImage == null) {
       return;
     }
-    final newSavedImage = await saveImage(io.File(newImage));
-    controller.insertImageBlock(imageSource: newSavedImage);
+    // final newSavedImage = await saveImage(io.File(newImage));
+    // controller.(imageSource: newSavedImage);
   }
 
   Future<void> onImageInsert(String image, QuillController controller) async {
-    if (image.startsWith('http://') ||
-                      image.startsWith('https://')) {
-      controller.insertImageBlock(imageSource: image);
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      // controller.insertImageBlock(imageSource: image);
       return;
     }
-    final newSavedImage = await saveImage(io.File(image));
-    controller.insertImageBlock(imageSource: newSavedImage);
+    // final newSavedImage = await saveImage(io.File(image));
+    // controller.insertImageBlock(imageSource: newSavedImage);
   }
 
   Future<String> saveImage(io.File file) async {
@@ -99,22 +97,18 @@ class ArticleTextToolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return QuillSimpleToolbar(
       controller: controller,
-      config: QuillSimpleToolbarConfig(  
-        decoration: BoxDecoration(
+      config: QuillSimpleToolbarConfig(
+        decoration: const BoxDecoration(
           color: Colors.transparent,
-        ),     
+        ),
         multiRowsDisplay: false,
         showSearchButton: false,
         showFontFamily: false,
         showColorButton: false,
         showBackgroundColorButton: false,
         showHeaderStyle: false,
-        showClipboardCopy: false,
-        showClipboardPaste: false,
-        showClipboardCut: false,
         embedButtons: FlutterQuillEmbeds.toolbarButtons(
           videoButtonOptions: null,
-          cameraButtonOptions: null,
           imageButtonOptions: QuillToolbarImageButtonOptions(
             imageButtonConfig: QuillToolbarImageConfig(
               onImageInsertCallback: isAndroidApp || isIosApp

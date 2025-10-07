@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 
 class PostCommentAndReplyContent extends StatelessWidget {
   const PostCommentAndReplyContent({
-    super.key,
     required this.replyOrComment,
     required this.originalPostId,
+    super.key,
     this.onReply,
     this.onLike,
     this.isReply = false,
@@ -27,8 +27,8 @@ class PostCommentAndReplyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.push(
+      onTap: () async {
+        await context.push(
           '/feed/post/${replyOrComment.id}',
           extra: replyOrComment,
         );
@@ -88,9 +88,9 @@ class PostCommentAndReplyContent extends StatelessWidget {
 
 class RowIconText extends StatelessWidget {
   const RowIconText({
-    super.key,
     required this.icon,
     required this.title,
+    super.key,
     this.color,
   });
 

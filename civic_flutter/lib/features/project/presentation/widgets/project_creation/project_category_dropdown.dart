@@ -6,11 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCategoryDropdown extends ConsumerWidget {
   const ProjectCategoryDropdown({
-    super.key,
-    required this.dropdownItems,
-    required this.value,
-    required this.onChanged,
-    required this.hintText,
+    required this.dropdownItems, required this.value, required this.onChanged, required this.hintText, super.key,
     this.width = double.maxFinite,
     this.rightPadding = 16,
     this.leftPadding = 8,
@@ -30,7 +26,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
       child: DropdownButton2<String>(
         isExpanded: true,
         hint: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8),
           child: Text(
             hintText,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -40,7 +36,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
         ),
         style: Theme.of(context).textTheme.bodyMedium,
         items: ProjectHelperFunctions.addDividersAfterItems(
-            dropdownItems, context),
+            dropdownItems, context,),
         value: value,
         onChanged: onChanged,
         buttonStyleData: ButtonStyleData(
@@ -74,7 +70,7 @@ class ProjectCategoryDropdown extends ConsumerWidget {
           ),
         ),
         menuItemStyleData: MenuItemStyleData(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           customHeights: ProjectHelperFunctions.getCustomItemsHeights(
             dropdownItems,
           ),

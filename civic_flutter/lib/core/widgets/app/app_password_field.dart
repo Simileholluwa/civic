@@ -27,47 +27,49 @@ class AppPasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, _) {
-      return TextFormField(
-        controller: textController,
-        validator: validator,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            prefixIcon,
-            size: iconSize,
-          ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(
-              right: TSizes.sm,
+    return Consumer(
+      builder: (context, ref, _) {
+        return TextFormField(
+          controller: textController,
+          validator: validator,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              prefixIcon,
+              size: iconSize,
             ),
-            child: IconButton(
-              onPressed: () {
-                if (ref.watch(showPasswordProvider)) {
-                  ref.watch(showPasswordProvider.notifier).setValue(false);
-                } else {
-                  ref.watch(showPasswordProvider.notifier).setValue(true);
-                }
-              },
-              icon: ref.watch(showPasswordProvider) == false
-                  ? const Icon(
-                      Icons.visibility,
-                    )
-                  : const Icon(
-                      Icons.visibility_off,
-                    ),
-            ),
-          ),
-          hintText: hintText,
-          errorStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorScheme.error,
+            suffixIcon: Padding(
+              padding: const EdgeInsets.only(
+                right: TSizes.sm,
               ),
-          errorMaxLines: 2,
-        ),
-        obscureText: !ref.watch(showPasswordProvider),
-        textInputAction: textInputAction,
-        keyboardType: textInputType,
-      );
-    });
+              child: IconButton(
+                onPressed: () {
+                  if (ref.watch(showPasswordProvider)) {
+                    ref.watch(showPasswordProvider.notifier).value = false;
+                  } else {
+                    ref.watch(showPasswordProvider.notifier).value = true;
+                  }
+                },
+                icon: !ref.watch(showPasswordProvider.notifier).value
+                    ? const Icon(
+                        Icons.visibility,
+                      )
+                    : const Icon(
+                        Icons.visibility_off,
+                      ),
+              ),
+            ),
+            hintText: hintText,
+            errorStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+            errorMaxLines: 2,
+          ),
+          obscureText: !ref.watch(showPasswordProvider),
+          textInputAction: textInputAction,
+          keyboardType: textInputType,
+        );
+      },
+    );
   }
 }

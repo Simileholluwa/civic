@@ -1,5 +1,3 @@
-//ignore_for_file:avoid_public_notifier_properties
-//ignore_for_file:avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -16,17 +14,17 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
 
   @override
   PagingStatus build() {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
+    pagingController
+      ..addPageRequestListener(
+        fetchPage,
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    ref.onDispose(
+      pagingController.dispose,
+    );
     return pagingController.value.status;
   }
 
@@ -42,8 +40,6 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
       result.fold((error) {
         log(error.toString(), name: 'PaginatedProjectList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: error.message,
         );
       }, (data) {
@@ -56,11 +52,9 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
           pagingController.appendLastPage(data.results);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString(), name: 'PaginatedProjectList');
       pagingController.value = PagingState(
-        nextPageKey: null,
-        itemList: null,
         error: e.toString(),
       );
     }
@@ -83,13 +77,13 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
   void removeAllProjects() {
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
-      itemList: [],
+      itemList: const [],
     );
   }
 
   void removeProject(Project project) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? []);
-    updatedList.remove(project);
+    final updatedList = List<Project>.from(pagingController.itemList ?? [])
+      ..remove(project);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,
@@ -100,8 +94,8 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
     if (pagingController.itemList == null) {
       return;
     }
-    final updatedList = List<Project>.from(pagingController.itemList ?? []);
-    updatedList.removeWhere((element) => element.id == projectId);
+    final updatedList = List<Project>.from(pagingController.itemList ?? [])
+      ..removeWhere((element) => element.id == projectId);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,

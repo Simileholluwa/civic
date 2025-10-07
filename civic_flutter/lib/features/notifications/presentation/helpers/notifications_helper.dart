@@ -30,7 +30,7 @@ class NotificationsHelper {
 
     final spans = <InlineSpan>[];
 
-    for (int i = 0; i < usernames.length; i++) {
+    for (var i = 0; i < usernames.length; i++) {
       spans.add(TextSpan(text: usernames[i], style: boldStyle));
 
       if (i < usernames.length - 2) {
@@ -50,7 +50,7 @@ class NotificationsHelper {
     if (triggerUser != null) {
       spans.add(
         TextSpan(
-          text: " $triggerUser",
+          text: ' $triggerUser',
           style: boldStyle,
         ),
       );
@@ -79,73 +79,73 @@ class NotificationsHelper {
 
   static Widget notifIcon(String actionType) {
     if (actionType == 'liked') {
-      return Icon(
+      return const Icon(
         Iconsax.heart5,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'commented on') {
-      return Icon(
+      return const Icon(
         Iconsax.message5,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType.contains('reacted')) {
-      return Icon(
+      return const Icon(
         Icons.thumb_up_alt_rounded,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'followed you') {
-      return Icon(
+      return const Icon(
         Iconsax.user_add,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType.contains('tagged')) {
-      return Icon(
+      return const Icon(
         Iconsax.tag_user5,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType.contains('mentioned')) {
-      return Icon(
+      return const Icon(
         Icons.person,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'bookmarked') {
-      return Icon(
+      return const Icon(
         Icons.bookmark_rounded,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'quoted') {
-      return Icon(
+      return const Icon(
         Iconsax.repeat,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'mentioned') {
-      return Icon(
+      return const Icon(
         Iconsax.tag_user,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'reviewed') {
-      return Icon(
+      return const Icon(
         Iconsax.magic_star5,
         color: Colors.white,
         size: 15,
       );
     } else if (actionType == 'vetted') {
-      return Icon(
+      return const Icon(
         Iconsax.medal_star5,
         color: Colors.white,
         size: 15,
       );
     } else {
-      return Icon(
+      return const Icon(
         Iconsax.notification5,
         color: Colors.white,
         size: 15,
@@ -197,7 +197,7 @@ class NotificationsHelper {
       activeButtonText: 'Delete all',
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: "Cancel",
+      skipText: 'Cancel',
       onTapActiveButton: () async {
         if (context.mounted) {
           context.pop();

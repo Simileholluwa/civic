@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 class ProjectLocationOptions extends StatelessWidget {
   const ProjectLocationOptions({
-    super.key,
-    required this.onTap,
-    required this.text,
-    required this.icon,
+    required this.onTap, required this.text, required this.icon, super.key,
   });
 
   final VoidCallback? onTap;

@@ -46,10 +46,11 @@ class NinForm extends ConsumerWidget {
                   final isValid = authState.ninFormKey.currentState!.validate();
                   if (!isValid) return;
                   final result = await authNotifier.searchNinRecord(
-                      ninNumber: authState.nin);
+                    ninNumber: authState.nin,
+                  );
                   if (result) {
                     if (context.mounted) {
-                      context.push(
+                      await context.push(
                         '/auth/signUp/confirmDetails',
                       );
                     }

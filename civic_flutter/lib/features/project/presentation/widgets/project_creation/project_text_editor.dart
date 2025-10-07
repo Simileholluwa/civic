@@ -1,6 +1,6 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:civic_flutter/core/core.dart';
 
 class ProjectTextEditor extends StatelessWidget {
   const ProjectTextEditor({

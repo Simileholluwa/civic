@@ -1,12 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectTitleField extends ConsumerWidget {
   const ProjectTitleField({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -31,9 +30,7 @@ class ProjectTitleField extends ConsumerWidget {
         counter: SizedBox(),
         contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 8),
       ),
-      onChanged: (value) {
-        projectNotifier.setTitle(value);
-      },
+      onChanged: projectNotifier.setTitle,
       maxLines: null,
       controller: projectCreationSate.titleController,
       textInputAction: TextInputAction.done,

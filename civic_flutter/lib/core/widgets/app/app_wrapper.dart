@@ -1,13 +1,13 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_flutter/core/core.dart';
 
 class AppWrapper extends ConsumerWidget {
   const AppWrapper({
-    super.key,
     required this.navigatorShell,
+    super.key,
   });
 
   final StatefulNavigationShell navigatorShell;
@@ -31,7 +31,7 @@ class AppWrapper extends ConsumerWidget {
             ? null
             : AnimatedSlide(
                 duration: const Duration(milliseconds: 300),
-                offset: hideBottomNav ? const Offset(0, 1) : const Offset(0, 0),
+                offset: hideBottomNav ? const Offset(0, 1) : Offset.zero,
                 child: hideBottomNav
                     ? null
                     : BottomNavigationBar(
@@ -48,7 +48,7 @@ class AppWrapper extends ConsumerWidget {
                         showUnselectedLabels: false,
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
-                        items: [
+                        items: const [
                           BottomNavigationBarItem(
                             activeIcon: Icon(
                               Iconsax.note,
@@ -117,7 +117,6 @@ class AppWrapper extends ConsumerWidget {
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
@@ -140,7 +139,7 @@ class AppWrapper extends ConsumerWidget {
                                               navigatorShell.currentIndex,
                                         );
                                       },
-                                      destinations: [
+                                      destinations: const [
                                         NavigationRailDestination(
                                           selectedIcon: Icon(
                                             Iconsax.airdrop5,
@@ -188,7 +187,7 @@ class AppWrapper extends ConsumerWidget {
                       ),
                       SizedBox(
                         height: screenHeight,
-                        child: VerticalDivider(
+                        child: const VerticalDivider(
                           width: 1,
                         ),
                       ),
@@ -220,10 +219,8 @@ class AppNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCollapsed = true;
-    //final screenWidth = MediaQuery.sizeOf(context).width;
     return SizedBox(
-      width: isCollapsed == false ? 250 : 70,
+      width: 70,
       child: Drawer(
         child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor),
       ),

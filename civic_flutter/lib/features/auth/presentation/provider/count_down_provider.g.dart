@@ -6,21 +6,55 @@ part of 'count_down_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(CountdownTimer)
+const countdownTimerProvider = CountdownTimerProvider._();
+
+final class CountdownTimerProvider
+    extends $NotifierProvider<CountdownTimer, CountdownTimerState> {
+  const CountdownTimerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'countdownTimerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$countdownTimerHash();
+
+  @$internal
+  @override
+  CountdownTimer create() => CountdownTimer();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CountdownTimerState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CountdownTimerState>(value),
+    );
+  }
+}
+
 String _$countdownTimerHash() => r'463d856236b3b0650b5d644c8380442cf5c028bd';
 
-/// See also [CountdownTimer].
-@ProviderFor(CountdownTimer)
-final countdownTimerProvider =
-    AutoDisposeNotifierProvider<CountdownTimer, CountdownTimerState>.internal(
-  CountdownTimer.new,
-  name: r'countdownTimerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$countdownTimerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$CountdownTimer = AutoDisposeNotifier<CountdownTimerState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$CountdownTimer extends $Notifier<CountdownTimerState> {
+  CountdownTimerState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<CountdownTimerState, CountdownTimerState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<CountdownTimerState, CountdownTimerState>,
+        CountdownTimerState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

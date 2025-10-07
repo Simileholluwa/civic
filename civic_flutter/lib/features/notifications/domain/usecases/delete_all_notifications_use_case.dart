@@ -3,8 +3,9 @@ import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:fpdart/fpdart.dart';
 
 class DeleteAllNotificationsUseCase implements UseCase<void, NoParams> {
-  DeleteAllNotificationsUseCase({required NotificationRepository notificationRepository})
-      : _notificationRepository = notificationRepository;
+  DeleteAllNotificationsUseCase({
+    required NotificationRepository notificationRepository,
+  }) : _notificationRepository = notificationRepository;
   final NotificationRepository _notificationRepository;
 
   @override
@@ -13,4 +14,3 @@ class DeleteAllNotificationsUseCase implements UseCase<void, NoParams> {
     return result;
   }
 }
-

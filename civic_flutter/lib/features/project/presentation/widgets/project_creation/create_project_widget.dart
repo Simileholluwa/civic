@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateProjectWidget extends ConsumerWidget {
   const CreateProjectWidget({
-    super.key,
     required this.project,
+    super.key,
   });
 
   final Project project;
@@ -19,21 +19,19 @@ class CreateProjectWidget extends ConsumerWidget {
     final pageController = ref.watch(projectPageControllerProvider);
     final currentPageNotifier = ref.watch(projectCurrentPageProvider.notifier);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const ProjectProgressIndicator(),
-        Padding(
-          padding: const EdgeInsets.only(
+        const Padding(
+          padding: EdgeInsets.only(
             bottom: 4,
           ),
-          child: const Divider(height: 0),
+          child: Divider(height: 0),
         ),
         Expanded(
           child: PageView(
             controller: pageController,
-            onPageChanged: (index) {
-              currentPageNotifier.setCurrentPage(index);
-            },
+            onPageChanged: (value) =>
+                currentPageNotifier.setCurrentPage = value,
             physics: const ClampingScrollPhysics(),
             children: [
               ProjectOverviewPageView(

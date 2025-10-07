@@ -1,8 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ValidateCreateAccountScreen extends StatelessWidget {
   const ValidateCreateAccountScreen({
@@ -24,14 +23,14 @@ class ValidateCreateAccountScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AuthHeader(
+              AuthHeader(
                 authTitle: TTexts.confirmEmail,
                 authSubTitle: TTexts.confirmEmailSubTitle,
               ),
-              const SizedBox(
+              SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
               ValidateCreateAccountForm(),

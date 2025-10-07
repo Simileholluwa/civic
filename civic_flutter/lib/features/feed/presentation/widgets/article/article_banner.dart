@@ -1,16 +1,17 @@
-import 'package:civic_client/civic_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:civic_flutter/features/feed/feed.dart';
 import 'dart:io';
-import 'package:civic_flutter/core/core.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ArticleBanner extends ConsumerWidget {
   const ArticleBanner({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -20,9 +21,7 @@ class ArticleBanner extends ConsumerWidget {
     final postState = ref.watch(feedProvider(post));
     final postNotifier = ref.watch(feedProvider(post).notifier);
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    var isUrlImage = postState.imageUrls.isEmpty
-        ? false
-        : regex.hasMatch(postState.imageUrls.first);
+    var isUrlImage = regex.hasMatch(postState.imageUrls.first);
     return Stack(
       children: [
         Container(
@@ -51,27 +50,29 @@ class ArticleBanner extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                            icon: Icon(
-                              Iconsax.gallery5,
-                              size: 60,
-                              color: Colors.grey[600],
-                            ),
-                            onPressed: () async {
-                              postNotifier.clearMedia();
-                              await postNotifier.pickPicture(1);
-                              isUrlImage = false;
-                            }),
+                          icon: Icon(
+                            Iconsax.gallery5,
+                            size: 60,
+                            color: Colors.grey[600],
+                          ),
+                          onPressed: () async {
+                            postNotifier.clearMedia();
+                            await postNotifier.pickPicture(1);
+                            isUrlImage = false;
+                          },
+                        ),
                         IconButton(
-                            icon: Icon(
-                              Iconsax.camera5,
-                              size: 60,
-                              color: Colors.grey[600],
-                            ),
-                            onPressed: () async {
-                              postNotifier.clearMedia();
-                              await postNotifier.takePicture(1);
-                              isUrlImage = false;
-                            }),
+                          icon: Icon(
+                            Iconsax.camera5,
+                            size: 60,
+                            color: Colors.grey[600],
+                          ),
+                          onPressed: () async {
+                            postNotifier.clearMedia();
+                            await postNotifier.takePicture(1);
+                            isUrlImage = false;
+                          },
+                        ),
                       ],
                     ),
                     Text(
@@ -107,15 +108,16 @@ class ArticleBanner extends ConsumerWidget {
                     },
                   ),
                   IconButton(
-                      icon: const Icon(
-                        Iconsax.gallery5,
-                        color: TColors.textWhite,
-                      ),
-                      onPressed: () async {
-                        postNotifier.clearMedia();
-                        await postNotifier.pickPicture();
-                        isUrlImage = false;
-                      }),
+                    icon: const Icon(
+                      Iconsax.gallery5,
+                      color: TColors.textWhite,
+                    ),
+                    onPressed: () async {
+                      postNotifier.clearMedia();
+                      await postNotifier.pickPicture();
+                      isUrlImage = false;
+                    },
+                  ),
                   IconButton(
                     icon: const Icon(
                       Iconsax.camera5,

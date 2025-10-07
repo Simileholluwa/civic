@@ -7,8 +7,7 @@ import 'package:iconsax/iconsax.dart';
 
 class AddVettingImage extends ConsumerWidget {
   const AddVettingImage({
-    super.key,
-    required this.projectVetting,
+    required this.projectVetting, super.key,
   });
 
   final ProjectVetting? projectVetting;
@@ -33,7 +32,6 @@ class AddVettingImage extends ConsumerWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

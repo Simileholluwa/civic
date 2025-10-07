@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
@@ -11,8 +9,8 @@ import 'package:intl/intl.dart';
 
 class NotificationsCard extends ConsumerWidget {
   const NotificationsCard({
-    super.key,
     required this.notification,
+    super.key,
   });
 
   final cc.Notification notification;
@@ -21,7 +19,7 @@ class NotificationsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(
       userNotificationStreamProvider(
-        this.notification.id!,
+        this.notification.id,
         this.notification,
       ),
     );
@@ -31,22 +29,23 @@ class NotificationsCard extends ConsumerWidget {
     );
     return InkWell(
       onTap: () async {
-        notificationNotifier.markAsRead(
+        await notificationNotifier.markAsRead(
           notification.id!,
         );
-        context.push(
-          notification.actionRoute,
-        );
+        if (context.mounted) {
+          await context.push(
+            notification.actionRoute,
+          );
+        }
       },
       child: ColoredBox(
         color: notification.isRead
             ? Colors.transparent
             : Theme.of(context).cardColor,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
             spacing: 15,
             children: [
               Stack(

@@ -7,9 +7,7 @@ import 'package:iconsax/iconsax.dart';
 
 class PostInteractionButtons extends ConsumerWidget {
   const PostInteractionButtons({
-    super.key,
-    required this.post,
-    required this.originalPostId,
+    required this.post, required this.originalPostId, super.key,
     this.hasPadding = true,
     this.onReply,
     this.replyIcon1 = Iconsax.message,
@@ -48,14 +46,14 @@ class PostInteractionButtons extends ConsumerWidget {
         children: [
           ContentInteractionButton(
             icon:
-                postCardState.hasLiked == true ? Iconsax.heart5 : Iconsax.heart,
+                postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
             onTap: () async {
               await postCardNotifier.togglePostLikeStatus(
                 post.id!,
               );
             },
             iconSize: iconSize,
-            color: postCardState.hasLiked == true
+            color: postCardState.hasLiked
                 ? TColors.primary
                 : Theme.of(context).hintColor,
             text: postCardState.numberOfLikes,
@@ -73,7 +71,7 @@ class PostInteractionButtons extends ConsumerWidget {
                 : Icons.bookmark_add_outlined,
             onTap: () async {
               await postCardNotifier.togglePostBookmarkStatus(
-                  post.id!, postCardState.hasBookmarked);
+                  post.id!, postCardState.hasBookmarked,);
             },
             iconSize: iconSize,
             text: postCardState.numberOfBookmarks,
@@ -90,8 +88,8 @@ class PostInteractionButtons extends ConsumerWidget {
           ),
           ContentInteractionButton(
             icon: Iconsax.more_circle,
-            onTap: () {
-              showDialog(
+            onTap: () async {
+              await showDialog<dynamic>(
                 context: context,
                 builder: (ctx) {
                   return AlertDialog(

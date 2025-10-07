@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 
 class PostCard extends ConsumerWidget {
   const PostCard({
-    super.key,
     required this.post,
+    super.key,
     this.showInteractions = true,
     this.onTap,
   });
@@ -15,19 +15,18 @@ class PostCard extends ConsumerWidget {
   final bool showInteractions;
   final VoidCallback? onTap;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PostCardDetail(
       post: post,
-      showInteractions: true,
       hasProject: post.postType == PostType.projectRepost,
-      onTap: onTap ?? () {
-        context.push(
-          '/feed/post/${post.id}',
-          extra: post,
-        );
-      },
+      onTap: onTap ??
+          () async {
+            await context.push(
+              '/feed/post/${post.id}',
+              extra: post,
+            );
+          },
     );
   }
 }

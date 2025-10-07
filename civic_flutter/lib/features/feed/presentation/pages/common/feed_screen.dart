@@ -21,8 +21,8 @@ class FeedScreen extends ConsumerWidget {
               snap: true,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    context.push('/feed/bookmarks');
+                  onPressed: () async {
+                    await context.push('/feed/bookmarks');
                   },
                   icon: const Icon(
                     Iconsax.note_1,
@@ -56,15 +56,15 @@ class FeedScreen extends ConsumerWidget {
                           fontSize: 25,
                         ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 22, left: 1),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 22, left: 1),
                     child: AppDecorationDot(),
                   ),
                 ],
               ),
-              bottom: PreferredSize(
+              bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(5),
-                child: const Divider(
+                child: Divider(
                   height: 0,
                 ),
               ),
@@ -94,7 +94,7 @@ class FeedBottomWidget extends ConsumerWidget {
           tabController: tabController,
           showTopBorder: true,
           dividerColor: Colors.transparent,
-          tabs: [
+          tabs: const [
             Tab(
               text: 'POSTS',
             ),

@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
-import 'package:civic_flutter/core/core.dart';
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class THelperFunctions {
     return '$firstName $middleName $lastName';
   }
 
-  static const colorizeColors = [
+  static const List<Color> colorizeColors = [
     TColors.primary,
     Colors.blue,
     Colors.yellow,
@@ -56,23 +57,23 @@ class THelperFunctions {
   static bool isImage(String filePath) {
     final ext = filePath.toLowerCase();
 
-    return ext.endsWith(".jpg") ||
-        ext.endsWith(".jpeg") ||
-        ext.endsWith(".png") ||
-        ext.endsWith(".gif") ||
-        ext.endsWith(".bmp");
+    return ext.endsWith('.jpg') ||
+        ext.endsWith('.jpeg') ||
+        ext.endsWith('.png') ||
+        ext.endsWith('.gif') ||
+        ext.endsWith('.bmp');
   }
 
   static bool isVideo(String filePath) {
-    var ext = filePath.toLowerCase();
+    final ext = filePath.toLowerCase();
 
-    return ext.endsWith(".mp4") ||
-        ext.endsWith(".avi") ||
-        ext.endsWith(".wmv") ||
-        ext.endsWith(".rmvb") ||
-        ext.endsWith(".mpg") ||
-        ext.endsWith(".mpeg") ||
-        ext.endsWith(".3gp");
+    return ext.endsWith('.mp4') ||
+        ext.endsWith('.avi') ||
+        ext.endsWith('.wmv') ||
+        ext.endsWith('.rmvb') ||
+        ext.endsWith('.mpg') ||
+        ext.endsWith('.mpeg') ||
+        ext.endsWith('.3gp');
   }
 
   static String humanizeNumber(int number) {
@@ -222,13 +223,8 @@ class THelperFunctions {
 
   static bool isNull(dynamic value) => value == null;
 
-  static bool? isBlank(dynamic value) {
-    return _isEmpty(value);
-  }
-
   static String? capitalizeFirst(String s) {
     if (isNull(s)) return null;
-    if (isBlank(s)!) return s;
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 
@@ -236,8 +232,11 @@ class THelperFunctions {
     return (file.lengthSync() / (1024 * 1024)).toStringAsFixed(1);
   }
 
-  static String redactString(String original, int redactLength,
-      {int start = 3}) {
+  static String redactString(
+    String original,
+    int redactLength, {
+    int start = 3,
+  }) {
     final length = original.length;
     final redactedPart = original.substring(start, length - redactLength);
     return original.replaceRange(
@@ -253,13 +252,17 @@ class THelperFunctions {
     }
 
     final atIndex = email.indexOf('@');
-    var redactedPart = '';
-    for (var i = 0; i < atIndex - 3 && i < 5; i++) {
-      // ignore: use_string_buffers
-      redactedPart += '*';
+    // Handle cases where '@' is not found or is at the beginning.
+    if (atIndex < 1) {
+      return email;
     }
+    final localPartLength = atIndex;
+    final charsToRedact = max(0, localPartLength - 3);
+    final numberOfAsterisks = min(charsToRedact, 5);
 
-    return email.substring(0, 3) + redactedPart + email.substring(atIndex);
+    return email.substring(0, 3) +
+        ('*' * numberOfAsterisks) +
+        email.substring(atIndex);
   }
 
   static Future<bool?> showScheduleDialog(
@@ -291,23 +294,22 @@ class THelperFunctions {
       // Replace the mention/hashtag in the text
       final newText = textBeforeCursor.replaceRange(start, end, suggestion) +
           textAfterCursor;
-      textController.text = newText;
+      textController
+        ..text = newText
 
-      // Move the cursor to the end of the inserted suggestion
-      textController.selection = TextSelection.fromPosition(
-          TextPosition(offset: start + suggestion.length));
+        // Move the cursor to the end of the inserted suggestion
+        ..selection = TextSelection.fromPosition(
+          TextPosition(offset: start + suggestion.length),
+        );
 
       controller.text = newText;
-      ref
-          .read(mentionSuggestionsProvider.notifier)
-          .setSuggestions(<UserRecord>[]);
+      ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
+          <UserRecord>[];
       ref
           .read(
-        hashtagsSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <String>[],
-      );
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <String>[];
     }
   }
 
@@ -319,35 +321,30 @@ class THelperFunctions {
     if (text.isEmpty) {
       ref
           .read(
-        mentionSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <UserRecord>[],
-      );
+            mentionSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <UserRecord>[];
       ref
           .read(
-        hashtagsSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <String>[],
-      );
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <String>[];
       return;
     }
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () {
+    _debounce = Timer(const Duration(milliseconds: 1000), () async {
       final lastWord = _getLastWord(
         ref,
         text,
         controller,
       );
       if (lastWord.startsWith('@')) {
-        _fetchMentionSuggestions(ref, lastWord);
+        await _fetchMentionSuggestions(ref, lastWord);
       } else if (lastWord.startsWith('#')) {
-        _fetchHashtags(ref, lastWord);
+        await _fetchHashtags(ref, lastWord);
       } else {
-        ref
-            .read(mentionSuggestionsProvider.notifier)
-            .setSuggestions(<UserRecord>[]);
+        ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
+            <UserRecord>[];
       }
     });
     _handleMentions(ref, text);
@@ -376,21 +373,11 @@ class THelperFunctions {
     }
   }
 
-  static bool? _isEmpty(dynamic value) {
-    if (value is String) {
-      return value.toString().trim().isEmpty;
-    }
-    if (value is Iterable || value is Map) {
-      return value.isEmpty as bool?;
-    }
-    return false;
-  }
-
   static void _handleMentions(WidgetRef ref, String text) {
     final selectedMentions = ref.watch(
       selectedMentionsProvider,
     );
-    List<String> currentMentions = ref.watch(
+    final currentMentions = ref.watch(
       extractedMentionsProvider(text),
     );
 
@@ -398,7 +385,7 @@ class THelperFunctions {
     selectedMentions.removeWhere((
       userRecord,
     ) {
-      String userName =
+      final userName =
           userRecord.userInfo!.fullName ?? userRecord.userInfo!.userName!;
       return !currentMentions.contains(
         userName,
@@ -428,7 +415,9 @@ class THelperFunctions {
   }
 
   static Future<void> _fetchMentionSuggestions(
-      WidgetRef ref, String query) async {
+    WidgetRef ref,
+    String query,
+  ) async {
     final results = await ref.watch(
       fetchUsersToMentionProvider(
         query.substring(1),
@@ -436,21 +425,17 @@ class THelperFunctions {
     );
 
     if (results.isNotEmpty) {
-      return ref
+      ref
           .read(
             mentionSuggestionsProvider.notifier,
           )
-          .setSuggestions(
-            results,
-          );
+          .setSuggestions = results;
     } else {
-      return ref
+      ref
           .read(
-        mentionSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <UserRecord>[],
-      );
+            mentionSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <UserRecord>[];
     }
   }
 
@@ -458,11 +443,9 @@ class THelperFunctions {
     if (query.isEmpty) {
       ref
           .read(
-        hashtagsSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <String>[],
-      );
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <String>[];
       return;
     }
     final results = await ref.watch(
@@ -473,24 +456,18 @@ class THelperFunctions {
       ).future,
     );
 
-    log(results.toString());
-
     if (results.isNotEmpty) {
-      return ref
+      ref
           .read(
             hashtagsSuggestionsProvider.notifier,
           )
-          .setSuggestions(
-            results,
-          );
+          .setSuggestions = results;
     } else {
-      return ref
+      ref
           .read(
-        hashtagsSuggestionsProvider.notifier,
-      )
-          .setSuggestions(
-        <String>[],
-      );
+            hashtagsSuggestionsProvider.notifier,
+          )
+          .setSuggestions = <String>[];
     }
   }
 }

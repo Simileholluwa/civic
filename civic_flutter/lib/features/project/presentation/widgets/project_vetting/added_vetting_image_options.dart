@@ -8,8 +8,7 @@ import 'package:iconsax/iconsax.dart';
 
 class AddedVettingImageOptions extends ConsumerWidget {
   const AddedVettingImageOptions({
-    super.key,
-    required this.projectVetting,
+    required this.projectVetting, super.key,
   });
 
   final ProjectVetting? projectVetting;
@@ -87,9 +86,7 @@ class AddedVettingImageOptions extends ConsumerWidget {
             ),
             if (vettedProjectState.images.length < 5)
               IconButton(
-                onPressed: () {
-                  vettedProjectNotifier.pickImageProof();
-                },
+                onPressed: vettedProjectNotifier.pickImageProof,
                 icon: const Icon(
                   Iconsax.gallery,
                   color: TColors.textWhite,
@@ -97,9 +94,7 @@ class AddedVettingImageOptions extends ConsumerWidget {
               ),
             if (vettedProjectState.images.length < 5)
               IconButton(
-                onPressed: () {
-                  vettedProjectNotifier.captureImageProof();
-                },
+                onPressed: vettedProjectNotifier.captureImageProof,
                 icon: const Icon(
                   Iconsax.camera,
                   color: TColors.textWhite,

@@ -1,13 +1,13 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CommentScreen extends ConsumerWidget {
-  const CommentScreen({super.key, required this.id});
+  const CommentScreen({required this.id, super.key});
 
   final int id;
 
@@ -59,15 +59,15 @@ class CommentScreen extends ConsumerWidget {
                 return [
                   IconButton(
                     icon: const Icon(Iconsax.refresh),
-                    onPressed: () {
-                      pagingController.refresh();
-                    },
+                    onPressed: pagingController.refresh,
                   ),
                   IconButton(
-                    icon: Icon(Iconsax.filter,
-                        color: value.commentCount! <= 2
-                            ? Theme.of(context).disabledColor
-                            : Theme.of(context).iconTheme.color),
+                    icon: Icon(
+                      Iconsax.filter,
+                      color: value.commentCount! <= 2
+                          ? Theme.of(context).disabledColor
+                          : Theme.of(context).iconTheme.color,
+                    ),
                     onPressed: value.commentCount! <= 2 ? null : () {},
                   ),
                   IconButton(
@@ -110,10 +110,13 @@ class CommentScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
-              onPressed: () {
-                context.push('/create/post/0', extra: {
-                  'parent': data,
-                });
+              onPressed: () async {
+                await context.push(
+                  '/create/post/0',
+                  extra: {
+                    'parent': data,
+                  },
+                );
               },
               text: 'Share your opinion',
               buttonIcon: Iconsax.magicpen5,
@@ -162,7 +165,7 @@ class CommentScreen extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          final err = error as Map<String, dynamic>;
+          final err = error as Map<String, String>;
           return Center(
             child: LoadingError(
               retry: null,
@@ -175,7 +178,7 @@ class CommentScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget();
+          return const AppLoadingWidget();
         },
       ),
     );

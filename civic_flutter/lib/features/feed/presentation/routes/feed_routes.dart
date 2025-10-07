@@ -15,66 +15,67 @@ class FeedRoutes {
       GoRoute(
         path: namespace,
         builder: (_, state) {
-          return FeedScreen();
+          return const FeedScreen();
         },
         routes: [
           GoRoute(
-              path: ':type/:id',
-              builder: (context, state) {
-                final type = state.pathParameters['type'];
-                if (type == 'post') {
-                  return DetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
-                    post: state.extra as Post?,
-                    postType: PostType.regular,
-                    draftType: 'postDraft',
+            path: ':type/:id',
+            builder: (context, state) {
+              final type = state.pathParameters['type'];
+              if (type == 'post') {
+                return DetailScreen(
+                  id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
+                  post: state.extra as Post?,
+                  postType: PostType.regular,
+                  draftType: 'postDraft',
+                );
+              } else if (type == 'poll') {
+                return DetailScreen(
+                  id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
+                  post: state.extra as Post?,
+                  postType: PostType.poll,
+                  draftType: 'pollDraft',
+                );
+              } else {
+                return DetailScreen(
+                  id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
+                  post: state.extra as Post?,
+                  postType: PostType.article,
+                  draftType: 'articleDraft',
+                );
+              }
+            },
+            routes: [
+              GoRoute(
+                path: 'comments',
+                builder: (_, state) {
+                  return CommentScreen(
+                    id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
                   );
-                } else if (type == 'poll') {
-                  return DetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
-                    post: state.extra as Post?,
-                    postType: PostType.poll,
-                    draftType: 'pollDraft',
+                },
+              ),
+              GoRoute(
+                path: 'notInterested',
+                builder: (_, state) {
+                  final data = state.extra as Map<String, dynamic>?;
+                  return MarkNotInterested(
+                    post: data?['post'] as Post,
+                    originalPostId: data?['originalPostId'] as int,
                   );
-                } else {
-                  return DetailScreen(
-                    id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
-                    post: state.extra as Post?,
-                    postType: PostType.article,
-                    draftType: 'articleDraft',
+                },
+              ),
+              GoRoute(
+                path: 'replies/:replyId',
+                builder: (_, state) {
+                  return RepliesScreen(
+                    replyId:
+                        int.tryParse(state.pathParameters['replyId'] ?? '') ??
+                            0,
                   );
-                }
-              },
-              routes: [
-                GoRoute(
-                  path: 'comments',
-                  builder: (_, state) {
-                    return CommentScreen(
-                      id: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-                    );
-                  },
-                ),
-                GoRoute(
-                  path: 'notInterested',
-                  builder: (_, state) {
-                    final data = state.extra as Map<String, dynamic>;
-                    return MarkNotInterested(
-                      post: data['post'],
-                      originalPostId: data['originalPostId'],
-                    );
-                  },
-                ),
-                GoRoute(
-                  path: 'replies/:replyId',
-                  builder: (_, state) {
-                    return RepliesScreen(
-                      replyId:
-                          int.tryParse(state.pathParameters['replyId'] ?? '') ??
-                              0,
-                    );
-                  },
-                ),
-              ]),
+                },
+              ),
+            ],
+          ),
           GoRoute(
             path: 'bookmarks',
             builder: (context, state) {

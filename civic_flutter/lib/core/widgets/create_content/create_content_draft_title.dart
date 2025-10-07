@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class CreateContentDraftTitle extends StatelessWidget {
   const CreateContentDraftTitle({
-    super.key,
     required this.createdAt,
     required this.index,
+    super.key,
   });
 
   final DateTime createdAt;
@@ -35,17 +35,17 @@ class CreateContentDraftTitle extends StatelessWidget {
         children: [
           Text(
             'Draft ${index + 1}',
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall!
-                .copyWith(
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: THelperFunctions.isDarkMode(context) ? TColors.textWhite : TColors.dark,
+                  color: THelperFunctions.isDarkMode(context)
+                      ? TColors.textWhite
+                      : TColors.dark,
                 ),
           ),
           Text(
-            'Expires in ${10 - age} ${age == 10 ? 'today' : age == 9 ? 'day' : 'days'}',
+            'Expires in ${10 - age} '
+            '${age == 10 ? 'today' : age == 9 ? 'day' : 'days'}',
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontSize: 13,
                 ),

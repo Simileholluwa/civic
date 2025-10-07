@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class ProjectDeleteConsequences extends StatelessWidget {
   const ProjectDeleteConsequences({
-    super.key,
-    required this.consequence,
-    required this.number,
+    required this.consequence, required this.number, super.key,
   });
 
   final String number;

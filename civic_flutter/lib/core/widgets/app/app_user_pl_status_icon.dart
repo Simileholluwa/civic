@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppUserPLStatusIcon extends StatelessWidget {
   const AppUserPLStatusIcon({
-    super.key,
-    required this.plStatusIndex,
+    required this.plStatusIndex, super.key,
   });
   final int plStatusIndex;
 

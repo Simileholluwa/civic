@@ -6,19 +6,51 @@ part of 'notifications_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notifHash() => r'4c0fc3d7dd9eb7f64db4ea7c87bb59f5fa98d823';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [Notif].
 @ProviderFor(Notif)
-final notifProvider = AutoDisposeNotifierProvider<Notif, void>.internal(
-  Notif.new,
-  name: r'notifProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$notifHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const notifProvider = NotifProvider._();
 
-typedef _$Notif = AutoDisposeNotifier<void>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class NotifProvider extends $NotifierProvider<Notif, void> {
+  const NotifProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notifProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$notifHash();
+
+  @$internal
+  @override
+  Notif create() => Notif();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$notifHash() => r'8736b17e8f81c75e884636042b39b09160390b48';
+
+abstract class _$Notif extends $Notifier<void> {
+  void build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    build();
+    final ref = this.ref as $Ref<void, void>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<void, void>, void, Object?, Object?>;
+    element.handleValue(ref, null);
+  }
+}

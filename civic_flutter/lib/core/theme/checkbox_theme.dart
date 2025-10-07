@@ -1,6 +1,6 @@
 
-import 'package:flutter/material.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter/material.dart';
 
 class TCheckboxTheme {
   TCheckboxTheme._();

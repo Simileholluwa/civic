@@ -23,7 +23,7 @@ class UsersListService {
       return left('Request timed out');
     } on SocketException catch (_) {
       return left('Failed to connect to server. Please try again.');
-    } catch (e) {
+    } on Exception catch (e) {
       return left(
         e.toString(),
       );

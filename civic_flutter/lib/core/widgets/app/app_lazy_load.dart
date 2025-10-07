@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LazyLoadTab extends StatelessWidget {
-  final int index;
-  final TabController tabController;
-  final Widget Function() builder;
 
   const LazyLoadTab({
     required this.index,
@@ -11,6 +8,9 @@ class LazyLoadTab extends StatelessWidget {
     required this.builder,
     super.key,
   });
+  final int index;
+  final TabController tabController;
+  final Widget Function() builder;
 
   @override
   Widget build(BuildContext context) {

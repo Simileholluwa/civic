@@ -1,25 +1,24 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'feed_service_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FeedLocalDatabaseImpl feedLocalDatabase(Ref ref) {
   return FeedLocalDatabaseImpl(
     prefs: ref.read(localStorageProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FeedRemoteDatabaseImpl feedRemoteDatabase(Ref ref) {
   return FeedRemoteDatabaseImpl(
     client: ref.read(clientProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FeedRepositoryImpl feedRepositoryImpl(Ref ref) {
   return FeedRepositoryImpl(
     remoteDatabase: ref.read(
@@ -38,7 +37,7 @@ SavePostUseCase savePost(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetPostsUseCase getPosts(Ref ref) {
   return GetPostsUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
@@ -52,14 +51,14 @@ GetPostUseCase getPost(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetUserPostBookmarksUseCase getUserPostBookmarks(Ref ref) {
   return GetUserPostBookmarksUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 ClearPostBookmarksUseCase clearPostBookmarks(Ref ref) {
   return ClearPostBookmarksUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
@@ -171,7 +170,7 @@ SavePollUseCase savePoll(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetPollsUseCase getPolls(Ref ref) {
   return GetPollsUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
@@ -185,7 +184,7 @@ CastVoteUseCase castVote(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetArticlesUseCase getArticles(Ref ref) {
   return GetArticlesUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),

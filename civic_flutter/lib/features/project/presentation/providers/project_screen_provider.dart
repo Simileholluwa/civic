@@ -114,7 +114,6 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
     state = state.copyWith(
       selectedCurrency: currency,
       zeroCost: false,
-      costToAndFromCurrency: null,
       selectedState: selectedState,
     );
   }
@@ -123,7 +122,6 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
     final selectedState = state.selectedState;
     state = state.copyWith(
       costToAndFromCurrency: currency,
-      selectedCurrency: null,
       zeroCost: false,
       selectedState: selectedState,
     );
@@ -135,7 +133,6 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
     state = state.copyWith(
       costFromAmount: amount,
       zeroCost: false,
-      selectedCurrency: null,
       costToAndFromCurrency: costToAndFromCurrency,
       selectedState: selectedState,
     );
@@ -147,7 +144,6 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
     state = state.copyWith(
       costToAmount: amount,
       zeroCost: false,
-      selectedCurrency: null,
       costToAndFromCurrency: costToAndFromCurrency,
       selectedState: selectedState,
     );
@@ -161,12 +157,10 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
     );
     if (state.zeroCost) {
       state.costFromController!.clear();
-      state.costToController!.clear();  
+      state.costToController!.clear();
       state = state.copyWith(
         costFromAmount: '',
         costToAmount: '',
-        costToAndFromCurrency: null,
-        selectedCurrency: null,
         selectedState: selectedState,
       );
     }
@@ -191,7 +185,6 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
       radiusOption: radius,
       selectedCurrency: selectedCurrecy,
       costToAndFromCurrency: costToAndFromCurrency,
-      selectedState: null,
       virtualLocation: false,
     );
   }
@@ -215,9 +208,7 @@ class ProjectScreenWidgets extends _$ProjectScreenWidgets {
       virtualLocation: !state.virtualLocation,
       selectedCurrency: selectedCurrency,
       costToAndFromCurrency: costToAndFromCurrency,
-      selectedState: null,
       radiusOption: '',
-
     );
   }
 
@@ -313,17 +304,16 @@ class _VSync implements TickerProvider {
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }
 
-final projectVsyncProvider = Provider<TickerProvider>(
-  (ref) => _VSync(),
-);
+@riverpod
+TickerProvider projectVsync(Ref ref) => _VSync();
 
-final projectCardVsyncProvider = Provider<TickerProvider>(
-  (ref) => _VSync(),
-);
+@riverpod
+TickerProvider projectCardVsync(Ref ref) => _VSync();
 
-final projectScreenTabProvider = Provider<TabController>(
-  (ref) => TabController(
+@riverpod
+Raw<TabController> projectScreenTab(Ref ref) {
+  return TabController(
     length: selectedFilters.keys.length,
     vsync: ref.watch(projectVsyncProvider),
-  ),
-);
+  );
+}

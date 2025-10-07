@@ -22,7 +22,8 @@ class VettingImagePageChanged extends _$VettingImagePageChanged {
 }
 
 @riverpod
-class ProjectImageAttachmentPageChanged extends _$ProjectImageAttachmentPageChanged {
+class ProjectImageAttachmentPageChanged
+    extends _$ProjectImageAttachmentPageChanged {
   @override
   int build() => 0;
 
@@ -32,7 +33,8 @@ class ProjectImageAttachmentPageChanged extends _$ProjectImageAttachmentPageChan
 }
 
 @riverpod
-class ProjectPDFAttachmentPageChanged extends _$ProjectPDFAttachmentPageChanged {
+class ProjectPDFAttachmentPageChanged
+    extends _$ProjectPDFAttachmentPageChanged {
   @override
   int build() => 0;
 

@@ -29,23 +29,19 @@ Future<DateTime?> createContentPollDuration(BuildContext context) async {
     builder: (context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          datePickerTheme: DatePickerThemeData(
+          datePickerTheme: const DatePickerThemeData(
             surfaceTintColor: Colors.transparent,
             elevation: 4,
             headerBackgroundColor: TColors.primary,
             headerForegroundColor: TColors.textWhite,
-          ),
-          dialogTheme: const DialogTheme(
-            elevation: 10,
           ),
         ),
         child: child!,
       );
     },
   );
-  if (pickedDate != null) {
+  if (pickedDate != null && context.mounted) {
     var pickedTime = await showTimePicker(
-      // ignore: use_build_context_synchronously
       context: context,
       initialTime: TimeOfDay.now(),
       helpText: 'Select expiration time',
@@ -57,9 +53,6 @@ Future<DateTime?> createContentPollDuration(BuildContext context) async {
               elevation: 4,
               entryModeIconColor: Colors.transparent,
               backgroundColor: isDark ? TColors.dark : TColors.light,
-            ),
-            dialogTheme: const DialogTheme(
-              elevation: 10,
             ),
           ),
           child: MediaQuery(

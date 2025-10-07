@@ -6,22 +6,56 @@ part of 'post_bookmark_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedPostBookmarkListHash() =>
-    r'5440e9814b3601f58472531a9f3233c29ff37029';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PaginatedPostBookmarkList].
 @ProviderFor(PaginatedPostBookmarkList)
-final paginatedPostBookmarkListProvider =
-    NotifierProvider<PaginatedPostBookmarkList, PagingStatus>.internal(
-  PaginatedPostBookmarkList.new,
-  name: r'paginatedPostBookmarkListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$paginatedPostBookmarkListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const paginatedPostBookmarkListProvider = PaginatedPostBookmarkListProvider._();
 
-typedef _$PaginatedPostBookmarkList = Notifier<PagingStatus>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PaginatedPostBookmarkListProvider
+    extends $NotifierProvider<PaginatedPostBookmarkList, PagingStatus> {
+  const PaginatedPostBookmarkListProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'paginatedPostBookmarkListProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedPostBookmarkListHash();
+
+  @$internal
+  @override
+  PaginatedPostBookmarkList create() => PaginatedPostBookmarkList();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PagingStatus value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PagingStatus>(value),
+    );
+  }
+}
+
+String _$paginatedPostBookmarkListHash() =>
+    r'3875adc5ae0245009f2b2147b9e4b758da920c81';
+
+abstract class _$PaginatedPostBookmarkList extends $Notifier<PagingStatus> {
+  PagingStatus build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PagingStatus, PagingStatus>,
+        PagingStatus,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

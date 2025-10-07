@@ -1,16 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 abstract class FeedLocalDatabase {
   Future<void> saveDraft({
-    required Post post, required String draftType,
+    required Post post,
+    required String draftType,
   });
-  Future<Post> getDraft({required String draftType,});
-  Future<void> deleteDraft({required String draftType,});
+  Future<Post> getDraft({
+    required String draftType,
+  });
+  Future<void> deleteDraft({
+    required String draftType,
+  });
 }
 
 class FeedLocalDatabaseImpl extends FeedLocalDatabase {
@@ -19,7 +25,9 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
   }) : _prefs = prefs;
   final LocalStorage _prefs;
   @override
-  Future<Post> getDraft({required String draftType,}) async {
+  Future<Post> getDraft({
+    required String draftType,
+  }) async {
     try {
       final userId = _prefs.getInt('userId')!;
       final rawOwner = _prefs.getString('userRecord')!;
@@ -27,8 +35,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       final owner = UserRecord.fromJson(ownerMap);
       final postDraft = _prefs.getString(draftType);
       if (postDraft != null) {
-        final postMap =
-            jsonDecode(postDraft.toString()) as Map<String, dynamic>;
+        final postMap = jsonDecode(postDraft) as Map<String, dynamic>;
         if (postMap['ownerId'] == userId) {
           return Post.fromJson(postMap);
         }
@@ -50,7 +57,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
           content: '',
         ),
       );
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -61,13 +68,13 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
     required String draftType,
   }) async {
     try {
-      var savedImagesPath = <String>[];
-      var existingUploadedImage = <String>[];
+      final savedImagesPath = <String>[];
+      final existingUploadedImage = <String>[];
       var existingUploadedVideo = '';
       var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
       final directory = Directory('${appDir.path}/$draftType');
-      if (!await directory.exists()) {
+      if (!directory.existsSync()) {
         await directory.create(recursive: true);
       }
       if (post.imageUrls!.isNotEmpty) {
@@ -112,7 +119,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       ).toJson();
       final jsonString = jsonEncode(postDraft);
       await _prefs.setString(draftType, jsonString);
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -123,10 +130,10 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       await _prefs.remove(draftType);
       final appDir = await getApplicationDocumentsDirectory();
       final directory = Directory('${appDir.path}/$draftType');
-      if (!await directory.exists()) {
+      if (!directory.existsSync()) {
         await directory.delete(recursive: true);
       }
-    } catch (_) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }

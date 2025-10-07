@@ -1,18 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/app/app_android_bottom_nav.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/next_button.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/onboarding_page_indicator.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/onboarding_page_view.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({
-    super.key,
-    required this.isPolitical,
+    required this.isPolitical, super.key,
   });
   final bool isPolitical;
 

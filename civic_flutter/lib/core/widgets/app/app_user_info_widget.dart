@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AppUserInfoWidget extends StatelessWidget {
   const AppUserInfoWidget({
-    super.key,
     required this.onTap,
     required this.userRecord,
+    super.key,
   });
 
   final VoidCallback onTap;
@@ -52,13 +52,15 @@ class AppUserInfoWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                      ),                    
+                      ),
                     ],
                   ),
                   Row(
                     children: [
                       Text(
-                        '${THelperFunctions.humanizeNumber(userRecord.followers!.length)} followers',
+                        '${THelperFunctions.humanizeNumber(
+                          userRecord.followers!.length,
+                        )} followers',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,
@@ -79,7 +81,9 @@ class AppUserInfoWidget extends StatelessWidget {
                         width: TSizes.sm,
                       ),
                       Text(
-                        '${THelperFunctions.humanizeNumber(userRecord.following!.length)} following',
+                        '${THelperFunctions.humanizeNumber(
+                          userRecord.following!.length,
+                        )} following',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontSize: 13,
@@ -89,7 +93,7 @@ class AppUserInfoWidget extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

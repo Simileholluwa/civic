@@ -21,7 +21,7 @@ class ReactToProjectVettingUseCase implements UseCase<ProjectVetting, ReactToPro
 class ReactToProjectVettingParams {
   ReactToProjectVettingParams(
     this.vettingId,
-    this.isLike
+    this.isLike,
   );
   final int vettingId;
   final bool isLike;

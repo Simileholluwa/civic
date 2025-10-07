@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class ProjectOverallRating extends StatelessWidget {
   const ProjectOverallRating({
-    super.key,
-    required this.title,
-    required this.rating,
+    required this.title, required this.rating, super.key,
   });
 
   final double rating;
@@ -27,7 +25,7 @@ class ProjectOverallRating extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.labelMedium!,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 RatingBar(
                   rating: rating,

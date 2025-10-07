@@ -1,42 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 
-import 'package:civic_client/civic_client.dart';
-
 class AuthState {
-  final String email;
-  final String password;
-  final PoliticalStatus politicalStatus;
-  final String verificationCode;
-  final String newPassword;
-  final String passwordResetCode;
-  final String newAccountPassword;
-  final String resetPasswordEmail;
-  final bool acceptTerms;
-  final String firstName;
-  final String lastName;
-  final String middleName;
-  final String nin;
-  final TextEditingController emailController;
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController middleNameController;
-  final TextEditingController passwordController;
-  final TextEditingController verificationCodeController;
-  final TextEditingController newPasswordController;
-  final TextEditingController passwordResetCodeController;
-  final TextEditingController newAccountPasswordController;
-  final TextEditingController resetPasswordEmailController;
-  final TextEditingController ninController;
-  final GlobalKey<FormState> emailFormKey;
-  final GlobalKey<FormState> ninFormKey;
-  final GlobalKey<FormState> passwordFormKey;
-  final GlobalKey<FormState> usernameFormKey;
-  final GlobalKey<FormState> verificationCodeFormKey;
-  final GlobalKey<FormState> newPasswordFormKey;
-  final GlobalKey<FormState> passwordResetCodeFormKey;
-  final GlobalKey<FormState> newAccountPasswordFormKey;
-  final GlobalKey<FormState> resetPasswordEmailFormKey;
   AuthState({
     required this.email,
     required this.password,
@@ -72,6 +37,77 @@ class AuthState {
     required this.newAccountPasswordFormKey,
     required this.resetPasswordEmailFormKey,
   });
+
+  factory AuthState.empty() {
+    return AuthState(
+      email: '',
+      password: '',
+      politicalStatus: PoliticalStatus.none,
+      verificationCode: '',
+      newPassword: '',
+      passwordResetCode: '',
+      newAccountPassword: '',
+      resetPasswordEmail: '',
+      acceptTerms: false,
+      firstName: '',
+      lastName: '',
+      nin: '',
+      middleName: '',
+      emailController: TextEditingController(),
+      ninController: TextEditingController(),
+      passwordController: TextEditingController(),
+      verificationCodeController: TextEditingController(),
+      newPasswordController: TextEditingController(),
+      passwordResetCodeController: TextEditingController(),
+      newAccountPasswordController: TextEditingController(),
+      firstNameController: TextEditingController(),
+      lastNameController: TextEditingController(),
+      middleNameController: TextEditingController(),
+      resetPasswordEmailController: TextEditingController(),
+      emailFormKey: GlobalKey<FormState>(),
+      ninFormKey: GlobalKey<FormState>(),
+      passwordFormKey: GlobalKey<FormState>(),
+      usernameFormKey: GlobalKey<FormState>(),
+      verificationCodeFormKey: GlobalKey<FormState>(),
+      newPasswordFormKey: GlobalKey<FormState>(),
+      passwordResetCodeFormKey: GlobalKey<FormState>(),
+      newAccountPasswordFormKey: GlobalKey<FormState>(),
+      resetPasswordEmailFormKey: GlobalKey<FormState>(),
+    );
+  }
+  final String email;
+  final String password;
+  final PoliticalStatus politicalStatus;
+  final String verificationCode;
+  final String newPassword;
+  final String passwordResetCode;
+  final String newAccountPassword;
+  final String resetPasswordEmail;
+  final bool acceptTerms;
+  final String firstName;
+  final String lastName;
+  final String middleName;
+  final String nin;
+  final TextEditingController emailController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController middleNameController;
+  final TextEditingController passwordController;
+  final TextEditingController verificationCodeController;
+  final TextEditingController newPasswordController;
+  final TextEditingController passwordResetCodeController;
+  final TextEditingController newAccountPasswordController;
+  final TextEditingController resetPasswordEmailController;
+  final TextEditingController ninController;
+  final GlobalKey<FormState> emailFormKey;
+  final GlobalKey<FormState> ninFormKey;
+  final GlobalKey<FormState> passwordFormKey;
+  final GlobalKey<FormState> usernameFormKey;
+  final GlobalKey<FormState> verificationCodeFormKey;
+  final GlobalKey<FormState> newPasswordFormKey;
+  final GlobalKey<FormState> passwordResetCodeFormKey;
+  final GlobalKey<FormState> newAccountPasswordFormKey;
+  final GlobalKey<FormState> resetPasswordEmailFormKey;
 
   AuthState copyWith({
     String? email,
@@ -127,59 +163,30 @@ class AuthState {
       lastNameController: lastNameController ?? this.lastNameController,
       middleNameController: middleNameController ?? this.middleNameController,
       passwordController: passwordController ?? this.passwordController,
-      verificationCodeController: verificationCodeController ?? this.verificationCodeController,
-      newPasswordController: newPasswordController ?? this.newPasswordController,
-      passwordResetCodeController: passwordResetCodeController ?? this.passwordResetCodeController,
-      newAccountPasswordController: newAccountPasswordController ?? this.newAccountPasswordController,
-      resetPasswordEmailController: resetPasswordEmailController ?? this.resetPasswordEmailController,
+      verificationCodeController:
+          verificationCodeController ?? this.verificationCodeController,
+      newPasswordController:
+          newPasswordController ?? this.newPasswordController,
+      passwordResetCodeController:
+          passwordResetCodeController ?? this.passwordResetCodeController,
+      newAccountPasswordController:
+          newAccountPasswordController ?? this.newAccountPasswordController,
+      resetPasswordEmailController:
+          resetPasswordEmailController ?? this.resetPasswordEmailController,
       ninController: ninController ?? this.ninController,
       emailFormKey: emailFormKey ?? this.emailFormKey,
       ninFormKey: ninFormKey ?? this.ninFormKey,
       passwordFormKey: passwordFormKey ?? this.passwordFormKey,
       usernameFormKey: usernameFormKey ?? this.usernameFormKey,
-      verificationCodeFormKey: verificationCodeFormKey ?? this.verificationCodeFormKey,
+      verificationCodeFormKey:
+          verificationCodeFormKey ?? this.verificationCodeFormKey,
       newPasswordFormKey: newPasswordFormKey ?? this.newPasswordFormKey,
-      passwordResetCodeFormKey: passwordResetCodeFormKey ?? this.passwordResetCodeFormKey,
-      newAccountPasswordFormKey: newAccountPasswordFormKey ?? this.newAccountPasswordFormKey,
-      resetPasswordEmailFormKey: resetPasswordEmailFormKey ?? this.resetPasswordEmailFormKey,
-    );
-  }
-
-  factory AuthState.empty() {
-    return AuthState(
-      email: '',
-      password: '',
-      politicalStatus: PoliticalStatus.none,
-      verificationCode: '',
-      newPassword: '',
-      passwordResetCode: '',
-      newAccountPassword: '',
-      resetPasswordEmail: '',
-      acceptTerms: false,
-      firstName: '',
-      lastName: '',
-      nin: '',
-      middleName: '',
-      emailController: TextEditingController(),
-      ninController: TextEditingController(),
-      passwordController: TextEditingController(),
-      verificationCodeController: TextEditingController(),
-      newPasswordController: TextEditingController(),
-      passwordResetCodeController: TextEditingController(),
-      newAccountPasswordController: TextEditingController(),
-      firstNameController: TextEditingController(),
-      lastNameController: TextEditingController(),
-      middleNameController: TextEditingController(),
-      resetPasswordEmailController: TextEditingController(),
-      emailFormKey: GlobalKey<FormState>(),
-      ninFormKey: GlobalKey<FormState>(),
-      passwordFormKey: GlobalKey<FormState>(),
-      usernameFormKey: GlobalKey<FormState>(),
-      verificationCodeFormKey: GlobalKey<FormState>(),
-      newPasswordFormKey: GlobalKey<FormState>(),
-      passwordResetCodeFormKey: GlobalKey<FormState>(),
-      newAccountPasswordFormKey: GlobalKey<FormState>(),
-      resetPasswordEmailFormKey: GlobalKey<FormState>(),
+      passwordResetCodeFormKey:
+          passwordResetCodeFormKey ?? this.passwordResetCodeFormKey,
+      newAccountPasswordFormKey:
+          newAccountPasswordFormKey ?? this.newAccountPasswordFormKey,
+      resetPasswordEmailFormKey:
+          resetPasswordEmailFormKey ?? this.resetPasswordEmailFormKey,
     );
   }
 }

@@ -6,10 +6,10 @@ import 'package:iconsax/iconsax.dart';
 
 class CreateContentAppbar extends StatelessWidget {
   const CreateContentAppbar({
-    super.key,
     required this.canSend,
     required this.sendPressed,
     required this.onCanSendPost,
+    super.key,
     this.title,
     this.sendText,
     this.isRepost = false,
@@ -33,9 +33,7 @@ class CreateContentAppbar extends StatelessWidget {
       child: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: canSend
-              ? () => onCanSendPost()
-              : () => context.pop(),
+          onPressed: canSend ? onCanSendPost : () => context.pop(),
           icon: const Icon(
             Iconsax.arrow_left_2,
           ),

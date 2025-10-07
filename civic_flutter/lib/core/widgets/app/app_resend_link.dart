@@ -1,7 +1,7 @@
-import 'package:civic_flutter/features/auth/auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AppResendLink extends ConsumerWidget {
@@ -38,25 +38,26 @@ class AppResendLink extends ConsumerWidget {
         const SizedBox(
           width: TSizes.xs,
         ),
-        ref.watch(initiateResendPasswordResetLoadingProvider)
-            ? LoadingAnimationWidget.discreteCircle(
-                color: TColors.primary,
-                size: 12,
-              )
-            : GestureDetector(
-                onTap: countdownState.isCountingDown ? null : onTap,
-                child: Text(
-                  countdownState.isCountingDown
-                      ? 'Retry in ${formatTime(countdownState.secondsRemaining)}'
-                      : TTexts.resendEmail,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: countdownState.isCountingDown
-                            ? Theme.of(context).disabledColor
-                            : TColors.primary,
-                        fontSize: 17,
-                      ),
-                ),
-              ),
+        if (ref.watch(initiateResendPasswordResetLoadingProvider))
+          LoadingAnimationWidget.discreteCircle(
+            color: TColors.primary,
+            size: 12,
+          )
+        else
+          GestureDetector(
+            onTap: countdownState.isCountingDown ? null : onTap,
+            child: Text(
+              countdownState.isCountingDown
+                  ? 'Retry in ${formatTime(countdownState.secondsRemaining)}'
+                  : TTexts.resendEmail,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: countdownState.isCountingDown
+                        ? Theme.of(context).disabledColor
+                        : TColors.primary,
+                    fontSize: 17,
+                  ),
+            ),
+          ),
       ],
     );
   }

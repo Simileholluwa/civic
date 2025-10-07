@@ -1,6 +1,6 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_page_provider.g.dart';
 
@@ -9,7 +9,7 @@ class ProjectCurrentPage extends _$ProjectCurrentPage {
   @override
   int build() => 0;
 
-  void setCurrentPage(int index) {
+  set setCurrentPage(int index) {
     state = index;
   }
 
@@ -27,25 +27,29 @@ class ProjectPageController extends _$ProjectPageController {
   @override
   Raw<PageController> build() => PageController();
 
-  void nextPage() {
+  Future<void> nextPage() async {
     ref.watch(projectCurrentPageProvider.notifier).add();
-    state.nextPage(
+    await state.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
-  void previousPage() {
+  Future<void> previousPage() async {
     ref.watch(projectCurrentPageProvider.notifier).subtract();
-    state.previousPage(
+    await state.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
-  void gotoPage(int index) {
-    ref.watch(projectCurrentPageProvider.notifier).setCurrentPage(index);
-    state.animateToPage(
+  Future<void> gotoPage(int index) async {
+    ref
+        .watch(
+          projectCurrentPageProvider.notifier,
+        )
+        .setCurrentPage = index;
+    await state.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -72,14 +76,11 @@ class ProjectTabController extends _$ProjectTabController {
       vsync: ref.watch(vsyncProvider),
     );
     controller.addListener(() {
-      currentPage.setCurrentPage(controller.index);
+      currentPage.setCurrentPage = controller.index;
     });
-    ref.onDispose(() {
-      controller.dispose();
-    });
+    ref.onDispose(controller.dispose);
     return controller;
   }
-  
 }
 
 @riverpod
@@ -89,7 +90,6 @@ class ProjectDetailsTabController extends _$ProjectDetailsTabController {
     return TabController(
       length: 4,
       vsync: ref.watch(vsyncProvider),
-      initialIndex: 0,
     );
   }
 }
@@ -99,7 +99,7 @@ class ProjectDetailCurrentPage extends _$ProjectDetailCurrentPage {
   @override
   int build() => 0;
 
-  void setCurrentPage(int index) {
+  set setCurrentPage(int index) {
     state = index;
   }
 }

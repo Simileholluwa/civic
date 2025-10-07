@@ -1,25 +1,24 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'project_services_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 ProjectRemoteDatasourceImpl projectRemoteDatasource(Ref ref) {
   return ProjectRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 ProjectLocalDataSourceImpl projectLocalDatasource(Ref ref) {
   return ProjectLocalDataSourceImpl(
     prefs: ref.read(localStorageProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 ProjectRepositoryImpl projectRepositoryImpl(Ref ref) {
   return ProjectRepositoryImpl(
     remoteDatasource: ref.read(
@@ -38,7 +37,7 @@ SaveProjectUseCase saveProject(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetProjectsUseCase getProjects(Ref ref) {
   return GetProjectsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -59,7 +58,7 @@ SaveProjectReviewUseCase saveProjectReview(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetProjectReviewsUseCase getProjectReviews(Ref ref) {
   return GetProjectReviewsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -73,7 +72,7 @@ GetProjectReviewUseCase getProjectReview(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetUserProjectBookmarksUseCase getPaginatedBookmarks(Ref ref) {
   return GetUserProjectBookmarksUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -101,7 +100,7 @@ ToggleLikeUseCase toggleLike(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 ClearProjectBookmarksUseCase clearProjectBookmarks(Ref ref) {
   return ClearProjectBookmarksUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
@@ -171,7 +170,7 @@ GetVettedProjectUseCase getVettedProject(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetVettedProjectsUseCase getVettedProjects(Ref ref) {
   return GetVettedProjectsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),

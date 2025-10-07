@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class CannotVetProjectWidget extends StatelessWidget {
   const CannotVetProjectWidget({
-    super.key,
-    required this.value,
+    required this.value, super.key,
   });
 
   final double value;
@@ -16,11 +15,10 @@ class CannotVetProjectWidget extends StatelessWidget {
         horizontal: 20,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 10,
         children: [
-          Image(
+          const Image(
             height: 250,
             image: AssetImage(
               TImageTexts.noData,
@@ -31,7 +29,7 @@ class CannotVetProjectWidget extends StatelessWidget {
               text: 'You are',
               children: [
                 TextSpan(
-                  text: ' ${(value).toStringAsFixed(
+                  text: ' ${value.toStringAsFixed(
                     2,
                   )}km',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -39,7 +37,7 @@ class CannotVetProjectWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: ' away from the project location. You must be within',
                 ),
                 TextSpan(
@@ -49,7 +47,7 @@ class CannotVetProjectWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: ' to vet this project.',
                 ),
               ],

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 class ProjectRatingSummary extends StatelessWidget {
   const ProjectRatingSummary({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;

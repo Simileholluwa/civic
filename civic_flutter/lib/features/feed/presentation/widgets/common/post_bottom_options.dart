@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class PostBottomOptions extends ConsumerWidget {
   const PostBottomOptions({
-    super.key,
     required this.post,
+    super.key,
     this.showMedia = true,
     this.isReplyOrComment = false,
     this.maxLength = 2500,
@@ -40,8 +40,8 @@ class PostBottomOptions extends ConsumerWidget {
               Visibility(
                 visible: showTagLoc,
                 child: IconButton(
-                  onPressed: () {
-                    FeedHelperFunctions.tagUsersBottomSheet(
+                  onPressed: () async {
+                    await FeedHelperFunctions.tagUsersBottomSheet(
                       context,
                       post,
                     );
@@ -66,8 +66,8 @@ class PostBottomOptions extends ConsumerWidget {
               Visibility(
                 visible: !isReplyOrComment,
                 child: IconButton(
-                  onPressed: () {
-                    THelperFunctions.showScheduleDialog(
+                  onPressed: () async {
+                    await THelperFunctions.showScheduleDialog(
                       context,
                     );
                   },

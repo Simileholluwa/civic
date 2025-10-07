@@ -6,10 +6,10 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class AppInfiniteList<T> extends ConsumerWidget {
   const AppInfiniteList({
-    super.key,
     required this.pagingController,
     required this.itemBuilder,
     required this.onRefresh,
+    super.key,
     this.canCreate = true,
     this.onCreate,
     this.createText = 'Create project',
@@ -30,7 +30,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
     T item,
     int index,
   ) itemBuilder;
-  final Function() onRefresh;
+  final void Function() onRefresh;
   final bool showRefresh;
   final Widget? noItemsFound;
   final ScrollController? scrollController;
@@ -48,7 +48,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return RefreshIndicator(
       onRefresh: () => Future.sync(
-        () => onRefresh(),
+        onRefresh,
       ),
       child: PagedListView.separated(
         pagingController: pagingController,
@@ -70,7 +70,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
           itemBuilder: itemBuilder,
           firstPageProgressIndicatorBuilder: (context) {
             return firstPageProgressIndicator ??
-                Center(
+                const Center(
                   child: AppLoadingWidget(),
                 );
           },
@@ -78,7 +78,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
             return firstPageErrorIndicator ??
                 LoadingError(
                   retry: () => Future.sync(
-                    () => onRefresh(),
+                    onRefresh,
                   ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -108,7 +108,8 @@ class AppInfiniteList<T> extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        "We've searched far and wide, but we couldn't find any results.",
+                        "We've searched far and wide, but we couldn't "
+                        'find any results.',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: Theme.of(context).hintColor,
@@ -116,7 +117,7 @@ class AppInfiniteList<T> extends ConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       if (canCreate)
-                        SizedBox(
+                        const SizedBox(
                           height: 1,
                         ),
                       if (canCreate)
@@ -154,9 +155,21 @@ class AppInfiniteList<T> extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     spacing: 8,
                     children: [
-                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
-                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
-                      Icon(Iconsax.star, size: 12, color: Theme.of(context).hintColor),
+                      Icon(
+                        Iconsax.star,
+                        size: 12,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      Icon(
+                        Iconsax.star,
+                        size: 12,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      Icon(
+                        Iconsax.star,
+                        size: 12,
+                        color: Theme.of(context).hintColor,
+                      ),
                     ],
                   ),
                   SizedBox(

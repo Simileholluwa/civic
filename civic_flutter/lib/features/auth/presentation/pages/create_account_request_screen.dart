@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CreateAccountRequestScreen extends StatelessWidget {
   const CreateAccountRequestScreen({
@@ -26,9 +24,9 @@ class CreateAccountRequestScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: Column(
+          child: const Column(
             children: [
-              const AuthHeader(
+              AuthHeader(
                 authTitle: 'Create password',
                 authSubTitle: 'Use a combination of alphabets, '
                     'numbers, and symbols.',

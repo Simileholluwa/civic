@@ -1,14 +1,14 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/presentation/widgets/project_details/show_filter_reviews.dart';
+import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
 
 class ProjectReviewsList extends ConsumerWidget {
   const ProjectReviewsList({
-    super.key,
     required this.project,
+    super.key,
     this.text,
   });
 
@@ -41,7 +41,7 @@ class ProjectReviewsList extends ConsumerWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                   ),
                 ),
@@ -77,7 +77,7 @@ class ProjectReviewsList extends ConsumerWidget {
                     ),
                     InkWell(
                       onTap: () async {
-                        showDialog(
+                        await showDialog<dynamic>(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
@@ -124,8 +124,8 @@ class ProjectReviewsList extends ConsumerWidget {
               );
             },
             onRefresh: pagingControllerNotifier.refresh,
-            firstPageProgressIndicator: Padding(
-              padding: const EdgeInsets.only(
+            firstPageProgressIndicator: const Padding(
+              padding: EdgeInsets.only(
                 top: 50,
               ),
               child: AppLoadingWidget(),

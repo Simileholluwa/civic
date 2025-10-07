@@ -1,4 +1,3 @@
-//ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -7,7 +6,7 @@ import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'feed_buttons_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class FeedButtons extends _$FeedButtons {
   void setReasonNotInterested(String reason) {
     state = state.copyWith(
@@ -213,18 +212,18 @@ class FeedButtons extends _$FeedButtons {
       } else if (isPoll) {
         ref
             .watch(
-              paginatedPollListProvider.notifier,
+              paginatedPostListProvider.notifier,
             )
-            .removePollById(
+            .removePostById(
               postId,
             );
         TToastMessages.infoToast('Your poll has been deleted.');
       } else if (isArticle) {
         ref
             .watch(
-              paginatedArticleListProvider.notifier,
+              paginatedPostListProvider.notifier,
             )
-            .removeArticleById(
+            .removePostById(
               postId,
             );
         TToastMessages.infoToast('Your article has been deleted.');

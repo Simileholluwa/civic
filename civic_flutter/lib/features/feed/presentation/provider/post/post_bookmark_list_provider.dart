@@ -1,12 +1,11 @@
-//ignore_for_file:avoid_public_notifier_properties
-//ignore_for_file:avoid_manual_providers_as_generated_provider_dependency
-
 import 'dart:developer';
+
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_client/civic_client.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'post_bookmark_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -16,16 +15,16 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
 
   @override
   PagingStatus build() {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
-
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    pagingController
+      ..addPageRequestListener(
+        fetchPage,
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
+    ref.onDispose(
+      pagingController.dispose,
+    );
     return pagingController.value.status;
   }
 
@@ -41,8 +40,6 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
       result.fold((error) {
         log(error.toString(), name: 'PaginatedPostList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: error.message,
         );
       }, (data) {
@@ -55,11 +52,9 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
           pagingController.appendLastPage(data.results);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString(), name: 'PaginatedPostList');
       pagingController.value = PagingState(
-        nextPageKey: null,
-        itemList: null,
         error: e.toString(),
       );
     }
@@ -71,8 +66,8 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
 
   void addPost(Post post) {
     if (pagingController.itemList != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? []);
-      updatedList.insert(0, post);
+      final updatedList = List<Post>.from(pagingController.itemList ?? [])
+        ..insert(0, post);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,
@@ -82,8 +77,8 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
 
   void removeProjectRepostById(int? projectId) {
     if (pagingController.itemList != null && projectId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? []);
-      updatedList.removeWhere((element) => element.projectId == projectId);
+      final updatedList = List<Post>.from(pagingController.itemList ?? [])
+        ..removeWhere((element) => element.projectId == projectId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,
@@ -94,14 +89,14 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
   void removeAllPosts() {
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
-      itemList: [],
+      itemList: const [],
     );
   }
 
   void removePostById(int? postId) {
     if (pagingController.itemList != null && postId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? []);
-      updatedList.removeWhere((element) => element.id == postId);
+      final updatedList = List<Post>.from(pagingController.itemList ?? [])
+        ..removeWhere((element) => element.id == postId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,

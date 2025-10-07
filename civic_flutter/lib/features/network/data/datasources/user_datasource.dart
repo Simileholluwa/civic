@@ -37,7 +37,7 @@ class UserRemoteDatasourceImpl extends UserRemoteDatasource {
     try {
       final userRecord = await _client.userRecord.getUser(userId.toString());
       if (userRecord == null) {
-        throw ServerException(message: 'User not found');
+        throw const ServerException(message: 'User not found');
       }
       return userRecord;
     } on ServerSideException catch (e) {

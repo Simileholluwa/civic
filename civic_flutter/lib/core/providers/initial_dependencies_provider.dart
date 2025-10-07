@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -7,7 +9,7 @@ part 'initial_dependencies_provider.g.dart';
 class BootStrap extends _$BootStrap {
   @override
   bool build() {
-    initialDependencies();
+    unawaited(initialDependencies());
     return true;
   }
 

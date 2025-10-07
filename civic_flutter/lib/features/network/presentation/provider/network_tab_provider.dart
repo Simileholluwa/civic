@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,26 +8,24 @@ class _VSync implements TickerProvider {
   Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }
 
-final networkVsyncProvider = Provider<TickerProvider>(
-  (ref) => _VSync(),
-);
+@riverpod
+TickerProvider networkVsync(Ref ref) => _VSync();
 
 @riverpod
 class NetworkTabController extends _$NetworkTabController {
   @override
   Raw<TabController> build() {
-    final currentPage = ref
-          .watch(networkCurrentPageProvider.notifier);        
+    final currentPage = ref.watch(networkCurrentPageProvider.notifier);
     final controller = TabController(
       length: 9,
       vsync: ref.watch(networkVsyncProvider),
     );
     controller.addListener(() {
-      currentPage.setCurrentPage(controller.index);
+      currentPage.currentPage = controller.index;
     });
-    ref.onDispose(() {
-      controller.dispose();
-    });
+    ref.onDispose(
+      controller.dispose,
+    );
     return controller;
   }
 }
@@ -38,7 +35,7 @@ class NetworkCurrentPage extends _$NetworkCurrentPage {
   @override
   int build() => 0;
 
-  void setCurrentPage(int index) {
+  set currentPage(int index) {
     state = index;
   }
 }

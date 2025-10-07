@@ -51,9 +51,7 @@ class CreateContentSchedule extends ConsumerWidget {
               ],
             ),
             GestureDetector(
-              onTap: () {
-                scheduledDateTimeProvider.clearDateTime();
-              },
+              onTap: scheduledDateTimeProvider.clearDateTime,
               child: const Icon(
                 Iconsax.close_square5,
                 color: TColors.secondary,

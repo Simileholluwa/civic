@@ -6,65 +6,137 @@ part of 'onboarding_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$onboardingLocalDatabaseHash() =>
-    r'ba6768b3617e3840b62d7b50ae1e66c09ecab38f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [onboardingLocalDatabase].
 @ProviderFor(onboardingLocalDatabase)
-final onboardingLocalDatabaseProvider =
-    AutoDisposeProvider<OnboardingLocalDatabaseImpl>.internal(
-  onboardingLocalDatabase,
-  name: r'onboardingLocalDatabaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$onboardingLocalDatabaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const onboardingLocalDatabaseProvider = OnboardingLocalDatabaseProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef OnboardingLocalDatabaseRef
-    = AutoDisposeProviderRef<OnboardingLocalDatabaseImpl>;
-String _$onboardingRepositoryHash() =>
-    r'c4be310716e269157c29bbc7bb23db9288fd42a8';
+final class OnboardingLocalDatabaseProvider extends $FunctionalProvider<
+    OnboardingLocalDatabaseImpl,
+    OnboardingLocalDatabaseImpl,
+    OnboardingLocalDatabaseImpl> with $Provider<OnboardingLocalDatabaseImpl> {
+  const OnboardingLocalDatabaseProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'onboardingLocalDatabaseProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [onboardingRepository].
+  @override
+  String debugGetCreateSourceHash() => _$onboardingLocalDatabaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<OnboardingLocalDatabaseImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OnboardingLocalDatabaseImpl create(Ref ref) {
+    return onboardingLocalDatabase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OnboardingLocalDatabaseImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OnboardingLocalDatabaseImpl>(value),
+    );
+  }
+}
+
+String _$onboardingLocalDatabaseHash() =>
+    r'39edbcf22cef204e8b58801348bf0bab7cb5f2f6';
+
 @ProviderFor(onboardingRepository)
-final onboardingRepositoryProvider =
-    AutoDisposeProvider<OnboardingRepositoryImpl>.internal(
-  onboardingRepository,
-  name: r'onboardingRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$onboardingRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const onboardingRepositoryProvider = OnboardingRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef OnboardingRepositoryRef
-    = AutoDisposeProviderRef<OnboardingRepositoryImpl>;
-String _$cacheFirstTimeUseCaseHash() =>
-    r'f1613247230b9a1ee78838b5bfffe9c44981889d';
+final class OnboardingRepositoryProvider extends $FunctionalProvider<
+    OnboardingRepositoryImpl,
+    OnboardingRepositoryImpl,
+    OnboardingRepositoryImpl> with $Provider<OnboardingRepositoryImpl> {
+  const OnboardingRepositoryProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'onboardingRepositoryProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [cacheFirstTimeUseCase].
+  @override
+  String debugGetCreateSourceHash() => _$onboardingRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<OnboardingRepositoryImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  OnboardingRepositoryImpl create(Ref ref) {
+    return onboardingRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OnboardingRepositoryImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OnboardingRepositoryImpl>(value),
+    );
+  }
+}
+
+String _$onboardingRepositoryHash() =>
+    r'a9b9e23c7e4cbe82938a3072e9fb4ade20fd83ef';
+
 @ProviderFor(cacheFirstTimeUseCase)
-final cacheFirstTimeUseCaseProvider =
-    AutoDisposeProvider<CacheFirstTimerUseCase>.internal(
-  cacheFirstTimeUseCase,
-  name: r'cacheFirstTimeUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$cacheFirstTimeUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const cacheFirstTimeUseCaseProvider = CacheFirstTimeUseCaseProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CacheFirstTimeUseCaseRef
-    = AutoDisposeProviderRef<CacheFirstTimerUseCase>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class CacheFirstTimeUseCaseProvider extends $FunctionalProvider<
+    CacheFirstTimerUseCase,
+    CacheFirstTimerUseCase,
+    CacheFirstTimerUseCase> with $Provider<CacheFirstTimerUseCase> {
+  const CacheFirstTimeUseCaseProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'cacheFirstTimeUseCaseProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$cacheFirstTimeUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<CacheFirstTimerUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  CacheFirstTimerUseCase create(Ref ref) {
+    return cacheFirstTimeUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CacheFirstTimerUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CacheFirstTimerUseCase>(value),
+    );
+  }
+}
+
+String _$cacheFirstTimeUseCaseHash() =>
+    r'984aa9394ffe95d8834500c910ed063ead53dc05';

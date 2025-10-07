@@ -131,7 +131,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final result = await _remoteDatabase.logout();
       return Right(result);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(
         Failure(
           message: e.toString(),
@@ -223,8 +223,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveUserRecord(
-      {required UserRecord userRecord}) async {
+  Future<Either<Failure, void>> saveUserRecord({
+    required UserRecord userRecord,
+  }) async {
     try {
       final result = await _localDatabase.saveUserRecord(
         userRecord: userRecord,

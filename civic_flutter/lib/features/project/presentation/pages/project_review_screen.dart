@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectReviewScreen extends ConsumerWidget {
   const ProjectReviewScreen({
-    super.key,
     required this.projectId,
+    super.key,
     this.fromDetails = true,
   });
   final int projectId;
@@ -23,7 +23,7 @@ class ProjectReviewScreen extends ConsumerWidget {
     );
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65),
+        preferredSize: const Size.fromHeight(65),
         child: Container(
           margin: EdgeInsets.only(
             top: fromDetails ? 0 : 4,
@@ -46,7 +46,7 @@ class ProjectReviewScreen extends ConsumerWidget {
             centerTitle: true,
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: Icon(Iconsax.arrow_left_2),
+              icon: const Icon(Iconsax.arrow_left_2),
               onPressed: () {
                 context.pop();
               },
@@ -60,7 +60,7 @@ class ProjectReviewScreen extends ConsumerWidget {
             projectReviewProviderProvider(review),
           );
           if (projectReviewState.isEditing) {
-            return ModifyProjectReviewOrVetting(
+            return const ModifyProjectReviewOrVetting(
               information:
                   'You have already reviewed this project. You can make changes to your review below.',
             );
@@ -76,7 +76,7 @@ class ProjectReviewScreen extends ConsumerWidget {
             retry: () {
               ref.invalidate(projectReviewDetailProvider);
             },
-            errorMessage: err['message']!,
+            errorMessage: err['message'],
             mainAxisAlignment: MainAxisAlignment.center,
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -84,7 +84,7 @@ class ProjectReviewScreen extends ConsumerWidget {
           );
         },
         loading: () {
-          return AppLoadingWidget();
+          return const AppLoadingWidget();
         },
       ),
       bottomNavigationBar: data.when(
@@ -110,7 +110,7 @@ class ProjectReviewScreen extends ConsumerWidget {
                 secondButtonOnPressed: projectReviewState.isDeleting
                     ? null
                     : () async {
-                        ProjectHelperFunctions.deleteProjectReviewDialog(
+                        await ProjectHelperFunctions.deleteProjectReviewDialog(
                           context,
                           projectReviewNotifier,
                           projectId,
@@ -134,38 +134,38 @@ class ProjectReviewScreen extends ConsumerWidget {
         error: (error, st) {
           final err = error as Map<String, String?>;
           if (err['action']! == 'retry') {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentSingleButton(
-              onPressed: () {
-                ref.invalidate(projectReviewDetailProvider);
-              },
-              text: 'Retry',
-              buttonIcon: Iconsax.refresh,
-            ),
-          );
-        } else if (err['action']! == 'share') {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
-            child: ContentDoubleButton(
-              firstButtonOnPressed: () {},
-              firstButtonIcon: Iconsax.share,
-              firstButtonText: 'Share project',
-              secondButtonOnPressed: () {},
-              secondButtonColor: Colors.blue,
-              secondButtonIcon: Iconsax.copy,
-              secondButtonText: 'Copy link',
-            ),
-          );
-        } else {
-          return null;
-        }
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentSingleButton(
+                onPressed: () {
+                  ref.invalidate(projectReviewDetailProvider);
+                },
+                text: 'Retry',
+                buttonIcon: Iconsax.refresh,
+              ),
+            );
+          } else if (err['action']! == 'share') {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 5,
+              ),
+              child: ContentDoubleButton(
+                firstButtonOnPressed: () {},
+                firstButtonIcon: Iconsax.share,
+                firstButtonText: 'Share project',
+                secondButtonOnPressed: () {},
+                secondButtonColor: Colors.blue,
+                secondButtonIcon: Iconsax.copy,
+                secondButtonText: 'Copy link',
+              ),
+            );
+          } else {
+            return null;
+          }
         },
         loading: () {
           return const SizedBox.shrink();

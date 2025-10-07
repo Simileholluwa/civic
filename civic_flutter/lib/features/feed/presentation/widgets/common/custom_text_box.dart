@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CustomTextBox extends ConsumerStatefulWidget {
-  const CustomTextBox({super.key, required this.post});
+  const CustomTextBox({required this.post, super.key});
 
   final Post post;
 
@@ -22,13 +22,13 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
     final postState = ref.watch(feedProvider(widget.post));
     final postNotifier = ref.watch(feedProvider(widget.post).notifier);
     final hasText = postState.controller.text.isNotEmpty;
-    final isComment = (widget.post.postType == PostType.regular ||
-            widget.post.postType == PostType.projectRepost ||
-            widget.post.postType == PostType.poll ||
-            widget.post.postType == PostType.article);
+    final isComment = widget.post.postType == PostType.regular ||
+        widget.post.postType == PostType.projectRepost ||
+        widget.post.postType == PostType.poll ||
+        widget.post.postType == PostType.article;
 
     return AnimatedSize(
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
       alignment: Alignment.bottomCenter,
       child: Row(
@@ -36,7 +36,7 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 5, 3),
+              padding: const EdgeInsets.fromLTRB(15, 0, 5, 3),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
@@ -48,10 +48,10 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                 children: [
                   Expanded(
                     child: AnimatedSize(
-                      duration: Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 250),
                       curve: Curves.easeInOut,
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minHeight: 40,
                           maxHeight: 200,
                         ),
@@ -59,7 +59,7 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: TextFormField(
                             controller: postState.controller,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Share your thoughts...',
                               border: InputBorder.none,
                               isDense: true,
@@ -70,11 +70,11 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                               ),
                               errorMaxLines: 2,
                             ),
-                            
                             validator: (value) {
                               if (value != null) {
                                 if (value.length > 400) {
-                                  return 'Maximum length of 400 characters exceeded.';
+                                  return 'Maximum length of 400 characters '
+                                      'exceeded.';
                                 }
                               }
                               return null;
@@ -88,7 +88,7 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                     ),
                   ),
                   AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     transitionBuilder: (child, animation) => ScaleTransition(
                       scale: animation,
                       child: FadeTransition(
@@ -98,19 +98,19 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                     ),
                     child: !hasText
                         ? IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Iconsax.gallery5,
                             ),
                             onPressed: () {},
                           )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.open_in_full_rounded,
                     ),
-                    onPressed: () {
-                      context.push(
+                    onPressed: () async {
+                      await context.push(
                         '/create/post/0',
                         extra: {
                           'parent': widget.post,
@@ -123,7 +123,7 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
             ),
           ),
           AnimatedSwitcher(
-            duration: Duration(milliseconds: 250),
+            duration: const Duration(milliseconds: 250),
             transitionBuilder: (child, animation) => ScaleTransition(
               scale: animation,
               child: FadeTransition(
@@ -135,13 +135,13 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                 ? Container(
                     height: 55,
                     width: 55,
-                    margin: EdgeInsets.only(left: 8),
-                    decoration: BoxDecoration(
+                    margin: const EdgeInsets.only(left: 8),
+                    decoration: const BoxDecoration(
                       color: TColors.primary,
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.send,
                         color: TColors.white,
                       ),
@@ -158,7 +158,7 @@ class _CustomTextBoxState extends ConsumerState<CustomTextBox>
                       },
                     ),
                   )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ),
         ],
       ),

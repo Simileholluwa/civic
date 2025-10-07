@@ -1,4 +1,3 @@
-//ignore_for_file:avoid_public_notifier_properties
 import 'dart:async';
 import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
@@ -16,17 +15,17 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
 
   @override
   PagingStatus build() {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
+    pagingController
+      ..addPageRequestListener(
+        fetchPage,
+      )
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    ref.onDispose(
+      pagingController.dispose,
+    );
     return PagingStatus.loadingFirstPage;
   }
 
@@ -45,8 +44,6 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
         result.fold((error) {
           log(error.message, name: 'PaginatedVettingList');
           pagingController.value = PagingState(
-            nextPageKey: null,
-            itemList: null,
             error: error,
           );
         }, (data) {
@@ -59,11 +56,9 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
             pagingController.appendLastPage(data.results);
           }
         });
-      } catch (e) {
+      } on Exception catch (e) {
         log(e.toString(), name: 'PaginatedVettingList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: e.toString(),
         );
       }
@@ -84,8 +79,8 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
 
   void deleteVetting(int vettingId) {
     final updatedList =
-        List<ProjectVetting>.from(pagingController.itemList ?? []);
-    updatedList.removeWhere((element) => element.id == vettingId);
+        List<ProjectVetting>.from(pagingController.itemList ?? [])
+          ..removeWhere((element) => element.id == vettingId);
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
       itemList: updatedList,

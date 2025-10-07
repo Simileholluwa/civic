@@ -1,15 +1,14 @@
-import 'package:civic_flutter/features/project/presentation/helpers/number_formatter.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/project/presentation/helpers/number_formatter.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProjectFundingPageView extends ConsumerWidget {
   const ProjectFundingPageView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -35,11 +34,7 @@ class ProjectFundingPageView extends ConsumerWidget {
                 hintText: 'NGN',
                 dropdownItems: currencies.keys.toList(),
                 value: projectCreationSate.currency,
-                onChanged: (String? value) {
-                  projectNotifier.setCurrency(
-                    value,
-                  );
-                },
+                onChanged: projectNotifier.setCurrency,
                 width: 100,
                 leftPadding: 4,
                 rightPadding: 8,
@@ -58,9 +53,7 @@ class ProjectFundingPageView extends ConsumerWidget {
                     value,
                   ),
                   textInputType: TextInputType.number,
-                  onChanged: (value) {
-                    projectNotifier.setProjectCost(value);
-                  },
+                  onChanged: projectNotifier.setProjectCost,
                 ),
               ),
             ],
@@ -70,19 +63,15 @@ class ProjectFundingPageView extends ConsumerWidget {
             hintText: 'Select funding category',
             dropdownItems: fundingSources.keys.toList(),
             value: projectCreationSate.fundingCategory,
-            onChanged: (String? value) {
-              projectNotifier.setFundingCategory(value);
-            },
+            onChanged: projectNotifier.setFundingCategory,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Select funding subcategory',
             dropdownItems: ProjectHelperFunctions.getFundingSubcategories(
-                projectCreationSate.fundingCategory),
+                projectCreationSate.fundingCategory,),
             value: projectCreationSate.fundingSubCategory,
-            onChanged: (String? value) {
-              projectNotifier.setFundingSubCategory(value);
-            },
+            onChanged: projectNotifier.setFundingSubCategory,
           ),
           const SizedBox(height: 20),
           AppTextField(
@@ -90,13 +79,9 @@ class ProjectFundingPageView extends ConsumerWidget {
             showPrefixIcon: false,
             hintText: 'Optional note on funding and or cost...',
             validator: (value) => null,
-            textInputType: TextInputType.text,
             showUpperText: true,
             upperText: 'Funding note',
-            onChanged: (value) {
-              projectNotifier.setFundingNote(value);
-            },
-            maxLines: null,
+            onChanged: projectNotifier.setFundingNote,
           ),
         ],
       ),

@@ -112,8 +112,8 @@ class ProjectVet extends _$ProjectVet {
     );
   }
 
-  void removeImageAtIndex(index) {
-    var images = state.images;
+  void removeImageAtIndex(int index) {
+    final images = state.images;
     if (images.length == 1) {
       state = state.copyWith(
         images: [],
@@ -126,8 +126,8 @@ class ProjectVet extends _$ProjectVet {
   }
 
   Future<bool> sendVettingImages() async {
-    var existingUpload = <String>[];
-    var newUpload = <String>[];
+    final existingUpload = <String>[];
+    final newUpload = <String>[];
     for (final image in state.images) {
       final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
       if (regex.hasMatch(image)) {
@@ -158,7 +158,10 @@ class ProjectVet extends _$ProjectVet {
     });
   }
 
-  Future<bool> sendVetting(int projectId, int? vettingId,) async {
+  Future<bool> sendVetting(
+    int projectId,
+    int? vettingId,
+  ) async {
     setIsSending(true);
     final sendVetting = ref.read(vetProjectProvider);
     final ownerId = ref.read(localStorageProvider).getInt('userId');

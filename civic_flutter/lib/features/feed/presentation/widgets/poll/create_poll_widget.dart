@@ -6,20 +6,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreatePollWidget extends ConsumerWidget {
   const CreatePollWidget({
-    super.key,
     required this.post,
     required this.isEditing,
+    super.key,
   });
 
   final Post post;
   final bool isEditing;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(feedProvider(post));
 
-    return Column(     
+    return Column(
       children: [
         PostBottomOptions(
           post: post,
@@ -47,9 +46,11 @@ class CreatePollWidget extends ConsumerWidget {
                 ...postState.controllers.asMap().entries.map((entry) {
                   final index = entry.key;
                   final controller = entry.value;
-          
+
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
                     child: PollOptionsTextField(
                       index: index,
                       controller: controller,
@@ -61,27 +62,31 @@ class CreatePollWidget extends ConsumerWidget {
                 if (postState.taggedUsers.isNotEmpty ||
                     postState.locations.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 10,),
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                    ),
                     child: ContentEngagementTagsAndLocations(
                       tags: postState.taggedUsers,
                       locations: postState.locations,
                       hasTags: postState.taggedUsers.isNotEmpty,
                       hasLocations: postState.locations.isNotEmpty,
-                      onTaggedUsersTap: () {
-                        FeedHelperFunctions.selectLocationBottomSheet(
+                      onTaggedUsersTap: () async {
+                        await FeedHelperFunctions.selectLocationBottomSheet(
                           context: context,
                           post: post,
                         );
                       },
-                      onLocationTap: () {
-                        FeedHelperFunctions.selectLocationBottomSheet(
+                      onLocationTap: () async {
+                        await FeedHelperFunctions.selectLocationBottomSheet(
                           context: context,
                           post: post,
                         );
                       },
                     ),
                   ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 PollDurationAndAddOptions(
                   post: post,
                   isEditing: isEditing,

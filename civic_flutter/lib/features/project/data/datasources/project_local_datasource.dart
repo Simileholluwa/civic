@@ -21,7 +21,7 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
       final projectDraft = project.toJson();
       final jsonString = jsonEncode(projectDraft);
       await _prefs.setString('projectDraft', jsonString);
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -32,8 +32,7 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
       final userId = _prefs.getInt('userId')!;
       final projectDraft = _prefs.getString('projectDraft');
       if (projectDraft != null) {
-        final projectMap =
-            jsonDecode(projectDraft.toString()) as Map<String, dynamic>;
+        final projectMap = jsonDecode(projectDraft) as Map<String, dynamic>;
         if (projectMap['ownerId'] == userId) {
           return Project.fromJson(projectMap);
         }
@@ -45,7 +44,7 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
       return Project(
         ownerId: userId,
       );
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
@@ -54,7 +53,7 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
   Future<void> deleteProjectDraft() async {
     try {
       await _prefs.remove('projectDraft');
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }

@@ -29,15 +29,13 @@ class CreatContentTextCounter extends ConsumerWidget {
             ),
           ),
         ),
-        maxLength - currentTextLength <= 50
-            ? Text(
+        if (maxLength - currentTextLength <= 50) Text(
                 '${maxLength - currentTextLength}',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: TColors.secondary,
                       fontSize: 12,
                     ),
-              )
-            : const SizedBox(),
+              ) else const SizedBox(),
       ],
     );
   }

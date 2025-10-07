@@ -8,12 +8,12 @@ import 'package:go_router/go_router.dart';
 
 class PostCardDetail extends ConsumerWidget {
   const PostCardDetail({
-    super.key,
     required this.post,
+    required this.onTap,
+    super.key,
     this.showInteractions = true,
     this.hasProject = false,
     this.noMaxLines = false,
-    required this.onTap,
   });
 
   final Post post;
@@ -41,7 +41,7 @@ class PostCardDetail extends ConsumerWidget {
         spacing: 10,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(15, 12, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
             child: ContentCreatorInfo(
               creator: post.owner!,
               timeAgo: postCardState.timeAgo,
@@ -80,14 +80,14 @@ class PostCardDetail extends ConsumerWidget {
             ),
           if (showInteractions)
             PostInteractionButtons(
-                post: livePost.value ?? post,
-                onReply: () {
-                  context.push(
-                    '/feed/post/${post.id}/comments',
-                  );
-                },
-                originalPostId: post.id!,
-                ),
+              post: livePost.value ?? post,
+              onReply: () async {
+                await context.push(
+                  '/feed/post/${post.id}/comments',
+                );
+              },
+              originalPostId: post.id!,
+            ),
         ],
       ),
     );

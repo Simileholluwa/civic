@@ -1,11 +1,11 @@
 class CountdownTimerState {
-  final int secondsRemaining;
-  final bool isCountingDown;
 
   CountdownTimerState({
     required this.secondsRemaining,
     required this.isCountingDown,
   });
+  final int secondsRemaining;
+  final bool isCountingDown;
 
   CountdownTimerState copyWith({
     int? secondsRemaining,

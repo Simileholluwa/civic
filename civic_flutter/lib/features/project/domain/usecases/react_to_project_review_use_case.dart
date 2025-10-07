@@ -21,7 +21,7 @@ class ReactToProjectReviewUseCase implements UseCase<ProjectReview, ReactToProje
 class ReactToProjectReviewParams {
   ReactToProjectReviewParams(
     this.reviewId,
-    this.isLike
+    this.isLike,
   );
   final int reviewId;
   final bool isLike;

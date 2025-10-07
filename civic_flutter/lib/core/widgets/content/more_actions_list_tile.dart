@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class MoreActionsListTile extends StatelessWidget {
   const MoreActionsListTile({
-    super.key,
-    this.color,
     required this.title,
     required this.subTitle,
     required this.icon,
     required this.onTap,
+    super.key,
+    this.color,
   });
 
   final Color? color;

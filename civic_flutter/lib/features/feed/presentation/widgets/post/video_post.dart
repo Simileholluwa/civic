@@ -1,17 +1,16 @@
-import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
-  final String videoUrl;
 
   const VideoPost({
-    super.key,
-    required this.videoUrl,
+    required this.videoUrl, super.key,
   });
+  final String videoUrl;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _VideoPostState();
@@ -119,15 +118,14 @@ class _VideoPostState extends ConsumerState<VideoPost> {
                     ),
                   ),
           ),
-          controller != null
-              ? controller.value.isInitialized
+          if (controller != null) controller.value.isInitialized
                   ? Align(
                       alignment: Alignment.bottomCenter,
                       child: AnimatedOpacity(
                         opacity: controller.value.isPlaying ? 0 : 1,
                         duration: const Duration(milliseconds: 300),
                         child: Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           decoration: const BoxDecoration(
                             color: Colors.black54,
                             borderRadius: BorderRadius.only(
@@ -209,8 +207,7 @@ class _VideoPostState extends ConsumerState<VideoPost> {
                         ),
                       ),
                     )
-                  : const SizedBox.shrink()
-              : const SizedBox.shrink(),
+                  : const SizedBox.shrink() else const SizedBox.shrink(),
         ],
       ),
     );

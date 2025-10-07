@@ -16,11 +16,10 @@ class ProjectAttachmentFilter extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0
+        16, 0, 20, 0,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ...attachments.keys.toList().asMap().entries.map(
             (entry) {

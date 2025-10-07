@@ -1,11 +1,10 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'project_detail_provider.g.dart';
 
 @riverpod
@@ -18,7 +17,7 @@ Future<Project> projectDetail(
   if (id == 0) {
     final getProjectDraft = ref.read(getProjectDraftProvider);
     final result = await getProjectDraft(NoParams());
-    result.fold(
+    await result.fold(
       (error) {
         completer.completeError({
           'message': error.message,
@@ -41,7 +40,7 @@ Future<Project> projectDetail(
       ),
     );
 
-    result.fold(
+    await result.fold(
       (error) {
         completer.completeError({
           'message': error.message,

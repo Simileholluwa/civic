@@ -6,71 +6,199 @@ part of 'integer_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(PageChanged)
+const pageChangedProvider = PageChangedProvider._();
+
+final class PageChangedProvider extends $NotifierProvider<PageChanged, int> {
+  const PageChangedProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'pageChangedProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$pageChangedHash();
+
+  @$internal
+  @override
+  PageChanged create() => PageChanged();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
 String _$pageChangedHash() => r'6fa1d86672f3f5cd327fcb853b8945f669f7d9c3';
 
-/// See also [PageChanged].
-@ProviderFor(PageChanged)
-final pageChangedProvider =
-    AutoDisposeNotifierProvider<PageChanged, int>.internal(
-  PageChanged.new,
-  name: r'pageChangedProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$pageChangedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$PageChanged extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$PageChanged = AutoDisposeNotifier<int>;
+@ProviderFor(VettingImagePageChanged)
+const vettingImagePageChangedProvider = VettingImagePageChangedProvider._();
+
+final class VettingImagePageChangedProvider
+    extends $NotifierProvider<VettingImagePageChanged, int> {
+  const VettingImagePageChangedProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'vettingImagePageChangedProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$vettingImagePageChangedHash();
+
+  @$internal
+  @override
+  VettingImagePageChanged create() => VettingImagePageChanged();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
 String _$vettingImagePageChangedHash() =>
     r'7a302734eb54ac2bc079b7655da97d4e6e1cfc63';
 
-/// See also [VettingImagePageChanged].
-@ProviderFor(VettingImagePageChanged)
-final vettingImagePageChangedProvider =
-    AutoDisposeNotifierProvider<VettingImagePageChanged, int>.internal(
-  VettingImagePageChanged.new,
-  name: r'vettingImagePageChangedProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$vettingImagePageChangedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$VettingImagePageChanged extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$VettingImagePageChanged = AutoDisposeNotifier<int>;
+@ProviderFor(ProjectImageAttachmentPageChanged)
+const projectImageAttachmentPageChangedProvider =
+    ProjectImageAttachmentPageChangedProvider._();
+
+final class ProjectImageAttachmentPageChangedProvider
+    extends $NotifierProvider<ProjectImageAttachmentPageChanged, int> {
+  const ProjectImageAttachmentPageChangedProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectImageAttachmentPageChangedProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$projectImageAttachmentPageChangedHash();
+
+  @$internal
+  @override
+  ProjectImageAttachmentPageChanged create() =>
+      ProjectImageAttachmentPageChanged();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
 String _$projectImageAttachmentPageChangedHash() =>
     r'810b9376132d535dfc68479d8fcc8f30a0a99a53';
 
-/// See also [ProjectImageAttachmentPageChanged].
-@ProviderFor(ProjectImageAttachmentPageChanged)
-final projectImageAttachmentPageChangedProvider = AutoDisposeNotifierProvider<
-    ProjectImageAttachmentPageChanged, int>.internal(
-  ProjectImageAttachmentPageChanged.new,
-  name: r'projectImageAttachmentPageChangedProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectImageAttachmentPageChangedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$ProjectImageAttachmentPageChanged extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$ProjectImageAttachmentPageChanged = AutoDisposeNotifier<int>;
+@ProviderFor(ProjectPDFAttachmentPageChanged)
+const projectPDFAttachmentPageChangedProvider =
+    ProjectPDFAttachmentPageChangedProvider._();
+
+final class ProjectPDFAttachmentPageChangedProvider
+    extends $NotifierProvider<ProjectPDFAttachmentPageChanged, int> {
+  const ProjectPDFAttachmentPageChangedProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'projectPDFAttachmentPageChangedProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$projectPDFAttachmentPageChangedHash();
+
+  @$internal
+  @override
+  ProjectPDFAttachmentPageChanged create() => ProjectPDFAttachmentPageChanged();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
 String _$projectPDFAttachmentPageChangedHash() =>
     r'abaa18c8a3b27821535e65bbcbf8d43e6331c2d9';
 
-/// See also [ProjectPDFAttachmentPageChanged].
-@ProviderFor(ProjectPDFAttachmentPageChanged)
-final projectPDFAttachmentPageChangedProvider =
-    AutoDisposeNotifierProvider<ProjectPDFAttachmentPageChanged, int>.internal(
-  ProjectPDFAttachmentPageChanged.new,
-  name: r'projectPDFAttachmentPageChangedProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$projectPDFAttachmentPageChangedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$ProjectPDFAttachmentPageChanged = AutoDisposeNotifier<int>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$ProjectPDFAttachmentPageChanged extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

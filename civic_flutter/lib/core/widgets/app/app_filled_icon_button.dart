@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppFilledIconButton extends StatelessWidget {
   const AppFilledIconButton({
-    this.color,
     required this.icon,
     required this.onPressed,
     required this.backgroundColor,
+    this.color,
     this.size = 42,
     super.key,
   });

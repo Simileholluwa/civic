@@ -1,12 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ContentDoubleButton extends StatelessWidget {
   const ContentDoubleButton({
-    super.key,
     required this.firstButtonOnPressed,
     required this.secondButtonOnPressed,
     required this.firstButtonText,
@@ -14,6 +11,7 @@ class ContentDoubleButton extends StatelessWidget {
     required this.secondButtonColor,
     required this.firstButtonIcon,
     required this.secondButtonIcon,
+    super.key,
     this.firstButtonLoading = false,
     this.seccondButtonLoading = false,
   });
@@ -52,7 +50,9 @@ class ContentDoubleButton extends StatelessWidget {
                   vertical: 10,
                 ),
               ),
-            ).withLoading(loading: firstButtonLoading,),
+            ).withLoading(
+              loading: firstButtonLoading,
+            ),
           ),
         ),
         Expanded(
@@ -74,7 +74,9 @@ class ContentDoubleButton extends StatelessWidget {
                   vertical: 10,
                 ),
               ),
-            ).withLoading(loading: seccondButtonLoading,),
+            ).withLoading(
+              loading: seccondButtonLoading,
+            ),
           ),
         ),
       ],

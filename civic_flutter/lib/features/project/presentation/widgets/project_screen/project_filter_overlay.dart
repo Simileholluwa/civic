@@ -30,14 +30,13 @@ class ProjectFilterOverlay extends ConsumerWidget {
                 : 0,
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
               border: Border(
                 bottom: BorderSide(
                   color: Theme.of(context).primaryColor,
-                  width: 1,
                 ),
               ),
               boxShadow: [

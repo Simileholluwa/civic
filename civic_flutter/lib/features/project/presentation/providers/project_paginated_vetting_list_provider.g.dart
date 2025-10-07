@@ -6,22 +6,57 @@ part of 'project_paginated_vetting_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedProjectVettingListHash() =>
-    r'618d6b5258738644ce89c7056f777b2a1b048340';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PaginatedProjectVettingList].
 @ProviderFor(PaginatedProjectVettingList)
-final paginatedProjectVettingListProvider =
-    NotifierProvider<PaginatedProjectVettingList, PagingStatus>.internal(
-  PaginatedProjectVettingList.new,
-  name: r'paginatedProjectVettingListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$paginatedProjectVettingListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const paginatedProjectVettingListProvider =
+    PaginatedProjectVettingListProvider._();
 
-typedef _$PaginatedProjectVettingList = Notifier<PagingStatus>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PaginatedProjectVettingListProvider
+    extends $NotifierProvider<PaginatedProjectVettingList, PagingStatus> {
+  const PaginatedProjectVettingListProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'paginatedProjectVettingListProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedProjectVettingListHash();
+
+  @$internal
+  @override
+  PaginatedProjectVettingList create() => PaginatedProjectVettingList();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PagingStatus value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PagingStatus>(value),
+    );
+  }
+}
+
+String _$paginatedProjectVettingListHash() =>
+    r'699b5a2db9b2b91e05c1eaa1c85a5420854b1dae';
+
+abstract class _$PaginatedProjectVettingList extends $Notifier<PagingStatus> {
+  PagingStatus build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PagingStatus, PagingStatus>,
+        PagingStatus,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

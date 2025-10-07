@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:async';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'project_review_detail_provider.g.dart';
 
 @riverpod
@@ -19,16 +19,15 @@ Future<ProjectReview?> projectReviewDetail(
     ),
   );
 
-  result.fold(
+  await result.fold(
     (error) {
       completer.completeError({
-          'message': error.message,
-          'action': error.action,
-        });
+        'message': error.message,
+        'action': error.action,
+      });
     },
     (projectReview) async {
       completer.complete(projectReview);
-    
     },
   );
 

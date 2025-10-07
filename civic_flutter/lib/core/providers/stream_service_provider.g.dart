@@ -6,768 +6,472 @@ part of 'stream_service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectStreamHash() => r'3867216eb4304c6ca0ec942f1e0bb090930fb6b3';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [projectStream].
 @ProviderFor(projectStream)
-const projectStreamProvider = ProjectStreamFamily();
+const projectStreamProvider = ProjectStreamFamily._();
 
-/// See also [projectStream].
-class ProjectStreamFamily extends Family<AsyncValue<Project>> {
-  /// See also [projectStream].
-  const ProjectStreamFamily();
-
-  /// See also [projectStream].
-  ProjectStreamProvider call(
-    int projectId,
-    Project? project,
-  ) {
-    return ProjectStreamProvider(
-      projectId,
-      project,
-    );
-  }
-
-  @override
-  ProjectStreamProvider getProviderOverride(
-    covariant ProjectStreamProvider provider,
-  ) {
-    return call(
-      provider.projectId,
-      provider.project,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'projectStreamProvider';
-}
-
-/// See also [projectStream].
-class ProjectStreamProvider extends StreamProvider<Project> {
-  /// See also [projectStream].
-  ProjectStreamProvider(
-    int projectId,
-    Project? project,
-  ) : this._internal(
-          (ref) => projectStream(
-            ref as ProjectStreamRef,
-            projectId,
-            project,
-          ),
-          from: projectStreamProvider,
+final class ProjectStreamProvider
+    extends $FunctionalProvider<AsyncValue<Project>, Project, Stream<Project>>
+    with $FutureModifier<Project>, $StreamProvider<Project> {
+  const ProjectStreamProvider._(
+      {required ProjectStreamFamily super.from,
+      required (
+        int,
+        Project?,
+      )
+          super.argument})
+      : super(
+          retry: null,
           name: r'projectStreamProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$projectStreamHash,
-          dependencies: ProjectStreamFamily._dependencies,
-          allTransitiveDependencies:
-              ProjectStreamFamily._allTransitiveDependencies,
-          projectId: projectId,
-          project: project,
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ProjectStreamProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectId,
-    required this.project,
-  }) : super.internal();
-
-  final int projectId;
-  final Project? project;
+  @override
+  String debugGetCreateSourceHash() => _$projectStreamHash();
 
   @override
-  Override overrideWith(
-    Stream<Project> Function(ProjectStreamRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ProjectStreamProvider._internal(
-        (ref) => create(ref as ProjectStreamRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectId: projectId,
-        project: project,
-      ),
-    );
+  String toString() {
+    return r'projectStreamProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  StreamProviderElement<Project> createElement() {
-    return _ProjectStreamProviderElement(this);
+  $StreamProviderElement<Project> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<Project> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      Project?,
+    );
+    return projectStream(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectStreamProvider &&
-        other.projectId == projectId &&
-        other.project == project;
+    return other is ProjectStreamProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectId.hashCode);
-    hash = _SystemHash.combine(hash, project.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ProjectStreamRef on StreamProviderRef<Project> {
-  /// The parameter `projectId` of this provider.
-  int get projectId;
+String _$projectStreamHash() => r'3867216eb4304c6ca0ec942f1e0bb090930fb6b3';
 
-  /// The parameter `project` of this provider.
-  Project? get project;
+final class ProjectStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            Stream<Project>,
+            (
+              int,
+              Project?,
+            )> {
+  const ProjectStreamFamily._()
+      : super(
+          retry: null,
+          name: r'projectStreamProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
+
+  ProjectStreamProvider call(
+    int projectId,
+    Project? project,
+  ) =>
+      ProjectStreamProvider._(argument: (
+        projectId,
+        project,
+      ), from: this);
+
+  @override
+  String toString() => r'projectStreamProvider';
 }
 
-class _ProjectStreamProviderElement extends StreamProviderElement<Project>
-    with ProjectStreamRef {
-  _ProjectStreamProviderElement(super.provider);
+@ProviderFor(postStream)
+const postStreamProvider = PostStreamFamily._();
+
+final class PostStreamProvider
+    extends $FunctionalProvider<AsyncValue<Post>, Post, Stream<Post>>
+    with $FutureModifier<Post>, $StreamProvider<Post> {
+  const PostStreamProvider._(
+      {required PostStreamFamily super.from,
+      required (
+        int,
+        Post?,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'postStreamProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
-  int get projectId => (origin as ProjectStreamProvider).projectId;
+  String debugGetCreateSourceHash() => _$postStreamHash();
+
   @override
-  Project? get project => (origin as ProjectStreamProvider).project;
+  String toString() {
+    return r'postStreamProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<Post> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<Post> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      Post?,
+    );
+    return postStream(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PostStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$postStreamHash() => r'c3fb29534e7c75f021df0affeb31adae528f202e';
 
-/// See also [postStream].
-@ProviderFor(postStream)
-const postStreamProvider = PostStreamFamily();
+final class PostStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            Stream<Post>,
+            (
+              int,
+              Post?,
+            )> {
+  const PostStreamFamily._()
+      : super(
+          retry: null,
+          name: r'postStreamProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
 
-/// See also [postStream].
-class PostStreamFamily extends Family<AsyncValue<Post>> {
-  /// See also [postStream].
-  const PostStreamFamily();
-
-  /// See also [postStream].
   PostStreamProvider call(
     int postId,
     Post? post,
-  ) {
-    return PostStreamProvider(
-      postId,
-      post,
-    );
-  }
+  ) =>
+      PostStreamProvider._(argument: (
+        postId,
+        post,
+      ), from: this);
 
   @override
-  PostStreamProvider getProviderOverride(
-    covariant PostStreamProvider provider,
-  ) {
-    return call(
-      provider.postId,
-      provider.post,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'postStreamProvider';
+  String toString() => r'postStreamProvider';
 }
 
-/// See also [postStream].
-class PostStreamProvider extends StreamProvider<Post> {
-  /// See also [postStream].
-  PostStreamProvider(
-    int postId,
-    Post? post,
-  ) : this._internal(
-          (ref) => postStream(
-            ref as PostStreamRef,
-            postId,
-            post,
-          ),
-          from: postStreamProvider,
-          name: r'postStreamProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$postStreamHash,
-          dependencies: PostStreamFamily._dependencies,
-          allTransitiveDependencies:
-              PostStreamFamily._allTransitiveDependencies,
-          postId: postId,
-          post: post,
+@ProviderFor(projectReviewStream)
+const projectReviewStreamProvider = ProjectReviewStreamFamily._();
+
+final class ProjectReviewStreamProvider extends $FunctionalProvider<
+        AsyncValue<ProjectReview>, ProjectReview, Stream<ProjectReview>>
+    with $FutureModifier<ProjectReview>, $StreamProvider<ProjectReview> {
+  const ProjectReviewStreamProvider._(
+      {required ProjectReviewStreamFamily super.from,
+      required (
+        int,
+        ProjectReview?,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'projectReviewStreamProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  PostStreamProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.postId,
-    required this.post,
-  }) : super.internal();
-
-  final int postId;
-  final Post? post;
+  @override
+  String debugGetCreateSourceHash() => _$projectReviewStreamHash();
 
   @override
-  Override overrideWith(
-    Stream<Post> Function(PostStreamRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: PostStreamProvider._internal(
-        (ref) => create(ref as PostStreamRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        postId: postId,
-        post: post,
-      ),
-    );
+  String toString() {
+    return r'projectReviewStreamProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  StreamProviderElement<Post> createElement() {
-    return _PostStreamProviderElement(this);
+  $StreamProviderElement<ProjectReview> $createElement(
+          $ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<ProjectReview> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      ProjectReview?,
+    );
+    return projectReviewStream(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PostStreamProvider &&
-        other.postId == postId &&
-        other.post == post;
+    return other is ProjectReviewStreamProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, postId.hashCode);
-    hash = _SystemHash.combine(hash, post.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PostStreamRef on StreamProviderRef<Post> {
-  /// The parameter `postId` of this provider.
-  int get postId;
-
-  /// The parameter `post` of this provider.
-  Post? get post;
-}
-
-class _PostStreamProviderElement extends StreamProviderElement<Post>
-    with PostStreamRef {
-  _PostStreamProviderElement(super.provider);
-
-  @override
-  int get postId => (origin as PostStreamProvider).postId;
-  @override
-  Post? get post => (origin as PostStreamProvider).post;
 }
 
 String _$projectReviewStreamHash() =>
     r'bc35376124017c77050ad7c9964c56da25a02c1a';
 
-/// See also [projectReviewStream].
-@ProviderFor(projectReviewStream)
-const projectReviewStreamProvider = ProjectReviewStreamFamily();
+final class ProjectReviewStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            Stream<ProjectReview>,
+            (
+              int,
+              ProjectReview?,
+            )> {
+  const ProjectReviewStreamFamily._()
+      : super(
+          retry: null,
+          name: r'projectReviewStreamProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
 
-/// See also [projectReviewStream].
-class ProjectReviewStreamFamily extends Family<AsyncValue<ProjectReview>> {
-  /// See also [projectReviewStream].
-  const ProjectReviewStreamFamily();
-
-  /// See also [projectReviewStream].
   ProjectReviewStreamProvider call(
     int projectReviewId,
     ProjectReview? projectReview,
-  ) {
-    return ProjectReviewStreamProvider(
-      projectReviewId,
-      projectReview,
-    );
-  }
+  ) =>
+      ProjectReviewStreamProvider._(argument: (
+        projectReviewId,
+        projectReview,
+      ), from: this);
 
   @override
-  ProjectReviewStreamProvider getProviderOverride(
-    covariant ProjectReviewStreamProvider provider,
-  ) {
-    return call(
-      provider.projectReviewId,
-      provider.projectReview,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'projectReviewStreamProvider';
+  String toString() => r'projectReviewStreamProvider';
 }
 
-/// See also [projectReviewStream].
-class ProjectReviewStreamProvider extends StreamProvider<ProjectReview> {
-  /// See also [projectReviewStream].
-  ProjectReviewStreamProvider(
-    int projectReviewId,
-    ProjectReview? projectReview,
-  ) : this._internal(
-          (ref) => projectReviewStream(
-            ref as ProjectReviewStreamRef,
-            projectReviewId,
-            projectReview,
-          ),
-          from: projectReviewStreamProvider,
-          name: r'projectReviewStreamProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$projectReviewStreamHash,
-          dependencies: ProjectReviewStreamFamily._dependencies,
-          allTransitiveDependencies:
-              ProjectReviewStreamFamily._allTransitiveDependencies,
-          projectReviewId: projectReviewId,
-          projectReview: projectReview,
+@ProviderFor(projectVettingStream)
+const projectVettingStreamProvider = ProjectVettingStreamFamily._();
+
+final class ProjectVettingStreamProvider extends $FunctionalProvider<
+        AsyncValue<ProjectVetting>, ProjectVetting, Stream<ProjectVetting>>
+    with $FutureModifier<ProjectVetting>, $StreamProvider<ProjectVetting> {
+  const ProjectVettingStreamProvider._(
+      {required ProjectVettingStreamFamily super.from,
+      required (
+        int,
+        ProjectVetting?,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'projectVettingStreamProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ProjectReviewStreamProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectReviewId,
-    required this.projectReview,
-  }) : super.internal();
-
-  final int projectReviewId;
-  final ProjectReview? projectReview;
+  @override
+  String debugGetCreateSourceHash() => _$projectVettingStreamHash();
 
   @override
-  Override overrideWith(
-    Stream<ProjectReview> Function(ProjectReviewStreamRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ProjectReviewStreamProvider._internal(
-        (ref) => create(ref as ProjectReviewStreamRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectReviewId: projectReviewId,
-        projectReview: projectReview,
-      ),
-    );
+  String toString() {
+    return r'projectVettingStreamProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  StreamProviderElement<ProjectReview> createElement() {
-    return _ProjectReviewStreamProviderElement(this);
+  $StreamProviderElement<ProjectVetting> $createElement(
+          $ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<ProjectVetting> create(Ref ref) {
+    final argument = this.argument as (
+      int,
+      ProjectVetting?,
+    );
+    return projectVettingStream(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectReviewStreamProvider &&
-        other.projectReviewId == projectReviewId &&
-        other.projectReview == projectReview;
+    return other is ProjectVettingStreamProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectReviewId.hashCode);
-    hash = _SystemHash.combine(hash, projectReview.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ProjectReviewStreamRef on StreamProviderRef<ProjectReview> {
-  /// The parameter `projectReviewId` of this provider.
-  int get projectReviewId;
-
-  /// The parameter `projectReview` of this provider.
-  ProjectReview? get projectReview;
-}
-
-class _ProjectReviewStreamProviderElement
-    extends StreamProviderElement<ProjectReview> with ProjectReviewStreamRef {
-  _ProjectReviewStreamProviderElement(super.provider);
-
-  @override
-  int get projectReviewId =>
-      (origin as ProjectReviewStreamProvider).projectReviewId;
-  @override
-  ProjectReview? get projectReview =>
-      (origin as ProjectReviewStreamProvider).projectReview;
 }
 
 String _$projectVettingStreamHash() =>
     r'609f5ae979383fa563f25ace1b2ba9667326a710';
 
-/// See also [projectVettingStream].
-@ProviderFor(projectVettingStream)
-const projectVettingStreamProvider = ProjectVettingStreamFamily();
+final class ProjectVettingStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            Stream<ProjectVetting>,
+            (
+              int,
+              ProjectVetting?,
+            )> {
+  const ProjectVettingStreamFamily._()
+      : super(
+          retry: null,
+          name: r'projectVettingStreamProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
 
-/// See also [projectVettingStream].
-class ProjectVettingStreamFamily extends Family<AsyncValue<ProjectVetting>> {
-  /// See also [projectVettingStream].
-  const ProjectVettingStreamFamily();
-
-  /// See also [projectVettingStream].
   ProjectVettingStreamProvider call(
     int vettingId,
     ProjectVetting? projectVetting,
-  ) {
-    return ProjectVettingStreamProvider(
-      vettingId,
-      projectVetting,
-    );
-  }
+  ) =>
+      ProjectVettingStreamProvider._(argument: (
+        vettingId,
+        projectVetting,
+      ), from: this);
 
   @override
-  ProjectVettingStreamProvider getProviderOverride(
-    covariant ProjectVettingStreamProvider provider,
-  ) {
-    return call(
-      provider.vettingId,
-      provider.projectVetting,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'projectVettingStreamProvider';
+  String toString() => r'projectVettingStreamProvider';
 }
 
-/// See also [projectVettingStream].
-class ProjectVettingStreamProvider extends StreamProvider<ProjectVetting> {
-  /// See also [projectVettingStream].
-  ProjectVettingStreamProvider(
-    int vettingId,
-    ProjectVetting? projectVetting,
-  ) : this._internal(
-          (ref) => projectVettingStream(
-            ref as ProjectVettingStreamRef,
-            vettingId,
-            projectVetting,
-          ),
-          from: projectVettingStreamProvider,
-          name: r'projectVettingStreamProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$projectVettingStreamHash,
-          dependencies: ProjectVettingStreamFamily._dependencies,
-          allTransitiveDependencies:
-              ProjectVettingStreamFamily._allTransitiveDependencies,
-          vettingId: vettingId,
-          projectVetting: projectVetting,
-        );
-
-  ProjectVettingStreamProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.vettingId,
-    required this.projectVetting,
-  }) : super.internal();
-
-  final int vettingId;
-  final ProjectVetting? projectVetting;
-
-  @override
-  Override overrideWith(
-    Stream<ProjectVetting> Function(ProjectVettingStreamRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ProjectVettingStreamProvider._internal(
-        (ref) => create(ref as ProjectVettingStreamRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        vettingId: vettingId,
-        projectVetting: projectVetting,
-      ),
-    );
-  }
-
-  @override
-  StreamProviderElement<ProjectVetting> createElement() {
-    return _ProjectVettingStreamProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ProjectVettingStreamProvider &&
-        other.vettingId == vettingId &&
-        other.projectVetting == projectVetting;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, vettingId.hashCode);
-    hash = _SystemHash.combine(hash, projectVetting.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ProjectVettingStreamRef on StreamProviderRef<ProjectVetting> {
-  /// The parameter `vettingId` of this provider.
-  int get vettingId;
-
-  /// The parameter `projectVetting` of this provider.
-  ProjectVetting? get projectVetting;
-}
-
-class _ProjectVettingStreamProviderElement
-    extends StreamProviderElement<ProjectVetting> with ProjectVettingStreamRef {
-  _ProjectVettingStreamProviderElement(super.provider);
-
-  @override
-  int get vettingId => (origin as ProjectVettingStreamProvider).vettingId;
-  @override
-  ProjectVetting? get projectVetting =>
-      (origin as ProjectVettingStreamProvider).projectVetting;
-}
-
-String _$userNotificationStreamHash() =>
-    r'9a487873964bf21f0bf6c31ac97f8777b0419c85';
-
-/// See also [userNotificationStream].
 @ProviderFor(userNotificationStream)
-const userNotificationStreamProvider = UserNotificationStreamFamily();
+const userNotificationStreamProvider = UserNotificationStreamFamily._();
 
-/// See also [userNotificationStream].
-class UserNotificationStreamFamily extends Family<AsyncValue<Notification>> {
-  /// See also [userNotificationStream].
-  const UserNotificationStreamFamily();
-
-  /// See also [userNotificationStream].
-  UserNotificationStreamProvider call(
-    int? notificationId,
-    Notification? notification,
-  ) {
-    return UserNotificationStreamProvider(
-      notificationId,
-      notification,
-    );
-  }
-
-  @override
-  UserNotificationStreamProvider getProviderOverride(
-    covariant UserNotificationStreamProvider provider,
-  ) {
-    return call(
-      provider.notificationId,
-      provider.notification,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'userNotificationStreamProvider';
-}
-
-/// See also [userNotificationStream].
-class UserNotificationStreamProvider extends StreamProvider<Notification> {
-  /// See also [userNotificationStream].
-  UserNotificationStreamProvider(
-    int? notificationId,
-    Notification? notification,
-  ) : this._internal(
-          (ref) => userNotificationStream(
-            ref as UserNotificationStreamRef,
-            notificationId,
-            notification,
-          ),
-          from: userNotificationStreamProvider,
+final class UserNotificationStreamProvider extends $FunctionalProvider<
+        AsyncValue<Notification>, Notification, Stream<Notification>>
+    with $FutureModifier<Notification>, $StreamProvider<Notification> {
+  const UserNotificationStreamProvider._(
+      {required UserNotificationStreamFamily super.from,
+      required (
+        int?,
+        Notification?,
+      )
+          super.argument})
+      : super(
+          retry: null,
           name: r'userNotificationStreamProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$userNotificationStreamHash,
-          dependencies: UserNotificationStreamFamily._dependencies,
-          allTransitiveDependencies:
-              UserNotificationStreamFamily._allTransitiveDependencies,
-          notificationId: notificationId,
-          notification: notification,
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  UserNotificationStreamProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.notificationId,
-    required this.notification,
-  }) : super.internal();
-
-  final int? notificationId;
-  final Notification? notification;
+  @override
+  String debugGetCreateSourceHash() => _$userNotificationStreamHash();
 
   @override
-  Override overrideWith(
-    Stream<Notification> Function(UserNotificationStreamRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: UserNotificationStreamProvider._internal(
-        (ref) => create(ref as UserNotificationStreamRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        notificationId: notificationId,
-        notification: notification,
-      ),
-    );
+  String toString() {
+    return r'userNotificationStreamProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  StreamProviderElement<Notification> createElement() {
-    return _UserNotificationStreamProviderElement(this);
+  $StreamProviderElement<Notification> $createElement(
+          $ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<Notification> create(Ref ref) {
+    final argument = this.argument as (
+      int?,
+      Notification?,
+    );
+    return userNotificationStream(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return other is UserNotificationStreamProvider &&
-        other.notificationId == notificationId &&
-        other.notification == notification;
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, notificationId.hashCode);
-    hash = _SystemHash.combine(hash, notification.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin UserNotificationStreamRef on StreamProviderRef<Notification> {
-  /// The parameter `notificationId` of this provider.
-  int? get notificationId;
+String _$userNotificationStreamHash() =>
+    r'9a487873964bf21f0bf6c31ac97f8777b0419c85';
 
-  /// The parameter `notification` of this provider.
-  Notification? get notification;
-}
+final class UserNotificationStreamFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            Stream<Notification>,
+            (
+              int?,
+              Notification?,
+            )> {
+  const UserNotificationStreamFamily._()
+      : super(
+          retry: null,
+          name: r'userNotificationStreamProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: false,
+        );
 
-class _UserNotificationStreamProviderElement
-    extends StreamProviderElement<Notification> with UserNotificationStreamRef {
-  _UserNotificationStreamProviderElement(super.provider);
+  UserNotificationStreamProvider call(
+    int? notificationId,
+    Notification? notification,
+  ) =>
+      UserNotificationStreamProvider._(argument: (
+        notificationId,
+        notification,
+      ), from: this);
 
   @override
-  int? get notificationId =>
-      (origin as UserNotificationStreamProvider).notificationId;
-  @override
-  Notification? get notification =>
-      (origin as UserNotificationStreamProvider).notification;
+  String toString() => r'userNotificationStreamProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

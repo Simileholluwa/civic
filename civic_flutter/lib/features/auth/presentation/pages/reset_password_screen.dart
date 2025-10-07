@@ -22,10 +22,10 @@ class ResetPasswordScreen extends StatelessWidget {
                 MediaQuery.of(context).viewInsets.bottom + TSizes.defaultSpace,
             top: TSizes.defaultSpace,
           ),
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AuthHeader(
+              AuthHeader(
                 authTitle: TTexts.forgetPassword,
                 authSubTitle: TTexts.forgetPasswordSubTitle,
               ),

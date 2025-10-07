@@ -1,9 +1,9 @@
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class PasswordResetVerificationForm extends ConsumerWidget {
   const PasswordResetVerificationForm({
@@ -25,9 +25,7 @@ class PasswordResetVerificationForm extends ConsumerWidget {
             controller: authState.passwordResetCodeController,
             validator: TValidator.validateOTP,
             obscureText: true,
-            onChanged: (code) {
-              authNotifier.setPasswordResetCode(code);
-            },
+            onChanged: authNotifier.setPasswordResetCode,
             keyboardType: TextInputType.text,
             obscuringWidget: const Icon(
               Icons.circle,
@@ -52,8 +50,8 @@ class PasswordResetVerificationForm extends ConsumerWidget {
             height: TSizes.spaceBtwSections,
           ),
           FilledButton(
-            onPressed: () {
-              context.pushNamed(
+            onPressed: () async {
+              await context.pushNamed(
                 AppRoutes.createNewPassword,
               );
             },

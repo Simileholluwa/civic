@@ -1,7 +1,7 @@
-//ignore_for_file:avoid_public_notifier_properties
 import 'dart:developer';
-import 'package:civic_flutter/features/feed/feed.dart';
+
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,26 +14,22 @@ class PaginatedCommentList extends _$PaginatedCommentList {
 
   @override
   PagingStatus build(int postId) {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(postId, page);
-    });
+    pagingController
+      ..addPageRequestListener((page) async {
+        await fetchPage(postId, page);
+      })
+      ..addStatusListener((status) {
+        state = status;
+      });
 
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    ref.onDispose(pagingController.dispose);
     return PagingStatus.loadingFirstPage;
   }
 
   Future<void> fetchPage(int postId, int page, {int limit = 50}) async {
     try {
       if (pagingController.itemList != null) {
-        pagingController.value = PagingState(
-          itemList: null,
-        );
+        pagingController.value = const PagingState();
       }
       final listPostCommentUseCase = ref.read(getPostCommentsProvider);
       final result = await listPostCommentUseCase(
@@ -46,8 +42,6 @@ class PaginatedCommentList extends _$PaginatedCommentList {
       result.fold((error) {
         log(error.message, name: 'PaginatedPostCommentList');
         pagingController.value = PagingState(
-          nextPageKey: null,
-          itemList: null,
           error: error.message,
         );
       }, (data) {
@@ -60,11 +54,9 @@ class PaginatedCommentList extends _$PaginatedCommentList {
           pagingController.appendLastPage(data.results);
         }
       });
-    } catch (e) {
+    } on Exception catch (e) {
       log(e.toString(), name: 'PaginatedPostCommentList');
       pagingController.value = PagingState(
-        nextPageKey: null,
-        itemList: null,
         error: e.toString(),
       );
     }
@@ -87,8 +79,8 @@ class PaginatedCommentList extends _$PaginatedCommentList {
 
   void removeCommentById(int? commentId) {
     if (pagingController.itemList != null && commentId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? []);
-      updatedList.removeWhere((element) => element.id == commentId);
+      final updatedList = List<Post>.from(pagingController.itemList ?? [])
+        ..removeWhere((element) => element.id == commentId);
       pagingController.value = PagingState(
         nextPageKey: pagingController.nextPageKey,
         itemList: updatedList,

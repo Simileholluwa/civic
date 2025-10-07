@@ -7,11 +7,11 @@ import 'package:iconsax/iconsax.dart';
 
 class PollOptionsTextField extends ConsumerWidget {
   const PollOptionsTextField({
-    super.key,
     required this.index,
     required this.controller,
     required this.post,
     required this.isEditing,
+    super.key,
   });
 
   final int index;
@@ -39,11 +39,11 @@ class PollOptionsTextField extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                  ),
+                  padding: EdgeInsets.zero,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3,),
+                    padding: const EdgeInsets.only(
+                      top: 3,
+                    ),
                     child: Text(
                       '${35 - controller.text.length}',
                       style: Theme.of(context).textTheme.labelMedium,

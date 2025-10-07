@@ -1,9 +1,9 @@
+import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/auth/auth.dart';
 
 class UsernameForm extends ConsumerWidget {
   const UsernameForm({
@@ -72,11 +72,11 @@ class UsernameForm extends ConsumerWidget {
               height: 55,
               width: double.maxFinite,
               child: FilledButton(
-                onPressed: () {
+                onPressed: () async {
                   final isValid =
                       authState.usernameFormKey.currentState!.validate();
                   if (!isValid) return;
-                  context.push(
+                  await context.push(
                     '/auth/signUp/selectStatus',
                   );
                 },

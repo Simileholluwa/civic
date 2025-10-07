@@ -1,8 +1,7 @@
-//ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'auth_service_provider.g.dart';
 
 @riverpod
@@ -27,7 +26,7 @@ AuthRepositoryImpl authRepository(Ref ref) {
   return AuthRepositoryImpl(
     remoteDatabase: ref.read(
       authRemoteDatabaseProvider,
-    ), 
+    ),
     localDatabase: ref.read(authLocalDatasourceProvider),
   );
 }
@@ -48,7 +47,8 @@ UserSignInUseCase userSignIn(Ref ref) {
 
 @riverpod
 InitiatePasswordResetUseCase initiatePasswordReset(
-    Ref ref) {
+  Ref ref,
+) {
   return InitiatePasswordResetUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
@@ -70,7 +70,8 @@ LogoutUseCase logOut(Ref ref) {
 
 @riverpod
 ValidateCreateAccountUseCase validateCreateAccount(
-    Ref ref) {
+  Ref ref,
+) {
   return ValidateCreateAccountUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );

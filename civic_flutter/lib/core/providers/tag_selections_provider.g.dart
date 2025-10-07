@@ -6,21 +6,55 @@ part of 'tag_selections_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagSelectionsHash() => r'1fa8d7a6a013ae800d138e00af4f88012a279cc8';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [TagSelections].
 @ProviderFor(TagSelections)
-final tagSelectionsProvider =
-    NotifierProvider<TagSelections, List<UserRecord>>.internal(
-  TagSelections.new,
-  name: r'tagSelectionsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$tagSelectionsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const tagSelectionsProvider = TagSelectionsProvider._();
 
-typedef _$TagSelections = Notifier<List<UserRecord>>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class TagSelectionsProvider
+    extends $NotifierProvider<TagSelections, List<UserRecord>> {
+  const TagSelectionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'tagSelectionsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$tagSelectionsHash();
+
+  @$internal
+  @override
+  TagSelections create() => TagSelections();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<UserRecord> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<UserRecord>>(value),
+    );
+  }
+}
+
+String _$tagSelectionsHash() => r'1fddedf8067168d4d3e2cb67e724168a35233431';
+
+abstract class _$TagSelections extends $Notifier<List<UserRecord>> {
+  List<UserRecord> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<UserRecord>, List<UserRecord>>,
+        List<UserRecord>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

@@ -1,13 +1,12 @@
-
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProjectFilterTitle extends StatelessWidget {
   const ProjectFilterTitle({
-    super.key,
     required this.filter,
     required this.onTap,
+    super.key,
   });
 
   final String filter;
@@ -24,9 +23,7 @@ class ProjectFilterTitle extends StatelessWidget {
       trailing: const Icon(
         Iconsax.arrow_down_2,
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 0,
-      ),
+      contentPadding: EdgeInsets.zero,
       onTap: onTap,
     );
   }

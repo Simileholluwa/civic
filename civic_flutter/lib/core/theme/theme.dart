@@ -25,7 +25,6 @@ class TAppTheme {
       interactionEffects: true,
       tintedDisabledControls: true,
       blendOnLevel: 20,
-      blendOnColors: false,
       useMaterial3Typography: true,
       useM2StyleDividerInM3: true,
       splashType: FlexSplashType.inkSplash,
@@ -86,7 +85,6 @@ class TAppTheme {
       ),
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    useMaterial3: true,
     swapLegacyOnMaterial3: true,
     fontFamily: 'Satoshi',
   );
@@ -111,7 +109,6 @@ class TAppTheme {
       interactionEffects: true,
       tintedDisabledControls: true,
       blendOnLevel: 20,
-      blendOnColors: false,
       useMaterial3Typography: true,
       useM2StyleDividerInM3: true,
       chipSelectedSchemeColor: SchemeColor.primaryContainer,
@@ -166,7 +163,6 @@ class TAppTheme {
       ),
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
-    useMaterial3: true,
     swapLegacyOnMaterial3: true,
     fontFamily: 'Satoshi',
   );

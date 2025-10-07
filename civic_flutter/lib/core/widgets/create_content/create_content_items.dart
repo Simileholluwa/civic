@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class CreateContentItems extends StatelessWidget {
   const CreateContentItems({
-    super.key,
     required this.itemName,
     required this.icon,
     required this.onTap,
     required this.itemCaption,
+    super.key,
     this.textColor,
   });
 
@@ -50,7 +50,7 @@ class CreateContentItems extends StatelessWidget {
                             fontSize: 16,
                             color: textColor,
                           ),
-                    )
+                    ),
                   ],
                 ),
               ),

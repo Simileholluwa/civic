@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
   const ProjectDetailsBottomNavigationWidget({
-    super.key,
     required this.project,
+    super.key,
   });
 
   final Project project;
@@ -31,16 +31,16 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.push(
+                  onPressed: () async {
+                    await context.push(
                       '/project/${project.id!}/vet',
                       extra: project.physicalLocations,
                     );
                   },
-                  label: Text(
+                  label: const Text(
                     'Vet',
                   ),
-                  icon: Icon(
+                  icon: const Icon(
                     Iconsax.medal_star5,
                     color: TColors.textWhite,
                   ),
@@ -58,15 +58,15 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
             child: SizedBox(
               height: 50,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  context.push(
+                onPressed: () async {
+                  await context.push(
                     '/project/${project.id}/review',
                   );
                 },
-                label: Text(
+                label: const Text(
                   'Review',
                 ),
-                icon: Icon(
+                icon: const Icon(
                   Iconsax.magic_star5,
                   color: TColors.textWhite,
                 ),

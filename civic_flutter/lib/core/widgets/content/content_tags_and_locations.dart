@@ -5,9 +5,9 @@ import 'package:iconsax/iconsax.dart';
 
 class ContentEngagementTagsAndLocations extends StatelessWidget {
   const ContentEngagementTagsAndLocations({
-    super.key,
     required this.tags,
     required this.locations,
+    super.key,
     this.hasTags = false,
     this.hasLocations = false,
     this.onTaggedUsersTap,
@@ -41,8 +41,10 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
                 title: tags.length == 1
                     ? 'With ${tags.first.userInfo!.userName}'
                     : tags.length == 2
-                        ? 'With ${tags[0].userInfo!.userName} and ${tags[1].userInfo!.userName}'
-                        : 'With ${tags.first.userInfo!.userName} and ${tags.length - 1} others',
+                        ? 'With ${tags[0].userInfo!.userName} '
+                            'and ${tags[1].userInfo!.userName}'
+                        : 'With ${tags.first.userInfo!.userName} '
+                            'and ${tags.length - 1} others',
                 color: Colors.blue,
                 textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                       fontSize: 14,
@@ -58,7 +60,8 @@ class ContentEngagementTagsAndLocations extends StatelessWidget {
                     ? 'At ${locations.first.place}'
                     : tags.length == 2
                         ? 'At ${locations.first.place} and 1 other'
-                        : 'At ${locations.first.place} and ${locations.length - 1} others',
+                        : 'At ${locations.first.place} '
+                            'and ${locations.length - 1} others',
                 color: Colors.orange,
                 textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
                       fontSize: 14,

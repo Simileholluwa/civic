@@ -23,7 +23,7 @@ class MentionHashTagLinkServices {
       return left('The request timed out.');
     } on LocationException catch (e) {
       return left(e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       return left(e.toString());
     }
   }
@@ -41,7 +41,7 @@ class MentionHashTagLinkServices {
       return left('The request timed out.');
     } on LocationException catch (e) {
       return left(e.message);
-    } catch (e) {
+    } on Exception catch (e) {
       return left(e.toString());
     }
   }
@@ -59,8 +59,8 @@ class MentionHashTagLinkServices {
         url: url,
       );
       return right(result);
-    } catch (e) {
-      log("Error fetching metadata: $e");
+    } on Exception catch (e) {
+      log('Error fetching metadata: $e');
       return left(e.toString());
     }
   }

@@ -9,13 +9,15 @@ typedef ContentBuilder<T> = Widget Function(
 );
 
 class RootCommentWidget extends StatelessWidget {
+  const RootCommentWidget(
+    this.content,
+    this.shouldDrawLine,
+    this.rootCommentUserProfileUrl, {
+    super.key,
+  });
   final Widget content;
   final bool shouldDrawLine;
   final String rootCommentUserProfileUrl;
-
-  const RootCommentWidget(
-      this.content, this.shouldDrawLine, this.rootCommentUserProfileUrl,
-      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +55,6 @@ class RootCommentWidget extends StatelessWidget {
 }
 
 class CommentChildWidget extends StatelessWidget {
-  final Widget? content;
-  final bool? isLast;
-  final bool hasAvatar;
-  final Post? reply;
-
   const CommentChildWidget({
     required this.isLast,
     required this.content,
@@ -65,6 +62,10 @@ class CommentChildWidget extends StatelessWidget {
     this.reply,
     super.key,
   });
+  final Widget? content;
+  final bool? isLast;
+  final bool hasAvatar;
+  final Post? reply;
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +102,6 @@ class CommentChildWidget extends StatelessWidget {
 }
 
 class _Painter extends CustomPainter {
-  bool isLast = false;
-  EdgeInsets? padding;
-  Color? pathColor;
-
   _Painter({
     required this.isLast,
     this.padding,
@@ -116,27 +113,31 @@ class _Painter extends CustomPainter {
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.butt;
   }
+  bool isLast = false;
+  EdgeInsets? padding;
+  Color? pathColor;
 
   late Paint _paint;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Path path = Path();
-    double rootDx = 25;
-    path.moveTo(rootDx, 0);
-    path.cubicTo(
-      rootDx,
-      0,
-      rootDx,
-      padding!.top + 30,
-      rootDx * 2,
-      padding!.top + 30,
-    );
+    final path = Path();
+    const double rootDx = 25;
+    path
+      ..moveTo(rootDx, 0)
+      ..cubicTo(
+        rootDx,
+        0,
+        rootDx,
+        padding!.top + 30,
+        rootDx * 2,
+        padding!.top + 30,
+      );
     canvas.drawPath(path, _paint);
 
     if (!isLast) {
       canvas.drawLine(
-        Offset(rootDx, 0),
+        const Offset(rootDx, 0),
         Offset(rootDx, size.height),
         _paint,
       );
@@ -150,9 +151,6 @@ class _Painter extends CustomPainter {
 }
 
 class RootPainter extends CustomPainter {
-  late Paint _paint;
-  Color? pathColor;
-  final bool shouldDrawLine;
   RootPainter(
     this.pathColor, {
     required this.shouldDrawLine,
@@ -163,13 +161,16 @@ class RootPainter extends CustomPainter {
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.butt;
   }
+  late Paint _paint;
+  Color? pathColor;
+  final bool shouldDrawLine;
 
   @override
   void paint(Canvas canvas, Size size) {
-    double dx = 25;
+    const double dx = 25;
     if (shouldDrawLine) {
       canvas.drawLine(
-        Offset(dx, 50),
+        const Offset(dx, 50),
         Offset(dx, size.height),
         _paint,
       );

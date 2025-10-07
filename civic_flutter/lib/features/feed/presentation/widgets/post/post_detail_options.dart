@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class PostDetailOptions extends ConsumerWidget {
   const PostDetailOptions({
-    super.key,
     required this.post,
+    super.key,
     this.isPoll = false,
     this.isArticle = false,
     this.isReply = false,
@@ -53,7 +53,8 @@ class PostDetailOptions extends ConsumerWidget {
         IconButton(
           onPressed: () async {
             await postCardNotifier.togglePostBookmarkStatus(
-              post.id!, postCardState.hasBookmarked
+              post.id!,
+              postCardState.hasBookmarked,
             );
           },
           icon: Icon(
@@ -67,7 +68,7 @@ class PostDetailOptions extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () async {},
-          icon: Icon(
+          icon: const Icon(
             Icons.share,
           ),
         ),
@@ -75,21 +76,21 @@ class PostDetailOptions extends ConsumerWidget {
           IconButton(
             onPressed: () async {
               if (isPoll) {
-                context.push(
+                await context.push(
                   '/create/poll/${post.id!}',
                   extra: {
                     'post': post,
                   },
                 );
-              } else if(isArticle) {
-                context.push(
+              } else if (isArticle) {
+                await context.push(
                   '/create/article/${post.id!}',
                   extra: {
                     'post': post,
                   },
                 );
               } else {
-                context.push(
+                await context.push(
                   '/create/post/${post.id}',
                   extra: {
                     'post': post,
@@ -98,14 +99,14 @@ class PostDetailOptions extends ConsumerWidget {
                 );
               }
             },
-            icon: Icon(
+            icon: const Icon(
               Iconsax.edit,
             ),
           ),
         if (!postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              context.push(
+              await context.push(
                 '/feed/post/${post.id}/notInterested',
                 extra: {
                   'post': post,
@@ -113,7 +114,7 @@ class PostDetailOptions extends ConsumerWidget {
                 },
               );
             },
-            icon: Icon(
+            icon: const Icon(
               Iconsax.eye_slash,
             ),
           ),
@@ -137,7 +138,7 @@ class PostDetailOptions extends ConsumerWidget {
                 }
               }
             },
-            icon: Icon(
+            icon: const Icon(
               Iconsax.trash,
               color: Colors.red,
             ),
@@ -145,7 +146,7 @@ class PostDetailOptions extends ConsumerWidget {
         if (!postCardState.isOwner)
           IconButton(
             onPressed: () async {},
-            icon: Icon(
+            icon: const Icon(
               Iconsax.flag,
               color: Colors.red,
             ),

@@ -6,173 +6,101 @@ part of 'vet_project_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectVetHash() => r'ff76de06366d2c241c0edaae9c5a89470fd6aa7a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ProjectVet
-    extends BuildlessAutoDisposeNotifier<VetProjectState> {
-  late final ProjectVetting? projectVetting;
-
-  VetProjectState build(
-    ProjectVetting? projectVetting,
-  );
-}
-
-/// See also [ProjectVet].
 @ProviderFor(ProjectVet)
-const projectVetProvider = ProjectVetFamily();
+const projectVetProvider = ProjectVetFamily._();
 
-/// See also [ProjectVet].
-class ProjectVetFamily extends Family<VetProjectState> {
-  /// See also [ProjectVet].
-  const ProjectVetFamily();
-
-  /// See also [ProjectVet].
-  ProjectVetProvider call(
-    ProjectVetting? projectVetting,
-  ) {
-    return ProjectVetProvider(
-      projectVetting,
-    );
-  }
-
-  @override
-  ProjectVetProvider getProviderOverride(
-    covariant ProjectVetProvider provider,
-  ) {
-    return call(
-      provider.projectVetting,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'projectVetProvider';
-}
-
-/// See also [ProjectVet].
-class ProjectVetProvider
-    extends AutoDisposeNotifierProviderImpl<ProjectVet, VetProjectState> {
-  /// See also [ProjectVet].
-  ProjectVetProvider(
-    ProjectVetting? projectVetting,
-  ) : this._internal(
-          () => ProjectVet()..projectVetting = projectVetting,
-          from: projectVetProvider,
+final class ProjectVetProvider
+    extends $NotifierProvider<ProjectVet, VetProjectState> {
+  const ProjectVetProvider._(
+      {required ProjectVetFamily super.from,
+      required ProjectVetting? super.argument})
+      : super(
+          retry: null,
           name: r'projectVetProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$projectVetHash,
-          dependencies: ProjectVetFamily._dependencies,
-          allTransitiveDependencies:
-              ProjectVetFamily._allTransitiveDependencies,
-          projectVetting: projectVetting,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ProjectVetProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectVetting,
-  }) : super.internal();
-
-  final ProjectVetting? projectVetting;
+  @override
+  String debugGetCreateSourceHash() => _$projectVetHash();
 
   @override
-  VetProjectState runNotifierBuild(
-    covariant ProjectVet notifier,
-  ) {
-    return notifier.build(
-      projectVetting,
-    );
+  String toString() {
+    return r'projectVetProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(ProjectVet Function() create) {
-    return ProviderOverride(
+  ProjectVet create() => ProjectVet();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(VetProjectState value) {
+    return $ProviderOverride(
       origin: this,
-      override: ProjectVetProvider._internal(
-        () => create()..projectVetting = projectVetting,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectVetting: projectVetting,
-      ),
+      providerOverride: $SyncValueProvider<VetProjectState>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<ProjectVet, VetProjectState>
-      createElement() {
-    return _ProjectVetProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectVetProvider &&
-        other.projectVetting == projectVetting;
+    return other is ProjectVetProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectVetting.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ProjectVetRef on AutoDisposeNotifierProviderRef<VetProjectState> {
-  /// The parameter `projectVetting` of this provider.
-  ProjectVetting? get projectVetting;
-}
+String _$projectVetHash() => r'a6a13464fbe399814e810f78ca52400f135513ac';
 
-class _ProjectVetProviderElement
-    extends AutoDisposeNotifierProviderElement<ProjectVet, VetProjectState>
-    with ProjectVetRef {
-  _ProjectVetProviderElement(super.provider);
+final class ProjectVetFamily extends $Family
+    with
+        $ClassFamilyOverride<ProjectVet, VetProjectState, VetProjectState,
+            VetProjectState, ProjectVetting?> {
+  const ProjectVetFamily._()
+      : super(
+          retry: null,
+          name: r'projectVetProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  ProjectVetProvider call(
+    ProjectVetting? projectVetting,
+  ) =>
+      ProjectVetProvider._(argument: projectVetting, from: this);
 
   @override
-  ProjectVetting? get projectVetting =>
-      (origin as ProjectVetProvider).projectVetting;
+  String toString() => r'projectVetProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$ProjectVet extends $Notifier<VetProjectState> {
+  late final _$args = ref.$arg as ProjectVetting?;
+  ProjectVetting? get projectVetting => _$args;
+
+  VetProjectState build(
+    ProjectVetting? projectVetting,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref as $Ref<VetProjectState, VetProjectState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<VetProjectState, VetProjectState>,
+        VetProjectState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

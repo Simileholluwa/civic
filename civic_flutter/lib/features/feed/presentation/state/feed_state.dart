@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class FeedState {
   FeedState({
@@ -48,7 +46,7 @@ class FeedState {
     if (article != null) {
       if (article.content!.isNotEmpty) {
         document = Document.fromJson(
-          jsonDecode(article.content!),
+          jsonDecode(article.content!) as List,
         );
       } else {
         document = Document();

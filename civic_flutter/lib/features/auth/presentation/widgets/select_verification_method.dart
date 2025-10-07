@@ -35,16 +35,17 @@ class _SelectVerificationMethodState extends State<SelectVerificationMethod> {
           ),
         ),
         child: ListTile(
-          leading: Radio<int>(
+          leading: RadioGroup(
+            groupValue: _verificationMethod,
+            onChanged: (value) {
+              setState(() {
+                _verificationMethod = value!;
+              });
+            },
+            child: Radio<int>(
               value: widget.value,
-              groupValue: _verificationMethod,
-              onChanged: (value) {
-                setState(() {
-                  _verificationMethod = value!;
-                });
-              },
             ),
-          
+          ),
           onTap: () {
             _verificationMethod = widget.value;
           },

@@ -1,11 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 class BooleanNotifier extends StateNotifier<bool> {
-  BooleanNotifier([bool? show]) : super(show ?? false);
+  BooleanNotifier() : super(false);
 
-  void setValue(bool value) {
+  set value(bool value) {
     state = value;
   }
+
+  bool get value => state;
 }
 
 final checkEmailLoadingProvider = StateNotifierProvider<BooleanNotifier, bool>(

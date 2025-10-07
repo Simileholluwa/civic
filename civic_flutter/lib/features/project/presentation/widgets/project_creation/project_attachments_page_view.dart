@@ -1,13 +1,12 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectAttachmentsPageView extends ConsumerWidget {
   const ProjectAttachmentsPageView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -33,12 +32,12 @@ class ProjectAttachmentsPageView extends ConsumerWidget {
               'project better.',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 17,
-                    color: Theme.of(context).textTheme.bodySmall!.color!,
+                    color: Theme.of(context).textTheme.bodySmall!.color,
                   ),
             ),
           ),
           ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               maxHeight: 500,
             ),
             child: TabBarView(

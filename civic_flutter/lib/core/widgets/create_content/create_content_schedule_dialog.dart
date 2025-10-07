@@ -8,9 +8,10 @@ Future<bool?> createContentScheduleDialog({
   required BuildContext context,
 }) {
   return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return Consumer(builder: (context, ref, _) {
+    context: context,
+    builder: (context) {
+      return Consumer(
+        builder: (context, ref, _) {
           final scheduledDateTimeProvider =
               ref.watch(postScheduledDateTimeProvider.notifier);
           return AlertDialog(
@@ -67,10 +68,11 @@ Future<bool?> createContentScheduleDialog({
                         validator: TValidator.validateEmail,
                         readOnly: true,
                         onTap: () async {
-                          scheduledDateTimeProvider.clearDateTime();
-                          scheduledDateTimeProvider.setDateTime(
-                            await createContentpickDateAndTime(context),
-                          );
+                          scheduledDateTimeProvider
+                            ..clearDateTime()
+                            ..setDateTime(
+                              await createContentpickDateAndTime(context),
+                            );
                           if (context.mounted) {
                             context.pop();
                           }
@@ -82,6 +84,8 @@ Future<bool?> createContentScheduleDialog({
               ],
             ),
           );
-        });
-      });
+        },
+      );
+    },
+  );
 }

@@ -2,7 +2,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:fpdart/fpdart.dart';
 
-class MarkPostNotInterestedUseCase implements UseCase<void, MarkPostNotInterestedParams> {
+class MarkPostNotInterestedUseCase
+    implements UseCase<void, MarkPostNotInterestedParams> {
   MarkPostNotInterestedUseCase({required FeedRepository feedRepository})
       : _feedRepository = feedRepository;
   final FeedRepository _feedRepository;

@@ -6,22 +6,57 @@ part of 'project_bookmarks_paginated_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$paginatedProjectBookmarksListHash() =>
-    r'755e9df7e1584607a9ef85c959eb7e85d33d440f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PaginatedProjectBookmarksList].
 @ProviderFor(PaginatedProjectBookmarksList)
-final paginatedProjectBookmarksListProvider =
-    NotifierProvider<PaginatedProjectBookmarksList, PagingStatus>.internal(
-  PaginatedProjectBookmarksList.new,
-  name: r'paginatedProjectBookmarksListProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$paginatedProjectBookmarksListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const paginatedProjectBookmarksListProvider =
+    PaginatedProjectBookmarksListProvider._();
 
-typedef _$PaginatedProjectBookmarksList = Notifier<PagingStatus>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PaginatedProjectBookmarksListProvider
+    extends $NotifierProvider<PaginatedProjectBookmarksList, PagingStatus> {
+  const PaginatedProjectBookmarksListProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'paginatedProjectBookmarksListProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$paginatedProjectBookmarksListHash();
+
+  @$internal
+  @override
+  PaginatedProjectBookmarksList create() => PaginatedProjectBookmarksList();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PagingStatus value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PagingStatus>(value),
+    );
+  }
+}
+
+String _$paginatedProjectBookmarksListHash() =>
+    r'5889d4a4393f06df59bb093312f59aef02575c75';
+
+abstract class _$PaginatedProjectBookmarksList extends $Notifier<PagingStatus> {
+  PagingStatus build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PagingStatus, PagingStatus>,
+        PagingStatus,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

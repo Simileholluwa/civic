@@ -8,9 +8,7 @@ import 'package:intl/intl.dart';
 
 class PollDurationAndAddOptions extends ConsumerWidget {
   const PollDurationAndAddOptions({
-    super.key,
-    required this.post,
-    required this.isEditing,
+    required this.post, required this.isEditing, super.key,
   });
 
   final Post post;

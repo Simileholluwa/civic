@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewCard extends ConsumerWidget {
   const ProjectReviewCard({
-    super.key,
     required this.projectReview,
     required this.project,
+    super.key,
   });
 
   final Project project;
@@ -32,7 +31,7 @@ class ProjectReviewCard extends ConsumerWidget {
         projectReview,
       ).notifier,
     );
-    
+
     final userId = ref
         .read(
           localStorageProvider,
@@ -41,7 +40,7 @@ class ProjectReviewCard extends ConsumerWidget {
           'userId',
         );
     return Column(
-      children: [      
+      children: [
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 18,
@@ -135,23 +134,23 @@ class ProjectReviewCard extends ConsumerWidget {
               ReactToReviewOrVetting(
                 text: 'Was this review helpful?',
                 likesCount: reactToReviewState.likesCount,
-                likeTextColor: reactToReviewState.isLiked &&
-                        reactToReviewState.isDeleted == false
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
+                likeTextColor:
+                    reactToReviewState.isLiked && !reactToReviewState.isDeleted
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface,
                 dislikeTextColor: reactToReviewState.isDisliked &&
-                        reactToReviewState.isDeleted == false
+                        !reactToReviewState.isDeleted
                     ? Theme.of(context).colorScheme.secondary
                     : Theme.of(context).colorScheme.onSurface,
-                likeTapped: () {
-                  reactToReviewNotifier.reactToReview(true);
+                likeTapped: () async {
+                  await reactToReviewNotifier.reactToReview(true);
                 },
-                dislikeTapped: () {
-                  reactToReviewNotifier.reactToReview(false);
+                dislikeTapped: () async {
+                  await reactToReviewNotifier.reactToReview(false);
                 },
                 isOwner: projectReview.ownerId == userId,
-                onDelete: () {
-                  ProjectHelperFunctions.deleteProjectReviewDialog(
+                onDelete: () async {
+                  await ProjectHelperFunctions.deleteProjectReviewDialog(
                     context,
                     projectReviewNotiier,
                     project.id!,

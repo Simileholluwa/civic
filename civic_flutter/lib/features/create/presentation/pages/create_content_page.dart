@@ -18,7 +18,9 @@ class CreateContentScreen extends ConsumerWidget {
         .getString(
           'userRecord',
         );
-    final decoded = jsonDecode(savedRecordString.toString());
+    final decoded = jsonDecode(
+      savedRecordString.toString(),
+    ) as Map<String, dynamic>;
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
     return Scaffold(
@@ -64,14 +66,15 @@ class CreateContentScreen extends ConsumerWidget {
                   icon: Iconsax.note,
                   textColor: isLeader ? null : Theme.of(context).disabledColor,
                   onTap: isLeader
-                      ? () {
-                          context.push(
-                            '/create/project/0',                           
+                      ? () async {
+                          await context.push(
+                            '/create/project/0',
                           );
                         }
                       : null,
-                  itemCaption:
-                      'New, existing, completed or planned. Keep your constituents updated. This is only available to leaders.',
+                  itemCaption: 'New, existing, completed or planned. Keep your '
+                      'constituents updated. This is only available to '
+                      'leaders.',
                 ),
                 const Divider(
                   indent: 40,
@@ -80,10 +83,9 @@ class CreateContentScreen extends ConsumerWidget {
                 CreateContentItems(
                   itemName: 'Post',
                   icon: Iconsax.calendar,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/create/post/0',
-                      extra: null,
                     );
                   },
                   itemCaption:
@@ -96,14 +98,13 @@ class CreateContentScreen extends ConsumerWidget {
                 CreateContentItems(
                   itemName: 'Poll',
                   icon: Iconsax.chart,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/create/poll/0',
-                      extra: null,
                     );
                   },
-                  itemCaption:
-                      'Engage your audience with quick questions and gather instant feedback.',
+                  itemCaption: 'Engage your audience with quick questions '
+                      'and gather instant feedback.',
                 ),
                 const Divider(
                   indent: 40,
@@ -112,14 +113,13 @@ class CreateContentScreen extends ConsumerWidget {
                 CreateContentItems(
                   itemName: 'Article',
                   icon: Iconsax.document,
-                  onTap: () {
-                    context.push(
+                  onTap: () async {
+                    await context.push(
                       '/create/article/0',
-                      extra: null,
                     );
                   },
-                  itemCaption:
-                      'Share in-depth insights, stories, or research with your audience.',
+                  itemCaption: 'Share in-depth insights, stories, or research '
+                      'with your audience.',
                 ),
               ],
             ),

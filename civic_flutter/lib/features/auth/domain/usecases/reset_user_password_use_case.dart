@@ -13,7 +13,7 @@ class ResetUserPasswordUseCase
     final result = await _authRepository.resetUserPassword(
       email: params.email,
       newPassword: params.password,
-      verificationCode: params.verificationCode
+      verificationCode: params.verificationCode,
     );
     return result;
   }

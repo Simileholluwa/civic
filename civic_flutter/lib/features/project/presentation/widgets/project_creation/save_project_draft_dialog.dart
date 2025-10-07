@@ -15,8 +15,9 @@ Future<bool?> saveProjectDraftDialog(
     title: 'Save project as draft?',
     description: 'Would you like to save the changes you have made as draft?',
     onTapSkipButton: () {
-      context.pop();
-      context.pop();
+      context
+        ..pop()
+        ..pop();
     },
     activeButtonText: 'Save as draft',
     activeButtonLoading: false,
@@ -26,7 +27,6 @@ Future<bool?> saveProjectDraftDialog(
       if (context.mounted) {
         context.go(
           ProjectRoutes.namespace,
-          extra: null,
         );
       }
       await ref

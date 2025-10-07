@@ -7,13 +7,13 @@ import 'package:go_router/go_router.dart';
 
 class ProjectCardItem extends ConsumerWidget {
   const ProjectCardItem({
-    super.key,
     required this.project,
     required this.canTap,
     required this.creatorAvatarRadius,
     required this.showPolitcalStatus,
     required this.maxHeight,
     required this.showInteractions,
+    super.key,
   });
 
   final Project project;
@@ -32,8 +32,8 @@ class ProjectCardItem extends ConsumerWidget {
     );
     return InkWell(
       onTap: canTap
-          ? () {
-              context.push(
+          ? () async {
+              await context.push(
                 '/project/${project.id}',
                 extra: project,
               );
@@ -52,20 +52,21 @@ class ProjectCardItem extends ConsumerWidget {
               showPoliticalStatus: showPolitcalStatus,
             ),
           ),
-          !projectCardState.isDeleted!
-              ? projectCardState.imagesUrl!.length == 1
-                  ? ContentSingleCachedImage(
-                      imageUrl: projectCardState.imagesUrl!.first,
-                      maxHeight: maxHeight,
-                    )
-                  : ContentMultipleCachedImage(
-                      imageUrls: projectCardState.imagesUrl!,
-                      maxHeight: maxHeight,
-                    )
-              : DeletedProjectPlaceholder(
-                  project: project,
-                  showInteractions: showInteractions,
-                ),
+          if (!projectCardState.isDeleted!)
+            projectCardState.imagesUrl!.length == 1
+                ? ContentSingleCachedImage(
+                    imageUrl: projectCardState.imagesUrl!.first,
+                    maxHeight: maxHeight,
+                  )
+                : ContentMultipleCachedImage(
+                    imageUrls: projectCardState.imagesUrl!,
+                    maxHeight: maxHeight,
+                  )
+          else
+            DeletedProjectPlaceholder(
+              project: project,
+              showInteractions: showInteractions,
+            ),
           if (!projectCardState.isDeleted!)
             ProjectQuickDetails(
               project: project,
@@ -96,7 +97,7 @@ class ProjectCardItem extends ConsumerWidget {
             ),
           if (showInteractions)
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
               child: ProjectInteractionButtons(
                 project: project,
               ),

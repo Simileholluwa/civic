@@ -1,11 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'project_pdf_thumbnail_provider.g.dart';
 
 @riverpod
@@ -34,12 +35,11 @@ Future<List<Uint8List>> projectPdfThumbnail(
       final image = await page.render(
         width: page.width,
         height: page.height,
-        format: PdfPageImageFormat.jpeg,
       );
       thumbnails.add(image!.bytes);
-      page.close();
-      pdfDocument.close();
-    } catch (e) {
+      await page.close();
+      await pdfDocument.close();
+    } on Exception catch (e) {
       log('Error processing PDF: $e');
       continue;
     }
@@ -53,13 +53,13 @@ Future<String> fetchAndCachePDF(String url) async {
     final fileName = Uri.parse(url).pathSegments.last;
     final filePath = '${cacheDir.path}/$fileName';
     final cachedFile = File(filePath);
-    if (await cachedFile.exists()) {
+    if (cachedFile.existsSync()) {
       return cachedFile.path;
     }
     final dio = Dio();
     await dio.download(url, filePath);
     return filePath;
-  } catch (e) {
+  } on Exception catch (e) {
     log('Error downloading PDF: $e');
     return '';
   }

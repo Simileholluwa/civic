@@ -20,11 +20,13 @@ class OnBoardingNextButton extends StatelessWidget {
           width: double.maxFinite,
           height: 55,
           child: FilledButton(
-            onPressed: () {
-              ref.read(onboardingProvider.notifier).cacheFirstTimer();
-              context.go(
-                AppRoutes.auth,
-              );
+            onPressed: () async {
+              await ref.read(onboardingProvider.notifier).cacheFirstTimer();
+              if (context.mounted) {
+                context.go(
+                  AppRoutes.auth,
+                );
+              }
             },
             child: const Center(
               child: Text(

@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 
 class ProjectListFilters extends StatelessWidget {
   const ProjectListFilters({
-    super.key,
-    required this.showModal,
-    required this.filterText,
-    required this.filterTextPlaceholder,
-    required this.child,
-    required this.onFilterTap,
+    required this.showModal, required this.filterText, required this.filterTextPlaceholder, required this.child, required this.onFilterTap, super.key,
   });
 
   final Widget child;

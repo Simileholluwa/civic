@@ -1,14 +1,12 @@
 
+import 'package:civic_flutter/core/constants/app_colors.dart';
+import 'package:civic_flutter/core/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'package:civic_flutter/core/constants/app_colors.dart';
-import 'package:civic_flutter/core/helpers/helper_functions.dart';
-
 class OnBoardingPageIndicator extends StatelessWidget {
   const OnBoardingPageIndicator({
-    super.key,
-    required this.pageController,
+    required this.pageController, super.key,
   });
   final PageController pageController;
 

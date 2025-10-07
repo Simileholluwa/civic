@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 class ContentInteractionButton extends StatelessWidget {
   const ContentInteractionButton({
-    super.key,
-    required this.icon,
-    required this.onTap,
-    required this.color,
+    required this.icon, required this.onTap, required this.color, super.key,
     this.showText = true,
     this.text = '',
     this.iconSize = 24,

@@ -1,11 +1,10 @@
-//ignore_for_file:avoid_public_notifier_properties
+import 'dart:async';
 import 'dart:developer';
-import 'package:civic_flutter/core/core.dart';
+
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:async';
 
 part 'users_list_service_provider.g.dart';
 
@@ -25,16 +24,12 @@ class PaginatedUsersList extends _$PaginatedUsersList {
 
   @override
   PagingStatus build(String query) {
-    pagingController.addPageRequestListener((page) {
-      fetchPage(page);
-    });
-
-    pagingController.addStatusListener((status) {
-      state = status;
-    });
-    ref.onDispose(() {
-      pagingController.dispose();
-    });
+    pagingController
+      ..addPageRequestListener(fetchPage)
+      ..addStatusListener((status) {
+        state = status;
+      });
+    ref.onDispose(pagingController.dispose);
     return PagingStatus.loadingFirstPage;
   }
 
@@ -66,7 +61,7 @@ class PaginatedUsersList extends _$PaginatedUsersList {
           completer.complete();
           return;
         });
-      } catch (e) {
+      } on Exception catch (e) {
         completer.completeError(e);
       }
     });
@@ -84,8 +79,7 @@ class SearchUsersListQuery extends _$SearchUsersListQuery {
   @override
   String build() => '';
 
-  void setSearchQuery(String query) {
+  set setSearchQuery(String query) {
     state = query;
   }
 }
-

@@ -9,9 +9,9 @@ import 'package:iconsax/iconsax.dart';
 
 class MarkNotInterested extends ConsumerWidget {
   const MarkNotInterested({
-    super.key,
     required this.post,
     required this.originalPostId,
+    super.key,
   });
 
   final Post post;
@@ -58,16 +58,18 @@ class MarkNotInterested extends ConsumerWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20,),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         child: Column(
           children: [
-            ListView.separated(             
+            ListView.separated(
               shrinkWrap: true,
               itemBuilder: (ctx, index) {
                 final texts = [
                   "I'm not interested in the author",
                   "I've seen this $type before",
-                  "This $type is old",
+                  'This $type is old',
                   "I've seen too many $type on this topic",
                   "It's something else",
                 ];
@@ -86,16 +88,17 @@ class MarkNotInterested extends ConsumerWidget {
                         Text(
                           texts[index],
                           textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontSize: 16,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: 16,
+                                  ),
                         ),
                         SizedBox(
                           width: 20,
                           height: 20,
                           child: Checkbox(
-                            value:
-                                postCardState.reasonNotInterested == texts[index],
+                            value: postCardState.reasonNotInterested ==
+                                texts[index],
                             onChanged: (value) {
                               postCardNotifier.setReasonNotInterested(
                                 texts[index],
@@ -116,13 +119,15 @@ class MarkNotInterested extends ConsumerWidget {
               itemCount: 5,
             ),
             const Divider(),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Text.rich(
               TextSpan(
                 text: 'If you think this $type violates our ',
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontStyle: FontStyle.italic,
-                ),
+                      fontStyle: FontStyle.italic,
+                    ),
                 children: [
                   TextSpan(
                     text: 'Political Community Guidelines',
@@ -132,7 +137,7 @@ class MarkNotInterested extends ConsumerWidget {
                         ),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: ', please let us know by ',
                   ),
                   TextSpan(
@@ -143,7 +148,7 @@ class MarkNotInterested extends ConsumerWidget {
                         ),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: ' instead.',
                   ),
                 ],

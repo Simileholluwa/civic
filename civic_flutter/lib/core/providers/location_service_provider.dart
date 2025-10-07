@@ -1,9 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:civic_flutter/core/core.dart';
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'location_service_provider.g.dart';
 
@@ -15,7 +15,6 @@ LocationServices locationService(Ref ref) {
     client: ref.read(clientProvider),
   );
 }
-
 
 @Riverpod(keepAlive: true)
 class CurrentLocationData extends _$CurrentLocationData {
@@ -78,7 +77,7 @@ Future<List<AWSPlaces>?> searchPlaces(
         completer.complete(locationData);
         return locationData;
       });
-    } catch (e) {
+    } on Exception catch (e) {
       completer.completeError(e);
     }
   });
@@ -91,7 +90,7 @@ class LocationSearchQuery extends _$LocationSearchQuery {
   @override
   String build() => '';
 
-  void setSearchQuery(String query) {
+  set searchQuery(String query) {
     state = query;
   }
 }
@@ -113,8 +112,7 @@ class SelectLocations extends _$SelectLocations {
     state = [];
   }
 
-  void setLocations(List<AWSPlaces> locations) {
+  set setLocations(List<AWSPlaces> locations) {
     state = locations;
   }
 }
-

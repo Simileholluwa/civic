@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -10,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class CreatePostScreen extends ConsumerWidget {
   const CreatePostScreen({
-    super.key,
     required this.id,
+    super.key,
     this.project,
     this.parent,
     this.post,
@@ -43,24 +41,23 @@ class CreatePostScreen extends ConsumerWidget {
         postState.text.isNotEmpty ||
         postState.videoUrl.isNotEmpty;
     final isRepost = project != null;
-    bool isReplyOrComment = false;
-    bool isComment = false;
+    var isReplyOrComment = false;
+    var isComment = false;
     if (data.hasValue && !data.hasError) {
       isReplyOrComment = parent != null;
       if (isReplyOrComment) {
-        isComment = (parent!.postType == PostType.regular ||
+        isComment = parent!.postType == PostType.regular ||
             parent!.postType == PostType.projectRepost ||
             parent!.postType == PostType.poll ||
-            parent!.postType == PostType.article);
+            parent!.postType == PostType.article;
       }
     }
     final scheduledDateTimeState = ref.watch(postScheduledDateTimeProvider);
     return PopScope(
       canPop: false,
-      // ignore: deprecated_member_use
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) return;
-        final bool? shouldPop = canSendPost
+        final shouldPop = canSendPost
             ? await savePostDraftDialog(
                 ref,
                 context,
@@ -104,7 +101,7 @@ class CreatePostScreen extends ConsumerWidget {
                             id,
                           );
               },
-              title: CreateContentPrivacy(),
+              title: const CreateContentPrivacy(),
               sendText: isRepost ? 'REPOST' : null,
               onCanSendPost: () async {
                 final shouldPop = canSendPost
@@ -183,7 +180,7 @@ class CreatePostScreen extends ConsumerWidget {
               );
             },
             error: (error, st) {
-              final err = error as Map<String, dynamic>;
+              final err = error as Map<String, String>;
               return LoadingError(
                 retry: null,
                 imageString: TImageTexts.error,
@@ -195,7 +192,7 @@ class CreatePostScreen extends ConsumerWidget {
               );
             },
             loading: () {
-              return AppLoadingWidget();
+              return const AppLoadingWidget();
             },
           ),
         ),

@@ -16,7 +16,7 @@ class CreateRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (context, state) => CreateContentScreen(),
+        builder: (context, state) => const CreateContentScreen(),
         routes: [
           GoRoute(
             path: 'post/:postId',
@@ -24,9 +24,9 @@ class CreateRoutes {
               final data = state.extra as Map<String, dynamic>?;
               return CreatePostScreen(
                 id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
-                project: data?['project'],
-                parent: data?['parent'],
-                post: data?['post'],
+                project: data?['project'] as Project?,
+                parent: data?['parent'] as Post?,
+                post: data?['post'] as Post?,
               );
             },
           ),
@@ -45,7 +45,7 @@ class CreateRoutes {
               final data = state.extra as Map<String, dynamic>?;
               return CreatePollScreen(
                 id: int.tryParse(state.pathParameters['pollId'] ?? '0') ?? 0,
-                post: data?['post'],
+                post: data?['post'] as Post?,
               );
             },
           ),
@@ -55,7 +55,7 @@ class CreateRoutes {
               final data = state.extra as Map<String, dynamic>?;
               return CreateArticleScreen(
                 id: int.tryParse(state.pathParameters['articleId'] ?? '0') ?? 0,
-                post: data?['post'],
+                post: data?['post'] as Post?,
               );
             },
           ),

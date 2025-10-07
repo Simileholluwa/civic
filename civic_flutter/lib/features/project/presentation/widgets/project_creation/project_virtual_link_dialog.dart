@@ -113,11 +113,9 @@ Future<bool?> virtualLinkDialog({
                                               color: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall!
-                                                  .color!,
+                                                  .color,
                                             ),
-                                        validator: (value) =>
-                                            TValidator.validateProjectLink(
-                                                value),
+                                        validator: TValidator.validateProjectLink,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium,

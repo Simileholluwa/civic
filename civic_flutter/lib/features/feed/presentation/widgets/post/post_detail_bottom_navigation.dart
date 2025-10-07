@@ -9,7 +9,7 @@ class PostDetailBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         bottom: TSizes.xs,
       ),
       decoration: BoxDecoration(
@@ -30,7 +30,7 @@ class PostDetailBottomNavigation extends StatelessWidget {
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: ConstrainedBox(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxHeight: 150,
                 ),
                 child: TextFormField(
@@ -47,7 +47,7 @@ class PostDetailBottomNavigation extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    errorBorder: UnderlineInputBorder(),
+                    errorBorder: const UnderlineInputBorder(),
                     border: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).dividerColor,
@@ -62,7 +62,7 @@ class PostDetailBottomNavigation extends StatelessWidget {
                           color: Theme.of(context).hintColor,
                         ),
                     errorMaxLines: 2,
-                    contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 12),
+                    contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
                     hintMaxLines: 1,
                   ),
                   style: Theme.of(context).textTheme.labelMedium,

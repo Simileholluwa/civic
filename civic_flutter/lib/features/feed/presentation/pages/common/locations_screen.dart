@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class LocationsScreen extends ConsumerWidget {
   const LocationsScreen({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -41,13 +41,14 @@ class LocationsScreen extends ConsumerWidget {
               centerTitle: true,
               title: CreateContentSearchBar(
                 onChanged: (text) {
-                  searchQueryProvider.setSearchQuery(text);
+                  searchQueryProvider.searchQuery = text;
                 },
                 trailingWidget: [
                   IconButton(
                     onPressed: () {
-                      ref.invalidate(searchNearbyPlacesProvider);
-                      ref.invalidate(searchPlacesProvider);
+                      ref
+                        ..invalidate(searchNearbyPlacesProvider)
+                        ..invalidate(searchPlacesProvider);
                     },
                     icon: const Icon(
                       Iconsax.refresh,
@@ -83,9 +84,7 @@ class LocationsScreen extends ConsumerWidget {
         ),
       ),
       body: data.isLoading
-          ? AppLoadingWidget(
-              
-            )
+          ? const AppLoadingWidget()
           : data.when(
               data: (data) {
                 if (data == null || data.isEmpty) {
@@ -138,9 +137,7 @@ class LocationsScreen extends ConsumerWidget {
                 return const CreateContentLocationError();
               },
               loading: () {
-                return AppLoadingWidget(
-                  
-                );
+                return const AppLoadingWidget();
               },
             ),
       bottomNavigationBar: postState.locations.isNotEmpty
@@ -155,7 +152,7 @@ class LocationsScreen extends ConsumerWidget {
                   return Chip(
                     label: Text(
                       postState.locations[index].place,
-                      style: Theme.of(context).textTheme.labelMedium!,
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
                     elevation: 0,
                     surfaceTintColor: Colors.transparent,

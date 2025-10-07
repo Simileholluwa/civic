@@ -1,32 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProjectScreenState {
-  final bool isActiveFilter;
-  final bool isStartDateExpanded;
-  final bool isEndDateExpanded;
-  final bool isPublishedDateExpanded;
-  final List<String> selectedCategories;
-  final List<String> selectedFunding;
-  final Map<String, bool> selectedAttachments;
-  final String? selectedCurrency;
-  final String? costToAndFromCurrency;
-  final String costFromAmount;
-  final String costToAmount;
-  final TextEditingController? costFromController;
-  final TextEditingController? costToController;
-  final bool zeroCost;
-  final String? selectedState;
-  final String radiusOption;
-  final bool isPhysicalLocationsExpanded;
-  final bool virtualLocation;
-  final String status;
-  final String? statusFrom;
-  final String? statusTo;
-  final TextEditingController? statusFromController;
-  final TextEditingController? statusToController;
-  final Map<String, List<DateTime?>>? selectedStartDate;
-  final Map<String, List<DateTime?>>? selectedEndDate;
-  final Map<String, List<DateTime?>>? selectedPublishedDate;
   
   
 
@@ -58,6 +32,32 @@ class ProjectScreenState {
     this.selectedEndDate,
     this.selectedPublishedDate,
   });
+  final bool isActiveFilter;
+  final bool isStartDateExpanded;
+  final bool isEndDateExpanded;
+  final bool isPublishedDateExpanded;
+  final List<String> selectedCategories;
+  final List<String> selectedFunding;
+  final Map<String, bool> selectedAttachments;
+  final String? selectedCurrency;
+  final String? costToAndFromCurrency;
+  final String costFromAmount;
+  final String costToAmount;
+  final TextEditingController? costFromController;
+  final TextEditingController? costToController;
+  final bool zeroCost;
+  final String? selectedState;
+  final String radiusOption;
+  final bool isPhysicalLocationsExpanded;
+  final bool virtualLocation;
+  final String status;
+  final String? statusFrom;
+  final String? statusTo;
+  final TextEditingController? statusFromController;
+  final TextEditingController? statusToController;
+  final Map<String, List<DateTime?>>? selectedStartDate;
+  final Map<String, List<DateTime?>>? selectedEndDate;
+  final Map<String, List<DateTime?>>? selectedPublishedDate;
 
   ProjectScreenState copyWith({
     bool? isActiveFilter,

@@ -1,11 +1,10 @@
-import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AppTabBarDesign extends StatelessWidget {
   const AppTabBarDesign({
-    super.key,
     required this.tabController,
     required this.tabs,
+    super.key,
     this.tabAlignment,
     this.dividerColor,
     this.dividerHeight,
@@ -51,10 +50,7 @@ class AppTabBarDesign extends StatelessWidget {
         indicatorSize: indicatorSize ?? TabBarIndicatorSize.label,
         indicator: indicator,
         indicatorPadding: indicatorPadding,
-        padding: EdgeInsets.only(
-          left: TSizes.xs - 4,
-        ),
-
+        padding: EdgeInsets.zero,
         dividerHeight: dividerHeight,
         unselectedLabelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
               fontSize: 14,

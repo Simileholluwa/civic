@@ -1,4 +1,3 @@
-// ignore_for_file: lines_longer_than_80_chars
 
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
@@ -7,8 +6,7 @@ import 'package:iconsax/iconsax.dart';
 
 class VerifyNinPhoneOTPScreen extends StatelessWidget {
   const VerifyNinPhoneOTPScreen({
-    super.key,
-    required this.verificationId,
+    required this.verificationId, super.key,
   });
   final String verificationId;
 

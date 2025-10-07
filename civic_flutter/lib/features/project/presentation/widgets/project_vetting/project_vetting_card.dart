@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectVettingCard extends ConsumerWidget {
   const ProjectVettingCard({
-    super.key,
     required this.projectVetting,
+    super.key,
   });
 
   final ProjectVetting projectVetting;
@@ -25,7 +25,7 @@ class ProjectVettingCard extends ConsumerWidget {
       ),
     );
     final projectVettingNotifier = ref.watch(
-      ProjectVetProvider(projectVetting).notifier,
+      projectVetProvider(projectVetting).notifier,
     );
     final userId = ref.read(localStorageProvider).getInt('userId');
     return Padding(
@@ -48,39 +48,40 @@ class ProjectVettingCard extends ConsumerWidget {
             onToggleTextTap: null,
             hasVideo: true,
           ),
-          projectVetting.images!.length == 1
-              ? ContentSingleCachedImage(
-                  useMargin: false,
-                  imageUrl: projectVetting.images![0],
-                )
-              : ContentMultipleCachedImage(
-                  imageUrls: projectVetting.images!,
-                  useMargin: false,
-                ),
+          if (projectVetting.images!.length == 1)
+            ContentSingleCachedImage(
+              useMargin: false,
+              imageUrl: projectVetting.images![0],
+            )
+          else
+            ContentMultipleCachedImage(
+              imageUrls: projectVetting.images!,
+              useMargin: false,
+            ),
           ReactToReviewOrVetting(
             text: 'Is this vetting accurate?',
             likesCount: reactToVettingState.likesCount,
-            likeTextColor: reactToVettingState.isLiked &&
-                    reactToVettingState.isDeleted == false
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.onSurface,
-            dislikeTextColor: reactToVettingState.isDisliked &&
-                    reactToVettingState.isDeleted == false
-                ? Theme.of(context).colorScheme.secondary
-                : Theme.of(context).colorScheme.onSurface,
-            likeTapped: () {
-              reactToVettingNotifier.reactToVetting(
+            likeTextColor:
+                reactToVettingState.isLiked && !reactToVettingState.isDeleted
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
+            dislikeTextColor:
+                reactToVettingState.isDisliked && !reactToVettingState.isDeleted
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.onSurface,
+            likeTapped: () async {
+              await reactToVettingNotifier.reactToVetting(
                 true,
               );
             },
-            dislikeTapped: () {
-              reactToVettingNotifier.reactToVetting(
+            dislikeTapped: () async {
+              await reactToVettingNotifier.reactToVetting(
                 false,
               );
             },
             isOwner: projectVetting.ownerId == userId,
-            onDelete: () {
-              ProjectHelperFunctions.deleteProjectVettingDialog(
+            onDelete: () async {
+              await ProjectHelperFunctions.deleteProjectVettingDialog(
                 context,
                 projectVettingNotifier,
                 projectVetting.id!,

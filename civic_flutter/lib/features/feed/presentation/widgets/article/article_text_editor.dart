@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart'
-    show CachedNetworkImageProvider;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/internal.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-// ignore: implementation_imports
 import 'package:flutter_quill_extensions/src/editor/image/widgets/image.dart'
     show getImageProviderByImageSource;
 
@@ -37,14 +35,15 @@ class ArticleTextEditor extends StatelessWidget {
         ),
         scrollable: true,
         placeholder:
-            'Write the content of your article here. Use the toolbar to format and apply all the styles you need.',
+            'Write the content of your article here. Use the toolbar to '
+            'format and apply all the styles you need.',
         padding: const EdgeInsets.all(16),
         embedBuilders: [
           ...(FlutterQuillEmbeds.editorBuilders(
             imageEmbedConfig: QuillEditorImageEmbedConfig(
               imageErrorWidgetBuilder: (context, error, stackTrace) {
                 return Text(
-                  'Error while loading an image: ${error.toString()}',
+                  'Error while loading an image: $error',
                 );
               },
               imageProviderBuilder: (context, imageUrl) {

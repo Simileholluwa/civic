@@ -4,9 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 class CommentRepliesPageError extends StatelessWidget {
   const CommentRepliesPageError({
-    super.key,
-    required this.onTap,
-    required this.errorMessage,
+    required this.onTap, required this.errorMessage, super.key,
   });
 
   final VoidCallback onTap;
@@ -18,7 +16,6 @@ class CommentRepliesPageError extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70,),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             height: 70,
@@ -27,7 +24,7 @@ class CommentRepliesPageError extends StatelessWidget {
               shape: BoxShape.circle,
               color: Colors.red.shade100,
             ),
-            child: Icon(
+            child: const Icon(
               Iconsax.information5,
               color: Colors.red,
               size: 60,
@@ -40,8 +37,8 @@ class CommentRepliesPageError extends StatelessWidget {
           ),
           TextButton(
             onPressed: onTap,
-            child: Text(
-              "Retry",
+            child: const Text(
+              'Retry',
             ),
           ),
         ],

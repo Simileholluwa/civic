@@ -6,22 +6,53 @@ part of 'scheduled_datetime_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postScheduledDateTimeHash() =>
-    r'46a85563a6104dd4d899f33b235a81708bb90e26';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PostScheduledDateTime].
 @ProviderFor(PostScheduledDateTime)
-final postScheduledDateTimeProvider =
-    NotifierProvider<PostScheduledDateTime, DateTime?>.internal(
-  PostScheduledDateTime.new,
-  name: r'postScheduledDateTimeProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$postScheduledDateTimeHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const postScheduledDateTimeProvider = PostScheduledDateTimeProvider._();
 
-typedef _$PostScheduledDateTime = Notifier<DateTime?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PostScheduledDateTimeProvider
+    extends $NotifierProvider<PostScheduledDateTime, DateTime?> {
+  const PostScheduledDateTimeProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'postScheduledDateTimeProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$postScheduledDateTimeHash();
+
+  @$internal
+  @override
+  PostScheduledDateTime create() => PostScheduledDateTime();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DateTime? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DateTime?>(value),
+    );
+  }
+}
+
+String _$postScheduledDateTimeHash() =>
+    r'd17d8be8d510aeace7fdcd8b899806948b995d4a';
+
+abstract class _$PostScheduledDateTime extends $Notifier<DateTime?> {
+  DateTime? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<DateTime?, DateTime?>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<DateTime?, DateTime?>, DateTime?, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

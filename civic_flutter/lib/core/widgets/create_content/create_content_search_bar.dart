@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 
 class CreateContentSearchBar extends StatelessWidget {
   const CreateContentSearchBar({
-    super.key,
-    required this.onChanged,
+    required this.onChanged, required this.trailingWidget, super.key,
     this.height = 50,
     this.hintText = 'Tap here to search for places',
-    required this.trailingWidget,
   });
 
   final void Function(String) onChanged;
@@ -30,7 +28,7 @@ class CreateContentSearchBar extends StatelessWidget {
           elevation: const WidgetStatePropertyAll(
             0,
           ),
-          backgroundColor: WidgetStatePropertyAll(
+          backgroundColor: const WidgetStatePropertyAll(
             Colors.transparent,
           ),
           hintText: hintText,
@@ -62,7 +60,6 @@ class CreateContentSearchBar extends StatelessWidget {
           padding: const WidgetStatePropertyAll(
             EdgeInsets.only(
               right: TSizes.xs,
-              left: 0,
             ),
           ),
         ),

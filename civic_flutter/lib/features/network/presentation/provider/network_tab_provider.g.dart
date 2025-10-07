@@ -6,39 +6,145 @@ part of 'network_tab_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$networkTabControllerHash() =>
-    r'656cf8b489387da6bf7bd2cdccb38cba9073117a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [NetworkTabController].
+@ProviderFor(networkVsync)
+const networkVsyncProvider = NetworkVsyncProvider._();
+
+final class NetworkVsyncProvider
+    extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
+    with $Provider<TickerProvider> {
+  const NetworkVsyncProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'networkVsyncProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$networkVsyncHash();
+
+  @$internal
+  @override
+  $ProviderElement<TickerProvider> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TickerProvider create(Ref ref) {
+    return networkVsync(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TickerProvider value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TickerProvider>(value),
+    );
+  }
+}
+
+String _$networkVsyncHash() => r'52b67dc0242240b30e7cf1939ef9fdfb8fdbab95';
+
 @ProviderFor(NetworkTabController)
-final networkTabControllerProvider = AutoDisposeNotifierProvider<
-    NetworkTabController, Raw<TabController>>.internal(
-  NetworkTabController.new,
-  name: r'networkTabControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$networkTabControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const networkTabControllerProvider = NetworkTabControllerProvider._();
 
-typedef _$NetworkTabController = AutoDisposeNotifier<Raw<TabController>>;
-String _$networkCurrentPageHash() =>
-    r'69455c19b9a7feb4c8082932fc71dd00ff2013a6';
+final class NetworkTabControllerProvider
+    extends $NotifierProvider<NetworkTabController, Raw<TabController>> {
+  const NetworkTabControllerProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'networkTabControllerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [NetworkCurrentPage].
+  @override
+  String debugGetCreateSourceHash() => _$networkTabControllerHash();
+
+  @$internal
+  @override
+  NetworkTabController create() => NetworkTabController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<TabController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<TabController>>(value),
+    );
+  }
+}
+
+String _$networkTabControllerHash() =>
+    r'dc1a6b92063679b01762a138cf28b664e812928d';
+
+abstract class _$NetworkTabController extends $Notifier<Raw<TabController>> {
+  Raw<TabController> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Raw<TabController>, Raw<TabController>>,
+        Raw<TabController>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(NetworkCurrentPage)
-final networkCurrentPageProvider =
-    AutoDisposeNotifierProvider<NetworkCurrentPage, int>.internal(
-  NetworkCurrentPage.new,
-  name: r'networkCurrentPageProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$networkCurrentPageHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const networkCurrentPageProvider = NetworkCurrentPageProvider._();
 
-typedef _$NetworkCurrentPage = AutoDisposeNotifier<int>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class NetworkCurrentPageProvider
+    extends $NotifierProvider<NetworkCurrentPage, int> {
+  const NetworkCurrentPageProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'networkCurrentPageProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$networkCurrentPageHash();
+
+  @$internal
+  @override
+  NetworkCurrentPage create() => NetworkCurrentPage();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$networkCurrentPageHash() =>
+    r'549088da327cf4fad21dc6346a1a614765d44e8c';
+
+abstract class _$NetworkCurrentPage extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

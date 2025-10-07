@@ -1,10 +1,4 @@
 class TTexts {
-  // -- Route Texts
-  static const String onBoarding = '/';
-
-  // -- GLOBAL Texts
-  static const String underConstruction =
-      'Page is under construction! Kindly check back later.';
   static const String skip = 'Skip';
   static const String done = 'Done';
   static const String and = 'and';
@@ -26,25 +20,34 @@ class TTexts {
   static const String onBoardingTitle11 = 'BE ENGAGING';
 
   static const String onBoardingSubTitle2 =
-      'Decision-makers and policy-shapers, including those aspiring or with past experience in such roles for a nation or community.';
+      'Decision-makers and policy-shapers, including those aspiring or with '
+      'past experience in such roles for a nation or community.';
   static const String onBoardingSubTitle3 =
-      'Concerned patriots who are intentional about revolutionizing the political system, and keeping political leaders in check.';
+      'Concerned patriots who are intentional about revolutionizing the '
+      'political system, and keeping political leaders in check.';
   static const String onBoardingSubTitle4 =
-      'Build credibility score based on projects verified by your constituents.';
+      'Build credibility score based on projects verified by '
+      'your constituents.';
   static const String onBoardingSubTitle5 =
       'Share updates, financial disclosures, and progress on promises.';
   static const String onBoardingSubTitle6 =
-      'Develop a consistent political identity accross diffrent political positions.';
+      'Develop a consistent political identity accross diffrent '
+      'political positions.';
   static const String onBoardingSubTitle7 =
-      'Constitute a network of followers and engage them through virtual townhall meetings.';
+      'Constitute a network of followers and engage them '
+      'through virtual townhall meetings.';
   static const String onBoardingSubTitle8 =
-      'Track the records and performance of political leaders accross different political positions.';
+      'Track the records and performance of political '
+      'leaders accross different political positions.';
   static const String onBoardingSubTitle9 =
-      'Determine how well a political leader is performing in office by vetting on projects and promises.';
+      'Determine how well a political leader is performing'
+      ' in office by vetting on projects and promises.';
   static const String onBoardingSubTitle10 =
-      'Access videos and materials that educates you about your civic rights and duties.';
+      'Access videos and materials that educates you about '
+      'your civic rights and duties.';
   static const String onBoardingSubTitle11 =
-      'Build a network of followers, engage and connect with political leaders.';
+      'Build a network of followers, engage and connect with '
+      'political leaders.';
 
   // -- Authentication Forms
   static const String firstName = 'First Name';
@@ -84,17 +87,8 @@ class TTexts {
   static const String forgetPasswordSubTitle =
       'No worries, simply provide your email address.';
   static const String changeYourPasswordTitle = 'Password Reset Email Sent';
-  static const String changeYourPasswordSubTitle =
-      "Your Account Security is Our Priority! We've Sent You a Secure Link to Safely Change Your Password and Keep Your Account Protected.";
   static const String confirmEmail = 'Verify your e-mail';
   static const String notReceived = "Didn't receive code?";
-  static const String noAccount = 'Not registered?';
   static const String confirmEmailSubTitle =
       'Enter the code sent to the e-mail you provided.';
-  static const String emailNotReceivedMessage =
-      'Didn’t get the email? Check your junk/spam or resend it.';
-  static const String yourAccountCreatedTitle =
-      'Your account successfully created!';
-  static const String yourAccountCreatedSubTitle =
-      'Welcome to Your Ultimate Shopping Destination: Your Account is Created, Unleash the Joy of Seamless Online Shopping!';
 }

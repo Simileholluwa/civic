@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 
 class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
   const CreateContentLocationsAndTaggedUsers({
-    super.key,
-    required this.locations,
-    required this.taggedUsers,
+    required this.locations, required this.taggedUsers, super.key,
   });
 
   final List<AWSPlaces> locations;

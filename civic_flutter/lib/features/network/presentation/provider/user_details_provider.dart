@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_details_provider.g.dart';
 
@@ -15,7 +14,7 @@ Future<UserRecord> getUserDetails(Ref ref, int userId) async {
       userId: userId,
     ),
   );
-  
+
   result.fold(
     (failure) {
       TToastMessages.errorToast(
@@ -26,9 +25,7 @@ Future<UserRecord> getUserDetails(Ref ref, int userId) async {
         'action': failure.action,
       });
     },
-    (user) {
-      completer.complete(user);
-    },
+    completer.complete,
   );
 
   return completer.future;

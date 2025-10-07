@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_manual_providers_as_generated_provider_dependency
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -103,7 +102,6 @@ class ProjectProvider extends _$ProjectProvider {
     final fundingSubCategory = state.fundingSubCategory;
     state = state.copyWith(
       projectCategory: projectCategory,
-      projectSubCategory: null,
       fundingCategory: fundingSubCategory,
     );
     setIsValid();
@@ -127,10 +125,7 @@ class ProjectProvider extends _$ProjectProvider {
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
       projectCost: double.tryParse(
-        projectCost!.replaceAll(
-          RegExp(r','),
-          '',
-        ),
+        projectCost!.replaceAll(',', ''),
       ),
       fundingSubCategory: fundingSubCategory,
       projectSubCategory: projectSubCategory,
@@ -143,7 +138,6 @@ class ProjectProvider extends _$ProjectProvider {
     final projectSubCategory = state.projectSubCategory;
     state = state.copyWith(
       fundingCategory: fundingCategory,
-      fundingSubCategory: null,
       projectSubCategory: projectSubCategory,
     );
     setIsValid();
@@ -334,10 +328,10 @@ class ProjectProvider extends _$ProjectProvider {
     if (state.projectImageAttachments.length >= maxImageCount) return;
     final imageLength = maxImageCount - state.projectImageAttachments.length;
     final image = await imageHelper.pickImage(
-      multipleImages: imageLength > 1 ? true : false,
+      multipleImages: imageLength > 1,
     );
     if (image != null) {
-      var imagePaths = <String>[];
+      final imagePaths = <String>[];
       for (final img in image) {
         imagePaths.add(img.path);
       }
@@ -359,7 +353,7 @@ class ProjectProvider extends _$ProjectProvider {
     setCanSave();
   }
 
-  void removeImageAtIndex(index) {
+  void removeImageAtIndex(int index) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     if (state.projectImageAttachments.isEmpty) {
@@ -370,7 +364,7 @@ class ProjectProvider extends _$ProjectProvider {
       );
     }
     if (state.projectImageAttachments.isEmpty) return;
-    var images = state.projectImageAttachments;
+    final images = state.projectImageAttachments;
     if (images.length == 1) {
       state = state.copyWith(
         projectImageAttachments: [],
@@ -410,15 +404,15 @@ class ProjectProvider extends _$ProjectProvider {
         fundingSubCategory: fundingSubCategory,
       );
     }
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
 
     if (result != null) {
-      List<File> pdfs = result.paths.map((path) => File(path!)).toList();
-      List<String> pdfPaths = pdfs.map((pdf) => pdf.path).toList();
+      final pdfs = result.paths.map((path) => File(path!)).toList();
+      final pdfPaths = pdfs.map((pdf) => pdf.path).toList();
       state = state.copyWith(
         projectPDFAttachments: [
           ...state.projectPDFAttachments!,
@@ -432,7 +426,7 @@ class ProjectProvider extends _$ProjectProvider {
     }
   }
 
-  Future<String> fetchAndCachePDF(url) async {
+  Future<String> fetchAndCachePDF(String url) async {
     try {
       final cacheDir = await getTemporaryDirectory();
       final dio = Dio();
@@ -441,7 +435,7 @@ class ProjectProvider extends _$ProjectProvider {
       await dio.download(url, filePath);
 
       return filePath;
-    } catch (e) {
+    } on Exception catch (e) {
       log('Error downloading PDF: $e');
       return '';
     }
@@ -471,13 +465,11 @@ class ProjectProvider extends _$ProjectProvider {
       final image = await page.render(
         width: page.width,
         height: page.height,
-        format: PdfPageImageFormat.jpeg,
       );
       thumbnails.add(image!.bytes);
-      page.close();
-      pdfDocument.close();
+      await page.close();
+      await pdfDocument.close();
     }
-    log(thumbnails.toString());
     state = state.copyWith(
       pdfAttachmentsThumbnail: [
         ...state.pdfAttachmentsThumbnail!,
@@ -489,7 +481,7 @@ class ProjectProvider extends _$ProjectProvider {
     return thumbnails;
   }
 
-  void removePDFAtIndex(index) {
+  void removePDFAtIndex(int index) {
     final fundingSubCategory = state.fundingSubCategory;
     final projectSubCategory = state.projectSubCategory;
     if (state.projectPDFAttachments == null) {
@@ -500,7 +492,7 @@ class ProjectProvider extends _$ProjectProvider {
       );
     }
     if (state.projectPDFAttachments!.isEmpty) return;
-    var pdfs = state.projectPDFAttachments!;
+    final pdfs = state.projectPDFAttachments!;
     if (pdfs.length == 1) {
       state = state.copyWith(
         projectPDFAttachments: [],
@@ -568,7 +560,7 @@ class ProjectProvider extends _$ProjectProvider {
       validateFunding(),
       validateLocation(),
       validateAttachment(),
-      validateDates()
+      validateDates(),
     ];
 
     if (validations.every((validation) => validation)) {
@@ -653,8 +645,8 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   Future<bool> sendImageAttachments() async {
-    var existingUpload = <String>[];
-    var newUpload = <String>[];
+    final existingUpload = <String>[];
+    final newUpload = <String>[];
     if (state.projectImageAttachments.isEmpty) return false;
 
     for (final image in state.projectImageAttachments) {
@@ -673,7 +665,7 @@ class ProjectProvider extends _$ProjectProvider {
         );
 
     return result.fold((error) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       log(error);
       return false;
     }, (imageUrls) {
@@ -683,8 +675,8 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   Future<bool> sendPDFAttachments() async {
-    var existingUpload = <String>[];
-    var newUpload = <String>[];
+    final existingUpload = <String>[];
+    final newUpload = <String>[];
     if (state.projectPDFAttachments == null) return true;
     if ((state.projectPDFAttachments ?? []).isEmpty) return true;
 
@@ -705,7 +697,7 @@ class ProjectProvider extends _$ProjectProvider {
         );
 
     return result.fold((error) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       log(error);
       return false;
     }, (pdfUrls) {
@@ -747,19 +739,21 @@ class ProjectProvider extends _$ProjectProvider {
   }
 
   Future<void> sendProject(int? projectId) async {
-    ref.read(sendPostLoadingProvider.notifier).setValue(true);
+    ref.read(sendPostLoadingProvider.notifier).value = true;
     final imageUrls = await sendImageAttachments();
     if (!imageUrls) {
       await saveProjectDraft();
       TToastMessages.errorToast(
-          'Unable to upload images. Project has been saved as draft.');
+        'Unable to upload images. Project has been saved as draft.',
+      );
       return;
     }
     final pdfUrls = await sendPDFAttachments();
     if (!pdfUrls) {
       await saveProjectDraft();
       TToastMessages.errorToast(
-          'Unable to upload PDFs. Project has been saved as draft.');
+        'Unable to upload PDFs. Project has been saved as draft.',
+      );
       return;
     }
 
@@ -791,16 +785,17 @@ class ProjectProvider extends _$ProjectProvider {
     );
 
     return result.fold((error) async {
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       log(error.message);
-      saveProjectDraft();
+      await saveProjectDraft();
       TToastMessages.errorToast(
-          "${error.message}. Project has been saved as draft.");
+        '${error.message}. Project has been saved as draft.',
+      );
       return;
     }, (response) async {
       final deleteDraft = ref.read(deleteProjectDraftProvider);
       await deleteDraft(NoParams());
-      ref.read(sendPostLoadingProvider.notifier).setValue(false);
+      ref.read(sendPostLoadingProvider.notifier).value = false;
       TToastMessages.successToast(
         'Your project was sent.',
       );

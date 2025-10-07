@@ -49,7 +49,9 @@ class InitialOnBoardingScreen extends StatelessWidget {
               ),
               Text(
                 TTexts.onBoardingTitle1,
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 30,),
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 30,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -59,8 +61,8 @@ class InitialOnBoardingScreen extends StatelessWidget {
                 indicatorColor: TColors.primary,
                 title: TTexts.onBoardingTitle2,
                 subTitle: TTexts.onBoardingSubTitle2,
-                onTap: () {
-                  context.pushNamed(
+                onTap: () async {
+                  await context.pushNamed(
                     AppRoutes.onboarding,
                     extra: {
                       'isPolitical': true,

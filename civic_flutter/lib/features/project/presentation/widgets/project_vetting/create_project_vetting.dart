@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateProjectVetting extends ConsumerWidget {
-  const CreateProjectVetting({super.key, required this.projectVetting});
+  const CreateProjectVetting({required this.projectVetting, super.key});
 
   final ProjectVetting? projectVetting;
 
@@ -43,9 +43,9 @@ class CreateProjectVetting extends ConsumerWidget {
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 5),
                 child: ProjectCategoryDropdown(
-                  dropdownItems: ['Completed', 'Ongoing', 'Not started'],
+                  dropdownItems: const ['Completed', 'Ongoing', 'Not started'],
                   value: vettedProjectState.status,
                   onChanged: (value) {
                     vettedProjectNotifier.setStatus(
@@ -69,11 +69,9 @@ class CreateProjectVetting extends ConsumerWidget {
                 'Add up to five images of the current state of the project as proof.',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
-              vettedProjectState.images.isEmpty
-                  ? AddVettingImage(
+              if (vettedProjectState.images.isEmpty) AddVettingImage(
                       projectVetting: projectVetting,
-                    )
-                  : AddedVettingImage(
+                    ) else AddedVettingImage(
                       projectVetting: projectVetting,
                     ),
             ],

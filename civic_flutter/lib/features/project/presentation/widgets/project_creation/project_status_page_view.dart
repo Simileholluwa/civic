@@ -1,15 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 class ProjectStatusPageView extends ConsumerWidget {
   const ProjectStatusPageView({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -24,8 +23,8 @@ class ProjectStatusPageView extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            "Select the start and end date of the project. Its status will be automatically determined.",
-            style: Theme.of(context).textTheme.bodyMedium!,
+            'Select the start and end date of the project. Its status will be automatically determined.',
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           AppTextField(
@@ -67,12 +66,12 @@ class ProjectStatusPageView extends ConsumerWidget {
                 context,
                 'Select end date',
                 projectCreationSate.startDate!.add(
-                  Duration(
+                  const Duration(
                     days: 1,
                   ),
                 ),
                 projectCreationSate.startDate!.add(
-                  Duration(
+                  const Duration(
                     days: 1,
                   ),
                 ),

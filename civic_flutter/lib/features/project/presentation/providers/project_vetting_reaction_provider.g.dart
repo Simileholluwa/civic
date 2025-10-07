@@ -6,174 +6,107 @@ part of 'project_vetting_reaction_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$vettingReactionHash() => r'3fbc0c8fe695af757f8c27bedc3112273149c008';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$VettingReaction
-    extends BuildlessAutoDisposeNotifier<ProjectVettingReactionState> {
-  late final ProjectVetting projectVetting;
-
-  ProjectVettingReactionState build(
-    ProjectVetting projectVetting,
-  );
-}
-
-/// See also [VettingReaction].
 @ProviderFor(VettingReaction)
-const vettingReactionProvider = VettingReactionFamily();
+const vettingReactionProvider = VettingReactionFamily._();
 
-/// See also [VettingReaction].
-class VettingReactionFamily extends Family<ProjectVettingReactionState> {
-  /// See also [VettingReaction].
-  const VettingReactionFamily();
-
-  /// See also [VettingReaction].
-  VettingReactionProvider call(
-    ProjectVetting projectVetting,
-  ) {
-    return VettingReactionProvider(
-      projectVetting,
-    );
-  }
-
-  @override
-  VettingReactionProvider getProviderOverride(
-    covariant VettingReactionProvider provider,
-  ) {
-    return call(
-      provider.projectVetting,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'vettingReactionProvider';
-}
-
-/// See also [VettingReaction].
-class VettingReactionProvider extends AutoDisposeNotifierProviderImpl<
-    VettingReaction, ProjectVettingReactionState> {
-  /// See also [VettingReaction].
-  VettingReactionProvider(
-    ProjectVetting projectVetting,
-  ) : this._internal(
-          () => VettingReaction()..projectVetting = projectVetting,
-          from: vettingReactionProvider,
+final class VettingReactionProvider
+    extends $NotifierProvider<VettingReaction, ProjectVettingReactionState> {
+  const VettingReactionProvider._(
+      {required VettingReactionFamily super.from,
+      required ProjectVetting super.argument})
+      : super(
+          retry: null,
           name: r'vettingReactionProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$vettingReactionHash,
-          dependencies: VettingReactionFamily._dependencies,
-          allTransitiveDependencies:
-              VettingReactionFamily._allTransitiveDependencies,
-          projectVetting: projectVetting,
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  VettingReactionProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectVetting,
-  }) : super.internal();
-
-  final ProjectVetting projectVetting;
+  @override
+  String debugGetCreateSourceHash() => _$vettingReactionHash();
 
   @override
-  ProjectVettingReactionState runNotifierBuild(
-    covariant VettingReaction notifier,
-  ) {
-    return notifier.build(
-      projectVetting,
-    );
+  String toString() {
+    return r'vettingReactionProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  Override overrideWith(VettingReaction Function() create) {
-    return ProviderOverride(
+  VettingReaction create() => VettingReaction();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ProjectVettingReactionState value) {
+    return $ProviderOverride(
       origin: this,
-      override: VettingReactionProvider._internal(
-        () => create()..projectVetting = projectVetting,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectVetting: projectVetting,
-      ),
+      providerOverride: $SyncValueProvider<ProjectVettingReactionState>(value),
     );
-  }
-
-  @override
-  AutoDisposeNotifierProviderElement<VettingReaction,
-      ProjectVettingReactionState> createElement() {
-    return _VettingReactionProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is VettingReactionProvider &&
-        other.projectVetting == projectVetting;
+    return other is VettingReactionProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectVetting.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin VettingReactionRef
-    on AutoDisposeNotifierProviderRef<ProjectVettingReactionState> {
-  /// The parameter `projectVetting` of this provider.
-  ProjectVetting get projectVetting;
-}
+String _$vettingReactionHash() => r'b4904fb694ade746378256021bfcded3497a668c';
 
-class _VettingReactionProviderElement
-    extends AutoDisposeNotifierProviderElement<VettingReaction,
-        ProjectVettingReactionState> with VettingReactionRef {
-  _VettingReactionProviderElement(super.provider);
+final class VettingReactionFamily extends $Family
+    with
+        $ClassFamilyOverride<
+            VettingReaction,
+            ProjectVettingReactionState,
+            ProjectVettingReactionState,
+            ProjectVettingReactionState,
+            ProjectVetting> {
+  const VettingReactionFamily._()
+      : super(
+          retry: null,
+          name: r'vettingReactionProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  VettingReactionProvider call(
+    ProjectVetting projectVetting,
+  ) =>
+      VettingReactionProvider._(argument: projectVetting, from: this);
 
   @override
-  ProjectVetting get projectVetting =>
-      (origin as VettingReactionProvider).projectVetting;
+  String toString() => r'vettingReactionProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$VettingReaction
+    extends $Notifier<ProjectVettingReactionState> {
+  late final _$args = ref.$arg as ProjectVetting;
+  ProjectVetting get projectVetting => _$args;
+
+  ProjectVettingReactionState build(
+    ProjectVetting projectVetting,
+  );
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(
+      _$args,
+    );
+    final ref = this.ref
+        as $Ref<ProjectVettingReactionState, ProjectVettingReactionState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ProjectVettingReactionState, ProjectVettingReactionState>,
+        ProjectVettingReactionState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

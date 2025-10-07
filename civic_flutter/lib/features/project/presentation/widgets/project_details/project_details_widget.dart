@@ -7,8 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectDetailsWidget extends ConsumerWidget {
   const ProjectDetailsWidget({
-    super.key,
-    required this.project,
+    required this.project, super.key,
   });
 
   final Project project;
@@ -27,12 +26,10 @@ class ProjectDetailsWidget extends ConsumerWidget {
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          projectCardState.imagesUrl!.length == 1
-              ? ContentSingleCachedImage(
+          if (projectCardState.imagesUrl!.length == 1) ContentSingleCachedImage(
                   imageUrl: projectCardState.imagesUrl!.first,
                   useMargin: false,
-                )
-              : ContentMultipleCachedImage(
+                ) else ContentMultipleCachedImage(
                   imageUrls: projectCardState.imagesUrl!,
                   useMargin: false,
                 ),

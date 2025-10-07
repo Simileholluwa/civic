@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 class PollDetailCard extends StatelessWidget {
   const PollDetailCard({
-    super.key,
-    required this.newPost,
+    required this.newPost, super.key,
   });
 
   final Post? newPost;

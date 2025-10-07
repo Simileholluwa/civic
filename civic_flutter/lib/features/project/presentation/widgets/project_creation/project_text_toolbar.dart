@@ -25,9 +25,6 @@ class ProjectTextToolbar extends StatelessWidget {
         showColorButton: false,
         showBackgroundColorButton: false,
         showHeaderStyle: false,
-        showClipboardCopy: false,
-        showClipboardPaste: false,
-        showClipboardCut: false,
       ),
     );
   }
