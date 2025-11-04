@@ -1,0 +1,91 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "user_notification_settings",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "allowMentions",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushMentions",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowTags",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushTags",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          }
+        ],
+        "deleteColumns": [
+          "allowMentionsAndTags",
+          "pushMentionsAndTags"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"allowMentionsAndTags\" of table \"user_notification_settings\" will be dropped.",
+            "table": "user_notification_settings",
+            "columns": [
+              "allowMentionsAndTags"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"pushMentionsAndTags\" of table \"user_notification_settings\" will be dropped.",
+            "table": "user_notification_settings",
+            "columns": [
+              "pushMentionsAndTags"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"allowMentionsAndTags\" of table \"user_notification_settings\" will be dropped.",
+      "table": "user_notification_settings",
+      "columns": [
+        "allowMentionsAndTags"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"pushMentionsAndTags\" of table \"user_notification_settings\" will be dropped.",
+      "table": "user_notification_settings",
+      "columns": [
+        "pushMentionsAndTags"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -49,7 +49,6 @@ export 'presentation/provider/common/paginated_replies_list_provider.dart';
 export 'presentation/provider/common/post_detail_provider.dart';
 export 'presentation/provider/post/post_bookmark_list_provider.dart';
 export 'presentation/provider/post/post_list_provider.dart';
-export 'presentation/provider/post/post_scroll_controller_provider.dart';
 export 'presentation/provider/post/post_video_player_provider.dart';
 export 'presentation/routes/feed_routes.dart';
 export 'presentation/state/feed_state.dart';

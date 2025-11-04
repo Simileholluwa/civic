@@ -27,7 +27,6 @@ AuthRepositoryImpl authRepository(Ref ref) {
     remoteDatabase: ref.read(
       authRemoteDatabaseProvider,
     ),
-    localDatabase: ref.read(authLocalDatasourceProvider),
   );
 }
 
@@ -94,20 +93,6 @@ UploadProfileImageUseCase uploadProfileImage(Ref ref) {
 @riverpod
 ResetUserPasswordUseCase resetUserPassword(Ref ref) {
   return ResetUserPasswordUseCase(
-    authRepository: ref.read(authRepositoryProvider),
-  );
-}
-
-@riverpod
-SaveUserRecordUserUseCase saveUserRecord(Ref ref) {
-  return SaveUserRecordUserUseCase(
-    authRepository: ref.read(authRepositoryProvider),
-  );
-}
-
-@riverpod
-GetUserRecordUseCase getUserRecord(Ref ref) {
-  return GetUserRecordUseCase(
     authRepository: ref.read(authRepositoryProvider),
   );
 }

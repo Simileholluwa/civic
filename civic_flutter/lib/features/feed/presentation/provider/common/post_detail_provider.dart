@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -17,9 +16,11 @@ Future<Post> postDetail(
   final completer = Completer<Post>();
   if (id == 0) {
     final getPostDraft = ref.read(getPostDraftProvider);
-    final result = await getPostDraft(GetPostDraftParams(
-      draftType,
-    ),);
+    final result = await getPostDraft(
+      GetPostDraftParams(
+        draftType,
+      ),
+    );
     result.fold(
       (error) {
         completer.completeError({
@@ -43,7 +44,6 @@ Future<Post> postDetail(
 
     return result.fold(
       (error) {
-        log(error.toString(), name: 'postDetail');
         completer.completeError({
           'message': error.message,
           'action': error.action,

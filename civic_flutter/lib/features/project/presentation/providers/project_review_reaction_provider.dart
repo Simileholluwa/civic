@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -21,7 +20,7 @@ class ReviewReaction extends _$ReviewReaction {
       ),
     );
     await result.fold((l) {
-      log(
+      TToastMessages.errorToast(
         l.message,
       );
       return;

@@ -1,0 +1,8 @@
+class: UserDevice
+table: user_device
+fields:
+  userInfo: UserRecord?, relation(onDelete=Cascade)
+  token: String
+indexes:
+  user_device_token_idx:
+    fields: token

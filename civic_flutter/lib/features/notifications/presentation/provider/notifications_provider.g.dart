@@ -12,7 +12,8 @@ part of 'notifications_provider.dart';
 @ProviderFor(Notif)
 const notifProvider = NotifProvider._();
 
-final class NotifProvider extends $NotifierProvider<Notif, void> {
+final class NotifProvider
+    extends $NotifierProvider<Notif, NotificationCardState> {
   const NotifProvider._()
       : super(
           from: null,
@@ -32,25 +33,28 @@ final class NotifProvider extends $NotifierProvider<Notif, void> {
   Notif create() => Notif();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(void value) {
+  Override overrideWithValue(NotificationCardState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<void>(value),
+      providerOverride: $SyncValueProvider<NotificationCardState>(value),
     );
   }
 }
 
-String _$notifHash() => r'8736b17e8f81c75e884636042b39b09160390b48';
+String _$notifHash() => r'1466bd4880210b1321c3ae930f4b497e6451e8db';
 
-abstract class _$Notif extends $Notifier<void> {
-  void build();
+abstract class _$Notif extends $Notifier<NotificationCardState> {
+  NotificationCardState build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<void, void>;
+    final created = build();
+    final ref = this.ref as $Ref<NotificationCardState, NotificationCardState>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<void, void>, void, Object?, Object?>;
-    element.handleValue(ref, null);
+        AnyNotifier<NotificationCardState, NotificationCardState>,
+        NotificationCardState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
   }
 }

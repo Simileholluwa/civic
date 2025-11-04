@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -38,7 +36,6 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
         ),
       );
       result.fold((error) {
-        log(error.toString(), name: 'PaginatedPostList');
         pagingController.value = PagingState(
           error: error.message,
         );
@@ -53,7 +50,6 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
         }
       });
     } on Exception catch (e) {
-      log(e.toString(), name: 'PaginatedPostList');
       pagingController.value = PagingState(
         error: e.toString(),
       );

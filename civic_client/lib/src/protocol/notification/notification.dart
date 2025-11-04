@@ -11,6 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import '../notification/notification_action_type.dart' as _i3;
+import '../notification/notification_target_type.dart' as _i4;
+import '../post/post.dart' as _i5;
+import '../project/project.dart' as _i6;
 
 abstract class Notification implements _i1.SerializableModel {
   Notification._({
@@ -21,17 +25,21 @@ abstract class Notification implements _i1.SerializableModel {
     this.sender,
     this.senderName,
     this.groupedSenderNames,
-    this.triggerUser,
-    this.content,
+    required this.title,
+    this.body,
     this.groupKey,
     required this.actionType,
-    required this.mediaThumbnailUrl,
+    this.senderAvatarUrl,
     required this.targetType,
     required this.actionRoute,
     required this.targetId,
     bool? isRead,
     DateTime? createdAt,
     this.updatedAt,
+    this.postId,
+    this.post,
+    this.projectId,
+    this.project,
   })  : isRead = isRead ?? false,
         createdAt = createdAt ?? DateTime.now();
 
@@ -43,17 +51,21 @@ abstract class Notification implements _i1.SerializableModel {
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
-    String? triggerUser,
-    String? content,
+    required String title,
+    String? body,
     String? groupKey,
-    required String actionType,
-    required String mediaThumbnailUrl,
-    required String targetType,
+    required _i3.NotificationActionType actionType,
+    String? senderAvatarUrl,
+    required _i4.NotificationTargetType targetType,
     required String actionRoute,
     required int targetId,
     bool? isRead,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? postId,
+    _i5.Post? post,
+    int? projectId,
+    _i6.Project? project,
   }) = _NotificationImpl;
 
   factory Notification.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -73,12 +85,14 @@ abstract class Notification implements _i1.SerializableModel {
       groupedSenderNames: (jsonSerialization['groupedSenderNames'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      triggerUser: jsonSerialization['triggerUser'] as String?,
-      content: jsonSerialization['content'] as String?,
+      title: jsonSerialization['title'] as String,
+      body: jsonSerialization['body'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
-      actionType: jsonSerialization['actionType'] as String,
-      mediaThumbnailUrl: jsonSerialization['mediaThumbnailUrl'] as String,
-      targetType: jsonSerialization['targetType'] as String,
+      actionType: _i3.NotificationActionType.fromJson(
+          (jsonSerialization['actionType'] as int)),
+      senderAvatarUrl: jsonSerialization['senderAvatarUrl'] as String?,
+      targetType: _i4.NotificationTargetType.fromJson(
+          (jsonSerialization['targetType'] as int)),
       actionRoute: jsonSerialization['actionRoute'] as String,
       targetId: jsonSerialization['targetId'] as int,
       isRead: jsonSerialization['isRead'] as bool,
@@ -87,6 +101,16 @@ abstract class Notification implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      postId: jsonSerialization['postId'] as int?,
+      post: jsonSerialization['post'] == null
+          ? null
+          : _i5.Post.fromJson(
+              (jsonSerialization['post'] as Map<String, dynamic>)),
+      projectId: jsonSerialization['projectId'] as int?,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i6.Project.fromJson(
+              (jsonSerialization['project'] as Map<String, dynamic>)),
     );
   }
 
@@ -107,17 +131,17 @@ abstract class Notification implements _i1.SerializableModel {
 
   List<String>? groupedSenderNames;
 
-  String? triggerUser;
+  String title;
 
-  String? content;
+  String? body;
 
   String? groupKey;
 
-  String actionType;
+  _i3.NotificationActionType actionType;
 
-  String mediaThumbnailUrl;
+  String? senderAvatarUrl;
 
-  String targetType;
+  _i4.NotificationTargetType targetType;
 
   String actionRoute;
 
@@ -128,6 +152,14 @@ abstract class Notification implements _i1.SerializableModel {
   DateTime createdAt;
 
   DateTime? updatedAt;
+
+  int? postId;
+
+  _i5.Post? post;
+
+  int? projectId;
+
+  _i6.Project? project;
 
   /// Returns a shallow copy of this [Notification]
   /// with some or all fields replaced by the given arguments.
@@ -140,17 +172,21 @@ abstract class Notification implements _i1.SerializableModel {
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
-    String? triggerUser,
-    String? content,
+    String? title,
+    String? body,
     String? groupKey,
-    String? actionType,
-    String? mediaThumbnailUrl,
-    String? targetType,
+    _i3.NotificationActionType? actionType,
+    String? senderAvatarUrl,
+    _i4.NotificationTargetType? targetType,
     String? actionRoute,
     int? targetId,
     bool? isRead,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? postId,
+    _i5.Post? post,
+    int? projectId,
+    _i6.Project? project,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -163,17 +199,21 @@ abstract class Notification implements _i1.SerializableModel {
       if (senderName != null) 'senderName': senderName,
       if (groupedSenderNames != null)
         'groupedSenderNames': groupedSenderNames?.toJson(),
-      if (triggerUser != null) 'triggerUser': triggerUser,
-      if (content != null) 'content': content,
+      'title': title,
+      if (body != null) 'body': body,
       if (groupKey != null) 'groupKey': groupKey,
-      'actionType': actionType,
-      'mediaThumbnailUrl': mediaThumbnailUrl,
-      'targetType': targetType,
+      'actionType': actionType.toJson(),
+      if (senderAvatarUrl != null) 'senderAvatarUrl': senderAvatarUrl,
+      'targetType': targetType.toJson(),
       'actionRoute': actionRoute,
       'targetId': targetId,
       'isRead': isRead,
       'createdAt': createdAt.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (postId != null) 'postId': postId,
+      if (post != null) 'post': post?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
     };
   }
 
@@ -194,17 +234,21 @@ class _NotificationImpl extends Notification {
     _i2.UserRecord? sender,
     String? senderName,
     List<String>? groupedSenderNames,
-    String? triggerUser,
-    String? content,
+    required String title,
+    String? body,
     String? groupKey,
-    required String actionType,
-    required String mediaThumbnailUrl,
-    required String targetType,
+    required _i3.NotificationActionType actionType,
+    String? senderAvatarUrl,
+    required _i4.NotificationTargetType targetType,
     required String actionRoute,
     required int targetId,
     bool? isRead,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? postId,
+    _i5.Post? post,
+    int? projectId,
+    _i6.Project? project,
   }) : super._(
           id: id,
           receiverId: receiverId,
@@ -213,17 +257,21 @@ class _NotificationImpl extends Notification {
           sender: sender,
           senderName: senderName,
           groupedSenderNames: groupedSenderNames,
-          triggerUser: triggerUser,
-          content: content,
+          title: title,
+          body: body,
           groupKey: groupKey,
           actionType: actionType,
-          mediaThumbnailUrl: mediaThumbnailUrl,
+          senderAvatarUrl: senderAvatarUrl,
           targetType: targetType,
           actionRoute: actionRoute,
           targetId: targetId,
           isRead: isRead,
           createdAt: createdAt,
           updatedAt: updatedAt,
+          postId: postId,
+          post: post,
+          projectId: projectId,
+          project: project,
         );
 
   /// Returns a shallow copy of this [Notification]
@@ -238,17 +286,21 @@ class _NotificationImpl extends Notification {
     Object? sender = _Undefined,
     Object? senderName = _Undefined,
     Object? groupedSenderNames = _Undefined,
-    Object? triggerUser = _Undefined,
-    Object? content = _Undefined,
+    String? title,
+    Object? body = _Undefined,
     Object? groupKey = _Undefined,
-    String? actionType,
-    String? mediaThumbnailUrl,
-    String? targetType,
+    _i3.NotificationActionType? actionType,
+    Object? senderAvatarUrl = _Undefined,
+    _i4.NotificationTargetType? targetType,
     String? actionRoute,
     int? targetId,
     bool? isRead,
     DateTime? createdAt,
     Object? updatedAt = _Undefined,
+    Object? postId = _Undefined,
+    Object? post = _Undefined,
+    Object? projectId = _Undefined,
+    Object? project = _Undefined,
   }) {
     return Notification(
       id: id is int? ? id : this.id,
@@ -261,17 +313,22 @@ class _NotificationImpl extends Notification {
       groupedSenderNames: groupedSenderNames is List<String>?
           ? groupedSenderNames
           : this.groupedSenderNames?.map((e0) => e0).toList(),
-      triggerUser: triggerUser is String? ? triggerUser : this.triggerUser,
-      content: content is String? ? content : this.content,
+      title: title ?? this.title,
+      body: body is String? ? body : this.body,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
       actionType: actionType ?? this.actionType,
-      mediaThumbnailUrl: mediaThumbnailUrl ?? this.mediaThumbnailUrl,
+      senderAvatarUrl:
+          senderAvatarUrl is String? ? senderAvatarUrl : this.senderAvatarUrl,
       targetType: targetType ?? this.targetType,
       actionRoute: actionRoute ?? this.actionRoute,
       targetId: targetId ?? this.targetId,
       isRead: isRead ?? this.isRead,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      postId: postId is int? ? postId : this.postId,
+      post: post is _i5.Post? ? post : this.post?.copyWith(),
+      projectId: projectId is int? ? projectId : this.projectId,
+      project: project is _i6.Project? ? project : this.project?.copyWith(),
     );
   }
 }

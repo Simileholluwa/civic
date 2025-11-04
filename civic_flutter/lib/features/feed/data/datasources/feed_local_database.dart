@@ -58,7 +58,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
         ),
       );
     } on Exception catch (_) {
-      throw const CacheException(message: 'Something went wrong');
+      throw const CacheException(message: TTexts.somethingWentWrong);
     }
   }
 
@@ -120,7 +120,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       final jsonString = jsonEncode(postDraft);
       await _prefs.setString(draftType, jsonString);
     } on Exception catch (_) {
-      throw const CacheException(message: 'Something went wrong');
+      throw const CacheException(message: TTexts.somethingWentWrong);
     }
   }
 
@@ -134,7 +134,7 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
         await directory.delete(recursive: true);
       }
     } on Exception catch (_) {
-      throw const CacheException(message: 'Something went wrong');
+      throw const CacheException(message: TTexts.somethingWentWrong);
     }
   }
 }

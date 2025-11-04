@@ -1,13 +1,15 @@
 import 'dart:convert';
-import 'dart:developer';
 
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/network/network.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'auth_user_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthUser extends _$AuthUser {
   @override
   AuthUserState build() {
@@ -15,7 +17,6 @@ class AuthUser extends _$AuthUser {
   }
 
   Future<void> init() async {
-    await ref.read(sessionProvider).initialize();
     await fetchUser();
   }
 
@@ -26,20 +27,48 @@ class AuthUser extends _$AuthUser {
         userId: null,
       ),
     );
-    return result.fold((error) {
-      log(error.message);
-      state = const AuthUserStateError();
-      return;
-    }, (response) async {
-      state = AuthUserStateSuccess(
-        userRecord: response,
-      );
-      final jsonString = jsonEncode(response);
-      await ref.read(localStorageProvider).setString(
-            'userRecord',
-            jsonString,
-          );
-      return;
-    });
+
+    if (!ref.mounted) return;
+
+    return result.fold(
+      (error) async {
+        if (!ref.mounted) return;
+        final savedUserString = ref
+            .read(
+              localStorageProvider,
+            )
+            .getString('userRecord');
+        if (savedUserString == null) {
+          state = const AuthUserStateError();
+          return;
+        }
+
+        final savedUser = await compute(
+          _parseSavedUser,
+          savedUserString,
+        );
+
+        state = AuthUserStateSuccess(
+          userRecord: savedUser,
+        );
+      },
+      (response) async {
+        if (!ref.mounted) return;
+        state = AuthUserStateSuccess(
+          userRecord: response,
+        );
+        final jsonString = jsonEncode(response);
+        await ref.read(localStorageProvider).setString(
+              'userRecord',
+              jsonString,
+            );
+      },
+    );
   }
+}
+
+UserRecord _parseSavedUser(String jsonString) {
+  return UserRecord.fromJson(
+    jsonDecode(jsonString) as Map<String, dynamic>,
+  );
 }

@@ -17,8 +17,8 @@ final class PaginatedNotificationsListProvider
   const PaginatedNotificationsListProvider._(
       {required PaginatedNotificationsListFamily super.from,
       required (
-        String,
-        bool,
+        cc.NotificationTargetType?,
+        bool?,
       )
           super.argument})
       : super(
@@ -64,7 +64,7 @@ final class PaginatedNotificationsListProvider
 }
 
 String _$paginatedNotificationsListHash() =>
-    r'f7e5038fa482e1e6006e3776c8856877c7a87928';
+    r'cd67bc75e8f5ef3df5141ce055d99adf7eb46f58';
 
 final class PaginatedNotificationsListFamily extends $Family
     with
@@ -74,8 +74,8 @@ final class PaginatedNotificationsListFamily extends $Family
             PagingStatus,
             PagingStatus,
             (
-              String,
-              bool,
+              cc.NotificationTargetType?,
+              bool?,
             )> {
   const PaginatedNotificationsListFamily._()
       : super(
@@ -87,9 +87,9 @@ final class PaginatedNotificationsListFamily extends $Family
         );
 
   PaginatedNotificationsListProvider call(
-    String targetType, [
-    bool isRead = true,
-  ]) =>
+    cc.NotificationTargetType? targetType,
+    bool? isRead,
+  ) =>
       PaginatedNotificationsListProvider._(argument: (
         targetType,
         isRead,
@@ -101,16 +101,16 @@ final class PaginatedNotificationsListFamily extends $Family
 
 abstract class _$PaginatedNotificationsList extends $Notifier<PagingStatus> {
   late final _$args = ref.$arg as (
-    String,
-    bool,
+    cc.NotificationTargetType?,
+    bool?,
   );
-  String get targetType => _$args.$1;
-  bool get isRead => _$args.$2;
+  cc.NotificationTargetType? get targetType => _$args.$1;
+  bool? get isRead => _$args.$2;
 
   PagingStatus build(
-    String targetType, [
-    bool isRead = true,
-  ]);
+    cc.NotificationTargetType? targetType,
+    bool? isRead,
+  );
   @$mustCallSuper
   @override
   void runBuild() {

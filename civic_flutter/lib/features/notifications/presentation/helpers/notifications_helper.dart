@@ -1,198 +1,117 @@
 import 'dart:async';
 
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NotificationsHelper {
-  static String formatGroupedUserNames(List<String> usernames) {
-    if (usernames.isEmpty) return '';
-    final count = usernames.length;
-    if (count == 1) return usernames.first;
-    if (count == 2) return '${usernames[0]} and ${usernames[1]}';
-    final others = count - 2;
-    return '${usernames[0]}, ${usernames[1]} and $others other${others > 1 ? 's' : ''}';
-  }
-
-  static InlineSpan formatNotificationRichText(
-    BuildContext context, {
-    required String? content,
-    required List<String> usernames,
-    required String actionType,
-    required String targetType,
-    required String? triggerUser,
-  }) {
+  static InlineSpan buildNotificationText(
+    BuildContext context,
+    String content,
+  ) {
     final style = DefaultTextStyle.of(context).style;
     final boldStyle = style.copyWith(fontWeight: FontWeight.w600);
 
+    // Parse occurrences of <b>...</b> (case-insensitive) and build spans for
+    // the text outside and inside those tags. This avoids relying on split
+    // with capturing groups which can be error-prone for variations.
     final spans = <InlineSpan>[];
+    final boldRegExp =
+        RegExp('<b>(.*?)</b>', caseSensitive: false, dotAll: true);
+    var lastEnd = 0;
 
-    for (var i = 0; i < usernames.length; i++) {
-      spans.add(TextSpan(text: usernames[i], style: boldStyle));
-
-      if (i < usernames.length - 2) {
-        spans.add(TextSpan(text: ', ', style: style));
-      } else if (i == usernames.length - 2) {
-        spans.add(TextSpan(text: ' and ', style: style));
+    for (final match in boldRegExp.allMatches(content)) {
+      // Add text before the <b> match
+      if (match.start > lastEnd) {
+        final before = content.substring(lastEnd, match.start);
+        if (before.isNotEmpty) {
+          spans.add(TextSpan(text: before, style: style));
+        }
       }
+
+      // Add the bold text (group 1)
+      final boldText = match.group(1) ?? '';
+      if (boldText.isNotEmpty) {
+        spans.add(TextSpan(text: boldText, style: boldStyle));
+      }
+
+      lastEnd = match.end;
     }
 
-    spans.add(
-      TextSpan(
-        text: ' $actionType',
-        style: style,
-      ),
-    );
-
-    if (triggerUser != null) {
-      spans.add(
-        TextSpan(
-          text: ' $triggerUser',
-          style: boldStyle,
-        ),
-      );
-    }
-
-    if (targetType.isNotEmpty) {
-      spans.add(
-        TextSpan(
-          text: " ${triggerUser != null ? "'s" : 'your'} $targetType",
-          style: style,
-        ),
-      );
-    }
-
-    if (content != null) {
-      spans.add(
-        TextSpan(
-          text: ': $content',
-          style: style,
-        ),
-      );
+    // Add any trailing text after the last match
+    if (lastEnd < content.length) {
+      final tail = content.substring(lastEnd);
+      if (tail.isNotEmpty) {
+        spans.add(
+          TextSpan(
+            text: tail,
+            style: style,
+          ),
+        );
+      }
     }
 
     return TextSpan(children: spans);
   }
 
-  static Widget notifIcon(String actionType) {
-    if (actionType == 'liked') {
-      return const Icon(
-        Iconsax.heart5,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'commented on') {
-      return const Icon(
-        Iconsax.message5,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType.contains('reacted')) {
-      return const Icon(
-        Icons.thumb_up_alt_rounded,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'followed you') {
-      return const Icon(
-        Iconsax.user_add,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType.contains('tagged')) {
-      return const Icon(
-        Iconsax.tag_user5,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType.contains('mentioned')) {
-      return const Icon(
-        Icons.person,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'bookmarked') {
-      return const Icon(
-        Icons.bookmark_rounded,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'quoted') {
-      return const Icon(
-        Iconsax.repeat,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'mentioned') {
-      return const Icon(
-        Iconsax.tag_user,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'reviewed') {
-      return const Icon(
-        Iconsax.magic_star5,
-        color: Colors.white,
-        size: 15,
-      );
-    } else if (actionType == 'vetted') {
-      return const Icon(
-        Iconsax.medal_star5,
-        color: Colors.white,
-        size: 15,
-      );
-    } else {
-      return const Icon(
-        Iconsax.notification5,
-        color: Colors.white,
-        size: 15,
-      );
-    }
+  static final Map<NotificationActionType, IconData> _iconMap = {
+    NotificationActionType.like: Iconsax.heart5,
+    NotificationActionType.comment: Iconsax.message5,
+    NotificationActionType.follow: Icons.person_add,
+    NotificationActionType.react: Icons.thumb_up_alt_rounded,
+    NotificationActionType.tag: Iconsax.tag_user5,
+    NotificationActionType.mention: Iconsax.tag_user,
+    NotificationActionType.quote: Iconsax.repeat,
+    NotificationActionType.review: Iconsax.magic_star5,
+    NotificationActionType.vet: Iconsax.medal_star5,
+  };
+
+  static Widget notifIcon(
+    NotificationActionType actionType, {
+    double size = 15,
+  }) {
+    final iconData = _iconMap[actionType] ?? Iconsax.notification5;
+
+    // Create the widget once
+    return Icon(
+      iconData,
+      color: Colors.white,
+      size: size,
+    );
   }
 
-  static Color getIconColor(String actionType) {
-    if (actionType == 'liked') {
-      return TColors.secondary;
-    } else if (actionType == 'commented on') {
-      return TColors.primary;
-    } else if (actionType == 'followed you') {
-      return Colors.blue;
-    } else if (actionType == 'bookmarked') {
-      return Colors.indigo;
-    } else if (actionType.contains('tagged')) {
-      return Colors.teal;
-    } else if (actionType.contains('reacted')) {
-      return Colors.pink;
-    } else if (actionType == 'quoted') {
-      return Colors.purple;
-    } else if (actionType == 'mentioned') {
-      return Colors.orange;
-    } else if (actionType == 'reviewed') {
-      return Colors.green;
-    } else if (actionType == 'vetted') {
-      return Colors.red;
-    } else {
-      return Colors.orange;
-    }
+  static final Map<NotificationActionType, Color> _colorMap = {
+    NotificationActionType.like: TColors.secondary,
+    NotificationActionType.comment: TColors.primary,
+    NotificationActionType.follow: Colors.blue,
+    NotificationActionType.react: Colors.pink,
+    NotificationActionType.tag: Colors.teal,
+    NotificationActionType.mention: Colors.orange,
+    NotificationActionType.quote: Colors.purple,
+    NotificationActionType.review: Colors.green,
+    NotificationActionType.vet: Colors.indigo,
+  };
+
+  static Color getIconColor(
+    NotificationActionType actionType,
+  ) {
+    // Use a default color if not found.
+    return _colorMap[actionType] ?? Colors.orange;
   }
 
   static Future<bool?> deleteNotificationsDialog(
-    WidgetRef ref,
     BuildContext context,
   ) {
-    final notifNotifier = ref.read(
-      notifProvider.notifier,
-    );
     return postDialog(
       context: context,
       title: 'Delete all notifications?',
-      description:
-          'Are you sure you want to delete all notifications? This action cannot be undone.',
+      description: 'Are you sure you want to delete all '
+          'notifications? This action cannot be undone.',
       onTapSkipButton: () {
-        context.pop();
+        context.pop(false);
       },
       activeButtonText: 'Delete all',
       activeButtonLoading: false,
@@ -200,12 +119,41 @@ class NotificationsHelper {
       skipText: 'Cancel',
       onTapActiveButton: () async {
         if (context.mounted) {
-          context.pop();
+          context.pop(true);
         }
-        unawaited(
-          notifNotifier.deleteAllNotification(),
-        );
       },
     );
+  }
+
+  static NotificationPreference getPreferenceForType(
+    AppNotificationSettings settings,
+    NotificationSettingType type,
+  ) {
+    switch (type) {
+      case NotificationSettingType.follows:
+        return settings.follows;
+      case NotificationSettingType.likes:
+        return settings.likes;
+      case NotificationSettingType.comments:
+        return settings.comments;
+      case NotificationSettingType.mentions:
+        return settings.mentions;
+      case NotificationSettingType.projectReviewReactions:
+        return settings.projectReviewReactions;
+      case NotificationSettingType.helpfulProjectReviews:
+        return settings.helpfulProjectReviews;
+      case NotificationSettingType.projectVettingReactions:
+        return settings.projectVettingReactions;
+      case NotificationSettingType.tags:
+        return settings.tags;
+      case NotificationSettingType.projectReviews:
+        return settings.projectReviews;
+      case NotificationSettingType.projectVetting:
+        return settings.projectVetting;
+      case NotificationSettingType.projectQuotes:
+        return settings.projectQuotes;
+      case NotificationSettingType.push:
+        return settings.projectQuotes;
+    }
   }
 }

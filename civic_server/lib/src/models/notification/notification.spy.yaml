@@ -2,17 +2,26 @@ class: Notification
 table: notification
 fields:
   receiver: UserRecord?, relation(onDelete=Cascade)
-  sender: UserRecord?, relation(onDelete=Cascade)
+  sender: UserRecord?, relation(onDelete=setNull)
   senderName: String?
   groupedSenderNames: List<String>?
-  triggerUser: String?
-  content: String?
+  title: String
+  body: String?
   groupKey: String?
-  actionType: String
-  mediaThumbnailUrl: String
-  targetType: String
+  actionType: NotificationActionType
+  senderAvatarUrl: String?
+  targetType: NotificationTargetType
   actionRoute: String
   targetId: int
   isRead: bool, default=false
   createdAt: DateTime, default=now
   updatedAt: DateTime?
+  post: Post?, relation(optional)
+  project: Project?, relation(optional)
+
+indexes:
+  notification_receiver_isread_idx:
+    fields: receiverId, isRead
+    
+  notification_receiver_createdat_idx:
+    fields: receiverId, createdAt

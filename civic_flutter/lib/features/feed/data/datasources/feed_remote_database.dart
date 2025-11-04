@@ -95,7 +95,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       final result = await _client.post.savePost(post);
       if (result == null) {
         throw const ServerException(
-          message: 'Failed to save post',
+          message: TTexts.failedToSavePost,
         );
       }
       return result;
@@ -103,7 +103,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerException {
       rethrow;
@@ -404,7 +404,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
         isReply,
       );
       if (result == null) {
-        throw const ServerException(message: 'Failed to save comment');
+        throw const ServerException(message: TTexts.failedToSaveComment);
       }
       return result;
     } on ServerSideException catch (e) {
@@ -501,7 +501,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
       if (result == null) {
         throw const ServerException(
-          message: 'Failed to save poll',
+          message: TTexts.failedToSavePoll,
         );
       }
       return result;
@@ -556,7 +556,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
       if (result == null) {
         throw const ServerException(
-          message: 'Failed to save article',
+          message: TTexts.failedToSaveArticle,
         );
       }
       return result;

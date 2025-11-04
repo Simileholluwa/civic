@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -38,7 +38,6 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
         ),
       );
       result.fold((error) {
-        log(error.toString(), name: 'PaginatedProjectList');
         pagingController.value = PagingState(
           error: error.message,
         );
@@ -53,7 +52,6 @@ class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
         }
       });
     } on Exception catch (e) {
-      log(e.toString(), name: 'PaginatedProjectList');
       pagingController.value = PagingState(
         error: e.toString(),
       );

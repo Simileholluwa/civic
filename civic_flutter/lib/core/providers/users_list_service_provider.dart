@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -46,7 +44,6 @@ class PaginatedUsersList extends _$PaginatedUsersList {
             );
 
         result.fold((error) {
-          log(error);
           completer.completeError(error);
           return;
         }, (data) {

@@ -251,14 +251,18 @@ class UserRecordEndpoint extends Endpoint {
           session,
           receiverId: userId,
           senderId: currentUser.id!,
-          actionType: 'followed you.',
-          targetType: '',
-          mediaThumbnailUrl: currentUser.userInfo!.imageUrl!,
+          actionType: NotificationActionType.follow,
+          targetType: NotificationTargetType.user,
+          senderAvatarUrl: currentUser.userInfo!.imageUrl!,
           targetId: currentUser.id!,
-          senderName: getFullName(currentUser.firstName!,
-              currentUser.middleName, currentUser.lastName!),
-          actionRoute: '',
-          content: null,
+          body:
+              'Tap here to view your followers and follow people you may know.',
+          senderName: getFullName(
+            currentUser.firstName!,
+            currentUser.middleName,
+            currentUser.lastName!,
+          ),
+          actionRoute: '/profile/${currentUser.id}',
         );
       }
     }
@@ -329,5 +333,35 @@ class UserRecordEndpoint extends Endpoint {
       return '$firstName $lastName';
     }
     return '$firstName $middleName $lastName';
+  }
+
+  Future<void> registerDeviceToken(Session session, String token) async {
+    // 1. Get the ID of the user who is *currently* logged in
+    final user = await session.authenticated;
+    final currentUserId = user!.userId;
+
+    // 2. Look for the device token in the database
+    final existing = await UserDevice.db.findFirstRow(
+      session,
+      where: (t) => t.token.equals(token),
+    );
+
+    if (existing != null) {
+      if (existing.userInfoId == currentUserId) {
+        return;
+      } else {
+        existing.userInfoId = currentUserId;
+        await UserDevice.db.updateRow(session, existing);
+        return;
+      }
+    } else {
+      await UserDevice.db.insertRow(
+        session,
+        UserDevice(
+          userInfoId: currentUserId,
+          token: token,
+        ),
+      );
+    }
   }
 }

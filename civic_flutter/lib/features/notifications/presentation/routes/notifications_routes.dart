@@ -14,6 +14,12 @@ class NotificationsRoutes {
       GoRoute(
         path: namespace,
         builder: (_, __) => const NotificationsScreen(),
+        routes: [
+          GoRoute(
+            path: 'settings',
+            builder: (_, __) => const NotificationsSettingsScreen(),
+          ),
+        ],
       ),
     ],
   );

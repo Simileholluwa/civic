@@ -46,3 +46,10 @@ app.*.map.json
 /android/app/src/profile
 /android/app/src/main
 
+# Firebase options
+firebase.json
+/lib/firebase_options.dart
+/assets/env/dev_env
+/assets/env/prod_env
+
+

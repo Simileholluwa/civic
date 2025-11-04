@@ -10,15 +10,18 @@ class PostCard extends ConsumerWidget {
     super.key,
     this.showInteractions = true,
     this.onTap,
+    this.showAuthor = true,
   });
   final Post post;
   final bool showInteractions;
   final VoidCallback? onTap;
+  final bool showAuthor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PostCardDetail(
       post: post,
+      showAuthor: showAuthor,
       hasProject: post.postType == PostType.projectRepost,
       onTap: onTap ??
           () async {

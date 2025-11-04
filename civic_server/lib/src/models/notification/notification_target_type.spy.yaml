@@ -1,0 +1,11 @@
+enum: NotificationTargetType
+values:
+  - post
+  - project
+  - vetting
+  - review
+  - comment
+  - reply
+  - photo
+  - video
+  - user

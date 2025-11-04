@@ -18,13 +18,17 @@ import '../endpoints/post_endpoint.dart' as _i6;
 import '../endpoints/project_endpoint.dart' as _i7;
 import '../endpoints/send_email_endpoint.dart' as _i8;
 import '../endpoints/user_record_endpoint.dart' as _i9;
-import 'package:civic_server/src/generated/post/post.dart' as _i10;
-import 'package:civic_server/src/generated/project/project.dart' as _i11;
-import 'package:civic_server/src/generated/project/project_review.dart' as _i12;
+import 'package:civic_server/src/generated/notification/notification_target_type.dart'
+    as _i10;
+import 'package:civic_server/src/generated/notification/notifications_settings.dart'
+    as _i11;
+import 'package:civic_server/src/generated/post/post.dart' as _i12;
+import 'package:civic_server/src/generated/project/project.dart' as _i13;
+import 'package:civic_server/src/generated/project/project_review.dart' as _i14;
 import 'package:civic_server/src/generated/project/project_vetting.dart'
-    as _i13;
-import 'package:civic_server/src/generated/user/user_record.dart' as _i14;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i15;
+    as _i15;
+import 'package:civic_server/src/generated/user/user_record.dart' as _i16;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i17;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -222,6 +226,16 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'notification',
       endpoint: endpoints['notification']!,
       methodConnectors: {
+        'markAllNotificationsAsRead': _i1.MethodConnector(
+          name: 'markAllNotificationsAsRead',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i5.NotificationEndpoint)
+                  .markAllNotificationsAsRead(session),
+        ),
         'markNotificationAsRead': _i1.MethodConnector(
           name: 'markNotificationAsRead',
           params: {
@@ -240,16 +254,6 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['notificationId'],
           ),
-        ),
-        'markAllNotificationsAsRead': _i1.MethodConnector(
-          name: 'markAllNotificationsAsRead',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['notification'] as _i5.NotificationEndpoint)
-                  .markAllNotificationsAsRead(session),
         ),
         'deleteNotification': _i1.MethodConnector(
           name: 'deleteNotification',
@@ -305,13 +309,13 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'targetType': _i1.ParameterDescription(
               name: 'targetType',
-              type: _i1.getType<String>(),
-              nullable: false,
+              type: _i1.getType<_i10.NotificationTargetType?>(),
+              nullable: true,
             ),
             'isRead': _i1.ParameterDescription(
               name: 'isRead',
-              type: _i1.getType<bool>(),
-              nullable: false,
+              type: _i1.getType<bool?>(),
+              nullable: true,
             ),
           },
           call: (
@@ -327,11 +331,40 @@ class Endpoints extends _i1.EndpointDispatch {
             isRead: params['isRead'],
           ),
         ),
-        'notificationUpdates': _i1.MethodStreamConnector(
-          name: 'notificationUpdates',
+        'getNotificationSettings': _i1.MethodConnector(
+          name: 'getNotificationSettings',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i5.NotificationEndpoint)
+                  .getNotificationSettings(session),
+        ),
+        'updateNotificationSettings': _i1.MethodConnector(
+          name: 'updateNotificationSettings',
           params: {
-            'notificationId': _i1.ParameterDescription(
-              name: 'notificationId',
+            'settings': _i1.ParameterDescription(
+              name: 'settings',
+              type: _i1.getType<_i11.UserNotificationSettings>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i5.NotificationEndpoint)
+                  .updateNotificationSettings(
+            session,
+            params['settings'],
+          ),
+        ),
+        'newNotificationUpdates': _i1.MethodStreamConnector(
+          name: 'newNotificationUpdates',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
               type: _i1.getType<int>(),
               nullable: false,
             )
@@ -344,9 +377,9 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, Stream> streamParams,
           ) =>
               (endpoints['notification'] as _i5.NotificationEndpoint)
-                  .notificationUpdates(
+                  .newNotificationUpdates(
             session,
-            params['notificationId'],
+            params['userId'],
           ),
         ),
       },
@@ -360,7 +393,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -378,7 +411,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -396,7 +429,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -504,7 +537,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'comment': _i1.ParameterDescription(
               name: 'comment',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
             'isReply': _i1.ParameterDescription(
@@ -612,7 +645,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -636,7 +669,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'post': _i1.ParameterDescription(
               name: 'post',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             )
           },
@@ -659,7 +692,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'quoteContent': _i1.ParameterDescription(
               name: 'quoteContent',
-              type: _i1.getType<_i10.Post>(),
+              type: _i1.getType<_i12.Post>(),
               nullable: false,
             ),
           },
@@ -912,7 +945,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i11.Project>(),
+              type: _i1.getType<_i13.Project>(),
               nullable: false,
             )
           },
@@ -930,7 +963,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectReview': _i1.ParameterDescription(
               name: 'projectReview',
-              type: _i1.getType<_i12.ProjectReview>(),
+              type: _i1.getType<_i14.ProjectReview>(),
               nullable: false,
             )
           },
@@ -985,7 +1018,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'project': _i1.ParameterDescription(
               name: 'project',
-              type: _i1.getType<_i11.Project>(),
+              type: _i1.getType<_i13.Project>(),
               nullable: false,
             ),
             'dateTime': _i1.ParameterDescription(
@@ -1211,7 +1244,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'projectVetting': _i1.ParameterDescription(
               name: 'projectVetting',
-              type: _i1.getType<_i13.ProjectVetting>(),
+              type: _i1.getType<_i15.ProjectVetting>(),
               nullable: false,
             )
           },
@@ -1433,7 +1466,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'userRecord': _i1.ParameterDescription(
               name: 'userRecord',
-              type: _i1.getType<_i14.UserRecord>(),
+              type: _i1.getType<_i16.UserRecord>(),
               nullable: false,
             )
           },
@@ -1574,6 +1607,25 @@ class Endpoints extends _i1.EndpointDispatch {
             params['ninNumber'],
           ),
         ),
+        'registerDeviceToken': _i1.MethodConnector(
+          name: 'registerDeviceToken',
+          params: {
+            'token': _i1.ParameterDescription(
+              name: 'token',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userRecord'] as _i9.UserRecordEndpoint)
+                  .registerDeviceToken(
+            session,
+            params['token'],
+          ),
+        ),
         'userUpdates': _i1.MethodStreamConnector(
           name: 'userUpdates',
           params: {
@@ -1597,6 +1649,6 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    modules['serverpod_auth'] = _i15.Endpoints()..initializeEndpoints(server);
+    modules['serverpod_auth'] = _i17.Endpoints()..initializeEndpoints(server);
   }
 }

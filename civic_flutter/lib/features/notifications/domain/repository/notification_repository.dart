@@ -10,7 +10,13 @@ abstract class NotificationRepository {
   Future<Either<Failure, NotificationList>> getNotifications({
     required int limit,
     required int page,
-    String targetType = '',
-    bool isRead = true,
+    NotificationTargetType? targetType,
+    bool? isRead,
+  });
+  Future<Either<Failure, UserNotificationSettings>>
+      getUserNotificationSettings();
+  Future<Either<Failure, UserNotificationSettings>>
+      updateUserNotificationSettings({
+    required UserNotificationSettings notificationsSettings,
   });
 }

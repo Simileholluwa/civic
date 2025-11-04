@@ -1,0 +1,2922 @@
+{
+  "moduleName": "civic",
+  "tables": [
+    {
+      "name": "article",
+      "dartName": "Article",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('article_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "content",
+          "columnType": 0,
+          "isNullable": true,
+          "columnDefault": "''::text",
+          "dartType": "String?"
+        },
+        {
+          "name": "tag",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "article_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "article_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "hashtag",
+      "dartName": "Hashtag",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('hashtag_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "tag",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "usageCount",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "hashtag_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "notification",
+      "dartName": "Notification",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('notification_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "receiverId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "senderId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "senderName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "groupedSenderNames",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "title",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "body",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "groupKey",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "actionType",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "protocol:NotificationActionType"
+        },
+        {
+          "name": "senderAvatarUrl",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "targetType",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "protocol:NotificationTargetType"
+        },
+        {
+          "name": "actionRoute",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "targetId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "isRead",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "false",
+          "dartType": "bool"
+        },
+        {
+          "name": "createdAt",
+          "columnType": 4,
+          "isNullable": false,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "notification_fk_0",
+          "columns": [
+            "receiverId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "notification_fk_1",
+          "columns": [
+            "senderId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 0
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "notification_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "notification_receiver_isread_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "receiverId"
+            },
+            {
+              "type": 0,
+              "definition": "isRead"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        },
+        {
+          "indexName": "notification_receiver_createdat_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "receiverId"
+            },
+            {
+              "type": 0,
+              "definition": "createdAt"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "poll",
+      "dartName": "Poll",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('poll_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "expiresAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "votedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "poll_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "poll_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "poll_option",
+      "dartName": "PollOption",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('poll_option_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "pollId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "option",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "votedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "poll_option_fk_0",
+          "columns": [
+            "pollId"
+          ],
+          "referenceTable": "poll",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "poll_option_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "poll_vote",
+      "dartName": "PollVote",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('poll_vote_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "pollId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "optionId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "voterId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "votedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "poll_vote_fk_0",
+          "columns": [
+            "pollId"
+          ],
+          "referenceTable": "poll",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "poll_vote_fk_1",
+          "columns": [
+            "optionId"
+          ],
+          "referenceTable": "poll_option",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "poll_vote_fk_2",
+          "columns": [
+            "voterId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "poll_vote_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "poll_vote_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "pollId"
+            },
+            {
+              "type": 0,
+              "definition": "voterId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "post",
+      "dartName": "Post",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('post_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "postType",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "protocol:PostType?"
+        },
+        {
+          "name": "text",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "imageUrls",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "videoUrl",
+          "columnType": 0,
+          "isNullable": true,
+          "columnDefault": "''::text",
+          "dartType": "String?"
+        },
+        {
+          "name": "taggedUsers",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<protocol:UserRecord>?"
+        },
+        {
+          "name": "locations",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<protocol:AWSPlaces>?"
+        },
+        {
+          "name": "mentions",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<protocol:UserRecord>?"
+        },
+        {
+          "name": "tags",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "likedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "likesCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "bookmarkedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "bookmarksCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "commentCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "subscribers",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "pollId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "articleId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "parentId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "quotedOrRepostedFromUserId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "isDeleted",
+          "columnType": 1,
+          "isNullable": true,
+          "columnDefault": "false",
+          "dartType": "bool?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "post_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_fk_1",
+          "columns": [
+            "pollId"
+          ],
+          "referenceTable": "poll",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_fk_2",
+          "columns": [
+            "articleId"
+          ],
+          "referenceTable": "article",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_fk_3",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_fk_4",
+          "columns": [
+            "parentId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_fk_5",
+          "columns": [
+            "quotedOrRepostedFromUserId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "post_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "post_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "ownerId"
+            },
+            {
+              "type": 0,
+              "definition": "postType"
+            },
+            {
+              "type": 0,
+              "definition": "pollId"
+            },
+            {
+              "type": 0,
+              "definition": "articleId"
+            },
+            {
+              "type": 0,
+              "definition": "projectId"
+            },
+            {
+              "type": 0,
+              "definition": "parentId"
+            },
+            {
+              "type": 0,
+              "definition": "quotedOrRepostedFromUserId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "post_bookmarks",
+      "dartName": "PostBookmarks",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('post_bookmarks_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": false,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "post_bookmarks_fk_0",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_bookmarks_fk_1",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "post_bookmarks_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "post_bookmarks_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "postId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "post_likes",
+      "dartName": "PostLikes",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('post_likes_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "post_likes_fk_0",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_likes_fk_1",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "post_likes_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "post_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "postId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "post_not_interested",
+      "dartName": "PostNotInterested",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('post_not_interested_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateMarked",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "reason",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "post_not_interested_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_not_interested_fk_1",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "post_not_interested_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "post_not_interested_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            },
+            {
+              "type": 0,
+              "definition": "postId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "post_subscription",
+      "dartName": "PostSubscription",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('post_subscription_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "createdAt",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "post_subscription_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "post_subscription_fk_1",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "post_subscription_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "post_notif_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            },
+            {
+              "type": 0,
+              "definition": "postId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "posthashtags",
+      "dartName": "PostsHashtags",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('posthashtags_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "postId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "hashtagId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "posthashtags_fk_0",
+          "columns": [
+            "postId"
+          ],
+          "referenceTable": "post",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "posthashtags_fk_1",
+          "columns": [
+            "hashtagId"
+          ],
+          "referenceTable": "hashtag",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "posthashtags_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "posthashtags_index_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "postId"
+            },
+            {
+              "type": 0,
+              "definition": "hashtagId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project",
+      "dartName": "Project",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "title",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "description",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "projectCategory",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "projectSubCategory",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "startDate",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "endDate",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "currency",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "fundingCategory",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "fundingSubCategory",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "projectCost",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "fundingNote",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "projectImageAttachments",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "projectPDFAttachments",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "physicalLocations",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<protocol:AWSPlaces>?"
+        },
+        {
+          "name": "virtualLocations",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "projectVideoUrl",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "likedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "likesCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "reviewedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "reviewsCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "bookmarkedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "bookmarksCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "vettedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "vettingsCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "subscribers",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "quotedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "quoteCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "overallRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallLocationRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallDescriptionRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallDatesRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallAttachmentsRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overAllCategoryRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallFundingRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "isDeleted",
+          "columnType": 1,
+          "isNullable": true,
+          "columnDefault": "false",
+          "dartType": "bool?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "project_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "ownerId"
+            },
+            {
+              "type": 0,
+              "definition": "title"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_bookmarks",
+      "dartName": "ProjectBookmarks",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_bookmarks_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": false,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_bookmarks_fk_0",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_bookmarks_fk_1",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_bookmarks_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "project_bookmarks_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "projectId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_likes",
+      "dartName": "ProjectLikes",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_likes_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_likes_fk_0",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_likes_fk_1",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_likes_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "project_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "projectId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_not_interested",
+      "dartName": "ProjectNotInterested",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_not_interested_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateMarked",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_not_interested_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_not_interested_fk_1",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_not_interested_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "project_not_interested_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            },
+            {
+              "type": 0,
+              "definition": "projectId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_review",
+      "dartName": "ProjectReview",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_review_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "review",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "locationRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "descriptionRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "attachmentsRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "categoryRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "fundingRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "datesRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "overallRating",
+          "columnType": 3,
+          "isNullable": true,
+          "dartType": "double?"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "likedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "dislikedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_review_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_review_fk_1",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_review_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_review_reaction",
+      "dartName": "ProjectReviewReaction",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_review_reaction_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "reviewId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "isLike",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        },
+        {
+          "name": "isDeleted",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_review_reaction_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_review_reaction_fk_1",
+          "columns": [
+            "reviewId"
+          ],
+          "referenceTable": "project_review",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_review_reaction_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "review_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "reviewId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_subscription",
+      "dartName": "ProjectSubscription",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_subscription_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "createdAt",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_subscription_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_subscription_fk_1",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_subscription_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "project_notif_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            },
+            {
+              "type": 0,
+              "definition": "projectId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_vetting",
+      "dartName": "ProjectVetting",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_vetting_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "projectId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "images",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<String>?"
+        },
+        {
+          "name": "comment",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "status",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "createdAt",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "likedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "dislikedBy",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_vetting_fk_0",
+          "columns": [
+            "projectId"
+          ],
+          "referenceTable": "project",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_vetting_fk_1",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_vetting_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "project_vetting_reaction",
+      "dartName": "ProjectVettingReaction",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('project_vetting_reaction_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "ownerId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "vettingId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "dateCreated",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "updatedAt",
+          "columnType": 4,
+          "isNullable": true,
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "isLike",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        },
+        {
+          "name": "isDeleted",
+          "columnType": 1,
+          "isNullable": true,
+          "dartType": "bool?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "project_vetting_reaction_fk_0",
+          "columns": [
+            "ownerId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        },
+        {
+          "constraintName": "project_vetting_reaction_fk_1",
+          "columns": [
+            "vettingId"
+          ],
+          "referenceTable": "project_vetting",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "project_vetting_reaction_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "vetting_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "vettingId"
+            },
+            {
+              "type": 0,
+              "definition": "ownerId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "user_device",
+      "dartName": "UserDevice",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('user_device_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userInfoId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "token",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "user_device_fk_0",
+          "columns": [
+            "userInfoId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "user_device_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "user_device_token_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "token"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "user_notification_settings",
+      "dartName": "UserNotificationSettings",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('user_notification_settings_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "pauseAllPush",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "false",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowComments",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushComments",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowLikes",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushLikes",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowRepostsAndQuotes",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushRepostsAndQuotes",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowNewReviews",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushNewReviews",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowNewVettings",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushNewVettings",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowReactions",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushReactions",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowHelpfulReviews",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushHelpfulReviews",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowSubscribedContent",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushSubscribedContent",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowMentions",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushMentions",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowTags",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushTags",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowNewFollowers",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushNewFollowers",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "allowPlatformUpdates",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        },
+        {
+          "name": "pushPlatformUpdates",
+          "columnType": 1,
+          "isNullable": false,
+          "columnDefault": "true",
+          "dartType": "bool"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "user_notification_settings_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user_record",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "user_notification_settings_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "notification_settings_user_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userId"
+            }
+          ],
+          "type": "btree",
+          "isUnique": false,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "user_record",
+      "dartName": "UserRecord",
+      "module": "civic",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('user_record_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "bio",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "nin",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "phoneNumber",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "userInfoId",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "int?"
+        },
+        {
+          "name": "firstName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "lastName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "gender",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "birthdate",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "middleName",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "email",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "profileImage",
+          "columnType": 0,
+          "isNullable": true,
+          "dartType": "String?"
+        },
+        {
+          "name": "following",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "followers",
+          "columnType": 8,
+          "isNullable": true,
+          "dartType": "List<int>?"
+        },
+        {
+          "name": "followersCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "followingCount",
+          "columnType": 6,
+          "isNullable": true,
+          "columnDefault": "0",
+          "dartType": "int?"
+        },
+        {
+          "name": "createdAt",
+          "columnType": 4,
+          "isNullable": true,
+          "columnDefault": "CURRENT_TIMESTAMP",
+          "dartType": "DateTime?"
+        },
+        {
+          "name": "politicalStatus",
+          "columnType": 6,
+          "isNullable": true,
+          "dartType": "protocol:PoliticalStatus?"
+        },
+        {
+          "name": "credibilityScore",
+          "columnType": 3,
+          "isNullable": true,
+          "columnDefault": "1",
+          "dartType": "double?"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "user_record_fk_0",
+          "columns": [
+            "userInfoId"
+          ],
+          "referenceTable": "serverpod_user_info",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "user_record_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        },
+        {
+          "indexName": "user_info_id_unique_idx",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "userInfoId"
+            },
+            {
+              "type": 0,
+              "definition": "email"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": false
+        }
+      ],
+      "managed": true
+    }
+  ],
+  "installedModules": [
+    {
+      "module": "serverpod",
+      "version": "20240516151843329"
+    },
+    {
+      "module": "serverpod_auth",
+      "version": "20240520102713718"
+    }
+  ],
+  "migrationApiVersion": 1
+}

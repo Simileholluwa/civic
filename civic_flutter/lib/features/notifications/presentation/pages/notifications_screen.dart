@@ -5,6 +5,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NotificationsScreen extends ConsumerWidget {
@@ -12,11 +13,13 @@ class NotificationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifNotifier = ref.read(notifProvider.notifier);
+    final notifState = ref.watch(notifProvider);
     final pagingController = ref.watch(
-      paginatedNotificationsListProvider('').notifier,
+      paginatedNotificationsListProvider(
+        notifState.targetType,
+        notifState.unread,
+      ).notifier,
     );
-    final isEmpty = pagingController.pagingController.itemList?.isEmpty ?? true;
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -25,39 +28,47 @@ class NotificationsScreen extends ConsumerWidget {
               floating: true,
               snap: true,
               actions: [
-                IconButton(
-                  onPressed: isEmpty
-                      ? null
-                      : () async {
-                          await NotificationsHelper.deleteNotificationsDialog(
-                            ref,
-                            context,
-                          );
-                        },
-                  icon: const Icon(
-                    Iconsax.trash,
-                    size: 26,
-                  ),
-                ),
-                IconButton(
-                  onPressed: isEmpty
-                      ? null
-                      : () {
-                          unawaited(
-                            notifNotifier.markAllAsRead(),
-                          );
-                        },
-                  icon: const Icon(
-                    Iconsax.tick_circle,
-                    size: 26,
-                  ),
-                ),
-                IconButton(
-                  onPressed: isEmpty ? null : () {},
-                  icon: const Icon(
-                    Iconsax.setting_3,
-                    size: 26,
-                  ),
+                ValueListenableBuilder(
+                  valueListenable: pagingController.pagingController,
+                  builder: (context, value, child) {
+                    final isEmpty = value.itemList?.isEmpty ?? true;
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: isEmpty
+                              ? null
+                              : () {
+                                  unawaited(
+                                    pagingController.markAllAsRead(),
+                                  );
+                                },
+                          icon: const Icon(
+                            Iconsax.card_tick_1,
+                            size: 26,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: isEmpty ? null : () {},
+                          icon: const Icon(
+                            Iconsax.setting_3,
+                            size: 26,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await context.push(
+                              '/notifications/settings',
+                            );
+                          },
+                          icon: const Icon(
+                            Iconsax.setting,
+                            size: 26,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(
                   width: 5,
@@ -87,38 +98,30 @@ class NotificationsScreen extends ConsumerWidget {
             ),
           ];
         },
-        body: const NotificationCard(
-          targetType: '',
+        body: AppInfiniteList<cc.Notification>(
+          pagingController: pagingController.pagingController,
+          canCreate: false,
+          showDivider: false,
+          itemBuilder: (context, notif, index) {
+            return NotificationsCard(
+              notification: notif,
+              onTap: () async {
+                unawaited(
+                  pagingController.markAsRead(
+                    notif.id!,
+                  ),
+                );
+                if (context.mounted) {
+                  await context.push(
+                    notif.actionRoute,
+                  );
+                }
+              },
+            );
+          },
+          onRefresh: pagingController.refresh,
         ),
       ),
-    );
-  }
-}
-
-class NotificationCard extends ConsumerWidget {
-  const NotificationCard({
-    required this.targetType,
-    super.key,
-    this.isRead = true,
-  });
-
-  final String targetType;
-  final bool isRead;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier = ref.watch(
-      paginatedNotificationsListProvider(targetType, isRead).notifier,
-    );
-    return AppInfiniteList<cc.Notification>(
-      pagingController: pagingControllerNotifier.pagingController,
-      canCreate: false,
-      itemBuilder: (context, notif, index) {
-        return NotificationsCard(
-          notification: notif,
-        );
-      },
-      onRefresh: pagingControllerNotifier.refresh,
     );
   }
 }

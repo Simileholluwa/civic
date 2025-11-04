@@ -10,11 +10,8 @@ import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDatabaseImpl remoteDatabase,
-    required AuthLocalDatasourceImpl localDatabase,
-  })  : _remoteDatabase = remoteDatabase,
-        _localDatabase = localDatabase;
+  }) : _remoteDatabase = remoteDatabase;
   final AuthRemoteDatabaseImpl _remoteDatabase;
-  final AuthLocalDatasourceImpl _localDatabase;
 
   @override
   Future<Either<Failure, String?>> checkIfNewUser({
@@ -186,52 +183,6 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       return Right(result);
     } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Either<Failure, UserRecord> getUserRecord() {
-    try {
-      final result = _localDatabase.getUserRecord();
-      return Right(result!);
-    } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> removeUserRecord() async {
-    try {
-      final result = await _localDatabase.removeUserRecord();
-      return Right(result);
-    } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> saveUserRecord({
-    required UserRecord userRecord,
-  }) async {
-    try {
-      final result = await _localDatabase.saveUserRecord(
-        userRecord: userRecord,
-      );
-      return Right(result);
-    } on CacheException catch (e) {
       return Left(
         Failure(
           message: e.message,

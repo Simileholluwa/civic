@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -42,7 +41,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       ToggleLikeParams(id),
     );
     return result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       return;
     }, (_) async {
       state = state.copyWith(
@@ -80,7 +79,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       ),
     );
     return result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       return false;
     }, (_) async {
       return true;
@@ -97,7 +96,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       ),
     );
     return result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       return false;
     }, (_) async {
       ref.read(paginatedProjectListProvider('').notifier).removeProjectById(

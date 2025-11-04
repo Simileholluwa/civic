@@ -9,6 +9,53 @@ part of 'notification_services_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(notificationLocalDatasource)
+const notificationLocalDatasourceProvider =
+    NotificationLocalDatasourceProvider._();
+
+final class NotificationLocalDatasourceProvider extends $FunctionalProvider<
+        NotificationLocalDatasourceImpl,
+        NotificationLocalDatasourceImpl,
+        NotificationLocalDatasourceImpl>
+    with $Provider<NotificationLocalDatasourceImpl> {
+  const NotificationLocalDatasourceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notificationLocalDatasourceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$notificationLocalDatasourceHash();
+
+  @$internal
+  @override
+  $ProviderElement<NotificationLocalDatasourceImpl> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  NotificationLocalDatasourceImpl create(Ref ref) {
+    return notificationLocalDatasource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NotificationLocalDatasourceImpl value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<NotificationLocalDatasourceImpl>(value),
+    );
+  }
+}
+
+String _$notificationLocalDatasourceHash() =>
+    r'fda7c1d36e842bdb18301ccbe6cd376ae356b9a5';
+
 @ProviderFor(notificationRemoteDatasource)
 const notificationRemoteDatasourceProvider =
     NotificationRemoteDatasourceProvider._();
@@ -54,7 +101,7 @@ final class NotificationRemoteDatasourceProvider extends $FunctionalProvider<
 }
 
 String _$notificationRemoteDatasourceHash() =>
-    r'6f8294fcb8928df585deb76175f99985a4c8a34b';
+    r'382c54f5dbb845e26ae9bfb21cf14da6a376f5cf';
 
 @ProviderFor(notificationRepositoryImpl)
 const notificationRepositoryImplProvider =
@@ -144,6 +191,100 @@ final class GetNotificationsProvider extends $FunctionalProvider<
 
 String _$getNotificationsHash() => r'f789e9b2a96903caed8ecdb8ec31834556f6dcaa';
 
+@ProviderFor(getUserNotificationSettings)
+const getUserNotificationSettingsProvider =
+    GetUserNotificationSettingsProvider._();
+
+final class GetUserNotificationSettingsProvider extends $FunctionalProvider<
+        GetUserNotificationSettingsUseCase,
+        GetUserNotificationSettingsUseCase,
+        GetUserNotificationSettingsUseCase>
+    with $Provider<GetUserNotificationSettingsUseCase> {
+  const GetUserNotificationSettingsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'getUserNotificationSettingsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$getUserNotificationSettingsHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetUserNotificationSettingsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetUserNotificationSettingsUseCase create(Ref ref) {
+    return getUserNotificationSettings(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetUserNotificationSettingsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<GetUserNotificationSettingsUseCase>(value),
+    );
+  }
+}
+
+String _$getUserNotificationSettingsHash() =>
+    r'6c942449fdf2012d0cfaba36a483ab9849cfb693';
+
+@ProviderFor(updateUserNotificationSettings)
+const updateUserNotificationSettingsProvider =
+    UpdateUserNotificationSettingsProvider._();
+
+final class UpdateUserNotificationSettingsProvider extends $FunctionalProvider<
+        UpdateUserNotificationSettingsUseCase,
+        UpdateUserNotificationSettingsUseCase,
+        UpdateUserNotificationSettingsUseCase>
+    with $Provider<UpdateUserNotificationSettingsUseCase> {
+  const UpdateUserNotificationSettingsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'updateUserNotificationSettingsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$updateUserNotificationSettingsHash();
+
+  @$internal
+  @override
+  $ProviderElement<UpdateUserNotificationSettingsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  UpdateUserNotificationSettingsUseCase create(Ref ref) {
+    return updateUserNotificationSettings(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UpdateUserNotificationSettingsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<UpdateUserNotificationSettingsUseCase>(value),
+    );
+  }
+}
+
+String _$updateUserNotificationSettingsHash() =>
+    r'1c149565ac3f0f651a03c3aafdde64b291249b80';
+
 @ProviderFor(deleteAllNotifications)
 const deleteAllNotificationsProvider = DeleteAllNotificationsProvider._();
 
@@ -158,7 +299,7 @@ final class DeleteAllNotificationsProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'deleteAllNotificationsProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -188,7 +329,7 @@ final class DeleteAllNotificationsProvider extends $FunctionalProvider<
 }
 
 String _$deleteAllNotificationsHash() =>
-    r'03abb08d9fcc4e0bedd58f0524f31f025a4f1ab7';
+    r'f4d890a760abeefa0ed89ba6e7e7df2876253efd';
 
 @ProviderFor(deleteNotification)
 const deleteNotificationProvider = DeleteNotificationProvider._();
@@ -203,7 +344,7 @@ final class DeleteNotificationProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'deleteNotificationProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -232,7 +373,7 @@ final class DeleteNotificationProvider extends $FunctionalProvider<
 }
 
 String _$deleteNotificationHash() =>
-    r'6b601b4b292530a6aea271fa7f04377d8ffb14a0';
+    r'ccc9f98a1588d45c1070f4489da2a82ba1ace307';
 
 @ProviderFor(markNotificationAsRead)
 const markNotificationAsReadProvider = MarkNotificationAsReadProvider._();
@@ -248,7 +389,7 @@ final class MarkNotificationAsReadProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'markNotificationAsReadProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -278,7 +419,7 @@ final class MarkNotificationAsReadProvider extends $FunctionalProvider<
 }
 
 String _$markNotificationAsReadHash() =>
-    r'a9baa492a4ab5fe3836388f3d888fffab922735a';
+    r'3b9b203c2f90c8ba08caaf240d2bcc619407d979';
 
 @ProviderFor(markAllNotificationAsRead)
 const markAllNotificationAsReadProvider = MarkAllNotificationAsReadProvider._();
@@ -294,7 +435,7 @@ final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'markAllNotificationAsReadProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -324,4 +465,4 @@ final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
 }
 
 String _$markAllNotificationAsReadHash() =>
-    r'c69418f099cf60d418a6174faf710da160776532';
+    r'48455bc3d6cf47f25c3ea31d191df05b812e5295';

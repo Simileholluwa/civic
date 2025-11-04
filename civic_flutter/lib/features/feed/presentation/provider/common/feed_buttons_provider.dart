@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -27,24 +26,28 @@ class FeedButtons extends _$FeedButtons {
   }
 
   Future<void> togglePostLikeStatus(int id) async {
+    state.copyWith(
+      hasLiked: !state.hasLiked,
+    );
     final toggleLike = ref.read(togglePostLikeProvider);
     final result = await toggleLike(
       TogglePostLikeParams(id),
     );
-    return result.fold((error) {
-      log(error.message);
-      return;
-    }, (_) async {
-      state = state.copyWith(
-        hasLiked: !state.hasLiked,
-      );
-    });
+    return result.fold(
+      (error) {
+        state.copyWith(
+          hasLiked: !state.hasLiked,
+        );
+      },
+      (_) {},
+    );
   }
 
-  Future<bool> togglePostBookmarkStatus(
+  Future<void> togglePostBookmarkStatus(
     int postId,
     bool isBookmarked,
   ) async {
+    state.copyWith(hasBookmarked: !state.hasBookmarked);
     if (isBookmarked) {
       ref
           .read(
@@ -68,15 +71,13 @@ class FeedButtons extends _$FeedButtons {
         postId,
       ),
     );
-    return result.fold((error) {
-      log(error.message);
-      return false;
-    }, (_) async {
-      state = state.copyWith(
-        hasBookmarked: !state.hasBookmarked,
-      );
-      return true;
-    });
+    return result.fold(
+      (error) {
+        state.copyWith(hasBookmarked: !state.hasBookmarked);
+        return;
+      },
+      (_) async {},
+    );
   }
 
   Future<bool> markPostNotInterested(
@@ -130,7 +131,6 @@ class FeedButtons extends _$FeedButtons {
       SubscribeToNotifParams(postId),
     );
     return result.fold((error) {
-      log(error.message);
       TToastMessages.errorToast(
         'Subscription failed. Please try again.',
       );
@@ -156,7 +156,7 @@ class FeedButtons extends _$FeedButtons {
       ),
     );
     result.fold((l) {
-      log(l.message);
+      TToastMessages.errorToast(l.message);
     }, (r) {
       final commentPagingControllerNotifier = ref.watch(
         paginatedCommentListProvider(postId).notifier,
@@ -281,7 +281,6 @@ class FeedButtons extends _$FeedButtons {
       ),
     );
     return result.fold((error) {
-      log(error.message);
       setIsSendingPoll(false);
       TToastMessages.errorToast(error.message);
       return false;

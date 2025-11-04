@@ -1,0 +1,61 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "notification",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "postId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          },
+          {
+            "name": "projectId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "notification_fk_2",
+            "columns": [
+              "postId"
+            ],
+            "referenceTable": "post",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 0
+          },
+          {
+            "constraintName": "notification_fk_3",
+            "columns": [
+              "projectId"
+            ],
+            "referenceTable": "project",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 0
+          }
+        ],
+        "deleteForeignKeys": [],
+        "warnings": []
+      }
+    }
+  ],
+  "warnings": [],
+  "migrationApiVersion": 1
+}

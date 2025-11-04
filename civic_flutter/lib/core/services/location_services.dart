@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -18,9 +18,9 @@ class LocationServices {
       final response = await client.location.searchLocation(query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server. Please try again.');
+      return left(TTexts.failedToConnectToServer);
     } on TimeoutException catch (_) {
-      return left('The request timed out.');
+      return left(TTexts.requestTimedOut);
     } on LocationException catch (e) {
       return left(e.message);
     } on Exception catch (e) {
@@ -35,9 +35,9 @@ class LocationServices {
       final response = await client.location.searchNearbyLocation(position);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server. Please try again.');
+      return left(TTexts.failedToConnectToServer);
     } on TimeoutException catch (_) {
-      return left('The request timed out.');
+      return left(TTexts.requestTimedOut);
     } on LocationException catch (e) {
       return left(e.message);
     } on Exception catch (e) {
@@ -50,9 +50,6 @@ class LocationServices {
       final position = await Geolocator.getCurrentPosition();
       return right([position.longitude, position.latitude]);
     } on Exception catch (e) {
-      log(
-        e.toString(),
-      );
       return left(
         e.toString(),
       );

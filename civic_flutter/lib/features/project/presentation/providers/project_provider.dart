@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
@@ -435,8 +435,7 @@ class ProjectProvider extends _$ProjectProvider {
       await dio.download(url, filePath);
 
       return filePath;
-    } on Exception catch (e) {
-      log('Error downloading PDF: $e');
+    } on Exception catch (_) {
       return '';
     }
   }
@@ -666,7 +665,6 @@ class ProjectProvider extends _$ProjectProvider {
 
     return result.fold((error) async {
       ref.read(sendPostLoadingProvider.notifier).value = false;
-      log(error);
       return false;
     }, (imageUrls) {
       setImages(existingUpload + imageUrls);
@@ -698,7 +696,6 @@ class ProjectProvider extends _$ProjectProvider {
 
     return result.fold((error) async {
       ref.read(sendPostLoadingProvider.notifier).value = false;
-      log(error);
       return false;
     }, (pdfUrls) {
       setPDFAttachments(existingUpload + pdfUrls);
@@ -732,7 +729,7 @@ class ProjectProvider extends _$ProjectProvider {
       ),
     );
     result.fold((l) {
-      log(l.message);
+      TToastMessages.errorToast(l.message);
     }, (_) {
       return;
     });
@@ -786,7 +783,6 @@ class ProjectProvider extends _$ProjectProvider {
 
     return result.fold((error) async {
       ref.read(sendPostLoadingProvider.notifier).value = false;
-      log(error.message);
       await saveProjectDraft();
       TToastMessages.errorToast(
         '${error.message}. Project has been saved as draft.',

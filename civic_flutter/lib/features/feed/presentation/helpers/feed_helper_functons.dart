@@ -17,14 +17,13 @@ class FeedHelperFunctions {
   ) {
     return postDialog(
       context: context,
-      title: 'Delete post?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
+      title: TTexts.deletePostTitle,
+      description: TTexts.deletePostSubtitle,
       onTapSkipButton: () => context.pop(false),
-      activeButtonText: 'Delete',
+      activeButtonText: TTexts.delete,
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: 'Cancel',
+      skipText: TTexts.cancel,
       onTapActiveButton: () => context.pop(true),
     );
   }
@@ -56,16 +55,15 @@ class FeedHelperFunctions {
   ) {
     return postDialog(
       context: context,
-      title: 'Clear all bookmarks?',
-      description: 'Are you sure you want to clear all your bookmarks? '
-          'This action cannot be undone.',
+      title: TTexts.clearAllBookmarksTitle,
+      description: TTexts.clearAllBookmarksSubtitle,
       onTapSkipButton: () {
         context.pop();
       },
-      activeButtonText: 'Delete all',
+      activeButtonText: TTexts.deleteAll,
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: 'Cancel',
+      skipText: TTexts.cancel,
       onTapActiveButton: () async {
         if (context.mounted) {
           context.pop();
@@ -104,7 +102,7 @@ class FeedHelperFunctions {
   ) async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      TToastMessages.infoToast('Location services are disabled on your device');
+      TToastMessages.infoToast(TTexts.locationServicesDisabled);
     }
     await Geolocator.requestPermission();
     final permission = await Geolocator.checkPermission();
@@ -130,14 +128,13 @@ class FeedHelperFunctions {
   ) {
     return postDialog(
       context: context,
-      title: 'Delete poll?',
-      description: 'Proceed with caution as this action is '
-          'irreversible.',
+      title: TTexts.deletePollTitle,
+      description: TTexts.deletePostSubtitle,
       onTapSkipButton: () => context.pop(false),
-      activeButtonText: 'Delete',
+      activeButtonText: TTexts.delete,
       activeButtonLoading: false,
       skipButtonLoading: false,
-      skipText: 'Cancel',
+      skipText: TTexts.cancel,
       onTapActiveButton: () => context.pop(true),
     );
   }
@@ -145,19 +142,19 @@ class FeedHelperFunctions {
   static String formatTimeLeft(DateTime expiresAt) {
     final now = DateTime.now();
     final timeLeft = expiresAt.difference(now);
-    if (timeLeft.isNegative) return ' • Poll ended';
+    if (timeLeft.isNegative) return TTexts.pollEnded;
 
     final days = timeLeft.inDays;
     final hours = timeLeft.inHours % 24;
     final minutes = timeLeft.inMinutes % 60;
 
-    if (days > 0) return ' • $days day${days == 1 ? '' : 's'} left';
+    if (days > 0) return ' • $days${days == 1 ? TTexts.day : TTexts.days}${TTexts.left}';
     if (hours > 0) {
-      return ' • $hours hour${hours == 1 ? '' : 's'} ${minutes}m left';
+      return ' • $hours${hours == 1 ? TTexts.hour : TTexts.hours} ${minutes}m${TTexts.left}';
     }
-    if (minutes > 0) return ' • $minutes minute${minutes == 1 ? '' : 's'} left';
+    if (minutes > 0) return ' • $minutes${minutes == 1 ? TTexts.minute : TTexts.minutes}${TTexts.left}';
 
-    return ' • Poll ends soon';
+    return TTexts.pollEndsSoon;
   }
 
   static List<String> getAllImagesFromEditor(String content) {

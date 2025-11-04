@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_provider.g.dart';
@@ -18,7 +18,7 @@ class CurrentActiveUser extends _$CurrentActiveUser {
       ),
     );
     return result.fold((l) {
-      log(l.message);
+      TToastMessages.errorToast(l.message);
       return false;
     }, (_) async {
       return true;
@@ -34,7 +34,6 @@ class CurrentActiveUser extends _$CurrentActiveUser {
     );
     return result.fold(
       (l) {
-        log(l.message);
         return false;
       },
       (r) {

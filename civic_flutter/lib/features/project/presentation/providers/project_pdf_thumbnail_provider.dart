@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -23,7 +22,6 @@ Future<List<Uint8List>> projectPdfThumbnail(
     if (regex.hasMatch(pdf)) {
       pdf = await fetchAndCachePDF(pdf);
       if (pdf.isEmpty) {
-        log('Skipping invalid PDF URL: $pdf');
         continue;
       }
     }
@@ -39,8 +37,7 @@ Future<List<Uint8List>> projectPdfThumbnail(
       thumbnails.add(image!.bytes);
       await page.close();
       await pdfDocument.close();
-    } on Exception catch (e) {
-      log('Error processing PDF: $e');
+    } on Exception catch (_) {
       continue;
     }
   }
@@ -59,8 +56,7 @@ Future<String> fetchAndCachePDF(String url) async {
     final dio = Dio();
     await dio.download(url, filePath);
     return filePath;
-  } on Exception catch (e) {
-    log('Error downloading PDF: $e');
+  } on Exception catch (_) {
     return '';
   }
 }

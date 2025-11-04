@@ -119,7 +119,7 @@ class TDeviceUtils {
     } else {
       if (context.mounted) {
         TToastMessages.errorToast(
-          'Unable to launch url',
+          TTexts.unableToLaunchUrl,
         );
       }
     }

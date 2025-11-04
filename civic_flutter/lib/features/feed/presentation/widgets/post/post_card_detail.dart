@@ -14,6 +14,7 @@ class PostCardDetail extends ConsumerWidget {
     this.showInteractions = true,
     this.hasProject = false,
     this.noMaxLines = false,
+    this.showAuthor = true,
   });
 
   final Post post;
@@ -21,6 +22,7 @@ class PostCardDetail extends ConsumerWidget {
   final bool hasProject;
   final VoidCallback? onTap;
   final bool noMaxLines;
+  final bool showAuthor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,13 +42,14 @@ class PostCardDetail extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
-            child: ContentCreatorInfo(
-              creator: post.owner!,
-              timeAgo: postCardState.timeAgo,
+          if (showAuthor)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+              child: ContentCreatorInfo(
+                creator: post.owner!,
+                timeAgo: postCardState.timeAgo,
+              ),
             ),
-          ),
           PostCardBuild(
             post: livePost.value ?? post,
             noMaxLines: noMaxLines,

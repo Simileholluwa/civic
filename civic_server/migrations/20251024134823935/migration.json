@@ -1,0 +1,543 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "notification"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "notification",
+        "dartName": "Notification",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('notification_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "receiverId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "senderId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "senderName",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "groupedSenderNames",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "content",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "groupKey",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "actionType",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "protocol:NotificationActionType"
+          },
+          {
+            "name": "senderAvatarUrl",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "targetType",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "protocol:NotificationTargetType"
+          },
+          {
+            "name": "actionRoute",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "targetId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "isRead",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "false",
+            "dartType": "bool"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": false,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "notification_fk_0",
+            "columns": [
+              "receiverId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          },
+          {
+            "constraintName": "notification_fk_1",
+            "columns": [
+              "senderId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 0
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "notification_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "notification_receiver_isread_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "receiverId"
+              },
+              {
+                "type": 0,
+                "definition": "isRead"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "notification_receiver_createdat_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "receiverId"
+              },
+              {
+                "type": 0,
+                "definition": "createdAt"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "user_device",
+        "dartName": "UserDevice",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('user_device_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "userInfoId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "token",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "user_device_fk_0",
+            "columns": [
+              "userInfoId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "user_device_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "user_device_token_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "token"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "user_notification_settings",
+        "dartName": "UserNotificationSettings",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('user_notification_settings_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "userId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "pauseAllPush",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "false",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowComments",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushComments",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowLikes",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushLikes",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowRepostsAndQuotes",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushRepostsAndQuotes",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowNewReviews",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushNewReviews",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowNewVettings",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushNewVettings",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowReactions",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushReactions",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowHelpfulReviews",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushHelpfulReviews",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowSubscribedContent",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushSubscribedContent",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowMentionsAndTags",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushMentionsAndTags",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowNewFollowers",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushNewFollowers",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "allowPlatformUpdates",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          },
+          {
+            "name": "pushPlatformUpdates",
+            "columnType": 1,
+            "isNullable": false,
+            "columnDefault": "true",
+            "dartType": "bool"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "user_notification_settings_fk_0",
+            "columns": [
+              "userId"
+            ],
+            "referenceTable": "user_record",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "user_notification_settings_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "notification_settings_user_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "userId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"triggerUser\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "triggerUser"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"mediaThumbnailUrl\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "mediaThumbnailUrl"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "notNullAdded",
+      "message": "Column content of table notification is modified to be not null. If there are existing rows with null values, this migration will fail.",
+      "table": "notification",
+      "columns": [
+        "content"
+      ],
+      "destrucive": false
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column actionType of table notification is modified in a way that it must be deleted and recreated.",
+      "table": "notification",
+      "columns": [
+        "actionType"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column targetType of table notification is modified in a way that it must be deleted and recreated.",
+      "table": "notification",
+      "columns": [
+        "targetType"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"notification\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "notification",
+      "columns": [
+        "actionType"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -41,7 +41,7 @@ class CreateContentScreen extends ConsumerWidget {
               horizontal: 20,
             ),
             child: Text(
-              'What would you like to create?',
+              TTexts.whatToCreate,
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 25,
                   ),
@@ -62,7 +62,7 @@ class CreateContentScreen extends ConsumerWidget {
               spacing: 15,
               children: [
                 CreateContentItems(
-                  itemName: 'Project',
+                  itemName: TTexts.project,
                   icon: Iconsax.note,
                   textColor: isLeader ? null : Theme.of(context).disabledColor,
                   onTap: isLeader
@@ -72,54 +72,49 @@ class CreateContentScreen extends ConsumerWidget {
                           );
                         }
                       : null,
-                  itemCaption: 'New, existing, completed or planned. Keep your '
-                      'constituents updated. This is only available to '
-                      'leaders.',
+                  itemCaption: TTexts.projectSubtitle,
                 ),
                 const Divider(
                   indent: 40,
                   endIndent: 5,
                 ),
                 CreateContentItems(
-                  itemName: 'Post',
+                  itemName: TTexts.post,
                   icon: Iconsax.calendar,
                   onTap: () async {
                     await context.push(
                       '/create/post/0',
                     );
                   },
-                  itemCaption:
-                      'Share your thoughts, ideas, and opinions with everyone.',
+                  itemCaption: TTexts.postSubtitle,
                 ),
                 const Divider(
                   indent: 40,
                   endIndent: 5,
                 ),
                 CreateContentItems(
-                  itemName: 'Poll',
+                  itemName: TTexts.poll,
                   icon: Iconsax.chart,
                   onTap: () async {
                     await context.push(
                       '/create/poll/0',
                     );
                   },
-                  itemCaption: 'Engage your audience with quick questions '
-                      'and gather instant feedback.',
+                  itemCaption: TTexts.pollSubtitle,
                 ),
                 const Divider(
                   indent: 40,
                   endIndent: 5,
                 ),
                 CreateContentItems(
-                  itemName: 'Article',
+                  itemName: TTexts.article,
                   icon: Iconsax.document,
                   onTap: () async {
                     await context.push(
                       '/create/article/0',
                     );
                   },
-                  itemCaption: 'Share in-depth insights, stories, or research '
-                      'with your audience.',
+                  itemCaption: TTexts.articleSubtitle,
                 ),
               ],
             ),

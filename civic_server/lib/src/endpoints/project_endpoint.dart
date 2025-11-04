@@ -363,16 +363,14 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 receiverId: project.ownerId,
                 senderId: user.id!,
-                actionType: 'reviewed',
-                targetType: 'project',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.review,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: sentReview.projectId,
                 senderName: getFullName(
                     user.firstName!, user.middleName, user.lastName!),
                 actionRoute: '/project/${project.id}',
-                content: sentReview.review!.length > 100
-                    ? '${sentReview.review!.substring(0, 100)}...'
-                    : sentReview.review!,
+                body: _getNotificationBody(projectReview.review ?? ''),
               ),
             );
 
@@ -381,14 +379,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 projectId: sentReview.projectId,
                 senderId: user.id!,
-                actionType: 'reviewed',
-                targetType: 'project',
-                triggerUser: getFullName(
-                  project.owner!.firstName!,
-                  project.owner!.middleName,
-                  project.owner!.lastName!,
-                ),
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.review,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: sentReview.projectId,
                 senderName: getFullName(
                   user.firstName!,
@@ -396,9 +389,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${project.id}',
-                content: sentReview.review!.length > 100
-                    ? '${sentReview.review!.substring(0, 100)}...'
-                    : sentReview.review!,
+                body: _getNotificationBody(projectReview.review ?? ''),
               ),
             );
           }
@@ -453,7 +444,8 @@ class ProjectEndpoint extends Endpoint {
         }
 
         if (existingReview.ownerId != user.id) {
-          throw ServerSideException(message: 'Unauthorized to delete this review');
+          throw ServerSideException(
+              message: 'Unauthorized to delete this review');
         }
 
         final project = await Project.db.findById(
@@ -572,7 +564,8 @@ class ProjectEndpoint extends Endpoint {
         }
 
         if (existingVetting.ownerId != user.id) {
-          throw ServerSideException(message: 'Unauthorized to delete this vetting');
+          throw ServerSideException(
+              message: 'Unauthorized to delete this vetting');
         }
 
         final project = await Project.db.findById(
@@ -824,7 +817,7 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
-    Future<void> clearBookmarks(Session session) async {
+  Future<void> clearBookmarks(Session session) async {
     return await session.db.transaction((transaction) async {
       try {
         final user = await authUser(session);
@@ -969,9 +962,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 receiverId: review!.ownerId,
                 senderId: user.id!,
-                actionType: 'reacted to',
-                targetType: 'project review',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.react,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: review!.projectId,
                 senderName: getFullName(
                   user.firstName!,
@@ -979,9 +972,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${review!.projectId}',
-                content: review!.review!.length > 100
-                    ? '${review!.review!.substring(0, 100)}...'
-                    : review!.review!,
+                body: _getNotificationBody(review!.review ?? ''),
               ),
             );
           }
@@ -1113,9 +1104,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 receiverId: vetting!.ownerId,
                 senderId: user.id!,
-                actionType: 'reacted to',
-                targetType: 'project vetting',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.react,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: vetting!.id!,
                 senderName: getFullName(
                   user.firstName!,
@@ -1123,9 +1114,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${vetting!.projectId}',
-                content: vetting!.comment!.length > 100
-                    ? '${vetting!.comment!.substring(0, 100)}...'
-                    : vetting!.comment!,
+                body: _getNotificationBody(vetting!.comment ?? ''),
               ),
             );
           }
@@ -1249,54 +1238,6 @@ class ProjectEndpoint extends Endpoint {
             transaction: transaction,
           );
           project.bookmarkedBy?.add(user.id!);
-
-          if (project.ownerId != user.id) {
-            unawaited(
-              NotificationEndpoint().sendNotification(
-                session,
-                receiverId: project.ownerId,
-                senderId: user.id!,
-                actionType: 'bookmarked',
-                targetType: 'project',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project.id!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute: '/project/${project.id!}',
-                content: project.title!.length > 100
-                    ? '${project.title!.substring(0, 100)}...'
-                    : project.title!,
-              ),
-            );
-            unawaited(
-              NotificationEndpoint().notifyProjectSubscribers(
-                session,
-                projectId: project.id!,
-                senderId: user.id!,
-                actionType: 'bookmarked',
-                targetType: 'project',
-                triggerUser: getFullName(
-                  project.owner!.firstName!,
-                  project.owner!.middleName,
-                  project.owner!.lastName!,
-                ),
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                targetId: project.id!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute: '/project/${project.id}',
-                content: project.title!.length > 100
-                    ? '${project.title!.substring(0, 100)}...'
-                    : project.title!,
-              ),
-            );
-          }
         }
         await updateProject(session, project);
       } catch (e, stackTrace) {
@@ -1380,9 +1321,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 receiverId: project.ownerId,
                 senderId: user.id!,
-                actionType: 'liked',
-                targetType: 'project',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.like,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
                   user.firstName!,
@@ -1390,9 +1331,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${project.id!}',
-                content: project.title!.length > 100
-                    ? '${project.title!.substring(0, 100)}...'
-                    : project.title!,
+                body: _getNotificationBody(project.title ?? ''),
               ),
             );
             unawaited(
@@ -1400,14 +1339,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 projectId: project.id!,
                 senderId: user.id!,
-                actionType: 'liked',
-                targetType: 'project',
-                triggerUser: getFullName(
-                  project.owner!.firstName!,
-                  project.owner!.middleName,
-                  project.owner!.lastName!,
-                ),
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.like,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
                   user.firstName!,
@@ -1415,9 +1349,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${project.id}',
-                content: project.title!.length > 100
-                    ? '${project.title!.substring(0, 100)}...'
-                    : project.title!,
+                body: _getNotificationBody(project.title ?? ''),
               ),
             );
           }
@@ -1545,9 +1477,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 receiverId: project.ownerId,
                 senderId: user.id!,
-                actionType: 'vetted',
-                targetType: 'project',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.vet,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
                   user.firstName!,
@@ -1555,9 +1487,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${project.id!}',
-                content: newVetting.comment!.length > 100
-                    ? '${newVetting.comment!.substring(0, 100)}...'
-                    : newVetting.comment!,
+                body: _getNotificationBody(newVetting.comment ?? ''),
               ),
             );
 
@@ -1566,14 +1496,9 @@ class ProjectEndpoint extends Endpoint {
                 session,
                 projectId: project.id!,
                 senderId: user.id!,
-                actionType: 'vetted',
-                targetType: 'project',
-                triggerUser: getFullName(
-                  project.owner!.firstName!,
-                  project.owner!.middleName,
-                  project.owner!.lastName!,
-                ),
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.vet,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: project.id!,
                 senderName: getFullName(
                   user.firstName!,
@@ -1581,9 +1506,7 @@ class ProjectEndpoint extends Endpoint {
                   user.lastName!,
                 ),
                 actionRoute: '/project/${project.id}',
-                content: project.title!.length > 100
-                    ? '${project.title!.substring(0, 100)}...'
-                    : project.title!,
+                body: _getNotificationBody(newVetting.comment ?? ''),
               ),
             );
           }
@@ -2129,5 +2052,14 @@ class ProjectEndpoint extends Endpoint {
     final effectiveNew = newValue ?? 0;
     return (effectiveCurrent * currentCount + effectiveNew) /
         (currentCount + 1);
+  }
+
+  @doNotGenerate
+  String? _getNotificationBody(String text) {
+    if (text.isEmpty) return null;
+    if (text.length > 150) {
+      return '${text.substring(0, 150)}...';
+    }
+    return text;
   }
 }

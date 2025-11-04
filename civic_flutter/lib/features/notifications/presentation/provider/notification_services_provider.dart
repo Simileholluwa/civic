@@ -4,8 +4,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_services_provider.g.dart';
 
 @Riverpod(keepAlive: true)
+NotificationLocalDatasourceImpl notificationLocalDatasource(Ref ref) {
+  return NotificationLocalDatasourceImpl(
+    prefs: ref.read(localStorageProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
 NotificationRemoteDatasourceImpl notificationRemoteDatasource(Ref ref) {
   return NotificationRemoteDatasourceImpl(
+    localDatasource: ref.read(notificationLocalDatasourceProvider),
     client: ref.read(clientProvider),
   );
 }
@@ -26,28 +34,42 @@ GetNotificationsUseCase getNotifications(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
+GetUserNotificationSettingsUseCase getUserNotificationSettings(Ref ref) {
+  return GetUserNotificationSettingsUseCase(
+    notificationRepository: ref.read(notificationRepositoryImplProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+UpdateUserNotificationSettingsUseCase updateUserNotificationSettings(Ref ref) {
+  return UpdateUserNotificationSettingsUseCase(
+    notificationRepository: ref.read(notificationRepositoryImplProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
 DeleteAllNotificationsUseCase deleteAllNotifications(Ref ref) {
   return DeleteAllNotificationsUseCase(
     notificationRepository: ref.read(notificationRepositoryImplProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 DeleteNotificationUseCase deleteNotification(Ref ref) {
   return DeleteNotificationUseCase(
     notificationRepository: ref.read(notificationRepositoryImplProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 MarkNotificationAsReadUseCase markNotificationAsRead(Ref ref) {
   return MarkNotificationAsReadUseCase(
     notificationRepository: ref.read(notificationRepositoryImplProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 MarkAllNotificationsAsReadUseCase markAllNotificationAsRead(Ref ref) {
   return MarkAllNotificationsAsReadUseCase(
     notificationRepository: ref.read(notificationRepositoryImplProvider),

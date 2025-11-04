@@ -48,7 +48,6 @@ export './presentation/providers/project_review_detail_provider.dart';
 export './presentation/providers/project_review_provider.dart';
 export './presentation/providers/project_review_reaction_provider.dart';
 export './presentation/providers/project_screen_provider.dart';
-export './presentation/providers/project_scroll_controller_provider.dart';
 export './presentation/providers/project_services_provider.dart';
 export './presentation/providers/project_vetting_reaction_provider.dart';
 export './presentation/providers/verify_user_proximity_provider.dart';

@@ -1,19 +1,22 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:civic_client/civic_client.dart';
+
+import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'paginated_notifications_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
-  final PagingController<int, Notification> pagingController =
+  final PagingController<int, cc.Notification> pagingController =
       PagingController(firstPageKey: 1);
 
+  final List<cc.Notification> _bufferedNotifications = [];
+
   @override
-  PagingStatus build(String targetType, [bool isRead = true]) {
+  PagingStatus build(cc.NotificationTargetType? targetType, bool? isRead) {
     pagingController
       ..addPageRequestListener(
         fetchPage,
@@ -22,27 +25,115 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
         state = status;
       });
 
-    ref
-      ..onDispose(
-        pagingController.dispose,
-      )
-      ..listen<AsyncValue<Notification>>(
-        userNotificationStreamProvider(null, null),
-        (previous, next) {
-          next.whenData((event) {
-            log(event.toString());
-            _handleNotification(event);
-          });
-        },
-      );
+    ref.onDispose(
+      pagingController.dispose,
+    );
+
+    _listenToNewNotifications();
 
     return pagingController.value.status;
   }
 
-  void removeAllNotifications() {
+  Future<void> markAsRead(int notificationId) async {
+    // 1. Find the item and its index
+    final currentList = pagingController.itemList ?? [];
+    final itemIndex = currentList.indexWhere(
+      (n) => n.id == notificationId,
+    );
+
+    if (itemIndex == -1) return;
+
+    final item = currentList[itemIndex];
+
+    // 2. Create the optimistically updated item
+    final updatedItem = item.copyWith(isRead: true);
+
+    // 3. Update the UI *immediately*
+    final newList = List<cc.Notification>.from(currentList);
+    newList[itemIndex] = updatedItem;
+
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
-      itemList: const [],
+      itemList: newList,
+    );
+
+    // 4. Call the API in the background
+    final markRead = ref.read(
+      markNotificationAsReadProvider,
+    );
+
+    final result = await markRead(
+      MarkNotificationAsReadParams(
+        notificationId,
+      ),
+    );
+
+    // 5. Roll back on failure
+    result.fold(
+      (l) {
+        // Put the original item back
+        newList[itemIndex] = item;
+        pagingController.value = PagingState(
+          nextPageKey: pagingController.nextPageKey,
+          itemList: newList,
+        );
+      },
+      (_) {},
+    );
+  }
+
+  Future<void> markAllAsRead() async {
+    final currentList = pagingController.itemList ?? [];
+
+    // 1. Create the new list with all items marked as read
+    final newList = currentList
+        .map(
+          (notif) => notif.isRead
+              ? notif
+              : notif.copyWith(
+                  isRead: true,
+                ),
+        )
+        .toList();
+
+    // 2. Update the UI *immediately*
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: newList,
+    );
+
+    // 3. Call the API in the background
+    final markAllRead = ref.read(markAllNotificationAsReadProvider);
+    final result = await markAllRead(NoParams());
+
+    // 4. Roll back on failure
+    result.fold(
+      (l) {
+        pagingController.value = PagingState(
+          nextPageKey: pagingController.nextPageKey,
+          itemList: currentList,
+        );
+      },
+      (_) {},
+    );
+  }
+
+  void _listenToNewNotifications() {
+    final userId = ref
+        .read(
+          localStorageProvider,
+        )
+        .getInt(
+          'userId',
+        );
+    final sub = ref
+        .read(clientProvider)
+        .notification
+        .newNotificationUpdates(userId!)
+        .listen(_handleNotification);
+
+    ref.onDispose(
+      sub.cancel,
     );
   }
 
@@ -58,7 +149,6 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
         ),
       );
       result.fold((error) {
-        log(error.toString(), name: 'PaginatedNotificationList');
         pagingController.value = PagingState(
           error: error.message,
         );
@@ -73,7 +163,6 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
         }
       });
     } on Exception catch (e) {
-      log(e.toString(), name: 'PaginatedNotificationList');
       pagingController.value = PagingState(
         error: e.toString(),
       );
@@ -84,27 +173,74 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     pagingController.refresh();
   }
 
-  void _handleNotification(Notification notif) {
-    final itemList = pagingController.itemList ?? [];
-    final alreadyExists = itemList.any((n) => n.id == notif.id);
-    if (alreadyExists) {
+  void _handleNotification(cc.Notification notif) {
+    _bufferedNotifications.insert(0, notif);
+    ref
+        .watch(
+          notificationsCountProvider.notifier,
+        )
+        .count = _bufferedNotifications.length;
+  }
+
+  void mergeBufferedNotifications() {
+    if (pagingController.itemList == null) {
+      _bufferedNotifications.clear();
+
+      ref
+          .watch(
+            notificationsCountProvider.notifier,
+          )
+          .count = _bufferedNotifications.length;
       return;
     }
     pagingController.value = PagingState(
       nextPageKey: pagingController.nextPageKey,
-      itemList: [notif, ...pagingController.itemList ?? []],
+      itemList: [
+        ..._bufferedNotifications,
+        ...pagingController.itemList ?? [],
+      ],
     );
+
+    _bufferedNotifications.clear();
+
+    ref
+        .watch(
+          notificationsCountProvider.notifier,
+        )
+        .count = _bufferedNotifications.length;
+    return;
   }
 
-  void removeNotificationById(int? notificationId) {
-    if (pagingController.itemList != null && notificationId != null) {
-      final updatedList =
-          List<Notification>.from(pagingController.itemList ?? [])
-            ..removeWhere((element) => element.id == notificationId);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
+  Future<void> deleteNotification(int notificationId) async {
+    // 1. Get the current list and store it for rollback
+    final currentList = pagingController.itemList ?? [];
+    final originalList = List<cc.Notification>.from(currentList);
+
+    // 2. Create the new optimistic list
+    final newList = List<cc.Notification>.from(currentList)
+      ..removeWhere((notif) => notif.id == notificationId);
+
+    // Check if anything was actually removed
+    if (newList.length == originalList.length) {
+      return;
     }
+
+    // 3. Update the UI *immediately*
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: newList,
+    );
+
+    // 4. Call the API in the background
+    final delete = ref.read(deleteNotificationProvider);
+    final result = await delete(
+      DeleteNotificationParams(
+        notificationId,
+      ),
+    );
+    result.fold(
+      (l) {},
+      (_) {},
+    );
   }
 }

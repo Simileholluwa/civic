@@ -72,7 +72,6 @@ class PostEndpoint extends Endpoint {
               session,
               user,
               savedPost,
-              'post',
             ),
           );
 
@@ -181,7 +180,6 @@ class PostEndpoint extends Endpoint {
               session,
               user,
               savedPost,
-              'poll',
             ),
           );
 
@@ -270,7 +268,6 @@ class PostEndpoint extends Endpoint {
               session,
               user,
               savedPost,
-              'article',
             ),
           );
 
@@ -303,7 +300,6 @@ class PostEndpoint extends Endpoint {
     Session session,
     UserRecord user,
     Post savedPost,
-    String type,
   ) async {
     if (savedPost.taggedUsers!.isNotEmpty) {
       for (final tag in savedPost.taggedUsers!) {
@@ -312,19 +308,18 @@ class PostEndpoint extends Endpoint {
             session,
             receiverId: tag.id!,
             senderId: user.id!,
-            actionType: 'tagged you in an $type',
-            targetType: '',
+            actionType: NotificationActionType.tag,
+            targetType: NotificationTargetType.post,
             targetId: savedPost.id!,
-            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
               user.firstName!,
               user.middleName,
               user.lastName!,
             ),
-            actionRoute: '/feed/$type/${savedPost.id}',
-            content: savedPost.text!.length > 100
-                ? '${savedPost.text!.substring(0, 100)}...'
-                : savedPost.text!,
+            actionRoute: '/feed/post/${savedPost.id}',
+            body: _getNotificationBody(savedPost.text ?? ''),
+            postId: savedPost.id,
           ),
         );
       }
@@ -337,16 +332,18 @@ class PostEndpoint extends Endpoint {
             session,
             receiverId: mention.id!,
             senderId: user.id!,
-            actionType: 'mentioned you in a $type',
-            targetType: '',
+            actionType: NotificationActionType.mention,
+            targetType: NotificationTargetType.post,
             targetId: savedPost.id!,
-            mediaThumbnailUrl: user.userInfo!.imageUrl!,
-            senderName:
-                getFullName(user.firstName!, user.middleName, user.lastName!),
-            actionRoute: '/feed/$type/${savedPost.id}',
-            content: savedPost.text!.length > 100
-                ? '${savedPost.text!.substring(0, 100)}...'
-                : savedPost.text!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
+            actionRoute: '/feed/post/${savedPost.id}',
+            body: _getNotificationBody(savedPost.text ?? ''),
+            postId: savedPost.id,
           ),
         );
       }
@@ -465,16 +462,15 @@ class PostEndpoint extends Endpoint {
             session,
             receiverId: post.ownerId,
             senderId: user.id!,
-            actionType: 'voted in',
-            targetType: 'poll',
+            actionType: NotificationActionType.vote,
+            targetType: NotificationTargetType.post,
             targetId: post.id!,
-            mediaThumbnailUrl: user.userInfo!.imageUrl!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName:
                 getFullName(user.firstName!, user.middleName, user.lastName!),
             actionRoute: '/feed/poll/${post.id}',
-            content: post.text!.length > 100
-                ? '${post.text!.substring(0, 100)}...'
-                : post.text!,
+            body: _getNotificationBody(post.text ?? ''),
+            postId: postId,
           ),
         );
 
@@ -483,21 +479,17 @@ class PostEndpoint extends Endpoint {
             session,
             senderId: user.id!,
             postId: post.id!,
-            triggerUser: getFullName(
-              post.owner!.firstName!,
-              post.owner!.middleName,
-              post.owner!.lastName!,
-            ),
-            actionType: 'voted in',
-            targetType: 'poll',
+            actionType: NotificationActionType.vote,
+            targetType: NotificationTargetType.post,
             targetId: post.id!,
-            mediaThumbnailUrl: user.userInfo!.imageUrl!,
-            senderName:
-                getFullName(user.firstName!, user.middleName, user.lastName!),
-            actionRoute: '/feed/poll/${post.id}',
-            content: post.text!.length > 100
-                ? '${post.text!.substring(0, 100)}...'
-                : post.text!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
+            actionRoute: '/feed/post/${post.id}',
+            body: _getNotificationBody(post.text ?? ''),
           ),
         );
       }
@@ -729,19 +721,20 @@ class PostEndpoint extends Endpoint {
               session,
               receiverId: parent.ownerId,
               senderId: user.id!,
-              actionType: isReply ? 'replied to' : 'commented on',
-              targetType: isReply ? 'comment' : 'post',
+              actionType: isReply
+                  ? NotificationActionType.reply
+                  : NotificationActionType.comment,
+              targetType: NotificationTargetType.post,
               targetId: sentComment.id!,
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
               senderName: getFullName(
                 user.firstName!,
                 user.middleName,
                 user.lastName!,
               ),
               actionRoute: '/feed/post/${sentComment.id!}',
-              content: sentComment.text!.length > 100
-                  ? '${sentComment.text!.substring(0, 100)}...'
-                  : sentComment.text!,
+              body: _getNotificationBody(sentComment.text ?? ''),
+              postId: sentComment.id!,
             ),
           );
 
@@ -749,25 +742,20 @@ class PostEndpoint extends Endpoint {
             NotificationEndpoint().notifyPostSubscribers(
               session,
               senderId: user.id!,
-              actionType: isReply ? 'replied to' : 'commented on',
-              targetType: isReply ? 'comment' : 'post',
+              actionType: isReply
+                  ? NotificationActionType.reply
+                  : NotificationActionType.comment,
+              targetType: NotificationTargetType.post,
               targetId: sentComment.id!,
-              triggerUser: getFullName(
-                parent.owner!.firstName!,
-                parent.owner!.middleName,
-                parent.owner!.lastName!,
-              ),
               postId: parent.id!,
-              mediaThumbnailUrl: user.userInfo!.imageUrl!,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
               senderName: getFullName(
                 user.firstName!,
                 user.middleName,
                 user.lastName!,
               ),
               actionRoute: '/feed/post/${parent.id}/comments',
-              content: sentComment.text!.length > 100
-                  ? '${sentComment.text!.substring(0, 100)}...'
-                  : sentComment.text!,
+              body: _getNotificationBody(sentComment.text ?? ''),
             ),
           );
         }
@@ -777,7 +765,6 @@ class PostEndpoint extends Endpoint {
             session,
             user,
             sentComment,
-            'post',
           ),
         );
 
@@ -1024,42 +1011,30 @@ class PostEndpoint extends Endpoint {
                 session,
                 receiverId: selectedProject.ownerId,
                 senderId: user.id!,
-                actionType: 'quoted',
-                targetType: 'project',
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                actionType: NotificationActionType.quote,
+                targetType: NotificationTargetType.project,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: sentPost.id!,
                 senderName: getFullName(
                     user.firstName!, user.middleName, user.lastName!),
                 actionRoute: '/feed/post/${sentPost.id}',
-                content: sentPost.text == null
-                    ? null
-                    : sentPost.text!.length > 100
-                        ? '${sentPost.text!.substring(0, 100)}...'
-                        : sentPost.text!,
+                body: _getNotificationBody(sentPost.text ?? ''),
+                postId: sentPost.id!,
               ),
             );
             unawaited(
               NotificationEndpoint().notifyProjectSubscribers(
                 session,
                 senderId: user.id!,
-                actionType: 'quoted',
-                targetType: 'project',
-                triggerUser: getFullName(
-                  selectedProject.owner!.firstName!,
-                  selectedProject.owner!.middleName,
-                  selectedProject.owner!.lastName!,
-                ),
+                actionType: NotificationActionType.quote,
+                targetType: NotificationTargetType.project,
                 projectId: selectedProject.id!,
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: sentPost.id!,
                 senderName: getFullName(
                     user.firstName!, user.middleName, user.lastName!),
                 actionRoute: '/feed/post/${sentPost.id}',
-                content: sentPost.text == null
-                    ? null
-                    : sentPost.text!.length > 100
-                        ? '${sentPost.text!.substring(0, 100)}...'
-                        : sentPost.text!,
+                body: _getNotificationBody(sentPost.text ?? ''),
               ),
             );
           }
@@ -1069,7 +1044,6 @@ class PostEndpoint extends Endpoint {
               session,
               user,
               sentPost,
-              'article',
             ),
           );
 
@@ -1338,58 +1312,6 @@ class PostEndpoint extends Endpoint {
             transaction: transaction,
           );
           post.bookmarkedBy?.add(user.id!);
-
-          if (post.ownerId != user.id) {
-            unawaited(
-              NotificationEndpoint().sendNotification(
-                session,
-                receiverId: post.ownerId,
-                senderId: user.id!,
-                actionType: 'bookmarked',
-                targetType: 'post',
-                targetId: post.id!,
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute: '/feed/post/${post.id}',
-                content: post.text == null
-                    ? null
-                    : post.text!.length > 100
-                        ? '${post.text!.substring(0, 100)}...'
-                        : post.text!,
-              ),
-            );
-            unawaited(
-              NotificationEndpoint().notifyPostSubscribers(
-                session,
-                triggerUser: getFullName(
-                  post.owner!.firstName!,
-                  post.owner!.middleName,
-                  post.owner!.lastName!,
-                ),
-                postId: post.id!,
-                senderId: user.id!,
-                actionType: 'bookmarked',
-                targetType: 'post',
-                targetId: post.id!,
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute: '/feed/post/${post.id}',
-                content: post.text == null
-                    ? null
-                    : post.text!.length > 100
-                        ? '${post.text!.substring(0, 100)}...'
-                        : post.text!,
-              ),
-            );
-          }
         }
         await updatePost(session, post);
       } catch (e, stackTrace) {
@@ -1464,48 +1386,36 @@ class PostEndpoint extends Endpoint {
                 session,
                 receiverId: post.ownerId,
                 senderId: user.id!,
-                actionType: 'liked',
-                targetType: 'post',
+                actionType: NotificationActionType.like,
+                targetType: NotificationTargetType.post,
                 targetId: post.id!,
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 senderName: getFullName(
                   user.firstName!,
                   user.middleName,
                   user.lastName!,
                 ),
                 actionRoute: '/feed/post/${post.id}',
-                content: post.text == null
-                    ? null
-                    : post.text!.length > 100
-                        ? '${post.text!.substring(0, 100)}...'
-                        : post.text!,
+                body: _getNotificationBody(post.text ?? ''),
+                postId: post.id!,
               ),
             );
             unawaited(
               NotificationEndpoint().notifyPostSubscribers(
                 session,
                 postId: post.id!,
-                triggerUser: getFullName(
-                  post.owner!.firstName!,
-                  post.owner!.middleName,
-                  post.owner!.lastName!,
-                ),
                 senderId: user.id!,
-                actionType: 'liked',
-                targetType: 'post',
+                actionType: NotificationActionType.like,
+                targetType: NotificationTargetType.post,
                 targetId: post.id!,
-                mediaThumbnailUrl: user.userInfo!.imageUrl!,
+                senderAvatarUrl: user.userInfo!.imageUrl!,
                 senderName: getFullName(
                   user.firstName!,
                   user.middleName,
                   user.lastName!,
                 ),
                 actionRoute: '/feed/post/${post.id}',
-                content: post.text == null
-                    ? null
-                    : post.text!.length > 100
-                        ? '${post.text!.substring(0, 100)}...'
-                        : post.text!,
+                body: _getNotificationBody(post.text ?? ''),
               ),
             );
           }
@@ -1832,5 +1742,14 @@ class PostEndpoint extends Endpoint {
       return '$firstName $lastName';
     }
     return '$firstName $middleName $lastName';
+  }
+
+  @doNotGenerate
+  String? _getNotificationBody(String text) {
+    if (text.isEmpty) return null;
+    if (text.length > 150) {
+      return '${text.substring(0, 150)}...';
+    }
+    return text;
   }
 }

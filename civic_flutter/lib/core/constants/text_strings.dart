@@ -91,4 +91,184 @@ class TTexts {
   static const String notReceived = "Didn't receive code?";
   static const String confirmEmailSubTitle =
       'Enter the code sent to the e-mail you provided.';
+
+  // -- Notifications
+  static const String notificationsSettings = 'NOTIFICATIONS SETTINGS';
+  static const String pushNotifications = 'Push notifications';
+  static const String pushNotificationsSubtitle =
+      'Receive notifications for important updates even when you are away.';
+  static const String inApp = 'In-app';
+  static const String push = 'Push';
+
+  // -- FCM
+  static const String stayInTheLoop = 'Stay in the loop';
+  static const String stayInTheLoopSubtitle =
+      "Never miss updates on posts, projects, comments, and more. Even when you aren't using the app.";
+  static const String allow = 'Allow';
+  static const String notNow = 'Not now';
+  static const String enablePermissionsLater =
+      'You can enable notification permissions later in settings.';
+  static const String permissionsDenied =
+      'Notification permissions denied. You can enable them in settings.';
+
+  // -- Device
+  static const String unableToLaunchUrl = 'Unable to launch url';
+
+  // -- Helpers
+  static const String pressBackButtonAgain =
+      'Press the back button again to exit';
+  static const String justNow = 'Just now';
+
+  // -- Scheduled DateTime
+  static const String scheduledFor = 'Scheduled for';
+  static const String at = 'at';
+
+  // -- Router
+  static const String pageNotFound = 'Oops, page not found!';
+  static const String pageNotFoundSubtitle =
+      'The page you are looking for does not exist.';
+  static const String goBackHome = 'Go back home';
+
+  // -- Asset Services
+  static const String unableToInitiateAssetUpload =
+      'Unable to initiate asset upload';
+  static const String couldNotCompleteUpload = 'Could not complete upload';
+  static const String couldNotGetUrl = 'Could not get URL of uploaded file';
+  static const String failedToConnectToServer =
+      'Failed to connect to server. Please try again.';
+  static const String requestTimedOut = 'The request timed out.';
+
+  // -- Users List Service
+  static const String requestTimedOutShort = 'Request timed out';
+
+  // -- Auth
+  static const String errorSavingUserRecord =
+      'Something went wrong while saving user record locally.';
+
+  // -- Auth Remote
+  static const String incorrectVerificationCode =
+      'Incorrect verification code.';
+  static const String incorrectPassword = 'Your password is incorrect.';
+  static const String unableToCreateUser = 'Unable to create user';
+  static const String internalServerError = 'Internal server error';
+  static const String tooManyFailedAttempts = 'Too many failed attempts.';
+  static const String accountBlocked = 'Your account has been blocked';
+  static const String somethingWentWrong = 'Something went wrong.';
+  static const String noUserFound = 'No user found.';
+  static const String authKeysNotFound = 'Authententication keys not found';
+  static const String userRecordNotFound = 'User record not found';
+  static const String failedToCreateAccount =
+      'Failed to create account. Please try again.';
+  static const String aNigerianCitizen = 'A Nigerian Citizen';
+  static const String aCurrentPoliticalLeader = 'A current political leader';
+  static const String anAspiringPoliticalLeader =
+      'An aspiring political leader';
+  static const String aFormerPoliticalLeader = 'A former political leader';
+  static const String failedToSignOut = 'Failed to sign out';
+  static const String failedToUploadImage = 'Failed to upload image';
+  static const String failedToSendValidationCode =
+      'Failed to send validation code';
+
+  // -- Political Status
+  static const String currentLeader = 'Current Leader';
+  static const String currentLeaderSubtitle =
+      'I am currently holding a political position.';
+  static const String formerLeader = 'Former Leader';
+  static const String formerLeaderSubtitle =
+      'I have previously held a political position.';
+  static const String aspiringLeader = 'Aspiring Leader';
+  static const String aspiringLeaderSubtitle = 'I have political aspirations.';
+  static const String concernedCitizen = 'Concerned Citizen';
+  static const String concernedCitizenSubtitle =
+      'I am passionate about making a change.';
+
+  // -- Feed Remote
+  static const String failedToSavePost = 'Failed to save post';
+  static const String failedToSaveComment = 'Failed to save comment';
+  static const String failedToSavePoll = 'Failed to save poll';
+  static const String failedToSaveArticle = 'Failed to save article';
+
+  // -- Feed Helpers
+  static const String deletePostTitle = 'Delete post?';
+  static const String deletePostSubtitle =
+      'Proceed with caution as this action is irreversible.';
+  static const String delete = 'Delete';
+  static const String cancel = 'Cancel';
+  static const String clearAllBookmarksTitle = 'Clear all bookmarks?';
+  static const String clearAllBookmarksSubtitle =
+      'Are you sure you want to clear all your bookmarks? This action cannot be undone.';
+  static const String deleteAll = 'Delete all';
+  static const String locationServicesDisabled =
+      'Location services are disabled on your device';
+  static const String deletePollTitle = 'Delete poll?';
+  static const String pollEnded = ' • Poll ended';
+  static const String pollEndsSoon = ' • Poll ends soon';
+  static const String day = ' day';
+  static const String days = ' days';
+  static const String left = ' left';
+  static const String hour = ' hour';
+  static const String hours = ' hours';
+  static const String minute = ' minute';
+  static const String minutes = ' minutes';
+
+  // -- Create Article
+  static const String retry = 'Retry';
+
+  // -- Create feature
+  static const String whatToCreate = 'What would you like to create?';
+  static const String project = 'Project';
+  static const String projectSubtitle =
+      'New, existing, completed or planned. Keep your '
+      'constituents updated. This is only available to '
+      'leaders.';
+  static const String post = 'Post';
+  static const String postSubtitle =
+      'Share your thoughts, ideas, and opinions with everyone.';
+  static const String poll = 'Poll';
+  static const String pollSubtitle =
+      'Engage your audience with quick questions '
+      'and gather instant feedback.';
+  static const String article = 'Article';
+  static const String articleSubtitle =
+      'Share in-depth insights, stories, or research '
+      'with your audience.';
+
+  // -- Notification
+  static const String comments = 'Comments and Replies';
+  static const String commentsSubtitle =
+      'Choose how you get notified when someone '
+      'comments on or replies to your posts.';
+  static const String likes = 'Likes';
+  static const String likesSubtitle =
+      'Choose how you get notified when someone '
+      'likes your project, posts, comments, and replies.';
+  static const String mentions = 'Mentions';
+  static const String mentionsSubtitle =
+      'Choose how you get notified when someone '
+      'mentions you in posts, comments, and replies.';
+  static const String follows = 'Follows';
+  static const String followsSubtitle =
+      'Choose how you get notified when someone '
+      'follows you.';
+  static const String projectReviews = 'Project reviews';
+  static const String projectReviewsSubtitle =
+      'Choose how you get notified when someone reviews your project.';
+  static const String projectVetting = 'Project vetting';
+  static const String projectVettingSubtitle =
+      'Choose how you get notified when someone vets your project.';
+  static const String projectQuotesOrReposts = 'Project quotes or reposts';
+  static const String projectQuotesOrRepostsSubtitle =
+      'Choose how you get notified when someone quotes or reposts your project.';
+  static const String projectReviewsReactions = 'Project reviews reactions';
+  static const String projectReviewsReactionsSubtitle =
+      'Choose how you get notified when someone reacts to your project reviews.';
+  static const String helpfulProjectReviews = 'Helpful project reviews';
+  static const String helpfulProjectReviewsSubtitle =
+      'Choose how you get notified when someone marks your project review as helpful.';
+  static const String projectVettingReactions = 'Project vetting reactions';
+  static const String projectVettingReactionsSubtitle =
+      'Choose how you get notified when someone reacts to a project you vetted.';
+  static const String tags = 'Tags';
+  static const String tagsSubtitle = 'Choose how you get notified when someone '
+      'tags you in photos or videos.';
 }

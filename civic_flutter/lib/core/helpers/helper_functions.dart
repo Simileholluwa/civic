@@ -166,7 +166,7 @@ class THelperFunctions {
     if (DateTime.now().difference(lastExitTime) >= const Duration(seconds: 2)) {
       lastExitTime = DateTime.now();
       TToastMessages.infoToast(
-        'Press the back button again to exit',
+        TTexts.pressBackButtonAgain,
       );
       return false;
     } else {
@@ -355,7 +355,7 @@ class THelperFunctions {
     final difference = now.difference(dateTime);
 
     if (difference.inSeconds <= 0) {
-      return 'Just now';
+      return TTexts.justNow;
     } else if (difference.inSeconds < 60) {
       return '${difference.inSeconds}s';
     } else if (difference.inMinutes < 60) {

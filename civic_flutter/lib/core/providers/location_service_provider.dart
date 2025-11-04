@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -43,7 +41,6 @@ Future<List<AWSPlaces>?> searchNearbyPlaces(Ref ref) async {
         currentPosition,
       );
   return locations.fold((error) {
-    log(error);
     return null;
   }, (loctionData) {
     return loctionData;

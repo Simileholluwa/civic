@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -264,7 +264,7 @@ class Feed extends _$Feed {
       ),
     );
     result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
     }, (data) {
       errorMesage != null
           ? TToastMessages.errorToast(
@@ -297,7 +297,7 @@ class Feed extends _$Feed {
 
       return result.fold((error) async {
         ref.read(sendPostLoadingProvider.notifier).value = false;
-        log(error);
+        TToastMessages.errorToast(error);
         if (saveDraft) {
           await savePostAsDraft(
             id,
@@ -329,7 +329,7 @@ class Feed extends _$Feed {
 
       return result.fold((error) async {
         ref.read(sendPostLoadingProvider.notifier).value = false;
-        log(error);
+        TToastMessages.errorToast(error);
         await savePostAsDraft(
           id,
           error,
@@ -359,7 +359,7 @@ class Feed extends _$Feed {
       ),
     );
     return result.fold((error) async {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       await savePostAsDraft(
         null,
         error.message,
@@ -442,7 +442,6 @@ class Feed extends _$Feed {
       ),
     );
     return result.fold((error) async {
-      log('Error: ${error.message}');
       error.action == 'deleted'
           ? TToastMessages.successToast(
               error.message,
@@ -637,7 +636,7 @@ class Feed extends _$Feed {
       ),
     );
     result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
     }, (data) {
       ref.read(sendPostLoadingProvider.notifier).value = false;
       errorMesage != null
@@ -676,7 +675,7 @@ class Feed extends _$Feed {
       ),
     );
     result.fold((error) {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
     }, (data) {
       ref.read(sendPostLoadingProvider.notifier).value = false;
       errorMesage != null
@@ -701,7 +700,7 @@ class Feed extends _$Feed {
       ),
     );
     return result.fold((error) async {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       await savePollAsDraft(
         null,
         error.message,
@@ -808,7 +807,7 @@ class Feed extends _$Feed {
         );
 
     return result.fold((error) async {
-      log(error);
+      TToastMessages.errorToast(error);
       await saveArticleAsDraft(
         id,
         error,
@@ -842,7 +841,7 @@ class Feed extends _$Feed {
       ),
     );
     return result.fold((error) async {
-      log(error.message);
+      TToastMessages.errorToast(error.message);
       await saveArticleAsDraft(
         null,
         error.message,

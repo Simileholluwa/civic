@@ -6,11 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostCardBuild extends ConsumerWidget {
   const PostCardBuild({
-    required this.noMaxLines, required this.post, super.key,
+    required this.noMaxLines,
+    required this.post,
+    this.showPadding = true,
+    super.key,
   });
 
   final bool noMaxLines;
   final Post post;
+  final bool showPadding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +27,9 @@ class PostCardBuild extends ConsumerWidget {
       children: [
         if (postCardState.hasText)
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: showPadding
+                ? const EdgeInsets.fromLTRB(15, 0, 15, 0)
+                : EdgeInsets.zero,
             child: ContentExpandableText(
               text: postCardState.text,
               hasImage: postCardState.hasImage,

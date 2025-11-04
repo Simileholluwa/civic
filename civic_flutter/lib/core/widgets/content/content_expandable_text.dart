@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 
 class ContentExpandableText extends StatelessWidget {
   const ContentExpandableText({
-    required this.text, required this.onToggleTextTap, super.key,
+    required this.text,
+    required this.onToggleTextTap,
+    super.key,
     this.hasVideo = false,
     this.hasImage = false,
     this.noMaxLines = false,
+    this.textStyle,
     this.maxLines,
     this.fontSize = 18,
   });
@@ -16,13 +19,14 @@ class ContentExpandableText extends StatelessWidget {
   final bool hasVideo;
   final bool hasImage;
   final int? maxLines;
+  final TextStyle? textStyle;
   final bool noMaxLines;
   final VoidCallback? onToggleTextTap;
   final double fontSize;
 
   @override
   Widget build(BuildContext context) {
-    final defaultTextStyle = DefaultTextStyle.of(context).style;
+    final defaultTextStyle = textStyle ?? DefaultTextStyle.of(context).style;
     return ExpandableRichText(
       text,
       onToggleTextTap: onToggleTextTap,

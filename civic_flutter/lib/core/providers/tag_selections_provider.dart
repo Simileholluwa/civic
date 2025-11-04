@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'tag_selections_provider.g.dart';
@@ -12,7 +10,6 @@ class TagSelections extends _$TagSelections {
   void addUser(UserRecord userRecord) {
     if (state.length < 10) {
       state = [...state, userRecord];
-      log(state[0].politicalStatus.toString());
     }
   }
 

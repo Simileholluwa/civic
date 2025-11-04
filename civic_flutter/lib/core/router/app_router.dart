@@ -1,4 +1,5 @@
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/core/screens/not_found_screen.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/presentation/routes/create_route.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -12,14 +13,19 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
+@riverpod
+GlobalKey<NavigatorState> rootNavigator(Ref ref) {
+  return rootNavigatorKey;
+}
 
 @riverpod
 GoRouter router(Ref ref) {
   ref.read(bootStrapProvider);
   return GoRouter(
     initialLocation: AppRoutes.initial,
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     routes: [
       // Onboarding routes
       GoRoute(
@@ -133,9 +139,9 @@ GoRouter router(Ref ref) {
         branches: [
           ProjectRoutes.branch,
           FeedRoutes.branch,
-          CreateRoutes.branch,
           NetworkRoutes.branch,
           NotificationsRoutes.branch,
+          CreateRoutes.branch,
         ],
         builder: (context, state, navigationShell) {
           return AppWrapper(
@@ -144,5 +150,6 @@ GoRouter router(Ref ref) {
         },
       ),
     ],
+    errorBuilder: (context, state) => const NotFoundScreen(),
   );
 }

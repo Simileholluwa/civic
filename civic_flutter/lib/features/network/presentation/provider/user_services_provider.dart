@@ -3,14 +3,14 @@ import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_services_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 UserRemoteDatasourceImpl userRemoteDatasource(Ref ref) {
   return UserRemoteDatasourceImpl(
     client: ref.read(clientProvider),
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 UserRepositoryImpl userRepositoryImpl(Ref ref) {
   return UserRepositoryImpl(
     remoteDatasource: ref.read(
@@ -28,7 +28,7 @@ ToggleFollowUseCase toggleFollow(Ref ref) {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetUserUseCase fetchUser(Ref ref) {
   return GetUserUseCase(
     userRepository: ref.read(

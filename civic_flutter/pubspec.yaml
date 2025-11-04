@@ -19,6 +19,8 @@ dependencies:
   expandable_richtext: ^1.0.7
   expandable_text:
   file_picker: ^10.1.2
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
   flex_color_scheme: ^8.2.0
   flutter:
     sdk: flutter
@@ -50,12 +52,13 @@ dependencies:
   pinput:
   responsive_framework: ^0.2.0
   riverpod_annotation: ^3.0.1
-  serverpod_auth_client: 2.9.1
-  serverpod_auth_email_flutter: 2.9.1
-  serverpod_auth_shared_flutter: 2.9.1
-  serverpod_flutter: 2.9.1
+  serverpod_auth_client: 2.9.2
+  serverpod_auth_email_flutter: 2.9.2
+  serverpod_auth_shared_flutter: 2.9.2
+  serverpod_flutter: 2.9.2
   shared_preferences:
   smooth_page_indicator:
+  timeago: ^3.7.1
   toastification:
   transparent_image:
   url_launcher:

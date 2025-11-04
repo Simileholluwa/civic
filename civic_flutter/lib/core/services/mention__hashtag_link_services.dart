@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 class MentionHashTagLinkServices {
@@ -18,9 +18,9 @@ class MentionHashTagLinkServices {
           await client.userRecord.mentionUsers(limit: 10, query: query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server. Please try again.');
+      return left(TTexts.failedToConnectToServer);
     } on TimeoutException catch (_) {
-      return left('The request timed out.');
+      return left(TTexts.requestTimedOut);
     } on LocationException catch (e) {
       return left(e.message);
     } on Exception catch (e) {
@@ -36,9 +36,9 @@ class MentionHashTagLinkServices {
           await client.hashtag.fetchHashtags(limit: 10, query: query);
       return right(response);
     } on SocketException catch (_) {
-      return left('Failed to connect to server. Please try again.');
+      return left(TTexts.failedToConnectToServer);
     } on TimeoutException catch (_) {
-      return left('The request timed out.');
+      return left(TTexts.requestTimedOut);
     } on LocationException catch (e) {
       return left(e.message);
     } on Exception catch (e) {
@@ -60,7 +60,6 @@ class MentionHashTagLinkServices {
       );
       return right(result);
     } on Exception catch (e) {
-      log('Error fetching metadata: $e');
       return left(e.toString());
     }
   }

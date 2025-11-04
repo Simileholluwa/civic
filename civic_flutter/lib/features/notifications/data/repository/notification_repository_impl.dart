@@ -3,7 +3,6 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:fpdart/fpdart.dart';
 
-
 class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl({
     required NotificationRemoteDatasourceImpl remoteDatabase,
@@ -43,8 +42,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   Future<Either<Failure, NotificationList>> getNotifications({
     required int limit,
     required int page,
-    String targetType = '',
-    bool isRead = true,
+    NotificationTargetType? targetType,
+    bool? isRead,
   }) async {
     try {
       final result = await _remoteDatabase.getNotifications(
@@ -78,10 +77,46 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> markNotificationAsRead({required int id}) async {
+  Future<Either<Failure, void>> markNotificationAsRead({
+    required int id,
+  }) async {
     try {
       final result = await _remoteDatabase.markNotificationsAsRead(
         id: id,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserNotificationSettings>>
+      getUserNotificationSettings() async {
+    try {
+      final result = await _remoteDatabase.getUserNotificationSettings();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserNotificationSettings>>
+      updateUserNotificationSettings({
+    required UserNotificationSettings notificationsSettings,
+  }) async {
+    try {
+      final result = await _remoteDatabase.updateUserNotificationSettings(
+        notificationsSettings: notificationsSettings,
       );
       return Right(result);
     } on ServerException catch (e) {

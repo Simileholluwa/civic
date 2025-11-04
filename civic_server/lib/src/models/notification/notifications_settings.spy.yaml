@@ -1,0 +1,33 @@
+class: UserNotificationSettings
+table: user_notification_settings
+fields:
+  user: UserRecord?, relation(onDelete=cascade)
+  pauseAllPush: bool, default=false
+  allowComments: bool, default=true
+  pushComments: bool, default=true
+  allowLikes: bool, default=true
+  pushLikes: bool, default=true
+  allowRepostsAndQuotes: bool, default=true
+  pushRepostsAndQuotes: bool, default=true
+  allowNewReviews: bool, default=true
+  pushNewReviews: bool, default=true
+  allowNewVettings: bool, default=true
+  pushNewVettings: bool, default=true
+  allowReactions: bool, default=true
+  pushReactions: bool, default=true
+  allowHelpfulReviews: bool, default=true
+  pushHelpfulReviews: bool, default=true
+  allowSubscribedContent: bool, default=true
+  pushSubscribedContent: bool, default=true
+  allowMentions: bool, default=true
+  pushMentions: bool, default=true
+  allowTags: bool, default=true
+  pushTags: bool, default=true
+  allowNewFollowers: bool, default=true
+  pushNewFollowers: bool, default=true
+  allowPlatformUpdates: bool, default=true
+  pushPlatformUpdates: bool, default=true
+
+indexes:
+    notification_settings_user_idx:
+      fields: userId

@@ -1,0 +1,102 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "notification",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "postId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          },
+          {
+            "name": "projectId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "post",
+          "project"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "notification_fk_2",
+            "columns": [
+              "postId"
+            ],
+            "referenceTable": "post",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "notification_fk_3",
+            "columns": [
+              "projectId"
+            ],
+            "referenceTable": "project",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"post\" of table \"notification\" will be dropped.",
+            "table": "notification",
+            "columns": [
+              "post"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"project\" of table \"notification\" will be dropped.",
+            "table": "notification",
+            "columns": [
+              "project"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"post\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "post"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"project\" of table \"notification\" will be dropped.",
+      "table": "notification",
+      "columns": [
+        "project"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

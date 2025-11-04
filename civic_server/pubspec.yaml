@@ -8,12 +8,13 @@ environment:
 
 dependencies:
   dio: ^5.7.0
-  serverpod: 2.9.1
-  serverpod_auth_server: 2.9.1
-  serverpod_cloud_storage_s3: 2.9.1
-  serverpod_serialization: 2.9.1
+  serverpod: 2.9.2
+  serverpod_auth_server: 2.9.2
+  serverpod_cloud_storage_s3: 2.9.2
+  serverpod_serialization: 2.9.2
   mailer:
   dotenv: ^4.2.0
+  googleapis_auth: ^2.0.0
 
 dev_dependencies:
   lints: '>=3.0.0 <5.0.0'

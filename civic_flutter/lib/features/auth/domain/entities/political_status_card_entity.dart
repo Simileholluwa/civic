@@ -1,4 +1,5 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 
 class PoliticalStatusCardEntity {
   PoliticalStatusCardEntity({
@@ -13,23 +14,23 @@ class PoliticalStatusCardEntity {
 
 List<PoliticalStatusCardEntity> allStatus = [
   PoliticalStatusCardEntity(
-    title: 'Current Leader',
-    subTitle: 'I am currently holding a political position.',
+    title: TTexts.currentLeader,
+    subTitle: TTexts.currentLeaderSubtitle,
     politicalStatus: PoliticalStatus.current,
   ),
   PoliticalStatusCardEntity(
-    title: 'Former Leader',
-    subTitle: 'I have previously held a political position.',
+    title: TTexts.formerLeader,
+    subTitle: TTexts.formerLeaderSubtitle,
     politicalStatus: PoliticalStatus.former,
   ),
   PoliticalStatusCardEntity(
-    title: 'Aspiring Leader',
-    subTitle: 'I have political aspirations.',
+    title: TTexts.aspiringLeader,
+    subTitle: TTexts.aspiringLeaderSubtitle,
     politicalStatus: PoliticalStatus.aspiring,
   ),
   PoliticalStatusCardEntity(
-    title: 'Concerned Citizen',
-    subTitle: 'I am passionate about making a change.',
+    title: TTexts.concernedCitizen,
+    subTitle: TTexts.concernedCitizenSubtitle,
     politicalStatus: PoliticalStatus.none,
   ),
 ];

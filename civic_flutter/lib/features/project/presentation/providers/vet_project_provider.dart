@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -146,7 +144,6 @@ class ProjectVet extends _$ProjectVet {
         );
 
     return result.fold((error) async {
-      log(error, name: 'Vetting images upload failed');
       return false;
     }, (imageUrls) {
       state = state.copyWith(

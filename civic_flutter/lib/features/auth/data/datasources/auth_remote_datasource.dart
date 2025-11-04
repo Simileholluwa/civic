@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
@@ -82,7 +82,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerSideException catch (e) {
       throw ServerException(
@@ -109,13 +109,13 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
       if (!result) {
         throw const ServerException(
-          message: 'Incorrect verification code.',
+          message: TTexts.incorrectVerificationCode,
         );
       }
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerException {
       rethrow;
@@ -141,38 +141,38 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         switch (failReason) {
           case 0:
             throw const ServerException(
-              message: 'Your password is incorrect.',
+              message: TTexts.incorrectPassword,
             );
           case 1:
             throw const ServerException(
-              message: 'Unable to create user',
+              message: TTexts.unableToCreateUser,
             );
           case 2:
             throw const ServerException(
-              message: 'Internal server error',
+              message: TTexts.internalServerError,
             );
           case 3:
             throw const ServerException(
-              message: 'Too many failed attempts.',
+              message: TTexts.tooManyFailedAttempts,
             );
           case 4:
             throw const ServerException(
-              message: 'Your account has been blocked',
+              message: TTexts.accountBlocked,
             );
           default:
             throw const ServerException(
-              message: 'Something went wrong.',
+              message: TTexts.somethingWentWrong,
             );
         }
       }
 
       if (result.userInfo == null) {
-        throw const ServerException(message: 'No user found.');
+        throw const ServerException(message: TTexts.noUserFound);
       }
 
       if (result.key == null || result.keyId == null) {
         throw const ServerException(
-          message: 'Authententication keys not found',
+          message: TTexts.authKeysNotFound,
         );
       }
 
@@ -187,7 +187,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final userRecord = await _client.userRecord.getUser(null);
       if (userRecord == null) {
         throw const ServerException(
-          message: 'User record not found',
+          message: TTexts.userRecordNotFound,
         );
       }
       await _localDatabase.saveUserRecord(
@@ -196,7 +196,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       return true;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on CacheException catch (e) {
       throw ServerException(
@@ -226,13 +226,13 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
 
       if (!result) {
         throw const ServerException(
-          message: 'Failed to create account. Please try again.',
+          message: TTexts.failedToCreateAccount,
         );
       }
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerException {
       rethrow;
@@ -251,11 +251,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
     required UserRecord userRecord,
   }) async {
     try {
-      log(email);
-      log(code);
-      log(password);
-      log(userRecord.toString());
-      var bio = 'A Nigerian Citizen';
+      var bio = TTexts.aNigerianCitizen;
       final selectedPoliticalStatus = userRecord.politicalStatus!.name;
       final result = await _auth.validateAccount(
         email,
@@ -263,19 +259,19 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
       if (result == null) {
         throw const ServerException(
-          message: 'Incorrect verification code',
+          message: TTexts.incorrectVerificationCode,
         );
       }
 
       switch (selectedPoliticalStatus) {
         case 'current':
-          bio = 'A current political leader';
+          bio = TTexts.aCurrentPoliticalLeader;
         case 'aspiring':
-          bio = 'An aspiring political leader';
+          bio = TTexts.anAspiringPoliticalLeader;
         case 'former':
-          bio = 'A former political leader';
+          bio = TTexts.aFormerPoliticalLeader;
         default:
-          bio = 'A Nigerian Citizen';
+          bio = TTexts.aNigerianCitizen;
       }
 
       final newRecord = userRecord.copyWith(
@@ -293,11 +289,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
         email: email,
         password: password,
       );
-
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on CacheException catch (e) {
       throw ServerException(
@@ -328,7 +323,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       await _localDatabase.removeUserRecord();
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerException {
       rethrow;
@@ -353,7 +348,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerSideException catch (e) {
       throw ServerException(
@@ -375,13 +370,13 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final result = await _sessionManager.uploadUserImage(byteData);
       if (!result) {
         throw const ServerException(
-          message: 'Failed to upload image',
+          message: TTexts.failedToUploadImage,
         );
       }
       final userRecord = await _client.userRecord.getUser(null);
       if (userRecord == null) {
         throw const ServerException(
-          message: 'User record not found',
+          message: TTexts.userRecordNotFound,
         );
       }
       await _localDatabase.saveUserRecord(
@@ -390,7 +385,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       return result;
     } on SocketException catch (_) {
       throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
+        message: TTexts.failedToConnectToServer,
       );
     } on ServerSideException catch (e) {
       throw ServerException(
@@ -419,7 +414,7 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       );
       if (!result) {
         throw const ServerException(
-          message: 'Failed to send validation code',
+          message: TTexts.failedToSendValidationCode,
         );
       }
 

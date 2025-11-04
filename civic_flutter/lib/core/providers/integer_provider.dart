@@ -42,3 +42,13 @@ class ProjectPDFAttachmentPageChanged
     state = index;
   }
 }
+
+@Riverpod(keepAlive: true)
+class NotificationsCount extends _$NotificationsCount {
+  @override
+  int build() => 0;
+
+  set count(int count) {
+    state = count;
+  }
+}

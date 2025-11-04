@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
@@ -27,10 +25,9 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
         'userId',
         userRecord.id!,
       );
-    } on Exception catch (e) {
-      log(e.toString());
+    } on Exception catch (_) {
       throw const CacheException(
-        message: 'Something went wrong while saving user record locally.',
+        message: TTexts.errorSavingUserRecord,
       );
     }
   }

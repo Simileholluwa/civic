@@ -9,6 +9,49 @@ part of 'app_router.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(rootNavigator)
+const rootNavigatorProvider = RootNavigatorProvider._();
+
+final class RootNavigatorProvider extends $FunctionalProvider<
+    GlobalKey<NavigatorState>,
+    GlobalKey<NavigatorState>,
+    GlobalKey<NavigatorState>> with $Provider<GlobalKey<NavigatorState>> {
+  const RootNavigatorProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'rootNavigatorProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$rootNavigatorHash();
+
+  @$internal
+  @override
+  $ProviderElement<GlobalKey<NavigatorState>> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GlobalKey<NavigatorState> create(Ref ref) {
+    return rootNavigator(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GlobalKey<NavigatorState> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GlobalKey<NavigatorState>>(value),
+    );
+  }
+}
+
+String _$rootNavigatorHash() => r'5826530c1c2be1045b4461da728ea488b0cf108a';
+
 @ProviderFor(router)
 const routerProvider = RouterProvider._();
 
@@ -48,4 +91,4 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'3fe75fd721128088408bb35b661c843bca9dd415';
+String _$routerHash() => r'7e0a796870bc27c33516f60fb23a9a45865e86fb';

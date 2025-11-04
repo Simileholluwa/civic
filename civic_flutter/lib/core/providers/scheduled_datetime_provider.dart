@@ -1,3 +1,4 @@
+import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,11 +39,11 @@ class PostScheduledDateTime extends _$PostScheduledDateTime {
   }
 
   String humanizeDateTime() {
-    return 'Scheduled for ${formatDate()} at ${formatTime()}.';
+    return '${TTexts.scheduledFor} ${formatDate()} ${TTexts.at} ${formatTime()}.';
   }
 
   String humanizeDateTimeForSend() {
-    return '${formatDate()} at ${formatTime()}';
+    return '${formatDate()} ${TTexts.at} ${formatTime()}';
   }
 
   bool canSendLater() {
@@ -55,7 +56,8 @@ class PostScheduledDateTime extends _$PostScheduledDateTime {
 
   TextEditingController textController() {
     final controller = TextEditingController(
-      text: state == null ? null : '${formatDate()} at ${formatTime()}',
+      text:
+          state == null ? null : '${formatDate()} ${TTexts.at} ${formatTime()}',
     );
     return controller;
   }

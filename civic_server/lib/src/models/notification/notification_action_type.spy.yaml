@@ -1,0 +1,14 @@
+enum: NotificationActionType
+values:
+  - like
+  - comment
+  - follow
+  - react
+  - tag
+  - mention
+  - quote
+  - review
+  - vet
+  - system
+  - vote
+  - reply

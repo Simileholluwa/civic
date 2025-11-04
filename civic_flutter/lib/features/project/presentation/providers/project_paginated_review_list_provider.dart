@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -52,7 +52,6 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
             ),
           );
           result.fold((error) {
-            log(error.message, name: 'PaginatedReviewList');
             pagingController.value = PagingState(
               error: error,
             );
@@ -67,7 +66,6 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
             }
           });
         } on Exception catch (e) {
-          log(e.toString(), name: 'PaginatedReviewList');
           pagingController.value = PagingState(
             error: e.toString(),
           );

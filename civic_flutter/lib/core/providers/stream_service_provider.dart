@@ -13,7 +13,14 @@ Stream<Project> projectStream(
   if (project != null) {
     yield project;
   }
-  final updates = ref.read(clientProvider).project.projectUpdates(projectId);
+  final updates = ref
+      .read(
+        clientProvider,
+      )
+      .project
+      .projectUpdates(
+        projectId,
+      );
   await for (final update in updates) {
     yield update;
   }
@@ -28,7 +35,14 @@ Stream<Post> postStream(
   if (post != null) {
     yield post;
   }
-  final updates = ref.read(clientProvider).post.postUpdates(postId);
+  final updates = ref
+      .read(
+        clientProvider,
+      )
+      .post
+      .postUpdates(
+        postId,
+      );
   await for (final update in updates) {
     yield update;
   }
@@ -43,8 +57,14 @@ Stream<ProjectReview> projectReviewStream(
   if (projectReview != null) {
     yield projectReview;
   }
-  final updates =
-      ref.read(clientProvider).project.projectReviewUpdates(projectReviewId);
+  final updates = ref
+      .read(
+        clientProvider,
+      )
+      .project
+      .projectReviewUpdates(
+        projectReviewId,
+      );
   await for (final update in updates) {
     yield update;
   }
@@ -59,29 +79,15 @@ Stream<ProjectVetting> projectVettingStream(
   if (projectVetting != null) {
     yield projectVetting;
   }
-  final updates =
-      ref.read(clientProvider).project.projectVettingUpdates(vettingId);
+  final updates = ref
+      .read(
+        clientProvider,
+      )
+      .project
+      .projectVettingUpdates(
+        vettingId,
+      );
   await for (final update in updates) {
     yield update;
-  }
-}
-
-@Riverpod(keepAlive: true)
-Stream<Notification> userNotificationStream(
-  Ref ref,
-  int? notificationId,
-  Notification? notification,
-) async* {
-  if (notification != null) {
-    yield notification;
-  }
-  if (notificationId != null) {
-    final updates = ref
-        .read(clientProvider)
-        .notification
-        .notificationUpdates(notificationId);
-    await for (final update in updates) {
-      yield update;
-    }
   }
 }

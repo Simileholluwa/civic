@@ -202,3 +202,51 @@ abstract class _$ProjectPDFAttachmentPageChanged extends $Notifier<int> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(NotificationsCount)
+const notificationsCountProvider = NotificationsCountProvider._();
+
+final class NotificationsCountProvider
+    extends $NotifierProvider<NotificationsCount, int> {
+  const NotificationsCountProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'notificationsCountProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$notificationsCountHash();
+
+  @$internal
+  @override
+  NotificationsCount create() => NotificationsCount();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$notificationsCountHash() =>
+    r'16d22f49cec78f01c52494030de4289816aa6260';
+
+abstract class _$NotificationsCount extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element = ref.element
+        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}

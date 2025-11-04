@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 class UsersListService {
@@ -20,9 +21,9 @@ class UsersListService {
       );
       return right(result);
     } on TimeoutException catch (_) {
-      return left('Request timed out');
+      return left(TTexts.requestTimedOutShort);
     } on SocketException catch (_) {
-      return left('Failed to connect to server. Please try again.');
+      return left(TTexts.failedToConnectToServer);
     } on Exception catch (e) {
       return left(
         e.toString(),

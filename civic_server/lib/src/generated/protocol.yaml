@@ -8,13 +8,15 @@ location:
   - searchLocation:
   - searchNearbyLocation:
 notification:
-  - markNotificationAsRead:
   - markAllNotificationsAsRead:
+  - markNotificationAsRead:
   - deleteNotification:
   - deleteAllNotifications:
   - getUnreadNotificationCount:
   - getNotifications:
-  - notificationUpdates:
+  - getNotificationSettings:
+  - updateNotificationSettings:
+  - newNotificationUpdates:
 post:
   - savePost:
   - savePoll:
@@ -76,3 +78,4 @@ userRecord:
   - followUnfollowUser:
   - getNinDetails:
   - userUpdates:
+  - registerDeviceToken:

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -37,7 +35,6 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
         ),
       );
       result.fold((error) {
-        log(error.message, name: 'PaginatedPostCommentRepliesList');
         pagingController.value = PagingState(
           error: error.message,
         );
@@ -52,7 +49,6 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
         }
       });
     } on Exception catch (e) {
-      log(e.toString(), name: 'PaginatedPostCommentRepliesList');
       pagingController.value = PagingState(
         error: e.toString(),
       );
