@@ -45,11 +45,15 @@ abstract class ProjectRepository {
     required int id,
   });
 
-  Future<Either<Failure, Project>> getProjectDraft();
+  Future<Either<Failure, List<Project>>> getProjectDrafts();
 
-  Future<Either<Failure, void>> saveProjectDraft({required Project project,});
+  Future<Either<Failure, void>> saveProjectDraft({
+    required Project project,
+  });
 
-  Future<Either<Failure, void>> deleteProjectDraft();
+  Future<Either<Failure, void>> deleteProjectDraft({required int projectId});
+
+  Future<Either<Failure, void>> deleteAllProjectDrafts();
 
   Future<Either<Failure, void>> clearProjectBookmarks();
 
@@ -85,20 +89,18 @@ abstract class ProjectRepository {
   });
 
   Future<Either<Failure, void>> toggleBookmark({
-    required int projectId,   
+    required int projectId,
   });
 
   Future<Either<Failure, void>> markNotInterested({
-    required int projectId,   
+    required int projectId,
   });
 
   Future<Either<Failure, ProjectVetting?>> getVettedProject({
-    required int projectId,   
+    required int projectId,
   });
 
   Future<Either<Failure, ProjectVetting>> vetProject({
-    required ProjectVetting projectVetting,   
+    required ProjectVetting projectVetting,
   });
-
-
 }

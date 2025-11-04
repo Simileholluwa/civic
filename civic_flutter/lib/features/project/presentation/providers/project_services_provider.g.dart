@@ -1043,48 +1043,48 @@ final class GetVettedProjectsProvider extends $FunctionalProvider<
 
 String _$getVettedProjectsHash() => r'1b02c9a15613c3978265afe71745114ed76d20eb';
 
-@ProviderFor(getProjectDraft)
-const getProjectDraftProvider = GetProjectDraftProvider._();
+@ProviderFor(getProjectDrafts)
+const getProjectDraftsProvider = GetProjectDraftsProvider._();
 
-final class GetProjectDraftProvider extends $FunctionalProvider<
-    GetProjectDraftUseCase,
-    GetProjectDraftUseCase,
-    GetProjectDraftUseCase> with $Provider<GetProjectDraftUseCase> {
-  const GetProjectDraftProvider._()
+final class GetProjectDraftsProvider extends $FunctionalProvider<
+    GetProjectDraftsUseCase,
+    GetProjectDraftsUseCase,
+    GetProjectDraftsUseCase> with $Provider<GetProjectDraftsUseCase> {
+  const GetProjectDraftsProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'getProjectDraftProvider',
+          name: r'getProjectDraftsProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$getProjectDraftHash();
+  String debugGetCreateSourceHash() => _$getProjectDraftsHash();
 
   @$internal
   @override
-  $ProviderElement<GetProjectDraftUseCase> $createElement(
+  $ProviderElement<GetProjectDraftsUseCase> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  GetProjectDraftUseCase create(Ref ref) {
-    return getProjectDraft(ref);
+  GetProjectDraftsUseCase create(Ref ref) {
+    return getProjectDrafts(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetProjectDraftUseCase value) {
+  Override overrideWithValue(GetProjectDraftsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<GetProjectDraftUseCase>(value),
+      providerOverride: $SyncValueProvider<GetProjectDraftsUseCase>(value),
     );
   }
 }
 
-String _$getProjectDraftHash() => r'3cc4c60dbdef5bae77f090179223d58a60b0ef87';
+String _$getProjectDraftsHash() => r'498f739d874a9c50f10ab138af65fc86bcf6885f';
 
 @ProviderFor(saveProjectDraft)
 const saveProjectDraftProvider = SaveProjectDraftProvider._();
@@ -1172,3 +1172,49 @@ final class DeleteProjectDraftProvider extends $FunctionalProvider<
 
 String _$deleteProjectDraftHash() =>
     r'0f24e9c7305d30d7d8d64a0795c66562a338b43e';
+
+@ProviderFor(deleteAllProjectDrafts)
+const deleteAllProjectDraftsProvider = DeleteAllProjectDraftsProvider._();
+
+final class DeleteAllProjectDraftsProvider extends $FunctionalProvider<
+        DeleteAllProjectDraftsUseCase,
+        DeleteAllProjectDraftsUseCase,
+        DeleteAllProjectDraftsUseCase>
+    with $Provider<DeleteAllProjectDraftsUseCase> {
+  const DeleteAllProjectDraftsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'deleteAllProjectDraftsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$deleteAllProjectDraftsHash();
+
+  @$internal
+  @override
+  $ProviderElement<DeleteAllProjectDraftsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DeleteAllProjectDraftsUseCase create(Ref ref) {
+    return deleteAllProjectDrafts(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DeleteAllProjectDraftsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<DeleteAllProjectDraftsUseCase>(value),
+    );
+  }
+}
+
+String _$deleteAllProjectDraftsHash() =>
+    r'd4e615b0dc06f57747a52f8995acd84e902d1570';

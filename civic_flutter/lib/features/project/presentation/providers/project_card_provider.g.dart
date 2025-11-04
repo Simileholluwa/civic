@@ -58,7 +58,7 @@ final class ProjectCardWidgetProvider
   }
 }
 
-String _$projectCardWidgetHash() => r'9837918808f063e31064b971dba3f71ec0239743';
+String _$projectCardWidgetHash() => r'cb141279e9f2603100b01bcda0b3bf84c2f8cdcb';
 
 final class ProjectCardWidgetFamily extends $Family
     with

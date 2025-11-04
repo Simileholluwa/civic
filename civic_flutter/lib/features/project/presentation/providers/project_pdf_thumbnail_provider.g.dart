@@ -63,7 +63,7 @@ final class ProjectPdfThumbnailProvider extends $FunctionalProvider<
 }
 
 String _$projectPdfThumbnailHash() =>
-    r'8c964319dba8171a85b73cf17790e37272b6ae20';
+    r'48c7d1c5039a1716fbffe398f3bbc798fad352c0';
 
 final class ProjectPdfThumbnailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Uint8List>>, List<String>> {

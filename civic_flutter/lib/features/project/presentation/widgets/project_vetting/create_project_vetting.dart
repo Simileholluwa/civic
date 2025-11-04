@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,11 +70,14 @@ class CreateProjectVetting extends ConsumerWidget {
                 'Add up to five images of the current state of the project as proof.',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
-              if (vettedProjectState.images.isEmpty) AddVettingImage(
-                      projectVetting: projectVetting,
-                    ) else AddedVettingImage(
-                      projectVetting: projectVetting,
-                    ),
+              if (vettedProjectState.images.isEmpty)
+                AddVettingImage(
+                  projectVetting: projectVetting,
+                )
+              else
+                AddedVettingImage(
+                  projectVetting: projectVetting,
+                ),
             ],
           ),
           Column(

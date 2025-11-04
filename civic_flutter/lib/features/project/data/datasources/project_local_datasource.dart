@@ -5,8 +5,9 @@ import 'package:civic_flutter/core/core.dart';
 
 abstract class ProjectLocalDataSource {
   Future<void> saveProjectDraft({required Project project});
-  Future<Project> getProjectDraft();
-  Future<void> deleteProjectDraft();
+  Future<List<Project>> getProjectDrafts();
+  Future<void> deleteProjectDraft({required int projectId});
+  Future<void> deleteAllProjectDrafts();
 }
 
 class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
@@ -18,41 +19,65 @@ class ProjectLocalDataSourceImpl extends ProjectLocalDataSource {
   @override
   Future<void> saveProjectDraft({required Project project}) async {
     try {
-      final projectDraft = project.toJson();
-      final jsonString = jsonEncode(projectDraft);
-      await _prefs.setString('projectDraft', jsonString);
+      final drafts = await getProjectDrafts();
+      final index = drafts.indexWhere((p) => p.id == project.id);
+      if (index != -1) {
+        drafts[index] = project;
+      } else {
+        drafts.add(project);
+      }
+      final draftStrings = drafts
+          .map(
+            (p) => jsonEncode(
+              p.toJson(),
+            ),
+          )
+          .toList();
+      await _prefs.setList('projectDrafts', draftStrings);
     } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<Project> getProjectDraft() async {
+  Future<List<Project>> getProjectDrafts() async {
     try {
       final userId = _prefs.getInt('userId')!;
-      final projectDraft = _prefs.getString('projectDraft');
-      if (projectDraft != null) {
-        final projectMap = jsonDecode(projectDraft) as Map<String, dynamic>;
-        if (projectMap['ownerId'] == userId) {
-          return Project.fromJson(projectMap);
-        }
-        return Project(
-          ownerId: userId,
-        );
+      final projectDrafts = _prefs.getList('projectDrafts');
+      if (projectDrafts != null) {
+        return projectDrafts
+            .map((draft) {
+              final projectMap = jsonDecode(draft) as Map<String, dynamic>;
+              if (projectMap['ownerId'] == userId) {
+                return Project.fromJson(projectMap);
+              }
+              return null;
+            })
+            .whereType<Project>()
+            .toList();
       }
-
-      return Project(
-        ownerId: userId,
-      );
+      return [];
     } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }
   }
 
   @override
-  Future<void> deleteProjectDraft() async {
+  Future<void> deleteProjectDraft({required int projectId}) async {
     try {
-      await _prefs.remove('projectDraft');
+      final drafts = await getProjectDrafts();
+      drafts.removeWhere((p) => p.id == projectId);
+      final draftStrings = drafts.map((p) => jsonEncode(p.toJson())).toList();
+      await _prefs.setList('projectDrafts', draftStrings);
+    } on Exception catch (_) {
+      throw const CacheException(message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future<void> deleteAllProjectDrafts() async {
+    try {
+      await _prefs.remove('projectDrafts');
     } on Exception catch (_) {
       throw const CacheException(message: 'Something went wrong');
     }

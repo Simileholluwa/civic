@@ -1,6 +1,5 @@
-
-
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +17,10 @@ class ProjectStatusFilter extends ConsumerWidget {
     final projectWidgetsState = ref.watch(projectScreenWidgetsProvider);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-        16, 0, 20, 0,
+        16,
+        0,
+        20,
+        0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

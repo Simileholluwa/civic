@@ -1,11 +1,13 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCategoryPageView extends ConsumerWidget {
   const ProjectCategoryPageView({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
@@ -13,7 +15,8 @@ class ProjectCategoryPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectCreationSate = ref.watch(projectProviderProvider(project));
-    final projectNotifier = ref.watch(projectProviderProvider(project).notifier);
+    final projectNotifier =
+        ref.watch(projectProviderProvider(project).notifier);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -33,8 +36,9 @@ class ProjectCategoryPageView extends ConsumerWidget {
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Project subcategory',
-            dropdownItems:
-                ProjectHelperFunctions.getSubcategories(projectCreationSate.projectCategory),
+            dropdownItems: ProjectHelperFunctions.getSubcategories(
+              projectCreationSate.projectCategory,
+            ),
             value: projectCreationSate.projectSubCategory,
             onChanged: projectNotifier.setProjectSubCategory,
           ),

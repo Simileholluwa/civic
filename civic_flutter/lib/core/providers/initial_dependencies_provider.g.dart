@@ -32,7 +32,7 @@ final class BootStrapProvider extends $AsyncNotifierProvider<BootStrap, void> {
   BootStrap create() => BootStrap();
 }
 
-String _$bootStrapHash() => r'432d38eec0a5eb2e828c8dd8d940ec786429a870';
+String _$bootStrapHash() => r'a9647e59bcc0ee59da50e0d553c30d5f03dc42e8';
 
 abstract class _$BootStrap extends $AsyncNotifier<void> {
   FutureOr<void> build();

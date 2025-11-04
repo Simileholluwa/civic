@@ -12,15 +12,19 @@ class CreateContentAppbar extends StatelessWidget {
     super.key,
     this.title,
     this.sendText,
+    this.hasDraft = false,
     this.isRepost = false,
+    this.draftPressed,
   });
 
   final bool canSend;
   final VoidCallback sendPressed;
+  final VoidCallback? draftPressed;
   final VoidCallback onCanSendPost;
   final Widget? title;
   final bool isRepost;
   final String? sendText;
+  final bool hasDraft;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +43,20 @@ class CreateContentAppbar extends StatelessWidget {
           ),
         ),
         title: title,
-        centerTitle: true,
         titleSpacing: 0,
         actions: [
+          TextButton(
+            onPressed: !hasDraft ? null : draftPressed,
+            child: Text(
+              sendText ?? 'DRAFTS',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: !hasDraft
+                        ? Theme.of(context).disabledColor
+                        : TColors.primary,
+                  ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(
               right: TSizes.sm,

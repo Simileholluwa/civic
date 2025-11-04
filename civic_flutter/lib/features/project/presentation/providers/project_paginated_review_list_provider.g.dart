@@ -60,7 +60,7 @@ final class PaginatedProjectReviewListProvider
 }
 
 String _$paginatedProjectReviewListHash() =>
-    r'235e3b16a6539ae977f8a325797da5dc3968640b';
+    r'd5f53f8df2fb4b90094dd602c3fe38879d2d1b66';
 
 final class PaginatedProjectReviewListFamily extends $Family
     with

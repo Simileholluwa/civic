@@ -12,64 +12,69 @@ Future<bool?> postDialog({
   required bool skipButtonLoading,
   required VoidCallback onTapActiveButton,
   required String skipText,
+  Color? activeButtonColor,
+  Color? skipButtonColor,
 }) {
   return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.only(
-            bottom: 16,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                      textAlign: TextAlign.left,
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.only(
+          bottom: 16,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                    textAlign: TextAlign.left,
+                  ),
+                  GestureDetector(
+                    onTap: context.pop,
+                    child: const Icon(
+                      Icons.clear,
+                      color: TColors.secondary,
                     ),
-                    GestureDetector(
-                      onTap: context.pop,
-                      child: const Icon(
-                        Icons.clear,
-                        color: TColors.secondary,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const Divider(
-                height: 0,
+            ),
+            const Divider(
+              height: 0,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 30,
+                children: [
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.left,
+                  ),
+                  AppDualButton(
+                    onTapActiveButton: onTapActiveButton,
+                    activeButtonText: activeButtonText,
+                    activeButtonLoading: activeButtonLoading,
+                    onTapSkipButton: onTapSkipButton,
+                    skipButtonLoading: skipButtonLoading,
+                    skipText: skipText,
+                    activeButtonColor: activeButtonColor,
+                    skipButtonColor: skipButtonColor,
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 30,
-                  children: [
-                    Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.left,
-                    ),
-                    AppDualButton(
-                      onTapActiveButton: onTapActiveButton,
-                      activeButtonText: activeButtonText,
-                      activeButtonLoading: activeButtonLoading,
-                      onTapSkipButton: onTapSkipButton,
-                      skipButtonLoading: skipButtonLoading,
-                      skipText: skipText,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },);
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

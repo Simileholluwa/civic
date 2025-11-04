@@ -178,8 +178,8 @@ GetVettedProjectsUseCase getVettedProjects(Ref ref) {
 }
 
 @riverpod
-GetProjectDraftUseCase getProjectDraft(Ref ref) {
-  return GetProjectDraftUseCase(
+GetProjectDraftsUseCase getProjectDrafts(Ref ref) {
+  return GetProjectDraftsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }
@@ -194,6 +194,13 @@ SaveProjectDraftUseCase saveProjectDraft(Ref ref) {
 @riverpod
 DeleteProjectDraftUseCase deleteProjectDraft(Ref ref) {
   return DeleteProjectDraftUseCase(
+    projectRepository: ref.read(projectRepositoryImplProvider),
+  );
+}
+
+@riverpod
+DeleteAllProjectDraftsUseCase deleteAllProjectDrafts(Ref ref) {
+  return DeleteAllProjectDraftsUseCase(
     projectRepository: ref.read(projectRepositoryImplProvider),
   );
 }

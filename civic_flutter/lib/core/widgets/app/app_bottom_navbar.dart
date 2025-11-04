@@ -81,7 +81,7 @@ class AppBottomNavbar extends ConsumerWidget {
                       Iconsax.airdrop,
                       Iconsax.people5,
                       Iconsax.notification5,
-                      Iconsax.magicpen5,
+                      Iconsax.edit_25,
                     ][index],
                   );
 

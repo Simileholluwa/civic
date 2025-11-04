@@ -129,7 +129,7 @@ final class SearchNearbyPlacesProvider extends $FunctionalProvider<
 }
 
 String _$searchNearbyPlacesHash() =>
-    r'cb471a1d09d54d83dd9e5b04bfe6e3facc23ec06';
+    r'8e8a47bdeeef2aae5d8c338125eaca9a1b6c6675';
 
 @ProviderFor(searchPlaces)
 const searchPlacesProvider = SearchPlacesProvider._();

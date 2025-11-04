@@ -9,6 +9,8 @@ class AppDualButton extends StatelessWidget {
     required this.onTapActiveButton,
     required this.activeButtonLoading,
     required this.skipButtonLoading,
+    this.activeButtonColor,
+    this.skipButtonColor,
     this.skipText = 'Skip',
     super.key,
   });
@@ -19,6 +21,8 @@ class AppDualButton extends StatelessWidget {
   final bool activeButtonLoading;
   final bool skipButtonLoading;
   final String skipText;
+  final Color? activeButtonColor;
+  final Color? skipButtonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,9 @@ class AppDualButton extends StatelessWidget {
           onPressed: onTapActiveButton,
           child: Text(
             activeButtonText,
+          ),
+          style: FilledButton.styleFrom(
+            backgroundColor: activeButtonColor ?? TColors.primary,
           ),
         ).withLoading(
           loading: activeButtonLoading,
@@ -45,9 +52,9 @@ class AppDualButton extends StatelessWidget {
                 )
               : Text(
                   skipText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: TColors.secondary,
+                    color: skipButtonColor ?? TColors.secondary,
                   ),
                 ),
         ),

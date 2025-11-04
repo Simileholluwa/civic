@@ -15,19 +15,11 @@ Future<Project> projectDetail(
 ) async {
   final completer = Completer<Project>();
   if (id == 0) {
-    final getProjectDraft = ref.read(getProjectDraftProvider);
-    final result = await getProjectDraft(NoParams());
-    await result.fold(
-      (error) {
-        completer.completeError({
-          'message': error.message,
-          'action': error.action,
-        });
-      },
-      (project) async {
-        completer.complete(project);
-      },
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final project = Project(
+      ownerId: userId!,
     );
+    completer.complete(project);
     return completer.future;
   } else if (project != null) {
     completer.complete(project);
@@ -54,4 +46,16 @@ Future<Project> projectDetail(
 
     return completer.future;
   }
+}
+
+@riverpod
+Future<bool> hasProjectDraft(Ref ref) async {
+  final getProjectsDraft = ref.read(getProjectDraftsProvider);
+  final result = await getProjectsDraft(NoParams());
+  return result.fold(
+    (l) => false,
+    (r) {
+      return r.isNotEmpty;
+    },
+  );
 }

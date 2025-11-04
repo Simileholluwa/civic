@@ -393,9 +393,13 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteProjectDraft() async {
+  Future<Either<Failure, void>> deleteProjectDraft({
+    required int projectId,
+  }) async {
     try {
-      final result = await _localDatasource.deleteProjectDraft();
+      final result = await _localDatasource.deleteProjectDraft(
+        projectId: projectId,
+      );
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -407,9 +411,9 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, Project>> getProjectDraft() async {
+  Future<Either<Failure, List<Project>>> getProjectDrafts() async {
     try {
-      final result = await _localDatasource.getProjectDraft();
+      final result = await _localDatasource.getProjectDrafts();
       return Right(result);
     } on CacheException catch (e) {
       return Left(
@@ -437,9 +441,25 @@ class ProjectRepositoryImpl extends ProjectRepository {
       );
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> subscribeToNotifications({required int id}) async {
+  Future<Either<Failure, void>> deleteAllProjectDrafts() async {
+    try {
+      final result = await _localDatasource.deleteAllProjectDrafts();
+      return Right(result);
+    } on CacheException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> subscribeToNotifications({
+    required int id,
+  }) async {
     try {
       final result = await _remoteDatasource.subscribeToNotifications(
         id: id,

@@ -213,7 +213,7 @@ final class SelectedMentionsProvider
   }
 }
 
-String _$selectedMentionsHash() => r'2e4f4a4cceab7c71bf690e34d6405f49459be89e';
+String _$selectedMentionsHash() => r'ddc17f687600e19abc53b19c4d1bd22fa633aac7';
 
 abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
   List<UserRecord> build();

@@ -41,7 +41,7 @@ final class CurrentActiveUserProvider
   }
 }
 
-String _$currentActiveUserHash() => r'ab84756f7d59ae7fe0ac7bd521cbfd7fbb0ae694';
+String _$currentActiveUserHash() => r'f26ef958a2f6fcdef26b65ca4a3784a417244628';
 
 abstract class _$CurrentActiveUser extends $Notifier<UserState> {
   UserState build();

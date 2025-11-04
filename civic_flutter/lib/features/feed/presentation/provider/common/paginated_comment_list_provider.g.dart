@@ -59,7 +59,7 @@ final class PaginatedCommentListProvider
 }
 
 String _$paginatedCommentListHash() =>
-    r'eed4e42b3a453bcf3e2968dffa712d23fed2b40b';
+    r'802a204a61fb0e0d6b685f210a6861441bc91918';
 
 final class PaginatedCommentListFamily extends $Family
     with

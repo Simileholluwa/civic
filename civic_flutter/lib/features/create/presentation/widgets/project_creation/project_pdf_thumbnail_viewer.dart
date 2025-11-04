@@ -2,14 +2,16 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ProjectPdfThumbnailViewer extends ConsumerWidget {
   const ProjectPdfThumbnailViewer({
-    required this.project, required this.data, super.key,
+    required this.project,
+    required this.data,
+    super.key,
   });
   final Project project;
   final List<Uint8List> data;
@@ -39,18 +41,19 @@ class ProjectPdfThumbnailViewer extends ConsumerWidget {
             ),
             child: CarouselSlider(
               options: CarouselOptions(
-                  scrollPhysics: const ClampingScrollPhysics(),
-                  height: 498,
-                  enableInfiniteScroll: false,
-                  viewportFraction: 1,
-                  onPageChanged: (index, reason) {
-                    ref
-                        .read(projectPDFAttachmentPageChangedProvider.notifier)
-                        .carouselPageChanged(
-                          index,
-                          reason,
-                        );
-                  },),
+                scrollPhysics: const ClampingScrollPhysics(),
+                height: 498,
+                enableInfiniteScroll: false,
+                viewportFraction: 1,
+                onPageChanged: (index, reason) {
+                  ref
+                      .read(projectPDFAttachmentPageChangedProvider.notifier)
+                      .carouselPageChanged(
+                        index,
+                        reason,
+                      );
+                },
+              ),
               items: data.map((image) {
                 return Container(
                   width: double.maxFinite,
@@ -98,11 +101,13 @@ class ProjectPdfThumbnailViewer extends ConsumerWidget {
                         width: 12,
                         height: 12,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 4,),
+                          vertical: 8,
+                          horizontal: 4,
+                        ),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 
-                            current == entry.key ? 0.9 : 0.4,
+                          color: Colors.white.withValues(
+                            alpha: current == entry.key ? 0.9 : 0.4,
                           ),
                         ),
                       );

@@ -42,7 +42,7 @@ final class PaginatedPostBookmarkListProvider
 }
 
 String _$paginatedPostBookmarkListHash() =>
-    r'3875adc5ae0245009f2b2147b9e4b758da920c81';
+    r'8119a7e3210f7700d6d6705af50d1fe30559b1dd';
 
 abstract class _$PaginatedPostBookmarkList extends $Notifier<PagingStatus> {
   PagingStatus build();

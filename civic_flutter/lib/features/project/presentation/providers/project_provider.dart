@@ -710,6 +710,7 @@ class ProjectProvider extends _$ProjectProvider {
       SaveProjectDraftParams(
         Project(
           ownerId: ownerId,
+          id: DateTime.now().millisecondsSinceEpoch,
           title: state.title,
           description: state.description,
           projectCategory: state.projectCategory,
@@ -790,7 +791,7 @@ class ProjectProvider extends _$ProjectProvider {
       return;
     }, (response) async {
       final deleteDraft = ref.read(deleteProjectDraftProvider);
-      await deleteDraft(NoParams());
+      await deleteDraft(projectId ?? 0);
       ref.read(sendPostLoadingProvider.notifier).value = false;
       TToastMessages.successToast(
         'Your project was sent.',

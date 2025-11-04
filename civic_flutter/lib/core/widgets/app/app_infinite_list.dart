@@ -94,43 +94,10 @@ class AppInfiniteList<T> extends ConsumerWidget {
                 horizontal: 20,
               ),
               child: noItemsFound ??
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 10,
-                    children: [
-                      Text(
-                        'Nothing Here.',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  color: Theme.of(context).hintColor,
-                                  fontSize: 30,
-                                ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        "We've searched far and wide, but we couldn't "
-                        'find any results.',
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  color: Theme.of(context).hintColor,
-                                ),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (canCreate)
-                        const SizedBox(
-                          height: 1,
-                        ),
-                      if (canCreate)
-                        SizedBox(
-                          height: 45,
-                          width: 250,
-                          child: ContentSingleButton(
-                            onPressed: onCreate,
-                            text: createText,
-                            buttonIcon: Iconsax.magicpen,
-                          ),
-                        ),
-                    ],
+                  AppEmptyList(
+                    canCreate: canCreate,
+                    onCreate: onCreate,
+                    createText: createText,
                   ),
             );
           },
@@ -186,6 +153,59 @@ class AppInfiniteList<T> extends ConsumerWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class AppEmptyList extends StatelessWidget {
+  const AppEmptyList({
+    required this.canCreate,
+    required this.createText,
+    this.onCreate,
+    super.key,
+  });
+
+  final bool canCreate;
+  final VoidCallback? onCreate;
+  final String createText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 10,
+      children: [
+        Text(
+          'Nothing Here.',
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                color: Theme.of(context).hintColor,
+                fontSize: 30,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          "We've searched far and wide, but we couldn't "
+          'find any results.',
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: Theme.of(context).hintColor,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        if (canCreate)
+          const SizedBox(
+            height: 1,
+          ),
+        if (canCreate)
+          SizedBox(
+            height: 45,
+            width: 250,
+            child: ContentSingleButton(
+              onPressed: onCreate,
+              text: createText,
+              buttonIcon: Iconsax.magicpen,
+            ),
+          ),
+      ],
     );
   }
 }

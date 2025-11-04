@@ -1,10 +1,10 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 
 class CreateProjectScreen extends ConsumerWidget {
   const CreateProjectScreen({
@@ -29,27 +29,42 @@ class CreateProjectScreen extends ConsumerWidget {
         data.value,
       ),
     );
-    final projectNotifier = ref.watch(
+    final projectNotifier = ref.read(
       projectProviderProvider(
         data.value,
       ).notifier,
     );
+
+    final hasDraft = ref.watch(hasProjectDraftProvider);
+
+    Future<void> handlePop() async {
+      if (!projectCreationState.canSave) {
+        if (context.mounted) {
+          context.pop();
+        }
+        return;
+      }
+      final shouldSave = await saveProjectDraftDialog(context);
+      if (shouldSave ?? false) {
+        await projectNotifier.saveProjectDraft();
+        TToastMessages.successToast(
+          'Your project has been saved as draft.',
+        );
+        if (context.mounted) {
+          context.pop();
+        }
+      } else {
+        if (context.mounted) {
+          context.pop();
+        }
+      }
+    }
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) return;
-        final shouldPop = projectCreationState.canSave
-            ? await saveProjectDraftDialog(
-                ref,
-                context,
-                data.value!,
-              )
-            : true;
-        if (shouldPop ?? false) {
-          if (context.mounted) {
-            context.pop();
-          }
-        }
+        await handlePop();
       },
       child: AppAndroidBottomNav(
         child: Scaffold(
@@ -61,6 +76,10 @@ class CreateProjectScreen extends ConsumerWidget {
             child: CreateContentAppbar(
               canSend: projectCreationState.isValid,
               title: const CreateProjectAppbarTitle(),
+              hasDraft: hasDraft.value ?? false,
+              draftPressed: () async {
+                await loadProjectDrafts(context);
+              },
               sendPressed: () async {
                 if (!projectNotifier.validateProject()) return;
                 context.pop();
@@ -68,20 +87,7 @@ class CreateProjectScreen extends ConsumerWidget {
                   data.value?.id,
                 );
               },
-              onCanSendPost: () async {
-                final shouldPop = projectCreationState.canSave
-                    ? await saveProjectDraftDialog(
-                        ref,
-                        context,
-                        data.value!,
-                      )
-                    : true;
-                if (shouldPop ?? false) {
-                  if (context.mounted) {
-                    context.pop();
-                  }
-                }
-              },
+              onCanSendPost: handlePop,
             ),
           ),
           body: data.when(
@@ -92,40 +98,20 @@ class CreateProjectScreen extends ConsumerWidget {
             },
             error: (error, st) {
               return LoadingError(
-                retry: null,
+                retry: () {
+                  ref.invalidate(projectDetailProvider);
+                },
                 imageString: TImageTexts.error,
                 mainAxisAlignment: MainAxisAlignment.center,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
+                showRefresh: true,
                 errorMessage: error.toString(),
               );
             },
             loading: () {
               return const AppLoadingWidget();
-            },
-          ),
-          bottomNavigationBar: data.when(
-            data: (_) {
-              return null;
-            },
-            error: (err, st) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 5,
-                ),
-                child: ContentSingleButton(
-                  onPressed: () {
-                    ref.invalidate(projectDetailProvider);
-                  },
-                  text: 'Retry',
-                  buttonIcon: Iconsax.refresh,
-                ),
-              );
-            },
-            loading: () {
-              return null;
             },
           ),
         ),

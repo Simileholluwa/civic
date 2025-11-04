@@ -41,7 +41,7 @@ final class TagSelectionsProvider
   }
 }
 
-String _$tagSelectionsHash() => r'1fddedf8067168d4d3e2cb67e724168a35233431';
+String _$tagSelectionsHash() => r'3cac578f4076f237cab2c930ac28644b8772fc51';
 
 abstract class _$TagSelections extends $Notifier<List<UserRecord>> {
   List<UserRecord> build();

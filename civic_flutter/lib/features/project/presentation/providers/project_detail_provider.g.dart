@@ -69,7 +69,7 @@ final class ProjectDetailProvider
   }
 }
 
-String _$projectDetailHash() => r'fd9a26f87fbe8443e2ad73e4d7721f0dbbf32a65';
+String _$projectDetailHash() => r'40efb498768bcb5645c12026d24d8c4aebebb0fc';
 
 final class ProjectDetailFamily extends $Family
     with
@@ -100,3 +100,36 @@ final class ProjectDetailFamily extends $Family
   @override
   String toString() => r'projectDetailProvider';
 }
+
+@ProviderFor(hasProjectDraft)
+const hasProjectDraftProvider = HasProjectDraftProvider._();
+
+final class HasProjectDraftProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  const HasProjectDraftProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'hasProjectDraftProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$hasProjectDraftHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    return hasProjectDraft(ref);
+  }
+}
+
+String _$hasProjectDraftHash() => r'1d977b01f89ecc31e6dd965904616a000cdf37d4';

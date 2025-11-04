@@ -32,7 +32,7 @@ class CreateContentScreen extends ConsumerWidget {
         spacing: 15,
         children: [
           Icon(
-            Iconsax.magicpen,
+            Iconsax.magicpen5,
             size: 50,
             color: Theme.of(context).primaryColor,
           ),
@@ -61,23 +61,26 @@ class CreateContentScreen extends ConsumerWidget {
             child: Column(
               spacing: 15,
               children: [
-                CreateContentItems(
-                  itemName: TTexts.project,
-                  icon: Iconsax.note,
-                  textColor: isLeader ? null : Theme.of(context).disabledColor,
-                  onTap: isLeader
-                      ? () async {
-                          await context.push(
-                            '/create/project/0',
-                          );
-                        }
-                      : null,
-                  itemCaption: TTexts.projectSubtitle,
-                ),
-                const Divider(
-                  indent: 40,
-                  endIndent: 5,
-                ),
+                if (isLeader)
+                  CreateContentItems(
+                    itemName: TTexts.project,
+                    icon: Iconsax.note,
+                    textColor:
+                        isLeader ? null : Theme.of(context).disabledColor,
+                    onTap: isLeader
+                        ? () async {
+                            await context.push(
+                              '/create/project/0',
+                            );
+                          }
+                        : null,
+                    itemCaption: TTexts.projectSubtitle,
+                  ),
+                if (isLeader)
+                  const Divider(
+                    indent: 40,
+                    endIndent: 5,
+                  ),
                 CreateContentItems(
                   itemName: TTexts.post,
                   icon: Iconsax.calendar,

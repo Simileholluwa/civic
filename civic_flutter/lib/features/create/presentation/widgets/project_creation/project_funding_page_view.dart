@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/project/presentation/helpers/number_formatter.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectFundingPageView extends ConsumerWidget {
   const ProjectFundingPageView({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
@@ -19,7 +21,12 @@ class ProjectFundingPageView extends ConsumerWidget {
     final projectNotifier =
         ref.watch(projectProviderProvider(project).notifier);
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(context).viewInsets.bottom + 20),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        20,
+        20,
+        MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,7 +53,9 @@ class ProjectFundingPageView extends ConsumerWidget {
                 child: AppTextField(
                   textController: projectCreationSate.projectCostController,
                   prefixIcon: Iconsax.moneys5,
-                  inputFormatters: [NumberInputFormatter(),],
+                  inputFormatters: [
+                    NumberInputFormatter(),
+                  ],
                   hintText: "Enter the project's cost",
                   validator: (value) => TValidator.validateEmptyText(
                     'Project cost',
@@ -69,7 +78,8 @@ class ProjectFundingPageView extends ConsumerWidget {
           ProjectCategoryDropdown(
             hintText: 'Select funding subcategory',
             dropdownItems: ProjectHelperFunctions.getFundingSubcategories(
-                projectCreationSate.fundingCategory,),
+              projectCreationSate.fundingCategory,
+            ),
             value: projectCreationSate.fundingSubCategory,
             onChanged: projectNotifier.setFundingSubCategory,
           ),

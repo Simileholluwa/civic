@@ -18,7 +18,6 @@ class CreateProjectAppbarTitle extends ConsumerWidget {
         horizontal: 10,
         vertical: TSizes.sm,
       ),
-      margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(200),

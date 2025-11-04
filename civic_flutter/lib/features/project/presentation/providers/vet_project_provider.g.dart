@@ -58,7 +58,7 @@ final class ProjectVetProvider
   }
 }
 
-String _$projectVetHash() => r'a6a13464fbe399814e810f78ca52400f135513ac';
+String _$projectVetHash() => r'337124f0b93b3d7a525281df47665015c750fd68';
 
 final class ProjectVetFamily extends $Family
     with

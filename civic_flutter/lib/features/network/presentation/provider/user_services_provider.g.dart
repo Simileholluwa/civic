@@ -22,7 +22,7 @@ final class UserRemoteDatasourceProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'userRemoteDatasourceProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -51,7 +51,7 @@ final class UserRemoteDatasourceProvider extends $FunctionalProvider<
 }
 
 String _$userRemoteDatasourceHash() =>
-    r'd976a11dbd329f87a917eb9a0bb0d16133996c47';
+    r'd28c0f4412c6e46fb529c4faea9360b7383f41d6';
 
 @ProviderFor(userRepositoryImpl)
 const userRepositoryImplProvider = UserRepositoryImplProvider._();
@@ -66,7 +66,7 @@ final class UserRepositoryImplProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'userRepositoryImplProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -95,7 +95,7 @@ final class UserRepositoryImplProvider extends $FunctionalProvider<
 }
 
 String _$userRepositoryImplHash() =>
-    r'159779279f4333e95fe754a9d2ab195dbd3d861a';
+    r'cf9bfc43f7e25882a5bb5390fd8b022e99864b39';
 
 @ProviderFor(toggleFollow)
 const toggleFollowProvider = ToggleFollowProvider._();
@@ -152,7 +152,7 @@ final class FetchUserProvider
           argument: null,
           retry: null,
           name: r'fetchUserProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -179,4 +179,4 @@ final class FetchUserProvider
   }
 }
 
-String _$fetchUserHash() => r'0183ce54db7382a8413345f8fed7d0ce4e4cd511';
+String _$fetchUserHash() => r'64743921d7e730ae3f953ffa4d90d7e7cf00fa8e';
