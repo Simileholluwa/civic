@@ -12,10 +12,9 @@ class NinForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final authNotifier = ref.watch(authProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
     return Form(
-      key: authState.ninFormKey,
+      key: authNotifier.ninFormKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -24,16 +23,14 @@ class NinForm extends ConsumerWidget {
         child: Column(
           children: [
             AppTextField(
-              textController: authState.ninController,
+              textController: authNotifier.ninController,
               hintText: 'National Identification Number',
               validator: TValidator.validateNin,
               textInputType: TextInputType.number,
               prefixIcon: FontAwesomeIcons.idCardClip,
               iconSize: 22,
               onChanged: (value) {
-                authNotifier.setNin(
-                  authState.ninController.text,
-                );
+                authNotifier.setNin(value ?? '');
               },
             ),
             const SizedBox(
@@ -44,10 +41,11 @@ class NinForm extends ConsumerWidget {
               width: double.maxFinite,
               child: FilledButton(
                 onPressed: () async {
-                  final isValid = authState.ninFormKey.currentState!.validate();
+                  final isValid =
+                      authNotifier.ninFormKey.currentState!.validate();
                   if (!isValid) return;
                   final result = await authNotifier.searchNinRecord(
-                    ninNumber: authState.nin,
+                    ninNumber: authNotifier.ninController.text,
                   );
                   if (result) {
                     if (context.mounted) {

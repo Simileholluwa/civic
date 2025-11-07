@@ -19,8 +19,17 @@ Future<bool?> uploadProfilePicture(
     builder: (context) {
       return Consumer(
         builder: (context, ref, child) {
-          final authNotifier = ref.watch(authProvider.notifier);
-          final authState = ref.watch(authProvider);
+          final authNotifier = ref.read(authProvider.notifier);
+          final imagePath = ref.watch(
+            authProvider.select(
+              (value) => value.imagePath,
+            ),
+          );
+          final photoUrlLoading = ref.watch(
+            authProvider.select(
+              (value) => value.photoUrlLoading,
+            ),
+          );
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -50,7 +59,7 @@ Future<bool?> uploadProfilePicture(
                           ? TColors.dark
                           : TColors.light,
                     ),
-                    child: authState.imagePath.isEmpty
+                    child: imagePath.isEmpty
                         ? const CircleAvatar(
                             radius: 90,
                             child: Icon(
@@ -61,7 +70,7 @@ Future<bool?> uploadProfilePicture(
                         : CircleAvatar(
                             radius: 90,
                             backgroundImage: FileImage(
-                              File(authState.imagePath),
+                              File(imagePath),
                             ),
                           ),
                   ),
@@ -81,7 +90,7 @@ Future<bool?> uploadProfilePicture(
                     spacing: 8,
                     children: [
                       Visibility(
-                        visible: authState.imagePath.isNotEmpty,
+                        visible: imagePath.isNotEmpty,
                         child: IconButton(
                           onPressed: authNotifier.editImage,
                           icon: const Icon(
@@ -91,7 +100,7 @@ Future<bool?> uploadProfilePicture(
                         ),
                       ),
                       Visibility(
-                        visible: authState.imagePath.isEmpty,
+                        visible: imagePath.isEmpty,
                         child: IconButton(
                           onPressed: authNotifier.pickImage,
                           icon: const Icon(
@@ -134,7 +143,7 @@ Future<bool?> uploadProfilePicture(
                     context.pop(true);
                   },
                   activeButtonText: 'Upload',
-                  onTapActiveButton: authState.imagePath.isEmpty
+                  onTapActiveButton: imagePath.isEmpty
                       ? null
                       : () async {
                           final res = await authNotifier.uploadProfileImage();
@@ -142,7 +151,7 @@ Future<bool?> uploadProfilePicture(
                             context.pop(true);
                           }
                         },
-                  activeButtonLoading: authState.photoUrlLoading,
+                  activeButtonLoading: photoUrlLoading,
                   skipButtonLoading: false,
                   skipText: "I'll do it later",
                 ),

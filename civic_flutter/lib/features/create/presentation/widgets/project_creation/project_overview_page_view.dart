@@ -1,8 +1,7 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectOverviewPageView extends ConsumerWidget {
@@ -15,25 +14,13 @@ class ProjectOverviewPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
+    final projectNotifier = ref.read(
+      createProjectNotifProvider(project).notifier,
+    );
     return Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
-              ),
-            ),
-          ),
-          padding: const EdgeInsets.only(
-            bottom: 4,
-          ),
-          child: ProjectTextToolbar(
-            controller: projectCreationSate.quillController,
-            focusNode: projectCreationSate.focusNode,
-          ),
+        ReusableQuillToolbar(
+          quillController: projectNotifier.quillController,
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -42,14 +29,34 @@ class ProjectOverviewPageView extends ConsumerWidget {
             ),
             child: Column(
               children: [
-                ProjectTitleField(
-                  project: project,
+                TextFormField(
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                      ),
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    hintText: 'Give your project a title...',
+                    counter: SizedBox(),
+                    contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 8),
+                  ),
+                  maxLines: null,
+                  controller: projectNotifier.titleController,
+                  textInputAction: TextInputAction.done,
+                  maxLength: 100,
                 ),
-                ProjectTextEditor(
-                  controller: projectCreationSate.quillController,
-                  scrollController: projectCreationSate.scrollController,
-                  focusNode: projectCreationSate.focusNode,
-                  configurations: const QuillEditorConfig(),
+                ReusableQuillEditor(
+                  controller: projectNotifier.quillController,
+                  scrollController: projectNotifier.scrollController,
+                  focusNode: projectNotifier.descriptionFocusNode,
+                  placeholder:
+                      'Describe in detail what this project is all about.'
+                      ' Think of its purpose, benefits, impact, and any relevant milestones.'
+                      ' Use the toolbar to style your texts.',
                 ),
               ],
             ),

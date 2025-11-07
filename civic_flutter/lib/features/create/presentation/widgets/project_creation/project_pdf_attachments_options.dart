@@ -1,6 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,25 +8,29 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectPDFttachmentsOptions extends ConsumerWidget {
   const ProjectPDFttachmentsOptions({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(
-      projectProviderProvider(project),
+    final pdfs = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectPDFAttachments ?? <String>[],
+      ),
     );
-    final projectNotifier = ref.watch(
-      projectProviderProvider(project).notifier,
+    final projectNotifier = ref.read(
+      createProjectNotifProvider(project).notifier,
     );
-    final pdfs = projectCreationSate.projectPDFAttachments ?? [];
     final pageIndex = ref.watch(projectPDFAttachmentPageChangedProvider) + 1;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16,),
+      padding: const EdgeInsets.only(
+        bottom: 16,
+      ),
       child: Container(
-        height: 45, 
+        height: 45,
         decoration: BoxDecoration(
           color: Colors.black54,
           borderRadius: BorderRadius.circular(
@@ -34,9 +38,8 @@ class ProjectPDFttachmentsOptions extends ConsumerWidget {
           ),
           border: Border.all(
             color: Theme.of(context).dividerColor,
-          ),  
+          ),
         ),
-        
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -101,7 +104,7 @@ class ProjectPDFttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${projectCreationSate.projectPDFAttachments!.length}',
+                  '$pageIndex/${pdfs.length}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

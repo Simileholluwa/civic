@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,31 +9,36 @@ part 'post_video_player_provider.g.dart';
 class PostVideoPlayer extends _$PostVideoPlayer {
   @override
   Raw<VideoPlayerController?> build(String videoUrl) {
-    ref.onDispose(() async {
-      await state?.dispose();
+    ref.onDispose(() {
+      // Dispose controller without awaiting to avoid async onDispose.
+      unawaited(state?.dispose());
     });
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
     final isUrlVideo = regex.hasMatch(videoUrl);
     if (isUrlVideo) {
-      final player = VideoPlayerController?.networkUrl(
-        Uri.parse(videoUrl),
-      )..initialize().then((_) async {
-          await state?.pause();
-          await state?.setLooping(true);
-          ref.notifyListeners();
-        });
-
-      return player;
+      final controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      unawaited(
+        controller.initialize().then(
+          (_) async {
+            await controller.pause();
+            await controller.setLooping(true);
+            ref.notifyListeners();
+          },
+        ),
+      );
+      return controller;
     } else {
-      final player = VideoPlayerController?.file(
-        File(videoUrl),
-      )..initialize().then((_) async {
-          await state?.pause();
-          await state?.setLooping(true);
-          ref.notifyListeners();
-        });
-
-      return player;
+      final controller = VideoPlayerController.file(File(videoUrl));
+      unawaited(
+        controller.initialize().then(
+          (_) async {
+            await controller.pause();
+            await controller.setLooping(true);
+            ref.notifyListeners();
+          },
+        ),
+      );
+      return controller;
     }
   }
 

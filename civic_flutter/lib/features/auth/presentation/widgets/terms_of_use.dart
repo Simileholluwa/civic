@@ -10,19 +10,23 @@ class TermsAndConditions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final authNotifier = ref.watch(authProvider.notifier);
+    final acceptTerms = ref.watch(
+      authProvider.select(
+        (s) => s.acceptTerms,
+      ),
+    );
+    final authNotifier = ref.read(authProvider.notifier);
     return Row(
       children: [
         SizedBox(
           width: 24,
           height: 24,
           child: Checkbox(
-              value: authState.acceptTerms,
-              onChanged: (value) {
-                authNotifier.toggleAcceptTerms(value!);
-              },
-            ),
+            value: acceptTerms,
+            onChanged: (value) {
+              authNotifier.toggleAcceptTerms(value!);
+            },
+          ),
         ),
         const SizedBox(
           width: TSizes.sm,

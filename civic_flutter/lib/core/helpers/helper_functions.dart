@@ -129,10 +129,7 @@ class THelperFunctions {
             ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
-        const VerticalSpacing(
-          0,
-          20,
-        ),
+        VerticalSpacing.zero,
         null,
         null,
       ),

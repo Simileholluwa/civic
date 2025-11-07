@@ -1,10 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/features/create/create.dart';
+import 'package:civic_flutter/features/create/presentation/widgets/project_creation/pdf_attacments_detail.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectPDFAttachmentsTabView extends ConsumerWidget {
   const ProjectPDFAttachmentsTabView({
@@ -16,11 +16,14 @@ class ProjectPDFAttachmentsTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
-    final pdfPaths = projectCreationSate.projectPDFAttachments ?? [];
-    final thumbnails = pdfPaths.isEmpty
-        ? const AsyncValue<List<Uint8List>>.data([])
-        : ref.watch(projectPdfThumbnailProvider(pdfPaths));
+    final pdfPaths = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectPDFAttachments ?? <String>[],
+      ),
+    );
+    final notifier = ref.read(
+      createProjectNotifProvider(project).notifier,
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -28,25 +31,41 @@ class ProjectPDFAttachmentsTabView extends ConsumerWidget {
       child: ContentKeepAliveWrapper(
         child: Column(
           children: [
-            thumbnails.when(
-              data: (data) {
-                if (data.isEmpty) {
-                  return ProjectPdfPicker(
-                    project: project,
-                  );
-                }
-                return ProjectPdfThumbnailViewer(
-                  project: project,
-                  data: data,
-                );
-              },
-              error: (e, st) {
-                return const ProjectPdfThumbnailError();
-              },
-              loading: () {
-                return const ProjectPdfThumbnailLoader();
-              },
-            ),
+            if (pdfPaths.isEmpty)
+              ProjectPdfPicker(
+                project: project,
+              )
+            else
+              Column(
+                spacing: 10,
+                children: [
+                  ...pdfPaths.asMap().entries.map(
+                    (entry) {
+                      final index = entry.key;
+                      final pdf = entry.value;
+                      return GestureDetector(
+                        onTap: () async {
+                          await launchUrl(
+                            Uri.parse(
+                              pdf,
+                            ),
+                          );
+                        },
+                        child: PdfAttacmentsDetail(
+                          pdfPaths: pdfPaths,
+                          index: index,
+                          showRemove: true,
+                          onRemove: () => notifier.removePDFAtIndex(index),
+                        ),
+                      );
+                    },
+                  ),
+                  if (pdfPaths.length < 5)
+                    ProjectPdfPicker(
+                      project: project,
+                    ),
+                ],
+              ),
           ],
         ),
       ),

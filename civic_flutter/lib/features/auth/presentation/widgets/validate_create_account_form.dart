@@ -13,16 +13,20 @@ class ValidateCreateAccountForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
+    final validateLoading = ref.watch(
+      authProvider.select(
+        (s) => s.validatCreateAccountLoading,
+      ),
+    );
     return Form(
-      key: authState.verificationCodeFormKey,
+      key: authNotifier.verificationCodeFormKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: authState.verificationCodeController,
+            controller: authNotifier.verificationCodeController,
             validator: TValidator.validateOTP,
             obscureText: true,
             keyboardType: TextInputType.text,
@@ -66,7 +70,7 @@ class ValidateCreateAccountForm extends ConsumerWidget {
               TTexts.tContinue,
             ),
           ).withLoading(
-            loading: authState.validatCreateAccountLoading,
+            loading: validateLoading,
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,

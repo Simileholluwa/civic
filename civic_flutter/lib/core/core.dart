@@ -67,6 +67,8 @@ export './widgets/app/app_user_pl_status_icon.dart';
 export './widgets/app/app_user_profile_image.dart';
 export './widgets/app/app_wrapper.dart';
 export './widgets/app/infinite_list_loading_error.dart';
+export './widgets/app/reusable_quill_editor.dart';
+export './widgets/app/reusable_quill_toolbar.dart';
 export './widgets/auth/auth_app_bar.dart';
 export './widgets/auth/auth_header.dart';
 export './widgets/content/content_app_bar.dart';

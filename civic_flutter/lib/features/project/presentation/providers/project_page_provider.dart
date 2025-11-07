@@ -70,14 +70,10 @@ final vsyncProvider = Provider<TickerProvider>(
 class ProjectTabController extends _$ProjectTabController {
   @override
   Raw<TabController> build() {
-    final currentPage = ref.watch(projectCurrentPageProvider.notifier);
     final controller = TabController(
-      length: 4,
+      length: 2,
       vsync: ref.watch(vsyncProvider),
     );
-    controller.addListener(() {
-      currentPage.setCurrentPage = controller.index;
-    });
     ref.onDispose(controller.dispose);
     return controller;
   }

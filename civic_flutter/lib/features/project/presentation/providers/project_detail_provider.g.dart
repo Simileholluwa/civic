@@ -69,7 +69,7 @@ final class ProjectDetailProvider
   }
 }
 
-String _$projectDetailHash() => r'40efb498768bcb5645c12026d24d8c4aebebb0fc';
+String _$projectDetailHash() => r'3e2e1a235220bfbcf0858b1b2481cc9568e5395d';
 
 final class ProjectDetailFamily extends $Family
     with
@@ -132,4 +132,4 @@ final class HasProjectDraftProvider
   }
 }
 
-String _$hasProjectDraftHash() => r'1d977b01f89ecc31e6dd965904616a000cdf37d4';
+String _$hasProjectDraftHash() => r'99c9e8ef7500a152583c1d3986a0148e6c9bb711';

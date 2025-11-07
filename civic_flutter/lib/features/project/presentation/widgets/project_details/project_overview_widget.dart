@@ -1,14 +1,15 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/presentation/widgets/project_creation/pdf_attacments_detail.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectOverviewWidget extends ConsumerWidget {
   const ProjectOverviewWidget({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
@@ -174,7 +175,8 @@ class ProjectOverviewWidget extends ConsumerWidget {
                         ProjectDetailTitleAndSubtitle(
                           title: 'Attachments',
                           subtitle:
-                              '${projectCardState.pdfAttachments!.length} PDF ${projectCardState.pdfAttachments!.length == 1 ? 'Attachment' : 'Attachments'} ',
+                              '${projectCardState.pdfAttachments!.length} PDF '
+                              '${projectCardState.pdfAttachments!.length == 1 ? 'Attachment' : 'Attachments'} ',
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -195,92 +197,10 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                       ),
                                     );
                                   },
-                                  child: Stack(
-                                    alignment: Alignment.bottomRight,
-                                    children: [
-                                      Container(
-                                        height: 70,
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                .82,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 6, 10, 6,),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            TSizes.sm,
-                                          ),
-                                          border: Border.all(
-                                            color:
-                                                Theme.of(context).dividerColor,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            FadeInImage(
-                                              image: const AssetImage(
-                                                'assets/images/pdf.png',
-                                              ),
-                                              placeholder: MemoryImage(
-                                                kTransparentImage,
-                                              ),
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Flexible(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    projectCardState
-                                                        .pdfAttachments![index]
-                                                        .split('/')
-                                                        .last,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .labelMedium,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 20,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            bottomRight: Radius.circular(
-                                              TSizes.sm,
-                                            ),
-                                            topLeft: Radius.circular(
-                                              TSizes.sm,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '${index + 1}/${projectCardState.pdfAttachments!.length}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium!
-                                                .copyWith(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  child: PdfAttacmentsDetail(
+                                    pdfPaths: projectCardState.pdfAttachments!,
+                                    index: index,
+                                    showRemove: false,
                                   ),
                                 );
                               },

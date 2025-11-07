@@ -6,6 +6,7 @@ import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:civic_flutter/features/project/project.dart';
+import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,8 +14,88 @@ part 'auth_provider.g.dart';
 
 @riverpod
 class Auth extends _$Auth {
+  // Move imperative UI objects (controllers/keys) into the notifier.
+  // Controllers
+  late final TextEditingController _emailController = TextEditingController();
+  late final TextEditingController _firstNameController =
+      TextEditingController();
+  late final TextEditingController _lastNameController =
+      TextEditingController();
+  late final TextEditingController _middleNameController =
+      TextEditingController();
+  late final TextEditingController _passwordController =
+      TextEditingController();
+  late final TextEditingController _verificationCodeController =
+      TextEditingController();
+  late final TextEditingController _newPasswordController =
+      TextEditingController();
+  late final TextEditingController _passwordResetCodeController =
+      TextEditingController();
+  late final TextEditingController _newAccountPasswordController =
+      TextEditingController();
+  late final TextEditingController _resetPasswordEmailController =
+      TextEditingController();
+  late final TextEditingController _ninController = TextEditingController();
+
+  // Form keys
+  final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _ninFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _usernameFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _verificationCodeFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _newPasswordFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _passwordResetCodeFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _newAccountPasswordFormKey =
+      GlobalKey<FormState>();
+  final GlobalKey<FormState> _resetPasswordEmailFormKey =
+      GlobalKey<FormState>();
+
+  // Getters for UI access without triggering state watches
+  TextEditingController get emailController => _emailController;
+  TextEditingController get firstNameController => _firstNameController;
+  TextEditingController get lastNameController => _lastNameController;
+  TextEditingController get middleNameController => _middleNameController;
+  TextEditingController get passwordController => _passwordController;
+  TextEditingController get verificationCodeController =>
+      _verificationCodeController;
+  TextEditingController get newPasswordController => _newPasswordController;
+  TextEditingController get passwordResetCodeController =>
+      _passwordResetCodeController;
+  TextEditingController get newAccountPasswordController =>
+      _newAccountPasswordController;
+  TextEditingController get resetPasswordEmailController =>
+      _resetPasswordEmailController;
+  TextEditingController get ninController => _ninController;
+
+  GlobalKey<FormState> get emailFormKey => _emailFormKey;
+  GlobalKey<FormState> get ninFormKey => _ninFormKey;
+  GlobalKey<FormState> get passwordFormKey => _passwordFormKey;
+  GlobalKey<FormState> get usernameFormKey => _usernameFormKey;
+  GlobalKey<FormState> get verificationCodeFormKey => _verificationCodeFormKey;
+  GlobalKey<FormState> get newPasswordFormKey => _newPasswordFormKey;
+  GlobalKey<FormState> get passwordResetCodeFormKey =>
+      _passwordResetCodeFormKey;
+  GlobalKey<FormState> get newAccountPasswordFormKey =>
+      _newAccountPasswordFormKey;
+  GlobalKey<FormState> get resetPasswordEmailFormKey =>
+      _resetPasswordEmailFormKey;
+
   @override
   AuthState build() {
+    // Ensure controllers are disposed when provider is destroyed
+    ref.onDispose(() {
+      _emailController.dispose();
+      _firstNameController.dispose();
+      _lastNameController.dispose();
+      _middleNameController.dispose();
+      _passwordController.dispose();
+      _verificationCodeController.dispose();
+      _newPasswordController.dispose();
+      _passwordResetCodeController.dispose();
+      _newAccountPasswordController.dispose();
+      _resetPasswordEmailController.dispose();
+      _ninController.dispose();
+    });
     return AuthState.empty();
   }
 
@@ -45,28 +126,34 @@ class Auth extends _$Auth {
   }
 
   void setEmail(String email) {
+    if (state.email == email) return;
     state = state.copyWith(email: email);
   }
 
   void setFirstName(String firstName) {
+    if (state.firstName == firstName) return;
     state = state.copyWith(
       firstName: firstName,
     );
   }
 
   void setNin(String nin) {
+    if (state.nin == nin) return;
     state = state.copyWith(nin: nin);
   }
 
   void setLastName(String lastName) {
+    if (state.lastName == lastName) return;
     state = state.copyWith(lastName: lastName);
   }
 
   void setMiddleName(String middleName) {
+    if (state.middleName == middleName) return;
     state = state.copyWith(middleName: middleName);
   }
 
   void setPassword(String password) {
+    if (state.password == password) return;
     state = state.copyWith(password: password);
   }
 
@@ -75,27 +162,38 @@ class Auth extends _$Auth {
   }
 
   void setNewAccountPassword(String password) {
+    if (state.newAccountPassword == password) return;
     state = state.copyWith(newAccountPassword: password);
   }
 
   void setVerificationCode(String code) {
+    if (state.verificationCode == code) return;
     state = state.copyWith(verificationCode: code);
   }
 
   void setResetPasswordEmail(String email) {
+    if (state.resetPasswordEmail == email) return;
     state = state.copyWith(resetPasswordEmail: email);
   }
 
   void setPasswordResetCode(String code) {
+    if (state.passwordResetCode == code) return;
     state = state.copyWith(passwordResetCode: code);
   }
 
   void setNewPassword(String password) {
+    if (state.newPassword == password) return;
     state = state.copyWith(newPassword: password);
   }
 
   void toggleAcceptTerms(bool value) {
+    if (state.acceptTerms == value) return;
     state = state.copyWith(acceptTerms: value);
+  }
+
+  // Alias with correct spelling for forward-compatibility; keeps old API intact
+  void setValidateCreateAccountLoading(bool value) {
+    setValidatCreateAccountLoading(value);
   }
 
   void clearImage() {
@@ -309,9 +407,9 @@ class Auth extends _$Auth {
         setFirstName(r.firstName ?? '');
         setMiddleName(r.middleName ?? '');
         setLastName(r.lastName ?? '');
-        state.firstNameController.text = state.firstName;
-        state.middleNameController.text = state.middleName;
-        state.lastNameController.text = state.lastName;
+        _firstNameController.text = state.firstName;
+        _middleNameController.text = state.middleName;
+        _lastNameController.text = state.lastName;
         return true;
       } else {
         TToastMessages.errorToast('NIN already exists');

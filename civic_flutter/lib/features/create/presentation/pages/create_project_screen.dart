@@ -24,13 +24,13 @@ class CreateProjectScreen extends ConsumerWidget {
         project,
       ),
     );
-    final projectCreationState = ref.watch(
-      projectProviderProvider(
+    final state = ref.watch(
+      createProjectNotifProvider(
         data.value,
       ),
     );
-    final projectNotifier = ref.read(
-      projectProviderProvider(
+    final notifier = ref.read(
+      createProjectNotifProvider(
         data.value,
       ).notifier,
     );
@@ -38,18 +38,17 @@ class CreateProjectScreen extends ConsumerWidget {
     final hasDraft = ref.watch(hasProjectDraftProvider);
 
     Future<void> handlePop() async {
-      if (!projectCreationState.canSave) {
+      if (!state.isDirty) {
         if (context.mounted) {
           context.pop();
         }
         return;
       }
       final shouldSave = await saveProjectDraftDialog(context);
-      if (shouldSave ?? false) {
-        await projectNotifier.saveProjectDraft();
-        TToastMessages.successToast(
-          'Your project has been saved as draft.',
-        );
+      if (shouldSave == null) {
+        return;
+      } else if (shouldSave) {
+        await notifier.saveProjectDraft();
         if (context.mounted) {
           context.pop();
         }
@@ -74,16 +73,19 @@ class CreateProjectScreen extends ConsumerWidget {
               60,
             ),
             child: CreateContentAppbar(
-              canSend: projectCreationState.isValid,
+              canSend: state.isValid,
               title: const CreateProjectAppbarTitle(),
               hasDraft: hasDraft.value ?? false,
               draftPressed: () async {
-                await loadProjectDrafts(context);
+                final draft = await loadProjectDrafts(context);
+                if (draft is Project) {
+                  notifier.loadDraft(draft);
+                }
               },
               sendPressed: () async {
-                if (!projectNotifier.validateProject()) return;
+                if (!notifier.validateProject()) return;
                 context.pop();
-                await projectNotifier.sendProject(
+                await notifier.sendProject(
                   data.value?.id,
                 );
               },

@@ -1,6 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,18 +8,21 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectImageAttachmentsOptions extends ConsumerWidget {
   const ProjectImageAttachmentsOptions({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(
-      projectProviderProvider(project),
+    final imagesLength = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectImageAttachments.length,
+      ),
     );
-    final projectNotifier = ref.watch(
-      projectProviderProvider(project).notifier,
+    final projectNotifier = ref.read(
+      createProjectNotifProvider(project).notifier,
     );
 
     final pageIndex = ref.watch(projectImageAttachmentPageChangedProvider) + 1;
@@ -88,7 +91,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
                 color: TColors.textWhite,
               ),
             ),
-            if (projectCreationSate.projectImageAttachments.length < 5)
+            if (imagesLength < 5)
               Row(
                 children: [
                   IconButton(
@@ -118,7 +121,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/${projectCreationSate.projectImageAttachments.length}',
+                  '$pageIndex/$imagesLength',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

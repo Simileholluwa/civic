@@ -11,10 +11,14 @@ class CreateAccountRequestForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final authNotifier = ref.watch(authProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
+    final createAccountLoading = ref.watch(
+      authProvider.select(
+        (s) => s.createAccountLoading,
+      ),
+    );
     return Form(
-      key: authState.newAccountPasswordFormKey,
+      key: authNotifier.newAccountPasswordFormKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -23,7 +27,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
         child: Column(
           children: [
             AppPasswordField(
-              textController: authState.newAccountPasswordController,
+              textController: authNotifier.newAccountPasswordController,
               validator: TValidator.validatePassword,
               onChanged: (value) {
                 authNotifier.setNewAccountPassword(value!);
@@ -40,7 +44,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
               height: 55,
               child: FilledButton(
                 onPressed: () async {
-                  final isValid = authState
+                  final isValid = authNotifier
                       .newAccountPasswordFormKey.currentState!
                       .validate();
                   if (!isValid) return;
@@ -55,7 +59,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
                   TTexts.tContinue,
                 ),
               ).withLoading(
-                loading: authState.createAccountLoading,
+                loading: createAccountLoading,
               ),
             ),
           ],

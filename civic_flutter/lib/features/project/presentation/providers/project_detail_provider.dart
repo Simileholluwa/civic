@@ -15,11 +15,12 @@ Future<Project> projectDetail(
 ) async {
   final completer = Completer<Project>();
   if (id == 0) {
-    final userId = ref.read(localStorageProvider).getInt('userId');
-    final project = Project(
-      ownerId: userId!,
+    final userId = ref.read(localStorageProvider).getInt('userId')!;
+    completer.complete(
+      Project(
+        ownerId: userId,
+      ),
     );
-    completer.complete(project);
     return completer.future;
   } else if (project != null) {
     completer.complete(project);

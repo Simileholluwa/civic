@@ -13,7 +13,11 @@ class PoliticalStatusOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authNotifier = ref.watch(authProvider.notifier);
-    final authState = ref.watch(authProvider);
+    final politicalStatus = ref.watch(
+      authProvider.select(
+        (s) => s.politicalStatus,
+      ),
+    );
     return Column(
       children: [
         Container(
@@ -36,8 +40,7 @@ class PoliticalStatusOptions extends ConsumerWidget {
             },
             itemBuilder: (context, index) {
               final status = allStatus[index];
-              final isSelected =
-                  authState.politicalStatus == status.politicalStatus;
+              final isSelected = politicalStatus == status.politicalStatus;
               return Container(
                 decoration: BoxDecoration(
                   border: index == 0

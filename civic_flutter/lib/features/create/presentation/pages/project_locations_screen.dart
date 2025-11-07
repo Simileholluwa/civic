@@ -1,6 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,9 +18,9 @@ class ProjectLocationsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchQueryProvider = ref.watch(locationSearchQueryProvider.notifier);
     final data = ref.watch(searchPlacesProvider);
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
+    final projectCreationSate = ref.watch(createProjectNotifProvider(project));
     final projectNotifier = ref.watch(
-      projectProviderProvider(project).notifier,
+      createProjectNotifProvider(project).notifier,
     );
     final locations = projectCreationSate.physicalLocations;
     return Scaffold(

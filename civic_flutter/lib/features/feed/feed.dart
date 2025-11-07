@@ -56,8 +56,6 @@ export 'presentation/state/feed_widgets_state.dart';
 export 'presentation/widgets/article/article_banner.dart';
 export 'presentation/widgets/article/article_card.dart';
 export 'presentation/widgets/article/article_detail_card.dart';
-export 'presentation/widgets/article/article_text_editor.dart';
-export 'presentation/widgets/article/article_text_toolbar.dart';
 export 'presentation/widgets/article/article_title_field.dart';
 export 'presentation/widgets/article/create_article_widget.dart';
 export 'presentation/widgets/common/comment_replies_page_error.dart';

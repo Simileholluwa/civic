@@ -4,88 +4,86 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectProgressIndicator extends ConsumerWidget {
-  const ProjectProgressIndicator({
-    super.key,
-  });
+  const ProjectProgressIndicator({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = ScrollController();
-    final activeIndicatorKey = GlobalKey();
-    ProjectHelperFunctions.scrollToActiveIndicator(
-      activeIndicatorKey,
-      scrollController,
-      context,
-    );
     final currentPage = ref.watch(projectCurrentPageProvider);
-    final pageNotifier = ref.watch(projectPageControllerProvider.notifier);
+    final pageNotifier = ref.read(projectPageControllerProvider.notifier);
+
+    final theme = Theme.of(context);
+    final labelStyle = theme.textTheme.labelLarge!;
+    final bodyColor = theme.textTheme.bodyLarge!.color;
+
     return SingleChildScrollView(
-      controller: scrollController,
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(20, 6, 20, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(sectionNames.length, (index) {
-          final isActive = index == currentPage;
-          final isCompleted = index < currentPage;
+        children: List<Widget>.generate(
+          sectionNames.length,
+          (index) {
+            final isActive = index == currentPage;
+            final isCompleted = index < currentPage;
 
-          return Row(
-            children: [
-              GestureDetector(
-                onTap: () => pageNotifier.gotoPage(index),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: isActive
-                            ? TColors.secondary
-                            : isCompleted
-                                ? TColors.primary
-                                : Theme.of(context).disabledColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${index + 1}',
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                              color: isActive || isCompleted
-                                  ? Colors.white
-                                  : Theme.of(context).disabledColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: TSizes.sm,
-                    ),
-                    Text(
-                      sectionNames[index],
-                      key: isActive ? activeIndicatorKey : null,
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: isActive || isCompleted
-                                ? Theme.of(context).textTheme.bodyLarge!.color
-                                : Theme.of(context).disabledColor,
-                            fontWeight: isActive || isCompleted
-                                ? FontWeight.bold
-                                : FontWeight.normal,
+            final circleColor = isActive
+                ? TColors.secondary
+                : isCompleted
+                    ? TColors.primary
+                    : theme.disabledColor;
+
+            final numberColor =
+                (isActive || isCompleted) ? Colors.white : theme.disabledColor;
+
+            return Row(
+              children: [
+                GestureDetector(
+                  onTap: () => pageNotifier.gotoPage(index),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: circleColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${index + 1}',
+                          style: labelStyle.copyWith(
+                            color: numberColor,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ),
+                      const SizedBox(width: TSizes.sm),
+                      Text(
+                        sectionNames[index],
+                        style: labelStyle.copyWith(
+                          color: (isActive || isCompleted)
+                              ? bodyColor
+                              : theme.disabledColor,
+                          fontWeight: isActive || isCompleted
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (index < sectionNames.length - 1)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: TSizes.sm,
                     ),
-                  ],
-                ),
-              ),
-              if (index < sectionNames.length - 1)
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: TSizes.sm,
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.chevron_right,
-                    color: Colors.grey,
-                  ),
-                ),
-            ],
-          );
-        }),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

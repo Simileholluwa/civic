@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -21,10 +20,13 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
+    final imageUrls = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectImageAttachments,
+      ),
+    );
     final projectNotifier =
-        ref.watch(projectProviderProvider(project).notifier);
-    final imageUrls = projectCreationSate.projectImageAttachments;
+        ref.read(createProjectNotifProvider(project).notifier);
     final current = ref.watch(projectImageAttachmentPageChangedProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(

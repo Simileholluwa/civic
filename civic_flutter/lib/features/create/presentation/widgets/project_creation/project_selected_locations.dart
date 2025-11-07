@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
@@ -20,15 +19,24 @@ class ProjectSelectedLocations extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
+    final virtualLocations = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.virtualLocations ?? <String>[],
+      ),
+    );
+    final physicalLocations = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.physicalLocations,
+      ),
+    );
     final projectNotifier =
-        ref.watch(projectProviderProvider(project).notifier);
+        ref.read(createProjectNotifProvider(project).notifier);
     List<dynamic>? locations;
     if (isVirtual) {
-      locations = projectCreationSate.virtualLocations ?? <String>[];
+      locations = virtualLocations;
     }
     if (isPhysical) {
-      locations = projectCreationSate.physicalLocations;
+      locations = physicalLocations;
     }
     return Flexible(
       child: ListView.separated(
@@ -108,12 +116,12 @@ class ProjectSelectedLocations extends ConsumerWidget {
                       onPressed: () {
                         if (isVirtual) {
                           projectNotifier.removeVirtualLocation(
-                            projectCreationSate.virtualLocations![index],
+                            virtualLocations[index],
                           );
                         }
                         if (isPhysical) {
                           projectNotifier.removePhysicalLocation(
-                            projectCreationSate.physicalLocations[index],
+                            physicalLocations[index],
                           );
                         }
                       },

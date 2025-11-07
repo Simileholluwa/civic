@@ -43,7 +43,6 @@ export './presentation/widgets/reset_password_form.dart';
 export './presentation/widgets/select_verification_method.dart';
 export './presentation/widgets/terms_of_use.dart';
 export './presentation/widgets/upload_profile_image.dart';
-export './presentation/widgets/user_nin_details.dart';
 export './presentation/widgets/username_form.dart';
 export './presentation/widgets/validate_create_account_form.dart';
 export './presentation/widgets/verify_nin_email_otp.dart';

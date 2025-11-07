@@ -2,11 +2,14 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProjectCategoryDropdown extends ConsumerWidget {
+class ProjectCategoryDropdown extends StatelessWidget {
   const ProjectCategoryDropdown({
-    required this.dropdownItems, required this.value, required this.onChanged, required this.hintText, super.key,
+    required this.dropdownItems,
+    required this.value,
+    required this.onChanged,
+    required this.hintText,
+    super.key,
     this.width = double.maxFinite,
     this.rightPadding = 16,
     this.leftPadding = 8,
@@ -21,7 +24,8 @@ class ProjectCategoryDropdown extends ConsumerWidget {
   final double leftPadding;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final effectiveValue = dropdownItems.contains(value) ? value : null;
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
         isExpanded: true,
@@ -36,8 +40,10 @@ class ProjectCategoryDropdown extends ConsumerWidget {
         ),
         style: Theme.of(context).textTheme.bodyMedium,
         items: ProjectHelperFunctions.addDividersAfterItems(
-            dropdownItems, context,),
-        value: value,
+          dropdownItems,
+          context,
+        ),
+        value: effectiveValue,
         onChanged: onChanged,
         buttonStyleData: ButtonStyleData(
           padding: EdgeInsets.only(

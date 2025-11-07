@@ -12,17 +12,16 @@ class PasswordResetVerificationForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final authNotifier = ref.watch(authProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
     final isDark = THelperFunctions.isDarkMode(context);
     return Form(
-      key: authState.passwordResetCodeFormKey,
+      key: authNotifier.passwordResetCodeFormKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: authState.passwordResetCodeController,
+            controller: authNotifier.passwordResetCodeController,
             validator: TValidator.validateOTP,
             obscureText: true,
             onChanged: authNotifier.setPasswordResetCode,

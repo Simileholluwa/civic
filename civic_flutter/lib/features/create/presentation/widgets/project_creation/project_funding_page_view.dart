@@ -17,9 +17,24 @@ class ProjectFundingPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
-    final projectNotifier =
-        ref.watch(projectProviderProvider(project).notifier);
+    final currency = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.currency,
+      ),
+    );
+    final fundingCategory = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.fundingCategory,
+      ),
+    );
+    final fundingSubCategory = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.fundingSubCategory,
+      ),
+    );
+    final projectNotifier = ref.read(
+      createProjectNotifProvider(project).notifier,
+    );
     return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(
         20,
@@ -40,7 +55,7 @@ class ProjectFundingPageView extends ConsumerWidget {
               ProjectCategoryDropdown(
                 hintText: 'NGN',
                 dropdownItems: currencies.keys.toList(),
-                value: projectCreationSate.currency,
+                value: currency,
                 onChanged: projectNotifier.setCurrency,
                 width: 100,
                 leftPadding: 4,
@@ -51,7 +66,7 @@ class ProjectFundingPageView extends ConsumerWidget {
               ),
               Expanded(
                 child: AppTextField(
-                  textController: projectCreationSate.projectCostController,
+                  textController: projectNotifier.projectCostController,
                   prefixIcon: Iconsax.moneys5,
                   inputFormatters: [
                     NumberInputFormatter(),
@@ -71,21 +86,21 @@ class ProjectFundingPageView extends ConsumerWidget {
           ProjectCategoryDropdown(
             hintText: 'Select funding category',
             dropdownItems: fundingSources.keys.toList(),
-            value: projectCreationSate.fundingCategory,
+            value: fundingCategory,
             onChanged: projectNotifier.setFundingCategory,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Select funding subcategory',
             dropdownItems: ProjectHelperFunctions.getFundingSubcategories(
-              projectCreationSate.fundingCategory,
+              fundingCategory,
             ),
-            value: projectCreationSate.fundingSubCategory,
+            value: fundingSubCategory,
             onChanged: projectNotifier.setFundingSubCategory,
           ),
           const SizedBox(height: 20),
           AppTextField(
-            textController: projectCreationSate.fundingNoteController,
+            textController: projectNotifier.fundingNoteController,
             showPrefixIcon: false,
             hintText: 'Optional note on funding and or cost...',
             validator: (value) => null,

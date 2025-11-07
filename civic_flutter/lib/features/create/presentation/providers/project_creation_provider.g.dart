@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'project_provider.dart';
+part of 'project_creation_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,35 +9,35 @@ part of 'project_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ProjectProvider)
-const projectProviderProvider = ProjectProviderFamily._();
+@ProviderFor(CreateProjectNotif)
+const createProjectNotifProvider = CreateProjectNotifFamily._();
 
-final class ProjectProviderProvider
-    extends $NotifierProvider<ProjectProvider, ProjectCreationState> {
-  const ProjectProviderProvider._(
-      {required ProjectProviderFamily super.from,
+final class CreateProjectNotifProvider
+    extends $NotifierProvider<CreateProjectNotif, ProjectCreationState> {
+  const CreateProjectNotifProvider._(
+      {required CreateProjectNotifFamily super.from,
       required Project? super.argument})
       : super(
           retry: null,
-          name: r'projectProviderProvider',
+          name: r'createProjectNotifProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$projectProviderHash();
+  String debugGetCreateSourceHash() => _$createProjectNotifHash();
 
   @override
   String toString() {
-    return r'projectProviderProvider'
+    return r'createProjectNotifProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  ProjectProvider create() => ProjectProvider();
+  CreateProjectNotif create() => CreateProjectNotif();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(ProjectCreationState value) {
@@ -49,7 +49,7 @@ final class ProjectProviderProvider
 
   @override
   bool operator ==(Object other) {
-    return other is ProjectProviderProvider && other.argument == argument;
+    return other is CreateProjectNotifProvider && other.argument == argument;
   }
 
   @override
@@ -58,31 +58,32 @@ final class ProjectProviderProvider
   }
 }
 
-String _$projectProviderHash() => r'30a0ccd833fdd58833db6d91834ffa0c66cb7bde';
+String _$createProjectNotifHash() =>
+    r'4a5f5571fd48208fbd9b77a8a963be4781772b35';
 
-final class ProjectProviderFamily extends $Family
+final class CreateProjectNotifFamily extends $Family
     with
-        $ClassFamilyOverride<ProjectProvider, ProjectCreationState,
+        $ClassFamilyOverride<CreateProjectNotif, ProjectCreationState,
             ProjectCreationState, ProjectCreationState, Project?> {
-  const ProjectProviderFamily._()
+  const CreateProjectNotifFamily._()
       : super(
           retry: null,
-          name: r'projectProviderProvider',
+          name: r'createProjectNotifProvider',
           dependencies: null,
           $allTransitiveDependencies: null,
           isAutoDispose: true,
         );
 
-  ProjectProviderProvider call(
+  CreateProjectNotifProvider call(
     Project? project,
   ) =>
-      ProjectProviderProvider._(argument: project, from: this);
+      CreateProjectNotifProvider._(argument: project, from: this);
 
   @override
-  String toString() => r'projectProviderProvider';
+  String toString() => r'createProjectNotifProvider';
 }
 
-abstract class _$ProjectProvider extends $Notifier<ProjectCreationState> {
+abstract class _$CreateProjectNotif extends $Notifier<ProjectCreationState> {
   late final _$args = ref.$arg as Project?;
   Project? get project => _$args;
 

@@ -15,9 +15,19 @@ class ProjectLocationPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(
-      projectProviderProvider(
-        project,
+    final canAddLocations = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.canAddLocations,
+      ),
+    );
+    final hasVirtualLocations = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => (s.virtualLocations ?? const <String>[]).isNotEmpty,
+      ),
+    );
+    final hasPhysicalLocations = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.physicalLocations.isNotEmpty,
       ),
     );
     return Column(
@@ -26,7 +36,8 @@ class ProjectLocationPageView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Text(
-            'Make it effortless to find where this project is located. Whether physical or virtual or both.',
+            'Make it effortless to find where this project '
+            'is located. Whether physical or virtual or both.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 17,
                   color: Theme.of(context).textTheme.bodySmall!.color,
@@ -43,7 +54,7 @@ class ProjectLocationPageView extends ConsumerWidget {
             children: [
               Expanded(
                 child: ProjectLocationOptions(
-                  onTap: projectCreationSate.canAddLocations
+                  onTap: canAddLocations
                       ? () async {
                           await ProjectHelperFunctions.selectLocation(
                             context,
@@ -59,7 +70,7 @@ class ProjectLocationPageView extends ConsumerWidget {
               ),
               Expanded(
                 child: ProjectLocationOptions(
-                  onTap: projectCreationSate.canAddLocations
+                  onTap: canAddLocations
                       ? () async {
                           await virtualLinkDialog(
                             context: context,
@@ -76,13 +87,13 @@ class ProjectLocationPageView extends ConsumerWidget {
             ],
           ),
         ),
-        if (projectCreationSate.virtualLocations != null)
+        if (hasVirtualLocations)
           ProjectSelectedLocations(
             project: project,
             isVirtual: true,
             isPhysical: false,
           ),
-        if (projectCreationSate.physicalLocations.isNotEmpty)
+        if (hasPhysicalLocations)
           ProjectSelectedLocations(
             project: project,
             isVirtual: false,

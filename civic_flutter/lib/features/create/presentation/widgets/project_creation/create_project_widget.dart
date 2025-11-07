@@ -13,12 +13,9 @@ class CreateProjectWidget extends ConsumerWidget {
   final Project project;
 
   @override
-  Widget build(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final pageController = ref.watch(projectPageControllerProvider);
-    final currentPageNotifier = ref.watch(projectCurrentPageProvider.notifier);
+    final currentPageNotifier = ref.read(projectCurrentPageProvider.notifier);
     return Column(
       children: [
         const ProjectProgressIndicator(),

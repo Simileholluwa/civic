@@ -12,11 +12,15 @@ class EmailForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authNotifier = ref.watch(authProvider.notifier);
-    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
+    final checkEmailLoading = ref.watch(
+      authProvider.select(
+        (s) => s.checkEmailLoading,
+      ),
+    );
 
     return Form(
-      key: authState.emailFormKey,
+      key: authNotifier.emailFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,
@@ -25,16 +29,14 @@ class EmailForm extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextField(
-              textController: authState.emailController,
+              textController: authNotifier.emailController,
               prefixIcon: Iconsax.message,
               hintText: 'your-email@domain.com',
               validator: TValidator.validateEmail,
               textInputType: TextInputType.emailAddress,
               maxLines: 1,
               onChanged: (value) {
-                authNotifier.setEmail(
-                  authState.emailController.text.toLowerCase(),
-                );
+                authNotifier.setEmail(value!.toLowerCase());
               },
             ),
             const SizedBox(
@@ -42,7 +44,8 @@ class EmailForm extends ConsumerWidget {
             ),
             FilledButton(
               onPressed: () async {
-                final isValid = authState.emailFormKey.currentState!.validate();
+                final isValid =
+                    authNotifier.emailFormKey.currentState!.validate();
                 if (!isValid) return;
                 final newUser = await authNotifier.checkIfNewUser();
                 if (newUser == null) {
@@ -63,7 +66,7 @@ class EmailForm extends ConsumerWidget {
                 TTexts.tContinue,
               ),
             ).withLoading(
-              loading: authState.checkEmailLoading,
+              loading: checkEmailLoading,
             ),
           ],
         ),

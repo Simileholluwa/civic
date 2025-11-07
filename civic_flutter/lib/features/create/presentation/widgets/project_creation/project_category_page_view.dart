@@ -14,9 +14,19 @@ class ProjectCategoryPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCreationSate = ref.watch(projectProviderProvider(project));
-    final projectNotifier =
-        ref.watch(projectProviderProvider(project).notifier);
+    final projectCategory = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectCategory,
+      ),
+    );
+    final projectSubCategory = ref.watch(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectSubCategory,
+      ),
+    );
+    final projectNotifier = ref.read(
+      createProjectNotifProvider(project).notifier,
+    );
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -30,16 +40,16 @@ class ProjectCategoryPageView extends ConsumerWidget {
           ProjectCategoryDropdown(
             hintText: 'Project category',
             dropdownItems: projectCategories.keys.toList(),
-            value: projectCreationSate.projectCategory,
+            value: projectCategory,
             onChanged: projectNotifier.setProjectCategory,
           ),
           const SizedBox(height: 20),
           ProjectCategoryDropdown(
             hintText: 'Project subcategory',
             dropdownItems: ProjectHelperFunctions.getSubcategories(
-              projectCreationSate.projectCategory,
+              projectCategory,
             ),
-            value: projectCreationSate.projectSubCategory,
+            value: projectSubCategory,
             onChanged: projectNotifier.setProjectSubCategory,
           ),
         ],
