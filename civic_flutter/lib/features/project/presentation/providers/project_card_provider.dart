@@ -12,7 +12,7 @@ class ProjectCardWidget extends _$ProjectCardWidget {
       return ProjectCardState.empty();
     }
     return ProjectCardState.populate(
-      project,
+      ProjectWithUserState(project: project),
       ref,
     );
   }

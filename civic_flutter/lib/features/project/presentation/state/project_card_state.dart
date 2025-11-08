@@ -91,10 +91,11 @@ class ProjectCardState {
   }
 
   factory ProjectCardState.populate(
-    Project project,
+    ProjectWithUserState projectWithUserState,
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
+    final project = projectWithUserState.project;
     return ProjectCardState(
       creator: project.owner,
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -126,32 +127,24 @@ class ProjectCardState {
         project.endDate!,
       ),
       numberOfLikes: THelperFunctions.humanizeNumber(
-        project.likedBy!.length,
+        project.likesCount!,
       ),
-      isSubscribed: project.subscribers!.contains(userId),
+      isSubscribed: projectWithUserState.isSubscribed!,
       numberOfReviews: THelperFunctions.humanizeNumber(
-        project.reviewedBy!.length,
+        project.reviewsCount!,
       ),
       numberOfVettings: THelperFunctions.humanizeNumber(
-        project.vettedBy!.length,
+        project.vettingsCount!,
       ),
       numberOfBookmarks: THelperFunctions.humanizeNumber(
-        project.bookmarkedBy!.length,
+        project.bookmarksCount!,
       ),
-      hasLiked: project.likedBy!.contains(
-        userId,
-      ),
-      hasReviewed: project.reviewedBy!.contains(
-        userId,
-      ),
-      hasVetted: project.vettedBy!.contains(
-        userId,
-      ),
-      isBookmarked: project.bookmarkedBy!.contains(
-        userId,
-      ),
+      hasLiked: projectWithUserState.hasLiked,
+      hasReviewed: projectWithUserState.hasReviewed,
+      hasVetted: projectWithUserState.hasVetted,
+      isBookmarked: projectWithUserState.hasBookmarked,
       numberOfReposts: THelperFunctions.humanizeNumber(
-        project.quoteCount!,
+        project.quotesCount!,
       ),
       canVet: ProjectHelperFunctions.canVet(
         project.startDate!,

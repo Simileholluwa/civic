@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -148,74 +146,15 @@ class FeedHelperFunctions {
     final hours = timeLeft.inHours % 24;
     final minutes = timeLeft.inMinutes % 60;
 
-    if (days > 0) return ' • $days${days == 1 ? TTexts.day : TTexts.days}${TTexts.left}';
+    if (days > 0) {
+      return ' • $days${days == 1 ? TTexts.day : TTexts.days}${TTexts.left}';
+    }
     if (hours > 0) {
       return ' • $hours${hours == 1 ? TTexts.hour : TTexts.hours} ${minutes}m${TTexts.left}';
     }
-    if (minutes > 0) return ' • $minutes${minutes == 1 ? TTexts.minute : TTexts.minutes}${TTexts.left}';
-
+    if (minutes > 0) {
+      return ' • $minutes${minutes == 1 ? TTexts.minute : TTexts.minutes}${TTexts.left}';
+    }
     return TTexts.pollEndsSoon;
-  }
-
-  static List<String> getAllImagesFromEditor(String content) {
-    final imageUrls = <String>[];
-    // Convert the document to JSON
-
-    final jsonDocument = jsonDecode(
-      content,
-    ) as List<Map<String, Map<String, String>>>;
-
-    // Loop through the document's operations
-    for (final operation in jsonDocument) {
-      if (operation['insert'] is Map && operation['insert'] != null) {
-        if (operation['insert']!.containsKey('image')) {
-          // Add the image URL to the list
-          final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-          if (!operation['insert']!['image'].toString().startsWith(regex)) {
-            imageUrls.add(operation['insert']!['image']!);
-          }
-        }
-      }
-    }
-
-    return imageUrls;
-  }
-
-  static Map<String, String> mapEmbededImages(
-    List<String> oldPath,
-    List<String> newPath,
-  ) {
-    return {for (int i = 0; i < oldPath.length; i++) oldPath[i]: newPath[i]};
-  }
-
-  static String modifyArticleContent(
-    String content,
-    Map<String, String> pathReplacements,
-  ) {
-    // Convert document to JSON
-    final documentJson = jsonDecode(
-      content,
-    ) as List<Map<String, Map<String, String>>>;
-
-    // Update the JSON with new image paths
-    for (final block in documentJson) {
-      if (block.containsKey('insert')) {
-        final insert = block['insert'];
-
-        // Check if the block is an image
-        if (insert is Map && insert != null) {
-          if (insert.containsKey('image')) {
-            final oldPath = insert['image']!;
-
-            // If the image path has a replacement, update it
-            if (pathReplacements.containsKey(oldPath)) {
-              insert['image'] = pathReplacements[oldPath]!;
-            }
-          }
-        }
-      }
-    }
-
-    return jsonEncode(documentJson);
   }
 }

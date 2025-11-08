@@ -33,20 +33,13 @@ abstract class Project implements _i1.SerializableModel {
     this.projectPDFAttachments,
     this.physicalLocations,
     this.virtualLocations,
-    this.projectVideoUrl,
     DateTime? dateCreated,
     this.updatedAt,
-    this.likedBy,
     int? likesCount,
-    this.reviewedBy,
     int? reviewsCount,
-    this.bookmarkedBy,
     int? bookmarksCount,
-    this.vettedBy,
     int? vettingsCount,
-    this.subscribers,
-    this.quotedBy,
-    int? quoteCount,
+    int? quotesCount,
     this.overallRating,
     this.overallLocationRating,
     this.overallDescriptionRating,
@@ -60,7 +53,7 @@ abstract class Project implements _i1.SerializableModel {
         reviewsCount = reviewsCount ?? 0,
         bookmarksCount = bookmarksCount ?? 0,
         vettingsCount = vettingsCount ?? 0,
-        quoteCount = quoteCount ?? 0,
+        quotesCount = quotesCount ?? 0,
         isDeleted = isDeleted ?? false;
 
   factory Project({
@@ -82,20 +75,13 @@ abstract class Project implements _i1.SerializableModel {
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? reviewedBy,
     int? reviewsCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
-    List<int>? vettedBy,
     int? vettingsCount,
-    List<int>? subscribers,
-    List<int>? quotedBy,
-    int? quoteCount,
+    int? quotesCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -143,7 +129,6 @@ abstract class Project implements _i1.SerializableModel {
       virtualLocations: (jsonSerialization['virtualLocations'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      projectVideoUrl: jsonSerialization['projectVideoUrl'] as String?,
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
@@ -151,29 +136,11 @@ abstract class Project implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likedBy: (jsonSerialization['likedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       likesCount: jsonSerialization['likesCount'] as int?,
-      reviewedBy: (jsonSerialization['reviewedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       reviewsCount: jsonSerialization['reviewsCount'] as int?,
-      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
-      vettedBy: (jsonSerialization['vettedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       vettingsCount: jsonSerialization['vettingsCount'] as int?,
-      subscribers: (jsonSerialization['subscribers'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      quotedBy: (jsonSerialization['quotedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      quoteCount: jsonSerialization['quoteCount'] as int?,
+      quotesCount: jsonSerialization['quotesCount'] as int?,
       overallRating: (jsonSerialization['overallRating'] as num?)?.toDouble(),
       overallLocationRating:
           (jsonSerialization['overallLocationRating'] as num?)?.toDouble(),
@@ -230,33 +197,19 @@ abstract class Project implements _i1.SerializableModel {
 
   List<String>? virtualLocations;
 
-  String? projectVideoUrl;
-
   DateTime? dateCreated;
 
   DateTime? updatedAt;
 
-  List<int>? likedBy;
-
   int? likesCount;
-
-  List<int>? reviewedBy;
 
   int? reviewsCount;
 
-  List<int>? bookmarkedBy;
-
   int? bookmarksCount;
-
-  List<int>? vettedBy;
 
   int? vettingsCount;
 
-  List<int>? subscribers;
-
-  List<int>? quotedBy;
-
-  int? quoteCount;
+  int? quotesCount;
 
   double? overallRating;
 
@@ -296,20 +249,13 @@ abstract class Project implements _i1.SerializableModel {
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? reviewedBy,
     int? reviewsCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
-    List<int>? vettedBy,
     int? vettingsCount,
-    List<int>? subscribers,
-    List<int>? quotedBy,
-    int? quoteCount,
+    int? quotesCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -345,20 +291,13 @@ abstract class Project implements _i1.SerializableModel {
             physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
-      if (projectVideoUrl != null) 'projectVideoUrl': projectVideoUrl,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (likesCount != null) 'likesCount': likesCount,
-      if (reviewedBy != null) 'reviewedBy': reviewedBy?.toJson(),
       if (reviewsCount != null) 'reviewsCount': reviewsCount,
-      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
-      if (vettedBy != null) 'vettedBy': vettedBy?.toJson(),
       if (vettingsCount != null) 'vettingsCount': vettingsCount,
-      if (subscribers != null) 'subscribers': subscribers?.toJson(),
-      if (quotedBy != null) 'quotedBy': quotedBy?.toJson(),
-      if (quoteCount != null) 'quoteCount': quoteCount,
+      if (quotesCount != null) 'quotesCount': quotesCount,
       if (overallRating != null) 'overallRating': overallRating,
       if (overallLocationRating != null)
         'overallLocationRating': overallLocationRating,
@@ -403,20 +342,13 @@ class _ProjectImpl extends Project {
     List<String>? projectPDFAttachments,
     List<_i3.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
-    String? projectVideoUrl,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? reviewedBy,
     int? reviewsCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
-    List<int>? vettedBy,
     int? vettingsCount,
-    List<int>? subscribers,
-    List<int>? quotedBy,
-    int? quoteCount,
+    int? quotesCount,
     double? overallRating,
     double? overallLocationRating,
     double? overallDescriptionRating,
@@ -444,20 +376,13 @@ class _ProjectImpl extends Project {
           projectPDFAttachments: projectPDFAttachments,
           physicalLocations: physicalLocations,
           virtualLocations: virtualLocations,
-          projectVideoUrl: projectVideoUrl,
           dateCreated: dateCreated,
           updatedAt: updatedAt,
-          likedBy: likedBy,
           likesCount: likesCount,
-          reviewedBy: reviewedBy,
           reviewsCount: reviewsCount,
-          bookmarkedBy: bookmarkedBy,
           bookmarksCount: bookmarksCount,
-          vettedBy: vettedBy,
           vettingsCount: vettingsCount,
-          subscribers: subscribers,
-          quotedBy: quotedBy,
-          quoteCount: quoteCount,
+          quotesCount: quotesCount,
           overallRating: overallRating,
           overallLocationRating: overallLocationRating,
           overallDescriptionRating: overallDescriptionRating,
@@ -491,20 +416,13 @@ class _ProjectImpl extends Project {
     Object? projectPDFAttachments = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
-    Object? projectVideoUrl = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likedBy = _Undefined,
     Object? likesCount = _Undefined,
-    Object? reviewedBy = _Undefined,
     Object? reviewsCount = _Undefined,
-    Object? bookmarkedBy = _Undefined,
     Object? bookmarksCount = _Undefined,
-    Object? vettedBy = _Undefined,
     Object? vettingsCount = _Undefined,
-    Object? subscribers = _Undefined,
-    Object? quotedBy = _Undefined,
-    Object? quoteCount = _Undefined,
+    Object? quotesCount = _Undefined,
     Object? overallRating = _Undefined,
     Object? overallLocationRating = _Undefined,
     Object? overallDescriptionRating = _Undefined,
@@ -547,34 +465,14 @@ class _ProjectImpl extends Project {
       virtualLocations: virtualLocations is List<String>?
           ? virtualLocations
           : this.virtualLocations?.map((e0) => e0).toList(),
-      projectVideoUrl:
-          projectVideoUrl is String? ? projectVideoUrl : this.projectVideoUrl,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likedBy: likedBy is List<int>?
-          ? likedBy
-          : this.likedBy?.map((e0) => e0).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
-      reviewedBy: reviewedBy is List<int>?
-          ? reviewedBy
-          : this.reviewedBy?.map((e0) => e0).toList(),
       reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
-      bookmarkedBy: bookmarkedBy is List<int>?
-          ? bookmarkedBy
-          : this.bookmarkedBy?.map((e0) => e0).toList(),
       bookmarksCount:
           bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
-      vettedBy: vettedBy is List<int>?
-          ? vettedBy
-          : this.vettedBy?.map((e0) => e0).toList(),
       vettingsCount: vettingsCount is int? ? vettingsCount : this.vettingsCount,
-      subscribers: subscribers is List<int>?
-          ? subscribers
-          : this.subscribers?.map((e0) => e0).toList(),
-      quotedBy: quotedBy is List<int>?
-          ? quotedBy
-          : this.quotedBy?.map((e0) => e0).toList(),
-      quoteCount: quoteCount is int? ? quoteCount : this.quoteCount,
+      quotesCount: quotesCount is int? ? quotesCount : this.quotesCount,
       overallRating:
           overallRating is double? ? overallRating : this.overallRating,
       overallLocationRating: overallLocationRating is double?

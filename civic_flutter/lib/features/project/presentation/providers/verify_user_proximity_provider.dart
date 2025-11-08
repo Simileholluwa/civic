@@ -28,7 +28,8 @@ Future<double> verifyUserProximity(
           'action': 'retry',
         });
       },
-      (project) async {
+      (projectWithUserState) async {
+        final project = projectWithUserState.project;
         final userId = ref.read(localStorageProvider).getInt('userId');
         if (project.isDeleted! && project.ownerId == userId) {
           completer.completeError({

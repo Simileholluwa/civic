@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'project_creation_provider.g.dart';
@@ -492,77 +493,69 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     );
   }
 
-  Future<void> saveProjectDraft() async {
+  Future<bool> saveProjectDraft() async {
     final saveDraft = ref.read(saveProjectDraftProvider);
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
-    final draftProject = Project(
+    final draftProject = _buildProjectFromState(
       ownerId: ownerId,
       id: _currentDraftId ?? DateTime.now().millisecondsSinceEpoch,
-      title: state.title,
-      description: state.description,
-      projectCategory: state.projectCategory,
-      projectSubCategory: state.projectSubCategory,
-      startDate: state.startDate,
-      endDate: state.endDate,
-      currency: state.currency,
-      projectCost: state.projectCost,
-      fundingCategory: state.fundingCategory,
-      fundingSubCategory: state.fundingSubCategory,
-      fundingNote: state.fundingNote,
-      physicalLocations: state.physicalLocations,
-      virtualLocations: state.virtualLocations,
-      projectImageAttachments: state.projectImageAttachments,
-      projectPDFAttachments: state.projectPDFAttachments,
     );
 
     final result = await saveDraft(
       SaveProjectDraftParams(draftProject),
     );
-    result.fold(
-      (l) => TToastMessages.errorToast(l.message),
+    return result.fold(
+      (l) {
+        TToastMessages.errorToast(l.message);
+        return false;
+      },
       (_) {
-        TToastMessages.successToast('Project saved as draft.');
         _setBaseline(draftProject);
         _currentDraftId = draftProject.id;
+        return true;
       },
     );
   }
 
-  Future<void> sendProject(int? projectId) async {
-    ref.read(sendPostLoadingProvider.notifier).value = true;
+  Future<void> sendMediaAndModifyContent(
+    List<String> embeddedImages,
+    String content,
+  ) async {
+    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+          embeddedImages,
+          'embedded_project_images',
+          'images',
+        );
 
-    final imagesUploaded = await _sendMediaAttachments(
-      attachments: state.projectImageAttachments,
-      folder: 'projects',
-      subFolder: 'images',
-      onUploadSuccess: setImages,
-    );
-    if (!imagesUploaded) {
+    return result.fold((error) async {
+      TToastMessages.errorToast(error);
       await saveProjectDraft();
       TToastMessages.errorToast(
-        'Unable to upload images. Project has been saved as draft.',
+        'Unable to upload embedded images. Project has been saved as draft.',
       );
       return;
-    }
-
-    final pdfsUploaded = await _sendMediaAttachments(
-      attachments: state.projectPDFAttachments,
-      folder: 'projects',
-      subFolder: 'pdfs',
-      onUploadSuccess: setPDFAttachments,
-    );
-    if (!pdfsUploaded) {
-      await saveProjectDraft();
-      TToastMessages.errorToast(
-        'Unable to upload PDFs. Project has been saved as draft.',
+    }, (mediaUrls) {
+      final pathReplacements = THelperFunctions.mapEmbededImages(
+        embeddedImages,
+        mediaUrls,
       );
+      final modifiedContent = THelperFunctions.modifyArticleContent(
+        content,
+        pathReplacements,
+      );
+
+      // Persist the modified description into state so subsequent steps send the updated content
+      state = state.copyWith(description: modifiedContent);
       return;
-    }
+    });
+  }
 
-    final ownerId = ref.read(localStorageProvider).getInt('userId')!;
-
-    final sentProject = Project(
-      id: projectId,
+  Project _buildProjectFromState({
+    required int? id,
+    required int ownerId,
+  }) {
+    return Project(
+      id: id,
       ownerId: ownerId,
       title: state.title.trim(),
       description: state.description.trim(),
@@ -580,31 +573,117 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       projectImageAttachments: state.projectImageAttachments,
       projectPDFAttachments: state.projectPDFAttachments,
     );
+  }
 
-    final saveProject = ref.read(saveProjectProvider);
-    final result = await saveProject(
-      SaveProjectParams(sentProject),
+  Future<void> sendProject(int? projectId) async {
+    // Prevent accidental double submit
+    if (ref.read(sendPostLoadingProvider.notifier).value) return;
+    ref.read(sendPostLoadingProvider.notifier).value = true;
+    // Keep provider alive for the duration of the submission (survives navigation/rebuild)
+    final keepAliveLink = ref.keepAlive();
+
+    const maxAttempts = 3;
+    var attempt = 0;
+    var backoff = const Duration(milliseconds: 600);
+
+    // Basic client-side validation
+    if (!validateProject()) {
+      ref.read(sendPostLoadingProvider.notifier).value = false;
+      return;
+    }
+
+    final embeddedImages = THelperFunctions.getAllImagesFromEditor(
+      state.description,
     );
+    try {
+      while (true) {
+        attempt++;
+        try {
+          // Upload embedded editor images first (content modified on success)
+          if (embeddedImages.isNotEmpty) {
+            await sendMediaAndModifyContent(
+              embeddedImages,
+              state.description,
+            );
+          }
 
-    return result.fold(
-      (error) async {
-        ref.read(sendPostLoadingProvider.notifier).value = false;
-        await saveProjectDraft();
-        TToastMessages.errorToast(
-          '${error.message}. Project has been saved as draft.',
-        );
-      },
-      (response) async {
-        if (projectId != null) {
-          final deleteDraft = ref.read(deleteProjectDraftProvider);
-          await deleteDraft(projectId);
+          final imagesUploaded = await _sendMediaAttachments(
+            attachments: state.projectImageAttachments,
+            folder: 'projects',
+            subFolder: 'images',
+            onUploadSuccess: setImages,
+          );
+          if (!imagesUploaded) {
+            throw Exception('Unable to upload images.');
+          }
+
+          final pdfsUploaded = await _sendMediaAttachments(
+            attachments: state.projectPDFAttachments,
+            folder: 'projects',
+            subFolder: 'pdfs',
+            onUploadSuccess: setPDFAttachments,
+          );
+          if (!pdfsUploaded) {
+            throw Exception('Unable to upload PDFs.');
+          }
+
+          final ownerId = ref.read(localStorageProvider).getInt('userId')!;
+          final outgoingProject = _buildProjectFromState(
+            id: projectId,
+            ownerId: ownerId,
+          );
+
+          final saveProject = ref.read(saveProjectProvider);
+          final result = await saveProject(
+            SaveProjectParams(outgoingProject),
+          );
+
+          final success = await result.fold(
+            (error) async {
+              throw Exception(error.message);
+            },
+            (response) async {
+              // Only after success, update paginated lists
+              final realProject = response;
+              if (projectId == null) {
+                ref
+                    .read(
+                      paginatedProjectListProvider('').notifier,
+                    )
+                    .addProject(realProject);
+              } else {
+                ref
+                    .read(
+                      paginatedProjectListProvider('').notifier,
+                    )
+                    .updateProject(realProject);
+              }
+              TToastMessages.successToast(
+                'Your project was sent.',
+              );
+              _setBaseline(realProject);
+              return true;
+            },
+          );
+          if (success) break; // Done
+        } on Exception catch (e) {
+          if (attempt >= maxAttempts) {
+            await saveProjectDraft();
+            TToastMessages.errorToast(
+              '$e. Project has been saved as draft.',
+            );
+            break;
+          }
+          // Backoff before retrying
+          await Future<void>.delayed(backoff);
+          backoff *= 2;
         }
-        ref.read(sendPostLoadingProvider.notifier).value = false;
-        TToastMessages.successToast('Your project was sent.');
-        _setBaseline(sentProject);
-        ref.invalidate(paginatedProjectListProvider);
-      },
-    );
+      }
+    } finally {
+      ref.read(sendPostLoadingProvider.notifier).value = false;
+      // Release keep-alive so provider can dispose normally after completion
+      keepAliveLink.close();
+    }
   }
 
   void loadDraft(Project draft) {
@@ -627,7 +706,6 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     _fundingNoteController.text = draft.fundingNote ?? '';
 
     state = ProjectCreationState.populate(draft).copyWith(isDirty: false);
-    // Set baseline to the loaded draft so subsequent edits are compared
     _setBaseline(draft);
     // Track the loaded draft id so saving overwrites this draft rather than creating a new one.
     _currentDraftId = draft.id;

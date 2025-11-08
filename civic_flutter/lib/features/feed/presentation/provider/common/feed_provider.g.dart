@@ -56,7 +56,7 @@ final class FeedProvider extends $NotifierProvider<Feed, FeedState> {
   }
 }
 
-String _$feedHash() => r'9ddffa5f3934d44f4eaa640615130983da65e35b';
+String _$feedHash() => r'936ddc431f374133d55d9bebe7daee6174c22e63';
 
 final class FeedFamily extends $Family
     with $ClassFamilyOverride<Feed, FeedState, FeedState, FeedState, Post?> {

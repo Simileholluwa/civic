@@ -992,7 +992,7 @@ class PostEndpoint extends Endpoint {
             transaction: transaction,
           );
 
-          selectedProject.quoteCount = (selectedProject.quoteCount ?? 0) + 1;
+          selectedProject.quotesCount = selectedProject.quotesCount! + 1;
 
           await ProjectEndpoint().updateProject(
             session,
@@ -1208,11 +1208,11 @@ class PostEndpoint extends Endpoint {
         post.projectId!,
       );
       if (project != null) {
-        project.quoteCount = project.quoteCount! - 1;
+        project.quotesCount = project.quotesCount! - 1;
         await ProjectEndpoint().updateProject(
           session,
           project.copyWith(
-            quoteCount: project.quoteCount,
+            quotesCount: project.quotesCount,
           ),
         );
       }

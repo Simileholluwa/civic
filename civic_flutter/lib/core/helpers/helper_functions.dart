@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -22,6 +23,76 @@ class THelperFunctions {
       return '$firstName $lastName';
     }
     return '$firstName $middleName $lastName';
+  }
+
+  static List<String> getAllImagesFromEditor(String content) {
+    final localImagePaths = <String>[];
+    if (content.trim().isEmpty) return localImagePaths;
+
+    dynamic decoded;
+    try {
+      decoded = jsonDecode(content);
+    } on FormatException catch (_) {
+      return localImagePaths;
+    }
+
+    if (decoded is! List) return localImagePaths;
+
+    final urlRegex = RegExp('^https?://');
+
+    for (final op in decoded) {
+      if (op is! Map) continue;
+      final insertVal = op['insert'];
+      if (insertVal is Map) {
+        final imageVal = insertVal['image'];
+        if (imageVal is String && imageVal.trim().isNotEmpty) {
+          if (!urlRegex.hasMatch(imageVal)) {
+            localImagePaths.add(imageVal);
+          }
+        }
+      }
+    }
+
+    return localImagePaths;
+  }
+
+  static Map<String, String> mapEmbededImages(
+    List<String> oldPath,
+    List<String> newPath,
+  ) {
+    return {for (int i = 0; i < oldPath.length; i++) oldPath[i]: newPath[i]};
+  }
+
+  static String modifyArticleContent(
+    String content,
+    Map<String, String> pathReplacements,
+  ) {
+    // Decode Quill delta safely without strong casts
+    dynamic decoded;
+    try {
+      decoded = jsonDecode(content);
+    } on FormatException catch (_) {
+      // If content isn't valid JSON, return unchanged
+      return content;
+    }
+
+    if (decoded is! List) return content;
+
+    for (final op in decoded) {
+      if (op is! Map) continue;
+      final insertVal = op['insert'];
+      if (insertVal is Map) {
+        final imageVal = insertVal['image'];
+        if (imageVal is String) {
+          final replacement = pathReplacements[imageVal];
+          if (replacement != null) {
+            insertVal['image'] = replacement;
+          }
+        }
+      }
+    }
+
+    return jsonEncode(decoded);
   }
 
   static const List<Color> colorizeColors = [

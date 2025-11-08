@@ -48,7 +48,10 @@ class CreateProjectScreen extends ConsumerWidget {
       if (shouldSave == null) {
         return;
       } else if (shouldSave) {
-        await notifier.saveProjectDraft();
+        final saved = await notifier.saveProjectDraft();
+        if (saved) {
+          TToastMessages.successToast('Your draft has been saved');
+        }
         if (context.mounted) {
           context.pop();
         }
@@ -83,7 +86,6 @@ class CreateProjectScreen extends ConsumerWidget {
                 }
               },
               sendPressed: () async {
-                if (!notifier.validateProject()) return;
                 context.pop();
                 await notifier.sendProject(
                   data.value?.id,

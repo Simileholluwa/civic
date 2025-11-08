@@ -42,13 +42,14 @@ class PaginatedProjectList extends _$PaginatedProjectList {
           error: error.message,
         );
       }, (data) {
+        final projects = data.results.map((e) => e.project).toList();
         if (data.canLoadMore) {
           pagingController.appendPage(
-            data.results,
+            projects,
             data.page + 1,
           );
         } else {
-          pagingController.appendLastPage(data.results);
+          pagingController.appendLastPage(projects);
         }
       });
     } on Exception catch (e) {
@@ -70,6 +71,37 @@ class PaginatedProjectList extends _$PaginatedProjectList {
         itemList: [project, ...currentList],
       );
     }
+  }
+
+  /// Optimistically updates an existing project in the current page list.
+  /// If the project id isn't found, no change is applied.
+  void updateProject(Project project) {
+    final list = pagingController.itemList;
+    if (list == null) return;
+    final idx = list.indexWhere((p) => p.id == project.id);
+    if (idx == -1) return;
+    final newList = List<Project>.from(list);
+    newList[idx] = project;
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: newList,
+    );
+  }
+
+  /// Replaces a temporary (optimistic) project placeholder (matched by id)
+  /// with the real saved project returned from the server.
+  void replaceProjectById(int? tempId, Project realProject) {
+    if (tempId == null) return;
+    final list = pagingController.itemList;
+    if (list == null) return;
+    final idx = list.indexWhere((p) => p.id == tempId);
+    if (idx == -1) return;
+    final newList = List<Project>.from(list);
+    newList[idx] = realProject;
+    pagingController.value = PagingState(
+      nextPageKey: pagingController.nextPageKey,
+      itemList: newList,
+    );
   }
 
   void removeProject(Project project) {

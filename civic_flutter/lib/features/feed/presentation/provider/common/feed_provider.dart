@@ -815,11 +815,11 @@ class Feed extends _$Feed {
 
       return;
     }, (mediaUrls) {
-      final pathReplacements = FeedHelperFunctions.mapEmbededImages(
+      final pathReplacements = THelperFunctions.mapEmbededImages(
         embeddedImages,
         mediaUrls,
       );
-      final modifiedContent = FeedHelperFunctions.modifyArticleContent(
+      final modifiedContent = THelperFunctions.modifyArticleContent(
         content,
         pathReplacements,
       );
@@ -893,7 +893,7 @@ class Feed extends _$Feed {
       await saveArticleAsDraft(id, 'Failed to upload banner');
       return;
     }
-    final embeddedImages = FeedHelperFunctions.getAllImagesFromEditor(
+    final embeddedImages = THelperFunctions.getAllImagesFromEditor(
       state.articleContent,
     );
     if (embeddedImages.isNotEmpty) {

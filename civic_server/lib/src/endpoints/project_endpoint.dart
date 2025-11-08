@@ -23,7 +23,10 @@ class ProjectEndpoint extends Endpoint {
   /// - [projectId]: The unique identifier of the project to retrieve.
   ///
   /// Returns the [Project] if found, otherwise throws an exception.
-  Future<Project> getProject(Session session, int projectId) async {
+  Future<ProjectWithUserState> getProject(
+    Session session,
+    int projectId,
+  ) async {
     final result = await Project.db.findById(
       session,
       projectId,
@@ -33,13 +36,65 @@ class ProjectEndpoint extends Endpoint {
         ),
       ),
     );
+
     if (result == null) {
       throw ServerSideException(
         message:
             'This project cannot be found. It may have been permanently deleted.',
       );
     }
-    return result;
+
+    final user = await authUser(session);
+
+    final like = await ProjectLikes.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) &
+          t.ownerId.equals(
+            user.userInfoId,
+          ),
+    );
+    final bookmark = await ProjectBookmarks.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) &
+          t.ownerId.equals(
+            user.userInfoId,
+          ),
+    );
+    final subscription = await ProjectSubscription.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) &
+          t.userId.equals(
+            user.id!,
+          ),
+    );
+    final review = await ProjectReview.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) &
+          t.ownerId.equals(
+            user.userInfoId,
+          ),
+    );
+    final vetting = await ProjectVetting.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) &
+          t.ownerId.equals(
+            user.userInfoId,
+          ),
+    );
+
+    return ProjectWithUserState(
+      project: result,
+      hasLiked: like != null,
+      hasBookmarked: bookmark != null,
+      hasReviewed: review != null,
+      hasVetted: vetting != null,
+      isSubscribed: subscription != null,
+    );
   }
 
   /// Retrieves the [ProjectReview] for a given project and the authenticated user.
@@ -129,12 +184,16 @@ class ProjectEndpoint extends Endpoint {
           project.id!,
         );
 
+        if (existingProject == null) {
+          throw ServerSideException(message: 'Project not found');
+        }
+
         final updatedProject = project.copyWith(
           updatedAt: DateTime.now(),
-          likedBy: existingProject!.likedBy,
-          reviewedBy: existingProject.reviewedBy,
-          vettedBy: existingProject.vettedBy,
-          bookmarkedBy: existingProject.bookmarkedBy,
+          dateCreated: existingProject.dateCreated,
+          ownerId: existingProject.ownerId,
+          owner: user,
+          isDeleted: existingProject.isDeleted,
           overallRating: existingProject.overallRating,
           overallLocationRating: existingProject.overallLocationRating,
           overallDescriptionRating: existingProject.overallDescriptionRating,
@@ -142,31 +201,27 @@ class ProjectEndpoint extends Endpoint {
           overallAttachmentsRating: existingProject.overallAttachmentsRating,
           overAllCategoryRating: existingProject.overAllCategoryRating,
           overallFundingRating: existingProject.overallFundingRating,
-          quoteCount: existingProject.quoteCount,
-          dateCreated: existingProject.dateCreated,
-          subscribers: existingProject.subscribers ?? [],
+          quotesCount: existingProject.quotesCount,
+          likesCount: existingProject.likesCount,
+          reviewsCount: existingProject.reviewsCount,
+          bookmarksCount: existingProject.bookmarksCount,
+          vettingsCount: existingProject.vettingsCount,
+          physicalLocations: existingProject.physicalLocations,
+          virtualLocations: existingProject.virtualLocations,
+          projectImageAttachments: existingProject.projectImageAttachments,
+          projectPDFAttachments: existingProject.projectPDFAttachments,
         );
-        await updateProject(
-          session,
-          updatedProject.copyWith(
-            owner: user,
-          ),
-        );
+        await updateProject(session, updatedProject);
         return updatedProject;
       } else {
-        return await Project.db.insertRow(
-          session,
-          project.copyWith(
-            ownerId: user.id,
-            owner: user,
-            dateCreated: DateTime.now(),
-            likedBy: [],
-            reviewedBy: [],
-            bookmarkedBy: [],
-            vettedBy: [],
-            subscribers: [],
-          ),
+        // Defensive initialization of server-managed fields for new project
+        final newProject = project.copyWith(
+          ownerId: user.userInfoId,
+          owner: user,
+          projectImageAttachments: project.projectImageAttachments ?? [],
+          projectPDFAttachments: project.projectPDFAttachments ?? [],
         );
+        return await Project.db.insertRow(session, newProject);
       }
     } catch (e, stackTrace) {
       session.log(
@@ -252,8 +307,8 @@ class ProjectEndpoint extends Endpoint {
           await validateProjectReviewOwnership(
               session, projectReview.id!, user);
 
-          if (project.reviewedBy?.isNotEmpty ?? false) {
-            final count = project.reviewedBy!.length;
+          if (project.reviewsCount != 0) {
+            final count = project.reviewsCount!;
 
             final updatedProject = project.copyWith(
               overallLocationRating: calculateNewOverallRating(
@@ -292,7 +347,47 @@ class ProjectEndpoint extends Endpoint {
                 newRating: projectReview.fundingRating,
                 count: count,
               ),
-              reviewedBy: project.reviewedBy,
+              reviewsCount: project.reviewsCount,
+              overallRating: _computeOverallFromDimensions(
+                project.copyWith(
+                  overallLocationRating: calculateNewOverallRating(
+                    currentOverall: project.overallLocationRating,
+                    existingRating: existingReview.locationRating,
+                    newRating: projectReview.locationRating,
+                    count: count,
+                  ),
+                  overallDescriptionRating: calculateNewOverallRating(
+                    currentOverall: project.overallDescriptionRating,
+                    existingRating: existingReview.descriptionRating,
+                    newRating: projectReview.descriptionRating,
+                    count: count,
+                  ),
+                  overallDatesRating: calculateNewOverallRating(
+                    currentOverall: project.overallDatesRating,
+                    existingRating: existingReview.datesRating,
+                    newRating: projectReview.datesRating,
+                    count: count,
+                  ),
+                  overallAttachmentsRating: calculateNewOverallRating(
+                    currentOverall: project.overallAttachmentsRating,
+                    existingRating: existingReview.attachmentsRating,
+                    newRating: projectReview.attachmentsRating,
+                    count: count,
+                  ),
+                  overAllCategoryRating: calculateNewOverallRating(
+                    currentOverall: project.overAllCategoryRating,
+                    existingRating: existingReview.categoryRating,
+                    newRating: projectReview.categoryRating,
+                    count: count,
+                  ),
+                  overallFundingRating: calculateNewOverallRating(
+                    currentOverall: project.overallFundingRating,
+                    existingRating: existingReview.fundingRating,
+                    newRating: projectReview.fundingRating,
+                    count: count,
+                  ),
+                ),
+              ),
             );
 
             await updateProject(session, updatedProject);
@@ -305,9 +400,11 @@ class ProjectEndpoint extends Endpoint {
             updatedAt: DateTime.now(),
           );
           await updateProjectReview(session, updatedReview);
+          // Also consolidate ratings into ProjectRating rows
+          await _upsertRatingsFromReview(session, updatedReview);
           return updatedReview;
         } else {
-          final oldCount = project.reviewedBy?.length ?? 0;
+          final oldCount = project.reviewsCount!;
 
           final updatedProject = project.copyWith(
             overallLocationRating: _calculateNewAverage(
@@ -340,7 +437,41 @@ class ProjectEndpoint extends Endpoint {
               currentCount: oldCount,
               newValue: projectReview.fundingRating,
             ),
-            reviewedBy: [...project.reviewedBy ?? [], user.id!],
+            reviewsCount: oldCount + 1,
+            overallRating: _computeOverallFromDimensions(
+              project.copyWith(
+                overallLocationRating: _calculateNewAverage(
+                  current: project.overallLocationRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.locationRating,
+                ),
+                overallDescriptionRating: _calculateNewAverage(
+                  current: project.overallDescriptionRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.descriptionRating,
+                ),
+                overallDatesRating: _calculateNewAverage(
+                  current: project.overallDatesRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.datesRating,
+                ),
+                overallAttachmentsRating: _calculateNewAverage(
+                  current: project.overallAttachmentsRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.attachmentsRating,
+                ),
+                overAllCategoryRating: _calculateNewAverage(
+                  current: project.overAllCategoryRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.categoryRating,
+                ),
+                overallFundingRating: _calculateNewAverage(
+                  current: project.overallFundingRating,
+                  currentCount: oldCount,
+                  newValue: projectReview.fundingRating,
+                ),
+              ),
+            ),
           );
 
           await updateProject(session, updatedProject);
@@ -356,6 +487,9 @@ class ProjectEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
+
+          // Consolidate ratings into ProjectRating rows for reporting/analytics
+          await _upsertRatingsFromReview(session, sentReview);
 
           if (project.ownerId != user.id) {
             unawaited(
@@ -458,8 +592,7 @@ class ProjectEndpoint extends Endpoint {
           throw ServerSideException(message: 'Associated project not found');
         }
 
-        final reviewedBy = project.reviewedBy ?? [];
-        final currentCount = reviewedBy.length;
+        final currentCount = project.reviewsCount!;
 
         if (currentCount <= 1) {
           // If only one review existed, reset ratings
@@ -470,7 +603,7 @@ class ProjectEndpoint extends Endpoint {
             overallAttachmentsRating: 0,
             overAllCategoryRating: null,
             overallFundingRating: 0,
-            reviewedBy: [],
+            reviewsCount: 0,
           );
           await updateProject(session, updatedProject);
         } else {
@@ -506,11 +639,46 @@ class ProjectEndpoint extends Endpoint {
               project.overallFundingRating,
               existingReview.fundingRating,
             ),
-            reviewedBy: reviewedBy.where((id) => id != user.id).toList(),
+            reviewsCount: newCount,
+            overallRating: _computeOverallFromDimensions(
+              project.copyWith(
+                overallLocationRating: recalcRating(
+                  project.overallLocationRating,
+                  existingReview.locationRating,
+                ),
+                overallDescriptionRating: recalcRating(
+                  project.overallDescriptionRating,
+                  existingReview.descriptionRating,
+                ),
+                overallDatesRating: recalcRating(
+                  project.overallDatesRating,
+                  existingReview.datesRating,
+                ),
+                overallAttachmentsRating: recalcRating(
+                  project.overallAttachmentsRating,
+                  existingReview.attachmentsRating,
+                ),
+                overAllCategoryRating: recalcRating(
+                  project.overAllCategoryRating,
+                  existingReview.categoryRating,
+                ),
+                overallFundingRating: recalcRating(
+                  project.overallFundingRating,
+                  existingReview.fundingRating,
+                ),
+              ),
+            ),
           );
 
           await updateProject(session, updatedProject);
         }
+
+        // Delete consolidated rating rows linked to this review
+        await ProjectRating.db.deleteWhere(
+          session,
+          where: (t) => t.reviewId.equals(existingReview.id),
+          transaction: transaction,
+        );
 
         await ProjectReview.db.deleteRow(
           session,
@@ -579,7 +747,9 @@ class ProjectEndpoint extends Endpoint {
         }
 
         final updatedProject = project.copyWith(
-          vettedBy: project.vettedBy?.where((id) => id != user.id).toList(),
+          vettingsCount: ((project.vettingsCount ?? 0) > 0)
+              ? (project.vettingsCount! - 1)
+              : 0,
         );
         await updateProject(session, updatedProject);
 
@@ -619,103 +789,153 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-  /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
-  ///
-  /// Throws a [ServerSideException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
-  ///
-  /// The returned [ProjectList] contains:
-  /// - [count]: Total number of projects available (excluding ignored).
-  /// - [limit]: The maximum number of projects per page.
-  /// - [page]: The current page number.
-  /// - [results]: The list of [Project]s for the current page, including their owners and user info.
-  /// - [numPages]: The total number of pages.
-  /// - [canLoadMore]: Whether there are more projects to load.
-  ///
-  /// Logs and throws a [ServerSideException] if an error occurs during fetching.
-  ///
-  /// Parameters:
-  /// - [limit]: Maximum number of projects to return per page (default: 50).
-  /// - [page]: The page number to retrieve (default: 1).
-  Future<ProjectList> getProjects(
+  /// Returns enriched feed projects including:
+  /// - Base project data & owner
+  /// - Up to 5 recent image attachments per project (for previews)
+  /// - Current user interaction state flags: hasLiked, hasBookmarked, hasReviewed,
+  ///   hasVetted, isSubscribed
+  /// This is a read-only aggregation endpoint; no persistence of transient flags.
+  Future<FeedProjectList> getProjects(
     Session session, {
     int limit = 50,
     int page = 1,
     String sortBy = '',
   }) async {
-    try {
-      if (limit <= 0 || page <= 0) {
-        throw ServerSideException(
-          message: 'Invalid pagination parameters',
-        );
-      }
-      final user = await authUser(session);
-      final ignored = await ProjectNotInterested.db.find(
-        session,
-        where: (t) => t.userId.equals(user.id!),
-      );
-      final ignoredIds = ignored.map((e) => e.projectId).toSet();
+    if (limit <= 0 || page <= 0) {
+      throw ServerSideException(message: 'Invalid pagination parameters');
+    }
+    final user = await authUser(session);
 
-      final count = await Project.db.count(
-        session,
-        where: (t) => t.id.notInSet(ignoredIds),
-      );
+    // Base filtering: exclude ignored.
+    final ignored = await ProjectNotInterested.db.find(
+      session,
+      where: (t) => t.userId.equals(user.id!),
+    );
+    final ignoredIds = ignored.map((e) => e.projectId).toSet();
 
-      var results = await Project.db.find(
-        session,
-        limit: limit,
-        offset: (page - 1) * limit,
-        include: Project.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+    final count = await Project.db.count(
+      session,
+      where: (t) => t.id.notInSet(ignoredIds),
+    );
+
+    var projects = await Project.db.find(
+      session,
+      limit: limit,
+      offset: (page - 1) * limit,
+      include: Project.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
         ),
-        where: (t) => t.id.notInSet(ignoredIds),
-      );
+      ),
+      where: (t) => t.id.notInSet(ignoredIds),
+    );
 
-      if (sortBy == 'new') {
-        results.sort(
-          (a, b) => b.dateCreated!.compareTo(a.dateCreated!),
-        );
-      } else if (sortBy == 'trending') {
-        results.sort(
-          (a, b) => engagementScore(b).compareTo(
-            engagementScore(a),
-          ),
-        );
-      } else if (sortBy == 'rating') {
-        results.sort(
-          (a, b) => b.overallRating!.compareTo(a.overallRating!),
-        );
-      }
+    // In-memory sort variants.
+    if (sortBy == 'new') {
+      projects.sort((a, b) => b.dateCreated!.compareTo(a.dateCreated!));
+    } else if (sortBy == 'trending') {
+      projects.sort((a, b) => engagementScore(b).compareTo(engagementScore(a)));
+    } else if (sortBy == 'rating') {
+      projects.sort(
+          (a, b) => (b.overallRating ?? 0).compareTo(a.overallRating ?? 0));
+    }
 
-      return ProjectList(
+    if (projects.isEmpty) {
+      return FeedProjectList(
         count: count,
-        limit: limit,
         page: page,
-        results: results,
         numPages: (count / limit).ceil(),
+        limit: limit,
         canLoadMore: page * limit < count,
-      );
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in getProjects: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-      throw ServerSideException(
-        message: 'Error fetching projects',
+        results: [],
       );
     }
+
+    final projectIds = projects.map((p) => p.id!).toSet();
+
+    // Bulk fetch user interactions.
+    Future<Set<int>> projectIdsFor<T>(
+        Future<List<T>> future, int Function(T) idGetter) async {
+      final rows = await future;
+      return rows.map(idGetter).toSet();
+    }
+
+    final likedSet = await projectIdsFor(
+      ProjectLikes.db.find(
+        session,
+        where: (t) =>
+            t.projectId.inSet(projectIds) & t.ownerId.equals(user.userInfoId),
+      ),
+      (r) => r.projectId,
+    );
+
+    final bookmarkedSet = await projectIdsFor(
+      ProjectBookmarks.db.find(
+        session,
+        where: (t) =>
+            t.projectId.inSet(projectIds) & t.ownerId.equals(user.userInfoId),
+      ),
+      (r) => r.projectId,
+    );
+
+    final reviewedSet = await projectIdsFor(
+      ProjectReview.db.find(
+        session,
+        where: (t) =>
+            t.projectId.inSet(projectIds) & t.ownerId.equals(user.userInfoId),
+      ),
+      (r) => r.projectId,
+    );
+
+    final vettedSet = await projectIdsFor(
+      ProjectVetting.db.find(
+        session,
+        where: (t) =>
+            t.projectId.inSet(projectIds) & t.ownerId.equals(user.userInfoId),
+      ),
+      (r) => r.projectId,
+    );
+
+    final subscribedSet = await projectIdsFor(
+      ProjectSubscription.db.find(
+        session,
+        where: (t) => t.projectId.inSet(projectIds) & t.userId.equals(user.id!),
+      ),
+      (r) => r.projectId,
+    );
+
+    // Assemble enriched DTOs.
+    final feedProjects = <ProjectWithUserState>[];
+    for (final p in projects) {
+      feedProjects.add(
+        ProjectWithUserState(
+          project: p,
+          hasLiked: likedSet.contains(p.id!),
+          hasBookmarked: bookmarkedSet.contains(p.id!),
+          hasReviewed: reviewedSet.contains(p.id!),
+          hasVetted: vettedSet.contains(p.id!),
+          isSubscribed: subscribedSet.contains(p.id!),
+        ),
+      );
+    }
+
+    return FeedProjectList(
+      count: count,
+      page: page,
+      numPages: (count / limit).ceil(),
+      limit: limit,
+      canLoadMore: page * limit < count,
+      results: feedProjects,
+    );
   }
 
   @doNotGenerate
   double engagementScore(Project p) {
-    return (p.likedBy!.length * 2) +
-        (p.quoteCount! * 2) +
-        (p.bookmarkedBy!.length * 1) +
-        (p.reviewedBy!.length * 3) +
-        (p.vettedBy!.length * 4);
+    return (p.likesCount! * 2) +
+        (p.quotesCount! * 2) +
+        (p.bookmarksCount! * 1) +
+        (p.reviewsCount! * 3) +
+        (p.vettingsCount! * 4);
   }
 
   /// Retrieves a paginated list of project reviews for a specific project.
@@ -830,8 +1050,10 @@ class ProjectEndpoint extends Endpoint {
         );
         final projects = userBookmarks.map((e) => e.project!);
         for (final project in projects) {
-          project.bookmarkedBy!.remove(user.id!);
-          project.bookmarksCount = project.bookmarksCount! - 1;
+          final newCount = ((project.bookmarksCount ?? 0) > 0)
+              ? (project.bookmarksCount! - 1)
+              : 0;
+          project.bookmarksCount = newCount;
           await updateProject(session, project);
         }
         await ProjectBookmarks.db.deleteWhere(
@@ -1227,7 +1449,9 @@ class ProjectEndpoint extends Endpoint {
             existingBookmark,
             transaction: transaction,
           );
-          project.bookmarkedBy?.remove(user.id!);
+          project.bookmarksCount = ((project.bookmarksCount ?? 0) > 0)
+              ? (project.bookmarksCount! - 1)
+              : 0;
         } else {
           await ProjectBookmarks.db.insertRow(
             session,
@@ -1237,7 +1461,7 @@ class ProjectEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          project.bookmarkedBy?.add(user.id!);
+          project.bookmarksCount = (project.bookmarksCount ?? 0) + 1;
         }
         await updateProject(session, project);
       } catch (e, stackTrace) {
@@ -1302,7 +1526,8 @@ class ProjectEndpoint extends Endpoint {
             existingLike,
             transaction: transaction,
           );
-          project.likedBy?.remove(user.id!);
+          project.likesCount =
+              ((project.likesCount ?? 0) > 0) ? (project.likesCount! - 1) : 0;
         } else {
           await ProjectLikes.db.insertRow(
             session,
@@ -1313,7 +1538,7 @@ class ProjectEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          project.likedBy?.add(user.id!);
+          project.likesCount = (project.likesCount ?? 0) + 1;
 
           if (project.ownerId != user.id) {
             unawaited(
@@ -1459,7 +1684,7 @@ class ProjectEndpoint extends Endpoint {
           return updatedVet;
         } else {
           final newProject = project.copyWith(
-            vettedBy: [...project.vettedBy ?? [], user.id!],
+            vettingsCount: (project.vettingsCount ?? 0) + 1,
           );
           await updateProject(session, newProject);
           final newVetting = await ProjectVetting.db.insertRow(
@@ -1852,17 +2077,7 @@ class ProjectEndpoint extends Endpoint {
           where: (t) =>
               t.userId.equals(user.id!) & t.projectId.equals(projectId),
         );
-        await updateProject(
-          session,
-          project.copyWith(
-            subscribers: project.subscribers
-                    ?.where(
-                      (id) => id != user.id!,
-                    )
-                    .toList() ??
-                [],
-          ),
-        );
+        // No project field to update for subscribers; state is stored in ProjectSubscription.
         return;
       }
 
@@ -1875,13 +2090,88 @@ class ProjectEndpoint extends Endpoint {
         ),
       );
 
-      await updateProject(
-        session,
-        project.copyWith(
-          subscribers: [...project.subscribers ?? [], user.id!],
-        ),
-      );
+      // No project field to update for subscribers; state is stored in ProjectSubscription.
     });
+  }
+
+  /// Computes an overall composite rating from the per-dimension averages.
+  /// Simple mean of present (non-null) dimension values. You can later adjust
+  /// to a weighted formula if product requirements change.
+  @doNotGenerate
+  double? _computeOverallFromDimensions(Project p) {
+    final parts = [
+      p.overallLocationRating,
+      p.overallDescriptionRating,
+      p.overallDatesRating,
+      p.overallAttachmentsRating,
+      p.overAllCategoryRating,
+      p.overallFundingRating,
+    ].whereType<double>().toList();
+    if (parts.isEmpty) return p.overallRating; // preserve existing if none
+    return parts.reduce((a, b) => a + b) / parts.length;
+  }
+
+  /// Upserts consolidated ProjectRating rows for each rating dimension found on the review.
+  @doNotGenerate
+  Future<void> _upsertRatingsFromReview(
+    Session session,
+    ProjectReview review,
+  ) async {
+    // helper to upsert one rating row
+    Future<void> upsert({
+      required RatingDimension dimension,
+      required double? value,
+    }) async {
+      if (value == null) return;
+      // Try existing row for (projectId, ownerId, dimension)
+      final existing = await ProjectRating.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.projectId.equals(review.projectId) &
+            t.ownerId.equals(review.ownerId) &
+            t.dimension.equals(dimension),
+      );
+      if (existing != null) {
+        await ProjectRating.db.updateRow(
+          session,
+          existing.copyWith(
+            value: value,
+            reviewId: review.id ?? existing.reviewId,
+            updatedAt: DateTime.now(),
+            isDeleted: false,
+          ),
+        );
+      } else {
+        await ProjectRating.db.insertRow(
+          session,
+          ProjectRating(
+            projectId: review.projectId,
+            ownerId: review.ownerId,
+            reviewId: review.id!,
+            dimension: dimension,
+            value: value,
+            dateCreated: DateTime.now(),
+            isDeleted: false,
+          ),
+        );
+      }
+    }
+
+    await upsert(
+        dimension: RatingDimension.location, value: review.locationRating);
+    await upsert(
+        dimension: RatingDimension.description,
+        value: review.descriptionRating);
+    await upsert(dimension: RatingDimension.dates, value: review.datesRating);
+    await upsert(
+        dimension: RatingDimension.attachments,
+        value: review.attachmentsRating);
+    await upsert(
+        dimension: RatingDimension.category, value: review.categoryRating);
+    await upsert(
+        dimension: RatingDimension.funding, value: review.fundingRating);
+    await upsert(
+        dimension: RatingDimension.overall, value: review.overallRating);
   }
 
   /// Updates the given [project] in the database and notifies all clients

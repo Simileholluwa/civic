@@ -58,7 +58,7 @@ final class PostVideoPlayerProvider
   }
 }
 
-String _$postVideoPlayerHash() => r'a8b69c316a53550bcf7f83ac08f38c76a812737c';
+String _$postVideoPlayerHash() => r'7b9a12afcb959a56ab4087192598e6871e01fa5f';
 
 final class PostVideoPlayerFamily extends $Family
     with

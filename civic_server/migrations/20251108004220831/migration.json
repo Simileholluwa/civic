@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "projectVideoUrl"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"projectVideoUrl\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "projectVideoUrl"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"projectVideoUrl\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "projectVideoUrl"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -30,7 +30,9 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, Project>> getProject({required int id}) async {
+  Future<Either<Failure, ProjectWithUserState>> getProject({
+    required int id,
+  }) async {
     try {
       final result = await _remoteDatasource.getProject(
         id: id,
@@ -47,7 +49,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectList>> getProjects({
+  Future<Either<Failure, FeedProjectList>> getProjects({
     required int page,
     required int limit,
     required String sortBy,

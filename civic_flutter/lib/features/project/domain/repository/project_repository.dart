@@ -3,7 +3,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract class ProjectRepository {
-  Future<Either<Failure, ProjectList>> getProjects({
+  Future<Either<Failure, FeedProjectList>> getProjects({
     required int page,
     required int limit,
     required String sortBy,
@@ -37,7 +37,7 @@ abstract class ProjectRepository {
     required bool isLike,
   });
 
-  Future<Either<Failure, Project>> getProject({
+  Future<Either<Failure, ProjectWithUserState>> getProject({
     required int id,
   });
 

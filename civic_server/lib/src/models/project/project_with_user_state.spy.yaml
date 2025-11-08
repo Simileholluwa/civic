@@ -1,0 +1,8 @@
+class: ProjectWithUserState
+fields:
+    project: Project
+    hasLiked: bool?, default=false
+    hasBookmarked: bool?, default=false
+    hasReviewed: bool?, default=false
+    hasVetted: bool?, default=false
+    isSubscribed: bool?, default=false

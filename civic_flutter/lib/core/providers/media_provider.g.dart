@@ -58,7 +58,7 @@ final class MediaVideoPlayerProvider
   }
 }
 
-String _$mediaVideoPlayerHash() => r'c42ae7a80c24cd4c804b3241dda3fd68692d93a8';
+String _$mediaVideoPlayerHash() => r'186319a1c893cf3b19d23b5d507f12280ef2d7bf';
 
 final class MediaVideoPlayerFamily extends $Family
     with

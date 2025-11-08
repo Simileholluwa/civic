@@ -1,0 +1,10 @@
+enum: RatingDimension
+serialized: byName
+values:
+  - overall
+  - location
+  - description
+  - dates
+  - attachments
+  - category
+  - funding

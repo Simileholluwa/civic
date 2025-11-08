@@ -40,8 +40,8 @@ Future<Project> projectDetail(
           'action': error.action,
         });
       },
-      (project) async {
-        completer.complete(project);
+      (projectWithUserState) async {
+        completer.complete(projectWithUserState.project);
       },
     );
 

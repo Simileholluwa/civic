@@ -17,20 +17,13 @@ fields:
     projectPDFAttachments: List<String>?
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
-    projectVideoUrl: String?
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
-    likedBy: List<int>?
     likesCount: int?, default=0
-    reviewedBy: List<int>?
     reviewsCount: int?, default=0
-    bookmarkedBy: List<int>?
     bookmarksCount: int?, default=0
-    vettedBy: List<int>?
     vettingsCount: int?, default=0
-    subscribers: List<int>?
-    quotedBy: List<int>?
-    quoteCount: int?, default=0
+    quotesCount: int?, default=0
     overallRating: double?
     overallLocationRating: double?
     overallDescriptionRating: double?

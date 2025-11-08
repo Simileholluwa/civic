@@ -1,0 +1,18 @@
+class: ProjectRating
+table: project_rating
+fields:
+  project: Project?, relation(onDelete=Cascade)
+  owner: UserRecord?, relation(onDelete=Cascade)
+  review: ProjectReview?, relation(onDelete=SetNull)
+  dimension: RatingDimension?
+  value: double?
+  dateCreated: DateTime?, default=now
+  updatedAt: DateTime?
+  isDeleted: bool?, default=false
+
+indexes:
+  project_rating_unique:
+    fields: projectId, ownerId, dimension
+    unique: true
+  project_rating_project_dim_created_idx:
+    fields: projectId, dimension, dateCreated

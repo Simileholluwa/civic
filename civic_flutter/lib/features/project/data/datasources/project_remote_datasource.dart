@@ -4,7 +4,7 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 
 abstract class ProjectRemoteDataSource {
-  Future<ProjectList> getProjects({
+  Future<FeedProjectList> getProjects({
     required int limit,
     required int page,
     required String sortBy,
@@ -20,7 +20,7 @@ abstract class ProjectRemoteDataSource {
     required int page,
   });
 
-  Future<Project> getProject({required int id});
+  Future<ProjectWithUserState> getProject({required int id});
 
   Future<void> subscribeToNotifications({required int id});
 
@@ -95,11 +95,12 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       return await _client.project.deleteProject(
         id,
       );
-    }  on ServerSideException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -130,7 +131,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<Project> getProject({required int id}) async {
+  Future<ProjectWithUserState> getProject({required int id}) async {
     try {
       final result = await _client.project.getProject(
         id,
@@ -180,7 +181,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectList> getProjects({
+  Future<FeedProjectList> getProjects({
     required int limit,
     required int page,
     required String sortBy,
@@ -196,7 +197,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -219,7 +221,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -242,7 +245,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -261,7 +265,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -294,7 +299,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       return await _client.project.toggleLike(
         projectId,
       );
-    }  on ServerSideException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(
@@ -349,7 +354,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -370,7 +376,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -393,7 +400,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -416,7 +424,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -470,7 +479,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -488,7 +498,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
       throw const ServerException(
-          message: 'Failed to connect to server. Please try again.',);
+        message: 'Failed to connect to server. Please try again.',
+      );
     } catch (e) {
       throw ServerException(
         message: e.toString(),
@@ -505,7 +516,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         projectVetting,
       );
       return result;
-    }  on ServerSideException catch (e) {
+    } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
       throw ServerException(

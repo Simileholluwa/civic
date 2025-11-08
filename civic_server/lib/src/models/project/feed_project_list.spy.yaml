@@ -1,0 +1,8 @@
+class: FeedProjectList
+fields:
+  results: List<ProjectWithUserState>
+  count: int
+  page: int
+  numPages: int
+  limit: int
+  canLoadMore: bool

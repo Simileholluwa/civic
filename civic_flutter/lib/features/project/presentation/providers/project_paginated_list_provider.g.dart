@@ -59,7 +59,7 @@ final class PaginatedProjectListProvider
 }
 
 String _$paginatedProjectListHash() =>
-    r'72955237101a5671a1f399960a9e017c98bf2fa7';
+    r'fdb7087e4b88b8adfc7e54bd7c74e9d2070032c9';
 
 final class PaginatedProjectListFamily extends $Family
     with

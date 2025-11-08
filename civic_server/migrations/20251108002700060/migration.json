@@ -1,0 +1,204 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "project_virtual_location"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "project_physical_location"
+    },
+    {
+      "type": "deleteTable",
+      "deleteTable": "project_attachment"
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "project",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "projectImageAttachments",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "projectPDFAttachments",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "physicalLocations",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<protocol:AWSPlaces>?"
+          },
+          {
+            "name": "virtualLocations",
+            "columnType": 8,
+            "isNullable": true,
+            "dartType": "List<String>?"
+          },
+          {
+            "name": "projectVideoUrl",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          }
+        ],
+        "deleteColumns": [
+          "imagesCount",
+          "pdfsCount",
+          "attachmentsCount",
+          "physicalLocationsCount",
+          "virtualLocationsCount"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "tableDropped",
+            "message": "Table \"project_virtual_location\" will be dropped.",
+            "table": "project_virtual_location",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"project_physical_location\" will be dropped.",
+            "table": "project_physical_location",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "tableDropped",
+            "message": "Table \"project_attachment\" will be dropped.",
+            "table": "project_attachment",
+            "columns": [],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"imagesCount\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "imagesCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"pdfsCount\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "pdfsCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"attachmentsCount\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "attachmentsCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"physicalLocationsCount\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "physicalLocationsCount"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"virtualLocationsCount\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "virtualLocationsCount"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "Table \"project_virtual_location\" will be dropped.",
+      "table": "project_virtual_location",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"project_physical_location\" will be dropped.",
+      "table": "project_physical_location",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "Table \"project_attachment\" will be dropped.",
+      "table": "project_attachment",
+      "columns": [],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"imagesCount\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "imagesCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"pdfsCount\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "pdfsCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"attachmentsCount\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "attachmentsCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"physicalLocationsCount\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "physicalLocationsCount"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"virtualLocationsCount\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "virtualLocationsCount"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

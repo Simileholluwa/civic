@@ -22,18 +22,22 @@ import 'package:civic_client/src/protocol/notification/notification.dart'
     as _i7;
 import 'package:civic_client/src/protocol/post/post.dart' as _i8;
 import 'package:civic_client/src/protocol/post/post_list.dart' as _i9;
-import 'package:civic_client/src/protocol/project/project.dart' as _i10;
+import 'package:civic_client/src/protocol/project/project_with_user_state.dart'
+    as _i10;
 import 'package:civic_client/src/protocol/project/project_review.dart' as _i11;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i12;
-import 'package:civic_client/src/protocol/project/project_review_list.dart'
+import 'package:civic_client/src/protocol/project/project.dart' as _i12;
+import 'package:civic_client/src/protocol/project/feed_project_list.dart'
     as _i13;
-import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i14;
+import 'package:civic_client/src/protocol/project/project_review_list.dart'
+    as _i14;
+import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i15;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
-    as _i15;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i16;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i17;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i18;
-import 'protocol.dart' as _i19;
+    as _i16;
+import 'package:civic_client/src/protocol/project/project_list.dart' as _i17;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i18;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i19;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i20;
+import 'protocol.dart' as _i21;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -467,8 +471,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [projectId]: The unique identifier of the project to retrieve.
   ///
   /// Returns the [Project] if found, otherwise throws an exception.
-  _i2.Future<_i10.Project> getProject(int projectId) =>
-      caller.callServerEndpoint<_i10.Project>(
+  _i2.Future<_i10.ProjectWithUserState> getProject(int projectId) =>
+      caller.callServerEndpoint<_i10.ProjectWithUserState>(
         'project',
         'getProject',
         {'projectId': projectId},
@@ -505,8 +509,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [project]: The project to save or update.
   ///
   /// Returns the saved or updated [Project].
-  _i2.Future<_i10.Project> saveProject(_i10.Project project) =>
-      caller.callServerEndpoint<_i10.Project>(
+  _i2.Future<_i12.Project> saveProject(_i12.Project project) =>
+      caller.callServerEndpoint<_i12.Project>(
         'project',
         'saveProject',
         {'project': project},
@@ -596,7 +600,7 @@ class EndpointProject extends _i1.EndpointRef {
   /// [project] - The project to be scheduled.
   /// [dateTime] - The date and time when the future call should be executed.
   _i2.Future<void> scheduleProject(
-    _i10.Project project,
+    _i12.Project project,
     DateTime dateTime,
   ) =>
       caller.callServerEndpoint<void>(
@@ -608,29 +612,18 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  /// Retrieves a paginated list of projects, excluding those the authenticated user has marked as "not interested".
-  ///
-  /// Throws a [ServerSideException] if the pagination parameters [limit] or [page] are invalid (less than or equal to zero).
-  ///
-  /// The returned [ProjectList] contains:
-  /// - [count]: Total number of projects available (excluding ignored).
-  /// - [limit]: The maximum number of projects per page.
-  /// - [page]: The current page number.
-  /// - [results]: The list of [Project]s for the current page, including their owners and user info.
-  /// - [numPages]: The total number of pages.
-  /// - [canLoadMore]: Whether there are more projects to load.
-  ///
-  /// Logs and throws a [ServerSideException] if an error occurs during fetching.
-  ///
-  /// Parameters:
-  /// - [limit]: Maximum number of projects to return per page (default: 50).
-  /// - [page]: The page number to retrieve (default: 1).
-  _i2.Future<_i12.ProjectList> getProjects({
+  /// Returns enriched feed projects including:
+  /// - Base project data & owner
+  /// - Up to 5 recent image attachments per project (for previews)
+  /// - Current user interaction state flags: hasLiked, hasBookmarked, hasReviewed,
+  ///   hasVetted, isSubscribed
+  /// This is a read-only aggregation endpoint; no persistence of transient flags.
+  _i2.Future<_i13.FeedProjectList> getProjects({
     required int limit,
     required int page,
     required String sortBy,
   }) =>
-      caller.callServerEndpoint<_i12.ProjectList>(
+      caller.callServerEndpoint<_i13.FeedProjectList>(
         'project',
         'getProjects',
         {
@@ -654,14 +647,14 @@ class EndpointProject extends _i1.EndpointRef {
   /// Throws a [ServerSideException] if pagination parameters are invalid or if an invalid
   /// rating category is provided.
   /// Throws a [ServerSideException] if an error occurs while fetching reviews.
-  _i2.Future<_i13.ProjectReviewList> getProjectReviews(
+  _i2.Future<_i14.ProjectReviewList> getProjectReviews(
     int projectId, {
     required int limit,
     required int page,
     double? rating,
     String? cardinal,
   }) =>
-      caller.callServerEndpoint<_i13.ProjectReviewList>(
+      caller.callServerEndpoint<_i14.ProjectReviewList>(
         'project',
         'getProjectReviews',
         {
@@ -728,11 +721,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// Parameters:
   /// - [vettingId]: The ID of the vetting to react to.
   /// - [isLike]: `true` for a like, `false` for a dislike.
-  _i2.Future<_i14.ProjectVetting> reactToVetting(
+  _i2.Future<_i15.ProjectVetting> reactToVetting(
     int vettingId,
     bool isLike,
   ) =>
-      caller.callServerEndpoint<_i14.ProjectVetting>(
+      caller.callServerEndpoint<_i15.ProjectVetting>(
         'project',
         'reactToVetting',
         {
@@ -836,9 +829,9 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// - [projectVetting]: The project vetting object to be processed.
-  _i2.Future<_i14.ProjectVetting> vetProject(
-          _i14.ProjectVetting projectVetting) =>
-      caller.callServerEndpoint<_i14.ProjectVetting>(
+  _i2.Future<_i15.ProjectVetting> vetProject(
+          _i15.ProjectVetting projectVetting) =>
+      caller.callServerEndpoint<_i15.ProjectVetting>(
         'project',
         'vetProject',
         {'projectVetting': projectVetting},
@@ -857,8 +850,8 @@ class EndpointProject extends _i1.EndpointRef {
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to retrieve.
-  _i2.Future<_i14.ProjectVetting?> getVettedProject(int projectId) =>
-      caller.callServerEndpoint<_i14.ProjectVetting?>(
+  _i2.Future<_i15.ProjectVetting?> getVettedProject(int projectId) =>
+      caller.callServerEndpoint<_i15.ProjectVetting?>(
         'project',
         'getVettedProject',
         {'projectId': projectId},
@@ -878,11 +871,11 @@ class EndpointProject extends _i1.EndpointRef {
   /// - The list of vetted project results for the requested page.
   /// - The total number of pages.
   /// - Whether more pages can be loaded.
-  _i2.Future<_i15.ProjectVetList> getVettedProjects({
+  _i2.Future<_i16.ProjectVetList> getVettedProjects({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i15.ProjectVetList>(
+      caller.callServerEndpoint<_i16.ProjectVetList>(
         'project',
         'getVettedProjects',
         {
@@ -891,11 +884,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i12.ProjectList> getUserProjectBookmarks({
+  _i2.Future<_i17.ProjectList> getUserProjectBookmarks({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i12.ProjectList>(
+      caller.callServerEndpoint<_i17.ProjectList>(
         'project',
         'getUserProjectBookmarks',
         {
@@ -917,8 +910,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [Project] details.
   ///   - Subsequent [Project] updates as they occur.
-  _i2.Stream<_i10.Project> projectUpdates(int projectId) => caller
-          .callStreamingServerEndpoint<_i2.Stream<_i10.Project>, _i10.Project>(
+  _i2.Stream<_i12.Project> projectUpdates(int projectId) => caller
+          .callStreamingServerEndpoint<_i2.Stream<_i12.Project>, _i12.Project>(
         'project',
         'projectUpdates',
         {'projectId': projectId},
@@ -966,9 +959,9 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [ProjectVetting] object if found.
   ///   - Any subsequent updates to the [ProjectVetting] object.
-  _i2.Stream<_i14.ProjectVetting> projectVettingUpdates(int vettingId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i14.ProjectVetting>,
-          _i14.ProjectVetting>(
+  _i2.Stream<_i15.ProjectVetting> projectVettingUpdates(int vettingId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i15.ProjectVetting>,
+          _i15.ProjectVetting>(
         'project',
         'projectVettingUpdates',
         {'vettingId': vettingId},
@@ -1010,15 +1003,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<_i16.UserRecord> saveUser(_i16.UserRecord userRecord) =>
-      caller.callServerEndpoint<_i16.UserRecord>(
+  _i2.Future<_i18.UserRecord> saveUser(_i18.UserRecord userRecord) =>
+      caller.callServerEndpoint<_i18.UserRecord>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i16.UserRecord?> getUser(String? userId) =>
-      caller.callServerEndpoint<_i16.UserRecord?>(
+  _i2.Future<_i18.UserRecord?> getUser(String? userId) =>
+      caller.callServerEndpoint<_i18.UserRecord?>(
         'userRecord',
         'getUser',
         {'userId': userId},
@@ -1031,12 +1024,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'email': email},
       );
 
-  _i2.Future<_i17.UsersList> getUsers({
+  _i2.Future<_i19.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i17.UsersList>(
+      caller.callServerEndpoint<_i19.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -1046,11 +1039,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i16.UserRecord>> mentionUsers({
+  _i2.Future<List<_i18.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i16.UserRecord>>(
+      caller.callServerEndpoint<List<_i18.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {
@@ -1066,16 +1059,16 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'userId': userId},
       );
 
-  _i2.Future<_i16.UserRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i16.UserRecord?>(
+  _i2.Future<_i18.UserRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i18.UserRecord?>(
         'userRecord',
         'getNinDetails',
         {'ninNumber': ninNumber},
       );
 
-  _i2.Stream<_i16.UserRecord> userUpdates(int userId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i16.UserRecord>,
-          _i16.UserRecord>(
+  _i2.Stream<_i18.UserRecord> userUpdates(int userId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i18.UserRecord>,
+          _i18.UserRecord>(
         'userRecord',
         'userUpdates',
         {'userId': userId},
@@ -1092,10 +1085,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i18.Caller(client);
+    auth = _i20.Caller(client);
   }
 
-  late final _i18.Caller auth;
+  late final _i20.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1114,7 +1107,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i19.Protocol(),
+          _i21.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

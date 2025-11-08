@@ -70,7 +70,7 @@ final class VerifyUserProximityProvider
 }
 
 String _$verifyUserProximityHash() =>
-    r'ee354f6475baedd1514f8313058a6b2a8b80d2d4';
+    r'302b5a98049f987eade0940d86db90b07a1a5d1c';
 
 final class VerifyUserProximityFamily extends $Family
     with

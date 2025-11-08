@@ -141,7 +141,7 @@ final class ProjectTabControllerProvider
 }
 
 String _$projectTabControllerHash() =>
-    r'f280f874f121bd1de5502af4037921e17d6ab068';
+    r'ed223f14da8dbcbdbd762363f64b9e4fd655b98d';
 
 abstract class _$ProjectTabController extends $Notifier<Raw<TabController>> {
   Raw<TabController> build();
