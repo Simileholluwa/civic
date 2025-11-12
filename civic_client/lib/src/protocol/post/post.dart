@@ -35,12 +35,9 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? dateCreated,
     this.updatedAt,
     this.hashtags,
-    this.likedBy,
     int? likesCount,
-    this.bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    this.subscribers,
     this.pollId,
     this.poll,
     this.articleId,
@@ -49,8 +46,6 @@ abstract class Post implements _i1.SerializableModel {
     this.project,
     this.parentId,
     this.parent,
-    this.quotedOrRepostedFromUserId,
-    this.quotedOrRepostedFromUser,
     bool? isDeleted,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
@@ -74,12 +69,9 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -88,8 +80,6 @@ abstract class Post implements _i1.SerializableModel {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   }) = _PostImpl;
 
@@ -131,18 +121,9 @@ abstract class Post implements _i1.SerializableModel {
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      likedBy: (jsonSerialization['likedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       likesCount: jsonSerialization['likesCount'] as int?,
-      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
-      subscribers: (jsonSerialization['subscribers'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       pollId: jsonSerialization['pollId'] as int?,
       poll: jsonSerialization['poll'] == null
           ? null
@@ -163,14 +144,6 @@ abstract class Post implements _i1.SerializableModel {
           ? null
           : _i9.Post.fromJson(
               (jsonSerialization['parent'] as Map<String, dynamic>)),
-      quotedOrRepostedFromUserId:
-          jsonSerialization['quotedOrRepostedFromUserId'] as int?,
-      quotedOrRepostedFromUser:
-          jsonSerialization['quotedOrRepostedFromUser'] == null
-              ? null
-              : _i2.UserRecord.fromJson(
-                  (jsonSerialization['quotedOrRepostedFromUser']
-                      as Map<String, dynamic>)),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
@@ -206,17 +179,11 @@ abstract class Post implements _i1.SerializableModel {
 
   List<_i5.PostsHashtags>? hashtags;
 
-  List<int>? likedBy;
-
   int? likesCount;
-
-  List<int>? bookmarkedBy;
 
   int? bookmarksCount;
 
   int? commentCount;
-
-  List<int>? subscribers;
 
   int? pollId;
 
@@ -233,10 +200,6 @@ abstract class Post implements _i1.SerializableModel {
   int? parentId;
 
   _i9.Post? parent;
-
-  int? quotedOrRepostedFromUserId;
-
-  _i2.UserRecord? quotedOrRepostedFromUser;
 
   bool? isDeleted;
 
@@ -258,12 +221,9 @@ abstract class Post implements _i1.SerializableModel {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -272,8 +232,6 @@ abstract class Post implements _i1.SerializableModel {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   });
   @override
@@ -297,12 +255,9 @@ abstract class Post implements _i1.SerializableModel {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (likesCount != null) 'likesCount': likesCount,
-      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
-      if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
       if (articleId != null) 'articleId': articleId,
@@ -311,10 +266,6 @@ abstract class Post implements _i1.SerializableModel {
       if (project != null) 'project': project?.toJson(),
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJson(),
-      if (quotedOrRepostedFromUserId != null)
-        'quotedOrRepostedFromUserId': quotedOrRepostedFromUserId,
-      if (quotedOrRepostedFromUser != null)
-        'quotedOrRepostedFromUser': quotedOrRepostedFromUser?.toJson(),
       if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
@@ -343,12 +294,9 @@ class _PostImpl extends Post {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -357,8 +305,6 @@ class _PostImpl extends Post {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   }) : super._(
           id: id,
@@ -375,12 +321,9 @@ class _PostImpl extends Post {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           hashtags: hashtags,
-          likedBy: likedBy,
           likesCount: likesCount,
-          bookmarkedBy: bookmarkedBy,
           bookmarksCount: bookmarksCount,
           commentCount: commentCount,
-          subscribers: subscribers,
           pollId: pollId,
           poll: poll,
           articleId: articleId,
@@ -389,8 +332,6 @@ class _PostImpl extends Post {
           project: project,
           parentId: parentId,
           parent: parent,
-          quotedOrRepostedFromUserId: quotedOrRepostedFromUserId,
-          quotedOrRepostedFromUser: quotedOrRepostedFromUser,
           isDeleted: isDeleted,
         );
 
@@ -413,12 +354,9 @@ class _PostImpl extends Post {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
-    Object? likedBy = _Undefined,
     Object? likesCount = _Undefined,
-    Object? bookmarkedBy = _Undefined,
     Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
-    Object? subscribers = _Undefined,
     Object? pollId = _Undefined,
     Object? poll = _Undefined,
     Object? articleId = _Undefined,
@@ -427,8 +365,6 @@ class _PostImpl extends Post {
     Object? project = _Undefined,
     Object? parentId = _Undefined,
     Object? parent = _Undefined,
-    Object? quotedOrRepostedFromUserId = _Undefined,
-    Object? quotedOrRepostedFromUser = _Undefined,
     Object? isDeleted = _Undefined,
   }) {
     return Post(
@@ -456,19 +392,10 @@ class _PostImpl extends Post {
       hashtags: hashtags is List<_i5.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
-      likedBy: likedBy is List<int>?
-          ? likedBy
-          : this.likedBy?.map((e0) => e0).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
-      bookmarkedBy: bookmarkedBy is List<int>?
-          ? bookmarkedBy
-          : this.bookmarkedBy?.map((e0) => e0).toList(),
       bookmarksCount:
           bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
-      subscribers: subscribers is List<int>?
-          ? subscribers
-          : this.subscribers?.map((e0) => e0).toList(),
       pollId: pollId is int? ? pollId : this.pollId,
       poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
       articleId: articleId is int? ? articleId : this.articleId,
@@ -477,12 +404,6 @@ class _PostImpl extends Post {
       project: project is _i8.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
       parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
-      quotedOrRepostedFromUserId: quotedOrRepostedFromUserId is int?
-          ? quotedOrRepostedFromUserId
-          : this.quotedOrRepostedFromUserId,
-      quotedOrRepostedFromUser: quotedOrRepostedFromUser is _i2.UserRecord?
-          ? quotedOrRepostedFromUser
-          : this.quotedOrRepostedFromUser?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
     );
   }

@@ -22,8 +22,8 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.owner,
     this.options,
     this.expiresAt,
-    this.votedBy,
-  });
+    int? votesCount,
+  }) : votesCount = votesCount ?? 0;
 
   factory Poll({
     int? id,
@@ -31,7 +31,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -48,9 +48,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       expiresAt: jsonSerialization['expiresAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['expiresAt']),
-      votedBy: (jsonSerialization['votedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
+      votesCount: jsonSerialization['votesCount'] as int?,
     );
   }
 
@@ -69,7 +67,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   DateTime? expiresAt;
 
-  List<int>? votedBy;
+  int? votesCount;
 
   @override
   _i1.Table<int?> get table => t;
@@ -83,7 +81,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,7 +92,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (options != null)
         'options': options?.toJson(valueToJson: (v) => v.toJson()),
       if (expiresAt != null) 'expiresAt': expiresAt?.toJson(),
-      if (votedBy != null) 'votedBy': votedBy?.toJson(),
+      if (votesCount != null) 'votesCount': votesCount,
     };
   }
 
@@ -107,7 +105,7 @@ abstract class Poll implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (options != null)
         'options': options?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (expiresAt != null) 'expiresAt': expiresAt?.toJson(),
-      if (votedBy != null) 'votedBy': votedBy?.toJson(),
+      if (votesCount != null) 'votesCount': votesCount,
     };
   }
 
@@ -156,14 +154,14 @@ class _PollImpl extends Poll {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
           options: options,
           expiresAt: expiresAt,
-          votedBy: votedBy,
+          votesCount: votesCount,
         );
 
   /// Returns a shallow copy of this [Poll]
@@ -176,7 +174,7 @@ class _PollImpl extends Poll {
     Object? owner = _Undefined,
     Object? options = _Undefined,
     Object? expiresAt = _Undefined,
-    Object? votedBy = _Undefined,
+    Object? votesCount = _Undefined,
   }) {
     return Poll(
       id: id is int? ? id : this.id,
@@ -186,9 +184,7 @@ class _PollImpl extends Poll {
           ? options
           : this.options?.map((e0) => e0.copyWith()).toList(),
       expiresAt: expiresAt is DateTime? ? expiresAt : this.expiresAt,
-      votedBy: votedBy is List<int>?
-          ? votedBy
-          : this.votedBy?.map((e0) => e0).toList(),
+      votesCount: votesCount is int? ? votesCount : this.votesCount,
     );
   }
 }
@@ -203,9 +199,10 @@ class PollTable extends _i1.Table<int?> {
       'expiresAt',
       this,
     );
-    votedBy = _i1.ColumnSerializable(
-      'votedBy',
+    votesCount = _i1.ColumnInt(
+      'votesCount',
       this,
+      hasDefault: true,
     );
   }
 
@@ -219,7 +216,7 @@ class PollTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime expiresAt;
 
-  late final _i1.ColumnSerializable votedBy;
+  late final _i1.ColumnInt votesCount;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -270,7 +267,7 @@ class PollTable extends _i1.Table<int?> {
         id,
         ownerId,
         expiresAt,
-        votedBy,
+        votesCount,
       ];
 
   @override

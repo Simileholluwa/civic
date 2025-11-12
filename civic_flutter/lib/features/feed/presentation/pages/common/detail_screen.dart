@@ -11,7 +11,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class DetailScreen extends ConsumerWidget {
   const DetailScreen({
     required this.id,
-    required this.draftType,
     required this.postType,
     super.key,
     this.post,
@@ -19,13 +18,12 @@ class DetailScreen extends ConsumerWidget {
 
   final int id;
   final Post? post;
-  final String draftType;
   final PostType postType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(
-      postDetailProvider(id, draftType, post),
+      postDetailProvider(id, post, postType),
     );
     final livePost = ref.watch(
       postStreamProvider(
@@ -99,7 +97,7 @@ class DetailScreen extends ConsumerWidget {
       body: data.when(
         data: (value) {
           final likes = postCardState.numberOfLikes;
-          final likesCount = newPost!.likedBy!.length;
+          final likesCount = newPost!.likesCount!;
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -27,21 +27,18 @@ class FeedRoutes {
                   id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                   post: state.extra as Post?,
                   postType: PostType.regular,
-                  draftType: 'postDraft',
                 );
               } else if (type == 'poll') {
                 return DetailScreen(
                   id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                   post: state.extra as Post?,
                   postType: PostType.poll,
-                  draftType: 'pollDraft',
                 );
               } else {
                 return DetailScreen(
                   id: int.tryParse(state.pathParameters['id'] ?? '0') ?? 0,
                   post: state.extra as Post?,
                   postType: PostType.article,
-                  draftType: 'articleDraft',
                 );
               }
             },

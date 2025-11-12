@@ -16,9 +16,15 @@ class ProjectLocationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchQueryProvider = ref.watch(locationSearchQueryProvider.notifier);
+    final searchQueryProvider = ref.watch(
+      locationSearchQueryProvider.notifier,
+    );
     final data = ref.watch(searchPlacesProvider);
-    final projectCreationSate = ref.watch(createProjectNotifProvider(project));
+    final projectCreationSate = ref.watch(
+      createProjectNotifProvider(
+        project,
+      ),
+    );
     final projectNotifier = ref.watch(
       createProjectNotifProvider(project).notifier,
     );
@@ -36,7 +42,9 @@ class ProjectLocationsScreen extends ConsumerWidget {
             ),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor),
+                bottom: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                ),
               ),
             ),
             child: AppBar(
@@ -90,50 +98,56 @@ class ProjectLocationsScreen extends ConsumerWidget {
           ? const AppLoadingWidget()
           : data.when(
               data: (data) {
-                if (data == null || data.isEmpty) {
-                  return const CreateContentLocationError();
-                }
-                return ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      height: 0,
-                    );
-                  },
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final place = data[index];
-                    final selectedIndex = locations.contains(place);
-                    return InkWell(
-                      onTap: () {
-                        if (!selectedIndex) {
-                          projectNotifier.addPhysicalLocation(
-                            [place],
-                          );
-                        } else {
-                          projectNotifier.removePhysicalLocation(
-                            place,
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(
-                          20,
-                          TSizes.sm + 4,
-                          20,
-                          index == 0 ? TSizes.md : TSizes.sm + 4,
+                return AnimatedCrossFade(
+                  firstChild: const CreateContentLocationError(),
+                  crossFadeState: (data == null || data.isEmpty)
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  secondChild: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        height: 0,
+                      );
+                    },
+                    itemCount: data!.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final place = data[index];
+                      final selectedIndex = locations.contains(place);
+                      return InkWell(
+                        onTap: () {
+                          if (!selectedIndex) {
+                            projectNotifier.addPhysicalLocation(
+                              [place],
+                            );
+                          } else {
+                            projectNotifier.removePhysicalLocation(
+                              place,
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(
+                            20,
+                            TSizes.sm + 4,
+                            20,
+                            index == 0 ? TSizes.md : TSizes.sm + 4,
+                          ),
+                          color: selectedIndex
+                              ? TColors.primary.withAlpha(
+                                  50,
+                                )
+                              : null,
+                          child: Text(
+                            place.place,
+                          ),
                         ),
-                        color: selectedIndex
-                            ? TColors.primary.withAlpha(
-                                50,
-                              )
-                            : null,
-                        child: Text(
-                          place.place,
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               },
               error: (error, st) {
@@ -150,48 +164,55 @@ class ProjectLocationsScreen extends ConsumerWidget {
                 );
               },
             ),
-      bottomNavigationBar: locations.isNotEmpty
-          ? SizedBox(
-              height: 50,
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TSizes.md,
+      bottomNavigationBar: AnimatedCrossFade(
+        firstChild: SizedBox(
+          height: 50,
+          child: ListView.separated(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.md,
+            ),
+            itemBuilder: (context, index) {
+              return Chip(
+                label: Text(
+                  locations[index].place,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
-                itemBuilder: (context, index) {
-                  return Chip(
-                    label: Text(
-                      locations[index].place,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    elevation: 0,
-                    surfaceTintColor: Colors.transparent,
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    deleteIcon: const Icon(
-                      Icons.clear,
-                      color: TColors.secondary,
-                    ),
-                    onDeleted: () => projectNotifier.removePhysicalLocation(
-                      locations[index],
-                    ),
-                  );
-                },
-                separatorBuilder: (_, __) {
-                  return const SizedBox(
-                    width: TSizes.sm,
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: locations.length,
-              ),
-            )
-          : const SizedBox.shrink(),
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    100,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                deleteIcon: const Icon(
+                  Icons.clear,
+                  color: TColors.secondary,
+                ),
+                onDeleted: () => projectNotifier.removePhysicalLocation(
+                  locations[index],
+                ),
+              );
+            },
+            separatorBuilder: (_, __) {
+              return const SizedBox(
+                width: TSizes.sm,
+              );
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: locations.length,
+          ),
+        ),
+        secondChild: const SizedBox.shrink(),
+        crossFadeState: locations.isNotEmpty
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: const Duration(
+          milliseconds: 300,
+        ),
+      ),
     );
   }
 }

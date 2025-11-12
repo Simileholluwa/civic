@@ -46,7 +46,7 @@ class PollOptionsCard extends ConsumerWidget {
       },
       itemBuilder: (context, index) {
         final option = postCardState.options[index];
-        final numberOfVotes = postCardState.pollOptions[index].votedBy!.length;
+        final numberOfVotes = postCardState.pollOptions[index].votesCount!;
         final totalVotes = postCardState.totalVotes;
         final userVote =
             postCardState.votedOption == postCardState.pollOptions[index];

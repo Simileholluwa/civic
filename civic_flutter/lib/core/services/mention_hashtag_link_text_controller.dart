@@ -1,86 +1,173 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
+/// TextEditingController that highlights @mentions, #hashtags and links.
+///
+/// Improvements over the previous version:
+/// - Robust tokenization (mentions/hashtags only highlighted at word start)
+/// - Better URL detection (http/https/www)
+/// - Handles IME composing region to avoid flicker while typing
+/// - Single-pass builder with clear boundaries and fewer allocations
 class MentionHashtagLinkTextEditingController extends TextEditingController {
-  MentionHashtagLinkTextEditingController(
-      {super.text,});
+  MentionHashtagLinkTextEditingController({super.text});
+
+  // Precompiled token regex: mentions, hashtags, or links
+  // - Mentions: @username (letters, numbers, underscore, dot)
+  // - Hashtags: #tag (letters, numbers, underscore)
+  // - Links: http(s)://... or www....
+  static final RegExp _tokenRegExp = RegExp(
+    r'(?:@[A-Za-z0-9_\.]+)|(?:#[A-Za-z0-9_]+)|(?:(?:https?:\/\/|www\.)\S+)',
+    caseSensitive: false,
+  );
 
   @override
-  TextSpan buildTextSpan(
-      {required BuildContext context,
-      required bool withComposing, TextStyle? style,}) {
-    final children = <InlineSpan>[];
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    required bool withComposing,
+    TextStyle? style,
+  }) {
+    // Fast-path: nothing to parse
+    final fullText = text;
+    if (fullText.isEmpty) {
+      return TextSpan(text: '', style: style);
+    }
 
-    // Regex pattern to match @mentions, #hashtags, and links
-    final regex = RegExp(r'(@\w+|#\w+|http[s]?:\/\/|www\.)[^\s]+');
-    final matches = regex.allMatches(text);
+    // Respect composing region: avoid styling the active IME composition
+    final composing = withComposing && value.isComposingRangeValid
+        ? value.composing
+        : TextRange.empty;
 
-    var currentIndex = 0;
+    if (!composing.isValid || composing.isCollapsed) {
+      // No composing: parse whole string
+      return TextSpan(
+        children: _buildSpansForRange(
+          fullText,
+          0,
+          fullText.length,
+          style,
+        ),
+        style: style,
+      );
+    }
 
-    // Iterate over the matches and split the text accordingly
-    for (final match in matches) {
-      if (match.start > currentIndex) {
-        // Add the text before the match as normal text
-        children.add(
+    // Split into [before | composing | after]. Only style before/after.
+    final before = _buildSpansForRange(
+      fullText,
+      0,
+      composing.start,
+      style,
+    );
+    final composingSpan = TextSpan(
+      text: fullText.substring(
+        composing.start,
+        composing.end,
+      ),
+      style: style,
+    );
+    final after = _buildSpansForRange(
+      fullText,
+      composing.end,
+      fullText.length,
+      style,
+    );
+
+    return TextSpan(
+      children: [
+        ...before,
+        composingSpan,
+        ...after,
+      ],
+      style: style,
+    );
+  }
+
+  List<InlineSpan> _buildSpansForRange(
+    String source,
+    int start,
+    int end,
+    TextStyle? baseStyle,
+  ) {
+    final spans = <InlineSpan>[];
+    if (start >= end) return spans;
+
+    final segment = source.substring(start, end);
+    final matches = _tokenRegExp.allMatches(segment);
+    var index = 0;
+
+    for (final m in matches) {
+      final mStart = m.start;
+      final mEnd = m.end;
+
+      if (mStart > index) {
+        spans.add(
           TextSpan(
-            text: text.substring(
-              currentIndex,
-              match.start,
-            ),
-            style: style,
+            text: segment.substring(index, mStart),
+            style: baseStyle,
           ),
         );
       }
 
-      final matchText = match.group(0)!;
+      final token = segment.substring(mStart, mEnd);
 
-      // Add the matched part with the appropriate style
-      if (matchText.startsWith('#')) {
-        children.add(TextSpan(
-          text: matchText,
-          style: style?.copyWith(
-            color: TColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),);
-      } else if (matchText.startsWith('@')) {
-        
-          children.add(TextSpan(
-            text: matchText,
-            style: style?.copyWith(
-              color: TColors.primary,
-              fontWeight: FontWeight.bold,
+      // Only highlight mentions/hashtags when they start a word (start or preceded by whitespace)
+      final globalStart = start + mStart;
+      final precededByWhitespace = globalStart == 0 ||
+          _isWhitespace(
+            source.codeUnitAt(
+              globalStart - 1,
             ),
-          ),);
-        
-      } else if (matchText.startsWith('http') || matchText.startsWith('www')) {
-        children.add(TextSpan(
-          text: matchText,
-          style: style?.copyWith(
-            color: TColors.primary,
-            fontWeight: FontWeight.bold,
+          );
+
+      final highlighted = (baseStyle ?? const TextStyle()).copyWith(
+        color: TColors.primary,
+        fontWeight: FontWeight.bold,
+      );
+
+      if (token.startsWith('@') || token.startsWith('#')) {
+        if (precededByWhitespace) {
+          spans.add(
+            TextSpan(
+              text: token,
+              style: highlighted,
+            ),
+          );
+        } else {
+          // Not a word start (e.g., email user@domain) -> keep as normal text
+          spans.add(
+            TextSpan(
+              text: token,
+              style: baseStyle,
+            ),
+          );
+        }
+      } else {
+        // Links are always highlighted
+        spans.add(
+          TextSpan(
+            text: token,
+            style: highlighted,
           ),
-        ),);
+        );
       }
 
-      currentIndex = match.end;
+      index = mEnd;
     }
 
-    // Add any remaining text after the last match
-    if (currentIndex < text.length) {
-      children.add(
+    if (index < segment.length) {
+      spans.add(
         TextSpan(
-          text: text.substring(
-            currentIndex,
-          ),
-          style: style,
+          text: segment.substring(index),
+          style: baseStyle,
         ),
       );
     }
+    return spans;
+  }
 
-    return TextSpan(
-      children: children,
-      style: style,
-    );
+  bool _isWhitespace(int charCode) {
+    return charCode == 0x20 /* space */ ||
+        charCode == 0x0A /* \n */ ||
+        charCode == 0x0D /* \r */ ||
+        charCode == 0x09 /* \t */;
   }
 }

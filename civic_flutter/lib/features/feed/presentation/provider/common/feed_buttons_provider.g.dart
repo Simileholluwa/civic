@@ -57,7 +57,7 @@ final class FeedButtonsProvider
   }
 }
 
-String _$feedButtonsHash() => r'217fe218b10a7dcdb93561229944587ac7cc5859';
+String _$feedButtonsHash() => r'fe7be3dbaee95d40fe53f6a9fa369ed5f4a236fe';
 
 final class FeedButtonsFamily extends $Family
     with

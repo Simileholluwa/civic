@@ -295,6 +295,6 @@ class FeedButtons extends _$FeedButtons {
     if (post == null) {
       return FeedWidgetsState.empty();
     }
-    return FeedWidgetsState.populate(post, ref);
+    return FeedWidgetsState.populate(PostWithUserState(post: post), ref);
   }
 }

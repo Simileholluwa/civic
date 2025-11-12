@@ -1,0 +1,113 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "votesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "votedBy"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"votedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "votedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"votedBy\" of table \"poll_option\" will be dropped.",
+            "table": "poll_option",
+            "columns": [
+              "votedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "poll_option",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "votesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "votedBy"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"votedBy\" of table \"poll\" will be dropped.",
+            "table": "poll",
+            "columns": [
+              "votedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"votedBy\" of table \"poll_option\" will be dropped.",
+            "table": "poll_option",
+            "columns": [
+              "votedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"votedBy\" of table \"poll\" will be dropped.",
+      "table": "poll",
+      "columns": [
+        "votedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"votedBy\" of table \"poll_option\" will be dropped.",
+      "table": "poll_option",
+      "columns": [
+        "votedBy"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

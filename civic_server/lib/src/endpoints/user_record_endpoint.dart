@@ -152,58 +152,76 @@ class UserRecordEndpoint extends Endpoint {
     required String query,
     int limit = 20,
   }) async {
-    // Fetch the authenticated user
+    // 1. Auth check
     final authInfo = await session.authenticated;
-
-    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    // Fetch the current user record
-    var currentUser = await UserRecord.db.findFirstRow(
+    // 2. Normalize & guard query. For very short queries we avoid a wide scan.
+    final trimmed = query.trim();
+    if (trimmed.length < 2) return <UserRecord>[];
+
+    // 3. Load current user (with userInfo to access id & following list).
+    final currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
+      include: UserRecord.include(userInfo: UserInfo.include()),
     );
-
-    // If the current user does not exist, throw an exception
     if (currentUser == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    // Fetch users that the current user follows and whose usernames match the query
-    var users = await UserRecord.db.find(
-      session,
-      where: (u) =>
-          u.userInfo.id.inSet(
-            currentUser.followers!.toSet(),
-          ) &
-          u.userInfo.userName.ilike('%${query.trim()}%'),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
+    final followingSet = currentUser.following?.toSet() ?? <int>{};
 
-    // If the number of users fetched is less than the limit, fetch additional users
-    if (users.length < limit) {
-      var additionalUsers = await UserRecord.db.find(
+    // 4. Fetch followed matches first (priority ranking).
+    List<UserRecord> followedMatches = <UserRecord>[];
+    if (followingSet.isNotEmpty) {
+      followedMatches = await UserRecord.db.find(
         session,
-        limit: limit - users.length,
+        limit: limit, // cap early; we'll trim later anyway
         where: (u) =>
-            u.userInfo.userName.ilike('%${query.trim()}%') &
-            u.userInfo.id.notEquals(currentUser.userInfo!.id),
-        include: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+            u.userInfo.id.inSet(followingSet) &
+            u.userInfo.userName.ilike('%$trimmed%'),
+        include: UserRecord.include(userInfo: UserInfo.include()),
       );
-      users.addAll(additionalUsers);
     }
 
-    // Return a list of users
-    return users;
+    // 5. If we still need more, fetch other matches excluding current user & already included followed ids.
+    List<UserRecord> otherMatches = <UserRecord>[];
+    if (followedMatches.length < limit) {
+      final remaining = limit - followedMatches.length;
+      final followedIds = followedMatches.map((u) => u.userInfo!.id).toSet();
+
+      // One query for others; we'll filter duplicates post-query (simpler than notInSet support).
+      final rawOthers = await UserRecord.db.find(
+        session,
+        limit: remaining * 2, // slight oversample to allow filtering
+        where: (u) =>
+            u.userInfo.userName.ilike('%$trimmed%') &
+            u.userInfo.id.notEquals(currentUser.userInfo!.id),
+        include: UserRecord.include(userInfo: UserInfo.include()),
+      );
+      for (final u in rawOthers) {
+        final id = u.userInfo!.id;
+        if (!followedIds.contains(id) && !followingSet.contains(id)) {
+          otherMatches.add(u);
+          if (otherMatches.length >= remaining) break;
+        }
+      }
+    }
+
+    // 6. Compose ordered list (followed first), trim to limit, ensure uniqueness.
+    final ordered = <UserRecord>[...followedMatches, ...otherMatches];
+    final seen = <int>{};
+    final deduped = <UserRecord>[];
+    for (final u in ordered) {
+      final id = u.userInfo!.id;
+      if (id != null && seen.add(id)) deduped.add(u);
+      if (deduped.length >= limit) break;
+    }
+
+    return deduped;
   }
 
   Future<void> followUnfollowUser(

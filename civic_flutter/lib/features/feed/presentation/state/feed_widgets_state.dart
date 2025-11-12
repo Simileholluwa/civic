@@ -27,7 +27,6 @@ class FeedWidgetsState {
     this.mentions = const <UserRecord>[],
     this.postType = PostType.regular,
     this.reasonNotInterested = '',
-    this.quoteOrRepostUser,
     this.hasBookmarked = false,
     this.isOwner = false,
     this.isFollower = false,
@@ -55,10 +54,11 @@ class FeedWidgetsState {
   }
 
   factory FeedWidgetsState.populate(
-    Post post,
+    PostWithUserState postWithUserState,
     Ref ref,
   ) {
     final userId = ref.read(localStorageProvider).getInt('userId');
+    final post = postWithUserState.post;
     final poll = post.poll;
     return FeedWidgetsState(
       timeAgo: THelperFunctions.humanizeDateTime(
@@ -84,30 +84,27 @@ class FeedWidgetsState {
       tags: post.taggedUsers ?? [],
       hasTags: post.taggedUsers?.isNotEmpty ?? false,
       creator: post.owner,
-      isSubscribed: post.subscribers!.contains(userId),
-      hasLiked: post.likedBy!.contains(userId),
+      isSubscribed: postWithUserState.isSubscribed!,
+      hasLiked: postWithUserState.hasLiked!,
       mentions: [],
-      hasBookmarked: post.bookmarkedBy!.contains(userId),
+      hasBookmarked: postWithUserState.hasBookmarked!,
       isOwner: post.owner!.id == userId,
-      quoteOrRepostUser: post.quotedOrRepostedFromUser,
       postType: post.postType!,
       isFollower:
           userId != post.ownerId && post.owner!.followers!.contains(userId),
-      numberOfVoters: NumberFormat('#,##0').format(poll?.votedBy?.length ?? 0),
-      numberOfOptionVoters: poll?.options?.map((e) => e.votedBy).length ?? 0,
+      numberOfVoters: NumberFormat('#,##0').format(poll?.votesCount ?? 0),
+      numberOfOptionVoters: poll?.options?.map((e) => e.votesCount).length ?? 0,
       options: poll?.options?.map((e) => e.option!).toList() ?? <String>[],
       pollOptions: poll?.options ?? <PollOption>[],
       votedOption: poll?.options?.firstWhere(
-        (e) => e.votedBy!.contains(
-          userId,
-        ),
+        (e) => e.id == postWithUserState.selectedPollOptionId,
         orElse: () => PollOption(
           pollId: 0,
         ),
       ),
       pollEnded: poll?.expiresAt?.isBefore(DateTime.now()) ?? false,
-      hasVoted: poll?.votedBy?.contains(userId) ?? false,
-      totalVotes: poll?.votedBy?.length ?? 0,
+      hasVoted: postWithUserState.selectedPollOptionId != null,
+      totalVotes: poll?.votesCount ?? 0,
       articleBanner: post.imageUrls!.isNotEmpty ? post.imageUrls!.first : '',
       articleContent: post.article != null
           ? post.article!.content!.isNotEmpty
@@ -164,7 +161,6 @@ class FeedWidgetsState {
   final List<PollOption> pollOptions;
   final PostType postType;
   final String quoteCount;
-  final UserRecord? quoteOrRepostUser;
   final String reasonNotInterested;
   final List<UserRecord> tags;
   final String text;
@@ -205,7 +201,6 @@ class FeedWidgetsState {
     List<PollOption>? pollOptions,
     PostType? postType,
     String? quoteCount,
-    UserRecord? quoteOrRepostUser,
     String? reasonNotInterested,
     List<UserRecord>? tags,
     String? text,
@@ -243,7 +238,6 @@ class FeedWidgetsState {
       pollOptions: pollOptions ?? this.pollOptions,
       postType: postType ?? this.postType,
       quoteCount: quoteCount ?? this.quoteCount,
-      quoteOrRepostUser: quoteOrRepostUser ?? this.quoteOrRepostUser,
       reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
       isSubscribed: isSubscribed ?? this.isSubscribed,
       tags: tags ?? this.tags,

@@ -10,9 +10,16 @@ abstract class FeedRepository {
     required Post post,
     required DateTime dateTime,
   });
-  Future<Either<Failure, void>> saveDraft({
+  Future<Either<Failure, List<Post>>> getDrafts({
+    required String draftType,
+  });
+  Future<Either<Failure, void>> saveOrUpdateDraft({
     required Post post,
     required String draftType,
+  });
+  Future<Either<Failure, void>> deleteDraftById({
+    required String draftType,
+    required int draftId,
   });
   Future<Either<Failure, Post>> getComment({
     required int commentId,
@@ -26,9 +33,6 @@ abstract class FeedRepository {
     required int page,
     required int limit,
   });
-  Future<Either<Failure, Post>> getDraft({
-    required String draftType,
-  });
   Future<Either<Failure, Post>> getPost({
     required int postId,
   });
@@ -39,7 +43,7 @@ abstract class FeedRepository {
     required int projectId,
     required Post quoteContent,
   });
-  Future<Either<Failure, void>> deleteDraft({
+  Future<Either<Failure, void>> clearDrafts({
     required String draftType,
   });
 
@@ -74,17 +78,9 @@ abstract class FeedRepository {
   Future<Either<Failure, Post?>> savePoll({
     required Post post,
   });
-  Future<Either<Failure, PostList>> getPolls({
-    required int page,
-    required int limit,
-  });
   Future<Either<Failure, void>> castVote({
     required int postId,
     required int optionId,
-  });
-  Future<Either<Failure, PostList>> getArticles({
-    required int page,
-    required int limit,
   });
   Future<Either<Failure, Post>> saveArticle({
     required Post post,

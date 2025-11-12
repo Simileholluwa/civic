@@ -18,15 +18,15 @@ abstract class PollOption implements _i1.SerializableModel {
     required this.pollId,
     this.poll,
     this.option,
-    this.votedBy,
-  });
+    int? votesCount,
+  }) : votesCount = votesCount ?? 0;
 
   factory PollOption({
     int? id,
     required int pollId,
     _i2.Poll? poll,
     String? option,
-    List<int>? votedBy,
+    int? votesCount,
   }) = _PollOptionImpl;
 
   factory PollOption.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -38,9 +38,7 @@ abstract class PollOption implements _i1.SerializableModel {
           : _i2.Poll.fromJson(
               (jsonSerialization['poll'] as Map<String, dynamic>)),
       option: jsonSerialization['option'] as String?,
-      votedBy: (jsonSerialization['votedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
+      votesCount: jsonSerialization['votesCount'] as int?,
     );
   }
 
@@ -55,7 +53,7 @@ abstract class PollOption implements _i1.SerializableModel {
 
   String? option;
 
-  List<int>? votedBy;
+  int? votesCount;
 
   /// Returns a shallow copy of this [PollOption]
   /// with some or all fields replaced by the given arguments.
@@ -65,7 +63,7 @@ abstract class PollOption implements _i1.SerializableModel {
     int? pollId,
     _i2.Poll? poll,
     String? option,
-    List<int>? votedBy,
+    int? votesCount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -74,7 +72,7 @@ abstract class PollOption implements _i1.SerializableModel {
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
       if (option != null) 'option': option,
-      if (votedBy != null) 'votedBy': votedBy?.toJson(),
+      if (votesCount != null) 'votesCount': votesCount,
     };
   }
 
@@ -92,13 +90,13 @@ class _PollOptionImpl extends PollOption {
     required int pollId,
     _i2.Poll? poll,
     String? option,
-    List<int>? votedBy,
+    int? votesCount,
   }) : super._(
           id: id,
           pollId: pollId,
           poll: poll,
           option: option,
-          votedBy: votedBy,
+          votesCount: votesCount,
         );
 
   /// Returns a shallow copy of this [PollOption]
@@ -110,16 +108,14 @@ class _PollOptionImpl extends PollOption {
     int? pollId,
     Object? poll = _Undefined,
     Object? option = _Undefined,
-    Object? votedBy = _Undefined,
+    Object? votesCount = _Undefined,
   }) {
     return PollOption(
       id: id is int? ? id : this.id,
       pollId: pollId ?? this.pollId,
       poll: poll is _i2.Poll? ? poll : this.poll?.copyWith(),
       option: option is String? ? option : this.option,
-      votedBy: votedBy is List<int>?
-          ? votedBy
-          : this.votedBy?.map((e0) => e0).toList(),
+      votesCount: votesCount is int? ? votesCount : this.votesCount,
     );
   }
 }

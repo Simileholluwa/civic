@@ -4,14 +4,15 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
 class GetUserProjectBookmarksUseCase
-    implements UseCase<ProjectList, GetUserProjectBookmarksParams> {
+    implements UseCase<FeedProjectList, GetUserProjectBookmarksParams> {
   GetUserProjectBookmarksUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
   final ProjectRepository _projectRepository;
 
   @override
-  Future<Either<Failure, ProjectList>> call(
-      GetUserProjectBookmarksParams params,) async {
+  Future<Either<Failure, FeedProjectList>> call(
+    GetUserProjectBookmarksParams params,
+  ) async {
     final result = await _projectRepository.getUserProjectBookmarks(
       page: params.page,
       limit: params.limit,

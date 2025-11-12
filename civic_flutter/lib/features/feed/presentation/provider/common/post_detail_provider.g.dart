@@ -19,8 +19,8 @@ final class PostDetailProvider
       {required PostDetailFamily super.from,
       required (
         int,
-        String,
         Post?,
+        PostType,
       )
           super.argument})
       : super(
@@ -50,8 +50,8 @@ final class PostDetailProvider
   FutureOr<Post> create(Ref ref) {
     final argument = this.argument as (
       int,
-      String,
       Post?,
+      PostType,
     );
     return postDetail(
       ref,
@@ -72,7 +72,7 @@ final class PostDetailProvider
   }
 }
 
-String _$postDetailHash() => r'db8e4863060e14eb4d7d4d72c5fe4b3f643712a5';
+String _$postDetailHash() => r'fd6153a73e815fd22ed2f9bd319c4bc480b71b8a';
 
 final class PostDetailFamily extends $Family
     with
@@ -80,8 +80,8 @@ final class PostDetailFamily extends $Family
             FutureOr<Post>,
             (
               int,
-              String,
               Post?,
+              PostType,
             )> {
   const PostDetailFamily._()
       : super(
@@ -94,13 +94,13 @@ final class PostDetailFamily extends $Family
 
   PostDetailProvider call(
     int id,
-    String draftType,
     Post? post,
+    PostType postType,
   ) =>
       PostDetailProvider._(argument: (
         id,
-        draftType,
         post,
+        postType,
       ), from: this);
 
   @override

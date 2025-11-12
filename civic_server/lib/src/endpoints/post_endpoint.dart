@@ -5,6 +5,7 @@ import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/endpoints/project_endpoint.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
+import 'package:civic_server/src/services/recommendation_service.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class PostEndpoint extends Endpoint {
@@ -28,17 +29,12 @@ class PostEndpoint extends Endpoint {
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingPost.likedBy,
-              bookmarkedBy: existingPost.bookmarkedBy,
               projectId: existingPost.projectId,
               parentId: existingPost.parentId,
               pollId: existingPost.pollId,
-              quotedOrRepostedFromUserId:
-                  existingPost.quotedOrRepostedFromUserId,
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
               dateCreated: existingPost.dateCreated,
-              subscribers: existingPost.subscribers,
             ),
           );
           await HashtagEndpoint().sendPostHashtags(
@@ -54,9 +50,6 @@ class PostEndpoint extends Endpoint {
               ownerId: user.id,
               owner: user,
               postType: PostType.regular,
-              likedBy: [],
-              bookmarkedBy: [],
-              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -105,13 +98,10 @@ class PostEndpoint extends Endpoint {
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingPost.likedBy,
-              bookmarkedBy: existingPost.bookmarkedBy,
               pollId: existingPost.pollId,
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
               dateCreated: existingPost.dateCreated,
-              subscribers: existingPost.subscribers,
             ),
           );
           await HashtagEndpoint().sendPostHashtags(
@@ -126,9 +116,6 @@ class PostEndpoint extends Endpoint {
             session,
             post.copyWith(
               ownerId: user.id!,
-              likedBy: [],
-              bookmarkedBy: [],
-              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -136,9 +123,7 @@ class PostEndpoint extends Endpoint {
           // 2. Save Poll and its options
           final savedPoll = await Poll.db.insertRow(
             session,
-            post.poll!.copyWith(
-              votedBy: [],
-            ),
+            post.poll!,
             transaction: transaction,
           );
 
@@ -149,7 +134,6 @@ class PostEndpoint extends Endpoint {
               session,
               option.copyWith(
                 pollId: savedPoll.id,
-                votedBy: [],
               ),
               transaction: transaction,
             );
@@ -184,6 +168,7 @@ class PostEndpoint extends Endpoint {
           );
 
           // 6. Return the fully populated post with poll and options
+          // Use the same transaction to ensure visibility of uncommitted writes.
           return await Post.db.findById(
             session,
             savedPost.id!,
@@ -191,6 +176,7 @@ class PostEndpoint extends Endpoint {
               owner: UserRecord.include(userInfo: UserInfo.include()),
               poll: Poll.include(options: PollOption.includeList()),
             ),
+            transaction: transaction,
           );
         }
       } catch (e, stackTrace) {
@@ -223,13 +209,10 @@ class PostEndpoint extends Endpoint {
             session,
             post.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingPost.likedBy,
-              bookmarkedBy: existingPost.bookmarkedBy,
               commentCount: existingPost.commentCount,
               postType: existingPost.postType,
               articleId: existingPost.articleId,
               dateCreated: existingPost.dateCreated,
-              subscribers: existingPost.subscribers,
               article: existingPost.article!.copyWith(
                 content: post.article!.content,
                 tag: [...existingPost.article!.tag!, ...post.article!.tag!],
@@ -242,9 +225,6 @@ class PostEndpoint extends Endpoint {
             session,
             post.copyWith(
               ownerId: user.id!,
-              likedBy: [],
-              bookmarkedBy: [],
-              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -358,7 +338,7 @@ class PostEndpoint extends Endpoint {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
 
-      // Fetch the poll
+      // Fetch the post and poll
       final post = await Post.db.findById(
         session,
         postId,
@@ -371,89 +351,65 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
 
-      if (post == null) {
+      if (post == null || post.poll == null) {
         throw ServerSideException(message: 'Poll not found.');
       }
 
       final poll = post.poll!;
 
-      // Check if user has already voted
-      if (poll.votedBy!.contains(user.id)) {
-        final options = await PollOption.db.find(
-          session,
-          where: (o) => o.pollId.equals(poll.id),
-          transaction: transaction,
-        );
-
-        // Find the one the user voted on
-        PollOption? votedOption = options.firstWhere(
-          (option) => option.votedBy!.contains(user.id!),
-          orElse: () => throw ServerSideException(
-            message: 'You have not voted for this option.',
-          ),
-        );
-
-        if (votedOption.id == optionId) return;
-
-        final updatedOption = votedOption.copyWith(
-          votedBy: votedOption.votedBy!
-              .where(
-                (id) => id != user.id!,
-              )
-              .toList(),
-        );
-
-        await PollOption.db.updateRow(
-          session,
-          updatedOption,
-          transaction: transaction,
-        );
-
-        poll.votedBy = poll.votedBy!
-            .where(
-              (id) => id != user.id!,
-            )
-            .toList();
-      }
-
-      // Ensure selected option belongs to the poll
+      // Ensure selected option belongs to this poll
       final option = await PollOption.db.findById(
         session,
         optionId,
         transaction: transaction,
       );
-
       if (option == null || option.pollId != poll.id) {
         throw ServerSideException(message: 'Invalid poll option selected.');
       }
 
-      // Update PollOption's votedBy
-      final updatedOption = option.copyWith(
-        votedBy: [
-          ...option.votedBy!,
-          user.id!,
-        ],
-      );
-
-      await PollOption.db.updateRow(
+      // Upsert into PollVote: change selection if exists, insert otherwise
+      final existingVote = await PollVote.db.findFirstRow(
         session,
-        updatedOption,
+        where: (t) => t.pollId.equals(poll.id!) & t.voterId.equals(user.id!),
         transaction: transaction,
       );
 
-      final updatedPoll = poll.copyWith(
-        votedBy: [...poll.votedBy!, user.id!],
-      );
+      if (existingVote != null) {
+        if (existingVote.optionId == optionId) {
+          return; // no-op
+        }
+        await PollVote.db.updateRow(
+          session,
+          existingVote.copyWith(
+            optionId: optionId,
+            votedAt: DateTime.now(),
+          ),
+          transaction: transaction,
+        );
+      } else {
+        await PollVote.db.insertRow(
+          session,
+          PollVote(
+            pollId: poll.id!,
+            optionId: optionId,
+            voterId: user.id!,
+            votedAt: DateTime.now(),
+          ),
+          transaction: transaction,
+        );
+      }
 
-      await Poll.db.updateRow(
-        session,
-        updatedPoll,
-        transaction: transaction,
-      );
-
-      await updatePost(
-        session,
-        post,
+      // Auto-log engagement: vote on a poll post
+      unawaited(
+        EngagementEvent.db.insertRow(
+          session,
+          EngagementEvent(
+            userId: user.id!,
+            postId: post.id!,
+            type: 'vote',
+            createdAt: DateTime.now(),
+          ),
+        ),
       );
 
       if (post.ownerId != user.id) {
@@ -504,153 +460,33 @@ class PostEndpoint extends Endpoint {
   ) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
-      final userId = user.id!;
 
-      // Fetch the poll
+      // Ensure poll exists
       final poll = await Poll.db.findById(
         session,
         pollId,
         transaction: transaction,
       );
-
       if (poll == null) {
         throw Exception('Poll not found.');
       }
 
-      // Check if user has voted
-      if (!poll.votedBy!.contains(userId)) {
-        throw Exception('You have not voted.');
+      final existingVote = await PollVote.db.findFirstRow(
+        session,
+        where: (t) => t.pollId.equals(pollId) & t.voterId.equals(user.id!),
+        transaction: transaction,
+      );
+      if (existingVote == null) {
+        throw ServerSideException(message: 'You have not voted in this poll.');
       }
 
-      // Fetch all options for the poll
-      final options = await PollOption.db.find(
+      await PollVote.db.deleteRow(
         session,
-        where: (o) => o.pollId.equals(pollId),
+        existingVote,
         transaction: transaction,
       );
-
-      // Find the one the user voted on
-      PollOption? votedOption = options.firstWhere(
-        (option) => option.votedBy!.contains(userId),
-        orElse: () => throw ServerSideException(
-          message: 'You have not voted in this poll.',
-        ),
-      );
-
-      // Remove user from PollOption.votedBy
-      final updatedOption = votedOption.copyWith(
-        votedBy: votedOption.votedBy!
-            .where(
-              (id) => id != userId,
-            )
-            .toList(),
-      );
-
-      await PollOption.db.updateRow(
-        session,
-        updatedOption,
-        transaction: transaction,
-      );
-
-      // // Remove user from Poll.votedBy
-      // final updatedPoll = poll.copyWith(
-      //   votedBy: poll.votedBy!
-      //       .where(
-      //         (id) => id != userId,
-      //       )
-      //       .toList(),
-      // );
       return true;
     });
-  }
-
-  Future<PostList> getPolls(
-    Session session, {
-    int limit = 50,
-    int page = 1,
-  }) async {
-    final user = await authUser(session);
-    final ignored = await PostNotInterested.db.find(
-      session,
-      where: (t) => t.userId.equals(user.id!),
-    );
-    final ignoredIds = ignored.map((e) => e.postId).toSet();
-    final count = await Post.db.count(
-      session,
-      where: (t) =>
-          t.postType.equals(PostType.poll) & t.id.notInSet(ignoredIds),
-    );
-    final results = await Post.db.find(
-      session,
-      where: (t) =>
-          t.postType.equals(PostType.poll) & t.id.notInSet(ignoredIds),
-      limit: limit,
-      offset: (page * limit) - limit,
-      include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
-        poll: Poll.include(
-          options: PollOption.includeList(
-            orderBy: (p0) => p0.id,
-            orderDescending: false,
-          ),
-        ),
-      ),
-      orderBy: (t) => t.dateCreated,
-      orderDescending: true,
-    );
-
-    return PostList(
-      count: count,
-      limit: limit,
-      page: page,
-      results: results,
-      numPages: (count / limit).ceil(),
-      canLoadMore: page * limit < count,
-    );
-  }
-
-  Future<PostList> getArticles(
-    Session session, {
-    int limit = 50,
-    int page = 1,
-  }) async {
-    final user = await authUser(session);
-    final ignored = await PostNotInterested.db.find(
-      session,
-      where: (t) => t.userId.equals(user.id!),
-    );
-    final ignoredIds = ignored.map((e) => e.postId).toSet();
-    final count = await Post.db.count(
-      session,
-      where: (t) =>
-          t.postType.equals(PostType.article) & t.id.notInSet(ignoredIds),
-    );
-    final results = await Post.db.find(
-      session,
-      where: (t) =>
-          t.postType.equals(PostType.article) & t.id.notInSet(ignoredIds),
-      limit: limit,
-      offset: (page * limit) - limit,
-      include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
-        article: Article.include(),
-      ),
-      orderBy: (t) => t.dateCreated,
-      orderDescending: true,
-    );
-
-    return PostList(
-      count: count,
-      limit: limit,
-      page: page,
-      results: results,
-      numPages: (count / limit).ceil(),
-      canLoadMore: page * limit < count,
-    );
   }
 
   Future<Post?> savePostComment(
@@ -674,12 +510,9 @@ class PostEndpoint extends Endpoint {
           session,
           comment.copyWith(
             updatedAt: DateTime.now(),
-            likedBy: existingCommentOrReply.likedBy,
-            bookmarkedBy: existingCommentOrReply.bookmarkedBy,
             commentCount: existingCommentOrReply.commentCount,
             postType: existingCommentOrReply.postType,
             dateCreated: existingCommentOrReply.dateCreated,
-            subscribers: existingCommentOrReply.subscribers,
           ),
         );
 
@@ -709,9 +542,19 @@ class PostEndpoint extends Endpoint {
           comment.copyWith(
             owner: user,
             postType: isReply ? PostType.commentReply : PostType.comment,
-            likedBy: [],
-            bookmarkedBy: [],
-            subscribers: [],
+          ),
+        );
+
+        // Auto-log engagement for comment or reply
+        unawaited(
+          EngagementEvent.db.insertRow(
+            session,
+            EngagementEvent(
+              userId: user.id!,
+              postId: parent?.id ?? comment.parentId!,
+              type: isReply ? 'reply' : 'comment',
+              createdAt: DateTime.now(),
+            ),
           ),
         );
 
@@ -822,9 +665,12 @@ class PostEndpoint extends Endpoint {
       ),
     );
 
+    // Enrich with user state flags
+    final enriched = await _enrichPosts(session, user, results);
+
     return PostList(
       count: count,
-      results: results,
+      results: enriched,
       limit: limit,
       page: page,
       numPages: (count / limit).ceil(),
@@ -902,9 +748,12 @@ class PostEndpoint extends Endpoint {
       ),
     );
 
+    // Enrich with user state flags
+    final enriched = await _enrichPosts(session, user, results);
+
     return PostList(
       count: count,
-      results: results,
+      results: enriched,
       limit: limit,
       page: page,
       numPages: (count / limit).ceil(),
@@ -953,15 +802,10 @@ class PostEndpoint extends Endpoint {
             session,
             quoteContent.copyWith(
               updatedAt: DateTime.now(),
-              likedBy: existingQuote.likedBy,
-              bookmarkedBy: existingQuote.bookmarkedBy,
               projectId: existingQuote.projectId,
-              quotedOrRepostedFromUserId:
-                  existingQuote.quotedOrRepostedFromUserId,
               commentCount: existingQuote.commentCount,
               dateCreated: existingQuote.dateCreated,
               postType: existingQuote.postType,
-              subscribers: existingQuote.subscribers,
             ),
           );
 
@@ -985,9 +829,6 @@ class PostEndpoint extends Endpoint {
             quoteContent.copyWith(
               ownerId: user.id!,
               projectId: selectedProject.id,
-              likedBy: [],
-              bookmarkedBy: [],
-              subscribers: [],
             ),
             transaction: transaction,
           );
@@ -1048,7 +889,6 @@ class PostEndpoint extends Endpoint {
           );
 
           return sentPost.copyWith(
-            quotedOrRepostedFromUser: user,
             owner: user,
             project: selectedProject,
           );
@@ -1110,6 +950,7 @@ class PostEndpoint extends Endpoint {
     Session session, {
     int limit = 50,
     int page = 1,
+    String? contentType, // 'polls' | 'articles' | 'regular' (includes reposts)
   }) async {
     if (limit <= 0 || page <= 0) {
       throw ServerSideException(
@@ -1122,18 +963,48 @@ class PostEndpoint extends Endpoint {
       where: (t) => t.userId.equals(user.id!),
     );
     final ignoredIds = ignored.map((e) => e.postId).toSet();
+    // Build type filter set based on contentType
+    Set<PostType>? allowedTypes;
+    if (contentType == 'polls') {
+      allowedTypes = {PostType.poll};
+    } else if (contentType == 'articles') {
+      allowedTypes = {PostType.article};
+    } else if (contentType == 'regular') {
+      // Regular posts and reposts
+      allowedTypes = {
+        PostType.regular,
+        PostType.postRepost,
+        PostType.projectRepost
+      };
+    } else {
+      allowedTypes = null; // default: everything except comments & replies
+    }
+
+    Expression whereBuilder(PostTable t) {
+      final base = t.id.notInSet(ignoredIds);
+      if (allowedTypes == null) {
+        return base &
+            t.postType.notInSet({
+              PostType.comment,
+              PostType.commentReply,
+            });
+      }
+      return base &
+          t.postType.inSet(
+            allowedTypes,
+          );
+    }
+
     final count = await Post.db.count(
       session,
-      where: (t) =>
-          t.postType.notInSet({PostType.comment, PostType.commentReply}) &
-          t.id.notInSet(ignoredIds),
+      where: whereBuilder,
     );
-    final results = await Post.db.find(
+    // Fetch a larger candidate pool for better ranking, then trim to [limit].
+    final candidateLimit = (limit * 5).clamp(limit, 500);
+    final candidates = await Post.db.find(
       session,
-      limit: limit,
-      where: (t) =>
-          t.postType.notInSet({PostType.comment, PostType.commentReply}) &
-          t.id.notInSet(ignoredIds),
+      limit: candidateLimit,
+      where: whereBuilder,
       offset: (page * limit) - limit,
       include: Post.include(
         owner: UserRecord.include(
@@ -1149,9 +1020,6 @@ class PostEndpoint extends Endpoint {
             userInfo: UserInfo.include(),
           ),
         ),
-        quotedOrRepostedFromUser: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
         poll: Poll.include(
           options: PollOption.includeList(
             orderBy: (p0) => p0.id,
@@ -1163,14 +1031,101 @@ class PostEndpoint extends Endpoint {
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
     );
+    // Rank candidates using heuristic/ML ranker with recent user engagement.
+    final ranker = const RecommendationService();
+    final userEngagementCounts = await ranker.recentUserEngagementCounts(
+      session: session,
+      userId: user.id!,
+      lookbackHours: 24,
+    );
+    final ranked = await ranker.rankPosts(
+      session: session,
+      user: user,
+      candidates: candidates,
+      userEngagementCounts: userEngagementCounts,
+    );
+    final results = ranked.take(limit).toList();
+
+    // Auto-log feed impression (list of post ids returned for this page)
+    // Fire-and-forget to avoid impacting latency; failures are non-fatal.
+    try {
+      final impressionPostIds = results
+          .map((e) => e.id)
+          .where((id) => id != null)
+          .cast<int>()
+          .toList(growable: false);
+      if (impressionPostIds.isNotEmpty) {
+        unawaited(
+          ImpressionLog.db.insertRow(
+            session,
+            ImpressionLog(
+              userId: user.id!,
+              postIds: impressionPostIds,
+              page: page,
+              createdAt: DateTime.now(),
+            ),
+          ),
+        );
+      }
+    } catch (e, stackTrace) {
+      session.log(
+        'Failed to log impression: $e',
+        level: LogLevel.warning,
+        stackTrace: stackTrace,
+      );
+    }
+
+    // Enrich with user state flags
+    final enriched = await _enrichPosts(session, user, results);
 
     return PostList(
       count: count,
       limit: limit,
       page: page,
-      results: results,
+      results: enriched,
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
+    );
+  }
+
+  /// TEMPORARY: Log an impression of a feed page. Stores postIds in a short-lived
+  /// cache bucket keyed by user and timestamp. Replace with a persistent table.
+  @doNotGenerate
+  Future<void> logFeedImpression(
+    Session session, {
+    required List<int> postIds,
+    required int page,
+  }) async {
+    final user = await authUser(session);
+    // Persist to ImpressionLog
+    await ImpressionLog.db.insertRow(
+      session,
+      ImpressionLog(
+        userId: user.id!,
+        postIds: postIds,
+        page: page,
+        createdAt: DateTime.now(),
+      ),
+    );
+  }
+
+  /// TEMPORARY: Log a single user engagement event (like/bookmark/comment/hide).
+  /// For now we only cache; later persist in EngagementEvent table.
+  @doNotGenerate
+  Future<void> logEngagementEvent(
+    Session session, {
+    required int postId,
+    required String type,
+  }) async {
+    final user = await authUser(session);
+    await EngagementEvent.db.insertRow(
+      session,
+      EngagementEvent(
+        userId: user.id!,
+        postId: postId,
+        type: type,
+        createdAt: DateTime.now(),
+      ),
     );
   }
 
@@ -1239,8 +1194,8 @@ class PostEndpoint extends Endpoint {
         );
         final posts = userBookmarks.map((e) => e.post!);
         for (final post in posts) {
-          post.bookmarkedBy!.remove(user.id!);
-          post.bookmarksCount = post.bookmarksCount! - 1;
+          final current = post.bookmarksCount ?? 0;
+          post.bookmarksCount = current > 0 ? current - 1 : 0;
           await updatePost(session, post);
         }
         await PostBookmarks.db.deleteWhere(
@@ -1290,18 +1245,20 @@ class PostEndpoint extends Endpoint {
                 postId,
               ) &
               t.ownerId.equals(
-                user.userInfoId,
+                user.id!,
               ),
           transaction: transaction,
         );
 
+        String engagementType;
         if (existingBookmark != null) {
           await PostBookmarks.db.deleteRow(
             session,
             existingBookmark,
             transaction: transaction,
           );
-          post.bookmarkedBy?.remove(user.id!);
+          post.bookmarksCount = post.bookmarksCount! - 1;
+          engagementType = 'unbookmark';
         } else {
           await PostBookmarks.db.insertRow(
             session,
@@ -1311,9 +1268,22 @@ class PostEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          post.bookmarkedBy?.add(user.id!);
+          post.bookmarksCount = post.bookmarksCount! + 1;
+          engagementType = 'bookmark';
         }
         await updatePost(session, post);
+        // Log bookmark engagement event
+        unawaited(
+          EngagementEvent.db.insertRow(
+            session,
+            EngagementEvent(
+              userId: user.id!,
+              postId: postId,
+              type: engagementType,
+              createdAt: DateTime.now(),
+            ),
+          ),
+        );
       } catch (e, stackTrace) {
         session.log(
           'Error in toggleBookmark: $e',
@@ -1356,18 +1326,20 @@ class PostEndpoint extends Endpoint {
                 postId,
               ) &
               t.ownerId.equals(
-                user.userInfoId,
+                user.id!,
               ),
           transaction: transaction,
         );
 
+        String engagementType;
         if (existingLike != null) {
           await PostLikes.db.deleteRow(
             session,
             existingLike,
             transaction: transaction,
           );
-          post.likedBy?.remove(user.id!);
+          post.likesCount = post.likesCount! - 1;
+          engagementType = 'unlike';
         } else {
           await PostLikes.db.insertRow(
             session,
@@ -1378,7 +1350,8 @@ class PostEndpoint extends Endpoint {
             ),
             transaction: transaction,
           );
-          post.likedBy?.add(user.id!);
+          post.likesCount = post.likesCount! + 1;
+          engagementType = 'like';
 
           if (post.ownerId != user.id) {
             unawaited(
@@ -1421,6 +1394,18 @@ class PostEndpoint extends Endpoint {
           }
         }
         await updatePost(session, post);
+        // Log like/unlike engagement event
+        unawaited(
+          EngagementEvent.db.insertRow(
+            session,
+            EngagementEvent(
+              userId: user.id!,
+              postId: postId,
+              type: engagementType,
+              createdAt: DateTime.now(),
+            ),
+          ),
+        );
       } catch (e, stackTrace) {
         session.log(
           'Error in togglePostLike: $e',
@@ -1458,15 +1443,16 @@ class PostEndpoint extends Endpoint {
           session,
           where: (t) => t.userId.equals(user.id!) & t.postId.equals(postId),
         );
-        await updatePost(
-          session,
-          post.copyWith(
-            subscribers: post.subscribers
-                    ?.where(
-                      (id) => id != user.id!,
-                    )
-                    .toList() ??
-                [],
+        // Log unsubscribe engagement
+        unawaited(
+          EngagementEvent.db.insertRow(
+            session,
+            EngagementEvent(
+              userId: user.id!,
+              postId: postId,
+              type: 'unsubscribe',
+              createdAt: DateTime.now(),
+            ),
           ),
         );
         return;
@@ -1480,13 +1466,16 @@ class PostEndpoint extends Endpoint {
           ),
         );
 
-        await updatePost(
-          session,
-          post.copyWith(
-            subscribers: <int>{
-              ...post.subscribers ?? [],
-              user.id!,
-            }.toList(),
+        // Log subscribe engagement
+        unawaited(
+          EngagementEvent.db.insertRow(
+            session,
+            EngagementEvent(
+              userId: user.id!,
+              postId: postId,
+              type: 'subscribe',
+              createdAt: DateTime.now(),
+            ),
           ),
         );
 
@@ -1534,22 +1523,91 @@ class PostEndpoint extends Endpoint {
                 userInfo: UserInfo.include(),
               ),
             ),
-            quotedOrRepostedFromUser: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
           ),
         ),
       );
       final results = bookmarks.map((e) => e.post!).toList();
+      final enriched = await _enrichPosts(session, user, results);
       return PostList(
         count: count,
         limit: limit,
         page: page,
-        results: results,
+        results: enriched,
         numPages: (count / limit).ceil(),
         canLoadMore: page * limit < count,
       );
     });
+  }
+
+  // Build PostWithUserState list for the given posts for the current user
+  @doNotGenerate
+  Future<List<PostWithUserState>> _enrichPosts(
+    Session session,
+    UserRecord user,
+    List<Post> posts,
+  ) async {
+    if (posts.isEmpty) return const <PostWithUserState>[];
+
+    final postIds = posts.map((p) => p.id!).toSet();
+    final pollIds =
+        posts.where((p) => p.pollId != null).map((p) => p.pollId!).toSet();
+
+    Future<Set<int>> asIdSet<T>(Future<List<T>> fut, int Function(T) id) async {
+      final rows = await fut;
+      return rows.map(id).toSet();
+    }
+
+    // Likes by this user on these posts
+    final likedSet = await asIdSet(
+      PostLikes.db.find(
+        session,
+        where: (t) => t.postId.inSet(postIds) & t.ownerId.equals(user.id!),
+      ),
+      (r) => r.postId,
+    );
+
+    // Bookmarks by this user on these posts
+    final bookmarkedSet = await asIdSet(
+      PostBookmarks.db.find(
+        session,
+        where: (t) => t.postId.inSet(postIds) & t.ownerId.equals(user.id!),
+      ),
+      (r) => r.postId,
+    );
+
+    // Subscriptions by this user on these posts
+    final subscribedSet = await asIdSet(
+      PostSubscription.db.find(
+        session,
+        where: (t) => t.postId.inSet(postIds) & t.userId.equals(user.id!),
+      ),
+      (r) => r.postId,
+    );
+
+    // Poll votes by this user for polls present in these posts
+    final Map<int, int> selectedOptionByPollId = {};
+    if (pollIds.isNotEmpty) {
+      final votes = await PollVote.db.find(
+        session,
+        where: (t) => t.pollId.inSet(pollIds) & t.voterId.equals(user.id!),
+      );
+      for (final v in votes) {
+        selectedOptionByPollId[v.pollId] = v.optionId;
+      }
+    }
+
+    return posts
+        .map(
+          (p) => PostWithUserState(
+            post: p,
+            hasLiked: likedSet.contains(p.id!),
+            hasBookmarked: bookmarkedSet.contains(p.id!),
+            isSubscribed: subscribedSet.contains(p.id!),
+            selectedPollOptionId:
+                p.pollId != null ? selectedOptionByPollId[p.pollId!] : null,
+          ),
+        )
+        .toList();
   }
 
   Future<void> markNotInterested(
@@ -1568,6 +1626,19 @@ class PostEndpoint extends Endpoint {
       await PostNotInterested.db.insertRow(
         session,
         entry,
+      );
+
+      // Auto-log engagement: user marked post not interested
+      unawaited(
+        EngagementEvent.db.insertRow(
+          session,
+          EngagementEvent(
+            userId: user.id!,
+            postId: postId,
+            type: 'notInterested',
+            createdAt: DateTime.now(),
+          ),
+        ),
       );
     } catch (e, stackTrace) {
       session.log(
@@ -1608,9 +1679,6 @@ class PostEndpoint extends Endpoint {
           ),
         ),
         article: Article.include(),
-        quotedOrRepostedFromUser: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
       ),
     );
     if (post != null) {
@@ -1625,7 +1693,6 @@ class PostEndpoint extends Endpoint {
         parent: post.parent,
         poll: post.poll,
         article: post.article,
-        quotedOrRepostedFromUser: post.quotedOrRepostedFromUser,
       );
     }
   }
@@ -1685,7 +1752,7 @@ class PostEndpoint extends Endpoint {
         message: 'Post not found',
       );
     }
-    if (post.ownerId != user.userInfoId) {
+    if (post.ownerId != user.id) {
       throw ServerSideException(
         message: 'Unauthorised operation',
       );
@@ -1716,7 +1783,7 @@ class PostEndpoint extends Endpoint {
         message: isReply ? 'Reply not found' : 'Comment not found',
       );
     }
-    if (comment.ownerId != user.userInfoId) {
+    if (comment.ownerId != user.id) {
       throw ServerSideException(
         message: 'Unauthorised operation',
       );

@@ -1,11 +1,13 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/feed/feed.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/material.dart';
 
 class CreateContentLocationsAndTaggedUsers extends StatelessWidget {
   const CreateContentLocationsAndTaggedUsers({
-    required this.locations, required this.taggedUsers, super.key,
+    required this.locations,
+    required this.taggedUsers,
+    super.key,
   });
 
   final List<AWSPlaces> locations;

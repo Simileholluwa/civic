@@ -166,58 +166,54 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveDraft({
+  Future<Either<Failure, List<Post>>> getDrafts({
+    required String draftType,
+  }) async {
+    try {
+      final drafts = await _localDatabase.getDrafts(
+        draftType: draftType,
+      );
+      return Right(drafts);
+    } on CacheException catch (e) {
+      return Left(Failure(message: e.message));
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveOrUpdateDraft({
     required Post post,
     required String draftType,
   }) async {
     try {
-      final result = await _localDatabase.saveDraft(
+      await _localDatabase.saveOrUpdateDraft(
         post: post,
         draftType: draftType,
       );
-      return Right(result);
+      return const Right(null);
     } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
+      return Left(Failure(message: e.message));
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, Post>> getDraft({
+  Future<Either<Failure, void>> deleteDraftById({
     required String draftType,
+    required int draftId,
   }) async {
     try {
-      final result = await _localDatabase.getDraft(
+      await _localDatabase.deleteDraftById(
         draftType: draftType,
+        draftId: draftId,
       );
-      return Right(result);
+      return const Right(null);
     } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> deleteDraft({
-    required String draftType,
-  }) async {
-    try {
-      final result = await _localDatabase.deleteDraft(
-        draftType: draftType,
-      );
-      return Right(result);
-    } on CacheException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
+      return Left(Failure(message: e.message));
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
     }
   }
 
@@ -316,6 +312,21 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, void>> clearDrafts({
+    required String draftType,
+  }) async {
+    try {
+      // Legacy behavior mapped to clearing all drafts of this type
+      await _localDatabase.clearDrafts(draftType: draftType);
+      return const Right(null);
+    } on CacheException catch (e) {
+      return Left(Failure(message: e.message));
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, PostList>> getPostComments({
     required int postId,
     required int page,
@@ -406,46 +417,6 @@ class FeedRepositoryImpl implements FeedRepository {
     try {
       final result = await _remoteDatabase.savePoll(
         post: post,
-      );
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, PostList>> getPolls({
-    required int page,
-    required int limit,
-  }) async {
-    try {
-      final result = await _remoteDatabase.getPolls(
-        page: page,
-        limit: limit,
-      );
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(
-        Failure(
-          message: e.message,
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, PostList>> getArticles({
-    required int page,
-    required int limit,
-  }) async {
-    try {
-      final result = await _remoteDatabase.getArticles(
-        page: page,
-        limit: limit,
       );
       return Right(result);
     } on ServerException catch (e) {

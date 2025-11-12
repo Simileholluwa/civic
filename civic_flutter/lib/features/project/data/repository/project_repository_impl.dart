@@ -85,7 +85,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectList>> getUserProjectBookmarks({
+  Future<Either<Failure, FeedProjectList>> getUserProjectBookmarks({
     required int page,
     required int limit,
   }) async {

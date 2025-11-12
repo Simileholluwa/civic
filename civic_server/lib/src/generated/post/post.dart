@@ -37,12 +37,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     this.updatedAt,
     this.hashtags,
-    this.likedBy,
     int? likesCount,
-    this.bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    this.subscribers,
     this.pollId,
     this.poll,
     this.articleId,
@@ -51,8 +48,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.project,
     this.parentId,
     this.parent,
-    this.quotedOrRepostedFromUserId,
-    this.quotedOrRepostedFromUser,
     bool? isDeleted,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
@@ -76,12 +71,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -90,8 +82,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   }) = _PostImpl;
 
@@ -133,18 +123,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       hashtags: (jsonSerialization['hashtags'] as List?)
           ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      likedBy: (jsonSerialization['likedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       likesCount: jsonSerialization['likesCount'] as int?,
-      bookmarkedBy: (jsonSerialization['bookmarkedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
-      subscribers: (jsonSerialization['subscribers'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       pollId: jsonSerialization['pollId'] as int?,
       poll: jsonSerialization['poll'] == null
           ? null
@@ -165,14 +146,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
           ? null
           : _i9.Post.fromJson(
               (jsonSerialization['parent'] as Map<String, dynamic>)),
-      quotedOrRepostedFromUserId:
-          jsonSerialization['quotedOrRepostedFromUserId'] as int?,
-      quotedOrRepostedFromUser:
-          jsonSerialization['quotedOrRepostedFromUser'] == null
-              ? null
-              : _i2.UserRecord.fromJson(
-                  (jsonSerialization['quotedOrRepostedFromUser']
-                      as Map<String, dynamic>)),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
@@ -210,17 +183,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   List<_i5.PostsHashtags>? hashtags;
 
-  List<int>? likedBy;
-
   int? likesCount;
-
-  List<int>? bookmarkedBy;
 
   int? bookmarksCount;
 
   int? commentCount;
-
-  List<int>? subscribers;
 
   int? pollId;
 
@@ -237,10 +204,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   int? parentId;
 
   _i9.Post? parent;
-
-  int? quotedOrRepostedFromUserId;
-
-  _i2.UserRecord? quotedOrRepostedFromUser;
 
   bool? isDeleted;
 
@@ -265,12 +228,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -279,8 +239,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   });
   @override
@@ -304,12 +262,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (likesCount != null) 'likesCount': likesCount,
-      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
-      if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
       if (articleId != null) 'articleId': articleId,
@@ -318,10 +273,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (project != null) 'project': project?.toJson(),
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJson(),
-      if (quotedOrRepostedFromUserId != null)
-        'quotedOrRepostedFromUserId': quotedOrRepostedFromUserId,
-      if (quotedOrRepostedFromUser != null)
-        'quotedOrRepostedFromUser': quotedOrRepostedFromUser?.toJson(),
       if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
@@ -349,12 +300,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
       if (likesCount != null) 'likesCount': likesCount,
-      if (bookmarkedBy != null) 'bookmarkedBy': bookmarkedBy?.toJson(),
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
-      if (subscribers != null) 'subscribers': subscribers?.toJson(),
       if (pollId != null) 'pollId': pollId,
       if (poll != null) 'poll': poll?.toJsonForProtocol(),
       if (articleId != null) 'articleId': articleId,
@@ -363,11 +311,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (project != null) 'project': project?.toJsonForProtocol(),
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJsonForProtocol(),
-      if (quotedOrRepostedFromUserId != null)
-        'quotedOrRepostedFromUserId': quotedOrRepostedFromUserId,
-      if (quotedOrRepostedFromUser != null)
-        'quotedOrRepostedFromUser':
-            quotedOrRepostedFromUser?.toJsonForProtocol(),
       if (isDeleted != null) 'isDeleted': isDeleted,
     };
   }
@@ -379,7 +322,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i7.ArticleInclude? article,
     _i8.ProjectInclude? project,
     _i9.PostInclude? parent,
-    _i2.UserRecordInclude? quotedOrRepostedFromUser,
   }) {
     return PostInclude._(
       owner: owner,
@@ -388,7 +330,6 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       article: article,
       project: project,
       parent: parent,
-      quotedOrRepostedFromUser: quotedOrRepostedFromUser,
     );
   }
 
@@ -436,12 +377,9 @@ class _PostImpl extends Post {
     DateTime? dateCreated,
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
-    List<int>? likedBy,
     int? likesCount,
-    List<int>? bookmarkedBy,
     int? bookmarksCount,
     int? commentCount,
-    List<int>? subscribers,
     int? pollId,
     _i6.Poll? poll,
     int? articleId,
@@ -450,8 +388,6 @@ class _PostImpl extends Post {
     _i8.Project? project,
     int? parentId,
     _i9.Post? parent,
-    int? quotedOrRepostedFromUserId,
-    _i2.UserRecord? quotedOrRepostedFromUser,
     bool? isDeleted,
   }) : super._(
           id: id,
@@ -468,12 +404,9 @@ class _PostImpl extends Post {
           dateCreated: dateCreated,
           updatedAt: updatedAt,
           hashtags: hashtags,
-          likedBy: likedBy,
           likesCount: likesCount,
-          bookmarkedBy: bookmarkedBy,
           bookmarksCount: bookmarksCount,
           commentCount: commentCount,
-          subscribers: subscribers,
           pollId: pollId,
           poll: poll,
           articleId: articleId,
@@ -482,8 +415,6 @@ class _PostImpl extends Post {
           project: project,
           parentId: parentId,
           parent: parent,
-          quotedOrRepostedFromUserId: quotedOrRepostedFromUserId,
-          quotedOrRepostedFromUser: quotedOrRepostedFromUser,
           isDeleted: isDeleted,
         );
 
@@ -506,12 +437,9 @@ class _PostImpl extends Post {
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
-    Object? likedBy = _Undefined,
     Object? likesCount = _Undefined,
-    Object? bookmarkedBy = _Undefined,
     Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
-    Object? subscribers = _Undefined,
     Object? pollId = _Undefined,
     Object? poll = _Undefined,
     Object? articleId = _Undefined,
@@ -520,8 +448,6 @@ class _PostImpl extends Post {
     Object? project = _Undefined,
     Object? parentId = _Undefined,
     Object? parent = _Undefined,
-    Object? quotedOrRepostedFromUserId = _Undefined,
-    Object? quotedOrRepostedFromUser = _Undefined,
     Object? isDeleted = _Undefined,
   }) {
     return Post(
@@ -549,19 +475,10 @@ class _PostImpl extends Post {
       hashtags: hashtags is List<_i5.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
-      likedBy: likedBy is List<int>?
-          ? likedBy
-          : this.likedBy?.map((e0) => e0).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
-      bookmarkedBy: bookmarkedBy is List<int>?
-          ? bookmarkedBy
-          : this.bookmarkedBy?.map((e0) => e0).toList(),
       bookmarksCount:
           bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
-      subscribers: subscribers is List<int>?
-          ? subscribers
-          : this.subscribers?.map((e0) => e0).toList(),
       pollId: pollId is int? ? pollId : this.pollId,
       poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
       articleId: articleId is int? ? articleId : this.articleId,
@@ -570,12 +487,6 @@ class _PostImpl extends Post {
       project: project is _i8.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
       parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
-      quotedOrRepostedFromUserId: quotedOrRepostedFromUserId is int?
-          ? quotedOrRepostedFromUserId
-          : this.quotedOrRepostedFromUserId,
-      quotedOrRepostedFromUser: quotedOrRepostedFromUser is _i2.UserRecord?
-          ? quotedOrRepostedFromUser
-          : this.quotedOrRepostedFromUser?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
     );
   }
@@ -630,18 +541,10 @@ class PostTable extends _i1.Table<int?> {
       'updatedAt',
       this,
     );
-    likedBy = _i1.ColumnSerializable(
-      'likedBy',
-      this,
-    );
     likesCount = _i1.ColumnInt(
       'likesCount',
       this,
       hasDefault: true,
-    );
-    bookmarkedBy = _i1.ColumnSerializable(
-      'bookmarkedBy',
-      this,
     );
     bookmarksCount = _i1.ColumnInt(
       'bookmarksCount',
@@ -652,10 +555,6 @@ class PostTable extends _i1.Table<int?> {
       'commentCount',
       this,
       hasDefault: true,
-    );
-    subscribers = _i1.ColumnSerializable(
-      'subscribers',
-      this,
     );
     pollId = _i1.ColumnInt(
       'pollId',
@@ -671,10 +570,6 @@ class PostTable extends _i1.Table<int?> {
     );
     parentId = _i1.ColumnInt(
       'parentId',
-      this,
-    );
-    quotedOrRepostedFromUserId = _i1.ColumnInt(
-      'quotedOrRepostedFromUserId',
       this,
     );
     isDeleted = _i1.ColumnBool(
@@ -712,17 +607,11 @@ class PostTable extends _i1.Table<int?> {
 
   _i1.ManyRelation<_i5.PostsHashtagsTable>? _hashtags;
 
-  late final _i1.ColumnSerializable likedBy;
-
   late final _i1.ColumnInt likesCount;
-
-  late final _i1.ColumnSerializable bookmarkedBy;
 
   late final _i1.ColumnInt bookmarksCount;
 
   late final _i1.ColumnInt commentCount;
-
-  late final _i1.ColumnSerializable subscribers;
 
   late final _i1.ColumnInt pollId;
 
@@ -739,10 +628,6 @@ class PostTable extends _i1.Table<int?> {
   late final _i1.ColumnInt parentId;
 
   _i9.PostTable? _parent;
-
-  late final _i1.ColumnInt quotedOrRepostedFromUserId;
-
-  _i2.UserRecordTable? _quotedOrRepostedFromUser;
 
   late final _i1.ColumnBool isDeleted;
 
@@ -824,19 +709,6 @@ class PostTable extends _i1.Table<int?> {
     return _parent!;
   }
 
-  _i2.UserRecordTable get quotedOrRepostedFromUser {
-    if (_quotedOrRepostedFromUser != null) return _quotedOrRepostedFromUser!;
-    _quotedOrRepostedFromUser = _i1.createRelationTable(
-      relationFieldName: 'quotedOrRepostedFromUser',
-      field: Post.t.quotedOrRepostedFromUserId,
-      foreignField: _i2.UserRecord.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i2.UserRecordTable(tableRelation: foreignTableRelation),
-    );
-    return _quotedOrRepostedFromUser!;
-  }
-
   _i1.ManyRelation<_i5.PostsHashtagsTable> get hashtags {
     if (_hashtags != null) return _hashtags!;
     var relationTable = _i1.createRelationTable(
@@ -869,17 +741,13 @@ class PostTable extends _i1.Table<int?> {
         tags,
         dateCreated,
         updatedAt,
-        likedBy,
         likesCount,
-        bookmarkedBy,
         bookmarksCount,
         commentCount,
-        subscribers,
         pollId,
         articleId,
         projectId,
         parentId,
-        quotedOrRepostedFromUserId,
         isDeleted,
       ];
 
@@ -903,9 +771,6 @@ class PostTable extends _i1.Table<int?> {
     if (relationField == 'parent') {
       return parent;
     }
-    if (relationField == 'quotedOrRepostedFromUser') {
-      return quotedOrRepostedFromUser;
-    }
     return null;
   }
 }
@@ -918,7 +783,6 @@ class PostInclude extends _i1.IncludeObject {
     _i7.ArticleInclude? article,
     _i8.ProjectInclude? project,
     _i9.PostInclude? parent,
-    _i2.UserRecordInclude? quotedOrRepostedFromUser,
   }) {
     _owner = owner;
     _hashtags = hashtags;
@@ -926,7 +790,6 @@ class PostInclude extends _i1.IncludeObject {
     _article = article;
     _project = project;
     _parent = parent;
-    _quotedOrRepostedFromUser = quotedOrRepostedFromUser;
   }
 
   _i2.UserRecordInclude? _owner;
@@ -941,8 +804,6 @@ class PostInclude extends _i1.IncludeObject {
 
   _i9.PostInclude? _parent;
 
-  _i2.UserRecordInclude? _quotedOrRepostedFromUser;
-
   @override
   Map<String, _i1.Include?> get includes => {
         'owner': _owner,
@@ -951,7 +812,6 @@ class PostInclude extends _i1.IncludeObject {
         'article': _article,
         'project': _project,
         'parent': _parent,
-        'quotedOrRepostedFromUser': _quotedOrRepostedFromUser,
       };
 
   @override
@@ -1351,30 +1211,6 @@ class PostAttachRowRepository {
     );
   }
 
-  /// Creates a relation between the given [Post] and [UserRecord]
-  /// by setting the [Post]'s foreign key `quotedOrRepostedFromUserId` to refer to the [UserRecord].
-  Future<void> quotedOrRepostedFromUser(
-    _i1.Session session,
-    Post post,
-    _i2.UserRecord quotedOrRepostedFromUser, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (post.id == null) {
-      throw ArgumentError.notNull('post.id');
-    }
-    if (quotedOrRepostedFromUser.id == null) {
-      throw ArgumentError.notNull('quotedOrRepostedFromUser.id');
-    }
-
-    var $post =
-        post.copyWith(quotedOrRepostedFromUserId: quotedOrRepostedFromUser.id);
-    await session.db.updateRow<Post>(
-      $post,
-      columns: [Post.t.quotedOrRepostedFromUserId],
-      transaction: transaction,
-    );
-  }
-
   /// Creates a relation between this [Post] and the given [PostsHashtags]
   /// by setting the [PostsHashtags]'s foreign key `postId` to refer to this [Post].
   Future<void> hashtags(
@@ -1513,28 +1349,6 @@ class PostDetachRowRepository {
     await session.db.updateRow<Post>(
       $post,
       columns: [Post.t.parentId],
-      transaction: transaction,
-    );
-  }
-
-  /// Detaches the relation between this [Post] and the [UserRecord] set in `quotedOrRepostedFromUser`
-  /// by setting the [Post]'s foreign key `quotedOrRepostedFromUserId` to `null`.
-  ///
-  /// This removes the association between the two models without deleting
-  /// the related record.
-  Future<void> quotedOrRepostedFromUser(
-    _i1.Session session,
-    Post post, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (post.id == null) {
-      throw ArgumentError.notNull('post.id');
-    }
-
-    var $post = post.copyWith(quotedOrRepostedFromUserId: null);
-    await session.db.updateRow<Post>(
-      $post,
-      columns: [Post.t.quotedOrRepostedFromUserId],
       transaction: transaction,
     );
   }

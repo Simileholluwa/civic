@@ -5,5 +5,5 @@ fields:
     owner: UserRecord?, relation(onDelete=Cascade)
     options: List<PollOption>?, relation(name=poll_options)
     expiresAt: DateTime?
-    votedBy: List<int>?
+    votesCount: int?, default=0
     

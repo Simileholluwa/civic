@@ -484,54 +484,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['pollId'],
           ),
         ),
-        'getPolls': _i1.MethodConnector(
-          name: 'getPolls',
-          params: {
-            'limit': _i1.ParameterDescription(
-              name: 'limit',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'page': _i1.ParameterDescription(
-              name: 'page',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i6.PostEndpoint).getPolls(
-            session,
-            limit: params['limit'],
-            page: params['page'],
-          ),
-        ),
-        'getArticles': _i1.MethodConnector(
-          name: 'getArticles',
-          params: {
-            'limit': _i1.ParameterDescription(
-              name: 'limit',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-            'page': _i1.ParameterDescription(
-              name: 'page',
-              type: _i1.getType<int>(),
-              nullable: false,
-            ),
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['post'] as _i6.PostEndpoint).getArticles(
-            session,
-            limit: params['limit'],
-            page: params['page'],
-          ),
-        ),
         'savePostComment': _i1.MethodConnector(
           name: 'savePostComment',
           params: {
@@ -737,6 +689,11 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int>(),
               nullable: false,
             ),
+            'contentType': _i1.ParameterDescription(
+              name: 'contentType',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
           },
           call: (
             _i1.Session session,
@@ -746,6 +703,7 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             limit: params['limit'],
             page: params['page'],
+            contentType: params['contentType'],
           ),
         ),
         'deletePost': _i1.MethodConnector(

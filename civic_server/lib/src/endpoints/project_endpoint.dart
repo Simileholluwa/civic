@@ -1849,7 +1849,7 @@ class ProjectEndpoint extends Endpoint {
     );
   }
 
-  Future<ProjectList> getUserProjectBookmarks(
+  Future<FeedProjectList> getUserProjectBookmarks(
     Session session, {
     int limit = 50,
     int page = 1,
@@ -1877,8 +1877,91 @@ class ProjectEndpoint extends Endpoint {
           orderDescending: true,
         );
         final results = bookmarks.map((bookmark) => bookmark.project!).toList();
-        return ProjectList(
-          results: results,
+
+        // Build user-state flags similar to getProjects
+        if (results.isEmpty) {
+          return FeedProjectList(
+            count: count,
+            page: page,
+            numPages: (count / limit).ceil(),
+            limit: limit,
+            canLoadMore: page * limit < count,
+            results: [],
+          );
+        }
+
+        final projectIds = results.map((p) => p.id!).toSet();
+
+        Future<Set<int>> asIdSet<T>(
+            Future<List<T>> fut, int Function(T) id) async {
+          final rows = await fut;
+          return rows.map(id).toSet();
+        }
+
+        final likedSet = await asIdSet(
+          ProjectLikes.db.find(
+            session,
+            where: (t) =>
+                t.projectId.inSet(projectIds) &
+                t.ownerId.equals(user.userInfoId),
+          ),
+          (r) => r.projectId,
+        );
+
+        final bookmarkedSet = await asIdSet(
+          ProjectBookmarks.db.find(
+            session,
+            where: (t) =>
+                t.projectId.inSet(projectIds) &
+                t.ownerId.equals(user.userInfoId),
+          ),
+          (r) => r.projectId,
+        );
+
+        final reviewedSet = await asIdSet(
+          ProjectReview.db.find(
+            session,
+            where: (t) =>
+                t.projectId.inSet(projectIds) &
+                t.ownerId.equals(user.userInfoId),
+          ),
+          (r) => r.projectId,
+        );
+
+        final vettedSet = await asIdSet(
+          ProjectVetting.db.find(
+            session,
+            where: (t) =>
+                t.projectId.inSet(projectIds) &
+                t.ownerId.equals(user.userInfoId),
+          ),
+          (r) => r.projectId,
+        );
+
+        final subscribedSet = await asIdSet(
+          ProjectSubscription.db.find(
+            session,
+            where: (t) =>
+                t.projectId.inSet(projectIds) & t.userId.equals(user.id!),
+          ),
+          (r) => r.projectId,
+        );
+
+        final enriched = results
+            .map(
+              (p) => ProjectWithUserState(
+                project: p,
+                hasLiked: likedSet.contains(p.id!),
+                hasBookmarked: bookmarkedSet.contains(p.id!),
+                hasReviewed: reviewedSet.contains(p.id!),
+                hasVetted: vettedSet.contains(p.id!),
+                isSubscribed: subscribedSet.contains(p.id!),
+              ),
+            )
+            .toList();
+
+        return FeedProjectList(
+          results: enriched,
           count: count,
           page: page,
           numPages: (count / limit).ceil(),

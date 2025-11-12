@@ -33,11 +33,10 @@ import 'package:civic_client/src/protocol/project/project_review_list.dart'
 import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i15;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
     as _i16;
-import 'package:civic_client/src/protocol/project/project_list.dart' as _i17;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i18;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i19;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i20;
-import 'protocol.dart' as _i21;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i17;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i18;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
+import 'protocol.dart' as _i20;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -246,32 +245,6 @@ class EndpointPost extends _i1.EndpointRef {
         {'pollId': pollId},
       );
 
-  _i2.Future<_i9.PostList> getPolls({
-    required int limit,
-    required int page,
-  }) =>
-      caller.callServerEndpoint<_i9.PostList>(
-        'post',
-        'getPolls',
-        {
-          'limit': limit,
-          'page': page,
-        },
-      );
-
-  _i2.Future<_i9.PostList> getArticles({
-    required int limit,
-    required int page,
-  }) =>
-      caller.callServerEndpoint<_i9.PostList>(
-        'post',
-        'getArticles',
-        {
-          'limit': limit,
-          'page': page,
-        },
-      );
-
   _i2.Future<_i8.Post?> savePostComment(
     _i8.Post comment,
     bool isReply,
@@ -370,6 +343,7 @@ class EndpointPost extends _i1.EndpointRef {
   _i2.Future<_i9.PostList> getPosts({
     required int limit,
     required int page,
+    String? contentType,
   }) =>
       caller.callServerEndpoint<_i9.PostList>(
         'post',
@@ -377,6 +351,7 @@ class EndpointPost extends _i1.EndpointRef {
         {
           'limit': limit,
           'page': page,
+          'contentType': contentType,
         },
       );
 
@@ -884,11 +859,11 @@ class EndpointProject extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<_i17.ProjectList> getUserProjectBookmarks({
+  _i2.Future<_i13.FeedProjectList> getUserProjectBookmarks({
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i17.ProjectList>(
+      caller.callServerEndpoint<_i13.FeedProjectList>(
         'project',
         'getUserProjectBookmarks',
         {
@@ -1003,15 +978,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<_i18.UserRecord> saveUser(_i18.UserRecord userRecord) =>
-      caller.callServerEndpoint<_i18.UserRecord>(
+  _i2.Future<_i17.UserRecord> saveUser(_i17.UserRecord userRecord) =>
+      caller.callServerEndpoint<_i17.UserRecord>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i18.UserRecord?> getUser(String? userId) =>
-      caller.callServerEndpoint<_i18.UserRecord?>(
+  _i2.Future<_i17.UserRecord?> getUser(String? userId) =>
+      caller.callServerEndpoint<_i17.UserRecord?>(
         'userRecord',
         'getUser',
         {'userId': userId},
@@ -1024,12 +999,12 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'email': email},
       );
 
-  _i2.Future<_i19.UsersList> getUsers({
+  _i2.Future<_i18.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
   }) =>
-      caller.callServerEndpoint<_i19.UsersList>(
+      caller.callServerEndpoint<_i18.UsersList>(
         'userRecord',
         'getUsers',
         {
@@ -1039,11 +1014,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i18.UserRecord>> mentionUsers({
+  _i2.Future<List<_i17.UserRecord>> mentionUsers({
     required String query,
     required int limit,
   }) =>
-      caller.callServerEndpoint<List<_i18.UserRecord>>(
+      caller.callServerEndpoint<List<_i17.UserRecord>>(
         'userRecord',
         'mentionUsers',
         {
@@ -1059,16 +1034,16 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'userId': userId},
       );
 
-  _i2.Future<_i18.UserRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i18.UserRecord?>(
+  _i2.Future<_i17.UserRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i17.UserRecord?>(
         'userRecord',
         'getNinDetails',
         {'ninNumber': ninNumber},
       );
 
-  _i2.Stream<_i18.UserRecord> userUpdates(int userId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i18.UserRecord>,
-          _i18.UserRecord>(
+  _i2.Stream<_i17.UserRecord> userUpdates(int userId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i17.UserRecord>,
+          _i17.UserRecord>(
         'userRecord',
         'userUpdates',
         {'userId': userId},
@@ -1085,10 +1060,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i20.Caller(client);
+    auth = _i19.Caller(client);
   }
 
-  late final _i20.Caller auth;
+  late final _i19.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1107,7 +1082,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i21.Protocol(),
+          _i20.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

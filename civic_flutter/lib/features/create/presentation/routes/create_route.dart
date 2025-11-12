@@ -1,7 +1,5 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/features/create/presentation/pages/create_content_page.dart';
-import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_flutter/features/project/project.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

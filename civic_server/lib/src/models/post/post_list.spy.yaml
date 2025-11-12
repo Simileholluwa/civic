@@ -1,7 +1,7 @@
 class: PostList
 
 fields:
-    results: List<Post>
+    results: List<PostWithUserState>
     count: int
     page: int
     numPages: int

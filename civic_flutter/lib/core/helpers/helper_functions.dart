@@ -350,7 +350,6 @@ class THelperFunctions {
     final textController = controller;
     final cursorIndex = textController.selection.baseOffset;
 
-    // Find the word to replace, ensuring it's the last mention/hashtag typed
     final textBeforeCursor = text.substring(0, cursorIndex);
     final textAfterCursor = text.substring(cursorIndex);
 
@@ -359,18 +358,25 @@ class THelperFunctions {
       final start = lastWordMatch.start;
       final end = lastWordMatch.end;
 
-      // Replace the mention/hashtag in the text
       final newText = textBeforeCursor.replaceRange(start, end, suggestion) +
           textAfterCursor;
       textController
         ..text = newText
-
-        // Move the cursor to the end of the inserted suggestion
         ..selection = TextSelection.fromPosition(
           TextPosition(offset: start + suggestion.length),
         );
 
       controller.text = newText;
+
+      // If the replaced token was a hashtag, record it in recent hashtags (store without '#').
+      final replacedToken = lastWordMatch.group(0)!;
+      if (replacedToken.startsWith('#')) {
+        final tagToRecord =
+            suggestion.startsWith('#') ? suggestion.substring(1) : suggestion;
+        if (tagToRecord.isNotEmpty) {
+          ref.read(recentHashtagsProvider.notifier).add(tagToRecord);
+        }
+      }
       ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
           <UserRecord>[];
       ref
@@ -400,19 +406,35 @@ class THelperFunctions {
       return;
     }
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () async {
+    _debounce = Timer(const Duration(milliseconds: 300), () async {
       final lastWord = _getLastWord(
         ref,
         text,
         controller,
       );
-      if (lastWord.startsWith('@')) {
+      if (lastWord == '@') {
+        final selected = ref.read(selectedMentionsProvider);
+        final recents = selected.length <= 8
+            ? selected
+            : selected
+                .sublist(selected.length - 8)
+                .reversed
+                .toList(growable: false);
+        ref.read(mentionSuggestionsProvider.notifier).setSuggestions = recents;
+      } else if (lastWord == '#') {
+        final recentTags = ref.read(recentHashtagsProvider);
+        final formatted = recentTags.map((t) => '#$t').toList(growable: false);
+        ref.read(hashtagsSuggestionsProvider.notifier).setSuggestions =
+            formatted;
+      } else if (lastWord.startsWith('@')) {
         await _fetchMentionSuggestions(ref, lastWord);
       } else if (lastWord.startsWith('#')) {
         await _fetchHashtags(ref, lastWord);
       } else {
         ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
             <UserRecord>[];
+        ref.read(hashtagsSuggestionsProvider.notifier).setSuggestions =
+            <String>[];
       }
     });
     _handleMentions(ref, text);
@@ -442,14 +464,13 @@ class THelperFunctions {
   }
 
   static void _handleMentions(WidgetRef ref, String text) {
-    final selectedMentions = ref.watch(
+    final selectedMentions = ref.read(
       selectedMentionsProvider,
     );
-    final currentMentions = ref.watch(
+    final currentMentions = ref.read(
       extractedMentionsProvider(text),
     );
 
-    // Remove records of users whose mentions are no longer in the text
     selectedMentions.removeWhere((
       userRecord,
     ) {
@@ -486,7 +507,12 @@ class THelperFunctions {
     WidgetRef ref,
     String query,
   ) async {
-    final results = await ref.watch(
+    if (query.length <= 1) {
+      ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
+          <UserRecord>[];
+      return;
+    }
+    final results = await ref.read(
       fetchUsersToMentionProvider(
         query.substring(1),
       ).future,
@@ -516,7 +542,12 @@ class THelperFunctions {
           .setSuggestions = <String>[];
       return;
     }
-    final results = await ref.watch(
+    if (query.length <= 1) {
+      ref.read(hashtagsSuggestionsProvider.notifier).setSuggestions =
+          <String>[];
+      return;
+    }
+    final results = await ref.read(
       fetchHashtagsProvider(
         query.substring(
           1,

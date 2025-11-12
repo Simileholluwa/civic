@@ -18,8 +18,7 @@ class AppBottomNavbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      alignment: Alignment.bottomCenter,
+    return SizedBox(
       height: 60,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -31,9 +30,7 @@ class AppBottomNavbar extends ConsumerWidget {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor.withValues(
-                    alpha: .01,
-                  ),
+              color: Theme.of(context).scaffoldBackgroundColor,
               border: Border(
                 top: BorderSide(
                   color: Theme.of(context).dividerColor,

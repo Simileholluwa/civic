@@ -52,6 +52,49 @@ final class MentionServicesProvider extends $FunctionalProvider<
 
 String _$mentionServicesHash() => r'bd3b5edaf82eee204df7723d0b3bc049d1fcc6e5';
 
+@ProviderFor(recentMentionSuggestions)
+const recentMentionSuggestionsProvider = RecentMentionSuggestionsProvider._();
+
+final class RecentMentionSuggestionsProvider extends $FunctionalProvider<
+    List<UserRecord>,
+    List<UserRecord>,
+    List<UserRecord>> with $Provider<List<UserRecord>> {
+  const RecentMentionSuggestionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'recentMentionSuggestionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$recentMentionSuggestionsHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<UserRecord>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<UserRecord> create(Ref ref) {
+    return recentMentionSuggestions(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<UserRecord> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<UserRecord>>(value),
+    );
+  }
+}
+
+String _$recentMentionSuggestionsHash() =>
+    r'0e46389e09644f20c2b482d928e017a5e461add6';
+
 @ProviderFor(fetchUsersToMention)
 const fetchUsersToMentionProvider = FetchUsersToMentionFamily._();
 
@@ -108,7 +151,7 @@ final class FetchUsersToMentionProvider extends $FunctionalProvider<
 }
 
 String _$fetchUsersToMentionHash() =>
-    r'dd07560788a583979f3345feb854149cc164b104';
+    r'2a01eec22ef6394d1508a6fe482ef9433db15f7f';
 
 final class FetchUsersToMentionFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<UserRecord>>, String> {
@@ -213,7 +256,7 @@ final class SelectedMentionsProvider
   }
 }
 
-String _$selectedMentionsHash() => r'ddc17f687600e19abc53b19c4d1bd22fa633aac7';
+String _$selectedMentionsHash() => r'd82b7001d840266f35ccdd7261dc63e6c2dd7d20';
 
 abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
   List<UserRecord> build();
@@ -280,7 +323,7 @@ final class ExtractedMentionsProvider
   }
 }
 
-String _$extractedMentionsHash() => r'e2fc89a90c6c908b79b6fefc62ddd7497a29a8c4';
+String _$extractedMentionsHash() => r'44b5d345a943a8f7f2d19047696d21ae7f79f4b1';
 
 final class ExtractedMentionsFamily extends $Family
     with
@@ -488,7 +531,7 @@ final class HashtagsProvider extends $NotifierProvider<Hashtags, List<String>> {
   }
 }
 
-String _$hashtagsHash() => r'2183195b3766eed9369c2ddb72902179f78cc13b';
+String _$hashtagsHash() => r'51eddcb9de8d581aa95991b5baa38960d0ee197f';
 
 final class HashtagsFamily extends $Family
     with
@@ -587,7 +630,7 @@ final class FetchHashtagsProvider extends $FunctionalProvider<
   }
 }
 
-String _$fetchHashtagsHash() => r'868cde6b8cb4f568a8c7d4d96e9220d758e55899';
+String _$fetchHashtagsHash() => r'9e8aac021494bcc22b52460cf06e6ff20de64288';
 
 final class FetchHashtagsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
@@ -660,6 +703,56 @@ abstract class _$HashtagsSuggestions extends $Notifier<List<String>> {
   }
 }
 
+@ProviderFor(RecentHashtags)
+const recentHashtagsProvider = RecentHashtagsProvider._();
+
+final class RecentHashtagsProvider
+    extends $NotifierProvider<RecentHashtags, List<String>> {
+  const RecentHashtagsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'recentHashtagsProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$recentHashtagsHash();
+
+  @$internal
+  @override
+  RecentHashtags create() => RecentHashtags();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<String> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<String>>(value),
+    );
+  }
+}
+
+String _$recentHashtagsHash() => r'45975aa722fbe1f05477180d4b1e3dfa584811a5';
+
+abstract class _$RecentHashtags extends $Notifier<List<String>> {
+  List<String> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<String>, List<String>>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<List<String>, List<String>>,
+        List<String>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(fetchLinkMetadata)
 const fetchLinkMetadataProvider = FetchLinkMetadataFamily._();
 
@@ -713,7 +806,7 @@ final class FetchLinkMetadataProvider extends $FunctionalProvider<
   }
 }
 
-String _$fetchLinkMetadataHash() => r'5d7175a6b91f0db953156ab6393a776b91c81b4c';
+String _$fetchLinkMetadataHash() => r'b0290afa80dd1b859732fa2b0a2bcdd26f7f846b';
 
 final class FetchLinkMetadataFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<LinkMetadata?>, String> {

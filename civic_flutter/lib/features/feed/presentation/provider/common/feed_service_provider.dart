@@ -52,8 +52,8 @@ GetPostUseCase getPost(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-GetUserPostBookmarksUseCase getUserPostBookmarks(Ref ref) {
-  return GetUserPostBookmarksUseCase(
+GetUserBookmarksUseCase getUserPostBookmarks(Ref ref) {
+  return GetUserBookmarksUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
@@ -66,22 +66,29 @@ ClearPostBookmarksUseCase clearPostBookmarks(Ref ref) {
 }
 
 @riverpod
-SavePostDraftUseCase savePostDraft(Ref ref) {
-  return SavePostDraftUseCase(
+SaveOrUpdatePostDraftUseCase savePostDraft(Ref ref) {
+  return SaveOrUpdatePostDraftUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
 
 @riverpod
-GetPostDraftUseCase getPostDraft(Ref ref) {
-  return GetPostDraftUseCase(
+GetPostDraftsUseCase getPostDrafts(Ref ref) {
+  return GetPostDraftsUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
 
 @riverpod
-DeletePostDraftUseCase deletePostDraft(Ref ref) {
-  return DeletePostDraftUseCase(
+DeletePostDraftByIdUseCase deletePostDraft(Ref ref) {
+  return DeletePostDraftByIdUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
+ClearPostDraftsUseCase clearPostDrafts(Ref ref) {
+  return ClearPostDraftsUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
@@ -170,23 +177,9 @@ SavePollUseCase savePoll(Ref ref) {
   );
 }
 
-@Riverpod(keepAlive: true)
-GetPollsUseCase getPolls(Ref ref) {
-  return GetPollsUseCase(
-    feedRepository: ref.read(feedRepositoryImplProvider),
-  );
-}
-
 @riverpod
 CastVoteUseCase castVote(Ref ref) {
   return CastVoteUseCase(
-    feedRepository: ref.read(feedRepositoryImplProvider),
-  );
-}
-
-@Riverpod(keepAlive: true)
-GetArticlesUseCase getArticles(Ref ref) {
-  return GetArticlesUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }

@@ -39,13 +39,14 @@ class PaginatedPostList extends _$PaginatedPostList {
           error: error.message,
         );
       }, (data) {
+        final results = data.results.map((e) => e.post).toList();
         if (data.canLoadMore) {
           pagingController.appendPage(
-            data.results,
+            results,
             data.page + 1,
           );
         } else {
-          pagingController.appendLastPage(data.results);
+          pagingController.appendLastPage(results);
         }
       });
     } on Exception catch (e) {

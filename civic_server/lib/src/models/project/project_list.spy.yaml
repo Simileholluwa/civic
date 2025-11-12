@@ -1,8 +1,0 @@
-class: ProjectList
-fields:
-    results: List<Project>
-    count: int
-    page: int
-    numPages: int
-    limit: int
-    canLoadMore: bool

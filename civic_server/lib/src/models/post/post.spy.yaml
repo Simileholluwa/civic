@@ -13,19 +13,19 @@ fields:
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
     hashtags: List<PostsHashtags>?, relation(name=posts_postshashtags)
-    likedBy: List<int>?
     likesCount: int?, default=0
-    bookmarkedBy: List<int>?
     bookmarksCount: int?, default=0
     commentCount: int?, default=0
-    subscribers: List<int>?
     poll: Poll?, relation(optional, onDelete=Cascade)
     article: Article?, relation(optional, onDelete=Cascade)
     project: Project?, relation(optional, onDelete=Cascade)
     parent: Post?, relation(optional, onDelete=Cascade,)
-    quotedOrRepostedFromUser: UserRecord?, relation(optional)
     isDeleted: bool?, default=false
 
 indexes:
-  post_idx:
-    fields: ownerId, postType, pollId, articleId, projectId, parentId, quotedOrRepostedFromUserId
+  post_type_date_idx:
+    fields: postType, dateCreated
+  post_owner_date_idx:
+    fields: ownerId, dateCreated
+  post_parent_date_idx:
+    fields: parentId, dateCreated

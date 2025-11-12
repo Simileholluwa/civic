@@ -29,18 +29,7 @@ class AppWrapper extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: 0,
         ),
-        bottomNavigationBar: AnimatedCrossFade(
-          duration: const Duration(milliseconds: 300),
-          crossFadeState: hideBottomNav
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          secondChild: const SizedBox.shrink(),
-          firstChild: AppBottomNavbar(
-            navigatorShell: navigatorShell,
-          ),
-        ),
         body: Stack(
-          alignment: Alignment.topCenter,
           children: [
             navigatorShell,
             Visibility(
@@ -50,6 +39,19 @@ class AppWrapper extends ConsumerWidget {
                 backgroundColor: THelperFunctions.isDarkMode(context)
                     ? TColors.dark
                     : TColors.light,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: AnimatedCrossFade(
+                duration: const Duration(milliseconds: 300),
+                crossFadeState: hideBottomNav
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                secondChild: const SizedBox.shrink(),
+                firstChild: AppBottomNavbar(
+                  navigatorShell: navigatorShell,
+                ),
               ),
             ),
           ],

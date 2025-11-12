@@ -1,7 +1,6 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
-import 'package:civic_flutter/features/create/presentation/widgets/project_creation/pdf_attacments_detail.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';

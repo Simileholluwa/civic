@@ -12,11 +12,21 @@ MentionHashTagLinkServices mentionServices(Ref ref) {
 }
 
 @riverpod
+List<UserRecord> recentMentionSuggestions(Ref ref) {
+  final selected = ref.watch(selectedMentionsProvider);
+  if (selected.length <= 8) return selected;
+  return selected.sublist(selected.length - 8).reversed.toList(growable: false);
+}
+
+@riverpod
 Future<List<UserRecord>> fetchUsersToMention(
   Ref ref,
   String query,
 ) async {
-  final result = await ref.watch(mentionServicesProvider).mentionUsers(query);
+  final trimmed = query.trim();
+  if (trimmed.isEmpty) return [];
+
+  final result = await ref.read(mentionServicesProvider).mentionUsers(trimmed);
 
   return result.fold(
     (error) {
@@ -41,9 +51,9 @@ class MentionSuggestions extends _$MentionSuggestions {
 @Riverpod(keepAlive: true)
 class SelectedMentions extends _$SelectedMentions {
   void addMention(UserRecord user) {
-    if (!state.contains(user)) {
-      state = [...state, user];
-    }
+    final newId = user.userInfo!.id;
+    final exists = state.any((u) => u.userInfo!.id == newId);
+    if (!exists) state = [...state, user];
   }
 
   @override
@@ -58,7 +68,7 @@ class SelectedMentions extends _$SelectedMentions {
 class ExtractedMentions extends _$ExtractedMentions {
   @override
   List<String> build(String text) {
-    final mentionRegExp = RegExp(r'@(\w+)', caseSensitive: false);
+    final mentionRegExp = RegExp(r'@([A-Za-z0-9_\.]+)', caseSensitive: false);
     final Iterable<Match> matches = mentionRegExp.allMatches(text);
     return matches.map((match) => match.group(1)!).toList();
   }
@@ -80,14 +90,14 @@ class ValidMentions extends _$ValidMentions {
 @Riverpod(keepAlive: true)
 class Hashtags extends _$Hashtags {
   void addTags(String tag) {
-    if (!state.contains(tag)) {
-      state = [...state, tag];
-    }
+    final lower = tag.toLowerCase();
+    final exists = state.any((t) => t.toLowerCase() == lower);
+    if (!exists) state = [...state, tag];
   }
 
   @override
   List<String> build(String text) {
-    final mentionRegExp = RegExp(r'#(\w+)', caseSensitive: false);
+    final mentionRegExp = RegExp('#([A-Za-z0-9_]+)', caseSensitive: false);
     final Iterable<Match> matches = mentionRegExp.allMatches(text);
     return matches.map((match) => match.group(1)!).toList();
   }
@@ -102,7 +112,9 @@ Future<List<String>> fetchHashtags(
   Ref ref,
   String query,
 ) async {
-  final result = await ref.watch(mentionServicesProvider).fetchHashtags(query);
+  final trimmed = query.trim();
+  if (trimmed.isEmpty) return [];
+  final result = await ref.read(mentionServicesProvider).fetchHashtags(trimmed);
 
   return result.fold(
     (error) {
@@ -124,14 +136,30 @@ class HashtagsSuggestions extends _$HashtagsSuggestions {
   List<String> build() => [];
 }
 
+@Riverpod(keepAlive: true)
+class RecentHashtags extends _$RecentHashtags {
+  static const int maxSize = 8;
+
+  @override
+  List<String> build() => const [];
+
+  void add(String tag) {
+    final lower = tag.toLowerCase();
+    final filtered = state.where((t) => t.toLowerCase() != lower).toList()
+      ..add(tag);
+    final start = filtered.length > maxSize ? filtered.length - maxSize : 0;
+    state = filtered.sublist(start);
+  }
+}
+
 @riverpod
 Future<LinkMetadata?> fetchLinkMetadata(
   Ref ref,
   String text,
 ) async {
   final url = ref.watch(extractLinkProvider(text));
-  final result =
-      await ref.watch(mentionServicesProvider).fetchLinkMetadata(url);
+  if (url.isEmpty) return null;
+  final result = await ref.read(mentionServicesProvider).fetchLinkMetadata(url);
   return result.fold(
     (error) {
       return null;

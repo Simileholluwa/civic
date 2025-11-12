@@ -10,7 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../post/post.dart' as _i2;
+import '../post/post_with_user_state.dart' as _i2;
 
 abstract class PostList
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -24,7 +24,7 @@ abstract class PostList
   });
 
   factory PostList({
-    required List<_i2.Post> results,
+    required List<_i2.PostWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -35,7 +35,8 @@ abstract class PostList
   factory PostList.fromJson(Map<String, dynamic> jsonSerialization) {
     return PostList(
       results: (jsonSerialization['results'] as List)
-          .map((e) => _i2.Post.fromJson((e as Map<String, dynamic>)))
+          .map((e) =>
+              _i2.PostWithUserState.fromJson((e as Map<String, dynamic>)))
           .toList(),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
@@ -45,7 +46,7 @@ abstract class PostList
     );
   }
 
-  List<_i2.Post> results;
+  List<_i2.PostWithUserState> results;
 
   int count;
 
@@ -61,7 +62,7 @@ abstract class PostList
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PostList copyWith({
-    List<_i2.Post>? results,
+    List<_i2.PostWithUserState>? results,
     int? count,
     int? page,
     int? numPages,
@@ -100,7 +101,7 @@ abstract class PostList
 
 class _PostListImpl extends PostList {
   _PostListImpl({
-    required List<_i2.Post> results,
+    required List<_i2.PostWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -120,7 +121,7 @@ class _PostListImpl extends PostList {
   @_i1.useResult
   @override
   PostList copyWith({
-    List<_i2.Post>? results,
+    List<_i2.PostWithUserState>? results,
     int? count,
     int? page,
     int? numPages,

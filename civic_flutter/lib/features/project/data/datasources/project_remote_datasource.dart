@@ -10,7 +10,7 @@ abstract class ProjectRemoteDataSource {
     required String sortBy,
   });
 
-  Future<ProjectList> getUserProjectBookmarks({
+  Future<FeedProjectList> getUserProjectBookmarks({
     required int limit,
     required int page,
   });
@@ -207,7 +207,7 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectList> getUserProjectBookmarks({
+  Future<FeedProjectList> getUserProjectBookmarks({
     required int limit,
     required int page,
   }) async {

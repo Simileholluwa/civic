@@ -3,4 +3,4 @@ table: poll_option
 fields:
     poll: Poll?, relation(onDelete=cascade, name=poll_options)
     option: String?
-    votedBy: List<int>?
+    votesCount: int?, default=0

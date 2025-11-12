@@ -271,4 +271,12 @@ class TTexts {
   static const String tags = 'Tags';
   static const String tagsSubtitle = 'Choose how you get notified when someone '
       'tags you in photos or videos.';
+
+  // -- Post drft types
+  static const String postDraft = 'postDraft';
+  static const String pollDraft = 'pollDraft';
+  static const String articleDraft = 'articleDraft';
+
+  static const String writeYourArticleHere =
+      'Write your article here and apply styles as needed using the toolbar...';
 }

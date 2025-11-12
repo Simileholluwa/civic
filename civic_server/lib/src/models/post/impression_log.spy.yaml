@@ -1,0 +1,11 @@
+class: ImpressionLog
+table: impression_log
+fields:
+  user: UserRecord?, relation(onDelete=Cascade)
+  postIds: List<int>
+  page: int
+  createdAt: DateTime?, default=now
+indexes:
+  impression_log_user_created_idx:
+    fields: userId, createdAt
+    unique: false

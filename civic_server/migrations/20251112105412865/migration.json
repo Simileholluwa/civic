@@ -1,0 +1,151 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "likedBy",
+          "bookmarkedBy",
+          "subscribers",
+          "quotedOrRepostedFromUserId"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [
+          {
+            "indexName": "post_type_date_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "postType"
+              },
+              {
+                "type": 0,
+                "definition": "dateCreated"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "post_owner_date_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "ownerId"
+              },
+              {
+                "type": 0,
+                "definition": "dateCreated"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "post_parent_date_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "parentId"
+              },
+              {
+                "type": 0,
+                "definition": "dateCreated"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [
+          "post_fk_5"
+        ],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"bookmarkedBy\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "bookmarkedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"subscribers\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "subscribers"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"quotedOrRepostedFromUserId\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "quotedOrRepostedFromUserId"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"likedBy\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "likedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"bookmarkedBy\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "bookmarkedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"subscribers\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "subscribers"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"quotedOrRepostedFromUserId\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "quotedOrRepostedFromUserId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

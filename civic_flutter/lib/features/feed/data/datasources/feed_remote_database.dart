@@ -71,14 +71,6 @@ abstract class FeedRemoteDatabase {
     required int postId,
     required int optionId,
   });
-  Future<PostList> getPolls({
-    required int page,
-    required int limit,
-  });
-  Future<PostList> getArticles({
-    required int page,
-    required int limit,
-  });
 }
 
 class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
@@ -466,32 +458,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }
 
   @override
-  Future<PostList> getPolls({
-    required int page,
-    required int limit,
-  }) async {
-    try {
-      final result = await _client.post.getPolls(
-        limit: limit,
-        page: page,
-      );
-      return result;
-    } on ServerSideException catch (e) {
-      throw ServerException(message: e.message);
-    } on SocketException catch (_) {
-      throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
-      );
-    } on ServerException {
-      rethrow;
-    } on Exception catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
   Future<Post> savePoll({
     required Post post,
   }) async {
@@ -504,32 +470,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
           message: TTexts.failedToSavePoll,
         );
       }
-      return result;
-    } on ServerSideException catch (e) {
-      throw ServerException(message: e.message);
-    } on SocketException catch (_) {
-      throw const ServerException(
-        message: 'Failed to connect to server. Please try again.',
-      );
-    } on ServerException {
-      rethrow;
-    } on Exception catch (e) {
-      throw ServerException(
-        message: e.toString(),
-      );
-    }
-  }
-
-  @override
-  Future<PostList> getArticles({
-    required int page,
-    required int limit,
-  }) async {
-    try {
-      final result = await _client.post.getArticles(
-        page: page,
-        limit: limit,
-      );
       return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);

@@ -48,15 +48,3 @@ Future<Project> projectDetail(
     return completer.future;
   }
 }
-
-@riverpod
-Future<bool> hasProjectDraft(Ref ref) async {
-  final getProjectsDraft = ref.read(getProjectDraftsProvider);
-  final result = await getProjectsDraft(NoParams());
-  return result.fold(
-    (l) => false,
-    (r) {
-      return r.isNotEmpty;
-    },
-  );
-}

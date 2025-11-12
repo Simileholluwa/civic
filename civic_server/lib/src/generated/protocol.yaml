@@ -23,8 +23,6 @@ post:
   - saveArticle:
   - castVote:
   - clearVote:
-  - getPolls:
-  - getArticles:
   - savePostComment:
   - getPostComments:
   - getComment:

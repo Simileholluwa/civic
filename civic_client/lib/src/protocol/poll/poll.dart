@@ -20,8 +20,8 @@ abstract class Poll implements _i1.SerializableModel {
     this.owner,
     this.options,
     this.expiresAt,
-    this.votedBy,
-  });
+    int? votesCount,
+  }) : votesCount = votesCount ?? 0;
 
   factory Poll({
     int? id,
@@ -29,7 +29,7 @@ abstract class Poll implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   }) = _PollImpl;
 
   factory Poll.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -46,9 +46,7 @@ abstract class Poll implements _i1.SerializableModel {
       expiresAt: jsonSerialization['expiresAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['expiresAt']),
-      votedBy: (jsonSerialization['votedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
+      votesCount: jsonSerialization['votesCount'] as int?,
     );
   }
 
@@ -65,7 +63,7 @@ abstract class Poll implements _i1.SerializableModel {
 
   DateTime? expiresAt;
 
-  List<int>? votedBy;
+  int? votesCount;
 
   /// Returns a shallow copy of this [Poll]
   /// with some or all fields replaced by the given arguments.
@@ -76,7 +74,7 @@ abstract class Poll implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -87,7 +85,7 @@ abstract class Poll implements _i1.SerializableModel {
       if (options != null)
         'options': options?.toJson(valueToJson: (v) => v.toJson()),
       if (expiresAt != null) 'expiresAt': expiresAt?.toJson(),
-      if (votedBy != null) 'votedBy': votedBy?.toJson(),
+      if (votesCount != null) 'votesCount': votesCount,
     };
   }
 
@@ -106,14 +104,14 @@ class _PollImpl extends Poll {
     _i2.UserRecord? owner,
     List<_i3.PollOption>? options,
     DateTime? expiresAt,
-    List<int>? votedBy,
+    int? votesCount,
   }) : super._(
           id: id,
           ownerId: ownerId,
           owner: owner,
           options: options,
           expiresAt: expiresAt,
-          votedBy: votedBy,
+          votesCount: votesCount,
         );
 
   /// Returns a shallow copy of this [Poll]
@@ -126,7 +124,7 @@ class _PollImpl extends Poll {
     Object? owner = _Undefined,
     Object? options = _Undefined,
     Object? expiresAt = _Undefined,
-    Object? votedBy = _Undefined,
+    Object? votesCount = _Undefined,
   }) {
     return Poll(
       id: id is int? ? id : this.id,
@@ -136,9 +134,7 @@ class _PollImpl extends Poll {
           ? options
           : this.options?.map((e0) => e0.copyWith()).toList(),
       expiresAt: expiresAt is DateTime? ? expiresAt : this.expiresAt,
-      votedBy: votedBy is List<int>?
-          ? votedBy
-          : this.votedBy?.map((e0) => e0).toList(),
+      votesCount: votesCount is int? ? votesCount : this.votesCount,
     );
   }
 }

@@ -265,9 +265,9 @@ String _$getPostHash() => r'0d07205d6703097db52f9e084fdda86248c93036';
 const getUserPostBookmarksProvider = GetUserPostBookmarksProvider._();
 
 final class GetUserPostBookmarksProvider extends $FunctionalProvider<
-    GetUserPostBookmarksUseCase,
-    GetUserPostBookmarksUseCase,
-    GetUserPostBookmarksUseCase> with $Provider<GetUserPostBookmarksUseCase> {
+    GetUserBookmarksUseCase,
+    GetUserBookmarksUseCase,
+    GetUserBookmarksUseCase> with $Provider<GetUserBookmarksUseCase> {
   const GetUserPostBookmarksProvider._()
       : super(
           from: null,
@@ -284,26 +284,26 @@ final class GetUserPostBookmarksProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<GetUserPostBookmarksUseCase> $createElement(
+  $ProviderElement<GetUserBookmarksUseCase> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  GetUserPostBookmarksUseCase create(Ref ref) {
+  GetUserBookmarksUseCase create(Ref ref) {
     return getUserPostBookmarks(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetUserPostBookmarksUseCase value) {
+  Override overrideWithValue(GetUserBookmarksUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<GetUserPostBookmarksUseCase>(value),
+      providerOverride: $SyncValueProvider<GetUserBookmarksUseCase>(value),
     );
   }
 }
 
 String _$getUserPostBookmarksHash() =>
-    r'55ee326d54cdeb6956468ce1b0548b0701767b67';
+    r'6be3f0b969c8bd636029985ddf9a7da6cb650b18';
 
 @ProviderFor(clearPostBookmarks)
 const clearPostBookmarksProvider = ClearPostBookmarksProvider._();
@@ -353,9 +353,9 @@ String _$clearPostBookmarksHash() =>
 const savePostDraftProvider = SavePostDraftProvider._();
 
 final class SavePostDraftProvider extends $FunctionalProvider<
-    SavePostDraftUseCase,
-    SavePostDraftUseCase,
-    SavePostDraftUseCase> with $Provider<SavePostDraftUseCase> {
+    SaveOrUpdatePostDraftUseCase,
+    SaveOrUpdatePostDraftUseCase,
+    SaveOrUpdatePostDraftUseCase> with $Provider<SaveOrUpdatePostDraftUseCase> {
   const SavePostDraftProvider._()
       : super(
           from: null,
@@ -372,76 +372,76 @@ final class SavePostDraftProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<SavePostDraftUseCase> $createElement(
+  $ProviderElement<SaveOrUpdatePostDraftUseCase> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  SavePostDraftUseCase create(Ref ref) {
+  SaveOrUpdatePostDraftUseCase create(Ref ref) {
     return savePostDraft(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SavePostDraftUseCase value) {
+  Override overrideWithValue(SaveOrUpdatePostDraftUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<SavePostDraftUseCase>(value),
+      providerOverride: $SyncValueProvider<SaveOrUpdatePostDraftUseCase>(value),
     );
   }
 }
 
-String _$savePostDraftHash() => r'931581affc97199eedc569b2658174fbe7908bbc';
+String _$savePostDraftHash() => r'1331f63d0fdbbbbc337121888ca9f7fa2c01ee08';
 
-@ProviderFor(getPostDraft)
-const getPostDraftProvider = GetPostDraftProvider._();
+@ProviderFor(getPostDrafts)
+const getPostDraftsProvider = GetPostDraftsProvider._();
 
-final class GetPostDraftProvider extends $FunctionalProvider<
-    GetPostDraftUseCase,
-    GetPostDraftUseCase,
-    GetPostDraftUseCase> with $Provider<GetPostDraftUseCase> {
-  const GetPostDraftProvider._()
+final class GetPostDraftsProvider extends $FunctionalProvider<
+    GetPostDraftsUseCase,
+    GetPostDraftsUseCase,
+    GetPostDraftsUseCase> with $Provider<GetPostDraftsUseCase> {
+  const GetPostDraftsProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'getPostDraftProvider',
+          name: r'getPostDraftsProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$getPostDraftHash();
+  String debugGetCreateSourceHash() => _$getPostDraftsHash();
 
   @$internal
   @override
-  $ProviderElement<GetPostDraftUseCase> $createElement(
+  $ProviderElement<GetPostDraftsUseCase> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  GetPostDraftUseCase create(Ref ref) {
-    return getPostDraft(ref);
+  GetPostDraftsUseCase create(Ref ref) {
+    return getPostDrafts(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetPostDraftUseCase value) {
+  Override overrideWithValue(GetPostDraftsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<GetPostDraftUseCase>(value),
+      providerOverride: $SyncValueProvider<GetPostDraftsUseCase>(value),
     );
   }
 }
 
-String _$getPostDraftHash() => r'9a94b4fc20b949a05833e13cc775d86e86b73778';
+String _$getPostDraftsHash() => r'3052c5991d4c8ce0eba7fabef8df797c4f86b1a3';
 
 @ProviderFor(deletePostDraft)
 const deletePostDraftProvider = DeletePostDraftProvider._();
 
 final class DeletePostDraftProvider extends $FunctionalProvider<
-    DeletePostDraftUseCase,
-    DeletePostDraftUseCase,
-    DeletePostDraftUseCase> with $Provider<DeletePostDraftUseCase> {
+    DeletePostDraftByIdUseCase,
+    DeletePostDraftByIdUseCase,
+    DeletePostDraftByIdUseCase> with $Provider<DeletePostDraftByIdUseCase> {
   const DeletePostDraftProvider._()
       : super(
           from: null,
@@ -458,25 +458,68 @@ final class DeletePostDraftProvider extends $FunctionalProvider<
 
   @$internal
   @override
-  $ProviderElement<DeletePostDraftUseCase> $createElement(
+  $ProviderElement<DeletePostDraftByIdUseCase> $createElement(
           $ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  DeletePostDraftUseCase create(Ref ref) {
+  DeletePostDraftByIdUseCase create(Ref ref) {
     return deletePostDraft(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(DeletePostDraftUseCase value) {
+  Override overrideWithValue(DeletePostDraftByIdUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<DeletePostDraftUseCase>(value),
+      providerOverride: $SyncValueProvider<DeletePostDraftByIdUseCase>(value),
     );
   }
 }
 
-String _$deletePostDraftHash() => r'85937821a06349483e8a359f7d6510dffd3283bf';
+String _$deletePostDraftHash() => r'a19972a588e94c2231848c49f4d1900ab75af088';
+
+@ProviderFor(clearPostDrafts)
+const clearPostDraftsProvider = ClearPostDraftsProvider._();
+
+final class ClearPostDraftsProvider extends $FunctionalProvider<
+    ClearPostDraftsUseCase,
+    ClearPostDraftsUseCase,
+    ClearPostDraftsUseCase> with $Provider<ClearPostDraftsUseCase> {
+  const ClearPostDraftsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'clearPostDraftsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$clearPostDraftsHash();
+
+  @$internal
+  @override
+  $ProviderElement<ClearPostDraftsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ClearPostDraftsUseCase create(Ref ref) {
+    return clearPostDrafts(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ClearPostDraftsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ClearPostDraftsUseCase>(value),
+    );
+  }
+}
+
+String _$clearPostDraftsHash() => r'58502d2762808eb0577a267062e00d38508f9d1f';
 
 @ProviderFor(deletePost)
 const deletePostProvider = DeletePostProvider._();
@@ -992,46 +1035,6 @@ final class SavePollProvider extends $FunctionalProvider<SavePollUseCase,
 
 String _$savePollHash() => r'692b9d9a420e91437f1e514bc3ac4794b795c9b2';
 
-@ProviderFor(getPolls)
-const getPollsProvider = GetPollsProvider._();
-
-final class GetPollsProvider extends $FunctionalProvider<GetPollsUseCase,
-    GetPollsUseCase, GetPollsUseCase> with $Provider<GetPollsUseCase> {
-  const GetPollsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPollsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$getPollsHash();
-
-  @$internal
-  @override
-  $ProviderElement<GetPollsUseCase> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  GetPollsUseCase create(Ref ref) {
-    return getPolls(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetPollsUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<GetPollsUseCase>(value),
-    );
-  }
-}
-
-String _$getPollsHash() => r'4592c3f81263744efba5afa7cf59791e6fd3d7fd';
-
 @ProviderFor(castVote)
 const castVoteProvider = CastVoteProvider._();
 
@@ -1071,47 +1074,6 @@ final class CastVoteProvider extends $FunctionalProvider<CastVoteUseCase,
 }
 
 String _$castVoteHash() => r'6aa14e73aa61064e97aa186840c48c8a1fb58063';
-
-@ProviderFor(getArticles)
-const getArticlesProvider = GetArticlesProvider._();
-
-final class GetArticlesProvider extends $FunctionalProvider<GetArticlesUseCase,
-    GetArticlesUseCase, GetArticlesUseCase> with $Provider<GetArticlesUseCase> {
-  const GetArticlesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getArticlesProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$getArticlesHash();
-
-  @$internal
-  @override
-  $ProviderElement<GetArticlesUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  GetArticlesUseCase create(Ref ref) {
-    return getArticles(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(GetArticlesUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<GetArticlesUseCase>(value),
-    );
-  }
-}
-
-String _$getArticlesHash() => r'612fbfeea14e9153926d82ca3eeef890b89f5d57';
 
 @ProviderFor(saveArticle)
 const saveArticleProvider = SaveArticleProvider._();
