@@ -13,15 +13,24 @@ class PasswordResetVerificationForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authNotifier = ref.read(authProvider.notifier);
-    final isDark = THelperFunctions.isDarkMode(context);
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.passwordResetCodeFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.passwordResetCodeController,
+      ),
+    );
     return Form(
-      key: authNotifier.passwordResetCodeFormKey,
+      key: formKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: authNotifier.passwordResetCodeController,
+            controller: controller,
             validator: TValidator.validateOTP,
             obscureText: true,
             onChanged: authNotifier.setPasswordResetCode,
@@ -41,7 +50,7 @@ class PasswordResetVerificationForm extends ConsumerWidget {
                   ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: isDark ? TColors.dark : TColors.light,
+                color: Theme.of(context).cardColor,
               ),
             ),
           ),

@@ -14,13 +14,30 @@ class ProjectOverviewPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectNotifier = ref.read(
-      createProjectNotifProvider(project).notifier,
+    final quillController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.quillController,
+      ),
+    );
+    final titleController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.titleController,
+      ),
+    );
+    final descriptionFocusNode = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.descriptionFocusNode,
+      ),
+    );
+    final scrollController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.scrollController,
+      ),
     );
     return Column(
       children: [
         ReusableQuillToolbar(
-          quillController: projectNotifier.quillController,
+          quillController: quillController!,
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -45,14 +62,14 @@ class ProjectOverviewPageView extends ConsumerWidget {
                     contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 8),
                   ),
                   maxLines: null,
-                  controller: projectNotifier.titleController,
+                  controller: titleController,
                   textInputAction: TextInputAction.done,
                   maxLength: 100,
                 ),
                 ReusableQuillEditor(
-                  controller: projectNotifier.quillController,
-                  scrollController: projectNotifier.scrollController,
-                  focusNode: projectNotifier.descriptionFocusNode,
+                  controller: quillController,
+                  scrollController: scrollController!,
+                  focusNode: descriptionFocusNode!,
                   placeholder:
                       'Describe in detail what this project is all about.'
                       ' Think of its purpose, benefits, impact, and any relevant milestones.'

@@ -16,6 +16,12 @@ class NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPostNotif =
+        notification.targetType == cc.NotificationTargetType.post;
+    final isPollNotif =
+        notification.targetType == cc.NotificationTargetType.poll;
+    final isArticleNotif =
+        notification.targetType == cc.NotificationTargetType.article;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -106,19 +112,30 @@ class NotificationsCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: notification.targetType ==
-                            cc.NotificationTargetType.post
-                        ? PostNotificationTarget(notification: notification)
-                        : notification.targetType ==
-                                cc.NotificationTargetType.user
-                            ? Text(
-                                notification.body!,
-                                style:
-                                    DefaultTextStyle.of(context).style.copyWith(
-                                          color: Theme.of(context).hintColor,
-                                        ),
+                    child: isPostNotif
+                        ? PostNotificationTarget(
+                            notification: notification,
+                          )
+                        : isPollNotif
+                            ? PollNotificationTarget(
+                                notification: notification,
                               )
-                            : const SizedBox.shrink(),
+                            : isArticleNotif
+                                ? ArticleNotificationTarget(
+                                    notification: notification,
+                                  )
+                                : notification.targetType ==
+                                        cc.NotificationTargetType.user
+                                    ? Text(
+                                        notification.body!,
+                                        style: DefaultTextStyle.of(context)
+                                            .style
+                                            .copyWith(
+                                              color:
+                                                  Theme.of(context).hintColor,
+                                            ),
+                                      )
+                                    : const SizedBox.shrink(),
                   ),
                 ],
               ),

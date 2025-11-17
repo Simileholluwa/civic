@@ -10,12 +10,14 @@ import 'package:transparent_image/transparent_image.dart';
 class PostImagePost extends ConsumerWidget {
   const PostImagePost({
     required this.post,
+    this.addPadding = true,
     this.showInteractions = true,
     super.key,
   });
 
   final Post post;
   final bool showInteractions;
+  final bool addPadding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +57,12 @@ class PostImagePost extends ConsumerWidget {
         return Stack(
           fit: StackFit.expand,
           children: [
-            tile(img),
+            tile(
+              img,
+              radius: const BorderRadius.only(
+                bottomRight: Radius.circular(TSizes.md),
+              ),
+            ),
             Container(
               color: Colors.black45,
               alignment: Alignment.center,
@@ -197,9 +204,11 @@ class PostImagePost extends ConsumerWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: TSizes.md,
-      ),
+      padding: addPadding
+          ? const EdgeInsets.symmetric(
+              horizontal: TSizes.md,
+            )
+          : EdgeInsets.zero,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [

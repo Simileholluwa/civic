@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart' as cc;
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 
@@ -28,13 +29,11 @@ class PostNotificationTarget extends StatelessWidget {
                 ),
           ),
         if (notification.post!.imageUrls?.isNotEmpty ?? false)
-          notification.post!.imageUrls!.length == 1
-              ? ContentSingleCachedImage(
-                  imageUrl: notification.post!.imageUrls!.first,
-                )
-              : ContentMultipleCachedImage(
-                  imageUrls: notification.post!.imageUrls!,
-                ),
+          PostImagePost(
+            post: notification.post!,
+            showInteractions: false,
+            addPadding: false,
+          ),
         if (notification.post!.videoUrl?.isNotEmpty ?? false)
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),

@@ -19,14 +19,24 @@ class ValidateCreateAccountForm extends ConsumerWidget {
         (s) => s.validatCreateAccountLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.verificationCodeFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.verificationCodeController,
+      ),
+    );
     return Form(
-      key: authNotifier.verificationCodeFormKey,
+      key: formKey,
       child: Column(
         children: [
           Pinput(
             length: 6,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            controller: authNotifier.verificationCodeController,
+            controller: controller,
             validator: TValidator.validateOTP,
             obscureText: true,
             keyboardType: TextInputType.text,

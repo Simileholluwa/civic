@@ -32,6 +32,16 @@ class ProjectFundingPageView extends ConsumerWidget {
         (s) => s.fundingSubCategory,
       ),
     );
+    final projectCostController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.projectCostController,
+      ),
+    );
+    final fundingNoteController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.fundingNoteController,
+      ),
+    );
     final projectNotifier = ref.read(
       createProjectNotifProvider(project).notifier,
     );
@@ -66,7 +76,7 @@ class ProjectFundingPageView extends ConsumerWidget {
               ),
               Expanded(
                 child: AppTextField(
-                  textController: projectNotifier.projectCostController,
+                  textController: projectCostController!,
                   prefixIcon: Iconsax.moneys5,
                   inputFormatters: [
                     NumberInputFormatter(),
@@ -100,7 +110,7 @@ class ProjectFundingPageView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           AppTextField(
-            textController: projectNotifier.fundingNoteController,
+            textController: fundingNoteController!,
             showPrefixIcon: false,
             hintText: 'Optional note on funding and or cost...',
             validator: (value) => null,

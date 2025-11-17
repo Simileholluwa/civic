@@ -20,7 +20,9 @@ enum NotificationTargetType implements _i1.SerializableModel {
   reply,
   photo,
   video,
-  user;
+  user,
+  poll,
+  article;
 
   static NotificationTargetType fromJson(int index) {
     switch (index) {
@@ -42,6 +44,10 @@ enum NotificationTargetType implements _i1.SerializableModel {
         return NotificationTargetType.video;
       case 8:
         return NotificationTargetType.user;
+      case 9:
+        return NotificationTargetType.poll;
+      case 10:
+        return NotificationTargetType.article;
       default:
         throw ArgumentError(
             'Value "$index" cannot be converted to "NotificationTargetType"');

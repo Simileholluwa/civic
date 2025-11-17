@@ -17,8 +17,18 @@ class CreateAccountRequestForm extends ConsumerWidget {
         (s) => s.createAccountLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.newAccountPasswordFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.newAccountPasswordController,
+      ),
+    );
     return Form(
-      key: authNotifier.newAccountPasswordFormKey,
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -27,7 +37,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
         child: Column(
           children: [
             AppPasswordField(
-              textController: authNotifier.newAccountPasswordController,
+              textController: controller!,
               validator: TValidator.validatePassword,
               onChanged: (value) {
                 authNotifier.setNewAccountPassword(value!);
@@ -44,9 +54,7 @@ class CreateAccountRequestForm extends ConsumerWidget {
               height: 55,
               child: FilledButton(
                 onPressed: () async {
-                  final isValid = authNotifier
-                      .newAccountPasswordFormKey.currentState!
-                      .validate();
+                  final isValid = formKey!.currentState!.validate();
                   if (!isValid) return;
                   final res = await authNotifier.createAccountRequest();
                   if (res && context.mounted) {

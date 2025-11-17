@@ -25,6 +25,16 @@ class ProjectStatusPageView extends ConsumerWidget {
     final projectNotifier = ref.read(
       createProjectNotifProvider(project).notifier,
     );
+    final startDateController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.startDateController,
+      ),
+    );
+    final endDateController = ref.read(
+      createProjectNotifProvider(project).select(
+        (s) => s.endDateController,
+      ),
+    );
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -36,7 +46,7 @@ class ProjectStatusPageView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           AppTextField(
-            textController: projectNotifier.startDateController,
+            textController: startDateController!,
             prefixIcon: Iconsax.calendar_1,
             hintText: 'Start date',
             readOnly: true,
@@ -50,8 +60,7 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setStartDate(pickedDate);
-                projectNotifier.startDateController.text =
-                    DateFormat('MMM d, y').format(
+                startDateController.text = DateFormat('MMM d, y').format(
                   pickedDate,
                 );
               }
@@ -60,12 +69,12 @@ class ProjectStatusPageView extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
           AppTextField(
-            textController: projectNotifier.endDateController,
+            textController: endDateController!,
             prefixIcon: Iconsax.calendar5,
             hintText: 'End date',
             readOnly: true,
             onTap: () async {
-              if (projectNotifier.startDateController.text.isEmpty) {
+              if (startDateController.text.isEmpty) {
                 TToastMessages.errorToast('Please select a start date first');
                 return;
               }
@@ -86,8 +95,7 @@ class ProjectStatusPageView extends ConsumerWidget {
               );
               if (pickedDate != null) {
                 projectNotifier.setEndDate(pickedDate);
-                projectNotifier.endDateController.text =
-                    DateFormat('MMM d, y').format(
+                endDateController.text = DateFormat('MMM d, y').format(
                   pickedDate,
                 );
               }

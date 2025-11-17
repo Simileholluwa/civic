@@ -23,9 +23,13 @@ Future<bool?> virtualLinkDialog({
           final projectNotifier = ref.read(
             createProjectNotifProvider(project).notifier,
           );
-
+          final virtualLocationController = ref.read(
+            createProjectNotifProvider(project).select(
+              (s) => s.virtualLocationController,
+            ),
+          );
           if (!initialized && index != null && link != null) {
-            projectNotifier.virtualLocationController.text = link;
+            virtualLocationController!.text = link;
             initialized = true;
           }
 
@@ -50,7 +54,7 @@ Future<bool?> virtualLinkDialog({
                     ),
                     GestureDetector(
                       onTap: () {
-                        projectNotifier.virtualLocationController.clear();
+                        virtualLocationController!.clear();
                         dialogContext.pop();
                       },
                       child: const Icon(
@@ -73,8 +77,7 @@ Future<bool?> virtualLinkDialog({
                   child: Column(
                     children: [
                       AppTextField(
-                        textController:
-                            projectNotifier.virtualLocationController,
+                        textController: virtualLocationController!,
                         prefixIcon: Iconsax.link,
                         textCapitalization: TextCapitalization.none,
                         hintText: 'E.g. https://nelf.gov.ng',
@@ -96,23 +99,23 @@ Future<bool?> virtualLinkDialog({
                           if (!isValid) return;
                           if (index != null) {
                             projectNotifier.editVirtualLocation(
-                              projectNotifier.virtualLocationController.text,
+                              virtualLocationController.text,
                               index,
                             );
-                            projectNotifier.virtualLocationController.clear();
+                            virtualLocationController.clear();
                             dialogContext.pop();
                           } else {
                             projectNotifier.addVirtualLocations(
-                              projectNotifier.virtualLocationController.text,
+                              virtualLocationController.text,
                             );
-                            projectNotifier.virtualLocationController.clear();
+                            virtualLocationController.clear();
                             dialogContext.pop();
                           }
                         },
                         activeButtonText: 'Submit',
                         activeButtonLoading: false,
                         onTapSkipButton: () {
-                          projectNotifier.virtualLocationController.clear();
+                          virtualLocationController.clear();
                           dialogContext.pop();
                         },
                         skipButtonLoading: false,

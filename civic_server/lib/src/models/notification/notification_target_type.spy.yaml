@@ -9,3 +9,5 @@ values:
   - photo
   - video
   - user
+  - poll
+  - article

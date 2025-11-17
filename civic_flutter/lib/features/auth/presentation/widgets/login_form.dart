@@ -18,9 +18,19 @@ class LoginForm extends ConsumerWidget {
         (s) => s.signInLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.passwordFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.passwordController,
+      ),
+    );
 
     return Form(
-      key: authNotifier.passwordFormKey,
+      key: formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,
@@ -28,7 +38,7 @@ class LoginForm extends ConsumerWidget {
         child: Column(
           children: [
             AppPasswordField(
-              textController: authNotifier.passwordController,
+              textController: controller!,
               validator: (value) => TValidator.validateEmptyText(
                 'Password',
                 value,
@@ -64,14 +74,12 @@ class LoginForm extends ConsumerWidget {
               height: 55,
               child: FilledButton(
                 onPressed: () async {
-                  final isValid =
-                      authNotifier.passwordFormKey.currentState!.validate();
+                  final isValid = formKey!.currentState!.validate();
                   if (!isValid) return;
-                  final userRecord =
+                  final signedIn =
                       await authNotifier.signInWithEmailAndPassword();
-                  if (userRecord && context.mounted) {
+                  if (signedIn && context.mounted) {
                     context.go(ProjectRoutes.namespace);
-                    ref.invalidate(authProvider);
                   }
                 },
                 child: const Text(

@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 // Sentinel used in copyWith to distinguish between an explicit null and an
 // omitted parameter for nullable category-related fields.
 const _unset = Object();
 
 class ProjectCreationState {
-  const ProjectCreationState({
+  ProjectCreationState({
     this.canAddLocations = true,
     this.title = '',
     this.description = '',
@@ -26,12 +28,20 @@ class ProjectCreationState {
     this.physicalLocations = const [],
     this.virtualLocations,
     this.isDirty = false,
+    this.descriptionFocusNode,
+    this.endDateController,
+    this.startDateController,
+    this.fundingNoteController,
+    this.projectCostController,
+    this.quillController,
+    this.scrollController,
+    this.titleController,
+    this.virtualLocationController,
   });
 
   /// Empty initial state.
-  factory ProjectCreationState.empty() => const ProjectCreationState();
+  factory ProjectCreationState.empty() => ProjectCreationState();
 
-  /// Populate state from an existing [Project].
   factory ProjectCreationState.populate(Project project) {
     return ProjectCreationState(
       title: project.title ?? '',
@@ -73,6 +83,15 @@ class ProjectCreationState {
   final List<AWSPlaces> physicalLocations;
   final List<String>? virtualLocations;
   final bool isDirty;
+  TextEditingController? titleController;
+  TextEditingController? startDateController;
+  TextEditingController? endDateController;
+  TextEditingController? projectCostController;
+  TextEditingController? fundingNoteController;
+  TextEditingController? virtualLocationController;
+  ScrollController? scrollController;
+  FocusNode? descriptionFocusNode;
+  QuillController? quillController;
 
   ProjectCreationState copyWith({
     bool? canAddLocations,
@@ -93,6 +112,15 @@ class ProjectCreationState {
     List<AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     bool? isDirty,
+    TextEditingController? titleController,
+    TextEditingController? startDateController,
+    TextEditingController? endDateController,
+    TextEditingController? projectCostController,
+    TextEditingController? fundingNoteController,
+    TextEditingController? virtualLocationController,
+    ScrollController? scrollController,
+    FocusNode? descriptionFocusNode,
+    QuillController? quillController,
   }) {
     return ProjectCreationState(
       canAddLocations: canAddLocations ?? this.canAddLocations,
@@ -124,6 +152,18 @@ class ProjectCreationState {
           physicalLocations ?? List<AWSPlaces>.from(this.physicalLocations),
       virtualLocations: virtualLocations ?? this.virtualLocations,
       isDirty: isDirty ?? this.isDirty,
+      titleController: titleController ?? this.titleController,
+      startDateController: startDateController ?? this.startDateController,
+      endDateController: endDateController ?? this.endDateController,
+      projectCostController:
+          projectCostController ?? this.projectCostController,
+      fundingNoteController:
+          fundingNoteController ?? this.fundingNoteController,
+      virtualLocationController:
+          virtualLocationController ?? this.virtualLocationController,
+      scrollController: scrollController ?? this.scrollController,
+      descriptionFocusNode: descriptionFocusNode ?? this.descriptionFocusNode,
+      quillController: quillController ?? this.quillController,
     );
   }
 

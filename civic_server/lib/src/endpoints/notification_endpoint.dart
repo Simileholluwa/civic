@@ -638,15 +638,26 @@ class NotificationEndpoint extends Endpoint {
       where: (t) => whereClause(t),
     );
 
-    final results = await Notification.db.find(session,
-        where: (t) => whereClause(t),
-        limit: limit,
-        offset: (page * limit) - limit,
-        orderBy: (t) => t.createdAt,
-        orderDescending: true,
-        include: Notification.include(
-          post: Post.include(),
-        ));
+    final results = await Notification.db.find(
+      session,
+      where: (t) => whereClause(t),
+      limit: limit,
+      offset: (page * limit) - limit,
+      orderBy: (t) => t.createdAt,
+      orderDescending: true,
+      include: Notification.include(
+        post: Post.include(
+          article: Article.include(),
+          poll: Poll.include(
+            options: PollOption.includeList(
+              orderBy: (p0) => p0.id,
+              orderDescending: false,
+            ),
+          ),
+        ),
+        project: Project.include(),
+      ),
+    );
 
     return NotificationList(
       count: count,

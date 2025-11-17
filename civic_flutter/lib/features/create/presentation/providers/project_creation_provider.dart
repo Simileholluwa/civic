@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -22,97 +21,81 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   static final imageHelper = ImageHelper();
   static const int maxImageCount = 5;
 
-  late final TextEditingController _titleController;
-  late final QuillController _quillController;
-  late final TextEditingController _startDateController;
-  late final TextEditingController _endDateController;
-  late final TextEditingController _projectCostController;
-  late final TextEditingController _fundingNoteController;
-
-  void _onTitleControllerChanged() => setTitle(_titleController.text);
-  void _onProjectCostControllerChanged() =>
-      setProjectCost(_projectCostController.text);
-  void _onFundingNoteControllerChanged() =>
-      setFundingNote(_fundingNoteController.text);
-  late final TextEditingController _virtualLocationController;
-  late final ScrollController _scrollController;
-  late final FocusNode _descriptionFocusNode;
-
-  TextEditingController get titleController => _titleController;
-  QuillController get quillController => _quillController;
-  TextEditingController get startDateController => _startDateController;
-  TextEditingController get endDateController => _endDateController;
-  TextEditingController get projectCostController => _projectCostController;
-  TextEditingController get fundingNoteController => _fundingNoteController;
-  TextEditingController get virtualLocationController =>
-      _virtualLocationController;
-  ScrollController get scrollController => _scrollController;
-  FocusNode get descriptionFocusNode => _descriptionFocusNode;
-
   Project? _baselineProject;
   int? _currentDraftId;
 
   @override
   ProjectCreationState build(Project? project) {
-    _titleController = TextEditingController(text: project?.title);
-    _scrollController = ScrollController();
-    _descriptionFocusNode = FocusNode();
-    _quillController = QuillController(
-      document: project?.description != null &&
-              project!.description!.trim().isNotEmpty
-          ? Document.fromJson(
-              jsonDecode(
-                project.description!,
-              ) as List,
-            )
-          : Document(),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
-    _startDateController = TextEditingController(
-      text: project?.startDate == null
-          ? null
-          : DateFormat('MMM d, y').format(project!.startDate!),
-    );
-    _endDateController = TextEditingController(
-      text: project?.endDate == null
-          ? null
-          : DateFormat('MMM d, y').format(project!.endDate!),
-    );
-    _projectCostController = TextEditingController(
-      text: project?.projectCost == null
-          ? null
-          : NumberFormat('#,##0.##').format(
-              project!.projectCost,
-            ),
-    );
-    _fundingNoteController = TextEditingController(
-      text: project?.fundingNote,
-    );
-    _virtualLocationController = TextEditingController();
-
     final initialState = project == null
         ? ProjectCreationState.empty()
-        : ProjectCreationState.populate(project);
+        : ProjectCreationState.populate(project)
+      ..titleController = TextEditingController(text: project?.title)
+      ..scrollController = ScrollController()
+      ..descriptionFocusNode = FocusNode()
+      ..quillController = QuillController(
+        document: project?.description != null &&
+                project!.description!.trim().isNotEmpty
+            ? Document.fromJson(
+                jsonDecode(
+                  project.description!,
+                ) as List,
+              )
+            : Document(),
+        selection: const TextSelection.collapsed(offset: 0),
+      )
+      ..startDateController = TextEditingController(
+        text: project?.startDate == null
+            ? null
+            : DateFormat('MMM d, y').format(project!.startDate!),
+      )
+      ..endDateController = TextEditingController(
+        text: project?.endDate == null
+            ? null
+            : DateFormat('MMM d, y').format(project!.endDate!),
+      )
+      ..projectCostController = TextEditingController(
+        text: project?.projectCost == null
+            ? null
+            : NumberFormat('#,##0.##').format(
+                project!.projectCost,
+              ),
+      )
+      ..fundingNoteController = TextEditingController(
+        text: project?.fundingNote,
+      )
+      ..virtualLocationController = TextEditingController();
 
     _baselineProject = project;
 
-    _quillController.addListener(_onQuillChanged);
-    _titleController.addListener(_onTitleControllerChanged);
-    _projectCostController.addListener(_onProjectCostControllerChanged);
-    _fundingNoteController.addListener(_onFundingNoteControllerChanged);
+    initialState.quillController?.addListener(_onQuillChanged);
+    initialState.titleController?.addListener(() {
+      setTitle(initialState.titleController!.text);
+    });
+    initialState.projectCostController?.addListener(() {
+      setProjectCost(initialState.projectCostController!.text);
+    });
+    initialState.fundingNoteController?.addListener(() {
+      setFundingNote(initialState.fundingNoteController!.text);
+    });
 
     ref.onDispose(() {
-      _titleController.dispose();
-      _quillController.dispose();
-      _startDateController.dispose();
-      _endDateController.dispose();
-      _projectCostController.dispose();
-      _fundingNoteController.dispose();
-      _virtualLocationController.dispose();
-      _quillController.removeListener(_onQuillChanged);
-      _titleController.removeListener(_onTitleControllerChanged);
-      _projectCostController.removeListener(_onProjectCostControllerChanged);
-      _fundingNoteController.removeListener(_onFundingNoteControllerChanged);
+      initialState.titleController?.dispose();
+      initialState.quillController?.dispose();
+      initialState.startDateController?.dispose();
+      initialState.endDateController?.dispose();
+      initialState.projectCostController?.dispose();
+      initialState.fundingNoteController?.dispose();
+      initialState.virtualLocationController?.dispose();
+      initialState.quillController?.removeListener(_onQuillChanged);
+      initialState.titleController?.removeListener(() {
+        setTitle(initialState.titleController!.text);
+      });
+      initialState.projectCostController?.removeListener(() {
+        setProjectCost(initialState.projectCostController!.text);
+      });
+      initialState.fundingNoteController?.removeListener(() {
+        setFundingNote(initialState.fundingNoteController!.text);
+      });
       _quillDebounce?.cancel();
     });
 
@@ -208,7 +191,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     _quillDebounce?.cancel();
     _quillDebounce = Timer(const Duration(milliseconds: 300), () {
       final descriptionJson = jsonEncode(
-        _quillController.document.toDelta().toJson(),
+        state.quillController!.document.toDelta().toJson(),
       );
       if (descriptionJson != state.description) {
         state = state.copyWith(description: descriptionJson);
@@ -230,7 +213,6 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   void setTitle(String title) {
     state = state.copyWith(title: title);
     _updateIsDirty();
-    log('Is dirty after title change: ${state.isDirty}');
   }
 
   void setStartDate(DateTime startDate) {
@@ -251,7 +233,6 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   void setProjectSubCategory(String? projectSubCategory) {
     state = state.copyWith(projectSubCategory: projectSubCategory);
     _updateIsDirty();
-    log('Is dirty after subcategory change: ${state.isDirty}');
   }
 
   void setProjectCategory(String? projectCategory) {
@@ -686,28 +667,52 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   void loadDraft(Project draft) {
-    _titleController.text = draft.title ?? '';
-    _quillController.document =
-        draft.description != null && draft.description!.trim().isNotEmpty
-            ? Document.fromJson(jsonDecode(draft.description!) as List)
-            : Document();
-    _startDateController.text = draft.startDate == null
+    // Preserve existing controllers created during build.
+    final existingTitleController = state.titleController;
+    final existingQuillController = state.quillController;
+    final existingStartDateController = state.startDateController;
+    final existingEndDateController = state.endDateController;
+    final existingProjectCostController = state.projectCostController;
+    final existingFundingNoteController = state.fundingNoteController;
+    final existingVirtualLocationController = state.virtualLocationController;
+    final existingScrollController = state.scrollController;
+    final existingDescriptionFocusNode = state.descriptionFocusNode;
+
+    // Update controller text values from draft.
+    existingTitleController?.text = draft.title ?? '';
+    if (existingQuillController != null) {
+      existingQuillController.document =
+          draft.description != null && draft.description!.trim().isNotEmpty
+              ? Document.fromJson(jsonDecode(draft.description!) as List)
+              : Document();
+    }
+    existingStartDateController?.text = draft.startDate == null
         ? ''
         : DateFormat('MMM d, y').format(draft.startDate!);
-    _endDateController.text = draft.endDate == null
+    existingEndDateController?.text = draft.endDate == null
         ? ''
         : DateFormat('MMM d, y').format(draft.endDate!);
-    _projectCostController.text = draft.projectCost == null
+    existingProjectCostController?.text = draft.projectCost == null
         ? ''
         : NumberFormat('#,##0.##').format(
             draft.projectCost,
           );
-    _fundingNoteController.text = draft.fundingNote ?? '';
+    existingFundingNoteController?.text = draft.fundingNote ?? '';
 
-    state = ProjectCreationState.populate(draft).copyWith(isDirty: false);
+    // Replace state data while re-attaching preserved controllers.
+    state = ProjectCreationState.populate(draft).copyWith(
+      isDirty: false,
+      titleController: existingTitleController,
+      quillController: existingQuillController,
+      startDateController: existingStartDateController,
+      endDateController: existingEndDateController,
+      projectCostController: existingProjectCostController,
+      fundingNoteController: existingFundingNoteController,
+      virtualLocationController: existingVirtualLocationController,
+      scrollController: existingScrollController,
+      descriptionFocusNode: existingDescriptionFocusNode,
+    );
     _setBaseline(draft);
-    // Track the loaded draft id so saving overwrites this draft rather than creating a new one.
     _currentDraftId = draft.id;
-    log(state.toString());
   }
 }

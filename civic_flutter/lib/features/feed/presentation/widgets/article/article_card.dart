@@ -47,6 +47,42 @@ class ArticleCard extends ConsumerWidget {
               timeAgo: postCardState.timeAgo,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              spacing: 10,
+              children: [
+                Expanded(
+                  child: Text(
+                    postCardState.text,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.left,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: const Text(
+                    'Article',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             width: double.maxFinite,
             margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -78,39 +114,6 @@ class ArticleCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 5,
               children: [
-                Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        postCardState.text,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.left,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      child: const Text(
-                        'Article',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 ContentExpandableText(
                   text: postCardState.articleContent,
                   hasImage: true,

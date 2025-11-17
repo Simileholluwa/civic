@@ -17,8 +17,9 @@ class ProjectsInfiniteList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedProjectListProvider(sortBy).notifier);
+    final pagingControllerNotifier = ref.watch(
+      paginatedProjectListProvider(sortBy).notifier,
+    );
     return AppInfiniteList<Project>(
       pagingController: pagingControllerNotifier.pagingController,
       scrollPhysics: const NeverScrollableScrollPhysics(),

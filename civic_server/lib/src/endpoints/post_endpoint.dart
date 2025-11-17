@@ -289,7 +289,11 @@ class PostEndpoint extends Endpoint {
             receiverId: tag.id!,
             senderId: user.id!,
             actionType: NotificationActionType.tag,
-            targetType: NotificationTargetType.post,
+            targetType: savedPost.article != null
+                ? NotificationTargetType.article
+                : savedPost.poll != null
+                    ? NotificationTargetType.poll
+                    : NotificationTargetType.post,
             targetId: savedPost.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
@@ -313,7 +317,11 @@ class PostEndpoint extends Endpoint {
             receiverId: mention.id!,
             senderId: user.id!,
             actionType: NotificationActionType.mention,
-            targetType: NotificationTargetType.post,
+            targetType: savedPost.article != null
+                ? NotificationTargetType.article
+                : savedPost.poll != null
+                    ? NotificationTargetType.poll
+                    : NotificationTargetType.post,
             targetId: savedPost.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
@@ -419,7 +427,7 @@ class PostEndpoint extends Endpoint {
             receiverId: post.ownerId,
             senderId: user.id!,
             actionType: NotificationActionType.vote,
-            targetType: NotificationTargetType.post,
+            targetType: NotificationTargetType.poll,
             targetId: post.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName:
@@ -436,7 +444,7 @@ class PostEndpoint extends Endpoint {
             senderId: user.id!,
             postId: post.id!,
             actionType: NotificationActionType.vote,
-            targetType: NotificationTargetType.post,
+            targetType: NotificationTargetType.poll,
             targetId: post.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
@@ -1360,7 +1368,11 @@ class PostEndpoint extends Endpoint {
                 receiverId: post.ownerId,
                 senderId: user.id!,
                 actionType: NotificationActionType.like,
-                targetType: NotificationTargetType.post,
+                targetType: post.article != null
+                    ? NotificationTargetType.article
+                    : post.poll != null
+                        ? NotificationTargetType.poll
+                        : NotificationTargetType.post,
                 targetId: post.id!,
                 senderAvatarUrl: user.userInfo!.imageUrl!,
                 senderName: getFullName(
@@ -1379,7 +1391,11 @@ class PostEndpoint extends Endpoint {
                 postId: post.id!,
                 senderId: user.id!,
                 actionType: NotificationActionType.like,
-                targetType: NotificationTargetType.post,
+                targetType: post.article != null
+                    ? NotificationTargetType.article
+                    : post.poll != null
+                        ? NotificationTargetType.poll
+                        : NotificationTargetType.post,
                 targetId: post.id!,
                 senderAvatarUrl: user.userInfo!.imageUrl!,
                 senderName: getFullName(

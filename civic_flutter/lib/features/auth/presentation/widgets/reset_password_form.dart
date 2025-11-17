@@ -18,8 +18,18 @@ class ResetPasswordForm extends ConsumerWidget {
         (s) => s.initiatePasswordResetLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.resetPasswordEmailFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.resetPasswordEmailController,
+      ),
+    );
     return Form(
-      key: authNotifier.resetPasswordEmailFormKey,
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -28,7 +38,7 @@ class ResetPasswordForm extends ConsumerWidget {
         child: Column(
           children: [
             AppTextField(
-              textController: authNotifier.resetPasswordEmailController,
+              textController: controller!,
               prefixIcon: Iconsax.message,
               hintText: 'your-email@domain.com',
               validator: TValidator.validateEmail,
@@ -42,9 +52,7 @@ class ResetPasswordForm extends ConsumerWidget {
             ),
             FilledButton(
               onPressed: () async {
-                final isValid = authNotifier
-                    .resetPasswordEmailFormKey.currentState!
-                    .validate();
+                final isValid = formKey!.currentState!.validate();
                 if (!isValid) return;
                 final initiated = await authNotifier.initiatePasswordRequest();
                 if (initiated && context.mounted) {

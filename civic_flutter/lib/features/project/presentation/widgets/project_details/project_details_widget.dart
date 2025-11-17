@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectDetailsWidget extends ConsumerWidget {
   const ProjectDetailsWidget({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
@@ -26,13 +27,16 @@ class ProjectDetailsWidget extends ConsumerWidget {
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (projectCardState.imagesUrl!.length == 1) ContentSingleCachedImage(
-                  imageUrl: projectCardState.imagesUrl!.first,
-                  useMargin: false,
-                ) else ContentMultipleCachedImage(
-                  imageUrls: projectCardState.imagesUrl!,
-                  useMargin: false,
-                ),
+          if (projectCardState.imagesUrl!.length == 1)
+            ContentSingleCachedImage(
+              imageUrl: projectCardState.imagesUrl!.first,
+              useMargin: false,
+            )
+          else
+            ContentMultipleCachedImage(
+              imageUrls: projectCardState.imagesUrl!,
+              useMargin: false,
+            ),
           Padding(
             padding: const EdgeInsets.only(
               top: 5,
@@ -44,20 +48,27 @@ class ProjectDetailsWidget extends ConsumerWidget {
                   ),
             ),
           ),
-          QuillEditor.basic(
+          QuillEditor(
             controller: QuillController(
               document: projectCardState.rawDescription!,
-              selection: const TextSelection.collapsed(
-                offset: 0,
-              ),
+              selection: const TextSelection.collapsed(offset: 0),
               readOnly: true,
             ),
+            focusNode: FocusNode(canRequestFocus: false),
+            scrollController: ScrollController(),
             config: QuillEditorConfig(
+              scrollable: false,
               customStyles: THelperFunctions.articleTextEditorStyles(
                 context,
                 defaultTextStyle,
               ),
-              scrollPhysics: const NeverScrollableScrollPhysics(),
+              embedBuilders: [
+                RoundedImageEmbedBuilder(
+                  borderRadius: BorderRadius.circular(
+                    16,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

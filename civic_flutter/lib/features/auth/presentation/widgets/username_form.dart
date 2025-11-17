@@ -13,8 +13,28 @@ class UsernameForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authNotifier = ref.read(authProvider.notifier);
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.usernameFormKey,
+      ),
+    );
+    final firstNameController = ref.read(
+      authProvider.select(
+        (s) => s.firstNameController,
+      ),
+    );
+    final middleNameController = ref.read(
+      authProvider.select(
+        (s) => s.middleNameController,
+      ),
+    );
+    final lastNameController = ref.read(
+      authProvider.select(
+        (s) => s.lastNameController,
+      ),
+    );
     return Form(
-      key: authNotifier.usernameFormKey,
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -28,7 +48,7 @@ class UsernameForm extends ConsumerWidget {
               spacing: 15,
               children: [
                 AppTextField(
-                  textController: authNotifier.firstNameController,
+                  textController: firstNameController!,
                   prefixIcon: Iconsax.user,
                   hintText: 'First name',
                   validator: (value) =>
@@ -38,7 +58,7 @@ class UsernameForm extends ConsumerWidget {
                   },
                 ),
                 AppTextField(
-                  textController: authNotifier.middleNameController,
+                  textController: middleNameController!,
                   prefixIcon: Iconsax.user,
                   hintText: 'Middle name',
                   validator: (value) => null,
@@ -47,7 +67,7 @@ class UsernameForm extends ConsumerWidget {
                   },
                 ),
                 AppTextField(
-                  textController: authNotifier.lastNameController,
+                  textController: lastNameController!,
                   prefixIcon: Iconsax.user,
                   hintText: 'Last name',
                   validator: (value) =>
@@ -66,8 +86,7 @@ class UsernameForm extends ConsumerWidget {
               width: double.maxFinite,
               child: FilledButton(
                 onPressed: () async {
-                  final isValid =
-                      authNotifier.usernameFormKey.currentState!.validate();
+                  final isValid = formKey!.currentState!.validate();
                   if (!isValid) return;
                   await context.push(
                     '/auth/signUp/selectStatus',

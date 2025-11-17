@@ -55,7 +55,8 @@ class AppInfiniteList<T> extends ConsumerWidget {
         scrollController: scrollController,
         physics: scrollPhysics,
         separatorBuilder: (context, index) {
-          if (index != pagingController.itemList!.length - 1) {
+          final total = pagingController.itemList?.length ?? 0;
+          if (total > 0 && index != total - 1) {
             return showDivider
                 ? const Divider(
                     height: 0,

@@ -80,7 +80,9 @@ class PostCommentCard extends ConsumerWidget {
         errorMessage:
             "We couldn't fetch comments for this post. Please try again.",
       ),
-      errorMessage: commentController.pagingController.error as String,
+      errorMessage: commentController.pagingController.error is String
+          ? commentController.pagingController.error as String
+          : commentController.pagingController.error?.toString(),
     );
   }
 }

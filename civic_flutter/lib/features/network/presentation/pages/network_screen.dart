@@ -97,12 +97,16 @@ class NetworkScreen extends ConsumerWidget {
           child: TextButton(
             onPressed: () async {
               final res = await ref.read(sessionProvider).signOutDevice();
-              ref
-                ..invalidate(paginatedProjectListProvider)
-                ..invalidate(paginatedPostListProvider)
-                ..invalidate(paginatedNotificationsListProvider);
               if (res && context.mounted) {
                 context.go(AppRoutes.auth);
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) {
+                    ref
+                      ..invalidate(paginatedProjectListProvider)
+                      ..invalidate(paginatedPostListProvider)
+                      ..invalidate(paginatedNotificationsListProvider);
+                  },
+                );
               }
             },
             child: const Text('Logout'),

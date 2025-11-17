@@ -17,8 +17,18 @@ class NewPasswordForm extends ConsumerWidget {
         (s) => s.resetPasswordLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.newPasswordFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.newPasswordController,
+      ),
+    );
     return Form(
-      key: authNotifier.newPasswordFormKey,
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -27,7 +37,7 @@ class NewPasswordForm extends ConsumerWidget {
         child: Column(
           children: [
             AppPasswordField(
-              textController: authNotifier.newPasswordController,
+              textController: controller!,
               validator: TValidator.validatePassword,
               onChanged: (password) {
                 authNotifier.setNewPassword(password!);
@@ -38,8 +48,7 @@ class NewPasswordForm extends ConsumerWidget {
             ),
             FilledButton(
               onPressed: () async {
-                final isValid =
-                    authNotifier.newPasswordFormKey.currentState!.validate();
+                final isValid = formKey!.currentState!.validate();
                 if (!isValid) return;
                 final success = await authNotifier.resetPassword();
                 if (success && context.mounted) {

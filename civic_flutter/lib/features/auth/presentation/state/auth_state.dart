@@ -1,4 +1,5 @@
 import 'package:civic_client/civic_client.dart';
+import 'package:flutter/widgets.dart';
 
 class AuthState {
   AuthState({
@@ -25,6 +26,26 @@ class AuthState {
     this.searchNinLoading = false,
     this.resetPasswordLoading = false,
     this.photoUrlLoading = false,
+    this.emailController,
+    this.passwordController,
+    this.verificationCodeController,
+    this.newPasswordController,
+    this.passwordResetCodeController,
+    this.newAccountPasswordController,
+    this.resetPasswordEmailController,
+    this.firstNameController,
+    this.lastNameController,
+    this.middleNameController,
+    this.ninController,
+    this.emailFormKey,
+    this.passwordFormKey,
+    this.usernameFormKey,
+    this.verificationCodeFormKey,
+    this.newPasswordFormKey,
+    this.ninFormKey,
+    this.passwordResetCodeFormKey,
+    this.newAccountPasswordFormKey,
+    this.resetPasswordEmailFormKey,
   });
 
   factory AuthState.empty() => AuthState();
@@ -51,7 +72,26 @@ class AuthState {
   final bool searchNinLoading;
   final bool resetPasswordLoading;
   final bool photoUrlLoading;
-  // Controllers and form keys are managed in the notifier to reduce rebuilds.
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
+  TextEditingController? verificationCodeController;
+  TextEditingController? newPasswordController;
+  TextEditingController? passwordResetCodeController;
+  TextEditingController? newAccountPasswordController;
+  TextEditingController? resetPasswordEmailController;
+  TextEditingController? firstNameController;
+  TextEditingController? lastNameController;
+  TextEditingController? middleNameController;
+  TextEditingController? ninController;
+  GlobalKey<FormState>? emailFormKey;
+  GlobalKey<FormState>? passwordFormKey;
+  GlobalKey<FormState>? usernameFormKey;
+  GlobalKey<FormState>? verificationCodeFormKey;
+  GlobalKey<FormState>? newPasswordFormKey;
+  GlobalKey<FormState>? ninFormKey;
+  GlobalKey<FormState>? passwordResetCodeFormKey;
+  GlobalKey<FormState>? newAccountPasswordFormKey;
+  GlobalKey<FormState>? resetPasswordEmailFormKey;
 
   AuthState copyWith({
     String? email,

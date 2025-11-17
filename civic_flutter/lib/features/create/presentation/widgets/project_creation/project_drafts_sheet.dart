@@ -12,9 +12,11 @@ Future<Project?> loadProjectDrafts(BuildContext context) async {
   return showModalBottomSheet(
     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     context: context,
-    shape: const RoundedRectangleBorder(),
     useSafeArea: true,
     isScrollControlled: true,
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.sizeOf(context).height * .7,
+    ),
     builder: (context) {
       return SizedBox(
         child: Consumer(

@@ -24,45 +24,53 @@ class ArticleDetailCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
+          ContentCreatorInfo(
+            creator: postCardState.creator!,
+            timeAgo: postCardState.timeAgo,
+          ),
           ClipRRect(
-              borderRadius: BorderRadius.circular(
-                TSizes.md,
-              ),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: ContentSingleCachedImage(
-                  useMargin: false,
-                  imageUrl: postCardState.articleBanner,
-                ),
+            borderRadius: BorderRadius.circular(
+              TSizes.md,
+            ),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ContentSingleCachedImage(
+                useMargin: false,
+                imageUrl: postCardState.articleBanner,
               ),
             ),
-            Text(
-              postCardState.text,
-              style:
-                  Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-              textAlign: TextAlign.left,
-            ),
-            QuillEditor.basic(
-              controller: QuillController(
-                document: postCardState.rawContent!,
-                selection: const TextSelection.collapsed(
-                  offset: 0,
+          ),
+          Text(
+            postCardState.text,
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
                 ),
-                readOnly: true,
-              ),
-              config: QuillEditorConfig(
-                customStyles:
-                    THelperFunctions.articleTextEditorStyles(
-                  context,
-                  defaultTextStyle,
-                ),
-                scrollPhysics: const NeverScrollableScrollPhysics(),
-              ),
+            textAlign: TextAlign.left,
+          ),
+          QuillEditor(
+            controller: QuillController(
+              document: postCardState.rawContent!,
+              selection: const TextSelection.collapsed(offset: 0),
+              readOnly: true,
             ),
-
+            focusNode: FocusNode(canRequestFocus: false),
+            scrollController: ScrollController(),
+            config: QuillEditorConfig(
+              scrollable: false,
+              customStyles: THelperFunctions.articleTextEditorStyles(
+                context,
+                defaultTextStyle,
+              ),
+              embedBuilders: [
+                RoundedImageEmbedBuilder(
+                  borderRadius: BorderRadius.circular(
+                    16,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

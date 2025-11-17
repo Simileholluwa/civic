@@ -18,9 +18,19 @@ class EmailForm extends ConsumerWidget {
         (s) => s.checkEmailLoading,
       ),
     );
+    final formKey = ref.read(
+      authProvider.select(
+        (s) => s.emailFormKey,
+      ),
+    );
+    final controller = ref.read(
+      authProvider.select(
+        (s) => s.emailController,
+      ),
+    );
 
     return Form(
-      key: authNotifier.emailFormKey,
+      key: formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: TSizes.spaceBtwSections,
@@ -29,7 +39,7 @@ class EmailForm extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextField(
-              textController: authNotifier.emailController,
+              textController: controller!,
               prefixIcon: Iconsax.message,
               hintText: 'your-email@domain.com',
               validator: TValidator.validateEmail,
@@ -44,8 +54,7 @@ class EmailForm extends ConsumerWidget {
             ),
             FilledButton(
               onPressed: () async {
-                final isValid =
-                    authNotifier.emailFormKey.currentState!.validate();
+                final isValid = formKey!.currentState!.validate();
                 if (!isValid) return;
                 final newUser = await authNotifier.checkIfNewUser();
                 if (newUser == null) {
