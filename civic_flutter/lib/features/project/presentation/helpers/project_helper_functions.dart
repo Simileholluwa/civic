@@ -38,7 +38,6 @@ class ProjectHelperFunctions {
   }
 
   static Future<bool?> clearBookmarksDialog(
-    WidgetRef ref,
     BuildContext context,
   ) {
     return postDialog(
@@ -47,7 +46,7 @@ class ProjectHelperFunctions {
       description: 'Are you sure you want to clear all your bookmarks? '
           'This action cannot be undone.',
       onTapSkipButton: () {
-        context.pop();
+        context.pop(false);
       },
       activeButtonText: 'Delete all',
       activeButtonLoading: false,
@@ -55,11 +54,8 @@ class ProjectHelperFunctions {
       skipText: 'Cancel',
       onTapActiveButton: () async {
         if (context.mounted) {
-          context.pop();
+          context.pop(true);
         }
-        await ref
-            .read(paginatedProjectBookmarksListProvider.notifier)
-            .clearBookmarksList();
       },
     );
   }

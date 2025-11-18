@@ -189,12 +189,13 @@ class ProjectVet extends _$ProjectVet {
       setIsSending(false);
       return false;
     }, (success) {
-      final vettingList =
-          ref.read(paginatedProjectVettingListProvider.notifier);
+      final vettingList = ref.read(
+        paginatedProjectVettingListProvider.notifier,
+      );
       TToastMessages.successToast(
         'Your vetting has been succesfully submitted.',
       );
-      if (vettingList.pagingController.itemList != null && vettingId == null) {
+      if (vettingId == null) {
         vettingList.addVetting(success);
       }
       setIsSending(false);

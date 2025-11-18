@@ -11,11 +11,11 @@ class ProjectVettingsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier = ref.watch(
-      paginatedProjectVettingListProvider.notifier,
+    final pagingState = ref.watch(
+      paginatedProjectVettingListProvider,
     );
     return AppInfiniteList<ProjectVetting>(
-      pagingController: pagingControllerNotifier.pagingController,
+      pagingController: pagingState,
       canCreate: false,
       itemBuilder: (context, vetting, index) {
         final liveProjectVetting = ref.watch(
@@ -25,11 +25,10 @@ class ProjectVettingsList extends ConsumerWidget {
           ),
         );
         return ProjectVettingCard(
-              projectVetting: liveProjectVetting.value ?? vetting,
-            );
-        
+          projectVetting: liveProjectVetting.value ?? vetting,
+        );
       },
-      onRefresh: pagingControllerNotifier.refresh,
+      onRefresh: pagingState.refresh,
       firstPageProgressIndicator: const Padding(
         padding: EdgeInsets.only(
           top: 50,

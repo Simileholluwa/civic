@@ -29,11 +29,9 @@ class CommentScreen extends ConsumerWidget {
         data.value,
       ).notifier,
     );
-    final pagingController = ref
-        .watch(
-          paginatedCommentListProvider(id).notifier,
-        )
-        .pagingController;
+    final pagingState = ref.watch(
+      paginatedCommentListProvider(id),
+    );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -59,7 +57,7 @@ class CommentScreen extends ConsumerWidget {
                 return [
                   IconButton(
                     icon: const Icon(Iconsax.refresh),
-                    onPressed: pagingController.refresh,
+                    onPressed: pagingState.refresh,
                   ),
                   IconButton(
                     icon: Icon(

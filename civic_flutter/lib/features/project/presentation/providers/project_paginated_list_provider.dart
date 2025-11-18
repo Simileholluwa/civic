@@ -8,117 +8,105 @@ part 'project_paginated_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedProjectList extends _$PaginatedProjectList {
-  final PagingController<int, Project> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build(String sortBy) {
-    pagingController
-      ..addPageRequestListener(
-        fetchPage,
-      )
-      ..addStatusListener((status) {
-        state = status;
-      });
-
-    ref.onDispose(
-      pagingController.dispose,
+  PagingController<int, Project> build(String sortBy) {
+    final controller = PagingController<int, Project>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null;
+        return state.nextIntPageKey;
+      },
+      fetchPage: (pageKey) => _fetchPage(pageKey, sortBy: sortBy),
     );
-    return pagingController.value.status;
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 
-  Future<void> fetchPage(int page, {int limit = 50}) async {
+  Future<List<Project>> _fetchPage(
+    int pageKey, {
+    required String sortBy,
+    int limit = 50,
+  }) async {
+    final listProjectUseCase = ref.read(getProjectsProvider);
+    final completer = Completer<List<Project>>();
     try {
-      final listProjectUseCase = ref.read(getProjectsProvider);
       final result = await listProjectUseCase(
         GetProjectsParams(
-          page,
+          pageKey,
           limit,
           sortBy,
         ),
       );
-      result.fold((error) {
-        pagingController.value = PagingState(
-          error: error.message,
-        );
-      }, (data) {
-        final projects = data.results.map((e) => e.project).toList();
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            projects,
-            data.page + 1,
-          );
-        } else {
-          pagingController.appendLastPage(projects);
-        }
-      });
-    } on Exception catch (e) {
-      pagingController.value = PagingState(
-        error: e.toString(),
+      result.fold(
+        (error) => completer.completeError(error.message),
+        (data) => completer.complete(
+          data.results.map((e) => e.project).toList(),
+        ),
       );
+    } on Exception catch (e) {
+      completer.completeError(e.toString());
     }
+    return completer.future;
   }
 
   void refresh() {
-    pagingController.refresh();
+    state.refresh();
   }
 
-  void addProject(Project project) {
-    if (pagingController.itemList != null) {
-      final currentList = pagingController.itemList ?? [];
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: [project, ...currentList],
+  void addProject(Project? project) {
+    if (project == null) return;
+    final current = state.value;
+    final pages = current.pages;
+
+    bool containsDuplicate(List<Project> list) =>
+        list.any((p) => p.id == project.id);
+
+    if (pages == null || pages.isEmpty) {
+      state.value = current.copyWith(
+        pages: [
+          [project],
+        ],
+        keys: const [1],
+        hasNextPage: current.hasNextPage,
       );
+      return;
     }
-  }
 
-  /// Optimistically updates an existing project in the current page list.
-  /// If the project id isn't found, no change is applied.
-  void updateProject(Project project) {
-    final list = pagingController.itemList;
-    if (list == null) return;
-    final idx = list.indexWhere((p) => p.id == project.id);
-    if (idx == -1) return;
-    final newList = List<Project>.from(list);
-    newList[idx] = project;
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: newList,
+    final firstPage = pages.first;
+    if (containsDuplicate(firstPage)) return;
+
+    final updatedFirst = [project, ...firstPage];
+    final updatedPages = [updatedFirst, ...pages.skip(1)];
+    final updatedKeys = [...?current.keys];
+    if (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
+    }
+
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
     );
   }
 
-  /// Replaces a temporary (optimistic) project placeholder (matched by id)
-  /// with the real saved project returned from the server.
+  void updateProject(Project project) {
+    final prev = state.value;
+    state.value = prev.mapItems(
+      (p) => p.id == project.id ? project : p,
+    );
+  }
+
   void replaceProjectById(int? tempId, Project realProject) {
     if (tempId == null) return;
-    final list = pagingController.itemList;
-    if (list == null) return;
-    final idx = list.indexWhere((p) => p.id == tempId);
-    if (idx == -1) return;
-    final newList = List<Project>.from(list);
-    newList[idx] = realProject;
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: newList,
-    );
-  }
-
-  void removeProject(Project project) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? [])
-      ..remove(project);
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: updatedList,
+    final prev = state.value;
+    state.value = prev.mapItems(
+      (p) => p.id == tempId ? realProject : p,
     );
   }
 
   void removeProjectById(int projectId) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? [])
-      ..removeWhere((element) => element.id == projectId);
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: updatedList,
+    final prev = state.value;
+    state.value = prev.filterItems(
+      (p) => p.id != projectId,
     );
   }
 }

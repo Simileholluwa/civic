@@ -17,11 +17,11 @@ class ProjectsInfiniteList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier = ref.watch(
-      paginatedProjectListProvider(sortBy).notifier,
+    final pagingState = ref.watch(
+      paginatedProjectListProvider(sortBy),
     );
     return AppInfiniteList<Project>(
-      pagingController: pagingControllerNotifier.pagingController,
+      pagingController: pagingState,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       canCreate: isLeader,
       onCreate: () async {
@@ -34,7 +34,7 @@ class ProjectsInfiniteList extends ConsumerWidget {
           project: project,
         );
       },
-      onRefresh: pagingControllerNotifier.refresh,
+      onRefresh: pagingState.refresh,
     );
   }
 }

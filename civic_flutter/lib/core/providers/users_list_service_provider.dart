@@ -17,57 +17,39 @@ UsersListService usersListService(Ref ref) {
 
 @Riverpod(keepAlive: true)
 class PaginatedUsersList extends _$PaginatedUsersList {
-  final PagingController<int, UserRecord> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build(String query) {
-    pagingController
-      ..addPageRequestListener(fetchPage)
-      ..addStatusListener((status) {
-        state = status;
-      });
-    ref.onDispose(pagingController.dispose);
-    return PagingStatus.loadingFirstPage;
+  PagingController<int, UserRecord> build(String query) {
+    final controller = PagingController<int, UserRecord>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null;
+        return state.nextIntPageKey;
+      },
+      fetchPage: fetchPage,
+    );
+    ref.onDispose(() {
+      controller.dispose();
+      _debounce?.cancel();
+    });
+    return controller;
   }
 
-  Future<void> fetchPage(int page, {int limit = 50}) async {
+  Future<List<UserRecord>> fetchPage(int pageKey, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 1000);
-    final completer = Completer<List<UserRecord>?>();
+    final completer = Completer<List<UserRecord>>();
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(debounceDuration, () async {
-      try {
-        final result = await ref.watch(usersListServiceProvider).listUsers(
-              query: query,
-              page: page,
-              limit: limit,
-            );
+      final result = await ref.watch(usersListServiceProvider).listUsers(
+            query: query,
+            page: pageKey,
+            limit: limit,
+          );
 
-        result.fold((error) {
-          completer.completeError(error);
-          return;
-        }, (data) {
-          if (data.canLoadMore) {
-            pagingController.appendPage(
-              data.results,
-              data.page + 1,
-            );
-          } else {
-            pagingController.appendLastPage(data.results);
-          }
-          completer.complete();
-          return;
-        });
-      } on Exception catch (e) {
-        completer.completeError(e);
-      }
+      result.fold(completer.completeError, (data) {
+        completer.complete(data.results);
+      });
     });
 
-    return;
-  }
-
-  void refresh() {
-    pagingController.refresh();
+    return completer.future;
   }
 }
 

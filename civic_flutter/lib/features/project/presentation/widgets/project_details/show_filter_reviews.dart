@@ -6,9 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ShowFilterReviews extends ConsumerWidget {
-  const ShowFilterReviews({required this.pagingController, super.key});
+  const ShowFilterReviews({super.key});
 
-  final PaginatedProjectReviewList pagingController;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projectReviewState = ref.watch(projectReviewListQueryProvider);
@@ -224,7 +223,6 @@ class ShowFilterReviews extends ConsumerWidget {
                 );
                 return;
               }
-              pagingController.refresh();
               context.pop();
             },
             activeButtonLoading: false,

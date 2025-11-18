@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class PostCommentCard extends ConsumerWidget {
   const PostCommentCard({
@@ -19,11 +20,11 @@ class PostCommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final commentController = ref.watch(
-      paginatedCommentListProvider(id).notifier,
+    final pagingState = ref.watch(
+      paginatedCommentListProvider(id),
     );
     return AppInfiniteList<Post>(
-      pagingController: commentController.pagingController,
+      pagingController: pagingState,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       canCreate: false,
@@ -72,17 +73,15 @@ class PostCommentCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: commentController.refresh,
+      onRefresh: pagingState.refresh,
       firstPageProgressIndicator: firstPageProgressIndicator,
       noItemsFound: const ContentNoItemsFound(),
       firstPageErrorIndicator: CommentRepliesPageError(
-        onTap: commentController.refresh,
-        errorMessage:
-            "We couldn't fetch comments for this post. Please try again.",
+        onTap: pagingState.refresh,
+        errorMessage: pagingState.error is Failure
+            ? (pagingState.error! as Failure).message
+            : 'Something went wrong. Please try again.',
       ),
-      errorMessage: commentController.pagingController.error is String
-          ? commentController.pagingController.error as String
-          : commentController.pagingController.error?.toString(),
     );
   }
 }

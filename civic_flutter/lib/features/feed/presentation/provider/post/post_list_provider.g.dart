@@ -13,7 +13,7 @@ part of 'post_list_provider.dart';
 const paginatedPostListProvider = PaginatedPostListProvider._();
 
 final class PaginatedPostListProvider
-    extends $NotifierProvider<PaginatedPostList, PagingStatus> {
+    extends $NotifierProvider<PaginatedPostList, PagingController<int, Post>> {
   const PaginatedPostListProvider._()
       : super(
           from: null,
@@ -33,26 +33,28 @@ final class PaginatedPostListProvider
   PaginatedPostList create() => PaginatedPostList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingStatus value) {
+  Override overrideWithValue(PagingController<int, Post> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingStatus>(value),
+      providerOverride: $SyncValueProvider<PagingController<int, Post>>(value),
     );
   }
 }
 
-String _$paginatedPostListHash() => r'a23fd6288e1d59471679e33bb837438eb53e6e1d';
+String _$paginatedPostListHash() => r'3a7ddc47f87b3a1d6b61c216062b2188c5ae7357';
 
-abstract class _$PaginatedPostList extends $Notifier<PagingStatus> {
-  PagingStatus build();
+abstract class _$PaginatedPostList
+    extends $Notifier<PagingController<int, Post>> {
+  PagingController<int, Post> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final ref = this.ref
+        as $Ref<PagingController<int, Post>, PagingController<int, Post>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingStatus, PagingStatus>,
-        PagingStatus,
+        AnyNotifier<PagingController<int, Post>, PagingController<int, Post>>,
+        PagingController<int, Post>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

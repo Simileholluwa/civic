@@ -17,8 +17,9 @@ class TagUsersScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final query = ref.watch(searchUsersListQueryProvider);
-    final pagingController =
-        ref.read(paginatedUsersListProvider(query).notifier);
+    final pagingController = ref.read(
+      paginatedUsersListProvider(query),
+    );
     final queryProvider = ref.read(searchUsersListQueryProvider.notifier);
     final postState = ref.watch(postCreationProvider(post));
     final postNotifier = ref.read(postCreationProvider(post).notifier);
@@ -128,7 +129,7 @@ class TagUsersScreen extends ConsumerWidget {
         ),
         body: AppInfiniteList<UserRecord>(
           key: Key('post_tag_users_screen_$query'),
-          pagingController: pagingController.pagingController,
+          pagingController: pagingController,
           canCreate: false,
           itemBuilder: (context, user, index) {
             final isSelected = postState.taggedUsers.contains(user);

@@ -7,78 +7,69 @@ part 'paginated_replies_list_provider.g.dart';
 
 @riverpod
 class PaginatedRepliesList extends _$PaginatedRepliesList {
-  final PagingController<int, Post> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build(int commentId) {
-    pagingController
-      ..addPageRequestListener((page) async {
-        await fetchPage(commentId, page);
-      })
-      ..addStatusListener((status) {
-        state = status;
-      });
-
-    ref.onDispose(pagingController.dispose);
-    return PagingStatus.loadingFirstPage;
+  PagingController<int, Post> build(int commentId) {
+    final controller = PagingController<int, Post>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null;
+        return state.nextIntPageKey;
+      },
+      fetchPage: (pageKey) => _fetchPage(commentId, pageKey),
+    );
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 
-  Future<void> fetchPage(int commentId, int page, {int limit = 50}) async {
-    try {
-      final commentReplies = ref.read(getPostCommentRepliesProvider);
-      final result = await commentReplies(
-        GetPostCommentRepliesParams(
-          commentId,
-          page,
-          limit,
-        ),
+  Future<List<Post>> _fetchPage(
+    int commentId,
+    int pageKey, {
+    int limit = 50,
+  }) async {
+    final usecase = ref.read(getPostCommentRepliesProvider);
+    final result = await usecase(
+      GetPostCommentRepliesParams(
+        commentId,
+        pageKey,
+        limit,
+      ),
+    );
+    return result.fold(
+      (error) => throw error,
+      (data) => data.results.map((e) => e.post).toList(),
+    );
+  }
+
+  void addReply(Post? reply) {
+    if (reply == null) return;
+    final current = state.value;
+    final pages = current.pages;
+    if (pages == null || pages.isEmpty) {
+      state.value = current.copyWith(
+        pages: [
+          [reply],
+        ],
+        keys: const [1],
+        hasNextPage: current.hasNextPage,
       );
-      result.fold((error) {
-        pagingController.value = PagingState(
-          error: error.message,
-        );
-      }, (data) {
-        final results = data.results.map((e) => e.post).toList();
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            results,
-            data.page + 1,
-          );
-        } else {
-          pagingController.appendLastPage(results);
-        }
-      });
-    } on Exception catch (e) {
-      pagingController.value = PagingState(
-        error: e.toString(),
-      );
-    }
-  }
-
-  void refresh() {
-    pagingController.refresh();
-  }
-
-  void addReply(Post reply) {
-    if (pagingController.itemList == null) {
-      refresh();
       return;
     }
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: [reply, ...pagingController.itemList ?? []],
+    if (pages.first.any((r) => r.id == reply.id)) return;
+    final updatedFirst = [reply, ...pages.first];
+    final updatedPages = [updatedFirst, ...pages.skip(1)];
+    final updatedKeys = [...?current.keys];
+    if (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
+    }
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
     );
   }
 
   void removeReplyById(int? replyId) {
-    if (pagingController.itemList != null && replyId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? [])
-        ..removeWhere((element) => element.id == replyId);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
-    }
+    if (replyId == null) return;
+    final prev = state.value;
+    state.value = prev.filterItems((r) => r.id != replyId);
   }
 }

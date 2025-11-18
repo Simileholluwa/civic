@@ -13,11 +13,12 @@ class ProjectBookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingController = ref.watch(
+    final pagingState = ref.watch(
+      paginatedProjectBookmarksListProvider,
+    );
+    final pagingNotifier = ref.read(
       paginatedProjectBookmarksListProvider.notifier,
     );
-    final itemList = pagingController.pagingController.value.itemList;
-    final isEmpty = itemList?.isEmpty ?? true;
     return AppAndroidBottomNav(
       child: Scaffold(
         body: NestedScrollView(
@@ -43,19 +44,33 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: isEmpty
-                        ? null
-                        : () async {
-                            await ProjectHelperFunctions.clearBookmarksDialog(
-                              ref,
-                              context,
-                            );
-                          },
-                    icon: const Icon(
-                      Iconsax.trash,
-                      size: 26,
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: pagingState,
+                    builder: (context, value, child) {
+                      final isEmpty = value.pages?.first.isEmpty ?? true;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: isEmpty
+                                ? null
+                                : () async {
+                                    final res = await ProjectHelperFunctions
+                                        .clearBookmarksDialog(
+                                      context,
+                                    );
+                                    if (res ?? false) {
+                                      await pagingNotifier.clearBookmarksList();
+                                    }
+                                  },
+                            icon: const Icon(
+                              Iconsax.trash,
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(
                     width: 5,
@@ -81,14 +96,14 @@ class ProjectBookmarksScreen extends ConsumerWidget {
             ];
           },
           body: AppInfiniteList<Project>(
-            pagingController: pagingController.pagingController,
+            pagingController: pagingState,
             canCreate: false,
             itemBuilder: (__, project, _) {
               return ProjectCard(
                 project: project,
               );
             },
-            onRefresh: pagingController.refresh,
+            onRefresh: pagingState.refresh,
           ),
         ),
       ),

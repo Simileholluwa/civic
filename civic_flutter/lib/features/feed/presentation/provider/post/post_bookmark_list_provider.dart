@@ -8,110 +8,90 @@ part 'post_bookmark_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
-  final PagingController<int, Post> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build() {
-    pagingController
-      ..addPageRequestListener(
-        fetchPage,
-      )
-      ..addStatusListener((status) {
-        state = status;
-      });
-    ref.onDispose(
-      pagingController.dispose,
+  PagingController<int, Post> build() {
+    final controller = PagingController<int, Post>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null;
+        return state.nextIntPageKey;
+      },
+      fetchPage: _fetchPage,
     );
-    return pagingController.value.status;
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 
-  Future<void> fetchPage(int page, {int limit = 50}) async {
-    try {
-      final bookmarkPostUseCase = ref.read(getUserPostBookmarksProvider);
-      final result = await bookmarkPostUseCase(
-        GetUserPostBookmarksParams(
-          page,
-          limit,
-        ),
+  Future<List<Post>> _fetchPage(int pageKey, {int limit = 50}) async {
+    final usecase = ref.read(getUserPostBookmarksProvider);
+    final result = await usecase(
+      GetUserPostBookmarksParams(
+        pageKey,
+        limit,
+      ),
+    );
+    return result.fold(
+      (error) => throw error,
+      (data) => data.results.map((e) => e.post).toList(),
+    );
+  }
+
+  void addPost(Post? post) {
+    if (post == null) return;
+    final current = state.value;
+    final pages = current.pages;
+    if (pages == null || pages.isEmpty) {
+      state.value = current.copyWith(
+        pages: [
+          [post],
+        ],
+        keys: const [1],
+        hasNextPage: current.hasNextPage,
       );
-      result.fold((error) {
-        pagingController.value = PagingState(
-          error: error.message,
-        );
-      }, (data) {
-        final results = data.results.map((e) => e.post).toList();
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            results,
-            data.page + 1,
-          );
-        } else {
-          pagingController.appendLastPage(results);
-        }
-      });
-    } on Exception catch (e) {
-      pagingController.value = PagingState(
-        error: e.toString(),
-      );
+      return;
     }
-  }
-
-  void refresh() {
-    pagingController.refresh();
-  }
-
-  void addPost(Post post) {
-    if (pagingController.itemList != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? [])
-        ..insert(0, post);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
+    // Prevent duplicate by id in first page.
+    if (pages.first.any((p) => p.id == post.id)) return;
+    final updatedFirst = [post, ...pages.first];
+    final updatedPages = [updatedFirst, ...pages.skip(1)];
+    final updatedKeys = [...?current.keys];
+    if (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
     }
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
+    );
   }
 
   void removeProjectRepostById(int? projectId) {
-    if (pagingController.itemList != null && projectId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? [])
-        ..removeWhere((element) => element.projectId == projectId);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
-    }
+    if (projectId == null) return;
+    final prev = state.value;
+    state.value = prev.filterItems((p) => p.projectId != projectId);
   }
 
   void removeAllPosts() {
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: const [],
+    final current = state.value;
+    state.value = current.copyWith(
+      pages: const [<Post>[]],
+      keys: const [1],
+      hasNextPage: current.hasNextPage,
     );
   }
 
   void removePostById(int? postId) {
-    if (pagingController.itemList != null && postId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? [])
-        ..removeWhere((element) => element.id == postId);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
-    }
+    if (postId == null) return;
+    final prev = state.value;
+    state.value = prev.filterItems((p) => p.id != postId);
   }
 
   Future<void> clearBookmarksList() async {
     removeAllPosts();
     final clearBookmarks = ref.read(clearPostBookmarksProvider);
     final result = await clearBookmarks(NoParams());
-    return result.fold((error) {
-      TToastMessages.errorToast(
-        error.message,
-      );
-      return;
-    }, (_) async {
-      return;
-    });
+    result.fold(
+      (error) => TToastMessages.errorToast(error.message),
+      (_) {},
+    );
   }
 }

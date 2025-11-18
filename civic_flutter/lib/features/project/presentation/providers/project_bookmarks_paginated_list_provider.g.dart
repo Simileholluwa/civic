@@ -13,8 +13,8 @@ part of 'project_bookmarks_paginated_list_provider.dart';
 const paginatedProjectBookmarksListProvider =
     PaginatedProjectBookmarksListProvider._();
 
-final class PaginatedProjectBookmarksListProvider
-    extends $NotifierProvider<PaginatedProjectBookmarksList, PagingStatus> {
+final class PaginatedProjectBookmarksListProvider extends $NotifierProvider<
+    PaginatedProjectBookmarksList, PagingController<int, Project>> {
   const PaginatedProjectBookmarksListProvider._()
       : super(
           from: null,
@@ -34,27 +34,31 @@ final class PaginatedProjectBookmarksListProvider
   PaginatedProjectBookmarksList create() => PaginatedProjectBookmarksList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingStatus value) {
+  Override overrideWithValue(PagingController<int, Project> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingStatus>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, Project>>(value),
     );
   }
 }
 
 String _$paginatedProjectBookmarksListHash() =>
-    r'5e807fac97d9c58d8fdab688113afa99f2c2ff94';
+    r'ca3473d9ed68ba3175c9f255988172db09c55b9f';
 
-abstract class _$PaginatedProjectBookmarksList extends $Notifier<PagingStatus> {
-  PagingStatus build();
+abstract class _$PaginatedProjectBookmarksList
+    extends $Notifier<PagingController<int, Project>> {
+  PagingController<int, Project> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final ref = this.ref
+        as $Ref<PagingController<int, Project>, PagingController<int, Project>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingStatus, PagingStatus>,
-        PagingStatus,
+        AnyNotifier<PagingController<int, Project>,
+            PagingController<int, Project>>,
+        PagingController<int, Project>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

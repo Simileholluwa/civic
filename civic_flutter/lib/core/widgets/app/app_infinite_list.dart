@@ -50,109 +50,115 @@ class AppInfiniteList<T> extends ConsumerWidget {
       onRefresh: () => Future.sync(
         onRefresh,
       ),
-      child: PagedListView.separated(
-        pagingController: pagingController,
-        scrollController: scrollController,
-        physics: scrollPhysics,
-        separatorBuilder: (context, index) {
-          final total = pagingController.itemList?.length ?? 0;
-          if (total > 0 && index != total - 1) {
-            return showDivider
-                ? const Divider(
-                    height: 0,
-                  )
-                : const SizedBox();
-          }
-          return const SizedBox();
-        },
-        shrinkWrap: shrinkWrap ?? false,
-        builderDelegate: PagedChildBuilderDelegate<T>(
-          animateTransitions: true,
-          itemBuilder: itemBuilder,
-          firstPageProgressIndicatorBuilder: (context) {
-            return firstPageProgressIndicator ??
-                const Center(
-                  child: AppLoadingWidget(),
-                );
-          },
-          firstPageErrorIndicatorBuilder: (context) {
-            return firstPageErrorIndicator ??
-                LoadingError(
-                  retry: () => Future.sync(
-                    onRefresh,
-                  ),
+      child: PagingListener(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) {
+          return PagedListView<int, T>.separated(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            scrollController: scrollController,
+            physics: scrollPhysics,
+            separatorBuilder: (context, index) {
+              final total = pagingController.items?.length ?? 0;
+              if (total > 0 && index != total - 1) {
+                return showDivider
+                    ? const Divider(
+                        height: 0,
+                      )
+                    : const SizedBox();
+              }
+              return const SizedBox();
+            },
+            shrinkWrap: shrinkWrap ?? false,
+            builderDelegate: PagedChildBuilderDelegate<T>(
+              animateTransitions: true,
+              itemBuilder: itemBuilder,
+              firstPageProgressIndicatorBuilder: (context) {
+                return firstPageProgressIndicator ??
+                    const Center(
+                      child: AppLoadingWidget(),
+                    );
+              },
+              firstPageErrorIndicatorBuilder: (context) {
+                return firstPageErrorIndicator ??
+                    LoadingError(
+                      retry: () => Future.sync(
+                        onRefresh,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      errorMessage: errorMessage,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      showRefresh: showRefresh,
+                    );
+              },
+              noItemsFoundIndicatorBuilder: (context) {
+                return Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),
-                  errorMessage: errorMessage,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  showRefresh: showRefresh,
+                  child: noItemsFound ??
+                      AppEmptyList(
+                        canCreate: canCreate,
+                        onCreate: onCreate,
+                        createText: createText,
+                      ),
                 );
-          },
-          noItemsFoundIndicatorBuilder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              child: noItemsFound ??
-                  AppEmptyList(
-                    canCreate: canCreate,
-                    onCreate: onCreate,
-                    createText: createText,
+              },
+              noMoreItemsIndicatorBuilder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
                   ),
-            );
-          },
-          noMoreItemsIndicatorBuilder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 10,
-                children: [
-                  SizedBox(
-                    width: 30,
-                    child: Divider(
-                      color: Theme.of(context).dividerColor,
-                      thickness: 1,
-                      height: 0,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 10,
                     children: [
-                      Icon(
-                        Iconsax.star,
-                        size: 12,
-                        color: Theme.of(context).hintColor,
+                      SizedBox(
+                        width: 30,
+                        child: Divider(
+                          color: Theme.of(context).dividerColor,
+                          thickness: 1,
+                          height: 0,
+                        ),
                       ),
-                      Icon(
-                        Iconsax.star,
-                        size: 12,
-                        color: Theme.of(context).hintColor,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8,
+                        children: [
+                          Icon(
+                            Iconsax.star,
+                            size: 12,
+                            color: Theme.of(context).hintColor,
+                          ),
+                          Icon(
+                            Iconsax.star,
+                            size: 12,
+                            color: Theme.of(context).hintColor,
+                          ),
+                          Icon(
+                            Iconsax.star,
+                            size: 12,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ],
                       ),
-                      Icon(
-                        Iconsax.star,
-                        size: 12,
-                        color: Theme.of(context).hintColor,
+                      SizedBox(
+                        width: 30,
+                        child: Divider(
+                          color: Theme.of(context).dividerColor,
+                          thickness: 1,
+                          height: 0,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: 30,
-                    child: Divider(
-                      color: Theme.of(context).dividerColor,
-                      thickness: 1,
-                      height: 0,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

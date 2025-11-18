@@ -4,17 +4,19 @@ import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class PostsScreen extends ConsumerWidget {
   const PostsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedPostListProvider.notifier);
+    final pagingState = ref.watch(
+      paginatedPostListProvider,
+    );
 
     return AppInfiniteList<Post>(
-      pagingController: pagingControllerNotifier.pagingController,
+      pagingController: pagingState,
       scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, post, index) {
         if (post.postType == PostType.article) {
@@ -37,7 +39,10 @@ class PostsScreen extends ConsumerWidget {
           '/create/post/0',
         );
       },
-      onRefresh: pagingControllerNotifier.refresh,
+      errorMessage: pagingState.error is Failure
+          ? (pagingState.error! as Failure).message
+          : 'Something went wrong. Please try again.',
+      onRefresh: pagingState.refresh,
     );
   }
 }

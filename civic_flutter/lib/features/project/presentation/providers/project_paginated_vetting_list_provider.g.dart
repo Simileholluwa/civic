@@ -13,8 +13,8 @@ part of 'project_paginated_vetting_list_provider.dart';
 const paginatedProjectVettingListProvider =
     PaginatedProjectVettingListProvider._();
 
-final class PaginatedProjectVettingListProvider
-    extends $NotifierProvider<PaginatedProjectVettingList, PagingStatus> {
+final class PaginatedProjectVettingListProvider extends $NotifierProvider<
+    PaginatedProjectVettingList, PagingController<int, ProjectVetting>> {
   const PaginatedProjectVettingListProvider._()
       : super(
           from: null,
@@ -34,27 +34,31 @@ final class PaginatedProjectVettingListProvider
   PaginatedProjectVettingList create() => PaginatedProjectVettingList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingStatus value) {
+  Override overrideWithValue(PagingController<int, ProjectVetting> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingStatus>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, ProjectVetting>>(value),
     );
   }
 }
 
 String _$paginatedProjectVettingListHash() =>
-    r'6b36d16e7fef6925053a48c1bff526118752a1b3';
+    r'95fc788fc430334ac0e427ad5ac0891b63dcaccd';
 
-abstract class _$PaginatedProjectVettingList extends $Notifier<PagingStatus> {
-  PagingStatus build();
+abstract class _$PaginatedProjectVettingList
+    extends $Notifier<PagingController<int, ProjectVetting>> {
+  PagingController<int, ProjectVetting> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final ref = this.ref as $Ref<PagingController<int, ProjectVetting>,
+        PagingController<int, ProjectVetting>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingStatus, PagingStatus>,
-        PagingStatus,
+        AnyNotifier<PagingController<int, ProjectVetting>,
+            PagingController<int, ProjectVetting>>,
+        PagingController<int, ProjectVetting>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

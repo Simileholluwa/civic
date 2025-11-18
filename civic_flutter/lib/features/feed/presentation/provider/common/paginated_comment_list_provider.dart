@@ -7,81 +7,70 @@ part 'paginated_comment_list_provider.g.dart';
 
 @riverpod
 class PaginatedCommentList extends _$PaginatedCommentList {
-  final PagingController<int, Post> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build(int postId) {
-    pagingController
-      ..addPageRequestListener((page) async {
-        await fetchPage(postId, page);
-      })
-      ..addStatusListener((status) {
-        state = status;
-      });
-
-    ref.onDispose(pagingController.dispose);
-    return PagingStatus.loadingFirstPage;
+  PagingController<int, Post> build(int postId) {
+    final controller = PagingController<int, Post>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null; // Stop if last page empty.
+        return state.nextIntPageKey;
+      },
+      fetchPage: (pageKey) => _fetchPage(postId, pageKey),
+    );
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 
-  Future<void> fetchPage(int postId, int page, {int limit = 50}) async {
-    try {
-      if (pagingController.itemList != null) {
-        pagingController.value = const PagingState();
-      }
-      final listPostCommentUseCase = ref.read(getPostCommentsProvider);
-      final result = await listPostCommentUseCase(
-        GetPostCommentsParams(
-          postId,
-          page,
-          limit,
-        ),
+  Future<List<Post>> _fetchPage(
+    int postId,
+    int pageKey, {
+    int limit = 50,
+  }) async {
+    final usecase = ref.read(getPostCommentsProvider);
+    final result = await usecase(
+      GetPostCommentsParams(
+        postId,
+        pageKey,
+        limit,
+      ),
+    );
+    return result.fold(
+      (error) => throw error,
+      (data) => data.results.map((e) => e.post).toList(),
+    );
+  }
+
+  void addComment(Post? comment) {
+    if (comment == null) return;
+    final current = state.value;
+    final pages = current.pages;
+    if (pages == null || pages.isEmpty) {
+      state.value = current.copyWith(
+        pages: [
+          [comment],
+        ],
+        keys: const [1],
+        hasNextPage: current.hasNextPage,
       );
-      result.fold((error) {
-        pagingController.value = PagingState(
-          error: error.message,
-        );
-      }, (data) {
-        final results = data.results.map((e) => e.post).toList();
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            results,
-            data.page + 1,
-          );
-        } else {
-          pagingController.appendLastPage(results);
-        }
-      });
-    } on Exception catch (e) {
-      pagingController.value = PagingState(
-        error: e.toString(),
-      );
-    }
-  }
-
-  void refresh() {
-    pagingController.refresh();
-  }
-
-  void addComment(Post comment) {
-    if (pagingController.itemList == null) {
-      refresh();
       return;
     }
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: [comment, ...pagingController.itemList ?? []],
+    // Prevent duplicates in first page.
+    if (pages.first.any((c) => c.id == comment.id)) return;
+    final updatedFirst = [comment, ...pages.first];
+    final updatedPages = [updatedFirst, ...pages.skip(1)];
+    final updatedKeys = [...?current.keys];
+    if (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
+    }
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
     );
   }
 
   void removeCommentById(int? commentId) {
-    if (pagingController.itemList != null && commentId != null) {
-      final updatedList = List<Post>.from(pagingController.itemList ?? [])
-        ..removeWhere((element) => element.id == commentId);
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: updatedList,
-      );
-    }
+    if (commentId == null) return;
+    final prev = state.value;
+    state.value = prev.filterItems((c) => c.id != commentId);
   }
 }

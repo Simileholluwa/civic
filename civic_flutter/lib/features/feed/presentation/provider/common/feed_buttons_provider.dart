@@ -62,7 +62,7 @@ class FeedButtons extends _$FeedButtons {
             paginatedPostBookmarkListProvider.notifier,
           )
           .addPost(
-            post!,
+            post,
           );
     }
     final toggleBookmark = ref.read(togglePostBookmarkProvider);
@@ -158,12 +158,11 @@ class FeedButtons extends _$FeedButtons {
     result.fold((l) {
       TToastMessages.errorToast(l.message);
     }, (r) {
-      final commentPagingControllerNotifier = ref.watch(
-        paginatedCommentListProvider(postId).notifier,
-      );
-      if (commentPagingControllerNotifier.pagingController.itemList != null) {
-        commentPagingControllerNotifier.addComment(r!);
-      }
+      ref
+          .watch(
+            paginatedCommentListProvider(postId).notifier,
+          )
+          .addComment(r);
     });
   }
 

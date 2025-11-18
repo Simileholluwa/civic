@@ -12,8 +12,8 @@ part of 'project_paginated_list_provider.dart';
 @ProviderFor(PaginatedProjectList)
 const paginatedProjectListProvider = PaginatedProjectListFamily._();
 
-final class PaginatedProjectListProvider
-    extends $NotifierProvider<PaginatedProjectList, PagingStatus> {
+final class PaginatedProjectListProvider extends $NotifierProvider<
+    PaginatedProjectList, PagingController<int, Project>> {
   const PaginatedProjectListProvider._(
       {required PaginatedProjectListFamily super.from,
       required String super.argument})
@@ -40,10 +40,11 @@ final class PaginatedProjectListProvider
   PaginatedProjectList create() => PaginatedProjectList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingStatus value) {
+  Override overrideWithValue(PagingController<int, Project> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingStatus>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, Project>>(value),
     );
   }
 
@@ -59,12 +60,16 @@ final class PaginatedProjectListProvider
 }
 
 String _$paginatedProjectListHash() =>
-    r'fdb7087e4b88b8adfc7e54bd7c74e9d2070032c9';
+    r'd743565c5892c6873c84220c5d932c80dd27703b';
 
 final class PaginatedProjectListFamily extends $Family
     with
-        $ClassFamilyOverride<PaginatedProjectList, PagingStatus, PagingStatus,
-            PagingStatus, String> {
+        $ClassFamilyOverride<
+            PaginatedProjectList,
+            PagingController<int, Project>,
+            PagingController<int, Project>,
+            PagingController<int, Project>,
+            String> {
   const PaginatedProjectListFamily._()
       : super(
           retry: null,
@@ -83,11 +88,12 @@ final class PaginatedProjectListFamily extends $Family
   String toString() => r'paginatedProjectListProvider';
 }
 
-abstract class _$PaginatedProjectList extends $Notifier<PagingStatus> {
+abstract class _$PaginatedProjectList
+    extends $Notifier<PagingController<int, Project>> {
   late final _$args = ref.$arg as String;
   String get sortBy => _$args;
 
-  PagingStatus build(
+  PagingController<int, Project> build(
     String sortBy,
   );
   @$mustCallSuper
@@ -96,10 +102,12 @@ abstract class _$PaginatedProjectList extends $Notifier<PagingStatus> {
     final created = build(
       _$args,
     );
-    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final ref = this.ref
+        as $Ref<PagingController<int, Project>, PagingController<int, Project>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingStatus, PagingStatus>,
-        PagingStatus,
+        AnyNotifier<PagingController<int, Project>,
+            PagingController<int, Project>>,
+        PagingController<int, Project>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

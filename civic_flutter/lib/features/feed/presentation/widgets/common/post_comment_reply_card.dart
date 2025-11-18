@@ -4,6 +4,7 @@ import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PostCommentReplyCard extends ConsumerWidget {
@@ -16,11 +17,11 @@ class PostCommentReplyCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final repliesController = ref.watch(
-      paginatedRepliesListProvider(postId).notifier,
+    final pagingState = ref.watch(
+      paginatedRepliesListProvider(postId),
     );
     return AppInfiniteList<Post>(
-      pagingController: repliesController.pagingController,
+      pagingController: pagingState,
       canCreate: false,
       shrinkWrap: true,
       showDivider: false,
@@ -68,7 +69,7 @@ class PostCommentReplyCard extends ConsumerWidget {
           ),
         );
       },
-      onRefresh: repliesController.refresh,
+      onRefresh: pagingState.refresh,
       noItemsFound: const ContentNoItemsFound(),
       firstPageProgressIndicator: Center(
         child: LoadingAnimationWidget.progressiveDots(
@@ -77,9 +78,10 @@ class PostCommentReplyCard extends ConsumerWidget {
         ),
       ),
       firstPageErrorIndicator: CommentRepliesPageError(
-        onTap: repliesController.refresh,
-        errorMessage:
-            "We couldn't fetch replies for this post. Please try again.",
+        onTap: pagingState.refresh,
+        errorMessage: pagingState.error is Failure
+            ? (pagingState.error! as Failure).message
+            : 'Something went wrong. Please try again.',
       ),
     );
   }

@@ -11,10 +11,12 @@ class PostBookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier =
-        ref.watch(paginatedPostBookmarkListProvider.notifier);
-    final itemList = pagingControllerNotifier.pagingController.value.itemList;
-    final isEmpty = itemList?.isEmpty ?? true;
+    final pagingState = ref.watch(
+      paginatedPostBookmarkListProvider,
+    );
+    final pagingNotifier = ref.watch(
+      paginatedPostBookmarkListProvider.notifier,
+    );
     return AppAndroidBottomNav(
       child: Scaffold(
         body: NestedScrollView(
@@ -40,19 +42,33 @@ class PostBookmarksScreen extends ConsumerWidget {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: isEmpty
-                        ? null
-                        : () async {
-                            await FeedHelperFunctions.clearBookmarksDialog(
-                              ref,
-                              context,
-                            );
-                          },
-                    icon: const Icon(
-                      Iconsax.trash,
-                      size: 26,
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: pagingState,
+                    builder: (context, value, child) {
+                      final isEmpty = value.pages?.first.isEmpty ?? true;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: isEmpty
+                                ? null
+                                : () async {
+                                    final res = await FeedHelperFunctions
+                                        .clearBookmarksDialog(
+                                      context,
+                                    );
+                                    if (res ?? false) {
+                                      await pagingNotifier.clearBookmarksList();
+                                    }
+                                  },
+                            icon: const Icon(
+                              Iconsax.trash,
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(
                     width: 5,
@@ -78,7 +94,7 @@ class PostBookmarksScreen extends ConsumerWidget {
             ];
           },
           body: AppInfiniteList<Post>(
-            pagingController: pagingControllerNotifier.pagingController,
+            pagingController: pagingState,
             scrollPhysics: const NeverScrollableScrollPhysics(),
             canCreate: false,
             itemBuilder: (__, post, _) {
@@ -114,7 +130,7 @@ class PostBookmarksScreen extends ConsumerWidget {
                 },
               );
             },
-            onRefresh: pagingControllerNotifier.refresh,
+            onRefresh: pagingState.refresh,
           ),
         ),
       ),

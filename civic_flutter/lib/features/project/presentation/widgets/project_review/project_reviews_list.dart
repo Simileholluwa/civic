@@ -17,10 +17,10 @@ class ProjectReviewsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingControllerNotifier = ref.watch(
+    final pagingState = ref.watch(
       paginatedProjectReviewListProvider(
         project.id!,
-      ).notifier,
+      ),
     );
     final projectReviewStateNotifier = ref.watch(
       projectReviewListQueryProvider.notifier,
@@ -54,7 +54,7 @@ class ProjectReviewsList extends ConsumerWidget {
                           ? null
                           : () {
                               projectReviewStateNotifier.clearQuery();
-                              pagingControllerNotifier.refresh();
+                              pagingState.refresh();
                             },
                       child: Ink(
                         child: Text(
@@ -80,13 +80,11 @@ class ProjectReviewsList extends ConsumerWidget {
                         await showDialog<dynamic>(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              contentPadding: const EdgeInsets.only(
+                            return const AlertDialog(
+                              contentPadding: EdgeInsets.only(
                                 bottom: 16,
                               ),
-                              content: ShowFilterReviews(
-                                pagingController: pagingControllerNotifier,
-                              ),
+                              content: ShowFilterReviews(),
                             );
                           },
                         );
@@ -109,7 +107,7 @@ class ProjectReviewsList extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(top: 110),
           child: AppInfiniteList<ProjectReview>(
-            pagingController: pagingControllerNotifier.pagingController,
+            pagingController: pagingState,
             canCreate: false,
             itemBuilder: (context, review, index) {
               final liveProjectReview = ref.watch(
@@ -123,7 +121,7 @@ class ProjectReviewsList extends ConsumerWidget {
                 project: project,
               );
             },
-            onRefresh: pagingControllerNotifier.refresh,
+            onRefresh: pagingState.refresh,
             firstPageProgressIndicator: const Padding(
               padding: EdgeInsets.only(
                 top: 50,

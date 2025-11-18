@@ -664,7 +664,7 @@ class PostCreation extends _$PostCreation {
               .watch(
                 paginatedCommentListProvider(postId).notifier,
               )
-              .addComment(r!);
+              .addComment(r);
         }
         ref.read(sendPostLoadingProvider.notifier).value = false;
       });
@@ -708,7 +708,7 @@ class PostCreation extends _$PostCreation {
           if (id == null) {
             ref
                 .read(paginatedRepliesListProvider(parentId).notifier)
-                .addReply(r!);
+                .addReply(r);
           }
           ref.read(sendPostLoadingProvider.notifier).value = false;
         },

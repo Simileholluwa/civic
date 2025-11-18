@@ -14,7 +14,13 @@ class NotificationsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifState = ref.watch(notifProvider);
-    final pagingController = ref.watch(
+    final pagingState = ref.watch(
+      paginatedNotificationsListProvider(
+        notifState.targetType,
+        notifState.unread,
+      ),
+    );
+    final pagingNotifier = ref.read(
       paginatedNotificationsListProvider(
         notifState.targetType,
         notifState.unread,
@@ -29,9 +35,9 @@ class NotificationsScreen extends ConsumerWidget {
               snap: true,
               actions: [
                 ValueListenableBuilder(
-                  valueListenable: pagingController.pagingController,
+                  valueListenable: pagingState,
                   builder: (context, value, child) {
-                    final isEmpty = value.itemList?.isEmpty ?? true;
+                    final isEmpty = value.pages?.first.isEmpty ?? true;
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -40,7 +46,7 @@ class NotificationsScreen extends ConsumerWidget {
                               ? null
                               : () {
                                   unawaited(
-                                    pagingController.markAllAsRead(),
+                                    pagingNotifier.markAllAsRead(),
                                   );
                                 },
                           icon: const Icon(
@@ -99,7 +105,7 @@ class NotificationsScreen extends ConsumerWidget {
           ];
         },
         body: AppInfiniteList<cc.Notification>(
-          pagingController: pagingController.pagingController,
+          pagingController: pagingState,
           canCreate: false,
           showDivider: false,
           itemBuilder: (context, notif, index) {
@@ -107,7 +113,7 @@ class NotificationsScreen extends ConsumerWidget {
               notification: notif,
               onTap: () async {
                 unawaited(
-                  pagingController.markAsRead(
+                  pagingNotifier.markAsRead(
                     notif.id!,
                   ),
                 );
@@ -119,7 +125,7 @@ class NotificationsScreen extends ConsumerWidget {
               },
             );
           },
-          onRefresh: pagingController.refresh,
+          onRefresh: pagingState.refresh,
         ),
       ),
     );

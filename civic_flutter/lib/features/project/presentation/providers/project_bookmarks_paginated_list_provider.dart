@@ -9,109 +9,125 @@ part 'project_bookmarks_paginated_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
-  final PagingController<int, Project> pagingController =
-      PagingController(firstPageKey: 1);
-
   @override
-  PagingStatus build() {
-    pagingController
-      ..addPageRequestListener(
-        fetchPage,
-      )
-      ..addStatusListener((status) {
-        state = status;
-      });
-
-    ref.onDispose(
-      pagingController.dispose,
+  PagingController<int, Project> build() {
+    final controller = PagingController<int, Project>(
+      getNextPageKey: (state) {
+        if (state.lastPageIsEmpty) return null;
+        return state.nextIntPageKey;
+      },
+      fetchPage: _fetchPage,
     );
-    return pagingController.value.status;
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 
-  Future<void> fetchPage(int page, {int limit = 50}) async {
-    try {
-      final projectBookmarksUseCase = ref.read(getPaginatedBookmarksProvider);
-      final result = await projectBookmarksUseCase(
-        GetUserProjectBookmarksParams(
-          page,
-          limit,
-        ),
-      );
-      result.fold((error) {
-        pagingController.value = PagingState(
-          error: error.message,
-        );
-      }, (data) {
-        final results = data.results.map((e) => e.project).toList();
-        if (data.canLoadMore) {
-          pagingController.appendPage(
-            results,
-            data.page + 1,
-          );
-        } else {
-          pagingController.appendLastPage(results);
-        }
-      });
-    } on Exception catch (e) {
-      pagingController.value = PagingState(
-        error: e.toString(),
-      );
-    }
-  }
+  Future<List<Project>> _fetchPage(int pageKey, {int limit = 50}) async {
+    final usecase = ref.read(getPaginatedBookmarksProvider);
+    final completer = Completer<List<Project>>();
 
-  void refresh() {
-    pagingController.refresh();
+    final result = await usecase(
+      GetUserProjectBookmarksParams(pageKey, limit),
+    );
+    result.fold(
+      (error) => completer.completeError(error.message),
+      (data) => completer.complete(
+        data.results.map((e) => e.project).toList(),
+      ),
+    );
+
+    return completer.future;
   }
 
   void addProject(Project? project) {
-    if (pagingController.itemList != null && project != null) {
-      final currentList = pagingController.itemList ?? [];
-      pagingController.value = PagingState(
-        nextPageKey: pagingController.nextPageKey,
-        itemList: [project, ...currentList],
-      );
-    }
-  }
+    if (project == null) return;
+    // Treat controller.value as a paging state that may have pages/keys (v5 style).
+    final current = state.value;
+    final pages = current.pages;
 
-  void removeAllProjects() {
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: const [],
+    // Helper to detect duplicate by id across first page.
+    bool containsDuplicate(List<Project> list) =>
+        list.any((p) => p.id == project.id);
+
+    // If no pages yet, initialize with a single page containing the project.
+    if (pages == null || pages.isEmpty) {
+      state.value = current.copyWith(
+        pages: [
+          [project],
+        ],
+        keys: const [1],
+        hasNextPage: current.hasNextPage,
+      );
+      return;
+    }
+
+    final firstPage = pages.first;
+    if (containsDuplicate(firstPage)) return;
+
+    final updatedFirst = [project, ...firstPage];
+    final updatedPages = [updatedFirst, ...pages.skip(1)];
+    final updatedKeys = [...?current.keys];
+    if (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
+    }
+
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
     );
   }
 
-  void removeProject(Project project) {
-    final updatedList = List<Project>.from(pagingController.itemList ?? [])
-      ..remove(project);
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: updatedList,
+  void removeAllProjects() {
+    final current = state.value;
+    final pages = current.pages;
+
+    // Already empty (no pages or first page empty) – nothing to do.
+    if (pages == null || pages.isEmpty || (pages.first.isEmpty)) {
+      // Ensure at least a single empty page structure for consistent UI if completely unset.
+      if (pages == null || pages.isEmpty) {
+        state.value = current.copyWith(
+          pages: const [<Project>[]],
+          keys: const [1],
+          hasNextPage: current.hasNextPage,
+        );
+      }
+      return;
+    }
+
+    // Replace first page contents with empty list; keep remaining pages structure.
+    final updatedPages = <List<Project>>[
+      <Project>[],
+      ...pages.skip(1),
+    ];
+
+    // Align keys length with pages length.
+    final updatedKeys = [...?current.keys];
+    while (updatedKeys.length < updatedPages.length) {
+      updatedKeys.insert(0, 0);
+    }
+
+    state.value = current.copyWith(
+      pages: updatedPages,
+      keys: updatedKeys,
+      hasNextPage: current.hasNextPage,
     );
   }
 
   void removeProjectById(int projectId) {
-    if (pagingController.itemList == null) {
-      return;
-    }
-    final updatedList = List<Project>.from(pagingController.itemList ?? [])
-      ..removeWhere((element) => element.id == projectId);
-    pagingController.value = PagingState(
-      nextPageKey: pagingController.nextPageKey,
-      itemList: updatedList,
-    );
+    final prev = state.value;
+    state.value = prev.filterItems((n) {
+      return n.id != projectId;
+    });
   }
 
   Future<void> clearBookmarksList() async {
     removeAllProjects();
     final clearBookmarks = ref.read(clearProjectBookmarksProvider);
     final result = await clearBookmarks(NoParams());
-    return result.fold((error) {
-      TToastMessages.errorToast(
-        error.message,
-      );
-      return;
-    }, (_) async {
-      return;
-    });
+    result.fold(
+      (error) => TToastMessages.errorToast(error.message),
+      (_) {},
+    );
   }
 }

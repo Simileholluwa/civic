@@ -1,7 +1,5 @@
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class FeedHelperFunctions {
@@ -25,7 +23,6 @@ class FeedHelperFunctions {
   }
 
   static Future<bool?> clearBookmarksDialog(
-    WidgetRef ref,
     BuildContext context,
   ) {
     return postDialog(
@@ -33,7 +30,7 @@ class FeedHelperFunctions {
       title: TTexts.clearAllBookmarksTitle,
       description: TTexts.clearAllBookmarksSubtitle,
       onTapSkipButton: () {
-        context.pop();
+        context.pop(false);
       },
       activeButtonText: TTexts.deleteAll,
       activeButtonLoading: false,
@@ -41,11 +38,8 @@ class FeedHelperFunctions {
       skipText: TTexts.cancel,
       onTapActiveButton: () async {
         if (context.mounted) {
-          context.pop();
+          context.pop(true);
         }
-        await ref
-            .read(paginatedPostBookmarkListProvider.notifier)
-            .clearBookmarksList();
       },
     );
   }

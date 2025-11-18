@@ -12,8 +12,8 @@ part of 'paginated_notifications_list_provider.dart';
 @ProviderFor(PaginatedNotificationsList)
 const paginatedNotificationsListProvider = PaginatedNotificationsListFamily._();
 
-final class PaginatedNotificationsListProvider
-    extends $NotifierProvider<PaginatedNotificationsList, PagingStatus> {
+final class PaginatedNotificationsListProvider extends $NotifierProvider<
+    PaginatedNotificationsList, PagingController<int, cc.Notification>> {
   const PaginatedNotificationsListProvider._(
       {required PaginatedNotificationsListFamily super.from,
       required (
@@ -44,10 +44,11 @@ final class PaginatedNotificationsListProvider
   PaginatedNotificationsList create() => PaginatedNotificationsList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingStatus value) {
+  Override overrideWithValue(PagingController<int, cc.Notification> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingStatus>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, cc.Notification>>(value),
     );
   }
 
@@ -64,15 +65,15 @@ final class PaginatedNotificationsListProvider
 }
 
 String _$paginatedNotificationsListHash() =>
-    r'82dda8e57b7bfc177a17e7f91808962705163f62';
+    r'b779b908e4d5e55dd8b1135d01f9e00d4300b714';
 
 final class PaginatedNotificationsListFamily extends $Family
     with
         $ClassFamilyOverride<
             PaginatedNotificationsList,
-            PagingStatus,
-            PagingStatus,
-            PagingStatus,
+            PagingController<int, cc.Notification>,
+            PagingController<int, cc.Notification>,
+            PagingController<int, cc.Notification>,
             (
               cc.NotificationTargetType?,
               bool?,
@@ -99,7 +100,8 @@ final class PaginatedNotificationsListFamily extends $Family
   String toString() => r'paginatedNotificationsListProvider';
 }
 
-abstract class _$PaginatedNotificationsList extends $Notifier<PagingStatus> {
+abstract class _$PaginatedNotificationsList
+    extends $Notifier<PagingController<int, cc.Notification>> {
   late final _$args = ref.$arg as (
     cc.NotificationTargetType?,
     bool?,
@@ -107,7 +109,7 @@ abstract class _$PaginatedNotificationsList extends $Notifier<PagingStatus> {
   cc.NotificationTargetType? get targetType => _$args.$1;
   bool? get isRead => _$args.$2;
 
-  PagingStatus build(
+  PagingController<int, cc.Notification> build(
     cc.NotificationTargetType? targetType,
     bool? isRead,
   );
@@ -118,10 +120,12 @@ abstract class _$PaginatedNotificationsList extends $Notifier<PagingStatus> {
       _$args.$1,
       _$args.$2,
     );
-    final ref = this.ref as $Ref<PagingStatus, PagingStatus>;
+    final ref = this.ref as $Ref<PagingController<int, cc.Notification>,
+        PagingController<int, cc.Notification>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingStatus, PagingStatus>,
-        PagingStatus,
+        AnyNotifier<PagingController<int, cc.Notification>,
+            PagingController<int, cc.Notification>>,
+        PagingController<int, cc.Notification>,
         Object?,
         Object?>;
     element.handleValue(ref, created);
