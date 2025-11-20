@@ -7,26 +7,18 @@ import 'package:iconsax/iconsax.dart';
 
 class PostInteractionButtons extends ConsumerWidget {
   const PostInteractionButtons({
-    required this.post, required this.originalPostId, super.key,
+    required this.post,
+    super.key,
     this.hasPadding = true,
     this.onReply,
-    this.replyIcon1 = Iconsax.message,
-    this.isReply = false,
-    this.isComment = false,
-    this.isPoll = false,
-    this.isArticle = false,
-    this.iconSize = 24,
+    this.replyIcon1 = Iconsax.message_text,
+    this.iconSize = 20,
   });
 
   final Post post;
-  final bool isPoll;
   final bool hasPadding;
   final VoidCallback? onReply;
   final IconData replyIcon1;
-  final bool isReply;
-  final bool isComment;
-  final int originalPostId;
-  final bool isArticle;
   final double iconSize;
 
   @override
@@ -45,8 +37,7 @@ class PostInteractionButtons extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ContentInteractionButton(
-            icon:
-                postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
+            icon: postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
             onTap: () async {
               await postCardNotifier.togglePostLikeStatus(
                 post.id!,
@@ -71,7 +62,9 @@ class PostInteractionButtons extends ConsumerWidget {
                 : Icons.bookmark_add_outlined,
             onTap: () async {
               await postCardNotifier.togglePostBookmarkStatus(
-                  post.id!, postCardState.hasBookmarked,);
+                post.id!,
+                postCardState.hasBookmarked,
+              );
             },
             iconSize: iconSize,
             text: postCardState.numberOfBookmarks,
@@ -80,37 +73,20 @@ class PostInteractionButtons extends ConsumerWidget {
                 : Theme.of(context).hintColor,
           ),
           ContentInteractionButton(
+            icon: Iconsax.chart,
+            text: THelperFunctions.humanizeNumber(
+              postCardState.impressionCount,
+            ),
+            onTap: postCardState.isOwner ? () {} : null,
+            color: Theme.of(context).hintColor,
+            iconSize: iconSize,
+          ),
+          ContentInteractionButton(
             icon: Icons.share,
             showText: false,
             onTap: () {},
             color: Theme.of(context).hintColor,
             iconSize: iconSize,
-          ),
-          ContentInteractionButton(
-            icon: Iconsax.more_circle,
-            onTap: () async {
-              await showDialog<dynamic>(
-                context: context,
-                builder: (ctx) {
-                  return AlertDialog(
-                    contentPadding: const EdgeInsets.only(
-                      bottom: 16,
-                    ),
-                    content: ShowPostActions(
-                      post: post,
-                      fromDetails: true,
-                      isReply: isReply,
-                      isComment: isComment,
-                      originalPostId: originalPostId,
-                      isPoll: isPoll,
-                      isArticle: isArticle,
-                    ),
-                  );
-                },
-              );
-            },
-            iconSize: iconSize,
-            color: Theme.of(context).hintColor,
           ),
         ],
       ),

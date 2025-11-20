@@ -212,6 +212,21 @@ class EndpointPost extends _i1.EndpointRef {
         {'post': post},
       );
 
+  _i2.Future<void> logPostImpressions(
+    List<int> postIds,
+    String? viewport,
+    String? source,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'post',
+        'logPostImpressions',
+        {
+          'postIds': postIds,
+          'viewport': viewport,
+          'source': source,
+        },
+      );
+
   _i2.Future<_i8.Post?> savePoll(_i8.Post post) =>
       caller.callServerEndpoint<_i8.Post?>(
         'post',

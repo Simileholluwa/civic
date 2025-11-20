@@ -71,6 +71,10 @@ abstract class FeedRemoteDatabase {
     required int postId,
     required int optionId,
   });
+  Future<void> logPostImpressions({
+    required List<int> postIds,
+    String? source,
+  });
 }
 
 class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
@@ -512,6 +516,24 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw ServerException(
         message: e.toString(),
       );
+    }
+  }
+
+  @override
+  Future<void> logPostImpressions({
+    required List<int> postIds,
+    String? source,
+  }) async {
+    try {
+      await _client.post.logPostImpressions(
+        postIds,
+        null,
+        source,
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
+    } on Exception catch (e) {
+      throw ServerException(message: e.toString());
     }
   }
 }

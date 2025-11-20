@@ -19,6 +19,7 @@ notification:
   - newNotificationUpdates:
 post:
   - savePost:
+  - logPostImpressions:
   - savePoll:
   - saveArticle:
   - castVote:

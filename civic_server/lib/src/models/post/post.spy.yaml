@@ -21,6 +21,8 @@ fields:
     project: Project?, relation(optional, onDelete=Cascade)
     parent: Post?, relation(optional, onDelete=Cascade,)
     isDeleted: bool?, default=false
+    impressionsCount: int?, default=0
+    lastImpressionAt: DateTime?
 
 indexes:
   post_type_date_idx:

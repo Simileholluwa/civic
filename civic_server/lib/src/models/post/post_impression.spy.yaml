@@ -1,0 +1,13 @@
+class: PostImpression
+table: post_impression
+fields:
+  post: Post?, relation(onDelete=Cascade)
+  viewer: UserRecord?, relation(onDelete=Cascade)
+  sessionId: String?
+  source: String?
+  hourBucket: DateTime?
+  createdAt: DateTime?, default=now
+indexes:
+  post_impression_unique_idx:
+    fields: postId, hourBucket, viewerId, sessionId
+    unique: true

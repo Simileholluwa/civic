@@ -45,6 +45,23 @@ class ArticleCard extends ConsumerWidget {
             child: ContentCreatorInfo(
               creator: postCardState.creator!,
               timeAgo: postCardState.timeAgo,
+              onMoreTapped: () async {
+                await showDialog<dynamic>(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      contentPadding: const EdgeInsets.only(
+                        bottom: 16,
+                      ),
+                      content: ShowPostActions(
+                        post: post,
+                        originalPostId: post.id!,
+                        isArticle: true,
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
           Padding(
@@ -138,8 +155,6 @@ class ArticleCard extends ConsumerWidget {
                   '/feed/post/${post.id}/comments',
                 );
               },
-              originalPostId: post.id!,
-              isArticle: true,
             ),
         ],
       ),

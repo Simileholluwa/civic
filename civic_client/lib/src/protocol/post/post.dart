@@ -47,12 +47,15 @@ abstract class Post implements _i1.SerializableModel {
     this.parentId,
     this.parent,
     bool? isDeleted,
+    int? impressionsCount,
+    this.lastImpressionAt,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
         likesCount = likesCount ?? 0,
         bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
-        isDeleted = isDeleted ?? false;
+        isDeleted = isDeleted ?? false,
+        impressionsCount = impressionsCount ?? 0;
 
   factory Post({
     int? id,
@@ -81,6 +84,8 @@ abstract class Post implements _i1.SerializableModel {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -145,6 +150,11 @@ abstract class Post implements _i1.SerializableModel {
           : _i9.Post.fromJson(
               (jsonSerialization['parent'] as Map<String, dynamic>)),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
+      impressionsCount: jsonSerialization['impressionsCount'] as int?,
+      lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['lastImpressionAt']),
     );
   }
 
@@ -203,6 +213,10 @@ abstract class Post implements _i1.SerializableModel {
 
   bool? isDeleted;
 
+  int? impressionsCount;
+
+  DateTime? lastImpressionAt;
+
   /// Returns a shallow copy of this [Post]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -233,6 +247,8 @@ abstract class Post implements _i1.SerializableModel {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -267,6 +283,9 @@ abstract class Post implements _i1.SerializableModel {
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJson(),
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
@@ -306,6 +325,8 @@ class _PostImpl extends Post {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -333,6 +354,8 @@ class _PostImpl extends Post {
           parentId: parentId,
           parent: parent,
           isDeleted: isDeleted,
+          impressionsCount: impressionsCount,
+          lastImpressionAt: lastImpressionAt,
         );
 
   /// Returns a shallow copy of this [Post]
@@ -366,6 +389,8 @@ class _PostImpl extends Post {
     Object? parentId = _Undefined,
     Object? parent = _Undefined,
     Object? isDeleted = _Undefined,
+    Object? impressionsCount = _Undefined,
+    Object? lastImpressionAt = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -405,6 +430,11 @@ class _PostImpl extends Post {
       parentId: parentId is int? ? parentId : this.parentId,
       parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
+      impressionsCount:
+          impressionsCount is int? ? impressionsCount : this.impressionsCount,
+      lastImpressionAt: lastImpressionAt is DateTime?
+          ? lastImpressionAt
+          : this.lastImpressionAt,
     );
   }
 }

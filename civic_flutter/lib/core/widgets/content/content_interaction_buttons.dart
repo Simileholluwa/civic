@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 class ContentInteractionButton extends StatelessWidget {
   const ContentInteractionButton({
-    required this.icon, required this.onTap, required this.color, super.key,
+    required this.icon,
+    required this.onTap,
+    required this.color,
+    super.key,
     this.showText = true,
     this.text = '',
     this.iconSize = 24,
@@ -38,15 +41,12 @@ class ContentInteractionButton extends StatelessWidget {
                   size: iconSize,
                 ),
                 if (showText)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      ' $text',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
+                  Text(
+                    ' $text',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: color,
+                          fontSize: 16,
+                        ),
                   ),
               ],
             ),

@@ -20,16 +20,31 @@ class PostsScreen extends ConsumerWidget {
       scrollPhysics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, post, index) {
         if (post.postType == PostType.article) {
-          return ArticleCard(
-            post: post,
+          return ImpressionVisibilityTracker(
+            postId: post.id!,
+            dwell: FeedHelperFunctions.dwellFor(post),
+            threshold: FeedHelperFunctions.thresholdFor(post),
+            child: ArticleCard(
+              post: post,
+            ),
           );
         } else if (post.postType == PostType.poll) {
-          return PollCard(
-            post: post,
+          return ImpressionVisibilityTracker(
+            postId: post.id!,
+            dwell: FeedHelperFunctions.dwellFor(post),
+            threshold: FeedHelperFunctions.thresholdFor(post),
+            child: PollCard(
+              post: post,
+            ),
           );
         } else {
-          return PostCard(
-            post: post,
+          return ImpressionVisibilityTracker(
+            postId: post.id!,
+            dwell: FeedHelperFunctions.dwellFor(post),
+            threshold: FeedHelperFunctions.thresholdFor(post),
+            child: PostCard(
+              post: post,
+            ),
           );
         }
       },

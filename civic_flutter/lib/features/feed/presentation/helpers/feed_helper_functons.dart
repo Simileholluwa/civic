@@ -1,9 +1,46 @@
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class FeedHelperFunctions {
   FeedHelperFunctions._();
+
+  static double thresholdFor(Post post) {
+    // Base by type
+    double base;
+    switch (post.postType) {
+      case PostType.article:
+        base = 0.35;
+      case PostType.poll:
+      case PostType.regular:
+        base = 0.50;
+      case PostType.projectRepost:
+      case PostType.postRepost:
+        base = 0.50;
+      case PostType.comment:
+      case PostType.commentReply:
+        base = 0.60;
+      case null:
+        base = 0.50;
+    }
+    final textLen = (post.text ?? '').length;
+    if (textLen > 800) {
+      base = (base - 0.10).clamp(0.30, 0.60);
+    } else if (textLen > 400) {
+      base = (base - 0.05).clamp(0.30, 0.60);
+    }
+    return base;
+  }
+
+  static Duration dwellFor(Post post) {
+    if (post.postType == PostType.poll) {
+      return const Duration(seconds: 2);
+    }
+    final textLen = (post.text ?? '').length;
+    if (textLen > 800) return const Duration(seconds: 2);
+    return const Duration(seconds: 1);
+  }
 
   static Future<bool?> deletePostDialog(
     BuildContext context,

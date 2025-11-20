@@ -32,7 +32,11 @@ class ShowPostActions extends ConsumerWidget {
         ? 'reply'
         : isComment
             ? 'comment'
-            : 'post';
+            : isPoll
+                ? 'poll'
+                : isArticle
+                    ? 'article'
+                    : 'post';
     final postCardState = ref.watch(
       feedButtonsProvider(
         post,

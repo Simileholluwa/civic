@@ -71,10 +71,6 @@ class PostCommentAndReplyContent extends StatelessWidget {
             hasPadding: false,
             onReply: onReply,
             replyIcon1: Icons.reply_rounded,
-            isReply: isReply,
-            isComment: isComment,
-            originalPostId: originalPostId,
-            iconSize: 20,
           ),
           if (replyOrComment.commentCount == 0)
             const SizedBox(

@@ -85,4 +85,13 @@ abstract class FeedRepository {
   Future<Either<Failure, Post>> saveArticle({
     required Post post,
   });
+
+  // Impression recording (debounced client-side batching)
+  void recordImpression({
+    required int postId,
+    String? source,
+  });
+  Future<Either<Failure, void>> flushImpressions({
+    String? source,
+  });
 }

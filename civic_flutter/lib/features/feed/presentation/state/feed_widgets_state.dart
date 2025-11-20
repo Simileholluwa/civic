@@ -47,6 +47,7 @@ class FeedWidgetsState {
     this.votedOption,
     this.rawContent,
     this.canEdit = false,
+    this.impressionCount = 0,
   });
 
   factory FeedWidgetsState.empty() {
@@ -64,6 +65,7 @@ class FeedWidgetsState {
       timeAgo: THelperFunctions.humanizeDateTime(
         post.dateCreated ?? DateTime.now(),
       ),
+      impressionCount: post.impressionsCount!,
       numberOfLikes: THelperFunctions.humanizeNumber(
         post.likesCount!,
       ),
@@ -173,6 +175,7 @@ class FeedWidgetsState {
   final List<String> articleTags;
   final Document? rawContent;
   final bool canEdit;
+  final int impressionCount;
 
   FeedWidgetsState copyWith({
     UserRecord? creator,
@@ -209,6 +212,7 @@ class FeedWidgetsState {
     String? videoUrl,
     PollOption? votedOption,
     bool? isSubscribed,
+    int? impressionCount,
   }) {
     return FeedWidgetsState(
       creator: creator ?? this.creator,
@@ -216,6 +220,7 @@ class FeedWidgetsState {
       hasImage: hasImage ?? this.hasImage,
       hasLiked: hasLiked ?? this.hasLiked,
       hasLocation: hasLocation ?? this.hasLocation,
+      impressionCount: impressionCount ?? this.impressionCount,
       hasTags: hasTags ?? this.hasTags,
       hasText: hasText ?? this.hasText,
       hasVideo: hasVideo ?? this.hasVideo,

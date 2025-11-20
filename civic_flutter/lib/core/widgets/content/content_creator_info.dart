@@ -12,6 +12,7 @@ class ContentCreatorInfo extends StatelessWidget {
     required this.timeAgo,
     super.key,
     this.radius = 25,
+    this.onMoreTapped,
     this.showPoliticalStatus = true,
   });
 
@@ -19,12 +20,12 @@ class ContentCreatorInfo extends StatelessWidget {
   final String timeAgo;
   final double radius;
   final bool showPoliticalStatus;
+  final VoidCallback? onMoreTapped;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           spacing: 15,
@@ -49,11 +50,25 @@ class ContentCreatorInfo extends StatelessWidget {
             ),
           ],
         ),
-        Text(
-          timeAgo,
-          style: Theme.of(context).textTheme.labelMedium,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: onMoreTapped,
+              child: const SizedBox(
+                height: 30,
+                child: Icon(
+                  Icons.more_horiz,
+                ),
+              ),
+            ),
+            Text(
+              timeAgo,
+              style: Theme.of(context).textTheme.labelMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
       ],
     );

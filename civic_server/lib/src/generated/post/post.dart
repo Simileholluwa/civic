@@ -49,12 +49,15 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.parentId,
     this.parent,
     bool? isDeleted,
+    int? impressionsCount,
+    this.lastImpressionAt,
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
         likesCount = likesCount ?? 0,
         bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
-        isDeleted = isDeleted ?? false;
+        isDeleted = isDeleted ?? false,
+        impressionsCount = impressionsCount ?? 0;
 
   factory Post({
     int? id,
@@ -83,6 +86,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   }) = _PostImpl;
 
   factory Post.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -147,6 +152,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
           : _i9.Post.fromJson(
               (jsonSerialization['parent'] as Map<String, dynamic>)),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
+      impressionsCount: jsonSerialization['impressionsCount'] as int?,
+      lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['lastImpressionAt']),
     );
   }
 
@@ -207,6 +217,10 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   bool? isDeleted;
 
+  int? impressionsCount;
+
+  DateTime? lastImpressionAt;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -240,6 +254,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -274,6 +290,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJson(),
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
@@ -312,6 +331,9 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (parentId != null) 'parentId': parentId,
       if (parent != null) 'parent': parent?.toJsonForProtocol(),
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
@@ -389,6 +411,8 @@ class _PostImpl extends Post {
     int? parentId,
     _i9.Post? parent,
     bool? isDeleted,
+    int? impressionsCount,
+    DateTime? lastImpressionAt,
   }) : super._(
           id: id,
           ownerId: ownerId,
@@ -416,6 +440,8 @@ class _PostImpl extends Post {
           parentId: parentId,
           parent: parent,
           isDeleted: isDeleted,
+          impressionsCount: impressionsCount,
+          lastImpressionAt: lastImpressionAt,
         );
 
   /// Returns a shallow copy of this [Post]
@@ -449,6 +475,8 @@ class _PostImpl extends Post {
     Object? parentId = _Undefined,
     Object? parent = _Undefined,
     Object? isDeleted = _Undefined,
+    Object? impressionsCount = _Undefined,
+    Object? lastImpressionAt = _Undefined,
   }) {
     return Post(
       id: id is int? ? id : this.id,
@@ -488,6 +516,11 @@ class _PostImpl extends Post {
       parentId: parentId is int? ? parentId : this.parentId,
       parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
+      impressionsCount:
+          impressionsCount is int? ? impressionsCount : this.impressionsCount,
+      lastImpressionAt: lastImpressionAt is DateTime?
+          ? lastImpressionAt
+          : this.lastImpressionAt,
     );
   }
 }
@@ -577,6 +610,15 @@ class PostTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
+    impressionsCount = _i1.ColumnInt(
+      'impressionsCount',
+      this,
+      hasDefault: true,
+    );
+    lastImpressionAt = _i1.ColumnDateTime(
+      'lastImpressionAt',
+      this,
+    );
   }
 
   late final _i1.ColumnInt ownerId;
@@ -630,6 +672,10 @@ class PostTable extends _i1.Table<int?> {
   _i9.PostTable? _parent;
 
   late final _i1.ColumnBool isDeleted;
+
+  late final _i1.ColumnInt impressionsCount;
+
+  late final _i1.ColumnDateTime lastImpressionAt;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -749,6 +795,8 @@ class PostTable extends _i1.Table<int?> {
         projectId,
         parentId,
         isDeleted,
+        impressionsCount,
+        lastImpressionAt,
       ];
 
   @override

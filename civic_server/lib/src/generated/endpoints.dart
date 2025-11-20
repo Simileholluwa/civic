@@ -406,6 +406,36 @@ class Endpoints extends _i1.EndpointDispatch {
             params['post'],
           ),
         ),
+        'logPostImpressions': _i1.MethodConnector(
+          name: 'logPostImpressions',
+          params: {
+            'postIds': _i1.ParameterDescription(
+              name: 'postIds',
+              type: _i1.getType<List<int>>(),
+              nullable: false,
+            ),
+            'viewport': _i1.ParameterDescription(
+              name: 'viewport',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+            'source': _i1.ParameterDescription(
+              name: 'source',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['post'] as _i6.PostEndpoint).logPostImpressions(
+            session,
+            params['postIds'],
+            params['viewport'],
+            params['source'],
+          ),
+        ),
         'savePoll': _i1.MethodConnector(
           name: 'savePoll',
           params: {

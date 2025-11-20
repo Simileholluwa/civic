@@ -82,6 +82,83 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  Future<void> logPostImpressions(
+    Session session,
+    List<int> postIds,
+    String? viewport,
+    String? source,
+  ) async {
+    if (postIds.isEmpty) return;
+    // Basic sanity limits to avoid abuse.
+    if (postIds.length > 100) {
+      throw Exception('Too many postIds in a single impression batch');
+    }
+    // Require authentication to ensure valid viewerId (FK constraint)
+    late final UserRecord viewer;
+    try {
+      viewer = await authUser(session);
+    } catch (e, st) {
+      session.log(
+        'logPostImpressions skipped: unauthenticated. postIds=${postIds.take(5).toList()}...',
+        level: LogLevel.debug,
+        exception: e,
+        stackTrace: st,
+      );
+      return;
+    }
+
+    final now = DateTime.now().toUtc();
+    final hourBucket = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+    );
+
+    // Process distinct IDs only.
+    final distinctIds = postIds.toSet();
+
+    await session.db.transaction((tx) async {
+      for (final pid in distinctIds) {
+        try {
+          final sessionTag = 'user:${viewer.id!}';
+          final impression = PostImpression(
+            postId: pid,
+            viewerId: viewer.id!,
+            viewer: viewer,
+            sessionId: sessionTag,
+            source: source,
+            hourBucket: hourBucket,
+            createdAt: now,
+          );
+          await PostImpression.db.insertRow(
+            session,
+            impression,
+            transaction: tx,
+          );
+        } catch (e) {
+          // Unique violation or other insert errors; skip count update
+          continue;
+        }
+
+        final post = await Post.db.findById(
+          session,
+          pid,
+          transaction: tx,
+        );
+        if (post != null) {
+          post.impressionsCount = (post.impressionsCount ?? 0) + 1;
+          post.lastImpressionAt = now;
+          await Post.db.updateRow(
+            session,
+            post,
+            transaction: tx,
+          );
+        }
+      }
+    });
+  }
+
   Future<Post?> savePoll(Session session, Post post) async {
     return await session.db.transaction((transaction) async {
       try {
@@ -1668,10 +1745,10 @@ class PostEndpoint extends Endpoint {
 
   Stream<Post> postUpdates(Session session, int postId) async* {
     // Create a message stream for this post
-    var updateStream = session.messages.createStream<Post>('post_$postId');
+    final updateStream = session.messages.createStream<Post>('post_$postId');
 
-    // Yield the latest post details when the client subscribes
-    var post = await Post.db.findById(
+    // Yield the latest post details (fully populated) when the client subscribes
+    final initial = await Post.db.findById(
       session,
       postId,
       include: Post.include(
@@ -1697,19 +1774,48 @@ class PostEndpoint extends Endpoint {
         article: Article.include(),
       ),
     );
-    if (post != null) {
-      yield post;
+    if (initial != null) {
+      yield initial;
     }
 
-    // Send updates when changes occur
-    await for (var postUpdate in updateStream) {
-      yield postUpdate.copyWith(
-        owner: post!.owner,
-        project: post.project,
-        parent: post.parent,
-        poll: post.poll,
-        article: post.article,
-      );
+    // Forward updates; if relations are missing, fetch full entity.
+    await for (final update in updateStream) {
+      if (update.owner == null ||
+          (update.projectId != null && update.project == null) ||
+          (update.parentId != null && update.parent == null) ||
+          (update.pollId != null && update.poll == null)) {
+        final full = await Post.db.findById(
+          session,
+          update.id!,
+          include: Post.include(
+            owner: UserRecord.include(
+              userInfo: UserInfo.include(),
+            ),
+            project: Project.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+            ),
+            parent: Post.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
+              ),
+            ),
+            poll: Poll.include(
+              options: PollOption.includeList(
+                orderBy: (p0) => p0.id,
+                orderDescending: false,
+              ),
+            ),
+            article: Article.include(),
+          ),
+        );
+        if (full != null) {
+          yield full;
+          continue;
+        }
+      }
+      yield update;
     }
   }
 
@@ -1812,10 +1918,38 @@ class PostEndpoint extends Endpoint {
     // Update the project in the database
     await Post.db.updateRow(session, post);
 
-    // Send an update to all clients subscribed to this project
+    // Re-fetch with relations to broadcast a fully-populated payload.
+    final enriched = await Post.db.findById(
+      session,
+      post.id!,
+      include: Post.include(
+        owner: UserRecord.include(
+          userInfo: UserInfo.include(),
+        ),
+        project: Project.include(
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+        ),
+        parent: Post.include(
+          owner: UserRecord.include(
+            userInfo: UserInfo.include(),
+          ),
+        ),
+        poll: Poll.include(
+          options: PollOption.includeList(
+            orderBy: (p0) => p0.id,
+            orderDescending: false,
+          ),
+        ),
+        article: Article.include(),
+      ),
+    );
+
+    // Send an update to all clients subscribed to this post
     session.messages.postMessage(
       'post_${post.id}',
-      post,
+      enriched ?? post,
     );
   }
 

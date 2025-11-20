@@ -28,6 +28,7 @@ class PostImagePost extends ConsumerWidget {
 
     Widget buildSingle(String image) {
       return FadeInImage(
+        placeholderColor: Theme.of(context).cardColor,
         image: regex.hasMatch(image)
             ? CachedNetworkImageProvider(image)
             : FileImage(File(image)) as ImageProvider,
@@ -223,7 +224,6 @@ class PostImagePost extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 TSizes.md,
               ),
-              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(TSizes.md),

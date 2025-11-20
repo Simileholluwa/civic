@@ -190,3 +190,17 @@ SaveArticleUseCase saveArticle(Ref ref) {
     feedRepository: ref.read(feedRepositoryImplProvider),
   );
 }
+
+@riverpod
+RecordPostImpressionUseCase recordPostImpression(Ref ref) {
+  return RecordPostImpressionUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
+FlushPostImpressionsUseCase flushPostImpressions(Ref ref) {
+  return FlushPostImpressionsUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}

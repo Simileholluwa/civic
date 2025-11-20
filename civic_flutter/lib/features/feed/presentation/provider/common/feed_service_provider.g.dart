@@ -1115,3 +1115,91 @@ final class SaveArticleProvider extends $FunctionalProvider<SaveArticleUseCase,
 }
 
 String _$saveArticleHash() => r'e23dda5fa1e9f638255ae1c06bd790814abf258f';
+
+@ProviderFor(recordPostImpression)
+const recordPostImpressionProvider = RecordPostImpressionProvider._();
+
+final class RecordPostImpressionProvider extends $FunctionalProvider<
+    RecordPostImpressionUseCase,
+    RecordPostImpressionUseCase,
+    RecordPostImpressionUseCase> with $Provider<RecordPostImpressionUseCase> {
+  const RecordPostImpressionProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'recordPostImpressionProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$recordPostImpressionHash();
+
+  @$internal
+  @override
+  $ProviderElement<RecordPostImpressionUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RecordPostImpressionUseCase create(Ref ref) {
+    return recordPostImpression(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RecordPostImpressionUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RecordPostImpressionUseCase>(value),
+    );
+  }
+}
+
+String _$recordPostImpressionHash() =>
+    r'324a313a4b1087e01e12c5cd2c5b45e1b07e65d2';
+
+@ProviderFor(flushPostImpressions)
+const flushPostImpressionsProvider = FlushPostImpressionsProvider._();
+
+final class FlushPostImpressionsProvider extends $FunctionalProvider<
+    FlushPostImpressionsUseCase,
+    FlushPostImpressionsUseCase,
+    FlushPostImpressionsUseCase> with $Provider<FlushPostImpressionsUseCase> {
+  const FlushPostImpressionsProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'flushPostImpressionsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$flushPostImpressionsHash();
+
+  @$internal
+  @override
+  $ProviderElement<FlushPostImpressionsUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  FlushPostImpressionsUseCase create(Ref ref) {
+    return flushPostImpressions(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FlushPostImpressionsUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FlushPostImpressionsUseCase>(value),
+    );
+  }
+}
+
+String _$flushPostImpressionsHash() =>
+    r'6e518a9df8c07a36c3b030b9b534be9b4d592721';

@@ -445,4 +445,61 @@ class FeedRepositoryImpl implements FeedRepository {
       );
     }
   }
+
+  // Impression batching state
+  final Set<int> _pendingImpressions = <int>{};
+  final Map<int, DateTime> _recentImpressions = <int, DateTime>{};
+  Timer? _debounceTimer;
+  final Duration _cooldown = const Duration(seconds: 15);
+  final Duration _debounce = const Duration(seconds: 2);
+  final int _maxBatch = 50;
+
+  @override
+  void recordImpression({
+    required int postId,
+    String? source,
+  }) {
+    final now = DateTime.now();
+    final last = _recentImpressions[postId];
+    if (last != null && now.difference(last) < _cooldown) {
+      return;
+    }
+    _recentImpressions[postId] = now;
+    _pendingImpressions.add(postId);
+    if (_pendingImpressions.length >= _maxBatch) {
+      unawaited(_flushInternal(source: source));
+      return;
+    }
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(_debounce, () {
+      unawaited(_flushInternal(source: source));
+    });
+  }
+
+  Future<void> _flushInternal({String? source}) async {
+    if (_pendingImpressions.isEmpty) return;
+    final ids = List<int>.from(_pendingImpressions);
+    _pendingImpressions.clear();
+    try {
+      await _remoteDatabase.logPostImpressions(
+        postIds: ids,
+        source: source,
+      );
+    } on ServerException catch (_) {
+      ids.forEach(_pendingImpressions.add);
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> flushImpressions({String? source}) async {
+    _debounceTimer?.cancel();
+    try {
+      await _flushInternal(source: source);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(Failure(message: e.message, action: e.action));
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
 }
