@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:civic_client/civic_client.dart' as cc;
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class NotificationsScreen extends ConsumerWidget {
             ),
           ];
         },
-        body: AppInfiniteList<cc.Notification>(
+        body: AppInfiniteList<AppNotification>(
           pagingController: pagingState,
           canCreate: false,
           showDivider: false,

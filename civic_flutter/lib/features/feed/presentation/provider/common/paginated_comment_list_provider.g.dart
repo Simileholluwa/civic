@@ -60,7 +60,7 @@ final class PaginatedCommentListProvider extends $NotifierProvider<
 }
 
 String _$paginatedCommentListHash() =>
-    r'8892052f61095a27b6c92c38f2eacfd6cb889178';
+    r'bd54b686320d0830ef9aa2b067a6f51056600307';
 
 final class PaginatedCommentListFamily extends $Family
     with

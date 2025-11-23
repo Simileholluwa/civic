@@ -23,7 +23,7 @@ abstract class NotificationList implements _i1.SerializableModel {
   });
 
   factory NotificationList({
-    required List<_i2.Notification> results,
+    required List<_i2.AppNotification> results,
     required int count,
     required int page,
     required int numPages,
@@ -34,7 +34,7 @@ abstract class NotificationList implements _i1.SerializableModel {
   factory NotificationList.fromJson(Map<String, dynamic> jsonSerialization) {
     return NotificationList(
       results: (jsonSerialization['results'] as List)
-          .map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
+          .map((e) => _i2.AppNotification.fromJson((e as Map<String, dynamic>)))
           .toList(),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
@@ -44,7 +44,7 @@ abstract class NotificationList implements _i1.SerializableModel {
     );
   }
 
-  List<_i2.Notification> results;
+  List<_i2.AppNotification> results;
 
   int count;
 
@@ -60,7 +60,7 @@ abstract class NotificationList implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   NotificationList copyWith({
-    List<_i2.Notification>? results,
+    List<_i2.AppNotification>? results,
     int? count,
     int? page,
     int? numPages,
@@ -87,7 +87,7 @@ abstract class NotificationList implements _i1.SerializableModel {
 
 class _NotificationListImpl extends NotificationList {
   _NotificationListImpl({
-    required List<_i2.Notification> results,
+    required List<_i2.AppNotification> results,
     required int count,
     required int page,
     required int numPages,
@@ -107,7 +107,7 @@ class _NotificationListImpl extends NotificationList {
   @_i1.useResult
   @override
   NotificationList copyWith({
-    List<_i2.Notification>? results,
+    List<_i2.AppNotification>? results,
     int? count,
     int? page,
     int? numPages,

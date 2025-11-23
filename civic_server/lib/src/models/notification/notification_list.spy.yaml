@@ -1,7 +1,7 @@
 class: NotificationList
 
 fields:
-    results: List<Notification>
+    results: List<AppNotification>
     count: int
     page: int
     numPages: int

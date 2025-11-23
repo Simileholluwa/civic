@@ -192,9 +192,9 @@ class EndpointNotification extends _i1.EndpointRef {
         {'settings': settings},
       );
 
-  _i2.Stream<_i7.Notification> newNotificationUpdates(int userId) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i7.Notification>,
-          _i7.Notification>(
+  _i2.Stream<_i7.AppNotification> newNotificationUpdates(int userId) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i7.AppNotification>,
+          _i7.AppNotification>(
         'notification',
         'newNotificationUpdates',
         {'userId': userId},

@@ -1,4 +1,4 @@
-import 'package:civic_client/civic_client.dart' as cc;
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +11,15 @@ class NotificationsCard extends StatelessWidget {
     super.key,
   });
 
-  final cc.Notification notification;
+  final AppNotification notification;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final isPostNotif =
-        notification.targetType == cc.NotificationTargetType.post;
-    final isPollNotif =
-        notification.targetType == cc.NotificationTargetType.poll;
+    final isPostNotif = notification.targetType == NotificationTargetType.post;
+    final isPollNotif = notification.targetType == NotificationTargetType.poll;
     final isArticleNotif =
-        notification.targetType == cc.NotificationTargetType.article;
+        notification.targetType == NotificationTargetType.article;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -125,7 +123,7 @@ class NotificationsCard extends StatelessWidget {
                                     notification: notification,
                                   )
                                 : notification.targetType ==
-                                        cc.NotificationTargetType.user
+                                        NotificationTargetType.user
                                     ? Text(
                                         notification.body!,
                                         style: DefaultTextStyle.of(context)

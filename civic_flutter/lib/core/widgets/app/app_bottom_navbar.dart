@@ -83,10 +83,18 @@ class AppBottomNavbar extends ConsumerWidget {
                   );
 
                   if (index == 3) {
-                    final notifCount = ref.watch(notificationsCountProvider);
+                    final notifCount = ref.watch(
+                      unreadNotificationsCountProvider,
+                    );
                     if (notifCount > 0) {
+                      final display = notifCount > 99 ? '99+' : '$notifCount';
                       icon = Badge(
-                        label: Text('$notifCount'),
+                        label: Text(
+                          display,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         child: icon,
                         backgroundColor: TColors.primary,
                         textColor: Colors.white,

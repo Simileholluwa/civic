@@ -91,7 +91,7 @@ class NotificationEndpoint extends Endpoint {
   }) async {
     final groupKey = '${actionType.name}_${targetType.name}_$targetId';
 
-    final existing = await Notification.db.findFirstRow(
+    final existing = await AppNotification.db.findFirstRow(
       session,
       where: (t) =>
           t.receiverId.equals(
@@ -140,7 +140,7 @@ class NotificationEndpoint extends Endpoint {
         return;
       }
 
-      await Notification.db.updateRow(
+      await AppNotification.db.updateRow(
         session,
         updatedNotification,
       );
@@ -164,7 +164,7 @@ class NotificationEndpoint extends Endpoint {
         targetType: targetType,
       );
 
-      final notification = Notification(
+      final notification = AppNotification(
         receiverId: receiverId,
         senderId: senderId,
         senderName: senderName,
@@ -194,7 +194,7 @@ class NotificationEndpoint extends Endpoint {
         return;
       }
 
-      await Notification.db.insertRow(
+      await AppNotification.db.insertRow(
         session,
         notification,
       );
@@ -244,7 +244,7 @@ class NotificationEndpoint extends Endpoint {
     final groupKey = '${actionType.name}_${targetType.name}_$targetId';
 
     // 1. Find all existing notifications for this groupKey and these users
-    final existingNotifications = await Notification.db.find(
+    final existingNotifications = await AppNotification.db.find(
       session,
       where: (t) =>
           t.groupKey.equals(
@@ -258,9 +258,9 @@ class NotificationEndpoint extends Endpoint {
     // Map them by receiverId for easy lookup
     final existingMap = {for (var n in existingNotifications) n.receiverId: n};
 
-    final notificationsToUpdate = <Notification>[];
-    final notificationsToInsert = <Notification>[];
-    final notificationsToStream = <Notification>[];
+    final notificationsToUpdate = <AppNotification>[];
+    final notificationsToInsert = <AppNotification>[];
+    final notificationsToStream = <AppNotification>[];
 
     for (final receiverId in subscriberIds) {
       final existing = existingMap[receiverId];
@@ -311,7 +311,7 @@ class NotificationEndpoint extends Endpoint {
           targetType: targetType,
         );
 
-        final newNotification = Notification(
+        final newNotification = AppNotification(
           receiverId: receiverId,
           senderId: senderId,
           groupedSenderNames: [senderName],
@@ -345,10 +345,10 @@ class NotificationEndpoint extends Endpoint {
 
     // 2. Perform bulk operations
     if (notificationsToUpdate.isNotEmpty) {
-      await Notification.db.update(session, notificationsToUpdate);
+      await AppNotification.db.update(session, notificationsToUpdate);
     }
     if (notificationsToInsert.isNotEmpty) {
-      await Notification.db.insert(session, notificationsToInsert);
+      await AppNotification.db.insert(session, notificationsToInsert);
     }
 
     // 3. Send all real-time stream messages (after DB is updated)
@@ -398,7 +398,7 @@ class NotificationEndpoint extends Endpoint {
     final groupKey = '${actionType.name}_${targetType.name}_$targetId';
 
     // 1. Find all existing notifications for this groupKey and these users
-    final existingNotifications = await Notification.db.find(
+    final existingNotifications = await AppNotification.db.find(
       session,
       where: (t) =>
           t.groupKey.equals(
@@ -412,9 +412,9 @@ class NotificationEndpoint extends Endpoint {
     // Map them by receiverId for easy lookup
     final existingMap = {for (var n in existingNotifications) n.receiverId: n};
 
-    final notificationsToUpdate = <Notification>[];
-    final notificationsToInsert = <Notification>[];
-    final notificationsToStream = <Notification>[];
+    final notificationsToUpdate = <AppNotification>[];
+    final notificationsToInsert = <AppNotification>[];
+    final notificationsToStream = <AppNotification>[];
 
     for (final receiverId in subscriberIds) {
       final existing = existingMap[receiverId];
@@ -460,7 +460,7 @@ class NotificationEndpoint extends Endpoint {
           targetType: targetType,
         );
 
-        final newNotification = Notification(
+        final newNotification = AppNotification(
           receiverId: receiverId,
           senderId: senderId,
           groupedSenderNames: [senderName],
@@ -489,13 +489,13 @@ class NotificationEndpoint extends Endpoint {
 
     // 2. Perform bulk operations
     if (notificationsToUpdate.isNotEmpty) {
-      await Notification.db.update(
+      await AppNotification.db.update(
         session,
         notificationsToUpdate,
       );
     }
     if (notificationsToInsert.isNotEmpty) {
-      await Notification.db.insert(
+      await AppNotification.db.insert(
         session,
         notificationsToInsert,
       );
@@ -521,7 +521,7 @@ class NotificationEndpoint extends Endpoint {
   Future<void> markAllNotificationsAsRead(Session session) async {
     final user = await authUser(session);
 
-    final unread = await Notification.db.find(
+    final unread = await AppNotification.db.find(
       session,
       where: (t) =>
           t.receiverId.equals(
@@ -544,7 +544,7 @@ class NotificationEndpoint extends Endpoint {
         .toList();
 
     // Call a single bulk update
-    await Notification.db.update(
+    await AppNotification.db.update(
       session,
       updatedNotifications,
     );
@@ -562,7 +562,7 @@ class NotificationEndpoint extends Endpoint {
       user,
     );
 
-    await Notification.db.updateRow(
+    await AppNotification.db.updateRow(
       session,
       notification.copyWith(
         isRead: true,
@@ -582,7 +582,7 @@ class NotificationEndpoint extends Endpoint {
       user,
     );
 
-    await Notification.db.deleteRow(
+    await AppNotification.db.deleteRow(
       session,
       notification,
     );
@@ -591,7 +591,7 @@ class NotificationEndpoint extends Endpoint {
   Future<void> deleteAllNotifications(Session session) async {
     final user = await authUser(session);
 
-    await Notification.db.deleteWhere(
+    await AppNotification.db.deleteWhere(
       session,
       where: (t) => t.receiverId.equals(user.id),
     );
@@ -600,7 +600,7 @@ class NotificationEndpoint extends Endpoint {
   Future<int> getUnreadNotificationCount(Session session) async {
     final user = await authUser(session);
 
-    return await Notification.db.count(
+    return await AppNotification.db.count(
       session,
       where: (t) => t.receiverId.equals(user.id) & t.isRead.equals(false),
     );
@@ -614,7 +614,7 @@ class NotificationEndpoint extends Endpoint {
     bool? isRead,
   }) async {
     final user = await authUser(session);
-    whereClause(NotificationTable t) {
+    whereClause(AppNotificationTable t) {
       var clause = t.receiverId.equals(
         user.id,
       );
@@ -633,19 +633,19 @@ class NotificationEndpoint extends Endpoint {
       return clause;
     }
 
-    final count = await Notification.db.count(
+    final count = await AppNotification.db.count(
       session,
       where: (t) => whereClause(t),
     );
 
-    final results = await Notification.db.find(
+    final results = await AppNotification.db.find(
       session,
       where: (t) => whereClause(t),
       limit: limit,
       offset: (page * limit) - limit,
       orderBy: (t) => t.createdAt,
       orderDescending: true,
-      include: Notification.include(
+      include: AppNotification.include(
         post: Post.include(
           article: Article.include(),
           poll: Poll.include(
@@ -818,7 +818,7 @@ class NotificationEndpoint extends Endpoint {
   @doNotGenerate
   Future<void> _sendPushNotification(
     Session session,
-    Notification notification, {
+    AppNotification notification, {
     UserNotificationSettings? settings,
   }) async {
     // Use provided settings when available to avoid extra DB reads.
@@ -917,7 +917,7 @@ class NotificationEndpoint extends Endpoint {
   @doNotGenerate
   Future<void> _sendInAppNotification(
     Session session,
-    Notification notification, {
+    AppNotification notification, {
     UserNotificationSettings? settings,
   }) async {
     // Use provided settings when available to avoid extra DB reads.
@@ -998,22 +998,22 @@ class NotificationEndpoint extends Endpoint {
     return user;
   }
 
-  Stream<Notification> newNotificationUpdates(
+  Stream<AppNotification> newNotificationUpdates(
     Session session,
     int userId,
   ) async* {
-    yield* session.messages.createStream<Notification>(
+    yield* session.messages.createStream<AppNotification>(
       'new_notification_$userId',
     );
   }
 
   @doNotGenerate
-  Future<Notification> validateNotificationOwnership(
+  Future<AppNotification> validateNotificationOwnership(
     Session session,
     int notificationId,
     UserRecord user,
   ) async {
-    final notification = await Notification.db.findById(
+    final notification = await AppNotification.db.findById(
       session,
       notificationId,
     );

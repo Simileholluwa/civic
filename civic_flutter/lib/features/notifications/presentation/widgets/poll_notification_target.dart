@@ -1,4 +1,4 @@
-import 'package:civic_client/civic_client.dart' as cc;
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,7 @@ class PollNotificationTarget extends StatelessWidget {
     super.key,
   });
 
-  final cc.Notification notification;
+  final AppNotification notification;
 
   @override
   Widget build(BuildContext context) {

@@ -26,5 +26,6 @@ export './presentation/widgets/notifications_setting_card.dart';
 export './presentation/widgets/poll_notification_target.dart';
 export './presentation/widgets/post_notification_target.dart';
 export 'presentation/provider/notification_settings_provider.dart';
+export 'presentation/provider/unread_notifications_count_provider.dart';
 export 'presentation/state/notification_card_state.dart';
 export 'presentation/state/notification_settings_state.dart';

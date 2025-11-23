@@ -141,8 +141,8 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i6.ServerSideException) {
       return _i6.ServerSideException.fromJson(data) as T;
     }
-    if (t == _i7.Notification) {
-      return _i7.Notification.fromJson(data) as T;
+    if (t == _i7.AppNotification) {
+      return _i7.AppNotification.fromJson(data) as T;
     }
     if (t == _i8.NotificationActionType) {
       return _i8.NotificationActionType.fromJson(data) as T;
@@ -289,8 +289,8 @@ class Protocol extends _i1.SerializationManager {
       return (data != null ? _i6.ServerSideException.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i7.Notification?>()) {
-      return (data != null ? _i7.Notification.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.AppNotification?>()) {
+      return (data != null ? _i7.AppNotification.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<_i8.NotificationActionType?>()) {
       return (data != null ? _i8.NotificationActionType.fromJson(data) : null)
@@ -442,9 +442,9 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<String>(e)).toList()
           : null) as T;
     }
-    if (t == List<_i7.Notification>) {
+    if (t == List<_i7.AppNotification>) {
       return (data as List)
-          .map((e) => deserialize<_i7.Notification>(e))
+          .map((e) => deserialize<_i7.AppNotification>(e))
           .toList() as T;
     }
     if (t == _i1.getType<List<_i14.PollOption>?>()) {
@@ -610,8 +610,8 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i6.ServerSideException) {
       return 'ServerSideException';
     }
-    if (data is _i7.Notification) {
-      return 'Notification';
+    if (data is _i7.AppNotification) {
+      return 'AppNotification';
     }
     if (data is _i8.NotificationActionType) {
       return 'NotificationActionType';
@@ -770,8 +770,8 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'ServerSideException') {
       return deserialize<_i6.ServerSideException>(data['data']);
     }
-    if (dataClassName == 'Notification') {
-      return deserialize<_i7.Notification>(data['data']);
+    if (dataClassName == 'AppNotification') {
+      return deserialize<_i7.AppNotification>(data['data']);
     }
     if (dataClassName == 'NotificationActionType') {
       return deserialize<_i8.NotificationActionType>(data['data']);

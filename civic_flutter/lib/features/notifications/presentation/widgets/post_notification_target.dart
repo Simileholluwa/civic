@@ -1,4 +1,4 @@
-import 'package:civic_client/civic_client.dart' as cc;
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -10,7 +10,7 @@ class PostNotificationTarget extends StatelessWidget {
     super.key,
   });
 
-  final cc.Notification notification;
+  final AppNotification notification;
 
   @override
   Widget build(BuildContext context) {

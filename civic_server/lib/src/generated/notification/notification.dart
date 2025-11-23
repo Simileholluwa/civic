@@ -18,9 +18,9 @@ import '../notification/notification_target_type.dart' as _i4;
 import '../post/post.dart' as _i5;
 import '../project/project.dart' as _i6;
 
-abstract class Notification
+abstract class AppNotification
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
-  Notification._({
+  AppNotification._({
     this.id,
     required this.receiverId,
     this.receiver,
@@ -46,7 +46,7 @@ abstract class Notification
   })  : isRead = isRead ?? false,
         createdAt = createdAt ?? DateTime.now();
 
-  factory Notification({
+  factory AppNotification({
     int? id,
     required int receiverId,
     _i2.UserRecord? receiver,
@@ -69,10 +69,10 @@ abstract class Notification
     _i5.Post? post,
     int? projectId,
     _i6.Project? project,
-  }) = _NotificationImpl;
+  }) = _AppNotificationImpl;
 
-  factory Notification.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Notification(
+  factory AppNotification.fromJson(Map<String, dynamic> jsonSerialization) {
+    return AppNotification(
       id: jsonSerialization['id'] as int?,
       receiverId: jsonSerialization['receiverId'] as int,
       receiver: jsonSerialization['receiver'] == null
@@ -117,9 +117,9 @@ abstract class Notification
     );
   }
 
-  static final t = NotificationTable();
+  static final t = AppNotificationTable();
 
-  static const db = NotificationRepository._();
+  static const db = AppNotificationRepository._();
 
   @override
   int? id;
@@ -169,10 +169,10 @@ abstract class Notification
   @override
   _i1.Table<int?> get table => t;
 
-  /// Returns a shallow copy of this [Notification]
+  /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
-  Notification copyWith({
+  AppNotification copyWith({
     int? id,
     int? receiverId,
     _i2.UserRecord? receiver,
@@ -254,13 +254,13 @@ abstract class Notification
     };
   }
 
-  static NotificationInclude include({
+  static AppNotificationInclude include({
     _i2.UserRecordInclude? receiver,
     _i2.UserRecordInclude? sender,
     _i5.PostInclude? post,
     _i6.ProjectInclude? project,
   }) {
-    return NotificationInclude._(
+    return AppNotificationInclude._(
       receiver: receiver,
       sender: sender,
       post: post,
@@ -268,22 +268,22 @@ abstract class Notification
     );
   }
 
-  static NotificationIncludeList includeList({
-    _i1.WhereExpressionBuilder<NotificationTable>? where,
+  static AppNotificationIncludeList includeList({
+    _i1.WhereExpressionBuilder<AppNotificationTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<NotificationTable>? orderBy,
+    _i1.OrderByBuilder<AppNotificationTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationTable>? orderByList,
-    NotificationInclude? include,
+    _i1.OrderByListBuilder<AppNotificationTable>? orderByList,
+    AppNotificationInclude? include,
   }) {
-    return NotificationIncludeList._(
+    return AppNotificationIncludeList._(
       where: where,
       limit: limit,
       offset: offset,
-      orderBy: orderBy?.call(Notification.t),
+      orderBy: orderBy?.call(AppNotification.t),
       orderDescending: orderDescending,
-      orderByList: orderByList?.call(Notification.t),
+      orderByList: orderByList?.call(AppNotification.t),
       include: include,
     );
   }
@@ -296,8 +296,8 @@ abstract class Notification
 
 class _Undefined {}
 
-class _NotificationImpl extends Notification {
-  _NotificationImpl({
+class _AppNotificationImpl extends AppNotification {
+  _AppNotificationImpl({
     int? id,
     required int receiverId,
     _i2.UserRecord? receiver,
@@ -345,11 +345,11 @@ class _NotificationImpl extends Notification {
           project: project,
         );
 
-  /// Returns a shallow copy of this [Notification]
+  /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   @override
-  Notification copyWith({
+  AppNotification copyWith({
     Object? id = _Undefined,
     int? receiverId,
     Object? receiver = _Undefined,
@@ -373,7 +373,7 @@ class _NotificationImpl extends Notification {
     Object? projectId = _Undefined,
     Object? project = _Undefined,
   }) {
-    return Notification(
+    return AppNotification(
       id: id is int? ? id : this.id,
       receiverId: receiverId ?? this.receiverId,
       receiver:
@@ -404,8 +404,9 @@ class _NotificationImpl extends Notification {
   }
 }
 
-class NotificationTable extends _i1.Table<int?> {
-  NotificationTable({super.tableRelation}) : super(tableName: 'notification') {
+class AppNotificationTable extends _i1.Table<int?> {
+  AppNotificationTable({super.tableRelation})
+      : super(tableName: 'app_notification') {
     receiverId = _i1.ColumnInt(
       'receiverId',
       this,
@@ -526,7 +527,7 @@ class NotificationTable extends _i1.Table<int?> {
     if (_receiver != null) return _receiver!;
     _receiver = _i1.createRelationTable(
       relationFieldName: 'receiver',
-      field: Notification.t.receiverId,
+      field: AppNotification.t.receiverId,
       foreignField: _i2.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -539,7 +540,7 @@ class NotificationTable extends _i1.Table<int?> {
     if (_sender != null) return _sender!;
     _sender = _i1.createRelationTable(
       relationFieldName: 'sender',
-      field: Notification.t.senderId,
+      field: AppNotification.t.senderId,
       foreignField: _i2.UserRecord.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -552,7 +553,7 @@ class NotificationTable extends _i1.Table<int?> {
     if (_post != null) return _post!;
     _post = _i1.createRelationTable(
       relationFieldName: 'post',
-      field: Notification.t.postId,
+      field: AppNotification.t.postId,
       foreignField: _i5.Post.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -565,7 +566,7 @@ class NotificationTable extends _i1.Table<int?> {
     if (_project != null) return _project!;
     _project = _i1.createRelationTable(
       relationFieldName: 'project',
-      field: Notification.t.projectId,
+      field: AppNotification.t.projectId,
       foreignField: _i6.Project.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
@@ -614,8 +615,8 @@ class NotificationTable extends _i1.Table<int?> {
   }
 }
 
-class NotificationInclude extends _i1.IncludeObject {
-  NotificationInclude._({
+class AppNotificationInclude extends _i1.IncludeObject {
+  AppNotificationInclude._({
     _i2.UserRecordInclude? receiver,
     _i2.UserRecordInclude? sender,
     _i5.PostInclude? post,
@@ -644,12 +645,12 @@ class NotificationInclude extends _i1.IncludeObject {
       };
 
   @override
-  _i1.Table<int?> get table => Notification.t;
+  _i1.Table<int?> get table => AppNotification.t;
 }
 
-class NotificationIncludeList extends _i1.IncludeList {
-  NotificationIncludeList._({
-    _i1.WhereExpressionBuilder<NotificationTable>? where,
+class AppNotificationIncludeList extends _i1.IncludeList {
+  AppNotificationIncludeList._({
+    _i1.WhereExpressionBuilder<AppNotificationTable>? where,
     super.limit,
     super.offset,
     super.orderBy,
@@ -657,24 +658,24 @@ class NotificationIncludeList extends _i1.IncludeList {
     super.orderByList,
     super.include,
   }) {
-    super.where = where?.call(Notification.t);
+    super.where = where?.call(AppNotification.t);
   }
 
   @override
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table<int?> get table => Notification.t;
+  _i1.Table<int?> get table => AppNotification.t;
 }
 
-class NotificationRepository {
-  const NotificationRepository._();
+class AppNotificationRepository {
+  const AppNotificationRepository._();
 
-  final attachRow = const NotificationAttachRowRepository._();
+  final attachRow = const AppNotificationAttachRowRepository._();
 
-  final detachRow = const NotificationDetachRowRepository._();
+  final detachRow = const AppNotificationDetachRowRepository._();
 
-  /// Returns a list of [Notification]s matching the given query parameters.
+  /// Returns a list of [AppNotification]s matching the given query parameters.
   ///
   /// Use [where] to specify which items to include in the return value.
   /// If none is specified, all items will be returned.
@@ -696,21 +697,21 @@ class NotificationRepository {
   ///   limit: 100,
   /// );
   /// ```
-  Future<List<Notification>> find(
+  Future<List<AppNotification>> find(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationTable>? where,
+    _i1.WhereExpressionBuilder<AppNotificationTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<NotificationTable>? orderBy,
+    _i1.OrderByBuilder<AppNotificationTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationTable>? orderByList,
+    _i1.OrderByListBuilder<AppNotificationTable>? orderByList,
     _i1.Transaction? transaction,
-    NotificationInclude? include,
+    AppNotificationInclude? include,
   }) async {
-    return session.db.find<Notification>(
-      where: where?.call(Notification.t),
-      orderBy: orderBy?.call(Notification.t),
-      orderByList: orderByList?.call(Notification.t),
+    return session.db.find<AppNotification>(
+      where: where?.call(AppNotification.t),
+      orderBy: orderBy?.call(AppNotification.t),
+      orderByList: orderByList?.call(AppNotification.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
@@ -719,7 +720,7 @@ class NotificationRepository {
     );
   }
 
-  /// Returns the first matching [Notification] matching the given query parameters.
+  /// Returns the first matching [AppNotification] matching the given query parameters.
   ///
   /// Use [where] to specify which items to include in the return value.
   /// If none is specified, all items will be returned.
@@ -736,20 +737,20 @@ class NotificationRepository {
   ///   orderBy: (t) => t.age,
   /// );
   /// ```
-  Future<Notification?> findFirstRow(
+  Future<AppNotification?> findFirstRow(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationTable>? where,
+    _i1.WhereExpressionBuilder<AppNotificationTable>? where,
     int? offset,
-    _i1.OrderByBuilder<NotificationTable>? orderBy,
+    _i1.OrderByBuilder<AppNotificationTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<NotificationTable>? orderByList,
+    _i1.OrderByListBuilder<AppNotificationTable>? orderByList,
     _i1.Transaction? transaction,
-    NotificationInclude? include,
+    AppNotificationInclude? include,
   }) async {
-    return session.db.findFirstRow<Notification>(
-      where: where?.call(Notification.t),
-      orderBy: orderBy?.call(Notification.t),
-      orderByList: orderByList?.call(Notification.t),
+    return session.db.findFirstRow<AppNotification>(
+      where: where?.call(AppNotification.t),
+      orderBy: orderBy?.call(AppNotification.t),
+      orderByList: orderByList?.call(AppNotification.t),
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
@@ -757,119 +758,119 @@ class NotificationRepository {
     );
   }
 
-  /// Finds a single [Notification] by its [id] or null if no such row exists.
-  Future<Notification?> findById(
+  /// Finds a single [AppNotification] by its [id] or null if no such row exists.
+  Future<AppNotification?> findById(
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
-    NotificationInclude? include,
+    AppNotificationInclude? include,
   }) async {
-    return session.db.findById<Notification>(
+    return session.db.findById<AppNotification>(
       id,
       transaction: transaction,
       include: include,
     );
   }
 
-  /// Inserts all [Notification]s in the list and returns the inserted rows.
+  /// Inserts all [AppNotification]s in the list and returns the inserted rows.
   ///
-  /// The returned [Notification]s will have their `id` fields set.
+  /// The returned [AppNotification]s will have their `id` fields set.
   ///
   /// This is an atomic operation, meaning that if one of the rows fails to
   /// insert, none of the rows will be inserted.
-  Future<List<Notification>> insert(
+  Future<List<AppNotification>> insert(
     _i1.Session session,
-    List<Notification> rows, {
+    List<AppNotification> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insert<Notification>(
+    return session.db.insert<AppNotification>(
       rows,
       transaction: transaction,
     );
   }
 
-  /// Inserts a single [Notification] and returns the inserted row.
+  /// Inserts a single [AppNotification] and returns the inserted row.
   ///
-  /// The returned [Notification] will have its `id` field set.
-  Future<Notification> insertRow(
+  /// The returned [AppNotification] will have its `id` field set.
+  Future<AppNotification> insertRow(
     _i1.Session session,
-    Notification row, {
+    AppNotification row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insertRow<Notification>(
+    return session.db.insertRow<AppNotification>(
       row,
       transaction: transaction,
     );
   }
 
-  /// Updates all [Notification]s in the list and returns the updated rows. If
+  /// Updates all [AppNotification]s in the list and returns the updated rows. If
   /// [columns] is provided, only those columns will be updated. Defaults to
   /// all columns.
   /// This is an atomic operation, meaning that if one of the rows fails to
   /// update, none of the rows will be updated.
-  Future<List<Notification>> update(
+  Future<List<AppNotification>> update(
     _i1.Session session,
-    List<Notification> rows, {
-    _i1.ColumnSelections<NotificationTable>? columns,
+    List<AppNotification> rows, {
+    _i1.ColumnSelections<AppNotificationTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.update<Notification>(
+    return session.db.update<AppNotification>(
       rows,
-      columns: columns?.call(Notification.t),
+      columns: columns?.call(AppNotification.t),
       transaction: transaction,
     );
   }
 
-  /// Updates a single [Notification]. The row needs to have its id set.
+  /// Updates a single [AppNotification]. The row needs to have its id set.
   /// Optionally, a list of [columns] can be provided to only update those
   /// columns. Defaults to all columns.
-  Future<Notification> updateRow(
+  Future<AppNotification> updateRow(
     _i1.Session session,
-    Notification row, {
-    _i1.ColumnSelections<NotificationTable>? columns,
+    AppNotification row, {
+    _i1.ColumnSelections<AppNotificationTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.updateRow<Notification>(
+    return session.db.updateRow<AppNotification>(
       row,
-      columns: columns?.call(Notification.t),
+      columns: columns?.call(AppNotification.t),
       transaction: transaction,
     );
   }
 
-  /// Deletes all [Notification]s in the list and returns the deleted rows.
+  /// Deletes all [AppNotification]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
-  Future<List<Notification>> delete(
+  Future<List<AppNotification>> delete(
     _i1.Session session,
-    List<Notification> rows, {
+    List<AppNotification> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<Notification>(
+    return session.db.delete<AppNotification>(
       rows,
       transaction: transaction,
     );
   }
 
-  /// Deletes a single [Notification].
-  Future<Notification> deleteRow(
+  /// Deletes a single [AppNotification].
+  Future<AppNotification> deleteRow(
     _i1.Session session,
-    Notification row, {
+    AppNotification row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteRow<Notification>(
+    return session.db.deleteRow<AppNotification>(
       row,
       transaction: transaction,
     );
   }
 
   /// Deletes all rows matching the [where] expression.
-  Future<List<Notification>> deleteWhere(
+  Future<List<AppNotification>> deleteWhere(
     _i1.Session session, {
-    required _i1.WhereExpressionBuilder<NotificationTable> where,
+    required _i1.WhereExpressionBuilder<AppNotificationTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteWhere<Notification>(
-      where: where(Notification.t),
+    return session.db.deleteWhere<AppNotification>(
+      where: where(AppNotification.t),
       transaction: transaction,
     );
   }
@@ -878,157 +879,157 @@ class NotificationRepository {
   /// will return the count of all rows in the table.
   Future<int> count(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<NotificationTable>? where,
+    _i1.WhereExpressionBuilder<AppNotificationTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<Notification>(
-      where: where?.call(Notification.t),
+    return session.db.count<AppNotification>(
+      where: where?.call(AppNotification.t),
       limit: limit,
       transaction: transaction,
     );
   }
 }
 
-class NotificationAttachRowRepository {
-  const NotificationAttachRowRepository._();
+class AppNotificationAttachRowRepository {
+  const AppNotificationAttachRowRepository._();
 
-  /// Creates a relation between the given [Notification] and [UserRecord]
-  /// by setting the [Notification]'s foreign key `receiverId` to refer to the [UserRecord].
+  /// Creates a relation between the given [AppNotification] and [UserRecord]
+  /// by setting the [AppNotification]'s foreign key `receiverId` to refer to the [UserRecord].
   Future<void> receiver(
     _i1.Session session,
-    Notification notification,
+    AppNotification appNotification,
     _i2.UserRecord receiver, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
     if (receiver.id == null) {
       throw ArgumentError.notNull('receiver.id');
     }
 
-    var $notification = notification.copyWith(receiverId: receiver.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.receiverId],
+    var $appNotification = appNotification.copyWith(receiverId: receiver.id);
+    await session.db.updateRow<AppNotification>(
+      $appNotification,
+      columns: [AppNotification.t.receiverId],
       transaction: transaction,
     );
   }
 
-  /// Creates a relation between the given [Notification] and [UserRecord]
-  /// by setting the [Notification]'s foreign key `senderId` to refer to the [UserRecord].
+  /// Creates a relation between the given [AppNotification] and [UserRecord]
+  /// by setting the [AppNotification]'s foreign key `senderId` to refer to the [UserRecord].
   Future<void> sender(
     _i1.Session session,
-    Notification notification,
+    AppNotification appNotification,
     _i2.UserRecord sender, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
     if (sender.id == null) {
       throw ArgumentError.notNull('sender.id');
     }
 
-    var $notification = notification.copyWith(senderId: sender.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.senderId],
+    var $appNotification = appNotification.copyWith(senderId: sender.id);
+    await session.db.updateRow<AppNotification>(
+      $appNotification,
+      columns: [AppNotification.t.senderId],
       transaction: transaction,
     );
   }
 
-  /// Creates a relation between the given [Notification] and [Post]
-  /// by setting the [Notification]'s foreign key `postId` to refer to the [Post].
+  /// Creates a relation between the given [AppNotification] and [Post]
+  /// by setting the [AppNotification]'s foreign key `postId` to refer to the [Post].
   Future<void> post(
     _i1.Session session,
-    Notification notification,
+    AppNotification appNotification,
     _i5.Post post, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
     if (post.id == null) {
       throw ArgumentError.notNull('post.id');
     }
 
-    var $notification = notification.copyWith(postId: post.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.postId],
+    var $appNotification = appNotification.copyWith(postId: post.id);
+    await session.db.updateRow<AppNotification>(
+      $appNotification,
+      columns: [AppNotification.t.postId],
       transaction: transaction,
     );
   }
 
-  /// Creates a relation between the given [Notification] and [Project]
-  /// by setting the [Notification]'s foreign key `projectId` to refer to the [Project].
+  /// Creates a relation between the given [AppNotification] and [Project]
+  /// by setting the [AppNotification]'s foreign key `projectId` to refer to the [Project].
   Future<void> project(
     _i1.Session session,
-    Notification notification,
+    AppNotification appNotification,
     _i6.Project project, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
     if (project.id == null) {
       throw ArgumentError.notNull('project.id');
     }
 
-    var $notification = notification.copyWith(projectId: project.id);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.projectId],
+    var $appNotification = appNotification.copyWith(projectId: project.id);
+    await session.db.updateRow<AppNotification>(
+      $appNotification,
+      columns: [AppNotification.t.projectId],
       transaction: transaction,
     );
   }
 }
 
-class NotificationDetachRowRepository {
-  const NotificationDetachRowRepository._();
+class AppNotificationDetachRowRepository {
+  const AppNotificationDetachRowRepository._();
 
-  /// Detaches the relation between this [Notification] and the [Post] set in `post`
-  /// by setting the [Notification]'s foreign key `postId` to `null`.
+  /// Detaches the relation between this [AppNotification] and the [Post] set in `post`
+  /// by setting the [AppNotification]'s foreign key `postId` to `null`.
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
   Future<void> post(
     _i1.Session session,
-    Notification notification, {
+    AppNotification appnotification, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appnotification.id == null) {
+      throw ArgumentError.notNull('appnotification.id');
     }
 
-    var $notification = notification.copyWith(postId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.postId],
+    var $appnotification = appnotification.copyWith(postId: null);
+    await session.db.updateRow<AppNotification>(
+      $appnotification,
+      columns: [AppNotification.t.postId],
       transaction: transaction,
     );
   }
 
-  /// Detaches the relation between this [Notification] and the [Project] set in `project`
-  /// by setting the [Notification]'s foreign key `projectId` to `null`.
+  /// Detaches the relation between this [AppNotification] and the [Project] set in `project`
+  /// by setting the [AppNotification]'s foreign key `projectId` to `null`.
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
   Future<void> project(
     _i1.Session session,
-    Notification notification, {
+    AppNotification appnotification, {
     _i1.Transaction? transaction,
   }) async {
-    if (notification.id == null) {
-      throw ArgumentError.notNull('notification.id');
+    if (appnotification.id == null) {
+      throw ArgumentError.notNull('appnotification.id');
     }
 
-    var $notification = notification.copyWith(projectId: null);
-    await session.db.updateRow<Notification>(
-      $notification,
-      columns: [Notification.t.projectId],
+    var $appnotification = appnotification.copyWith(projectId: null);
+    await session.db.updateRow<AppNotification>(
+      $appnotification,
+      columns: [AppNotification.t.projectId],
       transaction: transaction,
     );
   }

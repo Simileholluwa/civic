@@ -16,8 +16,8 @@ import '../notification/notification_target_type.dart' as _i4;
 import '../post/post.dart' as _i5;
 import '../project/project.dart' as _i6;
 
-abstract class Notification implements _i1.SerializableModel {
-  Notification._({
+abstract class AppNotification implements _i1.SerializableModel {
+  AppNotification._({
     this.id,
     required this.receiverId,
     this.receiver,
@@ -43,7 +43,7 @@ abstract class Notification implements _i1.SerializableModel {
   })  : isRead = isRead ?? false,
         createdAt = createdAt ?? DateTime.now();
 
-  factory Notification({
+  factory AppNotification({
     int? id,
     required int receiverId,
     _i2.UserRecord? receiver,
@@ -66,10 +66,10 @@ abstract class Notification implements _i1.SerializableModel {
     _i5.Post? post,
     int? projectId,
     _i6.Project? project,
-  }) = _NotificationImpl;
+  }) = _AppNotificationImpl;
 
-  factory Notification.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Notification(
+  factory AppNotification.fromJson(Map<String, dynamic> jsonSerialization) {
+    return AppNotification(
       id: jsonSerialization['id'] as int?,
       receiverId: jsonSerialization['receiverId'] as int,
       receiver: jsonSerialization['receiver'] == null
@@ -161,10 +161,10 @@ abstract class Notification implements _i1.SerializableModel {
 
   _i6.Project? project;
 
-  /// Returns a shallow copy of this [Notification]
+  /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
-  Notification copyWith({
+  AppNotification copyWith({
     int? id,
     int? receiverId,
     _i2.UserRecord? receiver,
@@ -225,8 +225,8 @@ abstract class Notification implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _NotificationImpl extends Notification {
-  _NotificationImpl({
+class _AppNotificationImpl extends AppNotification {
+  _AppNotificationImpl({
     int? id,
     required int receiverId,
     _i2.UserRecord? receiver,
@@ -274,11 +274,11 @@ class _NotificationImpl extends Notification {
           project: project,
         );
 
-  /// Returns a shallow copy of this [Notification]
+  /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   @override
-  Notification copyWith({
+  AppNotification copyWith({
     Object? id = _Undefined,
     int? receiverId,
     Object? receiver = _Undefined,
@@ -302,7 +302,7 @@ class _NotificationImpl extends Notification {
     Object? projectId = _Undefined,
     Object? project = _Undefined,
   }) {
-    return Notification(
+    return AppNotification(
       id: id is int? ? id : this.id,
       receiverId: receiverId ?? this.receiverId,
       receiver:

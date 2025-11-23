@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:civic_client/civic_client.dart' as cc;
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -9,14 +9,14 @@ part 'paginated_notifications_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
-  final List<cc.Notification> _bufferedNotifications = [];
+  final List<AppNotification> _bufferedNotifications = [];
 
   @override
-  PagingController<int, cc.Notification> build(
-    cc.NotificationTargetType? targetType,
+  PagingController<int, AppNotification> build(
+    NotificationTargetType? targetType,
     bool? isRead,
   ) {
-    final controller = PagingController<int, cc.Notification>(
+    final controller = PagingController<int, AppNotification>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -29,19 +29,15 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   }
 
   Future<void> markAsRead(int notificationId) async {
-    // 1) Snapshot current list and original item
-    final currentState = state as PagingState<int, cc.Notification>;
-    final currentItems = currentState.items ?? [];
-    final index = currentItems.indexWhere((n) => n.id == notificationId);
-    if (index == -1) return;
-    final original = currentItems[index];
+    final prevState = state.value;
 
-    // 2) Optimistic UI update using v5 helpers
-    state.value = currentState.mapItems(
+    state.value = prevState.mapItems(
       (n) => n.id == notificationId ? n.copyWith(isRead: true) : n,
     );
 
-    // 4. Call the API in the background
+    ref.read(unreadNotificationsCountProvider.notifier).count =
+        ref.read(unreadNotificationsCountProvider) - 1;
+
     final markRead = ref.read(
       markNotificationAsReadProvider,
     );
@@ -52,34 +48,38 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       ),
     );
 
-    // 5) Roll back on failure using v5 helpers
     result.fold(
       (l) {
-        state.value = currentState.mapItems(
-          (n) => n.id == notificationId ? original : n,
+        state.value = prevState.mapItems(
+          (n) => n.id == notificationId ? n.copyWith(isRead: false) : n,
         );
+
+        ref.read(unreadNotificationsCountProvider.notifier).count =
+            ref.read(unreadNotificationsCountProvider) + 1;
       },
       (_) {},
     );
   }
 
   Future<void> markAllAsRead() async {
-    // Snapshot current paging state for rollback
     final prevState = state.value;
 
-    // Optimistic update: mark all items as read using v5 helper
-    state.value = prevState.mapItems((n) {
-      return n.isRead ? n : n.copyWith(isRead: true);
-    });
+    final unreadBefore = prevState.items?.where((n) => !n.isRead).length ?? 0;
+    if (unreadBefore == 0) return;
+    state.value = prevState.mapItems(
+      (n) => n.isRead ? n : n.copyWith(isRead: true),
+    );
+    ref.read(unreadNotificationsCountProvider.notifier).count =
+        ref.read(unreadNotificationsCountProvider) - unreadBefore;
 
-    // Call the API in the background
     final markAllRead = ref.read(markAllNotificationAsReadProvider);
     final result = await markAllRead(NoParams());
 
-    // Roll back on failure
     result.fold(
       (_) {
         state.value = prevState;
+        ref.read(unreadNotificationsCountProvider.notifier).count =
+            ref.read(unreadNotificationsCountProvider) + unreadBefore;
       },
       (_) {},
     );
@@ -104,9 +104,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     );
   }
 
-  Future<List<cc.Notification>> fetchPage(int page, {int limit = 50}) async {
+  Future<List<AppNotification>> fetchPage(int page, {int limit = 50}) async {
     final listNotifications = ref.read(getNotificationsProvider);
-    final completer = Completer<List<cc.Notification>>();
+    final completer = Completer<List<AppNotification>>();
     final result = await listNotifications(
       GetNotificationsParams(
         page,
@@ -126,26 +126,24 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     return completer.future;
   }
 
-  void _handleNotification(cc.Notification notif) {
+  void _handleNotification(AppNotification notif) {
     _bufferedNotifications.insert(0, notif);
-    ref
-        .watch(
-          notificationsCountProvider.notifier,
-        )
-        .count = _bufferedNotifications.length;
+    ref.read(notificationsCountProvider.notifier).count =
+        _bufferedNotifications.length;
+    if (!notif.isRead) {
+      ref.read(unreadNotificationsCountProvider.notifier).count =
+          ref.read(unreadNotificationsCountProvider) + 1;
+    }
   }
 
   void mergeBufferedNotifications() {
-    // No buffered notifications: nothing to merge
     if (_bufferedNotifications.isEmpty) {
-      ref.watch(notificationsCountProvider.notifier).count =
-          _bufferedNotifications.length;
+      ref.read(notificationsCountProvider.notifier).count = 0;
       return;
     }
 
     final current = state.value;
 
-    // If there are no pages yet, create the first page with buffered items
     if (current.pages == null || current.pages!.isEmpty) {
       state.value = current.copyWith(
         pages: [
@@ -155,18 +153,15 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
         hasNextPage: current.hasNextPage,
       );
       _bufferedNotifications.clear();
-      ref.watch(notificationsCountProvider.notifier).count =
-          _bufferedNotifications.length;
+      ref.read(notificationsCountProvider.notifier).count = 0;
       return;
     }
 
-    // Prepend buffered items to the first page, keep the rest of the pages
-    final updatedPages = <List<cc.Notification>>[
+    final updatedPages = <List<AppNotification>>[
       [..._bufferedNotifications, ...current.pages!.first],
       ...current.pages!.skip(1),
     ];
 
-    // Keep keys aligned with pages length (insert a placeholder key if needed)
     final updatedKeys = [...?current.keys];
     if (updatedKeys.length < updatedPages.length) {
       updatedKeys.insert(0, 0);
@@ -179,29 +174,40 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     );
 
     _bufferedNotifications.clear();
-    ref.watch(notificationsCountProvider.notifier).count =
-        _bufferedNotifications.length;
+    ref.read(notificationsCountProvider.notifier).count = 0;
     return;
   }
 
   Future<void> deleteNotification(int notificationId) async {
-    // Snapshot current state for rollback
     final prevState = state.value;
     final items = prevState.items ?? [];
     final exists = items.any((n) => n.id == notificationId);
     if (!exists) return;
 
-    // Optimistic removal using v5 helper
+    final wasUnread = !items
+        .firstWhere(
+          (n) => n.id == notificationId,
+        )
+        .isRead;
     state.value = prevState.filterItems((n) => n.id != notificationId);
+    if (wasUnread) {
+      ref.read(unreadNotificationsCountProvider.notifier).count =
+          ref.read(unreadNotificationsCountProvider) - 1;
+    }
 
-    // Call the API in the background
     final delete = ref.read(deleteNotificationProvider);
     final result = await delete(DeleteNotificationParams(notificationId));
 
-    // Roll back on failure
     result.fold(
       (_) {
+        final wasUnread =
+            prevState.items?.any((n) => n.id == notificationId && !n.isRead) ??
+                false;
         state.value = prevState;
+        if (wasUnread) {
+          ref.read(unreadNotificationsCountProvider.notifier).count =
+              ref.read(unreadNotificationsCountProvider) + 1;
+        }
       },
       (_) {},
     );

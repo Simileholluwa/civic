@@ -1,5 +1,5 @@
-class: Notification
-table: notification
+class: AppNotification
+table: app_notification
 fields:
   receiver: UserRecord?, relation(onDelete=Cascade)
   sender: UserRecord?, relation(onDelete=setNull)
