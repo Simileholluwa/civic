@@ -15,11 +15,12 @@ const feedButtonsProvider = FeedButtonsFamily._();
 final class FeedButtonsProvider
     extends $NotifierProvider<FeedButtons, FeedWidgetsState> {
   const FeedButtonsProvider._(
-      {required FeedButtonsFamily super.from, required Post? super.argument})
+      {required FeedButtonsFamily super.from,
+      required PostWithUserStateKey? super.argument})
       : super(
           retry: null,
           name: r'feedButtonsProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -57,36 +58,36 @@ final class FeedButtonsProvider
   }
 }
 
-String _$feedButtonsHash() => r'cfdda51a44c630d350c60d32dbb29b4f9080b7a2';
+String _$feedButtonsHash() => r'00c8c77c879a50b55f1a9e345edc7c4c52688dbe';
 
 final class FeedButtonsFamily extends $Family
     with
         $ClassFamilyOverride<FeedButtons, FeedWidgetsState, FeedWidgetsState,
-            FeedWidgetsState, Post?> {
+            FeedWidgetsState, PostWithUserStateKey?> {
   const FeedButtonsFamily._()
       : super(
           retry: null,
           name: r'feedButtonsProvider',
           dependencies: null,
           $allTransitiveDependencies: null,
-          isAutoDispose: true,
+          isAutoDispose: false,
         );
 
   FeedButtonsProvider call(
-    Post? post,
+    PostWithUserStateKey? key,
   ) =>
-      FeedButtonsProvider._(argument: post, from: this);
+      FeedButtonsProvider._(argument: key, from: this);
 
   @override
   String toString() => r'feedButtonsProvider';
 }
 
 abstract class _$FeedButtons extends $Notifier<FeedWidgetsState> {
-  late final _$args = ref.$arg as Post?;
-  Post? get post => _$args;
+  late final _$args = ref.$arg as PostWithUserStateKey?;
+  PostWithUserStateKey? get key => _$args;
 
   FeedWidgetsState build(
-    Post? post,
+    PostWithUserStateKey? key,
   );
   @$mustCallSuper
   @override

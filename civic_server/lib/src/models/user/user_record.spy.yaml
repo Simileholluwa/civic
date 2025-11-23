@@ -13,8 +13,6 @@ fields:
   middleName: String?
   email: String?
   profileImage: String?
-  following: List<int>?
-  followers: List<int>?
   followersCount: int?, default=0
   followingCount: int?, default=0
   createdAt: DateTime?, default=now

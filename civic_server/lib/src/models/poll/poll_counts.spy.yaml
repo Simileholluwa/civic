@@ -1,0 +1,5 @@
+class: PollCounts
+fields:
+  pollId: int
+  votesCount: int?, default=0
+  options: List<PollOptionCount>?

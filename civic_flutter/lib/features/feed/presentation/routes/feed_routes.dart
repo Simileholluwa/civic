@@ -56,7 +56,8 @@ class FeedRoutes {
                 builder: (_, state) {
                   final data = state.extra as Map<String, dynamic>?;
                   return MarkNotInterested(
-                    post: data?['post'] as Post,
+                    postWithUserState:
+                        data?['postWithUserState'] as PostWithUserState,
                     originalPostId: data?['originalPostId'] as int,
                   );
                 },

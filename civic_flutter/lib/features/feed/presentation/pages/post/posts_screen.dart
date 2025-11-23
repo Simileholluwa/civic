@@ -15,17 +15,18 @@ class PostsScreen extends ConsumerWidget {
       paginatedPostListProvider,
     );
 
-    return AppInfiniteList<Post>(
+    return AppInfiniteList<PostWithUserState>(
       pagingController: pagingState,
       scrollPhysics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, post, index) {
+      itemBuilder: (context, postWithUserState, index) {
+        final post = postWithUserState.post;
         if (post.postType == PostType.article) {
           return ImpressionVisibilityTracker(
             postId: post.id!,
             dwell: FeedHelperFunctions.dwellFor(post),
             threshold: FeedHelperFunctions.thresholdFor(post),
             child: ArticleCard(
-              post: post,
+              postWithUserState: postWithUserState,
             ),
           );
         } else if (post.postType == PostType.poll) {
@@ -34,7 +35,7 @@ class PostsScreen extends ConsumerWidget {
             dwell: FeedHelperFunctions.dwellFor(post),
             threshold: FeedHelperFunctions.thresholdFor(post),
             child: PollCard(
-              post: post,
+              postWithUserState: postWithUserState,
             ),
           );
         } else {
@@ -42,8 +43,15 @@ class PostsScreen extends ConsumerWidget {
             postId: post.id!,
             dwell: FeedHelperFunctions.dwellFor(post),
             threshold: FeedHelperFunctions.thresholdFor(post),
-            child: PostCard(
-              post: post,
+            child: PostCardDetail(
+              postWithUserState: postWithUserState,
+              hasProject: post.postType == PostType.projectRepost,
+              onTap: () async {
+                await context.push(
+                  '/feed/post/${post.id}',
+                  extra: post,
+                );
+              },
             ),
           );
         }

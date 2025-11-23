@@ -87,6 +87,7 @@ class NotificationsSettingsScreen extends ConsumerWidget {
                   );
                   if (newPreference != null) {
                     await notificationSettingsNotifier.updateSetting(
+                      notificationSettings,
                       NotificationSettingsUpdate(
                         settingType: tileData.type,
                         preference: newPreference,
@@ -117,6 +118,7 @@ class NotificationsSettingsScreen extends ConsumerWidget {
                     );
                     if (newPreference != null) {
                       await notificationSettingsNotifier.updateSetting(
+                        notificationSettings,
                         NotificationSettingsUpdate(
                           settingType: tileData.type,
                           preference: newPreference,

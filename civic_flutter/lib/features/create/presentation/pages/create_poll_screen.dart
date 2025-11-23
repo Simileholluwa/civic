@@ -26,12 +26,12 @@ class CreatePollScreen extends ConsumerWidget {
     final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
     final postState = ref.watch(
       postCreationProvider(
-        data.value,
+        data.value?.post,
       ),
     );
     final postNotifier = ref.read(
       postCreationProvider(
-        data.value,
+        data.value?.post,
       ).notifier,
     );
     final hasDraft = ref.watch(
@@ -43,7 +43,7 @@ class CreatePollScreen extends ConsumerWidget {
 
     Future<void> saveDraftAndPop() async {
       await postNotifier.savePollAsDraft(
-        data.value?.id,
+        data.value?.post.id,
         null,
       );
       if (context.mounted) context.pop();
@@ -117,8 +117,8 @@ class CreatePollScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await postNotifier.sendAPoll(
-                  data.value?.id,
-                  data.value?.pollId,
+                  data.value?.post.id,
+                  data.value?.post.pollId,
                 );
               },
               title: const CreateContentPrivacy(),
@@ -162,12 +162,11 @@ class CreatePollScreen extends ConsumerWidget {
           body: data.when(
             data: (value) {
               return CreatePollWidget(
-                post: value,
-                isEditing: data.value?.id != null,
+                post: value.post,
+                isEditing: data.value?.post.id != null,
               );
             },
             error: (error, st) {
-              // Graceful error handling to support both Map and generic Exception
               final message = error is Map
                   ? (error['message']?.toString() ?? error.toString())
                   : error.toString();

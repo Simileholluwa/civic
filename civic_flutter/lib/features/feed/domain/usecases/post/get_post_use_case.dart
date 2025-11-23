@@ -3,13 +3,13 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetPostUseCase implements UseCase<Post, GetPostParams> {
+class GetPostUseCase implements UseCase<PostWithUserState, GetPostParams> {
   GetPostUseCase({required FeedRepository feedRepository})
       : _feedRepository = feedRepository;
   final FeedRepository _feedRepository;
 
   @override
-  Future<Either<Failure, Post>> call(GetPostParams params) async {
+  Future<Either<Failure, PostWithUserState>> call(GetPostParams params) async {
     final result = await _feedRepository.getPost(
       postId: params.postId,
     );

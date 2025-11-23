@@ -1,17 +1,16 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class FeedScreen extends ConsumerWidget {
+class FeedScreen extends StatelessWidget {
   const FeedScreen({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -73,39 +72,6 @@ class FeedScreen extends ConsumerWidget {
         },
         body: const PostsScreen(),
       ),
-    );
-  }
-}
-
-class FeedBottomWidget extends ConsumerWidget {
-  const FeedBottomWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = ref.watch(
-      feedScreenTabControllerProvider,
-    );
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppTabBarDesign(
-          tabController: tabController,
-          showTopBorder: true,
-          dividerColor: Colors.transparent,
-          tabs: const [
-            Tab(
-              text: 'POSTS',
-            ),
-            Tab(text: 'POLLS'),
-            Tab(text: 'ARTICLES'),
-          ],
-        ),
-        const Divider(
-          height: 0,
-        ),
-      ],
     );
   }
 }

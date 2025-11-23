@@ -1,0 +1,4 @@
+class: PollOptionCount
+fields:
+  optionId: int
+  votesCount: int?, default=0

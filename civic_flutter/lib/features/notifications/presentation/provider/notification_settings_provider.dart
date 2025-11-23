@@ -25,6 +25,7 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
     if (!hasUpdatedOnce) {
       unawaited(
         updateSetting(
+          initialSettings,
           NotificationSettingsUpdate(
             settingType: NotificationSettingType.push,
             enabled: true,
@@ -41,9 +42,10 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
   }
 
   Future<void> updateSetting(
+    AppNotificationSettings setting,
     NotificationSettingsUpdate update,
   ) async {
-    final newState = _updateState(state, update);
+    final newState = _updateState(setting, update);
     final userId = ref
         .read(
           localStorageProvider,
@@ -92,6 +94,7 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
       final res = await fcm.directPermissionRequest();
       if (res ?? false) {
         await updateSetting(
+          state,
           NotificationSettingsUpdate(
             settingType: NotificationSettingType.push,
             enabled: true,
@@ -100,6 +103,7 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
       }
     } else {
       await updateSetting(
+        state,
         NotificationSettingsUpdate(
           settingType: NotificationSettingType.push,
           enabled: !state.pushNotifications,

@@ -71,7 +71,7 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> getPost({
+  Future<Either<Failure, PostWithUserState>> getPost({
     required int postId,
   }) async {
     try {
@@ -124,7 +124,7 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
-  Future<Either<Failure, Post>> getComment({
+  Future<Either<Failure, PostWithUserState>> getComment({
     required int commentId,
     required bool isComment,
   }) async {

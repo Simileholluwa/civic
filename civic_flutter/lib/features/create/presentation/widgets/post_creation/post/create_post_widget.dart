@@ -12,12 +12,10 @@ class CreatePostWidget extends ConsumerWidget {
     required this.isReplyOrComment,
     super.key,
     this.project,
-    this.parent,
   });
 
   final Post post;
   final Project? project;
-  final Post? parent;
   final bool isReplyOrComment;
 
   @override

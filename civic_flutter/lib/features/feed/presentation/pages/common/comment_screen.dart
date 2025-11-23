@@ -13,76 +13,55 @@ class CommentScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(
-      getCommentProvider(
-        id,
-        true,
-      ),
-    );
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        data.value,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        data.value,
-      ).notifier,
-    );
-    final pagingState = ref.watch(
-      paginatedCommentListProvider(id),
-    );
+    final asyncPost = ref.watch(getCommentProvider(id, true));
+    final userId = ref.read(localStorageProvider).getInt('userId');
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: Container(
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
-              ),
+              bottom: BorderSide(color: Theme.of(context).dividerColor),
             ),
           ),
           child: AppBar(
             leading: IconButton(
-              icon: const Icon(
-                Iconsax.arrow_left_2,
-              ),
-              onPressed: () {
-                context.pop();
-              },
+              icon: const Icon(Iconsax.arrow_left_2),
+              onPressed: () => context.pop(),
             ),
-            actions: data.when(
-              data: (value) {
+            title: Text(
+              'Comments',
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontSize: 23,
+                  ),
+            ),
+            actions: asyncPost.when(
+              data: (post) {
+                final isOwner = post.post.owner?.id == userId;
+                final isSubscribed = ref.watch(
+                  feedButtonsProvider(PostWithUserStateKey(post))
+                      .select((s) => s.isSubscribed),
+                );
+                final postButtonsNotifier = ref.read(
+                  feedButtonsProvider(PostWithUserStateKey(post)).notifier,
+                );
                 return [
                   IconButton(
-                    icon: const Icon(Iconsax.refresh),
-                    onPressed: pagingState.refresh,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Iconsax.filter,
-                      color: value.commentCount! <= 2
-                          ? Theme.of(context).disabledColor
-                          : Theme.of(context).iconTheme.color,
-                    ),
-                    onPressed: value.commentCount! <= 2 ? null : () {},
-                  ),
-                  IconButton(
-                    onPressed: postCardState.isOwner
+                    onPressed: isOwner
                         ? null
                         : () async {
-                            await postCardNotifier.subscribeToNotifications(
-                              data.value!.id!,
+                            await postButtonsNotifier.subscribeToNotifications(
+                              post.post.id!,
                             );
                           },
                     icon: Icon(
-                      postCardState.isSubscribed
+                      isSubscribed
                           ? Iconsax.notification_bing5
                           : Iconsax.notification_bing,
-                      color: postCardState.isOwner
+                      color: isOwner
                           ? Theme.of(context).disabledColor
-                          : postCardState.isSubscribed
+                          : isSubscribed
                               ? TColors.primary
                               : Theme.of(context).iconTheme.color,
                       size: 26,
@@ -94,45 +73,30 @@ class CommentScreen extends ConsumerWidget {
               error: (_, __) => null,
               loading: () => null,
             ),
-            title: Text(
-              'Comments',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 23,
-                  ),
-            ),
           ),
         ),
       ),
-      bottomNavigationBar: data.when(
-        data: (data) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: ContentSingleButton(
-              onPressed: () async {
-                await context.push(
-                  '/create/post/0',
-                  extra: {
-                    'parent': data,
-                  },
-                );
-              },
-              text: 'Share your opinion',
-              buttonIcon: Iconsax.magicpen5,
-            ),
-          );
-        },
+      bottomNavigationBar: asyncPost.when(
+        data: (post) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: ContentSingleButton(
+            onPressed: () async {
+              await context.push(
+                '/create/post/0',
+                extra: {'parent': post},
+              );
+            },
+            text: 'Share your opinion',
+            buttonIcon: Iconsax.magicpen5,
+          ),
+        ),
         error: (error, __) {
-          final err = error as Map<String, dynamic>;
-          if (err['action'] == 'retry') {
+          final err = error as Map<String, dynamic>?;
+          if (err != null && err['action'] == 'retry') {
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 5,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ContentSingleButton(
-                onPressed: () {
-                  ref.invalidate(getCommentProvider);
-                },
+                onPressed: () => ref.invalidate(getCommentProvider),
                 text: 'Retry',
                 buttonIcon: Iconsax.refresh,
               ),
@@ -142,42 +106,32 @@ class CommentScreen extends ConsumerWidget {
         },
         loading: () => null,
       ),
-      body: data.when(
-        data: (_) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            child: PostCommentCard(
-              id: id,
-              firstPageProgressIndicator: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 50,
-                ),
-                child: LoadingAnimationWidget.progressiveDots(
-                  color: TColors.primary,
-                  size: 50,
-                ),
+      body: asyncPost.when(
+        data: (_) => Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: PostCommentCard(
+            id: id,
+            firstPageProgressIndicator: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: LoadingAnimationWidget.progressiveDots(
+                color: TColors.primary,
+                size: 50,
               ),
             ),
-          );
-        },
+          ),
+        ),
         error: (error, stackTrace) {
-          final err = error as Map<String, String>;
+          final err = error as Map<String, String>?;
           return Center(
             child: LoadingError(
               retry: null,
-              errorMessage: err['message'],
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+              errorMessage: err != null ? err['message'] : 'Error',
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               mainAxisAlignment: MainAxisAlignment.center,
             ),
           );
         },
-        loading: () {
-          return const AppLoadingWidget();
-        },
+        loading: () => const AppLoadingWidget(),
       ),
     );
   }

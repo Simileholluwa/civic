@@ -11,12 +11,9 @@ class PostBookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pagingState = ref.watch(
-      paginatedPostBookmarkListProvider,
-    );
-    final pagingNotifier = ref.watch(
-      paginatedPostBookmarkListProvider.notifier,
-    );
+    // Read controller once; internal listen handled by ValueListenableBuilder
+    final pagingState = ref.read(paginatedPostBookmarkListProvider);
+    final pagingNotifier = ref.read(paginatedPostBookmarkListProvider.notifier);
     return AppAndroidBottomNav(
       child: Scaffold(
         body: NestedScrollView(
@@ -93,14 +90,15 @@ class PostBookmarksScreen extends ConsumerWidget {
               ),
             ];
           },
-          body: AppInfiniteList<Post>(
+          body: AppInfiniteList<PostWithUserState>(
             pagingController: pagingState,
             scrollPhysics: const NeverScrollableScrollPhysics(),
             canCreate: false,
-            itemBuilder: (__, post, _) {
+            itemBuilder: (__, postWithUserState, _) {
+              final post = postWithUserState.post;
               if (post.postType == PostType.article) {
                 return ArticleCard(
-                  post: post,
+                  postWithUserState: postWithUserState,
                   onTap: () async {
                     await context.push(
                       '/feed/article/${post.id}',
@@ -111,7 +109,7 @@ class PostBookmarksScreen extends ConsumerWidget {
               }
               if (post.postType == PostType.poll) {
                 return PollCard(
-                  post: post,
+                  postWithUserState: postWithUserState,
                   onTap: () async {
                     await context.push(
                       '/feed/poll/${post.id}',
@@ -120,14 +118,17 @@ class PostBookmarksScreen extends ConsumerWidget {
                   },
                 );
               }
-              return PostCard(
-                post: post,
-                onTap: () async {
-                  await context.push(
-                    '/feed/post/${post.id}',
-                    extra: post,
-                  );
-                },
+              return RepaintBoundary(
+                child: PostCardDetail(
+                  postWithUserState: postWithUserState,
+                  hasProject: post.postType == PostType.projectRepost,
+                  onTap: () async {
+                    await context.push(
+                      '/feed/post/${post.id}',
+                      extra: post,
+                    );
+                  },
+                ),
               );
             },
             onRefresh: pagingState.refresh,

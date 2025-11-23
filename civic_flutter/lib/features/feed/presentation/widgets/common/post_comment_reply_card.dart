@@ -10,30 +10,30 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class PostCommentReplyCard extends ConsumerWidget {
   const PostCommentReplyCard({
     required this.postId,
+    this.scrollPhysics,
+    this.firstPageProgressIndicator,
+    this.shrinkWrap,
     super.key,
   });
 
   final int postId;
+  final ScrollPhysics? scrollPhysics;
+  final bool? shrinkWrap;
+  final Widget? firstPageProgressIndicator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pagingState = ref.watch(
       paginatedRepliesListProvider(postId),
     );
-    return AppInfiniteList<Post>(
+    return AppInfiniteList<PostWithUserState>(
       pagingController: pagingState,
       canCreate: false,
-      shrinkWrap: true,
+      shrinkWrap: shrinkWrap,
       showDivider: false,
-      scrollPhysics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, value, index) {
-        final liveReply = ref.watch(
-          postStreamProvider(
-            value.id!,
-            value,
-          ),
-        );
-        final reply = liveReply.value ?? value;
+      scrollPhysics: scrollPhysics,
+      itemBuilder: (context, postWithUserState, index) {
+        final reply = postWithUserState.post;
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -51,7 +51,7 @@ class PostCommentReplyCard extends ConsumerWidget {
                 reply.commentCount != 0,
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
-                    replyOrComment: reply,
+                    postWithUserState: postWithUserState,
                     onReply: () async {
                       await context.push(
                         '/create/post/0',

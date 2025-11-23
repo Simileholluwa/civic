@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class PollDetailCard extends StatelessWidget {
   const PollDetailCard({
-    required this.newPost, super.key,
+    required this.postWithUserState,
+    super.key,
   });
 
-  final Post? newPost;
+  final PostWithUserState postWithUserState;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class PollDetailCard extends StatelessWidget {
       spacing: 10,
       children: [
         PollCard(
-          post: newPost!,
+          postWithUserState: postWithUserState,
           fromDetails: true,
         ),
         const Divider(

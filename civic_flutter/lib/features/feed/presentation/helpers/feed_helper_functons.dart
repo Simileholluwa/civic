@@ -2,9 +2,13 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class FeedHelperFunctions {
   FeedHelperFunctions._();
+
+  static String humanizeNumber(int number) =>
+      NumberFormat('#,##0').format(number);
 
   static double thresholdFor(Post post) {
     // Base by type

@@ -489,7 +489,7 @@ class PostCreation extends _$PostCreation {
         }
         if (addToList) {
           ref.read(paginatedPostListProvider.notifier).addPost(
-                data,
+                PostWithUserState(post: data),
               );
         }
         TToastMessages.successToast(
@@ -568,7 +568,7 @@ class PostCreation extends _$PostCreation {
                 paginatedPostListProvider.notifier,
               )
               .addPost(
-                post,
+                PostWithUserState(post: post),
               );
         }
         TToastMessages.successToast(
@@ -659,13 +659,17 @@ class PostCreation extends _$PostCreation {
         ref.read(sendPostLoadingProvider.notifier).value = false;
       }, (r) {
         TToastMessages.successToast('Your comment has been sent.');
-        if (id == null) {
-          ref
-              .watch(
-                paginatedCommentListProvider(postId).notifier,
-              )
-              .addComment(r);
-        }
+
+        ref
+            .watch(
+              paginatedCommentListProvider(postId).notifier,
+            )
+            .addComment(
+              PostWithUserState(
+                post: r!,
+              ),
+            );
+
         ref.read(sendPostLoadingProvider.notifier).value = false;
       });
     });
@@ -706,9 +710,11 @@ class PostCreation extends _$PostCreation {
         (r) {
           TToastMessages.successToast('Your reply has been sent.');
           if (id == null) {
-            ref
-                .read(paginatedRepliesListProvider(parentId).notifier)
-                .addReply(r);
+            ref.read(paginatedRepliesListProvider(parentId).notifier).addReply(
+                  PostWithUserState(
+                    post: r!,
+                  ),
+                );
           }
           ref.read(sendPostLoadingProvider.notifier).value = false;
         },
@@ -818,7 +824,9 @@ class PostCreation extends _$PostCreation {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         final created = data ?? post;
         if (addToList) {
-          ref.read(paginatedPostListProvider.notifier).addPost(created);
+          ref.read(paginatedPostListProvider.notifier).addPost(
+                PostWithUserState(post: created),
+              );
         }
         TToastMessages.successToast(
           'Your poll was sent.',
@@ -952,7 +960,7 @@ class PostCreation extends _$PostCreation {
         }
         if (addToList) {
           ref.read(paginatedPostListProvider.notifier).addPost(
-                data,
+                PostWithUserState(post: data),
               );
         }
         TToastMessages.successToast(

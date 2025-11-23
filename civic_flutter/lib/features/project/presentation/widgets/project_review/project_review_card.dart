@@ -128,7 +128,7 @@ class ProjectReviewCard extends ConsumerWidget {
               ),
               ContentExpandableText(
                 text: projectReview.review!,
-                onToggleTextTap: null,
+                expandOnTextTap: true,
                 hasVideo: true,
               ),
               ReactToReviewOrVetting(

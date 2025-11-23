@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 class PostCommentAndReplyContent extends StatelessWidget {
   const PostCommentAndReplyContent({
-    required this.replyOrComment,
+    required this.postWithUserState,
     required this.originalPostId,
     super.key,
     this.onReply,
@@ -16,7 +16,7 @@ class PostCommentAndReplyContent extends StatelessWidget {
     this.onShowReplies,
   });
 
-  final Post replyOrComment;
+  final PostWithUserState postWithUserState;
   final VoidCallback? onReply;
   final VoidCallback? onLike;
   final bool isReply;
@@ -26,6 +26,17 @@ class PostCommentAndReplyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final replyOrComment = postWithUserState.post;
+    final text = replyOrComment.text;
+    final hasText = text != null && text.isNotEmpty;
+    final imageUrls = replyOrComment.imageUrls;
+    final hasImages = imageUrls?.isNotEmpty ?? false;
+    final singleImage = hasImages && imageUrls!.length == 1;
+    final taggedUsers = replyOrComment.taggedUsers ?? [];
+    final locations = replyOrComment.locations ?? [];
+    final hasTags = taggedUsers.isNotEmpty;
+    final hasLocations = locations.isNotEmpty;
+
     return InkWell(
       onTap: () async {
         await context.push(
@@ -40,34 +51,55 @@ class PostCommentAndReplyContent extends StatelessWidget {
         children: [
           CreatorNameAndAccountInfo(
             creator: replyOrComment.owner!,
-          ),
-          if (replyOrComment.text != null)
-            ContentExpandableText(
-              text: replyOrComment.text!,
-              noMaxLines: true,
-              onToggleTextTap: () {},
+            timeAgo: THelperFunctions.humanizeDateTime(
+              replyOrComment.dateCreated!,
             ),
-          if (replyOrComment.imageUrls?.isNotEmpty ?? false)
-            replyOrComment.imageUrls!.length == 1
-                ? ContentSingleCachedImage(
-                    imageUrl: replyOrComment.imageUrls!.first,
-                    useMargin: false,
-                  )
-                : ContentMultipleCachedImage(
-                    imageUrls: replyOrComment.imageUrls!,
-                    useMargin: false,
-                  ),
-          if (replyOrComment.taggedUsers!.isNotEmpty ||
-              replyOrComment.locations!.isNotEmpty)
+            onMoreTapped: () async {
+              await showDialog<dynamic>(
+                context: context,
+                builder: (ctx) {
+                  return AlertDialog(
+                    contentPadding: const EdgeInsets.only(
+                      bottom: 16,
+                    ),
+                    content: ShowPostActions(
+                      postWithUserState: postWithUserState,
+                      originalPostId: replyOrComment.parentId!,
+                      isReply: isReply,
+                      isComment: isComment,
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          if (hasText)
+            ContentExpandableText(
+              text: text,
+              noMaxLines: true,
+            ),
+          if (hasImages)
+            RepaintBoundary(
+              child: singleImage
+                  ? ContentSingleCachedImage(
+                      imageUrl: imageUrls.first,
+                      useMargin: false,
+                    )
+                  : ContentMultipleCachedImage(
+                      imageUrls: imageUrls!,
+                      useMargin: false,
+                    ),
+            ),
+          if (hasTags || hasLocations)
             ContentEngagementTagsAndLocations(
               usePadding: false,
-              tags: replyOrComment.taggedUsers!,
-              locations: replyOrComment.locations!,
-              hasTags: replyOrComment.taggedUsers!.isNotEmpty,
-              hasLocations: replyOrComment.locations!.isNotEmpty,
+              tags: taggedUsers,
+              locations: locations,
+              hasTags: hasTags,
+              hasLocations: hasLocations,
             ),
           PostInteractionButtons(
-            post: replyOrComment,
+            postWithUserState: postWithUserState,
             hasPadding: false,
             onReply: onReply,
             replyIcon1: Icons.reply_rounded,

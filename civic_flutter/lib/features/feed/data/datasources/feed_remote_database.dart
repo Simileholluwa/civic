@@ -15,7 +15,7 @@ abstract class FeedRemoteDatabase {
     required int page,
     required int limit,
   });
-  Future<Post> getPost({
+  Future<PostWithUserState> getPost({
     required int postId,
   });
   Future<void> subscribeToNotifications({
@@ -46,7 +46,7 @@ abstract class FeedRemoteDatabase {
     required Post comment,
     required bool isReply,
   });
-  Future<Post> getComment({
+  Future<PostWithUserState> getComment({
     required int commentId,
     required bool isComment,
   });
@@ -159,7 +159,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }
 
   @override
-  Future<Post> getPost({
+  Future<PostWithUserState> getPost({
     required int postId,
   }) async {
     try {
@@ -232,7 +232,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }
 
   @override
-  Future<Post> getComment({
+  Future<PostWithUserState> getComment({
     required int commentId,
     required bool isComment,
   }) async {

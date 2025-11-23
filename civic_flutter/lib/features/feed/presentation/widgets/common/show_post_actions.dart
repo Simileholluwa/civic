@@ -8,7 +8,7 @@ import 'package:iconsax/iconsax.dart';
 
 class ShowPostActions extends ConsumerWidget {
   const ShowPostActions({
-    required this.post,
+    required this.postWithUserState,
     required this.originalPostId,
     super.key,
     this.fromDetails = false,
@@ -18,7 +18,7 @@ class ShowPostActions extends ConsumerWidget {
     this.isArticle = false,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final bool fromDetails;
   final bool isPoll;
   final bool isReply;
@@ -28,6 +28,7 @@ class ShowPostActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final post = postWithUserState.post;
     final type = isReply
         ? 'reply'
         : isComment
@@ -37,16 +38,17 @@ class ShowPostActions extends ConsumerWidget {
                 : isArticle
                     ? 'article'
                     : 'post';
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        post,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        post,
-      ).notifier,
-    );
+    final feedProv =
+        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final isFollower = ref.watch(feedProv.select((s) => s.isFollower));
+    final postCardNotifier = ref.read(feedProv.notifier);
+
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final isOwner = post.ownerId == userId;
+    final canEdit =
+        isOwner && DateTime.now().difference(post.dateCreated!).inMinutes <= 30;
+    final username = post.owner?.userInfo?.userName ?? 'User';
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -70,10 +72,8 @@ class ShowPostActions extends ConsumerWidget {
             ],
           ),
         ),
-        const Divider(
-          height: 0,
-        ),
-        if (!postCardState.isOwner)
+        const Divider(height: 0),
+        if (!isOwner)
           MoreActionsListTile(
             title: 'Not interested',
             subTitle: "I don't want to see this $type anymore.",
@@ -85,34 +85,30 @@ class ShowPostActions extends ConsumerWidget {
               await context.push(
                 '/feed/post/${post.id}/notInterested',
                 extra: {
-                  'post': post,
+                  'postWithUserState': postWithUserState,
                   'originalPostId': originalPostId,
                 },
               );
             },
           ),
-        if (!postCardState.isOwner)
+        if (!isOwner)
           MoreActionsListTile(
-            title: postCardState.isFollower ? 'Unfollow' : 'Follow',
-            subTitle: postCardState.isFollower
-                ? '${post.owner!.userInfo!.userName} '
-                    'will be removed from the list of people you follow.'
-                : '${post.owner!.userInfo!.userName} '
-                    'will be added to the list of people you follow.',
-            icon: postCardState.isFollower
-                ? Iconsax.user_remove
-                : Iconsax.user_cirlce_add,
+            title: isFollower ? 'Unfollow' : 'Follow',
+            subTitle: isFollower
+                ? '$username will be removed from the list of people you follow.'
+                : '$username will be added to the list of people you follow.',
+            icon: isFollower ? Iconsax.user_remove : Iconsax.user_cirlce_add,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
               }
               await postCardNotifier.toggleFollow(
                 post.ownerId,
-                post.owner!.userInfo!.userName!,
+                username,
               );
             },
           ),
-        if (!postCardState.isOwner)
+        if (!isOwner)
           MoreActionsListTile(
             title: 'Report',
             subTitle: 'This post is inappropriate or offensive.',
@@ -120,7 +116,7 @@ class ShowPostActions extends ConsumerWidget {
             color: Colors.red,
             onTap: () async {},
           ),
-        if (postCardState.canEdit)
+        if (canEdit)
           MoreActionsListTile(
             title: 'Edit',
             subTitle: 'You can change the content of this $type however, '
@@ -154,7 +150,7 @@ class ShowPostActions extends ConsumerWidget {
               }
             },
           ),
-        if (postCardState.isOwner)
+        if (isOwner)
           MoreActionsListTile(
             title: 'Delete',
             subTitle:
@@ -165,13 +161,21 @@ class ShowPostActions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
+              final kind = isReply
+                  ? PostKind.reply
+                  : isComment
+                      ? PostKind.comment
+                      : isPoll
+                          ? PostKind.poll
+                          : isArticle
+                              ? PostKind.article
+                              : PostKind.post;
               await postCardNotifier.deletePost(
-                post.id!,
-                originalPostId,
-                isReply,
-                isComment,
-                isPoll,
-                isArticle,
+                DeleteContext(
+                  postId: post.id!,
+                  kind: kind,
+                  parentId: (isReply || isComment) ? originalPostId : null,
+                ),
               );
             },
           ),

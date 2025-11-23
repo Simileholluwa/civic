@@ -59,7 +59,7 @@ class AppUserInfoWidget extends StatelessWidget {
                     children: [
                       Text(
                         '${THelperFunctions.humanizeNumber(
-                          userRecord.followers!.length,
+                          userRecord.followersCount!,
                         )} followers',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
@@ -82,7 +82,7 @@ class AppUserInfoWidget extends StatelessWidget {
                       ),
                       Text(
                         '${THelperFunctions.humanizeNumber(
-                          userRecord.following!.length,
+                          userRecord.followingCount!,
                         )} following',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(

@@ -20,11 +20,13 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
     bool? hasReviewed,
     bool? hasVetted,
     bool? isSubscribed,
+    bool? isFollower,
   })  : hasLiked = hasLiked ?? false,
         hasBookmarked = hasBookmarked ?? false,
         hasReviewed = hasReviewed ?? false,
         hasVetted = hasVetted ?? false,
-        isSubscribed = isSubscribed ?? false;
+        isSubscribed = isSubscribed ?? false,
+        isFollower = isFollower ?? false;
 
   factory ProjectWithUserState({
     required _i2.Project project,
@@ -33,6 +35,7 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
     bool? hasReviewed,
     bool? hasVetted,
     bool? isSubscribed,
+    bool? isFollower,
   }) = _ProjectWithUserStateImpl;
 
   factory ProjectWithUserState.fromJson(
@@ -45,6 +48,7 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
       hasReviewed: jsonSerialization['hasReviewed'] as bool?,
       hasVetted: jsonSerialization['hasVetted'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
+      isFollower: jsonSerialization['isFollower'] as bool?,
     );
   }
 
@@ -60,6 +64,8 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
 
   bool? isSubscribed;
 
+  bool? isFollower;
+
   /// Returns a shallow copy of this [ProjectWithUserState]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -70,6 +76,7 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
     bool? hasReviewed,
     bool? hasVetted,
     bool? isSubscribed,
+    bool? isFollower,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -80,6 +87,7 @@ abstract class ProjectWithUserState implements _i1.SerializableModel {
       if (hasReviewed != null) 'hasReviewed': hasReviewed,
       if (hasVetted != null) 'hasVetted': hasVetted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
+      if (isFollower != null) 'isFollower': isFollower,
     };
   }
 
@@ -99,6 +107,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
     bool? hasReviewed,
     bool? hasVetted,
     bool? isSubscribed,
+    bool? isFollower,
   }) : super._(
           project: project,
           hasLiked: hasLiked,
@@ -106,6 +115,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
           hasReviewed: hasReviewed,
           hasVetted: hasVetted,
           isSubscribed: isSubscribed,
+          isFollower: isFollower,
         );
 
   /// Returns a shallow copy of this [ProjectWithUserState]
@@ -119,6 +129,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
     Object? hasReviewed = _Undefined,
     Object? hasVetted = _Undefined,
     Object? isSubscribed = _Undefined,
+    Object? isFollower = _Undefined,
   }) {
     return ProjectWithUserState(
       project: project ?? this.project.copyWith(),
@@ -128,6 +139,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
       hasReviewed: hasReviewed is bool? ? hasReviewed : this.hasReviewed,
       hasVetted: hasVetted is bool? ? hasVetted : this.hasVetted,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
+      isFollower: isFollower is bool? ? isFollower : this.isFollower,
     );
   }
 }

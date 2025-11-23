@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
@@ -23,37 +25,41 @@ class CreatePostScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final suggestions = ref.watch(mentionSuggestionsProvider);
-    final hashtagsSuggestions = ref.watch(hashtagsSuggestionsProvider);
-    final data = ref.watch(
-      postDetailProvider(id, post, PostType.regular),
-    );
-    final hasDraft = ref.watch(
-      hasPostDraftProvider(TTexts.postDraft),
-    );
-    final postState = ref.watch(
-      postCreationProvider(data.value),
-    );
+    final suggestions = ref.watch(mentionSuggestionsProvider.select((s) => s));
+    final hashtagsSuggestions =
+        ref.watch(hashtagsSuggestionsProvider.select((s) => s));
+    final data = ref.watch(postDetailProvider(id, post, PostType.regular));
+    final hasDraft = ref.watch(hasPostDraftProvider(TTexts.postDraft));
+    final postState = ref.watch(postCreationProvider(data.value?.post));
     final postNotifier = ref.read(
-      postCreationProvider(data.value).notifier,
+      postCreationProvider(data.value?.post).notifier,
     );
-    final canSendPost = postState.imageUrls.isNotEmpty ||
-        postState.text.isNotEmpty ||
-        postState.videoUrl.isNotEmpty;
+    final canSendPost = ref.watch(
+      postCreationProvider(data.value?.post).select(
+        (s) =>
+            s.imageUrls.isNotEmpty ||
+            s.text.isNotEmpty ||
+            s.videoUrl.isNotEmpty,
+      ),
+    );
     final isRepost = project != null;
-    final isReplyOrComment = parent != null;
+    final isReplyOrComment =
+        parent != null || data.value?.post.parentId != null;
     final isComment = isReplyOrComment &&
         (parent?.postType == PostType.regular ||
             parent?.postType == PostType.projectRepost ||
             parent?.postType == PostType.poll ||
-            parent?.postType == PostType.article);
+            parent?.postType == PostType.article ||
+            data.value?.post.postType == PostType.comment);
     final scheduledDateTimeState = ref.watch(
-      postScheduledDateTimeProvider,
+      postScheduledDateTimeProvider.select((dt) => dt),
     );
-
+    log('isComment: $isComment');
+    log('parentId: ${data.value?.post.parentId}');
+    log('post id: ${data.value?.post.id}');
     Future<void> saveDraftAndPop() async {
       await postNotifier.savePostAsDraft(
-        data.value?.id,
+        data.value?.post.id,
         null,
       );
       if (context.mounted) context.pop();
@@ -77,25 +83,27 @@ class CreatePostScreen extends ConsumerWidget {
     }
 
     Widget? buildSuggestionsSheet() {
+      if (suggestions.isEmpty && hashtagsSuggestions.isEmpty) return null;
       if (suggestions.isNotEmpty) {
-        return MentionsSuggestionsWidget(
+        return RepaintBoundary(
+          child: MentionsSuggestionsWidget(
+            onSuggestionSelected: (s) => THelperFunctions.onSuggestionSelected(
+              ref,
+              s,
+              postState.controller,
+            ),
+          ),
+        );
+      }
+      return RepaintBoundary(
+        child: HashtagSuggestionsWidget(
           onSuggestionSelected: (s) => THelperFunctions.onSuggestionSelected(
             ref,
             s,
             postState.controller,
           ),
-        );
-      }
-      if (hashtagsSuggestions.isNotEmpty) {
-        return HashtagSuggestionsWidget(
-          onSuggestionSelected: (s) => THelperFunctions.onSuggestionSelected(
-            ref,
-            s,
-            postState.controller,
-          ),
-        );
-      }
-      return null;
+        ),
+      );
     }
 
     return PopScope(
@@ -129,19 +137,19 @@ class CreatePostScreen extends ConsumerWidget {
                 }
                 if (isRepost) {
                   await postNotifier.repostOrQuote(
-                    data.value?.id,
+                    data.value?.post.id,
                     project?.id,
                   );
                 } else if (isReplyOrComment) {
                   if (isComment) {
                     await postNotifier.sendComment(
-                      parent!.id!,
-                      data.value?.id,
+                      parent?.id ?? data.value?.post.parentId ?? 0,
+                      data.value?.post.id,
                     );
                   } else {
                     await postNotifier.sendReply(
-                      parent!.id!,
-                      data.value?.id,
+                      parent?.id ?? data.value?.post.parentId ?? 0,
+                      data.value?.post.id,
                     );
                   }
                 } else {
@@ -157,15 +165,12 @@ class CreatePostScreen extends ConsumerWidget {
           ),
           bottomSheet: buildSuggestionsSheet(),
           bottomNavigationBar: data.when(
-            data: (_) {
-              if (scheduledDateTimeState != null) {
-                return const CreateContentSchedule();
-              } else {
-                return null;
-              }
-            },
+            data: (_) => scheduledDateTimeState != null
+                ? const RepaintBoundary(child: CreateContentSchedule())
+                : null,
             error: (error, st) {
-              final err = error as Map<String, dynamic>;
+              final err =
+                  error is Map<String, dynamic> ? error : <String, dynamic>{};
               if (err['action'] == 'retry') {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -173,9 +178,7 @@ class CreatePostScreen extends ConsumerWidget {
                     vertical: 5,
                   ),
                   child: ContentSingleButton(
-                    onPressed: () {
-                      ref.invalidate(postDetailProvider);
-                    },
+                    onPressed: () => ref.invalidate(postDetailProvider),
                     text: 'Retry',
                     buttonIcon: Iconsax.refresh,
                   ),
@@ -183,39 +186,29 @@ class CreatePostScreen extends ConsumerWidget {
               }
               return null;
             },
-            loading: () {
-              return null;
-            },
+            loading: () => null,
           ),
           body: data.when(
-            data: (value) {
-              return CreatePostWidget(
-                post: value,
+            data: (value) => RepaintBoundary(
+              child: CreatePostWidget(
+                post: value.post,
                 project: project,
-                parent: parent,
                 isReplyOrComment: parent != null,
-              );
-            },
+              ),
+            ),
             error: (error, st) {
-              String? message;
-              if (error is Map) {
-                message = error['message']?.toString();
-              } else {
-                message = error.toString();
-              }
+              final message = error is Map
+                  ? error['message']?.toString()
+                  : error.toString();
               return LoadingError(
                 retry: null,
                 imageString: TImageTexts.error,
                 mainAxisAlignment: MainAxisAlignment.center,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 errorMessage: message,
               );
             },
-            loading: () {
-              return const AppLoadingWidget();
-            },
+            loading: () => const AppLoadingWidget(),
           ),
         ),
       ),

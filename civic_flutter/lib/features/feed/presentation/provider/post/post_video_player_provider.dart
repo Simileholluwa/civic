@@ -10,7 +10,6 @@ class PostVideoPlayer extends _$PostVideoPlayer {
   @override
   Raw<VideoPlayerController?> build(String videoUrl) {
     ref.onDispose(() {
-      // Dispose controller without awaiting to avoid async onDispose.
       unawaited(state?.dispose());
     });
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');

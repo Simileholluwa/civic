@@ -1,12 +1,62 @@
+import 'dart:async';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'feed_buttons_provider.g.dart';
 
-@riverpod
+enum PostKind { post, comment, reply, poll, article, projectRepost }
+
+class DeleteContext {
+  const DeleteContext({
+    required this.postId,
+    required this.kind,
+    this.parentId,
+  });
+  final int postId;
+  final PostKind kind;
+
+  final int? parentId;
+  bool get hasParent => parentId != null;
+}
+
+@Riverpod(keepAlive: true)
 class FeedButtons extends _$FeedButtons {
+  Post? _post;
+  Poll? _poll;
+  StreamSubscription<PostCounts>? _countsSub;
+  StreamSubscription<PollCounts>? _pollCountsSub;
+  bool _didInit = false;
+
+  void _subscribeCounts() {
+    final postId = _post?.id;
+    if (postId == null) return;
+    _countsSub = ref
+        .read(clientProvider)
+        .post
+        .postCountsUpdates(postId)
+        .listen((counts) {
+      state = state.applyCounts(counts);
+    });
+    ref.onDispose(() => _countsSub?.cancel());
+  }
+
+  void _subscribePollCounts() {
+    final pollId = _poll?.id;
+    if (pollId == null) return;
+    _pollCountsSub = ref
+        .read(clientProvider)
+        .post
+        .pollCountsUpdates(pollId)
+        .listen((counts) {
+      state = state.applyPollCounts(counts);
+    });
+    ref.onDispose(() => _pollCountsSub?.cancel());
+  }
+
   void setReasonNotInterested(String reason) {
     state = state.copyWith(
       reasonNotInterested: reason,
@@ -26,8 +76,9 @@ class FeedButtons extends _$FeedButtons {
   }
 
   Future<void> togglePostLikeStatus(int id) async {
-    state.copyWith(
-      hasLiked: !state.hasLiked,
+    final currentlyLiked = state.hasLiked;
+    state = state.copyWith(
+      hasLiked: !currentlyLiked,
     );
     final toggleLike = ref.read(togglePostLikeProvider);
     final result = await toggleLike(
@@ -35,8 +86,8 @@ class FeedButtons extends _$FeedButtons {
     );
     return result.fold(
       (error) {
-        state.copyWith(
-          hasLiked: !state.hasLiked,
+        state = state.copyWith(
+          hasLiked: currentlyLiked,
         );
       },
       (_) {},
@@ -47,7 +98,10 @@ class FeedButtons extends _$FeedButtons {
     int postId,
     bool isBookmarked,
   ) async {
-    state.copyWith(hasBookmarked: !state.hasBookmarked);
+    final currentBookmarked = state.hasBookmarked;
+    state = state.copyWith(
+      hasBookmarked: !currentBookmarked,
+    );
     if (isBookmarked) {
       ref
           .read(
@@ -62,7 +116,14 @@ class FeedButtons extends _$FeedButtons {
             paginatedPostBookmarkListProvider.notifier,
           )
           .addPost(
-            post,
+            PostWithUserState(
+              post: _post!,
+              hasLiked: state.hasLiked,
+              hasBookmarked: state.hasBookmarked,
+              isSubscribed: state.isSubscribed,
+              isFollower: state.isFollower,
+              selectedPollOptionId: state.votedOption?.id,
+            ),
           );
     }
     final toggleBookmark = ref.read(togglePostBookmarkProvider);
@@ -73,7 +134,9 @@ class FeedButtons extends _$FeedButtons {
     );
     return result.fold(
       (error) {
-        state.copyWith(hasBookmarked: !state.hasBookmarked);
+        state = state.copyWith(
+          hasBookmarked: currentBookmarked,
+        );
         return;
       },
       (_) async {},
@@ -147,96 +210,111 @@ class FeedButtons extends _$FeedButtons {
     });
   }
 
-  Future<void> saveComment(Post comment, int postId) async {
-    final saveComment = ref.read(savePostCommentProvider);
-    final result = await saveComment(
-      SavePostCommentParams(
-        comment,
-        false,
-      ),
-    );
-    result.fold((l) {
-      TToastMessages.errorToast(l.message);
-    }, (r) {
-      ref
-          .watch(
-            paginatedCommentListProvider(postId).notifier,
-          )
-          .addComment(r);
-    });
-  }
+  Future<bool> deletePost(DeleteContext ctx) async {
+    if (state.isDeleting) return false;
+    state = state.copyWith(isDeleting: true);
+    var rollback = () {};
+    switch (ctx.kind) {
+      case PostKind.reply:
+        if (ctx.hasParent) {
+          final notifier = ref.read(
+            paginatedRepliesListProvider(
+              ctx.parentId!,
+            ).notifier,
+          );
+          final removed = _post;
+          notifier.removeReplyById(ctx.postId);
+          rollback = () {
+            if (removed != null) {
+              notifier.addReply(
+                PostWithUserState(
+                  post: removed,
+                  hasLiked: state.hasLiked,
+                  hasBookmarked: state.hasBookmarked,
+                  isSubscribed: state.isSubscribed,
+                  isFollower: state.isFollower,
+                  selectedPollOptionId: state.votedOption?.id,
+                ),
+              );
+            }
+          };
+        }
+      case PostKind.comment:
+        if (ctx.hasParent) {
+          final notifier = ref.read(
+            paginatedCommentListProvider(
+              ctx.parentId!,
+            ).notifier,
+          );
+          final removed = _post;
+          notifier.removeCommentById(ctx.postId);
+          rollback = () {
+            if (removed != null) {
+              notifier.addComment(
+                PostWithUserState(
+                  post: removed,
+                  hasLiked: state.hasLiked,
+                  hasBookmarked: state.hasBookmarked,
+                  isSubscribed: state.isSubscribed,
+                  isFollower: state.isFollower,
+                  selectedPollOptionId: state.votedOption?.id,
+                ),
+              );
+            }
+          };
+        }
+      case PostKind.poll:
+      case PostKind.article:
+      case PostKind.post:
+      case PostKind.projectRepost:
+        final postNotifier = ref.read(
+          paginatedPostListProvider.notifier,
+        );
+        final removed = _post;
+        postNotifier.removePostById(ctx.postId);
+        rollback = () {
+          if (removed != null) {
+            postNotifier.addPost(
+              PostWithUserState(
+                post: removed,
+                hasLiked: state.hasLiked,
+                hasBookmarked: state.hasBookmarked,
+                isSubscribed: state.isSubscribed,
+                isFollower: state.isFollower,
+                selectedPollOptionId: state.votedOption?.id,
+              ),
+            );
+          }
+        };
+    }
 
-  Future<void> deletePost(
-    int postId,
-    int originalPostId,
-    bool isReply,
-    bool isComment,
-    bool isPoll,
-    bool isArticle,
-  ) async {
-    final deleteProject = ref.read(deletePostProvider);
-    final result = await deleteProject(
+    final deletePostUseCase = ref.read(deletePostProvider);
+    final result = await deletePostUseCase(
       DeletePostParams(
-        postId,
+        ctx.postId,
       ),
     );
-    return result.fold((error) async {
-      TToastMessages.errorToast(
-        error.message,
-      );
-      return;
+    return result.fold((error) {
+      rollback();
+      state = state.copyWith(isDeleting: false);
+      TToastMessages.errorToast(error.message);
+      return false;
     }, (_) {
-      if (isReply) {
-        ref
-            .read(
-              paginatedRepliesListProvider(
-                originalPostId,
-              ).notifier,
-            )
-            .removeReplyById(
-              postId,
-            );
-        TToastMessages.infoToast('Your reply has been deleted.');
-      } else if (isComment) {
-        ref
-            .read(
-              paginatedCommentListProvider(
-                originalPostId,
-              ).notifier,
-            )
-            .removeCommentById(
-              postId,
-            );
-        TToastMessages.infoToast('Your comment has been deleted.');
-      } else if (isPoll) {
-        ref
-            .watch(
-              paginatedPostListProvider.notifier,
-            )
-            .removePostById(
-              postId,
-            );
-        TToastMessages.infoToast('Your poll has been deleted.');
-      } else if (isArticle) {
-        ref
-            .watch(
-              paginatedPostListProvider.notifier,
-            )
-            .removePostById(
-              postId,
-            );
-        TToastMessages.infoToast('Your article has been deleted.');
-      } else {
-        ref
-            .watch(
-              paginatedPostListProvider.notifier,
-            )
-            .removePostById(
-              postId,
-            );
-        TToastMessages.infoToast('Your post has been deleted.');
+      switch (ctx.kind) {
+        case PostKind.reply:
+          TToastMessages.infoToast('Your reply has been deleted.');
+        case PostKind.comment:
+          TToastMessages.infoToast('Your comment has been deleted.');
+        case PostKind.poll:
+          TToastMessages.infoToast('Your poll has been deleted.');
+        case PostKind.article:
+          TToastMessages.infoToast('Your article has been deleted.');
+        case PostKind.post:
+        case PostKind.projectRepost:
+          TToastMessages.infoToast('Your post has been deleted.');
       }
-      return;
+      state = state.copyWith(isDeleting: false);
+      return true;
     });
   }
 
@@ -290,10 +368,28 @@ class FeedButtons extends _$FeedButtons {
   }
 
   @override
-  FeedWidgetsState build(Post? post) {
-    if (post == null) {
-      return FeedWidgetsState.empty();
+  FeedWidgetsState build(PostWithUserStateKey? key) {
+    if (key == null) return FeedWidgetsState.empty();
+    final postUserState = key.value;
+    _post = postUserState.post;
+    _poll = postUserState.post.poll;
+    final base = FeedWidgetsState.populate(postUserState);
+    if (!_didInit) {
+      _didInit = true;
+      _subscribeCounts();
+      _subscribePollCounts();
+      return base;
     }
-    return FeedWidgetsState.populate(PostWithUserState(post: post), ref);
+    final preserved = base.copyWith(
+      hasLiked: state.hasLiked,
+      hasBookmarked: state.hasBookmarked,
+      isSubscribed: state.isSubscribed,
+      isFollower: state.isFollower,
+      hasVoted: state.hasVoted,
+      votedOption: state.votedOption,
+    );
+    _subscribeCounts();
+    _subscribePollCounts();
+    return preserved;
   }
 }

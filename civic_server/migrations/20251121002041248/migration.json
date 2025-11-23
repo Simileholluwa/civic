@@ -1,0 +1,155 @@
+{
+  "actions": [
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "user_follow",
+        "dartName": "UserFollow",
+        "module": "civic",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('user_follow_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "followerId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "followeeId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": true,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "indexName": "user_follow_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          },
+          {
+            "indexName": "follower_followee_unique_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "followerId"
+              },
+              {
+                "type": 0,
+                "definition": "followeeId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          },
+          {
+            "indexName": "follower_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "followerId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          },
+          {
+            "indexName": "followee_idx",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "followeeId"
+              }
+            ],
+            "type": "btree",
+            "isUnique": false,
+            "isPrimary": false
+          }
+        ],
+        "managed": true
+      }
+    },
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "user_record",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "following",
+          "followers"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"following\" of table \"user_record\" will be dropped.",
+            "table": "user_record",
+            "columns": [
+              "following"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"followers\" of table \"user_record\" will be dropped.",
+            "table": "user_record",
+            "columns": [
+              "followers"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"following\" of table \"user_record\" will be dropped.",
+      "table": "user_record",
+      "columns": [
+        "following"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"followers\" of table \"user_record\" will be dropped.",
+      "table": "user_record",
+      "columns": [
+        "followers"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

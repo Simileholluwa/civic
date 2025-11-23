@@ -9,8 +9,8 @@ part 'post_bookmark_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
   @override
-  PagingController<int, Post> build() {
-    final controller = PagingController<int, Post>(
+  PagingController<int, PostWithUserState> build() {
+    final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -21,7 +21,10 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
     return controller;
   }
 
-  Future<List<Post>> _fetchPage(int pageKey, {int limit = 50}) async {
+  Future<List<PostWithUserState>> _fetchPage(
+    int pageKey, {
+    int limit = 50,
+  }) async {
     final usecase = ref.read(getUserPostBookmarksProvider);
     final result = await usecase(
       GetUserPostBookmarksParams(
@@ -31,11 +34,11 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
     );
     return result.fold(
       (error) => throw error,
-      (data) => data.results.map((e) => e.post).toList(),
+      (data) => data.results,
     );
   }
 
-  void addPost(Post? post) {
+  void addPost(PostWithUserState? post) {
     if (post == null) return;
     final current = state.value;
     final pages = current.pages;
@@ -49,8 +52,15 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
       );
       return;
     }
-    // Prevent duplicate by id in first page.
-    if (pages.first.any((p) => p.id == post.id)) return;
+    if (pages.first.any((p) => p.post.id == post.post.id)) {
+      state.value = state.value.mapItems((p) {
+        if (p.post.id == post.post.id) {
+          return post;
+        }
+        return p;
+      });
+      return;
+    }
     final updatedFirst = [post, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
@@ -64,16 +74,10 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
     );
   }
 
-  void removeProjectRepostById(int? projectId) {
-    if (projectId == null) return;
-    final prev = state.value;
-    state.value = prev.filterItems((p) => p.projectId != projectId);
-  }
-
   void removeAllPosts() {
     final current = state.value;
     state.value = current.copyWith(
-      pages: const [<Post>[]],
+      pages: const [<PostWithUserState>[]],
       keys: const [1],
       hasNextPage: current.hasNextPage,
     );
@@ -82,7 +86,7 @@ class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
   void removePostById(int? postId) {
     if (postId == null) return;
     final prev = state.value;
-    state.value = prev.filterItems((p) => p.id != postId);
+    state.value = prev.filterItems((p) => p.post.id != postId);
   }
 
   Future<void> clearBookmarksList() async {

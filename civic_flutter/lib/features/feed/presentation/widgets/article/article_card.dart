@@ -1,32 +1,50 @@
+import 'dart:convert';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ArticleCard extends ConsumerWidget {
   const ArticleCard({
-    required this.post,
+    required this.postWithUserState,
     super.key,
     this.onTap,
     this.fromDetails = false,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final bool fromDetails;
   final VoidCallback? onTap;
 
+  static final Map<int, String> _plainTextCache = <int, String>{};
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final livePost = ref.watch(
-      postStreamProvider(
-        post.id!,
-        post,
-      ),
-    );
-    final newPost = livePost.value ?? post;
-    final postCardState = ref.watch(feedButtonsProvider(newPost));
+    var articleContent = '';
+    final post = postWithUserState.post;
+    final postId = post.id;
+    if (postId != null && _plainTextCache.containsKey(postId)) {
+      articleContent = _plainTextCache[postId]!;
+    } else {
+      final raw = post.article?.content;
+      if (raw != null) {
+        final dynamic decoded = jsonDecode(raw);
+        if (decoded is List) {
+          articleContent = Document.fromJson(decoded).toPlainText();
+        } else if (decoded is Map<String, dynamic>) {
+          articleContent = Document.fromJson([decoded]).toPlainText();
+        }
+      }
+      if (postId != null) {
+        _plainTextCache[postId] = articleContent;
+      }
+    }
+    final hasTags = post.tags != null && post.tags!.isNotEmpty;
+    final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
       onTap: fromDetails
           ? null
@@ -34,7 +52,7 @@ class ArticleCard extends ConsumerWidget {
               () async {
                 await context.push(
                   '/feed/article/${post.id}',
-                  extra: newPost,
+                  extra: post,
                 );
               },
       child: Column(
@@ -43,8 +61,10 @@ class ArticleCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
             child: ContentCreatorInfo(
-              creator: postCardState.creator!,
-              timeAgo: postCardState.timeAgo,
+              creator: post.owner!,
+              timeAgo: THelperFunctions.humanizeDateTime(
+                post.dateCreated!,
+              ),
               onMoreTapped: () async {
                 await showDialog<dynamic>(
                   context: context,
@@ -54,7 +74,7 @@ class ArticleCard extends ConsumerWidget {
                         bottom: 16,
                       ),
                       content: ShowPostActions(
-                        post: post,
+                        postWithUserState: postWithUserState,
                         originalPostId: post.id!,
                         isArticle: true,
                       ),
@@ -71,7 +91,7 @@ class ArticleCard extends ConsumerWidget {
               children: [
                 Expanded(
                   child: Text(
-                    postCardState.text,
+                    post.text!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -100,27 +120,29 @@ class ArticleCard extends ConsumerWidget {
               ],
             ),
           ),
-          Container(
-            width: double.maxFinite,
-            margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                TSizes.md,
+          RepaintBoundary(
+            child: Container(
+              width: double.maxFinite,
+              margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  TSizes.md,
+                ),
+                color: Theme.of(context).cardColor,
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                ),
               ),
-              color: Theme.of(context).cardColor,
-              border: Border.all(
-                color: Theme.of(context).dividerColor,
-              ),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                TSizes.md,
-              ),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: ContentCachedImage(
-                  url: postCardState.articleBanner,
-                  height: 200,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  TSizes.md,
+                ),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ContentCachedImage(
+                    url: post.imageUrls!.first,
+                    height: 200,
+                  ),
                 ),
               ),
             ),
@@ -131,25 +153,27 @@ class ArticleCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 5,
               children: [
-                ContentExpandableText(
-                  text: postCardState.articleContent,
-                  hasImage: true,
-                  maxLines: 3,
-                  onToggleTextTap: () {},
+                RepaintBoundary(
+                  child: ContentExpandableText(
+                    text: articleContent,
+                    hasImage: true,
+                    maxLines: 3,
+                    onToggleTextTap: () {},
+                  ),
                 ),
               ],
             ),
           ),
-          if (postCardState.hasTags || postCardState.hasLocation)
+          if (hasTags || hasLocations)
             ContentEngagementTagsAndLocations(
-              tags: postCardState.tags,
-              locations: postCardState.locations,
-              hasTags: postCardState.hasTags,
-              hasLocations: postCardState.hasLocation,
+              tags: post.taggedUsers ?? [],
+              locations: post.locations ?? [],
+              hasTags: hasTags,
+              hasLocations: hasLocations,
             ),
           if (!fromDetails)
             PostInteractionButtons(
-              post: newPost,
+              postWithUserState: postWithUserState,
               onReply: () async {
                 await context.push(
                   '/feed/post/${post.id}/comments',

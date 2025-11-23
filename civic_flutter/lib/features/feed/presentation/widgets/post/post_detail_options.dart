@@ -8,7 +8,7 @@ import 'package:iconsax/iconsax.dart';
 
 class PostDetailOptions extends ConsumerWidget {
   const PostDetailOptions({
-    required this.post,
+    required this.postWithUserState,
     super.key,
     this.isPoll = false,
     this.isArticle = false,
@@ -16,7 +16,7 @@ class PostDetailOptions extends ConsumerWidget {
     this.isComment = false,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final bool isPoll;
   final bool isArticle;
   final bool isReply;
@@ -24,134 +24,151 @@ class PostDetailOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        post,
+    final feedProv =
+        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final post = postWithUserState.post;
+    final hasLiked = ref.watch(
+      feedProv.select(
+        (s) => s.hasLiked,
       ),
     );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        post,
-      ).notifier,
+    final hasBookmarked = ref.watch(
+      feedProv.select(
+        (s) => s.hasBookmarked,
+      ),
     );
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: () async {
-            await postCardNotifier.togglePostLikeStatus(
-              post.id!,
-            );
-          },
-          icon: Icon(
-            postCardState.hasLiked ? Iconsax.heart5 : Iconsax.heart,
-            color: postCardState.hasLiked
-                ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
-          ),
-        ),
-        IconButton(
-          onPressed: () async {
-            await postCardNotifier.togglePostBookmarkStatus(
-              post.id!,
-              postCardState.hasBookmarked,
-            );
-          },
-          icon: Icon(
-            postCardState.hasBookmarked
-                ? Icons.bookmark
-                : Icons.bookmark_add_outlined,
-            color: postCardState.hasBookmarked
-                ? TColors.primary
-                : Theme.of(context).iconTheme.color!,
-          ),
-        ),
-        IconButton(
-          onPressed: () async {},
-          icon: const Icon(
-            Icons.share,
-          ),
-        ),
-        if (postCardState.canEdit)
+    final postCardNotifier = ref.read(feedProv.notifier);
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final isOwner = post.ownerId == userId;
+    final canEdit =
+        isOwner && DateTime.now().difference(post.dateCreated!).inMinutes <= 30;
+
+    return RepaintBoundary(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
           IconButton(
             onPressed: () async {
-              if (isPoll) {
-                await context.push(
-                  '/create/poll/${post.id!}',
-                  extra: {
-                    'post': post,
-                  },
-                );
-              } else if (isArticle) {
-                await context.push(
-                  '/create/article/${post.id!}',
-                  extra: {
-                    'post': post,
-                  },
-                );
-              } else {
-                await context.push(
-                  '/create/post/${post.id}',
-                  extra: {
-                    'post': post,
-                    'project': post.project,
-                  },
-                );
-              }
+              final id = post.id;
+              if (id == null) return;
+              await postCardNotifier.togglePostLikeStatus(id);
             },
-            icon: const Icon(
-              Iconsax.edit,
+            icon: Icon(
+              hasLiked ? Iconsax.heart5 : Iconsax.heart,
+              color: hasLiked
+                  ? TColors.primary
+                  : Theme.of(context).iconTheme.color!,
             ),
           ),
-        if (!postCardState.isOwner)
           IconButton(
             onPressed: () async {
-              await context.push(
-                '/feed/post/${post.id}/notInterested',
-                extra: {
-                  'post': post,
-                  'originalPostId': post.id!,
-                },
+              final id = post.id;
+              if (id == null) return;
+              await postCardNotifier.togglePostBookmarkStatus(
+                id,
+                hasBookmarked,
               );
             },
-            icon: const Icon(
-              Iconsax.eye_slash,
+            icon: Icon(
+              hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
+              color: hasBookmarked
+                  ? TColors.primary
+                  : Theme.of(context).iconTheme.color!,
             ),
           ),
-        if (postCardState.isOwner)
-          IconButton(
-            onPressed: () async {
-              final result = await FeedHelperFunctions.deletePostDialog(
-                context,
-                post.id!,
-              );
-              if (result != null) {
-                if (result) {
-                  await postCardNotifier.deletePost(
-                    post.id!,
-                    post.id!,
-                    isReply,
-                    isComment,
-                    isPoll,
-                    isArticle,
-                  );
-                }
-              }
-            },
-            icon: const Icon(
-              Iconsax.trash,
-              color: Colors.red,
-            ),
-          ),
-        if (!postCardState.isOwner)
           IconButton(
             onPressed: () async {},
-            icon: const Icon(
-              Iconsax.flag,
-              color: Colors.red,
-            ),
+            icon: const Icon(Icons.share),
           ),
-      ],
+          if (canEdit)
+            IconButton(
+              onPressed: () async {
+                final id = post.id;
+                if (id == null) return;
+                if (isPoll) {
+                  await context.push(
+                    '/create/poll/$id',
+                    extra: {
+                      'post': post,
+                    },
+                  );
+                } else if (isArticle) {
+                  await context.push(
+                    '/create/article/$id',
+                    extra: {
+                      'post': post,
+                    },
+                  );
+                } else {
+                  await context.push(
+                    '/create/post/$id',
+                    extra: {
+                      'post': post,
+                      'project': post.project,
+                    },
+                  );
+                }
+              },
+              icon: const Icon(Iconsax.edit),
+            ),
+          if (!isOwner)
+            IconButton(
+              onPressed: () async {
+                final id = post.id;
+                if (id == null) return;
+                await context.push(
+                  '/feed/post/$id/notInterested',
+                  extra: {
+                    'postWithUserState': postWithUserState,
+                    'originalPostId': id,
+                  },
+                );
+              },
+              icon: const Icon(Iconsax.eye_slash),
+            ),
+          if (isOwner)
+            IconButton(
+              onPressed: () async {
+                final id = post.id;
+                if (id == null) return;
+                final result = await FeedHelperFunctions.deletePostDialog(
+                  context,
+                  id,
+                );
+                if (result ?? false) {
+                  final kind = isReply
+                      ? PostKind.reply
+                      : isComment
+                          ? PostKind.comment
+                          : isPoll
+                              ? PostKind.poll
+                              : isArticle
+                                  ? PostKind.article
+                                  : PostKind.post;
+                  await postCardNotifier.deletePost(
+                    DeleteContext(
+                      postId: id,
+                      kind: kind,
+                      parentId: (isReply || isComment) ? id : null,
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(
+                Iconsax.trash,
+                color: Colors.red,
+              ),
+            ),
+          if (!isOwner)
+            IconButton(
+              onPressed: () async {},
+              icon: const Icon(
+                Iconsax.flag,
+                color: Colors.red,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

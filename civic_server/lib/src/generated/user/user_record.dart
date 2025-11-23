@@ -31,8 +31,6 @@ abstract class UserRecord
     this.middleName,
     this.email,
     this.profileImage,
-    this.following,
-    this.followers,
     int? followersCount,
     int? followingCount,
     DateTime? createdAt,
@@ -57,8 +55,6 @@ abstract class UserRecord
     String? middleName,
     String? email,
     String? profileImage,
-    List<int>? following,
-    List<int>? followers,
     int? followersCount,
     int? followingCount,
     DateTime? createdAt,
@@ -84,12 +80,6 @@ abstract class UserRecord
       middleName: jsonSerialization['middleName'] as String?,
       email: jsonSerialization['email'] as String?,
       profileImage: jsonSerialization['profileImage'] as String?,
-      following: (jsonSerialization['following'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      followers: (jsonSerialization['followers'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
       followersCount: jsonSerialization['followersCount'] as int?,
       followingCount: jsonSerialization['followingCount'] as int?,
       createdAt: jsonSerialization['createdAt'] == null
@@ -135,10 +125,6 @@ abstract class UserRecord
 
   String? profileImage;
 
-  List<int>? following;
-
-  List<int>? followers;
-
   int? followersCount;
 
   int? followingCount;
@@ -169,8 +155,6 @@ abstract class UserRecord
     String? middleName,
     String? email,
     String? profileImage,
-    List<int>? following,
-    List<int>? followers,
     int? followersCount,
     int? followingCount,
     DateTime? createdAt,
@@ -193,8 +177,6 @@ abstract class UserRecord
       if (middleName != null) 'middleName': middleName,
       if (email != null) 'email': email,
       if (profileImage != null) 'profileImage': profileImage,
-      if (following != null) 'following': following?.toJson(),
-      if (followers != null) 'followers': followers?.toJson(),
       if (followersCount != null) 'followersCount': followersCount,
       if (followingCount != null) 'followingCount': followingCount,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
@@ -219,8 +201,6 @@ abstract class UserRecord
       if (middleName != null) 'middleName': middleName,
       if (email != null) 'email': email,
       if (profileImage != null) 'profileImage': profileImage,
-      if (following != null) 'following': following?.toJson(),
-      if (followers != null) 'followers': followers?.toJson(),
       if (followersCount != null) 'followersCount': followersCount,
       if (followingCount != null) 'followingCount': followingCount,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
@@ -276,8 +256,6 @@ class _UserRecordImpl extends UserRecord {
     String? middleName,
     String? email,
     String? profileImage,
-    List<int>? following,
-    List<int>? followers,
     int? followersCount,
     int? followingCount,
     DateTime? createdAt,
@@ -297,8 +275,6 @@ class _UserRecordImpl extends UserRecord {
           middleName: middleName,
           email: email,
           profileImage: profileImage,
-          following: following,
-          followers: followers,
           followersCount: followersCount,
           followingCount: followingCount,
           createdAt: createdAt,
@@ -324,8 +300,6 @@ class _UserRecordImpl extends UserRecord {
     Object? middleName = _Undefined,
     Object? email = _Undefined,
     Object? profileImage = _Undefined,
-    Object? following = _Undefined,
-    Object? followers = _Undefined,
     Object? followersCount = _Undefined,
     Object? followingCount = _Undefined,
     Object? createdAt = _Undefined,
@@ -347,12 +321,6 @@ class _UserRecordImpl extends UserRecord {
       middleName: middleName is String? ? middleName : this.middleName,
       email: email is String? ? email : this.email,
       profileImage: profileImage is String? ? profileImage : this.profileImage,
-      following: following is List<int>?
-          ? following
-          : this.following?.map((e0) => e0).toList(),
-      followers: followers is List<int>?
-          ? followers
-          : this.followers?.map((e0) => e0).toList(),
       followersCount:
           followersCount is int? ? followersCount : this.followersCount,
       followingCount:
@@ -414,14 +382,6 @@ class UserRecordTable extends _i1.Table<int?> {
       'profileImage',
       this,
     );
-    following = _i1.ColumnSerializable(
-      'following',
-      this,
-    );
-    followers = _i1.ColumnSerializable(
-      'followers',
-      this,
-    );
     followersCount = _i1.ColumnInt(
       'followersCount',
       this,
@@ -473,10 +433,6 @@ class UserRecordTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString profileImage;
 
-  late final _i1.ColumnSerializable following;
-
-  late final _i1.ColumnSerializable followers;
-
   late final _i1.ColumnInt followersCount;
 
   late final _i1.ColumnInt followingCount;
@@ -514,8 +470,6 @@ class UserRecordTable extends _i1.Table<int?> {
         middleName,
         email,
         profileImage,
-        following,
-        followers,
         followersCount,
         followingCount,
         createdAt,

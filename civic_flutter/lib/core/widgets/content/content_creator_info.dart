@@ -25,29 +25,78 @@ class ContentCreatorInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 15,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () async {
+            await context.push(
+              '/profile/${creator.id}',
+            );
+          },
+          child: CircleAvatar(
+            radius: radius,
+            backgroundImage: CachedNetworkImageProvider(
+              creator.userInfo!.imageUrl!,
+            ),
+          ),
+        ),
+        Expanded(
+          child: CreatorNameAndAccountInfo(
+            creator: creator,
+            showPoliticalStatus: showPoliticalStatus,
+            timeAgo: timeAgo,
+            onMoreTapped: onMoreTapped,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CreatorNameAndAccountInfo extends StatelessWidget {
+  const CreatorNameAndAccountInfo({
+    required this.creator,
+    required this.timeAgo,
+    super.key,
+    this.onMoreTapped,
+    this.showPoliticalStatus = true,
+  });
+
+  final UserRecord creator;
+  final bool showPoliticalStatus;
+  final VoidCallback? onMoreTapped;
+  final String timeAgo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          spacing: 15,
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 3,
           children: [
-            InkWell(
-              onTap: () async {
-                await context.push(
-                  '/profile/${creator.id}',
-                );
-              },
-              child: CircleAvatar(
-                radius: radius,
-                backgroundImage: CachedNetworkImageProvider(
-                  creator.userInfo!.imageUrl!,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    THelperFunctions.getFullName(
+                      creator.firstName!,
+                      creator.middleName,
+                      creator.lastName!,
+                    ),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
+              ],
             ),
-            CreatorNameAndAccountInfo(
-              creator: creator,
-              showPoliticalStatus: showPoliticalStatus,
-            ),
+            if (showPoliticalStatus) UserQuickDetails(creator: creator),
           ],
         ),
         Column(
@@ -70,47 +119,6 @@ class ContentCreatorInfo extends StatelessWidget {
             ),
           ],
         ),
-      ],
-    );
-  }
-}
-
-class CreatorNameAndAccountInfo extends StatelessWidget {
-  const CreatorNameAndAccountInfo({
-    required this.creator,
-    super.key,
-    this.showPoliticalStatus = true,
-  });
-
-  final UserRecord creator;
-  final bool showPoliticalStatus;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 3,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Text(
-                THelperFunctions.getFullName(
-                  creator.firstName!,
-                  creator.middleName,
-                  creator.lastName!,
-                ),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        if (showPoliticalStatus) UserQuickDetails(creator: creator),
       ],
     );
   }
@@ -151,7 +159,7 @@ class UserQuickDetails extends StatelessWidget {
           size: 20,
           icon: Iconsax.people5,
           title: '${THelperFunctions.humanizeNumber(
-            creator.followers!.length,
+            creator.followersCount!,
           )} followers',
           color: Colors.blue,
           textStyle: Theme.of(context).textTheme.labelMedium!.copyWith(

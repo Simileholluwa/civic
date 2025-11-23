@@ -6,34 +6,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PollOptionsCard extends ConsumerWidget {
   const PollOptionsCard({
-    required this.post,
+    required this.postWithUserState,
     super.key,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final livePost = ref.watch(
-      postStreamProvider(
-        post.id!,
-        post,
-      ),
-    );
-    final newPost = livePost.value ?? post;
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        newPost,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        newPost,
-      ).notifier,
-    );
-
+    final feedProv =
+        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final optionVoters = ref.watch(feedProv.select((s) => s.optionVoters));
+    final totalVotes = ref.watch(feedProv.select((s) => s.totalVotes));
+    final votedOption = ref.watch(feedProv.select((s) => s.votedOption));
+    final pollEnded = ref.watch(feedProv.select((s) => s.pollEnded));
+    final isSendingPoll = ref.watch(feedProv.select((s) => s.isSendingPoll));
+    final postCardNotifier = ref.read(feedProv.notifier);
+    final options = postWithUserState.post.poll!.options!;
+    final votesMap = {
+      for (final v in optionVoters) v.optionId: v.votesCount ?? 0,
+    };
     return ListView.separated(
-      itemCount: postCardState.options.length,
+      itemCount: options.length,
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -45,18 +39,16 @@ class PollOptionsCard extends ConsumerWidget {
         );
       },
       itemBuilder: (context, index) {
-        final option = postCardState.options[index];
-        final numberOfVotes = postCardState.pollOptions[index].votesCount!;
-        final totalVotes = postCardState.totalVotes;
-        final userVote =
-            postCardState.votedOption == postCardState.pollOptions[index];
+        final option = options[index];
+        final numberOfOptionVotes = votesMap[option.id] ?? 0;
+        final userVote = votedOption == option;
         return GestureDetector(
-          onTap: postCardState.pollEnded || postCardState.isSendingPoll
+          onTap: pollEnded || isSendingPoll
               ? null
               : () async {
                   await postCardNotifier.castVote(
-                    post.id!,
-                    postCardState.pollOptions[index].id!,
+                    postWithUserState.post.id!,
+                    option.id!,
                   );
                 },
           child: Container(
@@ -81,7 +73,7 @@ class PollOptionsCard extends ConsumerWidget {
                       left: 15,
                     ),
                     title: Text(
-                      option,
+                      option.option!,
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
                             fontWeight:
                                 userVote ? FontWeight.w600 : FontWeight.normal,
@@ -100,7 +92,7 @@ class PollOptionsCard extends ConsumerWidget {
                     children: [
                       Text(
                         totalVotes != 0
-                            ? '${((numberOfVotes / totalVotes) * 100).toStringAsFixed(
+                            ? '${((numberOfOptionVotes / totalVotes) * 100).toStringAsFixed(
                                 2,
                               )}%'
                             : '0.00%',
@@ -111,11 +103,11 @@ class PollOptionsCard extends ConsumerWidget {
                                 ),
                       ),
                       Text(
-                        numberOfVotes == 0
+                        numberOfOptionVotes == 0
                             ? 'No votes'
-                            : numberOfVotes == 1
+                            : numberOfOptionVotes == 1
                                 ? '1 vote'
-                                : ' ${THelperFunctions.humanizeNumber(numberOfVotes)} votes',
+                                : ' ${THelperFunctions.humanizeNumber(numberOfOptionVotes)} votes',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   fontWeight: FontWeight.bold,

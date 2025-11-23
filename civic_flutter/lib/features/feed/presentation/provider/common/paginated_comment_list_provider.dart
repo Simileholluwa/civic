@@ -8,10 +8,10 @@ part 'paginated_comment_list_provider.g.dart';
 @riverpod
 class PaginatedCommentList extends _$PaginatedCommentList {
   @override
-  PagingController<int, Post> build(int postId) {
-    final controller = PagingController<int, Post>(
+  PagingController<int, PostWithUserState> build(int postId) {
+    final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
-        if (state.lastPageIsEmpty) return null; // Stop if last page empty.
+        if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
       },
       fetchPage: (pageKey) => _fetchPage(postId, pageKey),
@@ -20,7 +20,7 @@ class PaginatedCommentList extends _$PaginatedCommentList {
     return controller;
   }
 
-  Future<List<Post>> _fetchPage(
+  Future<List<PostWithUserState>> _fetchPage(
     int postId,
     int pageKey, {
     int limit = 50,
@@ -35,11 +35,11 @@ class PaginatedCommentList extends _$PaginatedCommentList {
     );
     return result.fold(
       (error) => throw error,
-      (data) => data.results.map((e) => e.post).toList(),
+      (data) => data.results,
     );
   }
 
-  void addComment(Post? comment) {
+  void addComment(PostWithUserState? comment) {
     if (comment == null) return;
     final current = state.value;
     final pages = current.pages;
@@ -53,8 +53,14 @@ class PaginatedCommentList extends _$PaginatedCommentList {
       );
       return;
     }
-    // Prevent duplicates in first page.
-    if (pages.first.any((c) => c.id == comment.id)) return;
+    if (pages.first.any((c) => c.post.id == comment.post.id)) {
+      state.value = state.value.mapItems((c) {
+        if (c.post.id == comment.post.id) {
+          return comment;
+        }
+        return c;
+      });
+    }
     final updatedFirst = [comment, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
@@ -71,6 +77,7 @@ class PaginatedCommentList extends _$PaginatedCommentList {
   void removeCommentById(int? commentId) {
     if (commentId == null) return;
     final prev = state.value;
-    state.value = prev.filterItems((c) => c.id != commentId);
+    final next = prev.filterItems((c) => c.post.id != commentId);
+    state.value = next;
   }
 }

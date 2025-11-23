@@ -13,7 +13,7 @@ part of 'paginated_comment_list_provider.dart';
 const paginatedCommentListProvider = PaginatedCommentListFamily._();
 
 final class PaginatedCommentListProvider extends $NotifierProvider<
-    PaginatedCommentList, PagingController<int, Post>> {
+    PaginatedCommentList, PagingController<int, PostWithUserState>> {
   const PaginatedCommentListProvider._(
       {required PaginatedCommentListFamily super.from,
       required int super.argument})
@@ -40,10 +40,11 @@ final class PaginatedCommentListProvider extends $NotifierProvider<
   PaginatedCommentList create() => PaginatedCommentList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, Post> value) {
+  Override overrideWithValue(PagingController<int, PostWithUserState> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingController<int, Post>>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, PostWithUserState>>(value),
     );
   }
 
@@ -59,12 +60,16 @@ final class PaginatedCommentListProvider extends $NotifierProvider<
 }
 
 String _$paginatedCommentListHash() =>
-    r'e94c638b6c4c0959044d01006d77486cb1fbc3fa';
+    r'8892052f61095a27b6c92c38f2eacfd6cb889178';
 
 final class PaginatedCommentListFamily extends $Family
     with
-        $ClassFamilyOverride<PaginatedCommentList, PagingController<int, Post>,
-            PagingController<int, Post>, PagingController<int, Post>, int> {
+        $ClassFamilyOverride<
+            PaginatedCommentList,
+            PagingController<int, PostWithUserState>,
+            PagingController<int, PostWithUserState>,
+            PagingController<int, PostWithUserState>,
+            int> {
   const PaginatedCommentListFamily._()
       : super(
           retry: null,
@@ -84,11 +89,11 @@ final class PaginatedCommentListFamily extends $Family
 }
 
 abstract class _$PaginatedCommentList
-    extends $Notifier<PagingController<int, Post>> {
+    extends $Notifier<PagingController<int, PostWithUserState>> {
   late final _$args = ref.$arg as int;
   int get postId => _$args;
 
-  PagingController<int, Post> build(
+  PagingController<int, PostWithUserState> build(
     int postId,
   );
   @$mustCallSuper
@@ -97,11 +102,12 @@ abstract class _$PaginatedCommentList
     final created = build(
       _$args,
     );
-    final ref = this.ref
-        as $Ref<PagingController<int, Post>, PagingController<int, Post>>;
+    final ref = this.ref as $Ref<PagingController<int, PostWithUserState>,
+        PagingController<int, PostWithUserState>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, Post>, PagingController<int, Post>>,
-        PagingController<int, Post>,
+        AnyNotifier<PagingController<int, PostWithUserState>,
+            PagingController<int, PostWithUserState>>,
+        PagingController<int, PostWithUserState>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

@@ -18,16 +18,19 @@ abstract class PostWithUserState implements _i1.SerializableModel {
     bool? hasLiked,
     bool? hasBookmarked,
     bool? isSubscribed,
+    bool? isFollower,
     this.selectedPollOptionId,
   })  : hasLiked = hasLiked ?? false,
         hasBookmarked = hasBookmarked ?? false,
-        isSubscribed = isSubscribed ?? false;
+        isSubscribed = isSubscribed ?? false,
+        isFollower = isFollower ?? false;
 
   factory PostWithUserState({
     required _i2.Post post,
     bool? hasLiked,
     bool? hasBookmarked,
     bool? isSubscribed,
+    bool? isFollower,
     int? selectedPollOptionId,
   }) = _PostWithUserStateImpl;
 
@@ -38,6 +41,7 @@ abstract class PostWithUserState implements _i1.SerializableModel {
       hasLiked: jsonSerialization['hasLiked'] as bool?,
       hasBookmarked: jsonSerialization['hasBookmarked'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
+      isFollower: jsonSerialization['isFollower'] as bool?,
       selectedPollOptionId: jsonSerialization['selectedPollOptionId'] as int?,
     );
   }
@@ -50,6 +54,8 @@ abstract class PostWithUserState implements _i1.SerializableModel {
 
   bool? isSubscribed;
 
+  bool? isFollower;
+
   int? selectedPollOptionId;
 
   /// Returns a shallow copy of this [PostWithUserState]
@@ -60,6 +66,7 @@ abstract class PostWithUserState implements _i1.SerializableModel {
     bool? hasLiked,
     bool? hasBookmarked,
     bool? isSubscribed,
+    bool? isFollower,
     int? selectedPollOptionId,
   });
   @override
@@ -69,6 +76,7 @@ abstract class PostWithUserState implements _i1.SerializableModel {
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
+      if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
         'selectedPollOptionId': selectedPollOptionId,
     };
@@ -88,12 +96,14 @@ class _PostWithUserStateImpl extends PostWithUserState {
     bool? hasLiked,
     bool? hasBookmarked,
     bool? isSubscribed,
+    bool? isFollower,
     int? selectedPollOptionId,
   }) : super._(
           post: post,
           hasLiked: hasLiked,
           hasBookmarked: hasBookmarked,
           isSubscribed: isSubscribed,
+          isFollower: isFollower,
           selectedPollOptionId: selectedPollOptionId,
         );
 
@@ -106,6 +116,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     Object? hasLiked = _Undefined,
     Object? hasBookmarked = _Undefined,
     Object? isSubscribed = _Undefined,
+    Object? isFollower = _Undefined,
     Object? selectedPollOptionId = _Undefined,
   }) {
     return PostWithUserState(
@@ -114,6 +125,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
       hasBookmarked:
           hasBookmarked is bool? ? hasBookmarked : this.hasBookmarked,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
+      isFollower: isFollower is bool? ? isFollower : this.isFollower,
       selectedPollOptionId: selectedPollOptionId is int?
           ? selectedPollOptionId
           : this.selectedPollOptionId,

@@ -27,28 +27,6 @@ Stream<Project> projectStream(
 }
 
 @Riverpod(keepAlive: true)
-Stream<Post> postStream(
-  Ref ref,
-  int postId,
-  Post? post,
-) async* {
-  if (post != null) {
-    yield post;
-  }
-  final updates = ref
-      .read(
-        clientProvider,
-      )
-      .post
-      .postUpdates(
-        postId,
-      );
-  await for (final update in updates) {
-    yield update;
-  }
-}
-
-@Riverpod(keepAlive: true)
 Stream<ProjectReview> projectReviewStream(
   Ref ref,
   int projectReviewId,

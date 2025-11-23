@@ -18,7 +18,6 @@ class AppWrapper extends ConsumerWidget {
       '/feed',
       '/network',
       '/notifications',
-      '/notifications/settings',
       '/create',
     ];
     final location =

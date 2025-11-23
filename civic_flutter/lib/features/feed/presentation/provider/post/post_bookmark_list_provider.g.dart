@@ -13,7 +13,7 @@ part of 'post_bookmark_list_provider.dart';
 const paginatedPostBookmarkListProvider = PaginatedPostBookmarkListProvider._();
 
 final class PaginatedPostBookmarkListProvider extends $NotifierProvider<
-    PaginatedPostBookmarkList, PagingController<int, Post>> {
+    PaginatedPostBookmarkList, PagingController<int, PostWithUserState>> {
   const PaginatedPostBookmarkListProvider._()
       : super(
           from: null,
@@ -33,29 +33,31 @@ final class PaginatedPostBookmarkListProvider extends $NotifierProvider<
   PaginatedPostBookmarkList create() => PaginatedPostBookmarkList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, Post> value) {
+  Override overrideWithValue(PagingController<int, PostWithUserState> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<PagingController<int, Post>>(value),
+      providerOverride:
+          $SyncValueProvider<PagingController<int, PostWithUserState>>(value),
     );
   }
 }
 
 String _$paginatedPostBookmarkListHash() =>
-    r'22341602e954dd28b8b9a3b123754f06befb34c5';
+    r'd729c079f43cccb67efda9859b75a09b14a431f5';
 
 abstract class _$PaginatedPostBookmarkList
-    extends $Notifier<PagingController<int, Post>> {
-  PagingController<int, Post> build();
+    extends $Notifier<PagingController<int, PostWithUserState>> {
+  PagingController<int, PostWithUserState> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref
-        as $Ref<PagingController<int, Post>, PagingController<int, Post>>;
+    final ref = this.ref as $Ref<PagingController<int, PostWithUserState>,
+        PagingController<int, PostWithUserState>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, Post>, PagingController<int, Post>>,
-        PagingController<int, Post>,
+        AnyNotifier<PagingController<int, PostWithUserState>,
+            PagingController<int, PostWithUserState>>,
+        PagingController<int, PostWithUserState>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

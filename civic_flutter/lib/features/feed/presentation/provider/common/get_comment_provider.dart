@@ -7,12 +7,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'get_comment_provider.g.dart';
 
 @riverpod
-Future<Post> getComment(
+Future<PostWithUserState> getComment(
   Ref ref,
   int commentId,
   bool isComment,
 ) async {
-  final completer = Completer<Post>();
+  final completer = Completer<PostWithUserState>();
 
   final getComment = ref.read(getCommentDetailProvider);
   final result = await getComment(

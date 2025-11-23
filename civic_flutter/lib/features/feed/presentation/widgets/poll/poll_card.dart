@@ -7,31 +7,44 @@ import 'package:go_router/go_router.dart';
 
 class PollCard extends ConsumerWidget {
   const PollCard({
-    required this.post,
+    required this.postWithUserState,
     super.key,
     this.onTap,
     this.fromDetails = false,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final bool fromDetails;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final livePost = ref.watch(
-      postStreamProvider(
-        post.id!,
-        post,
+    final post = postWithUserState.post;
+    final feedProv =
+        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final totalVotes = ref.watch(
+      feedProv.select(
+        (s) => s.totalVotes,
       ),
     );
-    final newPost = livePost.value ?? post;
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        newPost,
+    final numberOfVoters = ref.watch(
+      feedProv.select(
+        (s) => s.numberOfVoters,
       ),
     );
-
+    final hasVoted = ref.watch(
+      feedProv.select(
+        (s) => s.hasVoted,
+      ),
+    );
+    final pollEnded = ref.watch(
+      feedProv.select(
+        (s) => s.pollEnded,
+      ),
+    );
+    final hasText = post.text != null && post.text!.isNotEmpty;
+    final hasTags = post.tags != null && post.tags!.isNotEmpty;
+    final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
       onTap: fromDetails
           ? null
@@ -39,7 +52,7 @@ class PollCard extends ConsumerWidget {
               () async {
                 await context.push(
                   '/feed/poll/${post.id}',
-                  extra: newPost,
+                  extra: post,
                 );
               },
       child: Column(
@@ -49,8 +62,10 @@ class PollCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
             child: ContentCreatorInfo(
-              creator: postCardState.creator!,
-              timeAgo: postCardState.timeAgo,
+              creator: post.owner!,
+              timeAgo: THelperFunctions.humanizeDateTime(
+                post.dateCreated!,
+              ),
               onMoreTapped: () async {
                 await showDialog<dynamic>(
                   context: context,
@@ -60,7 +75,7 @@ class PollCard extends ConsumerWidget {
                         bottom: 16,
                       ),
                       content: ShowPostActions(
-                        post: post,
+                        postWithUserState: postWithUserState,
                         originalPostId: post.id!,
                         isPoll: true,
                       ),
@@ -70,65 +85,74 @@ class PollCard extends ConsumerWidget {
               },
             ),
           ),
-          if (postCardState.hasText)
+          if (hasText)
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
               ),
               child: ContentExpandableText(
-                text: postCardState.text,
-                onToggleTextTap: () {},
+                text: post.text!,
+                expandOnTextTap: true,
               ),
             ),
-          PollOptionsCard(post: newPost),
-          if (postCardState.hasTags || postCardState.hasLocation)
-            ContentEngagementTagsAndLocations(
-              tags: postCardState.tags,
-              locations: postCardState.locations,
-              hasTags: postCardState.hasTags,
-              hasLocations: postCardState.hasLocation,
+          RepaintBoundary(
+            child: PollOptionsCard(
+              postWithUserState: postWithUserState,
             ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      postCardState.totalVotes == 0
-                          ? 'No votes'
-                          : '${postCardState.numberOfVoters} ${postCardState.totalVotes == 1 ? 'vote' : 'votes'}',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: Theme.of(context).hintColor,
-                          ),
-                    ),
-                    Text(
-                      FeedHelperFunctions.formatTimeLeft(
-                        newPost.poll!.expiresAt!,
+          ),
+          if (hasTags || hasLocations)
+            ContentEngagementTagsAndLocations(
+              tags: post.taggedUsers ?? [],
+              locations: post.locations ?? [],
+              hasTags: hasTags,
+              hasLocations: hasLocations,
+            ),
+          RepaintBoundary(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        totalVotes == 0
+                            ? 'No votes'
+                            : '$numberOfVoters ${totalVotes == 1 ? 'vote' : 'votes'}',
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                ),
                       ),
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: Theme.of(context).hintColor,
-                          ),
-                    ),
-                  ],
-                ),
-                if (postCardState.hasVoted && !postCardState.pollEnded)
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      'Clear vote',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: TColors.primary,
-                          ),
-                    ),
+                      Text(
+                        FeedHelperFunctions.formatTimeLeft(
+                          post.poll!.expiresAt!,
+                        ),
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                      ),
+                    ],
                   ),
-              ],
+                  if (hasVoted && !pollEnded)
+                    GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        'Clear vote',
+                        style:
+                            Theme.of(context).textTheme.labelMedium!.copyWith(
+                                  color: TColors.primary,
+                                ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
           if (!fromDetails)
             PostInteractionButtons(
-              post: newPost,
+              postWithUserState: postWithUserState,
               onReply: () async {
                 await context.push(
                   '/feed/post/${post.id}/comments',

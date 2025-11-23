@@ -8,8 +8,8 @@ part 'post_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedPostList extends _$PaginatedPostList {
   @override
-  PagingController<int, Post> build() {
-    final controller = PagingController<int, Post>(
+  PagingController<int, PostWithUserState> build() {
+    final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -20,7 +20,10 @@ class PaginatedPostList extends _$PaginatedPostList {
     return controller;
   }
 
-  Future<List<Post>> _fetchPage(int pageKey, {int limit = 50}) async {
+  Future<List<PostWithUserState>> _fetchPage(
+    int pageKey, {
+    int limit = 50,
+  }) async {
     final usecase = ref.read(getPostsProvider);
     final result = await usecase(
       GetPostsParams(
@@ -30,7 +33,7 @@ class PaginatedPostList extends _$PaginatedPostList {
     );
     return result.fold(
       (error) => throw error,
-      (data) => data.results.map((e) => e.post).toList(),
+      (data) => data.results,
     );
   }
 
@@ -38,7 +41,7 @@ class PaginatedPostList extends _$PaginatedPostList {
     state.refresh();
   }
 
-  void addPost(Post? post) {
+  void addPost(PostWithUserState? post) {
     if (post == null) return;
     final current = state.value;
     final pages = current.pages;
@@ -52,8 +55,14 @@ class PaginatedPostList extends _$PaginatedPostList {
       );
       return;
     }
-    // Prevent duplicate in first page.
-    if (pages.first.any((p) => p.id == post.id)) return;
+    if (pages.first.any((p) => p.post.id == post.post.id)) {
+      state.value = state.value.mapItems((p) {
+        if (p.post.id == post.post.id) {
+          return post;
+        }
+        return p;
+      });
+    }
     final updatedFirst = [post, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
@@ -70,12 +79,12 @@ class PaginatedPostList extends _$PaginatedPostList {
   void removeProjectRepostById(int? projectId) {
     if (projectId == null) return;
     final prev = state.value;
-    state.value = prev.filterItems((p) => p.projectId != projectId);
+    state.value = prev.filterItems((p) => p.post.projectId != projectId);
   }
 
   void removePostById(int? postId) {
     if (postId == null) return;
     final prev = state.value;
-    state.value = prev.filterItems((p) => p.id != postId);
+    state.value = prev.filterItems((p) => p.post.id != postId);
   }
 }

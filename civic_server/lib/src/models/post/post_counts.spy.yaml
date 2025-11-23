@@ -1,0 +1,8 @@
+class: PostCounts
+fields:
+  postId: int
+  likesCount: int?, default=0
+  bookmarksCount: int?, default=0
+  commentCount: int?, default=0
+  impressionsCount: int?, default=0
+  lastImpressionAt: DateTime?, default=now

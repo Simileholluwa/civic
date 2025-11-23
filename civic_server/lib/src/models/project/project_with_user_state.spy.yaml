@@ -6,3 +6,4 @@ fields:
     hasReviewed: bool?, default=false
     hasVetted: bool?, default=false
     isSubscribed: bool?, default=false
+    isFollower: bool?, default=false

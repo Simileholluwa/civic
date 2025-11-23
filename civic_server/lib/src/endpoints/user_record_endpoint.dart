@@ -8,10 +8,7 @@ class UserRecordEndpoint extends Endpoint {
     // Save the user record to the database
     final savedRecord = await UserRecord.db.insertRow(
       session,
-      userRecord.copyWith(
-        followers: [],
-        following: [],
-      ),
+      userRecord,
     );
 
     return savedRecord;
@@ -82,68 +79,91 @@ class UserRecordEndpoint extends Endpoint {
     int limit = 20,
     int page = 1,
   }) async {
-    // Fetch the authenticated user
     final authInfo = await session.authenticated;
-
-    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
+    // Guard pagination params
+    if (limit <= 0 || page <= 0) {
+      throw ServerSideException(message: 'Invalid pagination parameters');
+    }
 
-    // Fetch the current user record
-    var currentUser = await UserRecord.db.findFirstRow(
+    final trimmed = query.trim();
+
+    final currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
+      include: UserRecord.include(userInfo: UserInfo.include()),
     );
-
-    // If the current user does not exist, throw an exception
     if (currentUser == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    // Fetch users that the current user follows and whose usernames match the query
-    var users = await UserRecord.db.find(
+    // Normalized followees via join table
+    final followRows = await UserFollow.db.find(
       session,
-      where: (u) =>
-          u.userInfo.id.inSet(
-            currentUser.followers!.toSet(),
-          ) &
-          u.userInfo.userName.ilike('%${query.trim()}%'),
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
+      where: (t) => t.followerId.equals(currentUser.id!),
     );
+    final followeeIds = followRows.map((f) => f.followeeId).toSet();
 
-    // If the number of users fetched is less than the limit, fetch additional users
-    if (users.length < limit) {
-      var additionalUsers = await UserRecord.db.find(
+    // 1. Fetch followed user matches first (scoped by query when provided)
+    List<UserRecord> followedMatches = <UserRecord>[];
+    if (followeeIds.isNotEmpty) {
+      followedMatches = await UserRecord.db.find(
         session,
-        limit: limit,
-        offset: (page * limit) - limit,
-        where: (u) =>
-            u.userInfo.userName.ilike('%${query.trim()}%') &
-            u.userInfo.id.notEquals(currentUser.userInfo!.id),
-        include: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        where: (u) {
+          final base = u.id.inSet(followeeIds);
+          if (trimmed.isNotEmpty) {
+            return base & u.userInfo.userName.ilike('%$trimmed%');
+          }
+          return base;
+        },
+        include: UserRecord.include(userInfo: UserInfo.include()),
       );
-      users.addAll(additionalUsers);
     }
 
-    // Fetch the total number of users
-    final count = await UserRecord.db.count(session);
+    // 2. If fewer than limit, fetch additional users matching query excluding current user & already included followees
+    List<UserRecord> additional = <UserRecord>[];
+    if (followedMatches.length < limit) {
+      final remaining = limit - followedMatches.length;
+      Expression whereAdditional(UserRecordTable u) {
+        Expression base = u.id.notEquals(currentUser.id!);
+        if (trimmed.isNotEmpty) {
+          base = base & u.userInfo.userName.ilike('%$trimmed%');
+        }
+        if (followeeIds.isNotEmpty) {
+          base = base & u.id.notInSet(followeeIds);
+        }
+        return base;
+      }
 
-    // Return a list of users
+      additional = await UserRecord.db.find(
+        session,
+        limit: remaining,
+        offset: (page * limit) - limit,
+        where: whereAdditional,
+        include: UserRecord.include(userInfo: UserInfo.include()),
+      );
+    }
+
+    // Compose results: followed first then additional, ensure uniqueness (defensive)
+    final ordered = <UserRecord>[...followedMatches, ...additional];
+    final seen = <int>{};
+    final finalResults = <UserRecord>[];
+    for (final u in ordered) {
+      final id = u.id!;
+      if (seen.add(id)) finalResults.add(u);
+      if (finalResults.length >= limit) break;
+    }
+
+    final totalCount = await UserRecord.db.count(session);
     return UsersList(
-      count: count,
+      count: totalCount,
       limit: limit,
       page: page,
-      results: users,
-      numPages: (count / limit).ceil(),
-      canLoadMore: page * limit < count,
+      results: finalResults,
+      numPages: (totalCount / limit).ceil(),
+      canLoadMore: page * limit < totalCount,
     );
   }
 
@@ -158,11 +178,10 @@ class UserRecordEndpoint extends Endpoint {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    // 2. Normalize & guard query. For very short queries we avoid a wide scan.
+    // 2. Normalize & guard query.
     final trimmed = query.trim();
-    if (trimmed.length < 2) return <UserRecord>[];
 
-    // 3. Load current user (with userInfo to access id & following list).
+    // 3. Load current user (with userInfo for username & avatar).
     final currentUser = await UserRecord.db.findFirstRow(
       session,
       where: (row) => row.userInfoId.equals(authInfo.userId),
@@ -172,26 +191,30 @@ class UserRecordEndpoint extends Endpoint {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    final followingSet = currentUser.following?.toSet() ?? <int>{};
+    // 4. Fetch followees via normalized join table instead of legacy array.
+    final followRows = await UserFollow.db.find(
+      session,
+      where: (t) => t.followerId.equals(currentUser.id!),
+    );
+    final followingSet = followRows.map((f) => f.followeeId).toSet();
 
-    // 4. Fetch followed matches first (priority ranking).
+    // 5. Fetch followed matches first (priority ranking).
     List<UserRecord> followedMatches = <UserRecord>[];
     if (followingSet.isNotEmpty) {
       followedMatches = await UserRecord.db.find(
         session,
-        limit: limit, // cap early; we'll trim later anyway
+        limit: limit,
         where: (u) =>
-            u.userInfo.id.inSet(followingSet) &
-            u.userInfo.userName.ilike('%$trimmed%'),
+            u.id.inSet(followingSet) & u.userInfo.userName.ilike('%$trimmed%'),
         include: UserRecord.include(userInfo: UserInfo.include()),
       );
     }
 
-    // 5. If we still need more, fetch other matches excluding current user & already included followed ids.
+    // 6. If we still need more, fetch other matches excluding current user & already included followed ids.
     List<UserRecord> otherMatches = <UserRecord>[];
     if (followedMatches.length < limit) {
       final remaining = limit - followedMatches.length;
-      final followedIds = followedMatches.map((u) => u.userInfo!.id).toSet();
+      final followedIds = followedMatches.map((u) => u.id!).toSet();
 
       // One query for others; we'll filter duplicates post-query (simpler than notInSet support).
       final rawOthers = await UserRecord.db.find(
@@ -199,11 +222,11 @@ class UserRecordEndpoint extends Endpoint {
         limit: remaining * 2, // slight oversample to allow filtering
         where: (u) =>
             u.userInfo.userName.ilike('%$trimmed%') &
-            u.userInfo.id.notEquals(currentUser.userInfo!.id),
+            u.id.notEquals(currentUser.id!),
         include: UserRecord.include(userInfo: UserInfo.include()),
       );
       for (final u in rawOthers) {
-        final id = u.userInfo!.id;
+        final id = u.id!;
         if (!followedIds.contains(id) && !followingSet.contains(id)) {
           otherMatches.add(u);
           if (otherMatches.length >= remaining) break;
@@ -211,13 +234,13 @@ class UserRecordEndpoint extends Endpoint {
       }
     }
 
-    // 6. Compose ordered list (followed first), trim to limit, ensure uniqueness.
+    // 7. Compose ordered list (followed first), trim to limit, ensure uniqueness.
     final ordered = <UserRecord>[...followedMatches, ...otherMatches];
     final seen = <int>{};
     final deduped = <UserRecord>[];
     for (final u in ordered) {
-      final id = u.userInfo!.id;
-      if (id != null && seen.add(id)) deduped.add(u);
+      final id = u.id!;
+      if (seen.add(id)) deduped.add(u);
       if (deduped.length >= limit) break;
     }
 
@@ -228,66 +251,95 @@ class UserRecordEndpoint extends Endpoint {
     Session session,
     int userId,
   ) async {
-    // Fetch the authenticated user
     final authInfo = await session.authenticated;
-
-    // If the user is not authenticated, throw an exception
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
-
-    // Fetch current user and the user to be followed
-    final currentUser = await UserRecord.db.findById(
-      session,
-      authInfo.userId,
-      include: UserRecord.include(
-        userInfo: UserInfo.include(),
-      ),
-    );
-    final followedUser = await UserRecord.db.findById(
-      session,
-      userId,
-    );
-
-    // If either user does not exist, throw an exception
-    if (currentUser == null || followedUser == null) {
-      throw ServerSideException(message: 'User not found');
+    if (authInfo.userId == userId) {
+      // No-op: cannot follow self
+      return;
     }
 
-    // Check if the current user is already following the target user
-    if (currentUser.following!.contains(userId)) {
-      // Unfollow the user
-      currentUser.following!.remove(userId);
-      followedUser.followers!.remove(authInfo.userId);
-    } else {
-      // Follow the user
-      currentUser.following!.add(userId);
-      followedUser.followers!.add(authInfo.userId);
+    await session.db.transaction((transaction) async {
+      // Load current user & target user
+      final currentUser = await UserRecord.db.findById(
+        session,
+        authInfo.userId,
+        include: UserRecord.include(userInfo: UserInfo.include()),
+        transaction: transaction,
+      );
+      final targetUser = await UserRecord.db.findById(
+        session,
+        userId,
+        include: UserRecord.include(userInfo: UserInfo.include()),
+        transaction: transaction,
+      );
+      if (currentUser == null || targetUser == null) {
+        throw ServerSideException(message: 'User not found');
+      }
 
-      if (currentUser.id != userId) {
+      // Check existing follow relation in join table
+      final existing = await UserFollow.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.followerId.equals(currentUser.id!) & t.followeeId.equals(userId),
+        transaction: transaction,
+      );
+
+      if (existing != null) {
+        // Unfollow: remove join, decrement counts safely
+        await UserFollow.db
+            .deleteRow(session, existing, transaction: transaction);
+        currentUser.followingCount = (currentUser.followingCount ?? 0) > 0
+            ? (currentUser.followingCount! - 1)
+            : 0;
+        targetUser.followersCount = (targetUser.followersCount ?? 0) > 0
+            ? (targetUser.followersCount! - 1)
+            : 0;
+      } else {
+        // Follow: insert join, increment counts
+        await UserFollow.db.insertRow(
+          session,
+          UserFollow(
+            followerId: currentUser.id!,
+            followeeId: targetUser.id!,
+            createdAt: DateTime.now(),
+          ),
+          transaction: transaction,
+        );
+        currentUser.followingCount = (currentUser.followingCount ?? 0) + 1;
+        targetUser.followersCount = (targetUser.followersCount ?? 0) + 1;
+
+        // Send notification only on follow
         await NotificationEndpoint().sendNotification(
           session,
-          receiverId: userId,
+          receiverId: targetUser.id!,
           senderId: currentUser.id!,
           actionType: NotificationActionType.follow,
           targetType: NotificationTargetType.user,
-          senderAvatarUrl: currentUser.userInfo!.imageUrl!,
+          senderAvatarUrl: currentUser.userInfo?.imageUrl ?? '',
           targetId: currentUser.id!,
           body:
               'Tap here to view your followers and follow people you may know.',
           senderName: getFullName(
-            currentUser.firstName!,
+            currentUser.firstName ?? 'User',
             currentUser.middleName,
-            currentUser.lastName!,
+            currentUser.lastName ?? '',
           ),
           actionRoute: '/profile/${currentUser.id}',
         );
       }
-    }
 
-    // Save changes to both users
-    await UserRecord.db.updateRow(session, currentUser);
-    await UserRecord.db.updateRow(session, followedUser);
+      // Persist updated counts
+      await UserRecord.db
+          .updateRow(session, currentUser, transaction: transaction);
+      await UserRecord.db
+          .updateRow(session, targetUser, transaction: transaction);
+
+      // Broadcast lightweight user updates (counts changed)
+      session.messages.postMessage('user_${currentUser.id}', currentUser);
+      session.messages.postMessage('user_${targetUser.id}', targetUser);
+    });
   }
 
   Future<UserRecord?> getNinDetails(Session session, String ninNumber) async {

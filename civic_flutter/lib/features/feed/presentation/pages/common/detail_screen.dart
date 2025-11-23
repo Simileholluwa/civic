@@ -22,27 +22,9 @@ class DetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(
+    final asyncPost = ref.watch(
       postDetailProvider(id, post, postType),
     );
-    final livePost = ref.watch(
-      postStreamProvider(
-        id,
-        data.value,
-      ),
-    );
-    final newPost = livePost.value ?? data.value;
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        newPost,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        newPost,
-      ).notifier,
-    );
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -64,76 +46,155 @@ class DetailScreen extends ConsumerWidget {
                 context.pop();
               },
             ),
-            actions: data.hasValue && !data.hasError
-                ? [
-                    IconButton(
-                      onPressed: postCardState.isOwner
-                          ? null
-                          : () async {
-                              await postCardNotifier.subscribeToNotifications(
-                                data.value!.id!,
-                              );
-                            },
-                      icon: Icon(
-                        postCardState.isSubscribed
-                            ? Iconsax.notification5
-                            : Iconsax.notification,
-                        color: postCardState.isOwner
-                            ? Theme.of(context).disabledColor
-                            : postCardState.isSubscribed
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color,
-                        size: 30,
+            actions: [
+              asyncPost.when(
+                data: (value) {
+                  final postData = value.post;
+                  final userId =
+                      ref.read(localStorageProvider).getInt('userId');
+                  final isOwner = postData.ownerId == userId;
+                  final isSubscribed = ref.watch(
+                    feedButtonsProvider(PostWithUserStateKey(value)).select(
+                      (s) => s.isSubscribed,
+                    ),
+                  );
+                  final notifier = ref.read(
+                    feedButtonsProvider(PostWithUserStateKey(value)).notifier,
+                  );
+                  return Row(
+                    children: [
+                      IconButton(
+                        onPressed: isOwner
+                            ? null
+                            : () async {
+                                await notifier
+                                    .subscribeToNotifications(postData.id!);
+                              },
+                        icon: Icon(
+                          isSubscribed
+                              ? Iconsax.notification5
+                              : Iconsax.notification,
+                          color: isOwner
+                              ? Theme.of(context).disabledColor
+                              : isSubscribed
+                                  ? TColors.primary
+                                  : Theme.of(context).iconTheme.color,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ]
-                : null,
+                      const SizedBox(width: 5),
+                    ],
+                  );
+                },
+                error: (_, __) => const SizedBox.shrink(),
+                loading: () => const SizedBox.shrink(),
+              ),
+            ],
           ),
         ),
       ),
-      body: data.when(
+      body: asyncPost.when(
         data: (value) {
-          final likes = postCardState.numberOfLikes;
-          final likesCount = newPost!.likesCount!;
+          final likes = ref.watch(
+            feedButtonsProvider(PostWithUserStateKey(value))
+                .select((s) => s.numberOfLikes),
+          );
+          final formattedLikes = FeedHelperFunctions.humanizeNumber(
+            likes,
+          );
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 10,
               children: [
-                if (postType == PostType.regular)
-                  PostCardDetail(
-                    post: newPost,
-                    showInteractions: false,
-                    hasProject: newPost.project != null,
-                    onTap: null,
-                    noMaxLines: true,
-                  ),
-                if (postType == PostType.poll) PollDetailCard(newPost: newPost),
-                if (postType == PostType.article)
-                  ArticleDetailCard(
-                    newPost: newPost,
+                if (value.post.isDeleted!)
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+                        child: ContentCreatorInfo(
+                          creator: value.post.owner!,
+                          timeAgo: THelperFunctions.humanizeDateTime(
+                            value.post.dateCreated!,
+                          ),
+                          onMoreTapped: () async {
+                            await showDialog<dynamic>(
+                              context: context,
+                              builder: (ctx) {
+                                return AlertDialog(
+                                  contentPadding: const EdgeInsets.only(
+                                    bottom: 16,
+                                  ),
+                                  content: ShowPostActions(
+                                    postWithUserState: value,
+                                    originalPostId: value.post.id!,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.all(15),
+                        margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(
+                            TSizes.sm,
+                          ),
+                        ),
+                        child: const Text(
+                          'This post is no longer available. It may have been deleted or removed.',
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    children: [
+                      if (postType == PostType.regular)
+                        RepaintBoundary(
+                          child: PostCardDetail(
+                            postWithUserState: value,
+                            showInteractions: false,
+                            hasProject: value.post.project != null,
+                            onTap: null,
+                            noMaxLines: true,
+                          ),
+                        ),
+                      if (postType == PostType.poll)
+                        RepaintBoundary(
+                          child: PollDetailCard(
+                            postWithUserState: value,
+                          ),
+                        ),
+                      if (postType == PostType.article)
+                        RepaintBoundary(
+                          child: ArticleDetailCard(
+                            post: value.post,
+                          ),
+                        ),
+                    ],
                   ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 17,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         DateFormat('hh:mm a • MMM d, y')
-                            .format(value.dateCreated!),
+                            .format(value.post.dateCreated!),
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: Theme.of(context).hintColor,
                                 ),
                       ),
-                      if (likesCount > 0)
+                      if (likes > 0)
                         Text(
-                          likesCount == 1 ? '$likes like' : '$likes likes',
+                          likes == 1
+                              ? '$formattedLikes like'
+                              : '$formattedLikes likes',
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
                                     color: Theme.of(context).hintColor,
@@ -152,7 +213,7 @@ class DetailScreen extends ConsumerWidget {
                         horizontal: 10,
                       ),
                       child: PostDetailOptions(
-                        post: newPost,
+                        postWithUserState: value,
                       ),
                     ),
                     const Divider(
@@ -160,25 +221,33 @@ class DetailScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                if (newPost.postType == PostType.commentReply ||
-                    newPost.postType == PostType.comment)
-                  PostCommentReplyCard(
-                    postId: value.id!,
+                if (value.post.postType == PostType.commentReply ||
+                    value.post.postType == PostType.comment)
+                  RepaintBoundary(
+                    child: PostCommentReplyCard(
+                      postId: value.post.id!,
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                    ),
                   ),
-                if (newPost.postType == PostType.regular ||
-                    newPost.postType == PostType.poll ||
-                    newPost.postType == PostType.article ||
-                    newPost.postType == PostType.projectRepost)
-                  PostCommentCard(
-                    id: value.id!,
-                    firstPageProgressIndicator: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 30,
-                      ),
-                      child: Center(
-                        child: LoadingAnimationWidget.progressiveDots(
-                          color: TColors.primary,
-                          size: 50,
+                if (value.post.postType == PostType.regular ||
+                    value.post.postType == PostType.poll ||
+                    value.post.postType == PostType.article ||
+                    value.post.postType == PostType.projectRepost)
+                  RepaintBoundary(
+                    child: PostCommentCard(
+                      id: value.post.id!,
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      firstPageProgressIndicator: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 30,
+                        ),
+                        child: Center(
+                          child: LoadingAnimationWidget.progressiveDots(
+                            color: TColors.primary,
+                            size: 50,
+                          ),
                         ),
                       ),
                     ),
@@ -204,7 +273,7 @@ class DetailScreen extends ConsumerWidget {
           return const AppLoadingWidget();
         },
       ),
-      bottomNavigationBar: data.when(
+      bottomNavigationBar: asyncPost.when(
         data: (value) {
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -213,12 +282,11 @@ class DetailScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                 child: ShareOpinion(
-                  imageUrl: value.owner!.userInfo!.imageUrl!,
                   onTap: () async {
                     await context.push(
                       '/create/post/0',
                       extra: {
-                        'parent': value,
+                        'parent': value.post,
                       },
                     );
                   },
@@ -237,9 +305,7 @@ class DetailScreen extends ConsumerWidget {
               ),
               child: ContentSingleButton(
                 onPressed: () {
-                  ref.invalidate(
-                    postDetailProvider,
-                  );
+                  ref.invalidate(postDetailProvider);
                 },
                 text: 'Retry',
                 buttonIcon: Iconsax.refresh,

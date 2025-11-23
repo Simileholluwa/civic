@@ -865,8 +865,8 @@ class Endpoints extends _i1.EndpointDispatch {
             params['reason'],
           ),
         ),
-        'postUpdates': _i1.MethodStreamConnector(
-          name: 'postUpdates',
+        'postCountsUpdates': _i1.MethodStreamConnector(
+          name: 'postCountsUpdates',
           params: {
             'postId': _i1.ParameterDescription(
               name: 'postId',
@@ -881,9 +881,30 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
             Map<String, Stream> streamParams,
           ) =>
-              (endpoints['post'] as _i6.PostEndpoint).postUpdates(
+              (endpoints['post'] as _i6.PostEndpoint).postCountsUpdates(
             session,
             params['postId'],
+          ),
+        ),
+        'pollCountsUpdates': _i1.MethodStreamConnector(
+          name: 'pollCountsUpdates',
+          params: {
+            'pollId': _i1.ParameterDescription(
+              name: 'pollId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['post'] as _i6.PostEndpoint).pollCountsUpdates(
+            session,
+            params['pollId'],
           ),
         ),
       },

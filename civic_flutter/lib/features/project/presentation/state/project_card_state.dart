@@ -174,10 +174,7 @@ class ProjectCardState {
       locations: project.physicalLocations ?? [],
       hasLocation: project.physicalLocations?.isNotEmpty ?? false,
       isOwner: userId == project.ownerId,
-      isFollower: userId != project.ownerId &&
-          project.owner!.followers!.contains(
-            userId,
-          ),
+      isFollower: projectWithUserState.isFollower,
       isDeleted: project.isDeleted,
     );
   }

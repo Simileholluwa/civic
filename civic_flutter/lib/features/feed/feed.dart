@@ -1,6 +1,7 @@
 export 'data/datasources/feed_local_database.dart';
 export 'data/datasources/feed_remote_database.dart';
 export 'data/repositories/post_repository_impl.dart';
+export 'domain/models/post_with_user_state_key.dart';
 export 'domain/repositories/post_repository.dart';
 export 'domain/usecases/article/save_article_use_case.dart';
 export 'domain/usecases/poll/cast_vote_use_case.dart';
@@ -63,10 +64,8 @@ export 'presentation/widgets/common/show_post_actions.dart';
 export 'presentation/widgets/poll/poll_card.dart';
 export 'presentation/widgets/poll/poll_detail_card.dart';
 export 'presentation/widgets/poll/poll_options_card.dart';
-export 'presentation/widgets/post/post_card.dart';
 export 'presentation/widgets/post/post_card_build.dart';
 export 'presentation/widgets/post/post_card_detail.dart';
-export 'presentation/widgets/post/post_detail_bottom_navigation.dart';
 export 'presentation/widgets/post/post_detail_options.dart';
 export 'presentation/widgets/post/repost_title.dart';
 export 'presentation/widgets/post/video_post.dart';

@@ -117,6 +117,28 @@ class AuthState {
     bool? resetPasswordLoading,
     String? imagePath,
     bool? photoUrlLoading,
+    // Controllers (preserve existing if null)
+    TextEditingController? emailController,
+    TextEditingController? passwordController,
+    TextEditingController? verificationCodeController,
+    TextEditingController? newPasswordController,
+    TextEditingController? passwordResetCodeController,
+    TextEditingController? newAccountPasswordController,
+    TextEditingController? resetPasswordEmailController,
+    TextEditingController? firstNameController,
+    TextEditingController? lastNameController,
+    TextEditingController? middleNameController,
+    TextEditingController? ninController,
+    // Form keys (preserve existing if null)
+    GlobalKey<FormState>? emailFormKey,
+    GlobalKey<FormState>? passwordFormKey,
+    GlobalKey<FormState>? usernameFormKey,
+    GlobalKey<FormState>? verificationCodeFormKey,
+    GlobalKey<FormState>? newPasswordFormKey,
+    GlobalKey<FormState>? ninFormKey,
+    GlobalKey<FormState>? passwordResetCodeFormKey,
+    GlobalKey<FormState>? newAccountPasswordFormKey,
+    GlobalKey<FormState>? resetPasswordEmailFormKey,
   }) {
     return AuthState(
       email: email ?? this.email,
@@ -145,6 +167,35 @@ class AuthState {
       searchNinLoading: searchNinLoading ?? this.searchNinLoading,
       resetPasswordLoading: resetPasswordLoading ?? this.resetPasswordLoading,
       checkEmailLoading: checkEmailLoading ?? this.checkEmailLoading,
+      emailController: emailController ?? this.emailController,
+      passwordController: passwordController ?? this.passwordController,
+      verificationCodeController:
+          verificationCodeController ?? this.verificationCodeController,
+      newPasswordController:
+          newPasswordController ?? this.newPasswordController,
+      passwordResetCodeController:
+          passwordResetCodeController ?? this.passwordResetCodeController,
+      newAccountPasswordController:
+          newAccountPasswordController ?? this.newAccountPasswordController,
+      resetPasswordEmailController:
+          resetPasswordEmailController ?? this.resetPasswordEmailController,
+      firstNameController: firstNameController ?? this.firstNameController,
+      lastNameController: lastNameController ?? this.lastNameController,
+      middleNameController: middleNameController ?? this.middleNameController,
+      ninController: ninController ?? this.ninController,
+      emailFormKey: emailFormKey ?? this.emailFormKey,
+      passwordFormKey: passwordFormKey ?? this.passwordFormKey,
+      usernameFormKey: usernameFormKey ?? this.usernameFormKey,
+      verificationCodeFormKey:
+          verificationCodeFormKey ?? this.verificationCodeFormKey,
+      newPasswordFormKey: newPasswordFormKey ?? this.newPasswordFormKey,
+      ninFormKey: ninFormKey ?? this.ninFormKey,
+      passwordResetCodeFormKey:
+          passwordResetCodeFormKey ?? this.passwordResetCodeFormKey,
+      newAccountPasswordFormKey:
+          newAccountPasswordFormKey ?? this.newAccountPasswordFormKey,
+      resetPasswordEmailFormKey:
+          resetPasswordEmailFormKey ?? this.resetPasswordEmailFormKey,
     );
   }
 }

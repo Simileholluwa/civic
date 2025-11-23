@@ -45,7 +45,7 @@ class ProjectVettingCard extends ConsumerWidget {
           ),
           ContentExpandableText(
             text: projectVetting.comment ?? 'No comment',
-            onToggleTextTap: null,
+            expandOnTextTap: true,
             hasVideo: true,
           ),
           if (projectVetting.images!.length == 1)

@@ -1,16 +1,26 @@
+import 'dart:convert';
+
+import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ShareOpinion extends StatelessWidget {
+class ShareOpinion extends ConsumerWidget {
   const ShareOpinion({
-    required this.imageUrl, required this.onTap, super.key,
+    required this.onTap,
+    super.key,
   });
 
-  final String imageUrl;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userRecord = ref.read(localStorageProvider).getString('userRecord')!;
+    final record =
+        UserRecord.fromJson(jsonDecode(userRecord) as Map<String, dynamic>)
+            .userInfo!;
+    final imageUrl = record.imageUrl!;
+    final username = record.userName!;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -27,7 +37,12 @@ class ShareOpinion extends StatelessWidget {
               imageUrl: imageUrl,
               radius: 23,
             ),
-            const Text('Share your opinion'),
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 2,
+              ),
+              child: Text('$username, share your opinion...'),
+            ),
           ],
         ),
       ),

@@ -8,43 +8,53 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'post_detail_provider.g.dart';
 
 @riverpod
-Future<Post> postDetail(
+Future<PostWithUserState> postDetail(
   Ref ref,
   int id,
   Post? post,
   PostType postType,
 ) async {
-  final completer = Completer<Post>();
+  final completer = Completer<PostWithUserState>();
   if (id == 0) {
     final ownerId = ref.read(localStorageProvider).getInt('userId')!;
     if (postType == PostType.regular) {
       completer.complete(
-        Post(
-          ownerId: ownerId,
+        PostWithUserState(
+          post: Post(
+            ownerId: ownerId,
+          ),
         ),
       );
     } else if (postType == PostType.article) {
       completer.complete(
-        Post(
-          ownerId: ownerId,
-          article: Article(
+        PostWithUserState(
+          post: Post(
             ownerId: ownerId,
+            article: Article(
+              ownerId: ownerId,
+            ),
           ),
         ),
       );
     } else if (postType == PostType.poll) {
       completer.complete(
-        Post(
-          ownerId: ownerId,
-          poll: Poll(
+        PostWithUserState(
+          post: Post(
             ownerId: ownerId,
+            poll: Poll(
+              ownerId: ownerId,
+            ),
           ),
         ),
       );
     }
     return completer.future;
   } else if (post != null) {
-    completer.complete(post);
+    completer.complete(
+      PostWithUserState(
+        post: post,
+      ),
+    );
     return completer.future;
   } else {
     final retrievePost = ref.read(getPostProvider);

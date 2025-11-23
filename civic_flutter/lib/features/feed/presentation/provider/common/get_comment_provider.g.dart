@@ -12,9 +12,13 @@ part of 'get_comment_provider.dart';
 @ProviderFor(getComment)
 const getCommentProvider = GetCommentFamily._();
 
-final class GetCommentProvider
-    extends $FunctionalProvider<AsyncValue<Post>, Post, FutureOr<Post>>
-    with $FutureModifier<Post>, $FutureProvider<Post> {
+final class GetCommentProvider extends $FunctionalProvider<
+        AsyncValue<PostWithUserState>,
+        PostWithUserState,
+        FutureOr<PostWithUserState>>
+    with
+        $FutureModifier<PostWithUserState>,
+        $FutureProvider<PostWithUserState> {
   const GetCommentProvider._(
       {required GetCommentFamily super.from,
       required (
@@ -42,11 +46,12 @@ final class GetCommentProvider
 
   @$internal
   @override
-  $FutureProviderElement<Post> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<PostWithUserState> $createElement(
+          $ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Post> create(Ref ref) {
+  FutureOr<PostWithUserState> create(Ref ref) {
     final argument = this.argument as (
       int,
       bool,
@@ -69,12 +74,12 @@ final class GetCommentProvider
   }
 }
 
-String _$getCommentHash() => r'b7bd071ba93305193cd7de075dc1c31b2f6ae489';
+String _$getCommentHash() => r'f47b28a49788fe5d62f5b2148d70fe7cc1ae30a6';
 
 final class GetCommentFamily extends $Family
     with
         $FunctionalFamilyOverride<
-            FutureOr<Post>,
+            FutureOr<PostWithUserState>,
             (
               int,
               bool,

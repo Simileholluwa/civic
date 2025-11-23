@@ -28,7 +28,7 @@ class CreateArticleScreen extends ConsumerWidget {
     );
     final postState = ref.watch(
       postCreationProvider(
-        data.value,
+        data.value?.post,
       ),
     );
     final hasDraft = ref.watch(
@@ -36,7 +36,7 @@ class CreateArticleScreen extends ConsumerWidget {
     );
     final postNotifier = ref.read(
       postCreationProvider(
-        data.value,
+        data.value?.post,
       ).notifier,
     );
     final canSend = postState.imageUrls.isNotEmpty &&
@@ -45,7 +45,7 @@ class CreateArticleScreen extends ConsumerWidget {
 
     Future<void> saveDraftAndPop() async {
       await postNotifier.saveArticleAsDraft(
-        data.value?.id,
+        data.value?.post.id,
         null,
       );
       if (context.mounted) context.pop();
@@ -95,7 +95,7 @@ class CreateArticleScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await postNotifier.sendAnArticle(
-                  data.value?.id,
+                  data.value?.post.id,
                 );
               },
               title: const CreateContentPrivacy(),
@@ -106,7 +106,9 @@ class CreateArticleScreen extends ConsumerWidget {
           ),
           body: data.when(
             data: (value) {
-              return CreateArticleWidget(post: value);
+              return CreateArticleWidget(
+                post: value.post,
+              );
             },
             error: (error, st) {
               final message = error is Map

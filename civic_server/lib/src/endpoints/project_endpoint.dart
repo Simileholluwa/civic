@@ -87,6 +87,15 @@ class ProjectEndpoint extends Endpoint {
           ),
     );
 
+    // Following relationship: is the current user following this project's owner?
+    bool isFollower = false;
+    final followRow = await UserFollow.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.followerId.equals(user.id!) & t.followeeId.equals(result.ownerId),
+    );
+    isFollower = followRow != null;
+
     return ProjectWithUserState(
       project: result,
       hasLiked: like != null,
@@ -94,6 +103,7 @@ class ProjectEndpoint extends Endpoint {
       hasReviewed: review != null,
       hasVetted: vetting != null,
       isSubscribed: subscription != null,
+      isFollower: isFollower,
     );
   }
 
@@ -904,6 +914,17 @@ class ProjectEndpoint extends Endpoint {
       (r) => r.projectId,
     );
 
+    // Following relationships for project owners
+    final ownerIds = projects.map((p) => p.ownerId).whereType<int>().toSet();
+    final followingOwnerSet = await projectIdsFor(
+      UserFollow.db.find(
+        session,
+        where: (t) =>
+            t.followerId.equals(user.id!) & t.followeeId.inSet(ownerIds),
+      ),
+      (r) => r.followeeId,
+    );
+
     // Assemble enriched DTOs.
     final feedProjects = <ProjectWithUserState>[];
     for (final p in projects) {
@@ -915,6 +936,7 @@ class ProjectEndpoint extends Endpoint {
           hasReviewed: reviewedSet.contains(p.id!),
           hasVetted: vettedSet.contains(p.id!),
           isSubscribed: subscribedSet.contains(p.id!),
+          isFollower: followingOwnerSet.contains(p.ownerId),
         ),
       );
     }
@@ -1947,6 +1969,17 @@ class ProjectEndpoint extends Endpoint {
           (r) => r.projectId,
         );
 
+        // Following relationships for project owners
+        final ownerIds = results.map((p) => p.ownerId).whereType<int>().toSet();
+        final followingOwnerSet = await asIdSet(
+          UserFollow.db.find(
+            session,
+            where: (t) =>
+                t.followerId.equals(user.id!) & t.followeeId.inSet(ownerIds),
+          ),
+          (r) => r.followeeId,
+        );
+
         final enriched = results
             .map(
               (p) => ProjectWithUserState(
@@ -1956,6 +1989,7 @@ class ProjectEndpoint extends Endpoint {
                 hasReviewed: reviewedSet.contains(p.id!),
                 hasVetted: vettedSet.contains(p.id!),
                 isSubscribed: subscribedSet.contains(p.id!),
+                isFollower: followingOwnerSet.contains(p.ownerId),
               ),
             )
             .toList();

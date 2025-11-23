@@ -9,16 +9,25 @@ import 'package:iconsax/iconsax.dart';
 
 class MarkNotInterested extends ConsumerWidget {
   const MarkNotInterested({
-    required this.post,
+    required this.postWithUserState,
     required this.originalPostId,
     super.key,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final int originalPostId;
+
+  static const _baseReasons = [
+    "I'm not interested in the author",
+    "I've seen this {type} before",
+    'This {type} is old',
+    "I've seen too many {type} on this topic",
+    "It's something else",
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final post = postWithUserState.post;
     final type = post.postType == PostType.comment
         ? 'comment'
         : post.postType == PostType.commentReply
@@ -26,8 +35,19 @@ class MarkNotInterested extends ConsumerWidget {
             : 'post';
     final isComment = post.postType == PostType.comment;
     final isReply = post.postType == PostType.commentReply;
-    final postCardNotifier = ref.watch(feedButtonsProvider(post).notifier);
-    final postCardState = ref.watch(feedButtonsProvider(post));
+    final feedProv =
+        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final postCardNotifier = ref.read(feedProv.notifier);
+    final reasonNotInterested = ref.watch(
+      feedProv.select((s) => s.reasonNotInterested),
+    );
+    final isSendingNotInterested = ref.watch(
+      feedProv.select((s) => s.isSendingNotInterested),
+    );
+
+    final reasons = _baseReasons
+        .map((r) => r.replaceAll('{type}', type))
+        .toList(growable: false);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -63,60 +83,49 @@ class MarkNotInterested extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (ctx, index) {
-                final texts = [
-                  "I'm not interested in the author",
-                  "I've seen this $type before",
-                  'This $type is old',
-                  "I've seen too many $type on this topic",
-                  "It's something else",
-                ];
-                return InkWell(
-                  onTap: () {
-                    postCardNotifier.setReasonNotInterested(
-                      texts[index],
-                    );
-                  },
-                  child: Ink(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 17),
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          texts[index],
-                          textAlign: TextAlign.left,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+            RepaintBoundary(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (ctx, index) {
+                  final text = reasons[index];
+                  final selected = reasonNotInterested == text;
+                  return InkWell(
+                    onTap: () => postCardNotifier.setReasonNotInterested(text),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 17),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              text,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
                                     fontSize: 16,
                                   ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: Checkbox(
-                            value: postCardState.reasonNotInterested ==
-                                texts[index],
-                            onChanged: (value) {
-                              postCardNotifier.setReasonNotInterested(
-                                texts[index],
-                              );
-                            },
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Checkbox(
+                              value: selected,
+                              onChanged: (_) =>
+                                  postCardNotifier.setReasonNotInterested(text),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (ctx, index) {
-                return const SizedBox(
-                  height: 5,
-                );
-              },
-              itemCount: 5,
+                  );
+                },
+                separatorBuilder: (ctx, index) => const SizedBox(height: 5),
+                itemCount: reasons.length,
+              ),
             ),
             const Divider(),
             const SizedBox(
@@ -182,24 +191,24 @@ class MarkNotInterested extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: postCardState.reasonNotInterested.isEmpty ||
-                          postCardState.isSendingNotInterested
-                      ? null
-                      : () async {
-                          final result =
-                              await postCardNotifier.markPostNotInterested(
-                            post.id!,
-                            postCardState.reasonNotInterested,
-                            originalPostId,
-                            isReply,
-                            isComment,
-                          );
-                          if (result) {
-                            if (context.mounted) {
-                              context.pop();
-                            }
-                          }
-                        },
+                  onPressed:
+                      reasonNotInterested.isEmpty || isSendingNotInterested
+                          ? null
+                          : () async {
+                              final result =
+                                  await postCardNotifier.markPostNotInterested(
+                                post.id!,
+                                reasonNotInterested,
+                                originalPostId,
+                                isReply,
+                                isComment,
+                              );
+                              if (result) {
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              }
+                            },
                   child: Text(
                     'Submit',
                     style: const TextStyle().copyWith(
@@ -207,7 +216,7 @@ class MarkNotInterested extends ConsumerWidget {
                     ),
                   ),
                 ).withLoading(
-                  loading: postCardState.isSendingNotInterested,
+                  loading: isSendingNotInterested,
                 ),
               ),
             ],

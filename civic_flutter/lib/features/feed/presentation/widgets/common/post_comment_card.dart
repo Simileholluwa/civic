@@ -12,10 +12,12 @@ class PostCommentCard extends ConsumerWidget {
     super.key,
     this.scrollPhysics,
     this.firstPageProgressIndicator,
+    this.shrinkWrap,
   });
 
   final int id;
   final ScrollPhysics? scrollPhysics;
+  final bool? shrinkWrap;
   final Widget? firstPageProgressIndicator;
 
   @override
@@ -23,21 +25,14 @@ class PostCommentCard extends ConsumerWidget {
     final pagingState = ref.watch(
       paginatedCommentListProvider(id),
     );
-    return AppInfiniteList<Post>(
+    return AppInfiniteList<PostWithUserState>(
       pagingController: pagingState,
-      scrollPhysics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
+      scrollPhysics: scrollPhysics,
+      shrinkWrap: shrinkWrap,
       canCreate: false,
       showDivider: false,
-      itemBuilder: (context, value, index) {
-        final liveComment = ref.watch(
-          postStreamProvider(
-            value.id!,
-            value,
-          ),
-        );
-        final comment = liveComment.value ?? value;
-
+      itemBuilder: (context, postWithUserState, index) {
+        final comment = postWithUserState.post;
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -55,7 +50,7 @@ class PostCommentCard extends ConsumerWidget {
                 comment.commentCount != 0,
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
-                    replyOrComment: reply,
+                    postWithUserState: postWithUserState,
                     onReply: () async {
                       await context.push(
                         '/create/post/0',

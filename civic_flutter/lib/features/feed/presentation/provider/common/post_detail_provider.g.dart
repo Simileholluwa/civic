@@ -12,9 +12,13 @@ part of 'post_detail_provider.dart';
 @ProviderFor(postDetail)
 const postDetailProvider = PostDetailFamily._();
 
-final class PostDetailProvider
-    extends $FunctionalProvider<AsyncValue<Post>, Post, FutureOr<Post>>
-    with $FutureModifier<Post>, $FutureProvider<Post> {
+final class PostDetailProvider extends $FunctionalProvider<
+        AsyncValue<PostWithUserState>,
+        PostWithUserState,
+        FutureOr<PostWithUserState>>
+    with
+        $FutureModifier<PostWithUserState>,
+        $FutureProvider<PostWithUserState> {
   const PostDetailProvider._(
       {required PostDetailFamily super.from,
       required (
@@ -43,11 +47,12 @@ final class PostDetailProvider
 
   @$internal
   @override
-  $FutureProviderElement<Post> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<PostWithUserState> $createElement(
+          $ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Post> create(Ref ref) {
+  FutureOr<PostWithUserState> create(Ref ref) {
     final argument = this.argument as (
       int,
       Post?,
@@ -72,12 +77,12 @@ final class PostDetailProvider
   }
 }
 
-String _$postDetailHash() => r'fd6153a73e815fd22ed2f9bd319c4bc480b71b8a';
+String _$postDetailHash() => r'c46797e14cab797e64920306040f4957e727b38f';
 
 final class PostDetailFamily extends $Family
     with
         $FunctionalFamilyOverride<
-            FutureOr<Post>,
+            FutureOr<PostWithUserState>,
             (
               int,
               Post?,

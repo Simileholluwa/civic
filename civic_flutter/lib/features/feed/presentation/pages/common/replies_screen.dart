@@ -15,22 +15,8 @@ class RepliesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(
-      getCommentProvider(
-        replyId,
-        false,
-      ),
-    );
-    final postCardState = ref.watch(
-      feedButtonsProvider(
-        data.value,
-      ),
-    );
-    final postCardNotifier = ref.watch(
-      feedButtonsProvider(
-        data.value,
-      ).notifier,
-    );
+    final asyncReply = ref.watch(getCommentProvider(replyId, false));
+    final userId = ref.read(localStorageProvider).getInt('userId');
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -51,28 +37,33 @@ class RepliesScreen extends ConsumerWidget {
                 context.pop();
               },
             ),
-            actions: data.when(
-              data: (_) {
+            actions: asyncReply.when(
+              data: (value) {
+                final reply = value.post;
+                final isOwner = reply.owner?.id == userId;
+                final isSubscribed = ref.watch(
+                  feedButtonsProvider(PostWithUserStateKey(value))
+                      .select((s) => s.isSubscribed),
+                );
+                final postCardNotifier = ref.read(
+                  feedButtonsProvider(PostWithUserStateKey(value)).notifier,
+                );
                 return [
                   IconButton(
-                    icon: const Icon(Iconsax.filter),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    onPressed: postCardState.isOwner
+                    onPressed: isOwner
                         ? null
                         : () async {
                             await postCardNotifier.subscribeToNotifications(
-                              data.value!.id!,
+                              reply.id!,
                             );
                           },
                     icon: Icon(
-                      postCardState.isSubscribed
+                      isSubscribed
                           ? Iconsax.notification_bing5
                           : Iconsax.notification_bing,
-                      color: postCardState.isOwner
+                      color: isOwner
                           ? Theme.of(context).disabledColor
-                          : postCardState.isSubscribed
+                          : isSubscribed
                               ? TColors.primary
                               : Theme.of(context).iconTheme.color,
                       size: 26,
@@ -93,8 +84,8 @@ class RepliesScreen extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: data.when(
-        data: (data) {
+      bottomNavigationBar: asyncReply.when(
+        data: (reply) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: ContentSingleButton(
@@ -102,7 +93,7 @@ class RepliesScreen extends ConsumerWidget {
                 await context.push(
                   '/create/post/0',
                   extra: {
-                    'parent': data,
+                    'parent': reply,
                   },
                 );
               },
@@ -132,7 +123,7 @@ class RepliesScreen extends ConsumerWidget {
         },
         loading: () => null,
       ),
-      body: data.when(
+      body: asyncReply.when(
         data: (_) {
           return Padding(
             padding: const EdgeInsets.only(top: 10),

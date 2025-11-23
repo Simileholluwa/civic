@@ -21,7 +21,7 @@ abstract class FeedRepository {
     required String draftType,
     required int draftId,
   });
-  Future<Either<Failure, Post>> getComment({
+  Future<Either<Failure, PostWithUserState>> getComment({
     required int commentId,
     required bool isComment,
   });
@@ -33,7 +33,7 @@ abstract class FeedRepository {
     required int page,
     required int limit,
   });
-  Future<Either<Failure, Post>> getPost({
+  Future<Either<Failure, PostWithUserState>> getPost({
     required int postId,
   });
   Future<Either<Failure, void>> subscribeToNotifications({
@@ -85,8 +85,6 @@ abstract class FeedRepository {
   Future<Either<Failure, Post>> saveArticle({
     required Post post,
   });
-
-  // Impression recording (debounced client-side batching)
   void recordImpression({
     required int postId,
     String? source,

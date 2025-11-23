@@ -1,0 +1,15 @@
+class: UserFollow
+table: user_follow
+fields:
+    followerId: int
+    followeeId: int
+    createdAt: DateTime?, default=now
+
+indexes:
+    follower_followee_unique_idx:
+        fields: followerId, followeeId
+        unique: true
+    follower_idx:
+        fields: followerId
+    followee_idx:
+        fields: followeeId

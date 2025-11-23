@@ -40,7 +40,8 @@ post:
   - subscribeToPost:
   - getUserPostBookmarks:
   - markNotInterested:
-  - postUpdates:
+  - postCountsUpdates:
+  - pollCountsUpdates:
 project:
   - getProject:
   - getProjectReview:

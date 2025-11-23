@@ -8,8 +8,8 @@ part 'paginated_replies_list_provider.g.dart';
 @riverpod
 class PaginatedRepliesList extends _$PaginatedRepliesList {
   @override
-  PagingController<int, Post> build(int commentId) {
-    final controller = PagingController<int, Post>(
+  PagingController<int, PostWithUserState> build(int commentId) {
+    final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -20,7 +20,7 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
     return controller;
   }
 
-  Future<List<Post>> _fetchPage(
+  Future<List<PostWithUserState>> _fetchPage(
     int commentId,
     int pageKey, {
     int limit = 50,
@@ -35,11 +35,11 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
     );
     return result.fold(
       (error) => throw error,
-      (data) => data.results.map((e) => e.post).toList(),
+      (data) => data.results,
     );
   }
 
-  void addReply(Post? reply) {
+  void addReply(PostWithUserState? reply) {
     if (reply == null) return;
     final current = state.value;
     final pages = current.pages;
@@ -53,7 +53,14 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
       );
       return;
     }
-    if (pages.first.any((r) => r.id == reply.id)) return;
+    if (pages.first.any((r) => r.post.id == reply.post.id)) {
+      state.value = state.value.mapItems((r) {
+        if (r.post.id == reply.post.id) {
+          return reply;
+        }
+        return r;
+      });
+    }
     final updatedFirst = [reply, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
@@ -70,6 +77,6 @@ class PaginatedRepliesList extends _$PaginatedRepliesList {
   void removeReplyById(int? replyId) {
     if (replyId == null) return;
     final prev = state.value;
-    state.value = prev.filterItems((r) => r.id != replyId);
+    state.value = prev.filterItems((r) => r.post.id != replyId);
   }
 }

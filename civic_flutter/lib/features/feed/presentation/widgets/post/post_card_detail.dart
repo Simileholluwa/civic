@@ -3,12 +3,11 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class PostCardDetail extends ConsumerWidget {
+class PostCardDetail extends StatelessWidget {
   const PostCardDetail({
-    required this.post,
+    required this.postWithUserState,
     required this.onTap,
     super.key,
     this.showInteractions = true,
@@ -17,7 +16,7 @@ class PostCardDetail extends ConsumerWidget {
     this.showAuthor = true,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
   final bool showInteractions;
   final bool hasProject;
   final VoidCallback? onTap;
@@ -25,17 +24,10 @@ class PostCardDetail extends ConsumerWidget {
   final bool showAuthor;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final livePost = ref.watch(
-      postStreamProvider(
-        post.id!,
-        post,
-      ),
-    );
-    final postCardState = ref.watch(
-      feedButtonsProvider(livePost.value ?? post),
-    );
-
+  Widget build(BuildContext context) {
+    final post = postWithUserState.post;
+    final hasTags = post.tags != null && post.tags!.isNotEmpty;
+    final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -47,7 +39,9 @@ class PostCardDetail extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
               child: ContentCreatorInfo(
                 creator: post.owner!,
-                timeAgo: postCardState.timeAgo,
+                timeAgo: THelperFunctions.humanizeDateTime(
+                  post.dateCreated!,
+                ),
                 onMoreTapped: () async {
                   await showDialog<dynamic>(
                     context: context,
@@ -57,7 +51,7 @@ class PostCardDetail extends ConsumerWidget {
                           bottom: 16,
                         ),
                         content: ShowPostActions(
-                          post: post,
+                          postWithUserState: postWithUserState,
                           originalPostId: post.id!,
                         ),
                       );
@@ -67,7 +61,7 @@ class PostCardDetail extends ConsumerWidget {
               ),
             ),
           PostCardBuild(
-            post: livePost.value ?? post,
+            post: post,
             noMaxLines: noMaxLines,
           ),
           if (hasProject)
@@ -90,16 +84,16 @@ class PostCardDetail extends ConsumerWidget {
                 maxHeight: 200,
               ),
             ),
-          if (postCardState.hasTags || postCardState.hasLocation)
+          if (hasTags || hasLocations)
             ContentEngagementTagsAndLocations(
-              tags: postCardState.tags,
-              locations: postCardState.locations,
-              hasTags: postCardState.hasTags,
-              hasLocations: postCardState.hasLocation,
+              tags: post.taggedUsers ?? [],
+              locations: post.locations ?? [],
+              hasTags: hasTags,
+              hasLocations: hasLocations,
             ),
           if (showInteractions)
             PostInteractionButtons(
-              post: livePost.value ?? post,
+              postWithUserState: postWithUserState,
               onReply: () async {
                 await context.push(
                   '/feed/post/${post.id}/comments',

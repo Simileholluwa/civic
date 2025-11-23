@@ -3,9 +3,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PostCardBuild extends ConsumerWidget {
+class PostCardBuild extends StatelessWidget {
   const PostCardBuild({
     required this.noMaxLines,
     required this.post,
@@ -18,37 +17,37 @@ class PostCardBuild extends ConsumerWidget {
   final bool showPadding;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final postCardState = ref.watch(
-      feedButtonsProvider(post),
-    );
+  Widget build(BuildContext context) {
+    final hasText = post.text != null && post.text!.isNotEmpty;
+    final hasVideo = post.videoUrl != null && post.videoUrl!.isNotEmpty;
+    final hasImage = post.imageUrls != null && post.imageUrls!.isNotEmpty;
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (postCardState.hasText)
+        if (hasText)
           Padding(
             padding: showPadding
                 ? const EdgeInsets.fromLTRB(15, 0, 15, 0)
                 : EdgeInsets.zero,
             child: ContentExpandableText(
-              text: postCardState.text,
-              hasImage: postCardState.hasImage,
-              hasVideo: postCardState.hasVideo,
+              text: post.text!,
+              hasImage: hasImage,
+              hasVideo: hasVideo,
               noMaxLines: noMaxLines,
-              onToggleTextTap: () {},
+              expandOnTextTap: true,
             ),
           ),
-        if (postCardState.hasImage)
+        if (hasImage)
           PostImagePost(
             post: post,
             showInteractions: false,
           ),
-        if (postCardState.hasVideo)
+        if (hasVideo)
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: VideoPost(
-              videoUrl: postCardState.videoUrl,
+              videoUrl: post.videoUrl!,
             ),
           ),
       ],

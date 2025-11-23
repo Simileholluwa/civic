@@ -16,29 +16,13 @@ class ImpressionVisibilityTracker extends ConsumerStatefulWidget {
     this.enabled = true,
     super.key,
   });
-
-  /// Unique post identifier (non-null when persisted).
   final int postId;
-
-  /// Where the impression originated (e.g. 'feed', 'detail_related').
   final String source;
-
-  /// Minimum visible fraction (0.0 - 1.0) required to start dwell timer.
   final double threshold;
-
-  /// Required continuous time above threshold before firing.
   final Duration dwell;
-
-  /// Local cooldown (separate from repository cooldown) to avoid immediate re-fires.
   final Duration cooldown;
-
-  /// If true, only a single impression is ever recorded for this widget lifecycle.
   final bool fireOnce;
-
-  /// Allows dynamic disabling without removing the widget.
   final bool enabled;
-
-  /// Child content being observed.
   final Widget child;
 
   @override
@@ -53,6 +37,7 @@ class _ImpressionVisibilityTrackerState
   DateTime? _lastFireAt;
   bool _firedOnce = false;
   bool _dwellPending = false;
+  bool _disposed = false;
 
   bool get _cooldownActive {
     if (_lastFireAt == null) return false;
@@ -60,9 +45,13 @@ class _ImpressionVisibilityTrackerState
   }
 
   void _scheduleDwell() {
+    if (_dwellPending) return;
     _dwellTimer?.cancel();
     _dwellPending = true;
-    _dwellTimer = Timer(widget.dwell, _tryFireImpression);
+    _dwellTimer = Timer(
+      widget.dwell,
+      _tryFireImpression,
+    );
   }
 
   void _cancelDwell() {
@@ -80,7 +69,6 @@ class _ImpressionVisibilityTrackerState
         _scheduleDwell();
       }
     } else {
-      // Drop below threshold cancels dwell attempt.
       if (_dwellPending) {
         _cancelDwell();
       }
@@ -89,32 +77,35 @@ class _ImpressionVisibilityTrackerState
 
   Future<void> _tryFireImpression() async {
     _dwellPending = false;
-    if (!mounted) return;
-    if (!widget.enabled) return;
-    // Re-check conditions.
+    if (_disposed) return;
+    if (!mounted || !widget.enabled) return;
     if (_lastFraction < widget.threshold) return;
     if (_cooldownActive) return;
     if (widget.fireOnce && _firedOnce) return;
-
-    // Fire impression.
+    if (widget.postId <= 0) return;
     await ref.read(feedImpressionsProvider.notifier).record(
           widget.postId,
           source: widget.source,
         );
     _lastFireAt = DateTime.now();
     _firedOnce = true;
-
-    if (_lastFraction >= widget.threshold && !widget.fireOnce) {}
+    if (widget.fireOnce) {
+      _cancelDwell();
+    }
   }
 
   @override
   void dispose() {
     _dwellTimer?.cancel();
+    _disposed = true;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.enabled) {
+      return widget.child;
+    }
     return VisibilityDetector(
       key: Key('impression-post-${widget.postId}'),
       onVisibilityChanged: _onVisibilityChanged,
