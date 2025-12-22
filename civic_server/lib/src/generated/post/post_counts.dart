@@ -16,11 +16,13 @@ abstract class PostCounts
   PostCounts._({
     required this.postId,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? impressionsCount,
     DateTime? lastImpressionAt,
   })  : likesCount = likesCount ?? 0,
+        repostCount = repostCount ?? 0,
         bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
         impressionsCount = impressionsCount ?? 0,
@@ -29,6 +31,7 @@ abstract class PostCounts
   factory PostCounts({
     required int postId,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? impressionsCount,
@@ -39,6 +42,7 @@ abstract class PostCounts
     return PostCounts(
       postId: jsonSerialization['postId'] as int,
       likesCount: jsonSerialization['likesCount'] as int?,
+      repostCount: jsonSerialization['repostCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
       impressionsCount: jsonSerialization['impressionsCount'] as int?,
@@ -52,6 +56,8 @@ abstract class PostCounts
   int postId;
 
   int? likesCount;
+
+  int? repostCount;
 
   int? bookmarksCount;
 
@@ -67,6 +73,7 @@ abstract class PostCounts
   PostCounts copyWith({
     int? postId,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? impressionsCount,
@@ -77,6 +84,7 @@ abstract class PostCounts
     return {
       'postId': postId,
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (impressionsCount != null) 'impressionsCount': impressionsCount,
@@ -90,6 +98,7 @@ abstract class PostCounts
     return {
       'postId': postId,
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (impressionsCount != null) 'impressionsCount': impressionsCount,
@@ -110,6 +119,7 @@ class _PostCountsImpl extends PostCounts {
   _PostCountsImpl({
     required int postId,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? impressionsCount,
@@ -117,6 +127,7 @@ class _PostCountsImpl extends PostCounts {
   }) : super._(
           postId: postId,
           likesCount: likesCount,
+          repostCount: repostCount,
           bookmarksCount: bookmarksCount,
           commentCount: commentCount,
           impressionsCount: impressionsCount,
@@ -130,6 +141,7 @@ class _PostCountsImpl extends PostCounts {
   PostCounts copyWith({
     int? postId,
     Object? likesCount = _Undefined,
+    Object? repostCount = _Undefined,
     Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
     Object? impressionsCount = _Undefined,
@@ -138,6 +150,7 @@ class _PostCountsImpl extends PostCounts {
     return PostCounts(
       postId: postId ?? this.postId,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
+      repostCount: repostCount is int? ? repostCount : this.repostCount,
       bookmarksCount:
           bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,

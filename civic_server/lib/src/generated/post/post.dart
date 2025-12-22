@@ -38,6 +38,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.updatedAt,
     this.hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     this.pollId,
@@ -54,6 +55,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   })  : videoUrl = videoUrl ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
         likesCount = likesCount ?? 0,
+        repostCount = repostCount ?? 0,
         bookmarksCount = bookmarksCount ?? 0,
         commentCount = commentCount ?? 0,
         isDeleted = isDeleted ?? false,
@@ -75,6 +77,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
@@ -129,6 +132,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
           ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
           .toList(),
       likesCount: jsonSerialization['likesCount'] as int?,
+      repostCount: jsonSerialization['repostCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
       pollId: jsonSerialization['pollId'] as int?,
@@ -195,6 +199,8 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   int? likesCount;
 
+  int? repostCount;
+
   int? bookmarksCount;
 
   int? commentCount;
@@ -243,6 +249,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
@@ -279,6 +286,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
@@ -320,6 +328,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
@@ -400,6 +409,7 @@ class _PostImpl extends Post {
     DateTime? updatedAt,
     List<_i5.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
@@ -429,6 +439,7 @@ class _PostImpl extends Post {
           updatedAt: updatedAt,
           hashtags: hashtags,
           likesCount: likesCount,
+          repostCount: repostCount,
           bookmarksCount: bookmarksCount,
           commentCount: commentCount,
           pollId: pollId,
@@ -464,6 +475,7 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likesCount = _Undefined,
+    Object? repostCount = _Undefined,
     Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
     Object? pollId = _Undefined,
@@ -504,6 +516,7 @@ class _PostImpl extends Post {
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
+      repostCount: repostCount is int? ? repostCount : this.repostCount,
       bookmarksCount:
           bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
@@ -579,6 +592,11 @@ class PostTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
+    repostCount = _i1.ColumnInt(
+      'repostCount',
+      this,
+      hasDefault: true,
+    );
     bookmarksCount = _i1.ColumnInt(
       'bookmarksCount',
       this,
@@ -650,6 +668,8 @@ class PostTable extends _i1.Table<int?> {
   _i1.ManyRelation<_i5.PostsHashtagsTable>? _hashtags;
 
   late final _i1.ColumnInt likesCount;
+
+  late final _i1.ColumnInt repostCount;
 
   late final _i1.ColumnInt bookmarksCount;
 
@@ -788,6 +808,7 @@ class PostTable extends _i1.Table<int?> {
         dateCreated,
         updatedAt,
         likesCount,
+        repostCount,
         bookmarksCount,
         commentCount,
         pollId,

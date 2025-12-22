@@ -133,7 +133,6 @@ class PostDetailOptions extends ConsumerWidget {
                 if (id == null) return;
                 final result = await FeedHelperFunctions.deletePostDialog(
                   context,
-                  id,
                 );
                 if (result ?? false) {
                   final kind = isReply

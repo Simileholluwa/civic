@@ -42,7 +42,7 @@ final class UnreadNotificationsCountProvider
 }
 
 String _$unreadNotificationsCountHash() =>
-    r'c49c8fe2991100b74be7721664b3757a5f97d44c';
+    r'ea2ee29462d76d48d1eb13d21ab624701f616efe';
 
 abstract class _$UnreadNotificationsCount extends $Notifier<int> {
   int build();

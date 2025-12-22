@@ -158,7 +158,6 @@ class DetailScreen extends ConsumerWidget {
                           child: PostCardDetail(
                             postWithUserState: value,
                             showInteractions: false,
-                            hasProject: value.post.project != null,
                             onTap: null,
                             noMaxLines: true,
                           ),
@@ -233,7 +232,7 @@ class DetailScreen extends ConsumerWidget {
                 if (value.post.postType == PostType.regular ||
                     value.post.postType == PostType.poll ||
                     value.post.postType == PostType.article ||
-                    value.post.postType == PostType.projectRepost)
+                    value.post.postType == PostType.projectQuote)
                   RepaintBoundary(
                     child: PostCommentCard(
                       id: value.post.id!,
@@ -286,7 +285,7 @@ class DetailScreen extends ConsumerWidget {
                     await context.push(
                       '/create/post/0',
                       extra: {
-                        'parent': value.post,
+                        'rootPost': value.post,
                       },
                     );
                   },

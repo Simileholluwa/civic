@@ -46,9 +46,9 @@ class CreateContentAppbar extends StatelessWidget {
         titleSpacing: 0,
         actions: [
           TextButton(
-            onPressed: !hasDraft ? null : draftPressed,
+            onPressed: !hasDraft || isRepost ? null : draftPressed,
             child: Text(
-              sendText ?? 'DRAFTS',
+              'DRAFTS',
               style: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: !hasDraft

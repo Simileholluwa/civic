@@ -5,7 +5,9 @@ class FeedWidgetsState {
     this.numberOfLikes = 0,
     this.numberOfComments = 0,
     this.numberOfBookmarks = 0,
+    this.numberOfReposts = 0,
     this.hasLiked = false,
+    this.hasReposted = false,
     this.reasonNotInterested = '',
     this.hasBookmarked = false,
     this.isFollower = false,
@@ -36,6 +38,8 @@ class FeedWidgetsState {
       numberOfBookmarks: post.bookmarksCount ?? 0,
       isSubscribed: postWithUserState.isSubscribed ?? false,
       hasLiked: postWithUserState.hasLiked ?? false,
+      hasReposted: postWithUserState.hasReposted ?? false,
+      numberOfReposts: post.repostCount ?? 0,
       hasBookmarked: postWithUserState.hasBookmarked ?? false,
       numberOfVoters: poll?.votesCount ?? 0,
       isFollower: postWithUserState.isFollower!,
@@ -60,6 +64,7 @@ class FeedWidgetsState {
 
   final bool hasBookmarked;
   final bool hasLiked;
+  final bool hasReposted;
   final bool hasVoted;
   final bool isFollower;
   final bool isSubscribed;
@@ -68,6 +73,7 @@ class FeedWidgetsState {
   final int numberOfBookmarks;
   final int numberOfComments;
   final int numberOfLikes;
+  final int numberOfReposts;
   final List<PollOptionCount> optionVoters;
   final int numberOfVoters;
   final bool pollEnded;
@@ -98,6 +104,8 @@ class FeedWidgetsState {
     PollOption? votedOption,
     bool? isSubscribed,
     int? impressionCount,
+    bool? hasReposted,
+    int? numberOfReposts,
   }) =>
       FeedWidgetsState(
         hasBookmarked: hasBookmarked ?? this.hasBookmarked,
@@ -119,6 +127,8 @@ class FeedWidgetsState {
         isSubscribed: isSubscribed ?? this.isSubscribed,
         totalVotes: totalVotes ?? this.totalVotes,
         votedOption: votedOption ?? this.votedOption,
+        hasReposted: hasReposted ?? this.hasReposted,
+        numberOfReposts: numberOfReposts ?? this.numberOfReposts,
       );
 }
 
@@ -128,6 +138,7 @@ extension FeedWidgetsStateCounts on FeedWidgetsState {
         numberOfComments: counts.commentCount,
         numberOfBookmarks: counts.bookmarksCount,
         impressionCount: counts.impressionsCount,
+        numberOfReposts: counts.repostCount,
       );
 }
 

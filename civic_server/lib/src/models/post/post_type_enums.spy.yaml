@@ -3,7 +3,8 @@ values:
     - postRepost
     - regular
     - comment
-    - projectRepost
+    - projectQuote
     - commentReply
     - poll
     - article
+    - postQuote

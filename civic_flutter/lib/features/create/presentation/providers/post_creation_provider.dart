@@ -543,7 +543,7 @@ class PostCreation extends _$PostCreation {
         ownerId: ownerId,
         state: state,
         mentions: ref.watch(selectedMentionsProvider),
-        postType: PostType.projectRepost,
+        postType: PostType.projectQuote,
         projectId: projectId,
       );
       final result = await repostQuote(
@@ -673,6 +673,33 @@ class PostCreation extends _$PostCreation {
         ref.read(sendPostLoadingProvider.notifier).value = false;
       });
     });
+  }
+
+  Future<Post?> quotePost(
+    int postId,
+  ) async {
+    final useCase = ref.read(quotePostProvider);
+    final result = await useCase(
+      QuotePostParams(
+        postId,
+        Post(
+          ownerId: _ownerId,
+          text: state.text.trim(),
+          mentions: ref.watch(selectedMentionsProvider),
+          postType: PostType.postQuote,
+        ),
+      ),
+    );
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return null;
+      },
+      (post) {
+        TToastMessages.successToast('Your quote has been posted.');
+        return post;
+      },
+    );
   }
 
   Future<void> sendReply(

@@ -3,6 +3,7 @@ fields:
     post: Post
     hasLiked: bool?, default=false
     hasBookmarked: bool?, default=false
+    hasReposted: bool?, default=false
     isSubscribed: bool?, default=false
     isFollower: bool?, default=false
     selectedPollOptionId: int?

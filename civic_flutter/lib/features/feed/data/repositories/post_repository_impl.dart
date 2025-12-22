@@ -90,6 +90,44 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, Post>> repostPost({
+    required int postId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.repostPost(postId: postId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> quotePost({
+    required int postId,
+    required Post quoteContent,
+  }) async {
+    try {
+      final result = await _remoteDatabase.quotePost(
+        postId: postId,
+        quoteContent: quoteContent,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> clearPostBookmarks() async {
     try {
       final result = await _remoteDatabase.clearPostBookmarks();

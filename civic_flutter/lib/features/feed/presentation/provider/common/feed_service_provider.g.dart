@@ -691,6 +691,87 @@ final class TogglePostLikeProvider extends $FunctionalProvider<
 
 String _$togglePostLikeHash() => r'32d530992c88f5ff16c1034b99382eb74c2b17cd';
 
+@ProviderFor(quotePost)
+const quotePostProvider = QuotePostProvider._();
+
+final class QuotePostProvider extends $FunctionalProvider<QuotePostUseCase,
+    QuotePostUseCase, QuotePostUseCase> with $Provider<QuotePostUseCase> {
+  const QuotePostProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'quotePostProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$quotePostHash();
+
+  @$internal
+  @override
+  $ProviderElement<QuotePostUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  QuotePostUseCase create(Ref ref) {
+    return quotePost(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(QuotePostUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<QuotePostUseCase>(value),
+    );
+  }
+}
+
+String _$quotePostHash() => r'423255e3e002a82b09748de1062cdbed8c126033';
+
+@ProviderFor(repostPost)
+const repostPostProvider = RepostPostProvider._();
+
+final class RepostPostProvider extends $FunctionalProvider<RepostPostUseCase,
+    RepostPostUseCase, RepostPostUseCase> with $Provider<RepostPostUseCase> {
+  const RepostPostProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'repostPostProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$repostPostHash();
+
+  @$internal
+  @override
+  $ProviderElement<RepostPostUseCase> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RepostPostUseCase create(Ref ref) {
+    return repostPost(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RepostPostUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RepostPostUseCase>(value),
+    );
+  }
+}
+
+String _$repostPostHash() => r'4dee7f31e6299fdf9f4607ecb1b33060b2809e5c';
+
 @ProviderFor(repostOrQuotePost)
 const repostOrQuotePostProvider = RepostOrQuotePostProvider._();
 

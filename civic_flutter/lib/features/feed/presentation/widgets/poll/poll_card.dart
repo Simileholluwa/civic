@@ -10,12 +10,14 @@ class PollCard extends ConsumerWidget {
     required this.postWithUserState,
     super.key,
     this.onTap,
-    this.fromDetails = false,
+    this.canTap = false,
+    this.showInteractions = true,
   });
 
   final PostWithUserState postWithUserState;
-  final bool fromDetails;
+  final bool canTap;
   final VoidCallback? onTap;
+  final bool showInteractions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +48,7 @@ class PollCard extends ConsumerWidget {
     final hasTags = post.tags != null && post.tags!.isNotEmpty;
     final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
-      onTap: fromDetails
+      onTap: !canTap
           ? null
           : onTap ??
               () async {
@@ -126,7 +128,7 @@ class PollCard extends ConsumerWidget {
                       ),
                       Text(
                         FeedHelperFunctions.formatTimeLeft(
-                          post.poll!.expiresAt!,
+                          post.poll!.expiresAt ?? DateTime.now(),
                         ),
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
@@ -150,7 +152,7 @@ class PollCard extends ConsumerWidget {
               ),
             ),
           ),
-          if (!fromDetails)
+          if (showInteractions)
             PostInteractionButtons(
               postWithUserState: postWithUserState,
               onReply: () async {

@@ -77,18 +77,24 @@ class CommentScreen extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: asyncPost.when(
-        data: (post) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: ContentSingleButton(
-            onPressed: () async {
-              await context.push(
-                '/create/post/0',
-                extra: {'parent': post},
-              );
-            },
-            text: 'Share your opinion',
-            buttonIcon: Iconsax.magicpen5,
-          ),
+        data: (value) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              child: ShareOpinion(
+                onTap: () async {
+                  await context.push(
+                    '/create/post/0',
+                    extra: {
+                      'rootPost': value.post,
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         error: (error, __) {
           final err = error as Map<String, dynamic>?;

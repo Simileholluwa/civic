@@ -122,6 +122,20 @@ TogglePostLikeUseCase togglePostLike(Ref ref) {
 }
 
 @riverpod
+QuotePostUseCase quotePost(Ref ref) {
+  return QuotePostUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
+RepostPostUseCase repostPost(Ref ref) {
+  return RepostPostUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
 RepostOrQuoteUseCase repostOrQuotePost(Ref ref) {
   return RepostOrQuoteUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),

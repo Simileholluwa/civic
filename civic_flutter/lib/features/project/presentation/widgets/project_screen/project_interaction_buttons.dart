@@ -52,7 +52,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
                   await context.push(
                     '/create/post/0',
                     extra: {
-                      'project': project,
+                      'projectToQuote': project,
                     },
                   );
                 },

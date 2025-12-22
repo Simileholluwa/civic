@@ -16,8 +16,8 @@ fields:
   isRead: bool, default=false
   createdAt: DateTime, default=now
   updatedAt: DateTime?
-  post: Post?, relation(optional)
-  project: Project?, relation(optional)
+  post: Post?, relation(optional, onDelete=SetNull)
+  project: Project?, relation(optional, onDelete=SetNull)
 
 indexes:
   notification_receiver_isread_idx:

@@ -95,40 +95,8 @@ class PostBookmarksScreen extends ConsumerWidget {
             scrollPhysics: const NeverScrollableScrollPhysics(),
             canCreate: false,
             itemBuilder: (__, postWithUserState, _) {
-              final post = postWithUserState.post;
-              if (post.postType == PostType.article) {
-                return ArticleCard(
-                  postWithUserState: postWithUserState,
-                  onTap: () async {
-                    await context.push(
-                      '/feed/article/${post.id}',
-                      extra: post,
-                    );
-                  },
-                );
-              }
-              if (post.postType == PostType.poll) {
-                return PollCard(
-                  postWithUserState: postWithUserState,
-                  onTap: () async {
-                    await context.push(
-                      '/feed/poll/${post.id}',
-                      extra: post,
-                    );
-                  },
-                );
-              }
-              return RepaintBoundary(
-                child: PostCardDetail(
-                  postWithUserState: postWithUserState,
-                  hasProject: post.postType == PostType.projectRepost,
-                  onTap: () async {
-                    await context.push(
-                      '/feed/post/${post.id}',
-                      extra: post,
-                    );
-                  },
-                ),
+              return AdaptivePostCard(
+                postWithUserState: postWithUserState,
               );
             },
             onRefresh: pagingState.refresh,

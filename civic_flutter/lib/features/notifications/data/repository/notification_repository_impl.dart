@@ -23,6 +23,20 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  Future<Either<Failure, int>> getUnreadNotifications() async {
+    try {
+      final result = await _remoteDatabase.getUnreadNotifications();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteNotification({required int id}) async {
     try {
       final result = await _remoteDatabase.deleteNotification(

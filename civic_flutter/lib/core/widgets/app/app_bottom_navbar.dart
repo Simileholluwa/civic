@@ -57,11 +57,6 @@ class AppBottomNavbar extends ConsumerWidget {
                         .read(fcmServiceImplProvider)
                         .promptForPermissions(context),
                   );
-                  ref
-                      .read(
-                        paginatedNotificationsListProvider(null, null).notifier,
-                      )
-                      .mergeBufferedNotifications();
                 }
 
                 navigatorShell.goBranch(

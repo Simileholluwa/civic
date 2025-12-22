@@ -15,10 +15,11 @@ enum PostType implements _i1.SerializableModel {
   postRepost,
   regular,
   comment,
-  projectRepost,
+  projectQuote,
   commentReply,
   poll,
-  article;
+  article,
+  postQuote;
 
   static PostType fromJson(int index) {
     switch (index) {
@@ -29,13 +30,15 @@ enum PostType implements _i1.SerializableModel {
       case 2:
         return PostType.comment;
       case 3:
-        return PostType.projectRepost;
+        return PostType.projectQuote;
       case 4:
         return PostType.commentReply;
       case 5:
         return PostType.poll;
       case 6:
         return PostType.article;
+      case 7:
+        return PostType.postQuote;
       default:
         throw ArgumentError('Value "$index" cannot be converted to "PostType"');
     }

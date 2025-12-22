@@ -18,11 +18,13 @@ abstract class PostWithUserState
     required this.post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     this.selectedPollOptionId,
   })  : hasLiked = hasLiked ?? false,
         hasBookmarked = hasBookmarked ?? false,
+        hasReposted = hasReposted ?? false,
         isSubscribed = isSubscribed ?? false,
         isFollower = isFollower ?? false;
 
@@ -30,6 +32,7 @@ abstract class PostWithUserState
     required _i2.Post post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
@@ -41,6 +44,7 @@ abstract class PostWithUserState
           (jsonSerialization['post'] as Map<String, dynamic>)),
       hasLiked: jsonSerialization['hasLiked'] as bool?,
       hasBookmarked: jsonSerialization['hasBookmarked'] as bool?,
+      hasReposted: jsonSerialization['hasReposted'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
       isFollower: jsonSerialization['isFollower'] as bool?,
       selectedPollOptionId: jsonSerialization['selectedPollOptionId'] as int?,
@@ -52,6 +56,8 @@ abstract class PostWithUserState
   bool? hasLiked;
 
   bool? hasBookmarked;
+
+  bool? hasReposted;
 
   bool? isSubscribed;
 
@@ -66,6 +72,7 @@ abstract class PostWithUserState
     _i2.Post? post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
@@ -76,6 +83,7 @@ abstract class PostWithUserState
       'post': post.toJson(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
+      if (hasReposted != null) 'hasReposted': hasReposted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
@@ -89,6 +97,7 @@ abstract class PostWithUserState
       'post': post.toJsonForProtocol(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
+      if (hasReposted != null) 'hasReposted': hasReposted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
@@ -109,6 +118,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     required _i2.Post post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
@@ -116,6 +126,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
           post: post,
           hasLiked: hasLiked,
           hasBookmarked: hasBookmarked,
+          hasReposted: hasReposted,
           isSubscribed: isSubscribed,
           isFollower: isFollower,
           selectedPollOptionId: selectedPollOptionId,
@@ -129,6 +140,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     _i2.Post? post,
     Object? hasLiked = _Undefined,
     Object? hasBookmarked = _Undefined,
+    Object? hasReposted = _Undefined,
     Object? isSubscribed = _Undefined,
     Object? isFollower = _Undefined,
     Object? selectedPollOptionId = _Undefined,
@@ -138,6 +150,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
       hasLiked: hasLiked is bool? ? hasLiked : this.hasLiked,
       hasBookmarked:
           hasBookmarked is bool? ? hasBookmarked : this.hasBookmarked,
+      hasReposted: hasReposted is bool? ? hasReposted : this.hasReposted,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
       isFollower: isFollower is bool? ? isFollower : this.isFollower,
       selectedPollOptionId: selectedPollOptionId is int?

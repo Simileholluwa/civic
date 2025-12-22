@@ -18,6 +18,7 @@ enum NotificationActionType implements _i1.SerializableModel {
   react,
   tag,
   mention,
+  repost,
   quote,
   review,
   vet,
@@ -40,16 +41,18 @@ enum NotificationActionType implements _i1.SerializableModel {
       case 5:
         return NotificationActionType.mention;
       case 6:
-        return NotificationActionType.quote;
+        return NotificationActionType.repost;
       case 7:
-        return NotificationActionType.review;
+        return NotificationActionType.quote;
       case 8:
-        return NotificationActionType.vet;
+        return NotificationActionType.review;
       case 9:
-        return NotificationActionType.system;
+        return NotificationActionType.vet;
       case 10:
-        return NotificationActionType.vote;
+        return NotificationActionType.system;
       case 11:
+        return NotificationActionType.vote;
+      case 12:
         return NotificationActionType.reply;
       default:
         throw ArgumentError(

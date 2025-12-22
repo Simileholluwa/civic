@@ -758,6 +758,7 @@ class NotificationEndpoint extends Endpoint {
       case NotificationActionType.review:
         return settings.pushNewReviews;
       case NotificationActionType.quote:
+      case NotificationActionType.repost:
         return settings.pushRepostsAndQuotes;
       case NotificationActionType.react:
         return settings.pushReactions;
@@ -792,6 +793,8 @@ class NotificationEndpoint extends Endpoint {
         return settings.allowNewVettings;
       case NotificationActionType.review:
         return settings.allowNewReviews;
+      case NotificationActionType.repost:
+        return settings.allowRepostsAndQuotes;
       case NotificationActionType.quote:
         return settings.allowRepostsAndQuotes;
       case NotificationActionType.react:
@@ -931,9 +934,27 @@ class NotificationEndpoint extends Endpoint {
     }
 
     try {
+      Post? post;
+      if (notification.postId != null) {
+        post = await Post.db.findById(
+          session,
+          notification.postId!,
+          include: Post.include(
+            article: Article.include(),
+            poll: Poll.include(
+              options: PollOption.includeList(
+                orderBy: (p0) => p0.id,
+                orderDescending: false,
+              ),
+            ),
+          ),
+        );
+      }
       await session.messages.postMessage(
         'new_notification_${notification.receiverId}',
-        notification,
+        notification.copyWith(
+          post: post,
+        ),
       );
     } catch (e, st) {
       _safeLog(
@@ -1085,6 +1106,8 @@ class NotificationEndpoint extends Endpoint {
         return 'voted in';
       case NotificationActionType.reply:
         return 'replied to';
+      case NotificationActionType.repost:
+        return 'reposted';
       case NotificationActionType.system:
         return 'sent you a';
     }

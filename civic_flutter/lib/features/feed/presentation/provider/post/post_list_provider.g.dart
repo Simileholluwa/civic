@@ -42,7 +42,7 @@ final class PaginatedPostListProvider extends $NotifierProvider<
   }
 }
 
-String _$paginatedPostListHash() => r'2124ed5c0c96c97ac6e167b25546e0f2e2449a6b';
+String _$paginatedPostListHash() => r'c15c35e3d349f1c47779cf74842eeb92d51e80fb';
 
 abstract class _$PaginatedPostList
     extends $Notifier<PagingController<int, PostWithUserState>> {

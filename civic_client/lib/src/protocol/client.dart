@@ -216,6 +216,26 @@ class EndpointPost extends _i1.EndpointRef {
         {'post': post},
       );
 
+  _i2.Future<_i8.Post?> repostPost(int postId) =>
+      caller.callServerEndpoint<_i8.Post?>(
+        'post',
+        'repostPost',
+        {'postId': postId},
+      );
+
+  _i2.Future<_i8.Post?> quotePost(
+    int postId,
+    _i8.Post quoteContent,
+  ) =>
+      caller.callServerEndpoint<_i8.Post?>(
+        'post',
+        'quotePost',
+        {
+          'postId': postId,
+          'quoteContent': quoteContent,
+        },
+      );
+
   _i2.Future<void> logPostImpressions(
     List<int> postIds,
     String? viewport,
@@ -433,7 +453,6 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  /// Lightweight stream of count metrics only. Emits PostCounts objects.
   _i2.Stream<_i11.PostCounts> postCountsUpdates(int postId) =>
       caller.callStreamingServerEndpoint<_i2.Stream<_i11.PostCounts>,
           _i11.PostCounts>(

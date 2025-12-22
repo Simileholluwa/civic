@@ -92,13 +92,16 @@ class RecommendationService {
       final likes = (p.likesCount ?? 0).toDouble();
       final bookmarks = (p.bookmarksCount ?? 0).toDouble();
       final comments = (p.commentCount ?? 0).toDouble();
-      final rawInteractionSum = likes + bookmarks + comments;
+      final shares = (p.repostCount ?? 0).toDouble();
+      final rawInteractionSum = likes + bookmarks + comments + shares;
 
       // Softplus-like squashing via log1p, then squash again.
       // Use log(1+x) manually (log1p unavailable in dart:math pre-3.0).
       double log1p(num v) => math.log(1 + v);
-      final engRaw =
-          log1p(likes) + 0.8 * log1p(bookmarks) + 0.7 * log1p(comments);
+      final engRaw = log1p(likes) +
+          0.8 * log1p(bookmarks) +
+          0.7 * log1p(comments) +
+          1.2 * log1p(shares);
       final engagement = 1 - math.exp(-engRaw / 5.0);
 
       // Impression-aware efficiency: interactions per recent unique impression.
@@ -126,10 +129,11 @@ class RecommendationService {
           (recentImpressions > 10 && efficiencyRatio < 0.01) ? 0.85 : 1.0;
 
       // Weighted combination (tunable).
-      final base = 0.45 * recency +
-          0.25 * engagement +
-          0.15 * efficiencyScore +
+      final base = 0.40 * recency +
+          0.23 * engagement +
+          0.14 * efficiencyScore +
           0.08 * rawImpressionsScore +
+          0.08 * (1 - math.exp(-log1p(shares) / 5.0)) +
           affinity +
           engagementBoost;
       return base * dampen;

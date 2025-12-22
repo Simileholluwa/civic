@@ -13,6 +13,7 @@ abstract class NotificationRepository {
     NotificationTargetType? targetType,
     bool? isRead,
   });
+  Future<Either<Failure, int>> getUnreadNotifications();
   Future<Either<Failure, UserNotificationSettings>>
       getUserNotificationSettings();
   Future<Either<Failure, UserNotificationSettings>>

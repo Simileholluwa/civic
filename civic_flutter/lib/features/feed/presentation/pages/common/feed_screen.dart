@@ -28,20 +28,6 @@ class FeedScreen extends StatelessWidget {
                     size: 26,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Iconsax.search_normal,
-                    size: 26,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Iconsax.setting_3,
-                    size: 26,
-                  ),
-                ),
                 const SizedBox(
                   width: 5,
                 ),

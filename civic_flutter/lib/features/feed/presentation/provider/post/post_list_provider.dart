@@ -76,7 +76,7 @@ class PaginatedPostList extends _$PaginatedPostList {
     );
   }
 
-  void removeProjectRepostById(int? projectId) {
+  void removeprojectQuoteById(int? projectId) {
     if (projectId == null) return;
     final prev = state.value;
     state.value = prev.filterItems((p) => p.post.projectId != projectId);

@@ -20,7 +20,7 @@ final class FeedImpressionsProvider
           argument: null,
           retry: null,
           name: r'feedImpressionsProvider',
-          isAutoDispose: false,
+          isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -41,7 +41,7 @@ final class FeedImpressionsProvider
   }
 }
 
-String _$feedImpressionsHash() => r'e464a7102edca63c7861048a35b5e84caa0b4c64';
+String _$feedImpressionsHash() => r'e3651a7b21edc6153f8c45bb668deaeb3d86b562';
 
 abstract class _$FeedImpressions extends $Notifier<int> {
   int build();

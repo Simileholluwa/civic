@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'feed_buttons_provider.g.dart';
 
-enum PostKind { post, comment, reply, poll, article, projectRepost }
+enum PostKind { post, comment, reply, poll, article, projectQuote }
 
 class DeleteContext {
   const DeleteContext({
@@ -23,7 +23,7 @@ class DeleteContext {
   bool get hasParent => parentId != null;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class FeedButtons extends _$FeedButtons {
   Post? _post;
   Poll? _poll;
@@ -143,6 +143,28 @@ class FeedButtons extends _$FeedButtons {
     );
   }
 
+  Future<void> repostPost(int postId) async {
+    final hasReposted = state.hasReposted;
+    state = state.copyWith(
+      hasReposted: !hasReposted,
+    );
+    final useCase = ref.read(repostPostProvider);
+    final result = await useCase(
+      postId,
+    );
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        state = state.copyWith(hasReposted: hasReposted);
+      },
+      (post) {
+        TToastMessages.successToast(
+          hasReposted ? 'Unrepost successful' : 'Repost action completed.',
+        );
+      },
+    );
+  }
+
   Future<bool> markPostNotInterested(
     int postId,
     String reason,
@@ -210,6 +232,29 @@ class FeedButtons extends _$FeedButtons {
     });
   }
 
+  Future<Post> resolveRoot(Post starting) async {
+    var current = starting;
+    for (var i = 0; i < 10; i++) {
+      final pid = current.parentId;
+      if (pid == null) break;
+      final getPost = ref.read(
+        getPostProvider,
+      );
+      final res = await getPost(
+        GetPostParams(
+          pid,
+        ),
+      );
+      final next = res.match(
+        (l) => null,
+        (r) => r.post,
+      );
+      if (next == null) break;
+      current = next;
+    }
+    return current;
+  }
+
   Future<bool> deletePost(DeleteContext ctx) async {
     if (state.isDeleting) return false;
     state = state.copyWith(isDeleting: true);
@@ -266,7 +311,7 @@ class FeedButtons extends _$FeedButtons {
       case PostKind.poll:
       case PostKind.article:
       case PostKind.post:
-      case PostKind.projectRepost:
+      case PostKind.projectQuote:
         final postNotifier = ref.read(
           paginatedPostListProvider.notifier,
         );
@@ -310,7 +355,7 @@ class FeedButtons extends _$FeedButtons {
         case PostKind.article:
           TToastMessages.infoToast('Your article has been deleted.');
         case PostKind.post:
-        case PostKind.projectRepost:
+        case PostKind.projectQuote:
           TToastMessages.infoToast('Your post has been deleted.');
       }
       state = state.copyWith(isDeleting: false);
