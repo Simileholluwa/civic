@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ArticleTextEditingController extends TextEditingController {
-
   // Keep track of text styles in a map
   final Map<int, TextStyle> _styleMap = {};
 
@@ -84,16 +83,19 @@ class ArticleTextEditingController extends TextEditingController {
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
-    required bool withComposing, TextStyle? style,
+    required bool withComposing,
+    TextStyle? style,
   }) {
     final spans = <TextSpan>[];
 
     // Iterate over the text and apply styles
     for (var i = 0; i < text.length; i++) {
-      spans.add(TextSpan(
-        text: text[i],
-        style: _styleMap[i] ?? style, // Apply style if available
-      ),);
+      spans.add(
+        TextSpan(
+          text: text[i],
+          style: _styleMap[i] ?? style, // Apply style if available
+        ),
+      );
     }
 
     return TextSpan(children: spans);

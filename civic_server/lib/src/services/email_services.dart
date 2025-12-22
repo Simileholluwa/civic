@@ -81,8 +81,10 @@ class EmailServices {
   ''';
   }
 
-
-  static String buildPasswordVerificationEmailTemplate(String verificationCode, String username,) {
+  static String buildPasswordVerificationEmailTemplate(
+    String verificationCode,
+    String username,
+  ) {
     final year = DateTime.now().year;
 
     return '''

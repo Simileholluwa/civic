@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HashtagSuggestionsWidget extends ConsumerWidget {
   const HashtagSuggestionsWidget({
-    required this.onSuggestionSelected, super.key,
+    required this.onSuggestionSelected,
+    super.key,
   });
   final void Function(String) onSuggestionSelected;
 
@@ -42,7 +43,6 @@ class HashtagSuggestionsWidget extends ConsumerWidget {
               child: Text(
                 hashtagsSuggestions[index],
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                     
                       fontWeight: FontWeight.bold,
                     ),
               ),

@@ -13,7 +13,7 @@ part of 'post_bookmark_list_provider.dart';
 const paginatedPostBookmarkListProvider = PaginatedPostBookmarkListProvider._();
 
 final class PaginatedPostBookmarkListProvider extends $NotifierProvider<
-    PaginatedPostBookmarkList, PagingController<int, PostWithUserState>> {
+    PaginatedPostBookmarkList, Raw<PagingController<int, PostWithUserState>>> {
   const PaginatedPostBookmarkListProvider._()
       : super(
           from: null,
@@ -33,31 +33,33 @@ final class PaginatedPostBookmarkListProvider extends $NotifierProvider<
   PaginatedPostBookmarkList create() => PaginatedPostBookmarkList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, PostWithUserState> value) {
+  Override overrideWithValue(
+      Raw<PagingController<int, PostWithUserState>> value) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
-          $SyncValueProvider<PagingController<int, PostWithUserState>>(value),
+          $SyncValueProvider<Raw<PagingController<int, PostWithUserState>>>(
+              value),
     );
   }
 }
 
 String _$paginatedPostBookmarkListHash() =>
-    r'd729c079f43cccb67efda9859b75a09b14a431f5';
+    r'7b82f24f696cfb62b9ef76d30909b5bc89241e35';
 
 abstract class _$PaginatedPostBookmarkList
-    extends $Notifier<PagingController<int, PostWithUserState>> {
-  PagingController<int, PostWithUserState> build();
+    extends $Notifier<Raw<PagingController<int, PostWithUserState>>> {
+  Raw<PagingController<int, PostWithUserState>> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<PagingController<int, PostWithUserState>,
-        PagingController<int, PostWithUserState>>;
+    final ref = this.ref as $Ref<Raw<PagingController<int, PostWithUserState>>,
+        Raw<PagingController<int, PostWithUserState>>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, PostWithUserState>,
-            PagingController<int, PostWithUserState>>,
-        PagingController<int, PostWithUserState>,
+        AnyNotifier<Raw<PagingController<int, PostWithUserState>>,
+            Raw<PagingController<int, PostWithUserState>>>,
+        Raw<PagingController<int, PostWithUserState>>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

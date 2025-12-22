@@ -14,7 +14,7 @@ const paginatedProjectBookmarksListProvider =
     PaginatedProjectBookmarksListProvider._();
 
 final class PaginatedProjectBookmarksListProvider extends $NotifierProvider<
-    PaginatedProjectBookmarksList, PagingController<int, Project>> {
+    PaginatedProjectBookmarksList, Raw<PagingController<int, Project>>> {
   const PaginatedProjectBookmarksListProvider._()
       : super(
           from: null,
@@ -34,31 +34,31 @@ final class PaginatedProjectBookmarksListProvider extends $NotifierProvider<
   PaginatedProjectBookmarksList create() => PaginatedProjectBookmarksList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, Project> value) {
+  Override overrideWithValue(Raw<PagingController<int, Project>> value) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
-          $SyncValueProvider<PagingController<int, Project>>(value),
+          $SyncValueProvider<Raw<PagingController<int, Project>>>(value),
     );
   }
 }
 
 String _$paginatedProjectBookmarksListHash() =>
-    r'ca3473d9ed68ba3175c9f255988172db09c55b9f';
+    r'8cc404496897b17f3d0cdf170ca33065f73a523d';
 
 abstract class _$PaginatedProjectBookmarksList
-    extends $Notifier<PagingController<int, Project>> {
-  PagingController<int, Project> build();
+    extends $Notifier<Raw<PagingController<int, Project>>> {
+  Raw<PagingController<int, Project>> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref
-        as $Ref<PagingController<int, Project>, PagingController<int, Project>>;
+    final ref = this.ref as $Ref<Raw<PagingController<int, Project>>,
+        Raw<PagingController<int, Project>>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, Project>,
-            PagingController<int, Project>>,
-        PagingController<int, Project>,
+        AnyNotifier<Raw<PagingController<int, Project>>,
+            Raw<PagingController<int, Project>>>,
+        Raw<PagingController<int, Project>>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

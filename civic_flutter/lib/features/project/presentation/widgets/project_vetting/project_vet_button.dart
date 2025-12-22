@@ -36,7 +36,8 @@ class ProjectVetButton extends StatelessWidget {
             topLeft: isApprove ? const Radius.circular(100) : Radius.zero,
             bottomLeft: isApprove ? const Radius.circular(100) : Radius.zero,
             topRight: isDisapprove ? const Radius.circular(100) : Radius.zero,
-            bottomRight: isDisapprove ? const Radius.circular(100) : Radius.zero,
+            bottomRight:
+                isDisapprove ? const Radius.circular(100) : Radius.zero,
           ),
         ),
         child: Row(

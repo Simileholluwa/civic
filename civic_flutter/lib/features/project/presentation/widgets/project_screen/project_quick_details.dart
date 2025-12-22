@@ -7,7 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectQuickDetails extends ConsumerWidget {
   const ProjectQuickDetails({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;

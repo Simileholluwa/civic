@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProjectScreenState {
-  
-  
-
   ProjectScreenState({
     this.isActiveFilter = false,
     this.isStartDateExpanded = true,
@@ -86,13 +83,13 @@ class ProjectScreenState {
     Map<String, List<DateTime?>>? selectedStartDate,
     Map<String, List<DateTime?>>? selectedEndDate,
     Map<String, List<DateTime?>>? selectedPublishedDate,
-    
   }) {
     return ProjectScreenState(
       isActiveFilter: isActiveFilter ?? this.isActiveFilter,
       isStartDateExpanded: isStartDateExpanded ?? this.isStartDateExpanded,
       isEndDateExpanded: isEndDateExpanded ?? this.isEndDateExpanded,
-      isPublishedDateExpanded: isPublishedDateExpanded ?? this.isPublishedDateExpanded,
+      isPublishedDateExpanded:
+          isPublishedDateExpanded ?? this.isPublishedDateExpanded,
       selectedCategories: selectedCategories ?? this.selectedCategories,
       selectedFunding: selectedFunding ?? this.selectedFunding,
       selectedAttachments: selectedAttachments ?? this.selectedAttachments,
@@ -105,7 +102,8 @@ class ProjectScreenState {
       costToController: costToController ?? this.costToController,
       selectedState: selectedState,
       radiusOption: radiusOption ?? this.radiusOption,
-      isPhysicalLocationsExpanded: isPhysicalLocationsExpanded ?? this.isPhysicalLocationsExpanded,
+      isPhysicalLocationsExpanded:
+          isPhysicalLocationsExpanded ?? this.isPhysicalLocationsExpanded,
       virtualLocation: virtualLocation ?? this.virtualLocation,
       status: status ?? this.status,
       statusFromController: statusFromController ?? this.statusFromController,
@@ -114,8 +112,8 @@ class ProjectScreenState {
       statusTo: statusTo ?? this.statusTo,
       selectedStartDate: selectedStartDate ?? this.selectedStartDate,
       selectedEndDate: selectedEndDate ?? this.selectedEndDate,
-      selectedPublishedDate: selectedPublishedDate ?? this.selectedPublishedDate,
+      selectedPublishedDate:
+          selectedPublishedDate ?? this.selectedPublishedDate,
     );
-
   }
 }

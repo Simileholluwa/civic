@@ -10,7 +10,8 @@ import 'package:transparent_image/transparent_image.dart';
 
 class AddedVettingImage extends ConsumerWidget {
   const AddedVettingImage({
-    required this.projectVetting, super.key,
+    required this.projectVetting,
+    super.key,
   });
 
   final ProjectVetting? projectVetting;
@@ -51,16 +52,17 @@ class AddedVettingImage extends ConsumerWidget {
             ),
             child: CarouselSlider(
               options: CarouselOptions(
-                  scrollPhysics: const ClampingScrollPhysics(),
-                  height: 498,
-                  enableInfiniteScroll: false,
-                  viewportFraction: 1,
-                  onPageChanged: (index, reason) {
-                    pageIndexNotifier.carouselPageChanged(
-                      index,
-                      reason,
-                    );
-                  },),
+                scrollPhysics: const ClampingScrollPhysics(),
+                height: 498,
+                enableInfiniteScroll: false,
+                viewportFraction: 1,
+                onPageChanged: (index, reason) {
+                  pageIndexNotifier.carouselPageChanged(
+                    index,
+                    reason,
+                  );
+                },
+              ),
               items: vettedProjectState.images.map((image) {
                 return Builder(
                   builder: (BuildContext context) {
@@ -117,7 +119,9 @@ class AddedVettingImage extends ConsumerWidget {
                         width: 12,
                         height: 12,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 4,),
+                          vertical: 8,
+                          horizontal: 4,
+                        ),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(

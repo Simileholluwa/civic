@@ -11,7 +11,6 @@ class SavePostCommentUseCase implements UseCase<Post?, SavePostCommentParams> {
   @override
   Future<Either<Failure, Post?>> call(SavePostCommentParams params) async {
     final result = await _feedRepository.savePostComment(
-
       comment: params.comment,
       isReply: params.isReply,
     );

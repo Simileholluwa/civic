@@ -1,13 +1,16 @@
-
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 
 class VetProjectState {
   VetProjectState({
-    required this.comment, required this.images, required this.status, required this.commentController, this.isSending = false,
-   this.isEditing = false,
-   this.isDeleting = false,
-   this.isValid = false,
+    required this.comment,
+    required this.images,
+    required this.status,
+    required this.commentController,
+    this.isSending = false,
+    this.isEditing = false,
+    this.isDeleting = false,
+    this.isValid = false,
   });
 
   factory VetProjectState.populate(ProjectVetting projectVetting) {

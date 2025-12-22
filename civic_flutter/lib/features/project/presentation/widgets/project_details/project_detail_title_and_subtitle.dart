@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProjectDetailTitleAndSubtitle extends StatelessWidget {
   const ProjectDetailTitleAndSubtitle({
-    required this.title, required this.subtitle, super.key,
+    required this.title,
+    required this.subtitle,
+    super.key,
   });
 
   final String title;

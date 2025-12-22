@@ -13,7 +13,7 @@ part of 'project_paginated_review_list_provider.dart';
 const paginatedProjectReviewListProvider = PaginatedProjectReviewListFamily._();
 
 final class PaginatedProjectReviewListProvider extends $NotifierProvider<
-    PaginatedProjectReviewList, PagingController<int, ProjectReview>> {
+    PaginatedProjectReviewList, Raw<PagingController<int, ProjectReview>>> {
   const PaginatedProjectReviewListProvider._(
       {required PaginatedProjectReviewListFamily super.from,
       required int super.argument})
@@ -40,11 +40,11 @@ final class PaginatedProjectReviewListProvider extends $NotifierProvider<
   PaginatedProjectReviewList create() => PaginatedProjectReviewList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, ProjectReview> value) {
+  Override overrideWithValue(Raw<PagingController<int, ProjectReview>> value) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
-          $SyncValueProvider<PagingController<int, ProjectReview>>(value),
+          $SyncValueProvider<Raw<PagingController<int, ProjectReview>>>(value),
     );
   }
 
@@ -61,15 +61,15 @@ final class PaginatedProjectReviewListProvider extends $NotifierProvider<
 }
 
 String _$paginatedProjectReviewListHash() =>
-    r'185e1617576846d5678198f31cd8637f3223f8ee';
+    r'7b0cd4b10f7789e6e7c2abcb65004176fb77d662';
 
 final class PaginatedProjectReviewListFamily extends $Family
     with
         $ClassFamilyOverride<
             PaginatedProjectReviewList,
-            PagingController<int, ProjectReview>,
-            PagingController<int, ProjectReview>,
-            PagingController<int, ProjectReview>,
+            Raw<PagingController<int, ProjectReview>>,
+            Raw<PagingController<int, ProjectReview>>,
+            Raw<PagingController<int, ProjectReview>>,
             int> {
   const PaginatedProjectReviewListFamily._()
       : super(
@@ -90,11 +90,11 @@ final class PaginatedProjectReviewListFamily extends $Family
 }
 
 abstract class _$PaginatedProjectReviewList
-    extends $Notifier<PagingController<int, ProjectReview>> {
+    extends $Notifier<Raw<PagingController<int, ProjectReview>>> {
   late final _$args = ref.$arg as int;
   int get projectId => _$args;
 
-  PagingController<int, ProjectReview> build(
+  Raw<PagingController<int, ProjectReview>> build(
     int projectId,
   );
   @$mustCallSuper
@@ -103,12 +103,12 @@ abstract class _$PaginatedProjectReviewList
     final created = build(
       _$args,
     );
-    final ref = this.ref as $Ref<PagingController<int, ProjectReview>,
-        PagingController<int, ProjectReview>>;
+    final ref = this.ref as $Ref<Raw<PagingController<int, ProjectReview>>,
+        Raw<PagingController<int, ProjectReview>>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, ProjectReview>,
-            PagingController<int, ProjectReview>>,
-        PagingController<int, ProjectReview>,
+        AnyNotifier<Raw<PagingController<int, ProjectReview>>,
+            Raw<PagingController<int, ProjectReview>>>,
+        Raw<PagingController<int, ProjectReview>>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

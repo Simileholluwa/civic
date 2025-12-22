@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AnimatedStarRating extends StatefulWidget {
-
   const AnimatedStarRating({
-    required this.onRatingSelected, super.key,
+    required this.onRatingSelected,
+    super.key,
     this.maxRating = 5,
     this.size = 40,
     this.selectedColor = Colors.amber,

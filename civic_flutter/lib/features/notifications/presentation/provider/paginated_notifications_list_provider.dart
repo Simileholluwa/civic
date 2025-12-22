@@ -11,7 +11,7 @@ part 'paginated_notifications_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedNotificationsList extends _$PaginatedNotificationsList {
   @override
-  PagingController<int, AppNotification> build(
+  Raw<PagingController<int, AppNotification>> build(
     NotificationTargetType? targetType,
     bool? isRead,
   ) {
@@ -34,8 +34,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       (n) => n.id == notificationId ? n.copyWith(isRead: true) : n,
     );
 
-    ref.read(unreadNotificationsCountProvider.notifier).count =
-        ref.read(unreadNotificationsCountProvider) - 1;
+    ref.read(unreadNotificationsCountProvider.notifier).setCount(
+          ref.read(unreadNotificationsCountProvider) - 1,
+        );
 
     final markRead = ref.read(
       markNotificationAsReadProvider,
@@ -53,8 +54,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
           (n) => n.id == notificationId ? n.copyWith(isRead: false) : n,
         );
 
-        ref.read(unreadNotificationsCountProvider.notifier).count =
-            ref.read(unreadNotificationsCountProvider) + 1;
+        ref.read(unreadNotificationsCountProvider.notifier).setCount(
+              ref.read(unreadNotificationsCountProvider) + 1,
+            );
       },
       (_) {},
     );
@@ -68,8 +70,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     state.value = prevState.mapItems(
       (n) => n.isRead ? n : n.copyWith(isRead: true),
     );
-    ref.read(unreadNotificationsCountProvider.notifier).count =
-        ref.read(unreadNotificationsCountProvider) - unreadBefore;
+    ref.read(unreadNotificationsCountProvider.notifier).setCount(
+          ref.read(unreadNotificationsCountProvider) - unreadBefore,
+        );
 
     final markAllRead = ref.read(markAllNotificationAsReadProvider);
     final result = await markAllRead(NoParams());
@@ -77,8 +80,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
     result.fold(
       (_) {
         state.value = prevState;
-        ref.read(unreadNotificationsCountProvider.notifier).count =
-            ref.read(unreadNotificationsCountProvider) + unreadBefore;
+        ref.read(unreadNotificationsCountProvider.notifier).setCount(
+              ref.read(unreadNotificationsCountProvider) + unreadBefore,
+            );
       },
       (_) {},
     );
@@ -160,8 +164,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
       hasNextPage: current.hasNextPage,
     );
 
-    ref.read(unreadNotificationsCountProvider.notifier).count =
-        ref.read(unreadNotificationsCountProvider) + 1;
+    ref.read(unreadNotificationsCountProvider.notifier).setCount(
+          ref.read(unreadNotificationsCountProvider) + 1,
+        );
   }
 
   Future<void> deleteNotification(int notificationId) async {
@@ -177,8 +182,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
         .isRead;
     state.value = prevState.filterItems((n) => n.id != notificationId);
     if (wasUnread) {
-      ref.read(unreadNotificationsCountProvider.notifier).count =
-          ref.read(unreadNotificationsCountProvider) - 1;
+      ref.read(unreadNotificationsCountProvider.notifier).setCount(
+            ref.read(unreadNotificationsCountProvider) - 1,
+          );
     }
 
     final delete = ref.read(deleteNotificationProvider);
@@ -191,8 +197,9 @@ class PaginatedNotificationsList extends _$PaginatedNotificationsList {
                 false;
         state.value = prevState;
         if (wasUnread) {
-          ref.read(unreadNotificationsCountProvider.notifier).count =
-              ref.read(unreadNotificationsCountProvider) + 1;
+          ref.read(unreadNotificationsCountProvider.notifier).setCount(
+                ref.read(unreadNotificationsCountProvider) + 1,
+              );
         }
       },
       (_) {},

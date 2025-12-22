@@ -18,7 +18,7 @@ UsersListService usersListService(Ref ref) {
 @Riverpod(keepAlive: true)
 class PaginatedUsersList extends _$PaginatedUsersList {
   @override
-  PagingController<int, UserRecord> build(String query) {
+  Raw<PagingController<int, UserRecord>> build(String query) {
     final controller = PagingController<int, UserRecord>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

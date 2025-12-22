@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class CannotVetProjectWidget extends StatelessWidget {
   const CannotVetProjectWidget({
-    required this.value, super.key,
+    required this.value,
+    super.key,
   });
 
   final double value;

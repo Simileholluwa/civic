@@ -25,9 +25,9 @@ class AppLoadingWidget extends StatelessWidget {
                 width: size,
                 child: CircularProgressIndicator(
                   color: TColors.primary,
-                  backgroundColor:THelperFunctions.isDarkMode(context)
-                ? TColors.dark
-                : TColors.light,
+                  backgroundColor: THelperFunctions.isDarkMode(context)
+                      ? TColors.dark
+                      : TColors.light,
                   strokeWidth: 6,
                 ),
               ),

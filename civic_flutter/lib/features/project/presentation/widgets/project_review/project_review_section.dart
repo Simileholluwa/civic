@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class ProjectReviewSection extends StatelessWidget {
   const ProjectReviewSection({
-    required this.title, required this.subTitle, required this.rating, required this.onRatingSelected, required this.currentRating, super.key,
+    required this.title,
+    required this.subTitle,
+    required this.rating,
+    required this.onRatingSelected,
+    required this.currentRating,
+    super.key,
   });
 
   final String title;

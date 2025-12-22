@@ -55,7 +55,7 @@ String _$usersListServiceHash() => r'125d68440db5707cc3888b53e653b0f45b09bef7';
 const paginatedUsersListProvider = PaginatedUsersListFamily._();
 
 final class PaginatedUsersListProvider extends $NotifierProvider<
-    PaginatedUsersList, PagingController<int, UserRecord>> {
+    PaginatedUsersList, Raw<PagingController<int, UserRecord>>> {
   const PaginatedUsersListProvider._(
       {required PaginatedUsersListFamily super.from,
       required String super.argument})
@@ -82,11 +82,11 @@ final class PaginatedUsersListProvider extends $NotifierProvider<
   PaginatedUsersList create() => PaginatedUsersList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(PagingController<int, UserRecord> value) {
+  Override overrideWithValue(Raw<PagingController<int, UserRecord>> value) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
-          $SyncValueProvider<PagingController<int, UserRecord>>(value),
+          $SyncValueProvider<Raw<PagingController<int, UserRecord>>>(value),
     );
   }
 
@@ -102,15 +102,15 @@ final class PaginatedUsersListProvider extends $NotifierProvider<
 }
 
 String _$paginatedUsersListHash() =>
-    r'c14b0dbb74a2143742b0bcf8a89b3b219d07323e';
+    r'5d5803660fdd7121e925a761fa30161250d94ca5';
 
 final class PaginatedUsersListFamily extends $Family
     with
         $ClassFamilyOverride<
             PaginatedUsersList,
-            PagingController<int, UserRecord>,
-            PagingController<int, UserRecord>,
-            PagingController<int, UserRecord>,
+            Raw<PagingController<int, UserRecord>>,
+            Raw<PagingController<int, UserRecord>>,
+            Raw<PagingController<int, UserRecord>>,
             String> {
   const PaginatedUsersListFamily._()
       : super(
@@ -131,11 +131,11 @@ final class PaginatedUsersListFamily extends $Family
 }
 
 abstract class _$PaginatedUsersList
-    extends $Notifier<PagingController<int, UserRecord>> {
+    extends $Notifier<Raw<PagingController<int, UserRecord>>> {
   late final _$args = ref.$arg as String;
   String get query => _$args;
 
-  PagingController<int, UserRecord> build(
+  Raw<PagingController<int, UserRecord>> build(
     String query,
   );
   @$mustCallSuper
@@ -144,12 +144,12 @@ abstract class _$PaginatedUsersList
     final created = build(
       _$args,
     );
-    final ref = this.ref as $Ref<PagingController<int, UserRecord>,
-        PagingController<int, UserRecord>>;
+    final ref = this.ref as $Ref<Raw<PagingController<int, UserRecord>>,
+        Raw<PagingController<int, UserRecord>>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PagingController<int, UserRecord>,
-            PagingController<int, UserRecord>>,
-        PagingController<int, UserRecord>,
+        AnyNotifier<Raw<PagingController<int, UserRecord>>,
+            Raw<PagingController<int, UserRecord>>>,
+        Raw<PagingController<int, UserRecord>>,
         Object?,
         Object?>;
     element.handleValue(ref, created);

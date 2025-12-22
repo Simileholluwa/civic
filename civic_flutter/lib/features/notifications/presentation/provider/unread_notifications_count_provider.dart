@@ -5,15 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'unread_notifications_count_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class UnreadNotificationsCount extends _$UnreadNotificationsCount {
-  int _count = 0;
   bool _initialized = false;
-  int get count => _count;
 
-  set count(int value) {
-    _count = value < 0 ? 0 : value;
-    state = _count;
+  void setCount(int value) {
+    state = value < 0 ? 0 : value;
   }
 
   Future<void> _init() async {
@@ -25,13 +22,13 @@ class UnreadNotificationsCount extends _$UnreadNotificationsCount {
     );
     result.fold(
       (_) {},
-      (r) => count = r,
+      setCount,
     );
   }
 
   @override
   int build() {
     unawaited(_init());
-    return _count;
+    return 0;
   }
 }

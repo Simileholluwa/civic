@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class CreateContentDraftText extends StatelessWidget {
   const CreateContentDraftText({
-    required this.text, super.key,
+    required this.text,
+    super.key,
   });
 
   final String text;

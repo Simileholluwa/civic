@@ -51,14 +51,13 @@ class _VerifyNinEmailOTPState extends ConsumerState<VerifyNinEmailOTP> {
             height: TSizes.spaceBtwSections,
           ),
           FilledButton(
-              onPressed: () {},
-              child: const Text(
-                'Confirm OTP',
-              ),
-            ).withLoading(
-              loading: false,
+            onPressed: () {},
+            child: const Text(
+              'Confirm OTP',
             ),
-          
+          ).withLoading(
+            loading: false,
+          ),
         ],
       ),
     );

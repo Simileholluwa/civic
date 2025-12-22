@@ -7,7 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class DeletedProjectPlaceholder extends ConsumerWidget {
   const DeletedProjectPlaceholder({
-    required this.project, super.key,
+    required this.project,
+    super.key,
     this.showInteractions = false,
   });
 

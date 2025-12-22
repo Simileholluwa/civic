@@ -11,7 +11,7 @@ class CreateContentSchedule extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scheduledDateTimeProvider =
-              ref.watch(postScheduledDateTimeProvider.notifier);
+        ref.watch(postScheduledDateTimeProvider.notifier);
     return InkWell(
       onTap: () => THelperFunctions.showScheduleDialog(context),
       child: Ink(

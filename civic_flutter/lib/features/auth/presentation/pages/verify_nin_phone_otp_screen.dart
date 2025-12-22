@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,8 @@ import 'package:iconsax/iconsax.dart';
 
 class VerifyNinPhoneOTPScreen extends StatelessWidget {
   const VerifyNinPhoneOTPScreen({
-    required this.verificationId, super.key,
+    required this.verificationId,
+    super.key,
   });
   final String verificationId;
 

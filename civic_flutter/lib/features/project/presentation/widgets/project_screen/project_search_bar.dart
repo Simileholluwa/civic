@@ -4,7 +4,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectSearchBar extends StatelessWidget {
   const ProjectSearchBar({
-    required this.onChanged, super.key,
+    required this.onChanged,
+    super.key,
     this.height = 50,
     this.hintText = 'Search for projects',
   });
@@ -29,7 +30,9 @@ class ProjectSearchBar extends StatelessWidget {
               0,
             ),
             backgroundColor: WidgetStatePropertyAll(
-              THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+              THelperFunctions.isDarkMode(context)
+                  ? TColors.dark
+                  : TColors.light,
             ),
             hintText: hintText,
             leading: Padding(
@@ -65,7 +68,6 @@ class ProjectSearchBar extends StatelessWidget {
             ),
           ),
         ),
-        
       ],
     );
   }

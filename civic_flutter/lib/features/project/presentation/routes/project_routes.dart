@@ -28,7 +28,8 @@ class ProjectRoutes {
             path: ':projectId',
             builder: (_, state) {
               return ProjectDetailsScreen(
-                projectId: int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
+                projectId:
+                    int.tryParse(state.pathParameters['projectId'] ?? '0') ?? 0,
                 project: state.extra as Project?,
               );
             },
@@ -37,7 +38,9 @@ class ProjectRoutes {
                 path: 'review',
                 builder: (_, state) {
                   return ProjectReviewScreen(
-                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
+                    projectId:
+                        int.tryParse(state.pathParameters['projectId'] ?? '') ??
+                            0,
                   );
                 },
               ),
@@ -45,7 +48,9 @@ class ProjectRoutes {
                 path: 'vet',
                 builder: (_, state) {
                   return ProjectVettingScreen(
-                    projectId: int.tryParse(state.pathParameters['projectId'] ?? '') ?? 0,
+                    projectId:
+                        int.tryParse(state.pathParameters['projectId'] ?? '') ??
+                            0,
                     projectLocations: state.extra as List<AWSPlaces>?,
                   );
                 },

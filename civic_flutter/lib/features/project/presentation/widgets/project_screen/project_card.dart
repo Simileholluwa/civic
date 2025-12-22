@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectCard extends ConsumerWidget {
   const ProjectCard({
-    required this.project, super.key,
+    required this.project,
+    super.key,
     this.canTap = true,
     this.showInteractions = true,
     this.maxHeight = 300,
@@ -30,12 +31,12 @@ class ProjectCard extends ConsumerWidget {
       ),
     );
     return ProjectCardItem(
-        project: liveProject.value ?? project,
-        canTap: canTap,
-        creatorAvatarRadius: creatorAvatarRadius,
-        showPolitcalStatus: showPolitcalStatus,
-        maxHeight: maxHeight,
-        showInteractions: showInteractions,
-      );
+      project: liveProject.value ?? project,
+      canTap: canTap,
+      creatorAvatarRadius: creatorAvatarRadius,
+      showPolitcalStatus: showPolitcalStatus,
+      maxHeight: maxHeight,
+      showInteractions: showInteractions,
+    );
   }
 }

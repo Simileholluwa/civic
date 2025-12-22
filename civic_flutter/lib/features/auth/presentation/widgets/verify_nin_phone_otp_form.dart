@@ -52,15 +52,15 @@ class _VerifyNinOTPState extends ConsumerState<VerifyNinPhoneOTPForm> {
           ),
           const SizedBox(
             height: TSizes.spaceBtwSections,
-          ),FilledButton(
-              onPressed: () {},
-              child: const Text(
-                'Confirm OTP',
-              ),
-            ).withLoading(
-              loading: false,
+          ),
+          FilledButton(
+            onPressed: () {},
+            child: const Text(
+              'Confirm OTP',
             ),
-          
+          ).withLoading(
+            loading: false,
+          ),
         ],
       ),
     );

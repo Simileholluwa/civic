@@ -10,7 +10,7 @@ part 'project_bookmarks_paginated_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedProjectBookmarksList extends _$PaginatedProjectBookmarksList {
   @override
-  PagingController<int, Project> build() {
+  Raw<PagingController<int, Project>> build() {
     final controller = PagingController<int, Project>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

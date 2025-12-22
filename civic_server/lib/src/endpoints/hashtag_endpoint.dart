@@ -32,7 +32,7 @@ class HashtagEndpoint extends Endpoint {
             session,
             newHashtag,
           );
-          
+
           hashtagId = sentHashtag.id!;
         }
         var postHashtag = PostsHashtags(
@@ -74,5 +74,4 @@ class HashtagEndpoint extends Endpoint {
     // Return a list of hashtag strings
     return postTags;
   }
-
 }
