@@ -15,7 +15,6 @@ class FeedWidgetsState {
     this.hasVoted = false,
     this.isSendingPoll = false,
     this.optionVoters = const <PollOptionCount>[],
-    this.numberOfVoters = 0,
     this.pollEnded = false,
     this.totalVotes = 0,
     this.isSubscribed = false,
@@ -41,7 +40,6 @@ class FeedWidgetsState {
       hasReposted: postWithUserState.hasReposted ?? false,
       numberOfReposts: post.repostCount ?? 0,
       hasBookmarked: postWithUserState.hasBookmarked ?? false,
-      numberOfVoters: poll?.votesCount ?? 0,
       isFollower: postWithUserState.isFollower!,
       optionVoters: List<PollOptionCount>.from(
         poll?.options?.map(
@@ -75,7 +73,6 @@ class FeedWidgetsState {
   final int numberOfLikes;
   final int numberOfReposts;
   final List<PollOptionCount> optionVoters;
-  final int numberOfVoters;
   final bool pollEnded;
   final String reasonNotInterested;
   final int totalVotes;
@@ -96,7 +93,6 @@ class FeedWidgetsState {
     int? numberOfComments,
     int? numberOfLikes,
     List<PollOptionCount>? optionVoters,
-    int? numberOfVoters,
     bool? pollEnded,
     String? reasonNotInterested,
     String? timeAgo,
@@ -121,7 +117,6 @@ class FeedWidgetsState {
         numberOfComments: numberOfComments ?? this.numberOfComments,
         numberOfLikes: numberOfLikes ?? this.numberOfLikes,
         optionVoters: optionVoters ?? this.optionVoters,
-        numberOfVoters: numberOfVoters ?? this.numberOfVoters,
         pollEnded: pollEnded ?? this.pollEnded,
         reasonNotInterested: reasonNotInterested ?? this.reasonNotInterested,
         isSubscribed: isSubscribed ?? this.isSubscribed,

@@ -26,18 +26,40 @@ class PostImagePost extends ConsumerWidget {
       postCreationProvider(post),
     );
 
+    Future<void> openGallery(String tappedImage) async {
+      final images = postState.imageUrls;
+      if (images.isEmpty) return;
+      final initialIndex = images.indexOf(tappedImage);
+      ref.read(bottomNavVisibilityProvider.notifier).hide();
+      await Navigator.of(context).push(
+        MaterialPageRoute<Widget>(
+          builder: (_) => PostImageGalleryPage(
+            imageUrls: images,
+            initialIndex: initialIndex < 0 ? 0 : initialIndex,
+          ),
+        ),
+      );
+      ref.read(bottomNavVisibilityProvider.notifier).show();
+    }
+
     Widget buildSingle(String image) {
-      return FadeInImage(
-        placeholderColor: Theme.of(context).cardColor,
-        image: regex.hasMatch(image)
-            ? CachedNetworkImageProvider(image)
-            : FileImage(File(image)) as ImageProvider,
-        placeholder: MemoryImage(kTransparentImage),
-        fit: BoxFit.cover,
+      final tag = 'post-image-${image.hashCode}';
+      return GestureDetector(
+        onTap: () => openGallery(image),
+        child: Hero(
+          tag: tag,
+          child: FadeInImage(
+            placeholderColor: Theme.of(context).cardColor,
+            image: regex.hasMatch(image)
+                ? CachedNetworkImageProvider(image)
+                : FileImage(File(image)) as ImageProvider,
+            placeholder: MemoryImage(kTransparentImage),
+            fit: BoxFit.cover,
+          ),
+        ),
       );
     }
 
-    // Collage patterns: 2 side-by-side, 3 (one large left, two stacked right), 4 (2x2), >4 show first 4 with overlay +N.
     Widget buildCollage(List<String> images) {
       final display = images.take(4).toList(growable: false);
       final extra = images.length - display.length;
@@ -45,11 +67,14 @@ class PostImagePost extends ConsumerWidget {
       Widget tile(String img, {BorderRadius? radius}) {
         return ClipRRect(
           borderRadius: radius ?? BorderRadius.circular(TSizes.sm),
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: buildSingle(img),
+          child: InkWell(
+            onTap: () => openGallery(img),
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: Theme.of(context).cardColor,
+              child: buildSingle(img),
+            ),
           ),
         );
       }
@@ -64,15 +89,18 @@ class PostImagePost extends ConsumerWidget {
                 bottomRight: Radius.circular(TSizes.md),
               ),
             ),
-            Container(
-              color: Colors.black45,
-              alignment: Alignment.center,
-              child: Text(
-                '+$extra',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+            InkWell(
+              onTap: () => openGallery(img),
+              child: Container(
+                color: Colors.black45,
+                alignment: Alignment.center,
+                child: Text(
+                  '+$extra',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ),
           ],
@@ -154,7 +182,6 @@ class PostImagePost extends ConsumerWidget {
           ],
         );
       }
-      // 4 or more: 1 large left, 3 stacked right.
       return Row(
         children: [
           Expanded(

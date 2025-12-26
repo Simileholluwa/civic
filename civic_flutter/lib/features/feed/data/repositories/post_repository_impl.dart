@@ -51,6 +51,24 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, void>> clearVote({
+    required int pollId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.clearVote(
+        pollId: pollId,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, PostList>> getUserPostBookmarks({
     required int page,
     required int limit,

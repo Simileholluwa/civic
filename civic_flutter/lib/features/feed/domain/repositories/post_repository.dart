@@ -99,4 +99,7 @@ abstract class FeedRepository {
   Future<Either<Failure, void>> flushImpressions({
     String? source,
   });
+  Future<Either<Failure, void>> clearVote({
+    required int pollId,
+  });
 }

@@ -45,28 +45,32 @@ class VideoPost extends ConsumerWidget {
           ),
         );
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 500),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(TSizes.md),
+      ),
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           RepaintBoundary(
-            child: Container(
+            child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 500),
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(TSizes.md),
-                border: Border.all(color: Theme.of(context).dividerColor),
-              ),
               child: controller != null && controller.value.isInitialized
                   ? ContentKeepAliveWrapper(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(TSizes.md),
-                        child: AspectRatio(
-                          aspectRatio: controller.value.aspectRatio,
-                          child: GestureDetector(
-                            onTap: controllerNotifier.pausePlay,
-                            child: VideoPlayer(controller),
+                      child: AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: GestureDetector(
+                          onTap: controllerNotifier.pausePlay,
+                          child: ClipRRect(
+                            child: VideoPlayer(
+                              controller,
+                            ),
+                            borderRadius: controller.value.aspectRatio > 0.75
+                                ? BorderRadiusGeometry.circular(
+                                    TSizes.md,
+                                  )
+                                : BorderRadius.zero,
                           ),
                         ),
                       ),

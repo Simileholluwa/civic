@@ -34,6 +34,7 @@ class FeedButtons extends _$FeedButtons {
   void _subscribeCounts() {
     final postId = _post?.id;
     if (postId == null) return;
+    unawaited(_countsSub?.cancel());
     _countsSub = ref
         .read(clientProvider)
         .post
@@ -47,6 +48,7 @@ class FeedButtons extends _$FeedButtons {
   void _subscribePollCounts() {
     final pollId = _poll?.id;
     if (pollId == null) return;
+    unawaited(_pollCountsSub?.cancel());
     _pollCountsSub = ref
         .read(clientProvider)
         .post
@@ -73,6 +75,29 @@ class FeedButtons extends _$FeedButtons {
     state = state.copyWith(
       isSendingPoll: value,
     );
+  }
+
+  Future<void> clearPollVote(int pollId) async {
+    final currentOption = state.votedOption;
+    setIsSendingPoll(true);
+    state = state.copyWith(
+      votedOption: PollOption(pollId: 0),
+      hasVoted: false,
+    );
+    final clearVote = ref.read(clearVoteProvider);
+    final result = await clearVote(
+      pollId,
+    );
+    return result.fold((error) {
+      setIsSendingPoll(false);
+      TToastMessages.errorToast(error.message);
+      state = state.copyWith(
+        votedOption: currentOption,
+        hasVoted: currentOption != null,
+      );
+    }, (_) async {
+      setIsSendingPoll(false);
+    });
   }
 
   Future<void> togglePostLikeStatus(int id) async {
@@ -210,17 +235,26 @@ class FeedButtons extends _$FeedButtons {
     });
   }
 
-  Future<void> subscribeToNotifications(int postId) async {
+  Future<void> subscribeToNotifications(
+    int postId,
+  ) async {
+    final isSubbed = state.isSubscribed;
+    state = state.copyWith(
+      isSubscribed: !isSubbed,
+    );
     final subscribeToNotif = ref.read(subscribeToNotifProvider);
     final result = await subscribeToNotif(
       SubscribeToNotifParams(postId),
     );
     return result.fold((error) {
+      state = state.copyWith(
+        isSubscribed: isSubbed,
+      );
       TToastMessages.errorToast(
         'Subscription failed. Please try again.',
       );
     }, (success) {
-      if (!state.isSubscribed) {
+      if (!isSubbed) {
         TToastMessages.successToast(
           'You will now receive notifications on this post.',
         );
@@ -394,7 +428,13 @@ class FeedButtons extends _$FeedButtons {
       TToastMessages.errorToast('This poll has ended.');
       return false;
     }
+    final currentOption = state.votedOption;
     setIsSendingPoll(true);
+    state = state.copyWith(
+      votedOption: _poll!.options!.firstWhere(
+        (option) => option.id == optionId,
+      ),
+    );
     final castVote = ref.read(castVoteProvider);
     final result = await castVote(
       CastVoteParams(
@@ -405,9 +445,13 @@ class FeedButtons extends _$FeedButtons {
     return result.fold((error) {
       setIsSendingPoll(false);
       TToastMessages.errorToast(error.message);
+      state = state.copyWith(
+        votedOption: currentOption,
+      );
       return false;
     }, (_) async {
       setIsSendingPoll(false);
+      state = state.copyWith(hasVoted: true);
       return true;
     });
   }

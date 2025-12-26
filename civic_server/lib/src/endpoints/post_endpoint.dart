@@ -759,6 +759,7 @@ class PostEndpoint extends Endpoint {
         if (existingVote.optionId == optionId) {
           return;
         }
+        // Update the user's vote to the new option.
         await PollVote.db.updateRow(
           session,
           existingVote.copyWith(
@@ -767,18 +768,39 @@ class PostEndpoint extends Endpoint {
           ),
           transaction: transaction,
         );
-        poll.options!
-            .firstWhere(
-              (opt) => opt.id == existingVote.optionId,
-            )
-            .votesCount = (option.votesCount ?? 0) - 1;
-        poll.options!
-            .firstWhere(
-              (opt) => opt.id == optionId,
-            )
-            .votesCount = (option.votesCount ?? 0) + 1;
-        await updatePoll(session, poll);
+
+        // Decrement the previous option's count.
+        final prevOption = await PollOption.db.findById(
+          session,
+          existingVote.optionId,
+          transaction: transaction,
+        );
+        if (prevOption != null) {
+          await PollOption.db.updateRow(
+            session,
+            prevOption.copyWith(
+              votesCount: (((prevOption.votesCount ?? 0) - 1) < 0)
+                  ? 0
+                  : (prevOption.votesCount ?? 0) - 1,
+            ),
+            transaction: transaction,
+          );
+        }
+
+        // Increment the newly selected option's count.
+        await PollOption.db.updateRow(
+          session,
+          option.copyWith(
+            votesCount: (option.votesCount ?? 0) + 1,
+          ),
+          transaction: transaction,
+        );
+
+        // Total poll votes remain unchanged when switching options.
+        // Broadcast updated poll counts (options changed) within the transaction.
+        await updatePoll(session, poll, transaction: transaction);
       } else {
+        // First-time vote: insert and increment counts.
         await PollVote.db.insertRow(
           session,
           PollVote(
@@ -789,13 +811,24 @@ class PostEndpoint extends Endpoint {
           ),
           transaction: transaction,
         );
-        poll.votesCount = (poll.votesCount ?? 0) + 1;
-        poll.options!
-            .firstWhere(
-              (opt) => opt.id == optionId,
-            )
-            .votesCount = (option.votesCount ?? 0) + 1;
-        await updatePoll(session, poll);
+
+        // Increment the selected option's count.
+        await PollOption.db.updateRow(
+          session,
+          option.copyWith(
+            votesCount: (option.votesCount ?? 0) + 1,
+          ),
+          transaction: transaction,
+        );
+
+        // Increment the poll's total votes and broadcast using fresh counts within the transaction.
+        await updatePoll(
+          session,
+          poll.copyWith(
+            votesCount: (poll.votesCount ?? 0) + 1,
+          ),
+          transaction: transaction,
+        );
       }
 
       unawaited(
@@ -852,7 +885,7 @@ class PostEndpoint extends Endpoint {
     });
   }
 
-  Future<bool> clearVote(
+  Future<void> clearVote(
     Session session,
     int pollId,
   ) async {
@@ -896,13 +929,25 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
 
-      poll.votesCount = (poll.votesCount ?? 0) - 1;
-      poll.options!
-          .firstWhere(
-            (opt) => opt.id == existingVote.optionId,
-          )
-          .votesCount = (option.votesCount ?? 0) - 1;
-      return true;
+      await PollOption.db.updateRow(
+        session,
+        option.copyWith(
+          votesCount: (((option.votesCount ?? 0) - 1) < 0)
+              ? 0
+              : (option.votesCount ?? 0) - 1,
+        ),
+        transaction: transaction,
+      );
+
+      await updatePoll(
+        session,
+        poll.copyWith(
+          votesCount: (((poll.votesCount ?? 0) - 1) < 0)
+              ? 0
+              : (poll.votesCount ?? 0) - 1,
+        ),
+        transaction: transaction,
+      );
     });
   }
 
@@ -2168,11 +2213,13 @@ class PostEndpoint extends Endpoint {
     );
   }
 
-  Future<PollCounts?> _loadCounts(Session session, int pollId) async {
+  Future<PollCounts?> _loadCounts(Session session, int pollId,
+      {Transaction? transaction}) async {
     final poll = await Poll.db.findById(
       session,
       pollId,
       include: Poll.include(options: PollOption.includeList()),
+      transaction: transaction,
     );
     if (poll == null) return null;
     return _buildPollCounts(poll);
@@ -2281,12 +2328,17 @@ class PostEndpoint extends Endpoint {
   }
 
   @doNotGenerate
-  Future<void> updatePoll(Session session, Poll poll) async {
-    await Poll.db.updateRow(session, poll);
-    session.messages.postMessage(
-      'poll_counts_${poll.id}',
-      _buildPollCounts(poll),
-    );
+  Future<void> updatePoll(Session session, Poll poll,
+      {Transaction? transaction}) async {
+    await Poll.db.updateRow(session, poll, transaction: transaction);
+    final counts =
+        await _loadCounts(session, poll.id!, transaction: transaction);
+    if (counts != null) {
+      session.messages.postMessage(
+        'poll_counts_${poll.id}',
+        counts,
+      );
+    }
   }
 
   @doNotGenerate

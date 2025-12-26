@@ -278,7 +278,7 @@ class EndpointPost extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<bool> clearVote(int pollId) => caller.callServerEndpoint<bool>(
+  _i2.Future<void> clearVote(int pollId) => caller.callServerEndpoint<void>(
         'post',
         'clearVote',
         {'pollId': pollId},

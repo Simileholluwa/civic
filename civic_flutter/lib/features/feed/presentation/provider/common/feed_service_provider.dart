@@ -129,6 +129,13 @@ QuotePostUseCase quotePost(Ref ref) {
 }
 
 @riverpod
+ClearVoteUseCase clearVote(Ref ref) {
+  return ClearVoteUseCase(
+    feedRepository: ref.read(feedRepositoryImplProvider),
+  );
+}
+
+@riverpod
 RepostPostUseCase repostPost(Ref ref) {
   return RepostPostUseCase(
     feedRepository: ref.read(feedRepositoryImplProvider),

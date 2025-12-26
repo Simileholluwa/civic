@@ -67,8 +67,9 @@ class DetailScreen extends ConsumerWidget {
                         onPressed: isOwner
                             ? null
                             : () async {
-                                await notifier
-                                    .subscribeToNotifications(postData.id!);
+                                await notifier.subscribeToNotifications(
+                                  postData.id!,
+                                );
                               },
                         icon: Icon(
                           isSubscribed
@@ -164,14 +165,23 @@ class DetailScreen extends ConsumerWidget {
                         ),
                       if (postType == PostType.poll)
                         RepaintBoundary(
-                          child: PollDetailCard(
-                            postWithUserState: value,
+                          child: Column(
+                            spacing: 10,
+                            children: [
+                              PollCard(
+                                postWithUserState: value,
+                                showInteractions: false,
+                              ),
+                              const Divider(
+                                height: 0,
+                              ),
+                            ],
                           ),
                         ),
                       if (postType == PostType.article)
                         RepaintBoundary(
                           child: ArticleDetailCard(
-                            post: value.post,
+                            postWithUserState: value,
                           ),
                         ),
                     ],

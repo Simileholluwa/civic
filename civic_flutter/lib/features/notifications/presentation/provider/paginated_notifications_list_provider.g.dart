@@ -67,7 +67,7 @@ final class PaginatedNotificationsListProvider extends $NotifierProvider<
 }
 
 String _$paginatedNotificationsListHash() =>
-    r'a0ed8ed3229159eb9fa536a5efb6e1459de05a06';
+    r'a4308c57ebc6100b528fbe4ac66b659604dd2cdb';
 
 final class PaginatedNotificationsListFamily extends $Family
     with

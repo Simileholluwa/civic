@@ -14,14 +14,39 @@ class PollOptionsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feedProv =
-        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
-    final optionVoters = ref.watch(feedProv.select((s) => s.optionVoters));
-    final totalVotes = ref.watch(feedProv.select((s) => s.totalVotes));
-    final votedOption = ref.watch(feedProv.select((s) => s.votedOption));
-    final pollEnded = ref.watch(feedProv.select((s) => s.pollEnded));
-    final isSendingPoll = ref.watch(feedProv.select((s) => s.isSendingPoll));
-    final postCardNotifier = ref.read(feedProv.notifier);
+    final feedProv = feedButtonsProvider(
+      PostWithUserStateKey(
+        postWithUserState,
+      ),
+    );
+    final optionVoters = ref.watch(
+      feedProv.select(
+        (s) => s.optionVoters,
+      ),
+    );
+    final totalVotes = ref.watch(
+      feedProv.select(
+        (s) => s.totalVotes,
+      ),
+    );
+    final votedOption = ref.watch(
+      feedProv.select(
+        (s) => s.votedOption,
+      ),
+    );
+    final pollEnded = ref.watch(
+      feedProv.select(
+        (s) => s.pollEnded,
+      ),
+    );
+    final isSendingPoll = ref.watch(
+      feedProv.select(
+        (s) => s.isSendingPoll,
+      ),
+    );
+    final postCardNotifier = ref.read(
+      feedProv.notifier,
+    );
     final options = postWithUserState.post.poll!.options!;
     final votesMap = {
       for (final v in optionVoters) v.optionId: v.votesCount ?? 0,
@@ -41,7 +66,12 @@ class PollOptionsCard extends ConsumerWidget {
       itemBuilder: (context, index) {
         final option = options[index];
         final numberOfOptionVotes = votesMap[option.id] ?? 0;
-        final userVote = votedOption == option;
+        final userVote = votedOption?.id == option.id;
+        final highestVote = votesMap.values.isEmpty
+            ? 0
+            : votesMap.values.reduce(
+                (a, b) => a > b ? a : b,
+              );
         return GestureDetector(
           onTap: pollEnded || isSendingPoll
               ? null
@@ -56,7 +86,7 @@ class PollOptionsCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 10,
               ),
-              color: userVote
+              color: highestVote == numberOfOptionVotes
                   ? Theme.of(context).primaryColor.withAlpha(50)
                   : null,
               border: Border.all(
@@ -79,44 +109,51 @@ class PollOptionsCard extends ConsumerWidget {
                                 userVote ? FontWeight.w600 : FontWeight.normal,
                           ),
                     ),
+                    subtitle: Row(
+                      spacing: 5,
+                      children: [
+                        Text(
+                          totalVotes != 0
+                              ? '${((numberOfOptionVotes / totalVotes) * 100).toStringAsFixed(
+                                  2,
+                                )}%'
+                              : '0.00%',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                    fontSize: 12,
+                                  ),
+                        ),
+                        Text(
+                          ' • ',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                    fontSize: 12,
+                                  ),
+                        ),
+                        Text(
+                          numberOfOptionVotes == 0
+                              ? 'No votes yet'
+                              : numberOfOptionVotes == 1
+                                  ? '1 vote'
+                                  : ' ${THelperFunctions.humanizeNumber(numberOfOptionVotes)} votes',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: Theme.of(context).hintColor,
+                                    fontSize: 12,
+                                  ),
+                        ),
+                      ],
+                    ),
                     selected: userVote,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 10,
-                    left: 5,
+                if (userVote)
+                  Checkbox(
+                    value: userVote,
+                    onChanged: (_) {},
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        totalVotes != 0
-                            ? '${((numberOfOptionVotes / totalVotes) * 100).toStringAsFixed(
-                                2,
-                              )}%'
-                            : '0.00%',
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                      ),
-                      Text(
-                        numberOfOptionVotes == 0
-                            ? 'No votes'
-                            : numberOfOptionVotes == 1
-                                ? '1 vote'
-                                : ' ${THelperFunctions.humanizeNumber(numberOfOptionVotes)} votes',
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

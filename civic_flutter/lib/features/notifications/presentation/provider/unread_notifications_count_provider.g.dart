@@ -20,7 +20,7 @@ final class UnreadNotificationsCountProvider
           argument: null,
           retry: null,
           name: r'unreadNotificationsCountProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -42,7 +42,7 @@ final class UnreadNotificationsCountProvider
 }
 
 String _$unreadNotificationsCountHash() =>
-    r'ea2ee29462d76d48d1eb13d21ab624701f616efe';
+    r'b62ee7b48d1f748badcacb7f835a0725a1dfbe59';
 
 abstract class _$UnreadNotificationsCount extends $Notifier<int> {
   int build();

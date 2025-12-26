@@ -22,7 +22,9 @@ class AppWrapper extends ConsumerWidget {
     ];
     final location =
         navigatorShell.shellRouteContext.routerState.uri.toString();
-    final hideBottomNav = !mainTabLocations.contains(location);
+    final isMainTab = mainTabLocations.contains(location);
+    final bottomNavVisible = ref.watch(bottomNavVisibilityProvider);
+    final showBottomNav = isMainTab && bottomNavVisible;
     return AppAndroidBottomNav(
       child: Scaffold(
         appBar: AppBar(
@@ -44,7 +46,7 @@ class AppWrapper extends ConsumerWidget {
               alignment: Alignment.bottomCenter,
               child: AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                crossFadeState: hideBottomNav
+                crossFadeState: !showBottomNav
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
                 secondChild: const SizedBox.shrink(),

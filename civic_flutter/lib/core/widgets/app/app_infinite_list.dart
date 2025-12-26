@@ -108,8 +108,9 @@ class AppInfiniteList<T> extends ConsumerWidget {
               },
               noMoreItemsIndicatorBuilder: (context) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    bottom: 100,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

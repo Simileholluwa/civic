@@ -10,6 +10,9 @@ abstract class FeedRemoteDatabase {
   Future<Post> repostPost({
     required int postId,
   });
+  Future<void> clearVote({
+    required int pollId,
+  });
   Future<Post> quotePost({
     required int postId,
     required Post quoteContent,
@@ -110,6 +113,23 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       );
     } on ServerException {
       rethrow;
+    } on Exception catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> clearVote({
+    required int pollId,
+  }) async {
+    try {
+      return await _client.post.clearVote(
+        pollId,
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
     } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),

@@ -10,7 +10,7 @@ environment:
 dependencies:
   animated_text_kit:
   cached_network_image:
-  carousel_slider:
+  carousel_slider: ^5.1.1
   civic_client:
     path: ../civic_client
   cupertino_icons: ^1.0.5
@@ -18,7 +18,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   expandable_richtext: ^1.0.7
   expandable_text:
-  file_picker: ^10.1.2
+  file_picker: ^10.3.8
   firebase_core: ^4.2.0
   firebase_messaging: ^16.0.3
   flex_color_scheme: ^8.2.0
@@ -39,6 +39,7 @@ dependencies:
   google_fonts:
   iconsax:
   image_cropper:
+  image_gallery_saver_plus: ^4.0.1
   image_picker:
   infinite_scroll_pagination: ^5.1.1
   intl: ^0.20.2

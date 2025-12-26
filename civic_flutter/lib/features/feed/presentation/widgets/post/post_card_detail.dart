@@ -24,6 +24,8 @@ class PostCardDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final post = postWithUserState.post;
+    final theme = Theme.of(context);
+    final timeAgo = THelperFunctions.humanizeDateTime(post.dateCreated!);
     final hasTags = post.tags != null && post.tags!.isNotEmpty;
     final hasLocations = post.locations != null && post.locations!.isNotEmpty;
 
@@ -38,17 +40,13 @@ class PostCardDetail extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
               child: ContentCreatorInfo(
                 creator: post.owner!,
-                timeAgo: THelperFunctions.humanizeDateTime(
-                  post.dateCreated!,
-                ),
+                timeAgo: timeAgo,
                 onMoreTapped: () async {
                   await showDialog<dynamic>(
                     context: context,
                     builder: (ctx) {
                       return AlertDialog(
-                        contentPadding: const EdgeInsets.only(
-                          bottom: 16,
-                        ),
+                        contentPadding: const EdgeInsets.only(bottom: 16),
                         content: ShowPostActions(
                           postWithUserState: postWithUserState,
                           originalPostId: post.id!,
@@ -77,7 +75,7 @@ class PostCardDetail extends StatelessWidget {
                   TSizes.md,
                 ),
                 border: Border.all(
-                  color: Theme.of(context).dividerColor,
+                  color: theme.dividerColor,
                 ),
               ),
               child: ProjectCard(
@@ -120,9 +118,8 @@ class PostCardDetail extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) {
                                       return AlertDialog(
-                                        contentPadding: const EdgeInsets.only(
-                                          bottom: 16,
-                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.only(bottom: 16),
                                         content: ShowPostActions(
                                           postWithUserState: postWithUserState,
                                           originalPostId: post.id!,
@@ -148,7 +145,7 @@ class PostCardDetail extends StatelessWidget {
                                     TSizes.md,
                                   ),
                                   border: Border.all(
-                                    color: Theme.of(context).dividerColor,
+                                    color: theme.dividerColor,
                                   ),
                                 ),
                                 child: ProjectCard(
@@ -195,48 +192,6 @@ class PostCardDetail extends StatelessWidget {
               },
             ),
         ],
-      ),
-    );
-  }
-}
-
-class RepostHeader extends StatelessWidget {
-  const RepostHeader({
-    required this.post,
-    super.key,
-  });
-
-  final Post post;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 5,
-          children: [
-            AppUserProfileImage(
-              imageUrl: post.owner!.userInfo!.imageUrl!,
-              radius: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Text(
-                '${THelperFunctions.getFullName(
-                  post.owner!.firstName!,
-                  post.owner!.middleName,
-                  post.owner!.lastName!,
-                )} reposted',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

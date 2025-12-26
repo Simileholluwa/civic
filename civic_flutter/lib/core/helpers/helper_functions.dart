@@ -2,17 +2,97 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class THelperFunctions {
   THelperFunctions._();
+
+  static Future<void> saveImage(String url) async {
+    try {
+      final permitted = await _ensureSavePermission();
+      if (!permitted) {
+        TToastMessages.errorToast('Storage permission is required to save');
+        return;
+      }
+
+      TToastMessages.infoToast('Saving image...');
+      Uint8List bytes;
+      final isNetwork = url.startsWith('http://') || url.startsWith('https://');
+      if (isNetwork) {
+        final res = await Dio().get<List<int>>(
+          url,
+          options: Options(responseType: ResponseType.bytes),
+        );
+        bytes = Uint8List.fromList(res.data ?? <int>[]);
+      } else {
+        bytes = await File(url).readAsBytes();
+      }
+      if (bytes.isEmpty) {
+        TToastMessages.errorToast(
+          'Failed to save the image',
+        );
+        return;
+      }
+      final name = 'civic_${DateTime.now().millisecondsSinceEpoch}';
+      final result = await ImageGallerySaverPlus.saveImage(
+        bytes,
+        quality: 100,
+        name: name,
+      );
+      final success = (result is Map &&
+              (result['isSuccess'] == true || result['isSuccess'] == 'true')) ||
+          (result is bool && result);
+      if (!success) {
+        TToastMessages.errorToast(
+          'Failed to save the image',
+        );
+        return;
+      }
+      TToastMessages.successToast(
+        'Image saved to gallery',
+      );
+    } on Exception catch (e) {
+      TToastMessages.errorToast(
+        'Failed to save the image: $e',
+      );
+    }
+  }
+
+  static Future<bool> _ensureSavePermission() async {
+    try {
+      if (Platform.isIOS) {
+        final status = await Permission.photos.status;
+        if (status.isGranted) return true;
+        final req = await Permission.photos.request();
+        return req.isGranted;
+      }
+      if (Platform.isAndroid) {
+        var status = await Permission.photos.status;
+        if (status.isGranted) return true;
+        status = await Permission.photos.request();
+        if (status.isGranted) return true;
+
+        var storage = await Permission.storage.status;
+        if (storage.isGranted) return true;
+        storage = await Permission.storage.request();
+        return storage.isGranted;
+      }
+      return true;
+    } on Exception catch (_) {
+      return true;
+    }
+  }
 
   static String getFullName(
     String firstName,

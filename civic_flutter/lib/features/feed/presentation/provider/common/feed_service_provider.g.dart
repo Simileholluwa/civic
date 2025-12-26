@@ -731,6 +731,46 @@ final class QuotePostProvider extends $FunctionalProvider<QuotePostUseCase,
 
 String _$quotePostHash() => r'423255e3e002a82b09748de1062cdbed8c126033';
 
+@ProviderFor(clearVote)
+const clearVoteProvider = ClearVoteProvider._();
+
+final class ClearVoteProvider extends $FunctionalProvider<ClearVoteUseCase,
+    ClearVoteUseCase, ClearVoteUseCase> with $Provider<ClearVoteUseCase> {
+  const ClearVoteProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'clearVoteProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$clearVoteHash();
+
+  @$internal
+  @override
+  $ProviderElement<ClearVoteUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ClearVoteUseCase create(Ref ref) {
+    return clearVote(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ClearVoteUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ClearVoteUseCase>(value),
+    );
+  }
+}
+
+String _$clearVoteHash() => r'cfd22173b9f46766fcba0c76599ec43b92e84ab0';
+
 @ProviderFor(repostPost)
 const repostPostProvider = RepostPostProvider._();
 

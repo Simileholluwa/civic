@@ -2,20 +2,22 @@ import 'dart:convert';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class ArticleDetailCard extends StatelessWidget {
   const ArticleDetailCard({
-    required this.post,
+    required this.postWithUserState,
     super.key,
   });
 
-  final Post post;
+  final PostWithUserState postWithUserState;
 
   static final Map<int, Document> _documentCache = <int, Document>{};
 
   Document _resolveDocument() {
+    final post = postWithUserState.post;
     final id = post.id;
     if (id != null && _documentCache.containsKey(id)) {
       return _documentCache[id]!;
@@ -44,6 +46,7 @@ class ArticleDetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final defaultTextStyle = DefaultTextStyle.of(context);
     final decodedDocument = _resolveDocument();
+    final post = postWithUserState.post;
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: Column(
@@ -55,6 +58,23 @@ class ArticleDetailCard extends StatelessWidget {
             timeAgo: THelperFunctions.humanizeDateTime(
               post.dateCreated!,
             ),
+            onMoreTapped: () async {
+              await showDialog<dynamic>(
+                context: context,
+                builder: (ctx) {
+                  return AlertDialog(
+                    contentPadding: const EdgeInsets.only(
+                      bottom: 16,
+                    ),
+                    content: ShowPostActions(
+                      postWithUserState: postWithUserState,
+                      originalPostId: post.id!,
+                      isArticle: true,
+                    ),
+                  );
+                },
+              );
+            },
           ),
           RepaintBoundary(
             child: ClipRRect(
