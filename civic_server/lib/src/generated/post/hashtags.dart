@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/posts_hashtags.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class Hashtag
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -35,9 +37,11 @@ abstract class Hashtag
       id: jsonSerialization['id'] as int?,
       tag: jsonSerialization['tag'] as String,
       usageCount: jsonSerialization['usageCount'] as int,
-      hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      hashtags: jsonSerialization['hashtags'] == null
+          ? null
+          : _i3.Protocol().deserialize<List<_i2.PostsHashtags>>(
+              jsonSerialization['hashtags'],
+            ),
     );
   }
 
@@ -69,6 +73,7 @@ abstract class Hashtag
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Hashtag',
       if (id != null) 'id': id,
       'tag': tag,
       'usageCount': usageCount,
@@ -80,6 +85,7 @@ abstract class Hashtag
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'Hashtag',
       if (id != null) 'id': id,
       'tag': tag,
       'usageCount': usageCount,
@@ -127,11 +133,11 @@ class _HashtagImpl extends Hashtag {
     required int usageCount,
     List<_i2.PostsHashtags>? hashtags,
   }) : super._(
-          id: id,
-          tag: tag,
-          usageCount: usageCount,
-          hashtags: hashtags,
-        );
+         id: id,
+         tag: tag,
+         usageCount: usageCount,
+         hashtags: hashtags,
+       );
 
   /// Returns a shallow copy of this [Hashtag]
   /// with some or all fields replaced by the given arguments.
@@ -154,8 +160,23 @@ class _HashtagImpl extends Hashtag {
   }
 }
 
+class HashtagUpdateTable extends _i1.UpdateTable<HashtagTable> {
+  HashtagUpdateTable(super.table);
+
+  _i1.ColumnValue<String, String> tag(String value) => _i1.ColumnValue(
+    table.tag,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> usageCount(int value) => _i1.ColumnValue(
+    table.usageCount,
+    value,
+  );
+}
+
 class HashtagTable extends _i1.Table<int?> {
   HashtagTable({super.tableRelation}) : super(tableName: 'hashtag') {
+    updateTable = HashtagUpdateTable(this);
     tag = _i1.ColumnString(
       'tag',
       this,
@@ -165,6 +186,8 @@ class HashtagTable extends _i1.Table<int?> {
       this,
     );
   }
+
+  late final HashtagUpdateTable updateTable;
 
   late final _i1.ColumnString tag;
 
@@ -200,17 +223,18 @@ class HashtagTable extends _i1.Table<int?> {
     _hashtags = _i1.ManyRelation<_i2.PostsHashtagsTable>(
       tableWithRelations: relationTable,
       table: _i2.PostsHashtagsTable(
-          tableRelation: relationTable.tableRelation!.lastRelation),
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
     );
     return _hashtags!;
   }
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        tag,
-        usageCount,
-      ];
+    id,
+    tag,
+    usageCount,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -428,6 +452,46 @@ class HashtagRepository {
     );
   }
 
+  /// Updates a single [Hashtag] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<Hashtag?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<HashtagUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<Hashtag>(
+      id,
+      columnValues: columnValues(Hashtag.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [Hashtag]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<Hashtag>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<HashtagUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<HashtagTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<HashtagTable>? orderBy,
+    _i1.OrderByListBuilder<HashtagTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<Hashtag>(
+      columnValues: columnValues(Hashtag.t.updateTable),
+      where: where(Hashtag.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(Hashtag.t),
+      orderByList: orderByList?.call(Hashtag.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [Hashtag]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -500,8 +564,9 @@ class HashtagAttachRepository {
       throw ArgumentError.notNull('hashtag.id');
     }
 
-    var $postsHashtags =
-        postsHashtags.map((e) => e.copyWith(hashtagId: hashtag.id)).toList();
+    var $postsHashtags = postsHashtags
+        .map((e) => e.copyWith(hashtagId: hashtag.id))
+        .toList();
     await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],
@@ -554,8 +619,9 @@ class HashtagDetachRepository {
       throw ArgumentError.notNull('postsHashtags.id');
     }
 
-    var $postsHashtags =
-        postsHashtags.map((e) => e.copyWith(hashtagId: null)).toList();
+    var $postsHashtags = postsHashtags
+        .map((e) => e.copyWith(hashtagId: null))
+        .toList();
     await session.db.update<_i2.PostsHashtags>(
       $postsHashtags,
       columns: [_i2.PostsHashtags.t.hashtagId],

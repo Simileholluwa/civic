@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class Article
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -38,11 +40,13 @@ abstract class Article
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       content: jsonSerialization['content'] as String?,
-      tag:
-          (jsonSerialization['tag'] as List?)?.map((e) => e as String).toList(),
+      tag: jsonSerialization['tag'] == null
+          ? null
+          : _i3.Protocol().deserialize<List<String>>(jsonSerialization['tag']),
     );
   }
 
@@ -77,6 +81,7 @@ abstract class Article
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Article',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -88,6 +93,7 @@ abstract class Article
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'Article',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
@@ -136,12 +142,12 @@ class _ArticleImpl extends Article {
     String? content,
     List<String>? tag,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          content: content,
-          tag: tag,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         content: content,
+         tag: tag,
+       );
 
   /// Returns a shallow copy of this [Article]
   /// with some or all fields replaced by the given arguments.
@@ -164,8 +170,29 @@ class _ArticleImpl extends Article {
   }
 }
 
+class ArticleUpdateTable extends _i1.UpdateTable<ArticleTable> {
+  ArticleUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> content(String? value) => _i1.ColumnValue(
+    table.content,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> tag(List<String>? value) =>
+      _i1.ColumnValue(
+        table.tag,
+        value,
+      );
+}
+
 class ArticleTable extends _i1.Table<int?> {
   ArticleTable({super.tableRelation}) : super(tableName: 'article') {
+    updateTable = ArticleUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -175,11 +202,13 @@ class ArticleTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
-    tag = _i1.ColumnSerializable(
+    tag = _i1.ColumnSerializable<List<String>>(
       'tag',
       this,
     );
   }
+
+  late final ArticleUpdateTable updateTable;
 
   late final _i1.ColumnInt ownerId;
 
@@ -187,7 +216,7 @@ class ArticleTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString content;
 
-  late final _i1.ColumnSerializable tag;
+  late final _i1.ColumnSerializable<List<String>> tag;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -204,11 +233,11 @@ class ArticleTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        content,
-        tag,
-      ];
+    id,
+    ownerId,
+    content,
+    tag,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -416,6 +445,46 @@ class ArticleRepository {
     return session.db.updateRow<Article>(
       row,
       columns: columns?.call(Article.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [Article] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<Article?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ArticleUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<Article>(
+      id,
+      columnValues: columnValues(Article.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [Article]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<Article>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ArticleUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<ArticleTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ArticleTable>? orderBy,
+    _i1.OrderByListBuilder<ArticleTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<Article>(
+      columnValues: columnValues(Article.t.updateTable),
+      where: where(Article.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(Article.t),
+      orderByList: orderByList?.call(Article.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

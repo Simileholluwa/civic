@@ -51,6 +51,7 @@ abstract class FeedRemoteDatabase {
   });
   Future<void> deletePost({
     required int postId,
+    required bool fullDelete,
   });
   Future<Post> savePostComment({
     required Post comment,
@@ -441,9 +442,13 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   @override
   Future<void> deletePost({
     required int postId,
+    required bool fullDelete,
   }) async {
     try {
-      return await _client.post.deletePost(postId);
+      return await _client.post.deletePost(
+        postId,
+        fullDelete: fullDelete,
+      );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on Exception catch (e) {
@@ -583,11 +588,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       final result = await _client.post.saveArticle(
         post,
       );
-      if (result == null) {
-        throw const ServerException(
-          message: TTexts.failedToSaveArticle,
-        );
-      }
       return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
@@ -595,8 +595,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
       );
-    } on ServerException {
-      rethrow;
     } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),

@@ -15,15 +15,15 @@ class PostBuilder {
     Article? article,
     int? parentId,
     int? projectId,
+    bool includeLocalMedia = false,
   }) {
-    return Post(
+    final post = Post(
       id: id,
       ownerId: ownerId,
       text: state.text.trim(),
-      imageUrls: state.imageUrls,
-      videoUrl: state.videoUrl,
       taggedUsers: state.taggedUsers,
       locations: state.locations,
+      mediaAssets: state.uploadedAssets,
       mentions: mentions,
       tags: state.tags,
       postType: postType,
@@ -32,6 +32,7 @@ class PostBuilder {
       parentId: parentId,
       projectId: projectId,
     );
+    return post;
   }
 
   static Poll buildPoll({

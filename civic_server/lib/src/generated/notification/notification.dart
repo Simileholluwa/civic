@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -17,6 +18,7 @@ import '../notification/notification_action_type.dart' as _i3;
 import '../notification/notification_target_type.dart' as _i4;
 import '../post/post.dart' as _i5;
 import '../project/project.dart' as _i6;
+import 'package:civic_server/src/generated/protocol.dart' as _i7;
 
 abstract class AppNotification
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -43,8 +45,8 @@ abstract class AppNotification
     this.post,
     this.projectId,
     this.project,
-  })  : isRead = isRead ?? false,
-        createdAt = createdAt ?? DateTime.now();
+  }) : isRead = isRead ?? false,
+       createdAt = createdAt ?? DateTime.now();
 
   factory AppNotification({
     int? id,
@@ -77,43 +79,50 @@ abstract class AppNotification
       receiverId: jsonSerialization['receiverId'] as int,
       receiver: jsonSerialization['receiver'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['receiver'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['receiver'],
+            ),
       senderId: jsonSerialization['senderId'] as int,
       sender: jsonSerialization['sender'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['sender'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['sender'],
+            ),
       senderName: jsonSerialization['senderName'] as String?,
-      groupedSenderNames: (jsonSerialization['groupedSenderNames'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+      groupedSenderNames: jsonSerialization['groupedSenderNames'] == null
+          ? null
+          : _i7.Protocol().deserialize<List<String>>(
+              jsonSerialization['groupedSenderNames'],
+            ),
       title: jsonSerialization['title'] as String,
       body: jsonSerialization['body'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
       actionType: _i3.NotificationActionType.fromJson(
-          (jsonSerialization['actionType'] as int)),
+        (jsonSerialization['actionType'] as String),
+      ),
       senderAvatarUrl: jsonSerialization['senderAvatarUrl'] as String?,
       targetType: _i4.NotificationTargetType.fromJson(
-          (jsonSerialization['targetType'] as int)),
+        (jsonSerialization['targetType'] as String),
+      ),
       actionRoute: jsonSerialization['actionRoute'] as String,
       targetId: jsonSerialization['targetId'] as int,
       isRead: jsonSerialization['isRead'] as bool,
-      createdAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      createdAt: _i1.DateTimeJsonExtension.fromJson(
+        jsonSerialization['createdAt'],
+      ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       postId: jsonSerialization['postId'] as int?,
       post: jsonSerialization['post'] == null
           ? null
-          : _i5.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i5.Post>(jsonSerialization['post']),
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
-          : _i6.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i6.Project>(
+              jsonSerialization['project'],
+            ),
     );
   }
 
@@ -199,6 +208,7 @@ abstract class AppNotification
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'AppNotification',
       if (id != null) 'id': id,
       'receiverId': receiverId,
       if (receiver != null) 'receiver': receiver?.toJson(),
@@ -228,6 +238,7 @@ abstract class AppNotification
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'AppNotification',
       if (id != null) 'id': id,
       'receiverId': receiverId,
       if (receiver != null) 'receiver': receiver?.toJsonForProtocol(),
@@ -321,29 +332,29 @@ class _AppNotificationImpl extends AppNotification {
     int? projectId,
     _i6.Project? project,
   }) : super._(
-          id: id,
-          receiverId: receiverId,
-          receiver: receiver,
-          senderId: senderId,
-          sender: sender,
-          senderName: senderName,
-          groupedSenderNames: groupedSenderNames,
-          title: title,
-          body: body,
-          groupKey: groupKey,
-          actionType: actionType,
-          senderAvatarUrl: senderAvatarUrl,
-          targetType: targetType,
-          actionRoute: actionRoute,
-          targetId: targetId,
-          isRead: isRead,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          postId: postId,
-          post: post,
-          projectId: projectId,
-          project: project,
-        );
+         id: id,
+         receiverId: receiverId,
+         receiver: receiver,
+         senderId: senderId,
+         sender: sender,
+         senderName: senderName,
+         groupedSenderNames: groupedSenderNames,
+         title: title,
+         body: body,
+         groupKey: groupKey,
+         actionType: actionType,
+         senderAvatarUrl: senderAvatarUrl,
+         targetType: targetType,
+         actionRoute: actionRoute,
+         targetId: targetId,
+         isRead: isRead,
+         createdAt: createdAt,
+         updatedAt: updatedAt,
+         postId: postId,
+         post: post,
+         projectId: projectId,
+         project: project,
+       );
 
   /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
@@ -376,8 +387,9 @@ class _AppNotificationImpl extends AppNotification {
     return AppNotification(
       id: id is int? ? id : this.id,
       receiverId: receiverId ?? this.receiverId,
-      receiver:
-          receiver is _i2.UserRecord? ? receiver : this.receiver?.copyWith(),
+      receiver: receiver is _i2.UserRecord?
+          ? receiver
+          : this.receiver?.copyWith(),
       senderId: senderId ?? this.senderId,
       sender: sender is _i2.UserRecord? ? sender : this.sender?.copyWith(),
       senderName: senderName is String? ? senderName : this.senderName,
@@ -388,8 +400,9 @@ class _AppNotificationImpl extends AppNotification {
       body: body is String? ? body : this.body,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
       actionType: actionType ?? this.actionType,
-      senderAvatarUrl:
-          senderAvatarUrl is String? ? senderAvatarUrl : this.senderAvatarUrl,
+      senderAvatarUrl: senderAvatarUrl is String?
+          ? senderAvatarUrl
+          : this.senderAvatarUrl,
       targetType: targetType ?? this.targetType,
       actionRoute: actionRoute ?? this.actionRoute,
       targetId: targetId ?? this.targetId,
@@ -404,9 +417,106 @@ class _AppNotificationImpl extends AppNotification {
   }
 }
 
+class AppNotificationUpdateTable extends _i1.UpdateTable<AppNotificationTable> {
+  AppNotificationUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> receiverId(int value) => _i1.ColumnValue(
+    table.receiverId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> senderId(int value) => _i1.ColumnValue(
+    table.senderId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> senderName(String? value) => _i1.ColumnValue(
+    table.senderName,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> groupedSenderNames(
+    List<String>? value,
+  ) => _i1.ColumnValue(
+    table.groupedSenderNames,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> title(String value) => _i1.ColumnValue(
+    table.title,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> body(String? value) => _i1.ColumnValue(
+    table.body,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> groupKey(String? value) => _i1.ColumnValue(
+    table.groupKey,
+    value,
+  );
+
+  _i1.ColumnValue<_i3.NotificationActionType, _i3.NotificationActionType>
+  actionType(_i3.NotificationActionType value) => _i1.ColumnValue(
+    table.actionType,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> senderAvatarUrl(String? value) =>
+      _i1.ColumnValue(
+        table.senderAvatarUrl,
+        value,
+      );
+
+  _i1.ColumnValue<_i4.NotificationTargetType, _i4.NotificationTargetType>
+  targetType(_i4.NotificationTargetType value) => _i1.ColumnValue(
+    table.targetType,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> actionRoute(String value) => _i1.ColumnValue(
+    table.actionRoute,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> targetId(int value) => _i1.ColumnValue(
+    table.targetId,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> isRead(bool value) => _i1.ColumnValue(
+    table.isRead,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> createdAt(DateTime value) =>
+      _i1.ColumnValue(
+        table.createdAt,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> postId(int? value) => _i1.ColumnValue(
+    table.postId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> projectId(int? value) => _i1.ColumnValue(
+    table.projectId,
+    value,
+  );
+}
+
 class AppNotificationTable extends _i1.Table<int?> {
   AppNotificationTable({super.tableRelation})
-      : super(tableName: 'app_notification') {
+    : super(tableName: 'app_notification') {
+    updateTable = AppNotificationUpdateTable(this);
     receiverId = _i1.ColumnInt(
       'receiverId',
       this,
@@ -419,7 +529,7 @@ class AppNotificationTable extends _i1.Table<int?> {
       'senderName',
       this,
     );
-    groupedSenderNames = _i1.ColumnSerializable(
+    groupedSenderNames = _i1.ColumnSerializable<List<String>>(
       'groupedSenderNames',
       this,
     );
@@ -438,7 +548,7 @@ class AppNotificationTable extends _i1.Table<int?> {
     actionType = _i1.ColumnEnum(
       'actionType',
       this,
-      _i1.EnumSerialization.byIndex,
+      _i1.EnumSerialization.byName,
     );
     senderAvatarUrl = _i1.ColumnString(
       'senderAvatarUrl',
@@ -447,7 +557,7 @@ class AppNotificationTable extends _i1.Table<int?> {
     targetType = _i1.ColumnEnum(
       'targetType',
       this,
-      _i1.EnumSerialization.byIndex,
+      _i1.EnumSerialization.byName,
     );
     actionRoute = _i1.ColumnString(
       'actionRoute',
@@ -481,6 +591,8 @@ class AppNotificationTable extends _i1.Table<int?> {
     );
   }
 
+  late final AppNotificationUpdateTable updateTable;
+
   late final _i1.ColumnInt receiverId;
 
   _i2.UserRecordTable? _receiver;
@@ -491,7 +603,7 @@ class AppNotificationTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString senderName;
 
-  late final _i1.ColumnSerializable groupedSenderNames;
+  late final _i1.ColumnSerializable<List<String>> groupedSenderNames;
 
   late final _i1.ColumnString title;
 
@@ -577,25 +689,25 @@ class AppNotificationTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        receiverId,
-        senderId,
-        senderName,
-        groupedSenderNames,
-        title,
-        body,
-        groupKey,
-        actionType,
-        senderAvatarUrl,
-        targetType,
-        actionRoute,
-        targetId,
-        isRead,
-        createdAt,
-        updatedAt,
-        postId,
-        projectId,
-      ];
+    id,
+    receiverId,
+    senderId,
+    senderName,
+    groupedSenderNames,
+    title,
+    body,
+    groupKey,
+    actionType,
+    senderAvatarUrl,
+    targetType,
+    actionRoute,
+    targetId,
+    isRead,
+    createdAt,
+    updatedAt,
+    postId,
+    projectId,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -638,11 +750,11 @@ class AppNotificationInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'receiver': _receiver,
-        'sender': _sender,
-        'post': _post,
-        'project': _project,
-      };
+    'receiver': _receiver,
+    'sender': _sender,
+    'post': _post,
+    'project': _project,
+  };
 
   @override
   _i1.Table<int?> get table => AppNotification.t;
@@ -837,6 +949,48 @@ class AppNotificationRepository {
     );
   }
 
+  /// Updates a single [AppNotification] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<AppNotification?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<AppNotificationUpdateTable>
+    columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<AppNotification>(
+      id,
+      columnValues: columnValues(AppNotification.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [AppNotification]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<AppNotification>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<AppNotificationUpdateTable>
+    columnValues,
+    required _i1.WhereExpressionBuilder<AppNotificationTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<AppNotificationTable>? orderBy,
+    _i1.OrderByListBuilder<AppNotificationTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<AppNotification>(
+      columnValues: columnValues(AppNotification.t.updateTable),
+      where: where(AppNotification.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(AppNotification.t),
+      orderByList: orderByList?.call(AppNotification.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [AppNotification]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -997,16 +1151,16 @@ class AppNotificationDetachRowRepository {
   /// the related record.
   Future<void> post(
     _i1.Session session,
-    AppNotification appnotification, {
+    AppNotification appNotification, {
     _i1.Transaction? transaction,
   }) async {
-    if (appnotification.id == null) {
-      throw ArgumentError.notNull('appnotification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
 
-    var $appnotification = appnotification.copyWith(postId: null);
+    var $appNotification = appNotification.copyWith(postId: null);
     await session.db.updateRow<AppNotification>(
-      $appnotification,
+      $appNotification,
       columns: [AppNotification.t.postId],
       transaction: transaction,
     );
@@ -1019,16 +1173,16 @@ class AppNotificationDetachRowRepository {
   /// the related record.
   Future<void> project(
     _i1.Session session,
-    AppNotification appnotification, {
+    AppNotification appNotification, {
     _i1.Transaction? transaction,
   }) async {
-    if (appnotification.id == null) {
-      throw ArgumentError.notNull('appnotification.id');
+    if (appNotification.id == null) {
+      throw ArgumentError.notNull('appNotification.id');
     }
 
-    var $appnotification = appnotification.copyWith(projectId: null);
+    var $appNotification = appNotification.copyWith(projectId: null);
     await session.db.updateRow<AppNotification>(
-      $appnotification,
+      $appNotification,
       columns: [AppNotification.t.projectId],
       transaction: transaction,
     );

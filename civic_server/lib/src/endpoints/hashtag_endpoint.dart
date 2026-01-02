@@ -56,7 +56,7 @@ class HashtagEndpoint extends Endpoint {
     int limit = 20,
   }) async {
     // Fetch the authenticated user
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
 
     // If the user is not authenticated, throw an exception
     if (authInfo == null) {

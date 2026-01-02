@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -17,24 +18,25 @@ enum PoliticalStatus implements _i1.SerializableModel {
   aspiring,
   none;
 
-  static PoliticalStatus fromJson(int index) {
-    switch (index) {
-      case 0:
+  static PoliticalStatus fromJson(String name) {
+    switch (name) {
+      case 'current':
         return PoliticalStatus.current;
-      case 1:
+      case 'former':
         return PoliticalStatus.former;
-      case 2:
+      case 'aspiring':
         return PoliticalStatus.aspiring;
-      case 3:
+      case 'none':
         return PoliticalStatus.none;
       default:
         throw ArgumentError(
-            'Value "$index" cannot be converted to "PoliticalStatus"');
+          'Value "$name" cannot be converted to "PoliticalStatus"',
+        );
     }
   }
 
   @override
-  int toJson() => index;
+  String toJson() => name;
 
   @override
   String toString() => name;

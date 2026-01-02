@@ -66,6 +66,7 @@ abstract class FeedRepository {
   });
   Future<Either<Failure, void>> deletePost({
     required int postId,
+    required bool fullDelete,
   });
   Future<Either<Failure, void>> clearPostBookmarks();
   Future<Either<Failure, Post>> savePostComment({

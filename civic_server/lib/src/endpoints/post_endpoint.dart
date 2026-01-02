@@ -8,380 +8,517 @@ import 'package:serverpod/serverpod.dart';
 import 'package:civic_server/src/services/recommendation_service.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
+/// Endpoint for managing posts, articles, polls, comments, and related
+/// engagement. Also handles synchronization of associated media assets and
+/// emits real-time count updates via Serverpod message streams.
 class PostEndpoint extends Endpoint {
+  /// Synchronizes media assets for a post.
+  ///
+  /// Performs a set-based reconciliation using `objectKey`:
+  /// - Inserts new assets not present on the post.
+  /// - Updates existing assets if any metadata changed.
+  /// - Deletes stale assets (and their storage objects) no longer referenced.
+  ///
+  /// Parameters:
+  /// - [session]: Current request session.
+  /// - [user]: Authenticated owner performing the change.
+  /// - [existingPost]: The post whose assets are being updated.
+  /// - [incoming]: Desired list of `MediaAsset` (may be null/empty).
+  /// - [transaction]: Optional DB transaction context.
+  Future<void> _syncMediaAssetsForPost(
+    Session session, {
+    required UserRecord user,
+    required Post existingPost,
+    required List<MediaAsset>? incoming,
+    Transaction? transaction,
+  }) async {
+    final existing = await MediaAsset.db.find(
+      session,
+      where: (t) => t.postId.equals(existingPost.id!),
+      transaction: transaction,
+    );
+    final existingByKey = {for (final e in existing) e.objectKey: e};
+    final incomingList = incoming ?? const <MediaAsset>[];
+    final incomingKeys = <String>{};
+    final inserts = <MediaAsset>[];
+    final updates = <MediaAsset>[];
+
+    for (final a in incomingList) {
+      final key = a.objectKey;
+      if (key.isEmpty || incomingKeys.contains(key)) continue;
+      incomingKeys.add(key);
+      final current = existingByKey[key];
+      if (current == null) {
+        inserts.add(
+          a.copyWith(
+            ownerId: user.id!,
+            postId: existingPost.id!,
+          ),
+        );
+        continue;
+      }
+      final changed = (current.publicUrl != a.publicUrl) ||
+          (current.contentType != a.contentType) ||
+          (current.size != a.size) ||
+          (current.width != a.width) ||
+          (current.height != a.height) ||
+          (current.durationMs != a.durationMs) ||
+          (current.kind != a.kind);
+      if (changed) {
+        updates.add(
+          current.copyWith(
+            publicUrl: a.publicUrl,
+            contentType: a.contentType,
+            size: a.size,
+            width: a.width,
+            height: a.height,
+            durationMs: a.durationMs,
+            kind: a.kind,
+          ),
+        );
+      }
+    }
+
+    final staleKeys =
+        existingByKey.keys.where((k) => !incomingKeys.contains(k)).toSet();
+    if (staleKeys.isNotEmpty) {
+      await MediaAsset.db.deleteWhere(
+        session,
+        where: (t) =>
+            t.postId.equals(existingPost.id!) & t.objectKey.inSet(staleKeys),
+        transaction: transaction,
+      );
+      for (final key in staleKeys) {
+        unawaited(
+          session.storage.deleteFile(
+            storageId: 'public',
+            path: key,
+          ),
+        );
+      }
+    }
+
+    if (updates.isNotEmpty) {
+      for (final u in updates) {
+        await MediaAsset.db.updateRow(
+          session,
+          u,
+          transaction: transaction,
+        );
+      }
+    }
+
+    if (inserts.isNotEmpty) {
+      await MediaAsset.db.insert(
+        session,
+        inserts,
+        transaction: transaction,
+      );
+    }
+  }
+
+  /// Creates or updates a regular post.
+  ///
+  /// On update, media assets are synchronized and hashtags recorded.
+  /// Returns the enriched `Post` including owner and media assets.
   Future<Post?> savePost(
     Session session,
     Post post,
   ) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(
+      final user = await authUser(
+        session,
+      );
+      if (post.id != null) {
+        final existingPost = await validatePostOwnership(
           session,
+          post.id!,
+          user,
         );
-        if (post.id != null) {
-          final existingPost = await validatePostOwnership(
-            session,
-            post.id!,
-            user,
-          );
+        await _syncMediaAssetsForPost(
+          session,
+          user: user,
+          existingPost: existingPost,
+          incoming: post.mediaAssets,
+          transaction: transaction,
+        );
 
-          final updatedPost = post.copyWith(
-            updatedAt: DateTime.now(),
-            projectId: existingPost.projectId,
-            parentId: existingPost.parentId,
-            pollId: existingPost.pollId,
-            commentCount: existingPost.commentCount,
-            postType: existingPost.postType,
-            dateCreated: existingPost.dateCreated,
-          );
+        final updatedPost = post.copyWith(
+          updatedAt: DateTime.now(),
+          projectId: existingPost.projectId,
+          parentId: existingPost.parentId,
+          pollId: existingPost.pollId,
+          commentCount: existingPost.commentCount,
+          postType: existingPost.postType,
+          dateCreated: existingPost.dateCreated,
+        );
 
-          await updatePost(
-            session,
-            updatedPost,
-          );
-          await HashtagEndpoint().sendPostHashtags(
-            session,
-            post.tags ?? [],
-            post.id!,
-          );
-          return updatedPost;
-        } else {
-          final savedPost = await Post.db.insertRow(
-            session,
-            post.copyWith(
-              ownerId: user.id,
-              owner: user,
-              postType: PostType.regular,
-            ),
-            transaction: transaction,
-          );
+        await updatePost(
+          session,
+          updatedPost,
+        );
 
-          await HashtagEndpoint().sendPostHashtags(
+        await HashtagEndpoint().sendPostHashtags(
+          session,
+          post.tags ?? [],
+          post.id!,
+        );
+
+        final enriched = await Post.db.findById(
+          session,
+          updatedPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            mediaAssets: MediaAsset.includeList(),
+          ),
+          transaction: transaction,
+        );
+        return enriched;
+      } else {
+        final savedPost = await Post.db.insertRow(
+          session,
+          post.copyWith(
+            ownerId: user.id,
+            owner: user,
+            postType: PostType.regular,
+          ),
+          transaction: transaction,
+        );
+
+        if ((post.mediaAssets?.isNotEmpty ?? false)) {
+          MediaAsset.db.insert(
             session,
-            post.tags ?? [],
-            savedPost.id!,
+            post.mediaAssets!
+                .map((e) => e.copyWith(
+                      ownerId: user.id!,
+                      postId: savedPost.id!,
+                    ))
+                .toList(),
           );
-
-          unawaited(
-            notifyTaggedOrMentionedUsers(
-              session,
-              user,
-              savedPost,
-            ),
-          );
-
-          return savedPost;
         }
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in savePost: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+
+        await HashtagEndpoint().sendPostHashtags(
+          session,
+          post.tags ?? [],
+          savedPost.id!,
         );
-        return null;
+
+        unawaited(
+          notifyTaggedOrMentionedUsers(
+            session,
+            user,
+            savedPost,
+          ),
+        );
+
+        final withAssets = await Post.db.findById(
+          session,
+          savedPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            mediaAssets: MediaAsset.includeList(),
+          ),
+          transaction: transaction,
+        );
+        return withAssets;
       }
     });
   }
 
+  /// Reposts an existing post, toggling if already reposted.
+  ///
+  /// Updates repost counts, inserts engagement events and notifications.
   Future<Post?> repostPost(
     Session session,
     int postId,
   ) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(session);
-        final original = await Post.db.findById(
+      final user = await authUser(session);
+      final original = await Post.db.findById(
+        session,
+        postId,
+        include: Post.include(
+          owner: UserRecord.include(userInfo: UserInfo.include()),
+          article: Article.include(),
+          poll: Poll.include(options: PollOption.includeList()),
+          project: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include())),
+        ),
+        transaction: transaction,
+      );
+      if (original == null) {
+        throw ServerSideException(message: 'Original post not found.');
+      }
+
+      final existing = await PostReposts.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.ownerId.equals(user.id!) & t.postId.equals(original.id!),
+        transaction: transaction,
+      );
+      if (existing != null) {
+        await PostReposts.db.deleteRow(
           session,
-          postId,
-          include: Post.include(
-            owner: UserRecord.include(userInfo: UserInfo.include()),
-            article: Article.include(),
-            poll: Poll.include(options: PollOption.includeList()),
-            project: Project.include(
-                owner: UserRecord.include(userInfo: UserInfo.include())),
-          ),
+          existing,
           transaction: transaction,
         );
-        if (original == null) {
-          throw ServerSideException(message: 'Original post not found.');
-        }
-
-        final existing = await PostReposts.db.findFirstRow(
+        final existingRepost = await Post.db.findFirstRow(
           session,
           where: (t) =>
-              t.ownerId.equals(user.id!) & t.postId.equals(original.id!),
+              t.ownerId.equals(user.id!) &
+              t.parentId.equals(original.id!) &
+              t.postType.equals(PostType.postRepost) &
+              t.isDeleted.equals(false),
           transaction: transaction,
         );
-        if (existing != null) {
-          await PostReposts.db.deleteRow(
-            session,
-            existing,
-            transaction: transaction,
-          );
-          final existingRepost = await Post.db.findFirstRow(
-            session,
-            where: (t) =>
-                t.ownerId.equals(user.id!) &
-                t.parentId.equals(original.id!) &
-                t.postType.equals(PostType.postRepost) &
-                t.isDeleted.equals(false),
-            transaction: transaction,
-          );
-          Post? updated;
-          if (existingRepost != null) {
-            updated = existingRepost.copyWith(isDeleted: true);
-            await updatePost(session, updated);
-          }
-          final current = original.repostCount ?? 0;
-          final updatedOriginal = original.copyWith(
-            repostCount: current > 0 ? current - 1 : 0,
-          );
-          await updatePost(session, updatedOriginal);
-          unawaited(
-            EngagementEvent.db.insertRow(
-              session,
-              EngagementEvent(
-                userId: user.id!,
-                postId: original.id!,
-                type: 'unrepost',
-                createdAt: DateTime.now(),
-              ),
-            ),
-          );
-          return updated?.copyWith(owner: user, parent: original);
+        Post? updated;
+        if (existingRepost != null) {
+          updated = existingRepost.copyWith(isDeleted: true);
+          await updatePost(session, updated);
         }
-
-        final repost = await Post.db.insertRow(
-          session,
-          Post(
-            ownerId: user.id!,
-            parentId: original.id,
-            postType: PostType.postRepost,
-          ),
-          transaction: transaction,
-        );
-
-        await PostReposts.db.insertRow(
-          session,
-          PostReposts(
-            postId: original.id!,
-            ownerId: user.id!,
-            dateCreated: DateTime.now(),
-          ),
-          transaction: transaction,
-        );
-
+        final current = original.repostCount ?? 0;
         final updatedOriginal = original.copyWith(
-          repostCount: (original.repostCount ?? 0) + 1,
+          repostCount: current > 0 ? current - 1 : 0,
         );
         await updatePost(session, updatedOriginal);
-
         unawaited(
           EngagementEvent.db.insertRow(
             session,
             EngagementEvent(
               userId: user.id!,
               postId: original.id!,
-              type: 'repost',
+              type: 'unrepost',
               createdAt: DateTime.now(),
             ),
           ),
         );
-
-        if (original.ownerId != user.id) {
-          final targetType = original.article != null
-              ? NotificationTargetType.article
-              : original.poll != null
-                  ? NotificationTargetType.poll
-                  : NotificationTargetType.post;
-
-          unawaited(
-            NotificationEndpoint().sendNotification(
-              session,
-              receiverId: original.ownerId,
-              senderId: user.id!,
-              actionType: NotificationActionType.repost,
-              targetType: targetType,
-              targetId: repost.id!,
-              senderAvatarUrl: user.userInfo!.imageUrl!,
-              senderName: getFullName(
-                user.firstName!,
-                user.middleName,
-                user.lastName!,
-              ),
-              actionRoute: '/feed/post/${repost.id}',
-              body: _getNotificationBody(repost.text ?? ''),
-              postId: repost.id,
-            ),
-          );
-
-          unawaited(
-            NotificationEndpoint().notifyPostSubscribers(
-              session,
-              senderId: user.id!,
-              actionType: NotificationActionType.repost,
-              targetType: targetType,
-              targetId: repost.id!,
-              postId: original.id!,
-              senderAvatarUrl: user.userInfo!.imageUrl!,
-              senderName: getFullName(
-                user.firstName!,
-                user.middleName,
-                user.lastName!,
-              ),
-              actionRoute: '/feed/post/${repost.id}',
-              body: _getNotificationBody(repost.text ?? ''),
-            ),
-          );
-        }
-
-        return repost.copyWith(owner: user, parent: original);
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in repostPost: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
-        );
-        return null;
+        return updated?.copyWith(owner: user, parent: original);
       }
+
+      final repost = await Post.db.insertRow(
+        session,
+        Post(
+          ownerId: user.id!,
+          parentId: original.id,
+          postType: PostType.postRepost,
+        ),
+        transaction: transaction,
+      );
+
+      await PostReposts.db.insertRow(
+        session,
+        PostReposts(
+          postId: original.id!,
+          ownerId: user.id!,
+          dateCreated: DateTime.now(),
+        ),
+        transaction: transaction,
+      );
+
+      final updatedOriginal = original.copyWith(
+        repostCount: (original.repostCount ?? 0) + 1,
+      );
+      await updatePost(session, updatedOriginal);
+
+      unawaited(
+        EngagementEvent.db.insertRow(
+          session,
+          EngagementEvent(
+            userId: user.id!,
+            postId: original.id!,
+            type: 'repost',
+            createdAt: DateTime.now(),
+          ),
+        ),
+      );
+
+      if (original.ownerId != user.id) {
+        final targetType = original.postType == PostType.article
+            ? NotificationTargetType.article
+            : original.postType == PostType.poll
+                ? NotificationTargetType.poll
+                : original.postType == PostType.commentReply
+                    ? NotificationTargetType.reply
+                    : original.postType == PostType.comment
+                        ? NotificationTargetType.comment
+                        : NotificationTargetType.post;
+
+        final route = original.article != null
+            ? 'article'
+            : original.poll != null
+                ? 'poll'
+                : 'post';
+
+        unawaited(
+          NotificationEndpoint().sendNotification(
+            session,
+            receiverId: original.ownerId,
+            senderId: user.id!,
+            actionType: NotificationActionType.repost,
+            targetType: targetType,
+            targetId: original.id!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
+            actionRoute: '/feed/$route/${repost.id}',
+            body: _getNotificationBody(repost.text ?? ''),
+            postId: original.id,
+          ),
+        );
+
+        unawaited(
+          NotificationEndpoint().notifyPostSubscribers(
+            session,
+            senderId: user.id!,
+            actionType: NotificationActionType.repost,
+            targetType: targetType,
+            targetId: repost.id!,
+            postId: original.id!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
+            actionRoute: '/feed/post/${repost.id}',
+            body: _getNotificationBody(repost.text ?? ''),
+          ),
+        );
+      }
+
+      return repost.copyWith(owner: user, parent: original);
     });
   }
 
+  /// Creates a quote post referencing another post.
+  ///
+  /// Increments repost count on the root post, logs engagement, and
+  /// dispatches relevant notifications.
   Future<Post?> quotePost(
     Session session,
     int postId,
     Post quoteContent,
   ) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(session);
-        final original = await Post.db.findById(
+      final user = await authUser(session);
+      final original = await Post.db.findById(
+        session,
+        postId,
+        include: Post.include(
+          owner: UserRecord.include(userInfo: UserInfo.include()),
+          article: Article.include(),
+          poll: Poll.include(options: PollOption.includeList()),
+          project: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include())),
+        ),
+        transaction: transaction,
+      );
+      if (original == null) {
+        throw ServerSideException(message: 'Original post not found.');
+      }
+
+      final root = await getRootPost(session, original);
+
+      final sentPost = await Post.db.insertRow(
+        session,
+        quoteContent.copyWith(
+          ownerId: user.id!,
+          parentId: original.id,
+        ),
+        transaction: transaction,
+      );
+
+      await PostQuotes.db.insertRow(
+        session,
+        PostQuotes(
+          postId: root.id!,
+          ownerId: user.id!,
+          dateCreated: DateTime.now(),
+        ),
+        transaction: transaction,
+      );
+
+      await HashtagEndpoint().sendPostHashtags(
+        session,
+        quoteContent.tags ?? [],
+        sentPost.id!,
+      );
+
+      final updatedOriginal = root.copyWith(
+        repostCount: (root.repostCount ?? 0) + 1,
+      );
+      await updatePost(session, updatedOriginal);
+
+      unawaited(
+        EngagementEvent.db.insertRow(
           session,
-          postId,
-          include: Post.include(
-            owner: UserRecord.include(userInfo: UserInfo.include()),
-            article: Article.include(),
-            poll: Poll.include(options: PollOption.includeList()),
-            project: Project.include(
-                owner: UserRecord.include(userInfo: UserInfo.include())),
+          EngagementEvent(
+            userId: user.id!,
+            postId: original.id!,
+            type: 'quote',
+            createdAt: DateTime.now(),
           ),
-          transaction: transaction,
-        );
-        if (original == null) {
-          throw ServerSideException(message: 'Original post not found.');
-        }
+        ),
+      );
 
-        // Resolve the root post to normalize counts & join tracking
-        final root = await getRootPost(session, original);
-
-        final sentPost = await Post.db.insertRow(
-          session,
-          quoteContent.copyWith(
-            ownerId: user.id!,
-            // Preserve chain by quoting the selected post (which may itself be a quote)
-            parentId: original.id,
-          ),
-          transaction: transaction,
-        );
-
-        await PostQuotes.db.insertRow(
-          session,
-          PostQuotes(
-            // Track against the root so multiple layers map to a single original
-            postId: root.id!,
-            ownerId: user.id!,
-            dateCreated: DateTime.now(),
-          ),
-          transaction: transaction,
-        );
-
-        await HashtagEndpoint().sendPostHashtags(
-          session,
-          quoteContent.tags ?? [],
-          sentPost.id!,
-        );
-
-        // Increment root's repost/share count
-        final updatedOriginal = root.copyWith(
-          repostCount: (root.repostCount ?? 0) + 1,
-        );
-        await updatePost(session, updatedOriginal);
+      if (original.ownerId != user.id) {
+        final targetType = original.article != null
+            ? NotificationTargetType.article
+            : original.poll != null
+                ? NotificationTargetType.poll
+                : NotificationTargetType.post;
 
         unawaited(
-          EngagementEvent.db.insertRow(
+          NotificationEndpoint().sendNotification(
             session,
-            EngagementEvent(
-              userId: user.id!,
-              postId: original.id!,
-              type: 'quote',
-              createdAt: DateTime.now(),
+            receiverId: original.ownerId,
+            senderId: user.id!,
+            actionType: NotificationActionType.quote,
+            targetType: targetType,
+            targetId: sentPost.id!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
             ),
+            actionRoute: '/feed/post/${sentPost.id}',
+            body: _getNotificationBody(sentPost.text ?? ''),
+            postId: sentPost.id,
           ),
         );
 
-        if (original.ownerId != user.id) {
-          final targetType = original.article != null
-              ? NotificationTargetType.article
-              : original.poll != null
-                  ? NotificationTargetType.poll
-                  : NotificationTargetType.post;
-
-          unawaited(
-            NotificationEndpoint().sendNotification(
-              session,
-              receiverId: original.ownerId,
-              senderId: user.id!,
-              actionType: NotificationActionType.quote,
-              targetType: targetType,
-              targetId: sentPost.id!,
-              senderAvatarUrl: user.userInfo!.imageUrl!,
-              senderName: getFullName(
-                user.firstName!,
-                user.middleName,
-                user.lastName!,
-              ),
-              actionRoute: '/feed/post/${sentPost.id}',
-              body: _getNotificationBody(sentPost.text ?? ''),
-              postId: sentPost.id,
+        unawaited(
+          NotificationEndpoint().notifyPostSubscribers(
+            session,
+            senderId: user.id!,
+            actionType: NotificationActionType.quote,
+            targetType: targetType,
+            targetId: sentPost.id!,
+            postId: root.id!,
+            senderAvatarUrl: user.userInfo!.imageUrl!,
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
             ),
-          );
-
-          // Notify subscribers of the root thread
-          unawaited(
-            NotificationEndpoint().notifyPostSubscribers(
-              session,
-              senderId: user.id!,
-              actionType: NotificationActionType.quote,
-              targetType: targetType,
-              targetId: sentPost.id!,
-              postId: root.id!,
-              senderAvatarUrl: user.userInfo!.imageUrl!,
-              senderName: getFullName(
-                user.firstName!,
-                user.middleName,
-                user.lastName!,
-              ),
-              actionRoute: '/feed/post/${sentPost.id}',
-              body: _getNotificationBody(sentPost.text ?? ''),
-            ),
-          );
-        }
-
-        return sentPost.copyWith(owner: user, parent: original);
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in quotePost: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+            actionRoute: '/feed/post/${sentPost.id}',
+            body: _getNotificationBody(sentPost.text ?? ''),
+          ),
         );
-        return null;
       }
+
+      return sentPost.copyWith(owner: user, parent: original);
     });
   }
 
+  /// Logs batch post impressions for the authenticated viewer.
+  ///
+  /// Each impression is bucketed by hour and increments a post's
+  /// impression counters.
   Future<void> logPostImpressions(
     Session session,
     List<int> postIds,
@@ -456,199 +593,241 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Creates or updates a poll post and its options.
+  ///
+  /// On create, inserts poll/options and associates them with the post.
+  /// Returns the updated or newly created `Post` with poll included.
   Future<Post?> savePoll(Session session, Post post) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(session);
+      final user = await authUser(session);
 
-        if (post.id != null) {
-          final existingPost = await validatePostOwnership(
-            session,
-            post.id!,
-            user,
-          );
-
-          final updatedPost = post.copyWith(
-            updatedAt: DateTime.now(),
-            projectId: existingPost.projectId,
-            parentId: existingPost.parentId,
-            pollId: existingPost.pollId,
-            commentCount: existingPost.commentCount,
-            postType: existingPost.postType,
-            dateCreated: existingPost.dateCreated,
-          );
-
-          await updatePost(
-            session,
-            updatedPost,
-          );
-          await HashtagEndpoint().sendPostHashtags(
-            session,
-            post.tags ?? [],
-            post.id!,
-          );
-          return updatedPost;
-        } else {
-          final savedPost = await Post.db.insertRow(
-            session,
-            post.copyWith(
-              ownerId: user.id!,
-            ),
-            transaction: transaction,
-          );
-
-          final savedPoll = await Poll.db.insertRow(
-            session,
-            post.poll!,
-            transaction: transaction,
-          );
-
-          final savedOptions = <PollOption>[];
-          for (final option in post.poll!.options ?? []) {
-            final savedOption = await PollOption.db.insertRow(
-              session,
-              option.copyWith(
-                pollId: savedPoll.id,
-              ),
-              transaction: transaction,
-            );
-            savedOptions.add(savedOption);
-          }
-
-          final updatedPoll = savedPoll.copyWith(
-            options: savedOptions,
-          );
-          await Poll.db.updateRow(
-            session,
-            updatedPoll,
-            transaction: transaction,
-          );
-
-          await Post.db.updateRow(
-            session,
-            savedPost.copyWith(
-              pollId: updatedPoll.id,
-            ),
-            transaction: transaction,
-          );
-
-          unawaited(
-            notifyTaggedOrMentionedUsers(
-              session,
-              user,
-              savedPost,
-            ),
-          );
-
-          return await Post.db.findById(
-            session,
-            savedPost.id!,
-            include: Post.include(
-              owner: UserRecord.include(userInfo: UserInfo.include()),
-              poll: Poll.include(options: PollOption.includeList()),
-            ),
-            transaction: transaction,
-          );
-        }
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in savePoll: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+      if (post.id != null) {
+        final existingPost = await validatePostOwnership(
+          session,
+          post.id!,
+          user,
         );
-        return null;
+
+        final updatedPost = post.copyWith(
+          updatedAt: DateTime.now(),
+          parentId: existingPost.parentId,
+          pollId: existingPost.pollId,
+          commentCount: existingPost.commentCount,
+          postType: existingPost.postType,
+          dateCreated: existingPost.dateCreated,
+        );
+
+        await updatePost(
+          session,
+          updatedPost,
+        );
+        await HashtagEndpoint().sendPostHashtags(
+          session,
+          post.tags ?? [],
+          post.id!,
+        );
+        return updatedPost;
+      } else {
+        final savedPost = await Post.db.insertRow(
+          session,
+          post.copyWith(
+            ownerId: user.id!,
+          ),
+          transaction: transaction,
+        );
+
+        final savedPoll = await Poll.db.insertRow(
+          session,
+          post.poll!,
+          transaction: transaction,
+        );
+
+        final savedOptions = <PollOption>[];
+        for (final option in post.poll!.options ?? []) {
+          final savedOption = await PollOption.db.insertRow(
+            session,
+            option.copyWith(
+              pollId: savedPoll.id,
+            ),
+            transaction: transaction,
+          );
+          savedOptions.add(savedOption);
+        }
+
+        final updatedPoll = savedPoll.copyWith(
+          options: savedOptions,
+        );
+        await Poll.db.updateRow(
+          session,
+          updatedPoll,
+          transaction: transaction,
+        );
+
+        await Post.db.updateRow(
+          session,
+          savedPost.copyWith(
+            pollId: updatedPoll.id,
+          ),
+          transaction: transaction,
+        );
+
+        unawaited(
+          notifyTaggedOrMentionedUsers(
+            session,
+            user,
+            savedPost,
+          ),
+        );
+
+        return await Post.db.findById(
+          session,
+          savedPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            poll: Poll.include(options: PollOption.includeList()),
+          ),
+          transaction: transaction,
+        );
       }
     });
   }
 
-  Future<Post?> saveArticle(
+  /// Creates or updates an article post and synchronizes its media.
+  ///
+  /// On update, preserves post metadata linkage, updates the article row,
+  /// and returns the enriched `Post` with `Article` and assets.
+  Future<Post> saveArticle(
     Session session,
     Post post,
   ) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(session);
-        if (post.id != null) {
-          final existingPost = await validatePostOwnership(
-            session,
-            post.id!,
-            user,
-          );
+      final user = await authUser(session);
+      if (post.id != null) {
+        final existingPost = await validatePostOwnership(
+          session,
+          post.id!,
+          user,
+        );
 
-          final updatedPost = post.copyWith(
-            updatedAt: DateTime.now(),
-            parentId: existingPost.parentId,
-            commentCount: existingPost.commentCount,
-            postType: existingPost.postType,
-            dateCreated: existingPost.dateCreated,
-            articleId: existingPost.articleId,
-            article: existingPost.article!.copyWith(
-              content: post.article!.content,
-              tag: [...existingPost.article!.tag!, ...post.article!.tag!],
-            ),
-          );
+        final existingMedia = await MediaAsset.db.findFirstRow(
+          session,
+          where: (a) =>
+              a.postId.equals(existingPost.id!) & a.ownerId.equals(user.id!),
+          transaction: transaction,
+        );
 
-          await updatePost(
+        await MediaAsset.db.updateRow(
+          session,
+          post.mediaAssets!.first.copyWith(
+            ownerId: user.id!,
+            postId: post.id!,
+            id: existingMedia?.id,
+          ),
+          transaction: transaction,
+        );
+
+        final updatedPost = post.copyWith(
+          updatedAt: DateTime.now(),
+          parentId: existingPost.parentId,
+          commentCount: existingPost.commentCount,
+          postType: existingPost.postType,
+          dateCreated: existingPost.dateCreated,
+          articleId: existingPost.articleId,
+        );
+
+        await Article.db.updateRow(
+          session,
+          post.article!.copyWith(
+            id: existingPost.articleId,
+          ),
+          transaction: transaction,
+        );
+
+        await updatePost(
+          session,
+          updatedPost,
+        );
+
+        final enriched = await Post.db.findById(
+          session,
+          updatedPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            article: Article.include(),
+            mediaAssets: MediaAsset.includeList(),
+          ),
+          transaction: transaction,
+        );
+        return enriched!;
+      } else {
+        final savedPost = await Post.db.insertRow(
+          session,
+          post.copyWith(
+            ownerId: user.id!,
+          ),
+          transaction: transaction,
+        );
+
+        final savedArticle = await Article.db.insertRow(
+          session,
+          post.article!,
+          transaction: transaction,
+        );
+
+        await Post.db.updateRow(
+          session,
+          savedPost.copyWith(
+            articleId: savedArticle.id,
+          ),
+          transaction: transaction,
+        );
+
+        if ((post.mediaAssets?.isNotEmpty ?? false)) {
+          await MediaAsset.db.insertRow(
             session,
-            updatedPost,
-          );
-          return updatedPost;
-        } else {
-          final savedPost = await Post.db.insertRow(
-            session,
-            post.copyWith(
+            post.mediaAssets!.first.copyWith(
               ownerId: user.id!,
-            ),
-            transaction: transaction,
-          );
-
-          final savedArticle = await Article.db.insertRow(
-            session,
-            post.article!,
-            transaction: transaction,
-          );
-
-          await Post.db.updateRow(
-            session,
-            savedPost.copyWith(
-              articleId: savedArticle.id,
-            ),
-            transaction: transaction,
-          );
-
-          unawaited(
-            notifyTaggedOrMentionedUsers(
-              session,
-              user,
-              savedPost,
-            ),
-          );
-
-          return await Post.db.findById(
-            session,
-            savedPost.id!,
-            include: Post.include(
-              owner: UserRecord.include(
-                userInfo: UserInfo.include(),
-              ),
-              article: Article.include(),
+              postId: savedPost.id!,
             ),
             transaction: transaction,
           );
         }
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in saveArticle: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+
+        unawaited(
+          notifyTaggedOrMentionedUsers(
+            session,
+            user,
+            savedPost,
+          ),
         );
-        return null;
+
+        final sent = await Post.db.findById(
+          session,
+          savedPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(
+              userInfo: UserInfo.include(),
+            ),
+            article: Article.include(),
+            mediaAssets: MediaAsset.includeList(),
+          ),
+          transaction: transaction,
+        );
+
+        if (sent == null) {
+          throw ServerSideException(
+            message: 'Something went wrong while saving your article',
+          );
+        }
+
+        return sent;
       }
     });
   }
 
+  /// Sends notifications to tagged users and mentioned users for a post.
+  ///
+  /// Dispatches per-user notification events with appropriate target types.
   @doNotGenerate
   Future<void> notifyTaggedOrMentionedUsers(
     Session session,
@@ -714,6 +893,9 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  /// Casts or changes a vote on a poll option and updates counts.
+  ///
+  /// Emits engagement events and sends notifications if applicable.
   Future<void> castVote(
     Session session,
     int postId,
@@ -759,7 +941,6 @@ class PostEndpoint extends Endpoint {
         if (existingVote.optionId == optionId) {
           return;
         }
-        // Update the user's vote to the new option.
         await PollVote.db.updateRow(
           session,
           existingVote.copyWith(
@@ -769,7 +950,6 @@ class PostEndpoint extends Endpoint {
           transaction: transaction,
         );
 
-        // Decrement the previous option's count.
         final prevOption = await PollOption.db.findById(
           session,
           existingVote.optionId,
@@ -787,7 +967,6 @@ class PostEndpoint extends Endpoint {
           );
         }
 
-        // Increment the newly selected option's count.
         await PollOption.db.updateRow(
           session,
           option.copyWith(
@@ -796,11 +975,8 @@ class PostEndpoint extends Endpoint {
           transaction: transaction,
         );
 
-        // Total poll votes remain unchanged when switching options.
-        // Broadcast updated poll counts (options changed) within the transaction.
         await updatePoll(session, poll, transaction: transaction);
       } else {
-        // First-time vote: insert and increment counts.
         await PollVote.db.insertRow(
           session,
           PollVote(
@@ -812,7 +988,6 @@ class PostEndpoint extends Endpoint {
           transaction: transaction,
         );
 
-        // Increment the selected option's count.
         await PollOption.db.updateRow(
           session,
           option.copyWith(
@@ -821,7 +996,6 @@ class PostEndpoint extends Endpoint {
           transaction: transaction,
         );
 
-        // Increment the poll's total votes and broadcast using fresh counts within the transaction.
         await updatePoll(
           session,
           poll.copyWith(
@@ -885,6 +1059,9 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Clears the authenticated user's vote in a given poll.
+  ///
+  /// Updates option and poll counts accordingly.
   Future<void> clearVote(
     Session session,
     int pollId,
@@ -951,12 +1128,16 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Creates or updates a comment or reply on a post.
+  ///
+  /// On update, synchronizes media assets; on create, inserts media and
+  /// dispatches notifications and engagement events.
   Future<Post?> savePostComment(
     Session session,
     Post comment,
     bool isReply,
   ) async {
-    try {
+    return await session.db.transaction((transaction) async {
       final user = await authUser(session);
 
       if (comment.id != null) {
@@ -966,6 +1147,14 @@ class PostEndpoint extends Endpoint {
           comment.parentId!,
           user,
           isReply,
+        );
+
+        await _syncMediaAssetsForPost(
+          session,
+          user: user,
+          existingPost: existingCommentOrReply,
+          incoming: comment.mediaAssets,
+          transaction: transaction,
         );
 
         final updatedComment = comment.copyWith(
@@ -980,8 +1169,13 @@ class PostEndpoint extends Endpoint {
           updatedComment,
         );
 
-        return updatedComment.copyWith(
-          owner: user,
+        return await Post.db.findById(
+          session,
+          comment.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            mediaAssets: MediaAsset.includeList(),
+          ),
         );
       } else {
         Post? parent;
@@ -1010,6 +1204,20 @@ class PostEndpoint extends Endpoint {
             postType: isReply ? PostType.commentReply : PostType.comment,
           ),
         );
+
+        if (comment.mediaAssets != null && comment.mediaAssets!.isNotEmpty) {
+          await MediaAsset.db.insert(
+            session,
+            comment.mediaAssets != null
+                ? comment.mediaAssets!
+                    .map((e) => e.copyWith(
+                          ownerId: user.id!,
+                          postId: sentComment.id!,
+                        ))
+                    .toList()
+                : [],
+          );
+        }
 
         unawaited(
           EngagementEvent.db.insertRow(
@@ -1076,18 +1284,22 @@ class PostEndpoint extends Endpoint {
           ),
         );
 
-        return sentComment;
+        final enriched = await Post.db.findById(
+          session,
+          sentComment.id!,
+          include: Post.include(
+            owner: UserRecord.include(),
+            mediaAssets: MediaAsset.includeList(),
+          ),
+        );
+        return enriched;
       }
-    } catch (e, stackTrace) {
-      session.log(
-        'Failed to add comment: $e',
-        stackTrace: stackTrace,
-        level: LogLevel.error,
-      );
-      return null;
-    }
+    });
   }
 
+  /// Returns paginated comments for a post, excluding ignored posts.
+  ///
+  /// Includes owner info and media assets for each comment.
   Future<PostList> getPostComments(
     Session session,
     int postId, {
@@ -1127,10 +1339,10 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
+        mediaAssets: MediaAsset.includeList(),
       ),
     );
 
-    // Enrich with user state flags
     final enriched = await _enrichPosts(session, user, results);
 
     return PostList(
@@ -1143,6 +1355,8 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Returns a single comment or reply enriched with user state.
+  /// Throws if the target does not exist.
   Future<PostWithUserState> getComment(
     Session session,
     int commentId,
@@ -1156,11 +1370,7 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
-        poll: Poll.include(options: PollOption.includeList()),
-        article: Article.include(),
-        project: Project.include(
-          owner: UserRecord.include(userInfo: UserInfo.include()),
-        ),
+        mediaAssets: MediaAsset.includeList(),
         parent: Post.include(
           owner: UserRecord.include(userInfo: UserInfo.include()),
         ),
@@ -1183,6 +1393,9 @@ class PostEndpoint extends Endpoint {
     return enriched.first;
   }
 
+  /// Returns paginated replies for a specific comment.
+  ///
+  /// Includes owner info and media assets for each reply.
   Future<PostList> getPostCommentReplies(
     Session session,
     int commentId, {
@@ -1224,6 +1437,7 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
+        mediaAssets: MediaAsset.includeList(),
       ),
     );
 
@@ -1239,6 +1453,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Schedules a post to be sent at a future time using Serverpod.
   Future<void> schedulePost(
     Session session,
     Post post,
@@ -1251,6 +1466,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Traverses the parent chain to return the root post for a thread.
   Future<Post> getRootPost(Session session, Post post) async {
     var current = post;
     while (current.parentId != null) {
@@ -1261,134 +1477,144 @@ class PostEndpoint extends Endpoint {
     return current;
   }
 
+  /// Creates a quote post referencing a project and updates project counts.
   Future<Post> quoteProject(
     Session session,
     int projectId,
     Post quoteContent,
   ) async {
-    final user = await authUser(session);
     return await session.db.transaction((transaction) async {
-      try {
-        if (quoteContent.id != null) {
-          final existingQuote = await validatePostOwnership(
-            session,
-            quoteContent.id!,
-            user,
-          );
+      final user = await authUser(session);
+      if (quoteContent.id != null) {
+        final existingQuote = await validatePostOwnership(
+          session,
+          quoteContent.id!,
+          user,
+        );
 
-          final updatedQuote = quoteContent.copyWith(
-            updatedAt: DateTime.now(),
-            projectId: existingQuote.projectId,
-            commentCount: existingQuote.commentCount,
-            dateCreated: existingQuote.dateCreated,
-            postType: existingQuote.postType,
-          );
+        final updatedQuote = quoteContent.copyWith(
+          updatedAt: DateTime.now(),
+          projectId: existingQuote.projectId,
+          commentCount: existingQuote.commentCount,
+          dateCreated: existingQuote.dateCreated,
+          postType: existingQuote.postType,
+        );
 
-          await updatePost(
-            session,
-            updatedQuote,
-          );
+        await updatePost(
+          session,
+          updatedQuote,
+        );
 
-          return existingQuote;
-        } else {
-          final selectedProject = await Project.db.findById(
-            session,
-            projectId,
-            transaction: transaction,
-            include: Project.include(
-              owner: UserRecord.include(),
+        final quote = await Post.db.findById(
+          session,
+          quoteContent.id!,
+          include: Post.include(
+            owner: UserRecord.include(
+              userInfo: UserInfo.include(),
             ),
-          );
-
-          if (selectedProject == null) {
-            throw ServerSideException(message: 'Project not found.');
-          }
-
-          final sentPost = await Post.db.insertRow(
-            session,
-            quoteContent.copyWith(
-              ownerId: user.id!,
-              projectId: selectedProject.id,
-            ),
-            transaction: transaction,
-          );
-
-          selectedProject.quotesCount = selectedProject.quotesCount! + 1;
-
-          await ProjectEndpoint().updateProject(
-            session,
-            selectedProject,
-          );
-
-          await HashtagEndpoint().sendPostHashtags(
-            session,
-            sentPost.tags ?? [],
-            sentPost.id!,
-          );
-
-          if (selectedProject.ownerId != user.id) {
-            unawaited(
-              NotificationEndpoint().sendNotification(
-                session,
-                receiverId: selectedProject.ownerId,
-                senderId: user.id!,
-                actionType: NotificationActionType.quote,
-                targetType: NotificationTargetType.project,
-                senderAvatarUrl: user.userInfo!.imageUrl!,
-                targetId: sentPost.id!,
-                senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/feed/post/${sentPost.id}',
-                body: _getNotificationBody(sentPost.text ?? ''),
-                postId: sentPost.id!,
+            project: Project.include(
+              owner: UserRecord.include(
+                userInfo: UserInfo.include(),
               ),
-            );
-            unawaited(
-              NotificationEndpoint().notifyProjectSubscribers(
-                session,
-                senderId: user.id!,
-                actionType: NotificationActionType.quote,
-                targetType: NotificationTargetType.project,
-                projectId: selectedProject.id!,
-                senderAvatarUrl: user.userInfo!.imageUrl!,
-                targetId: sentPost.id!,
-                senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
-                actionRoute: '/feed/post/${sentPost.id}',
-                body: _getNotificationBody(sentPost.text ?? ''),
-              ),
-            );
-          }
-
-          unawaited(
-            notifyTaggedOrMentionedUsers(
-              session,
-              user,
-              sentPost,
             ),
-          );
+          ),
+          transaction: transaction,
+        );
 
-          return sentPost.copyWith(
-            owner: user,
-            project: selectedProject,
+        if (quote == null) {
+          throw ServerSideException(
+            message: 'Quote not found.',
           );
         }
-      } on ServerSideException {
-        rethrow;
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in repostOrQuote: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+
+        return quote;
+      } else {
+        final selectedProject = await Project.db.findById(
+          session,
+          projectId,
+          transaction: transaction,
+          include: Project.include(
+            owner: UserRecord.include(),
+          ),
         );
-        throw ServerSideException(
-          message: 'Error reposting or quoting post',
+
+        if (selectedProject == null) {
+          throw ServerSideException(message: 'Project not found.');
+        }
+
+        final sentPost = await Post.db.insertRow(
+          session,
+          quoteContent.copyWith(
+            ownerId: user.id!,
+            projectId: selectedProject.id,
+          ),
+          transaction: transaction,
+        );
+
+        selectedProject.quotesCount = selectedProject.quotesCount! + 1;
+
+        await ProjectEndpoint().updateProject(
+          session,
+          selectedProject,
+        );
+
+        await HashtagEndpoint().sendPostHashtags(
+          session,
+          sentPost.tags ?? [],
+          sentPost.id!,
+        );
+
+        if (selectedProject.ownerId != user.id) {
+          unawaited(
+            NotificationEndpoint().sendNotification(
+              session,
+              receiverId: selectedProject.ownerId,
+              senderId: user.id!,
+              actionType: NotificationActionType.quote,
+              targetType: NotificationTargetType.project,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
+              targetId: sentPost.id!,
+              senderName:
+                  getFullName(user.firstName!, user.middleName, user.lastName!),
+              actionRoute: '/feed/post/${sentPost.id}',
+              body: _getNotificationBody(sentPost.text ?? ''),
+              postId: sentPost.id!,
+            ),
+          );
+          unawaited(
+            NotificationEndpoint().notifyProjectSubscribers(
+              session,
+              senderId: user.id!,
+              actionType: NotificationActionType.quote,
+              targetType: NotificationTargetType.project,
+              projectId: selectedProject.id!,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
+              targetId: sentPost.id!,
+              senderName:
+                  getFullName(user.firstName!, user.middleName, user.lastName!),
+              actionRoute: '/feed/post/${sentPost.id}',
+              body: _getNotificationBody(sentPost.text ?? ''),
+            ),
+          );
+        }
+
+        unawaited(
+          notifyTaggedOrMentionedUsers(
+            session,
+            user,
+            sentPost,
+          ),
+        );
+
+        return sentPost.copyWith(
+          owner: user,
+          project: selectedProject,
         );
       }
     });
   }
 
+  /// Returns an enriched post by id, including owner, media, and related data.
   Future<PostWithUserState> getPost(
     Session session,
     int id,
@@ -1401,6 +1627,7 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
+        mediaAssets: MediaAsset.includeList(),
         project: Project.include(
           owner: UserRecord.include(
             userInfo: UserInfo.include(),
@@ -1410,6 +1637,7 @@ class PostEndpoint extends Endpoint {
           owner: UserRecord.include(
             userInfo: UserInfo.include(),
           ),
+          mediaAssets: MediaAsset.includeList(),
         ),
         poll: Poll.include(
           options: PollOption.includeList(),
@@ -1432,6 +1660,9 @@ class PostEndpoint extends Endpoint {
     return enriched.first;
   }
 
+  /// Returns ranked, paginated feed posts for the authenticated user.
+  ///
+  /// Supports content-type filtering and logs impressions opportunistically.
   Future<PostList> getPosts(
     Session session, {
     int limit = 50,
@@ -1449,14 +1680,12 @@ class PostEndpoint extends Endpoint {
       where: (t) => t.userId.equals(user.id!),
     );
     final ignoredIds = ignored.map((e) => e.postId).toSet();
-    // Build type filter set based on contentType
     Set<PostType>? allowedTypes;
     if (contentType == 'polls') {
       allowedTypes = {PostType.poll};
     } else if (contentType == 'articles') {
       allowedTypes = {PostType.article};
     } else if (contentType == 'regular') {
-      // Regular posts and reposts
       allowedTypes = {
         PostType.regular,
         PostType.postRepost,
@@ -1495,6 +1724,7 @@ class PostEndpoint extends Endpoint {
         owner: UserRecord.include(
           userInfo: UserInfo.include(),
         ),
+        mediaAssets: MediaAsset.includeList(),
         project: Project.include(
           owner: UserRecord.include(
             userInfo: UserInfo.include(),
@@ -1504,6 +1734,7 @@ class PostEndpoint extends Endpoint {
           owner: UserRecord.include(
             userInfo: UserInfo.include(),
           ),
+          mediaAssets: MediaAsset.includeList(),
           project: Project.include(
             owner: UserRecord.include(
               userInfo: UserInfo.include(),
@@ -1581,6 +1812,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Logs a single feed-impression page event for the user.
   @doNotGenerate
   Future<void> logFeedImpression(
     Session session, {
@@ -1600,6 +1832,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Logs a single engagement event (like, bookmark, repost, etc.).
   @doNotGenerate
   Future<void> logEngagementEvent(
     Session session, {
@@ -1618,10 +1851,9 @@ class PostEndpoint extends Endpoint {
     );
   }
 
-  Future<void> deletePost(
-    Session session,
-    int id,
-  ) async {
+  /// Deletes or soft-deletes a post, updating related counts when needed.
+  Future<void> deletePost(Session session, int id,
+      {bool fullDelete = false}) async {
     return await session.db.transaction((tx) async {
       final user = await authUser(
         session,
@@ -1665,6 +1897,14 @@ class PostEndpoint extends Endpoint {
         }
       }
 
+      if (fullDelete) {
+        await Post.db.deleteRow(
+          session,
+          post,
+          transaction: tx,
+        );
+        return;
+      }
       await updatePost(
         session,
         post.copyWith(
@@ -1674,269 +1914,250 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Clears all bookmarks for the authenticated user and updates counts.
   Future<void> clearBookmarks(Session session) async {
     return await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(
-          session,
-        );
-        final userBookmarks = await PostBookmarks.db.find(
-          session,
-          where: (t) => t.ownerId.equals(user.id!),
-          include: PostBookmarks.include(
-            post: Post.include(),
-          ),
-        );
-        final posts = userBookmarks.map((e) => e.post!);
-        for (final post in posts) {
-          final current = post.bookmarksCount ?? 0;
-          post.bookmarksCount = current > 0 ? current - 1 : 0;
-          await updatePost(session, post);
-        }
-        await PostBookmarks.db.deleteWhere(
-          session,
-          where: (t) => t.ownerId.equals(user.id!),
-        );
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in clearPostBookmarks: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
-        );
-        throw ServerSideException(
-          message: 'Error clearing bookmarks',
-        );
+      final user = await authUser(
+        session,
+      );
+      final userBookmarks = await PostBookmarks.db.find(
+        session,
+        where: (t) => t.ownerId.equals(user.id!),
+        include: PostBookmarks.include(
+          post: Post.include(),
+        ),
+        transaction: transaction,
+      );
+      final posts = userBookmarks.map((e) => e.post!);
+      for (final post in posts) {
+        final current = post.bookmarksCount ?? 0;
+        post.bookmarksCount = current > 0 ? current - 1 : 0;
+        await updatePost(session, post);
       }
+      await PostBookmarks.db.deleteWhere(
+        session,
+        where: (t) => t.ownerId.equals(user.id!),
+        transaction: transaction,
+      );
     });
   }
 
+  /// Toggles bookmark state on a post for the authenticated user.
+  ///
+  /// Updates counts and logs a corresponding engagement event.
   Future<void> toggleBookmark(
     Session session,
     int postId,
   ) async {
-    final user = await authUser(session);
-
     await session.db.transaction((transaction) async {
-      try {
-        final post = await Post.db.findById(
-          session,
-          postId,
-          transaction: transaction,
-          include: Post.include(
-            owner: UserRecord.include(),
-          ),
-        );
-        if (post == null) {
-          throw ServerSideException(
-            message: "Post not found",
-          );
-        }
-
-        final existingBookmark = await PostBookmarks.db.findFirstRow(
-          session,
-          where: (t) =>
-              t.postId.equals(
-                postId,
-              ) &
-              t.ownerId.equals(
-                user.id!,
-              ),
-          transaction: transaction,
-        );
-
-        String engagementType;
-        if (existingBookmark != null) {
-          await PostBookmarks.db.deleteRow(
-            session,
-            existingBookmark,
-            transaction: transaction,
-          );
-          post.bookmarksCount = post.bookmarksCount! - 1;
-          engagementType = 'unbookmark';
-        } else {
-          await PostBookmarks.db.insertRow(
-            session,
-            PostBookmarks(
-              postId: postId,
-              ownerId: user.id!,
-            ),
-            transaction: transaction,
-          );
-          post.bookmarksCount = post.bookmarksCount! + 1;
-          engagementType = 'bookmark';
-        }
-        await updatePost(session, post);
-
-        unawaited(
-          EngagementEvent.db.insertRow(
-            session,
-            EngagementEvent(
-              userId: user.id!,
-              postId: postId,
-              type: engagementType,
-              createdAt: DateTime.now(),
-            ),
-          ),
-        );
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in toggleBookmark: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+      final user = await authUser(session);
+      final post = await Post.db.findById(
+        session,
+        postId,
+        transaction: transaction,
+        include: Post.include(
+          owner: UserRecord.include(),
+        ),
+      );
+      if (post == null) {
+        throw ServerSideException(
+          message: "Post not found",
         );
       }
+
+      final existingBookmark = await PostBookmarks.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.postId.equals(
+              postId,
+            ) &
+            t.ownerId.equals(
+              user.id!,
+            ),
+        transaction: transaction,
+      );
+
+      String engagementType;
+      if (existingBookmark != null) {
+        await PostBookmarks.db.deleteRow(
+          session,
+          existingBookmark,
+          transaction: transaction,
+        );
+        post.bookmarksCount = post.bookmarksCount! - 1;
+        engagementType = 'unbookmark';
+      } else {
+        await PostBookmarks.db.insertRow(
+          session,
+          PostBookmarks(
+            postId: postId,
+            ownerId: user.id!,
+          ),
+          transaction: transaction,
+        );
+        post.bookmarksCount = post.bookmarksCount! + 1;
+        engagementType = 'bookmark';
+      }
+      await updatePost(session, post);
+
+      unawaited(
+        EngagementEvent.db.insertRow(
+          session,
+          EngagementEvent(
+            userId: user.id!,
+            postId: postId,
+            type: engagementType,
+            createdAt: DateTime.now(),
+          ),
+        ),
+      );
     });
   }
 
+  /// Toggles like state on a post for the authenticated user.
+  ///
+  /// Sends notifications to the post owner and subscribers on like.
   Future<void> toggleLike(
     Session session,
     int postId,
   ) async {
     await session.db.transaction((transaction) async {
-      try {
-        final user = await authUser(
-          session,
-        );
+      final user = await authUser(
+        session,
+      );
 
-        final post = await Post.db.findById(
-          session,
-          postId,
-          transaction: transaction,
-          include: Post.include(
-            owner: UserRecord.include(),
-          ),
-        );
-        if (post == null) {
-          throw ServerSideException(
-            message: "Post not found",
-          );
-        }
-
-        final existingLike = await PostLikes.db.findFirstRow(
-          session,
-          where: (t) =>
-              t.postId.equals(
-                postId,
-              ) &
-              t.ownerId.equals(
-                user.id!,
-              ),
-          transaction: transaction,
-        );
-
-        String engagementType;
-        if (existingLike != null) {
-          await PostLikes.db.deleteRow(
-            session,
-            existingLike,
-            transaction: transaction,
-          );
-          post.likesCount = post.likesCount! - 1;
-          engagementType = 'unlike';
-        } else {
-          await PostLikes.db.insertRow(
-            session,
-            PostLikes(
-              postId: postId,
-              ownerId: user.id!,
-              dateCreated: DateTime.now(),
-            ),
-            transaction: transaction,
-          );
-          post.likesCount = post.likesCount! + 1;
-          engagementType = 'like';
-
-          if (post.ownerId != user.id) {
-            unawaited(
-              NotificationEndpoint().sendNotification(
-                session,
-                receiverId: post.ownerId,
-                senderId: user.id!,
-                actionType: NotificationActionType.like,
-                targetType: post.postType == PostType.article
-                    ? NotificationTargetType.article
-                    : post.postType == PostType.poll
-                        ? NotificationTargetType.poll
-                        : post.postType == PostType.commentReply
-                            ? NotificationTargetType.reply
-                            : post.postType == PostType.comment
-                                ? NotificationTargetType.comment
-                                : NotificationTargetType.post,
-                targetId: post.id!,
-                senderAvatarUrl: user.userInfo!.imageUrl!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute:
-                    '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
-                body: _getNotificationBody(post.text ?? ''),
-                postId: post.id!,
-              ),
-            );
-            unawaited(
-              NotificationEndpoint().notifyPostSubscribers(
-                session,
-                postId: post.id!,
-                senderId: user.id!,
-                actionType: NotificationActionType.like,
-                targetType: post.postType == PostType.article
-                    ? NotificationTargetType.article
-                    : post.postType == PostType.poll
-                        ? NotificationTargetType.poll
-                        : post.postType == PostType.commentReply
-                            ? NotificationTargetType.reply
-                            : post.postType == PostType.comment
-                                ? NotificationTargetType.comment
-                                : NotificationTargetType.post,
-                targetId: post.id!,
-                senderAvatarUrl: user.userInfo!.imageUrl!,
-                senderName: getFullName(
-                  user.firstName!,
-                  user.middleName,
-                  user.lastName!,
-                ),
-                actionRoute:
-                    '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
-                body: _getNotificationBody(post.text ?? ''),
-              ),
-            );
-          }
-        }
-        await updatePost(session, post);
-        unawaited(
-          EngagementEvent.db.insertRow(
-            session,
-            EngagementEvent(
-              userId: user.id!,
-              postId: postId,
-              type: engagementType,
-              createdAt: DateTime.now(),
-            ),
-          ),
-        );
-      } catch (e, stackTrace) {
-        session.log(
-          'Error in togglePostLike: $e',
-          level: LogLevel.error,
-          exception: e,
-          stackTrace: stackTrace,
+      final post = await Post.db.findById(
+        session,
+        postId,
+        transaction: transaction,
+        include: Post.include(
+          owner: UserRecord.include(),
+        ),
+      );
+      if (post == null) {
+        throw ServerSideException(
+          message: "Post not found",
         );
       }
+
+      final existingLike = await PostLikes.db.findFirstRow(
+        session,
+        where: (t) =>
+            t.postId.equals(
+              postId,
+            ) &
+            t.ownerId.equals(
+              user.id!,
+            ),
+        transaction: transaction,
+      );
+
+      String engagementType;
+      if (existingLike != null) {
+        await PostLikes.db.deleteRow(
+          session,
+          existingLike,
+          transaction: transaction,
+        );
+        post.likesCount = post.likesCount! - 1;
+        engagementType = 'unlike';
+      } else {
+        await PostLikes.db.insertRow(
+          session,
+          PostLikes(
+            postId: postId,
+            ownerId: user.id!,
+            dateCreated: DateTime.now(),
+          ),
+          transaction: transaction,
+        );
+        post.likesCount = post.likesCount! + 1;
+        engagementType = 'like';
+
+        if (post.ownerId != user.id) {
+          unawaited(
+            NotificationEndpoint().sendNotification(
+              session,
+              receiverId: post.ownerId,
+              senderId: user.id!,
+              actionType: NotificationActionType.like,
+              targetType: post.postType == PostType.article
+                  ? NotificationTargetType.article
+                  : post.postType == PostType.poll
+                      ? NotificationTargetType.poll
+                      : post.postType == PostType.commentReply
+                          ? NotificationTargetType.reply
+                          : post.postType == PostType.comment
+                              ? NotificationTargetType.comment
+                              : NotificationTargetType.post,
+              targetId: post.id!,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
+              actionRoute:
+                  '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
+              body: _getNotificationBody(post.text ?? ''),
+              postId: post.id!,
+            ),
+          );
+          unawaited(
+            NotificationEndpoint().notifyPostSubscribers(
+              session,
+              postId: post.id!,
+              senderId: user.id!,
+              actionType: NotificationActionType.like,
+              targetType: post.postType == PostType.article
+                  ? NotificationTargetType.article
+                  : post.postType == PostType.poll
+                      ? NotificationTargetType.poll
+                      : post.postType == PostType.commentReply
+                          ? NotificationTargetType.reply
+                          : post.postType == PostType.comment
+                              ? NotificationTargetType.comment
+                              : NotificationTargetType.post,
+              targetId: post.id!,
+              senderAvatarUrl: user.userInfo!.imageUrl!,
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
+              actionRoute:
+                  '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
+              body: _getNotificationBody(post.text ?? ''),
+            ),
+          );
+        }
+      }
+      await updatePost(session, post);
+      unawaited(
+        EngagementEvent.db.insertRow(
+          session,
+          EngagementEvent(
+            userId: user.id!,
+            postId: postId,
+            type: engagementType,
+            createdAt: DateTime.now(),
+          ),
+        ),
+      );
     });
   }
 
+  /// Subscribes or unsubscribes the authenticated user from a post.
+  ///
+  /// Logs engagement and returns immediately.
   Future<void> subscribeToPost(Session session, int postId) async {
     return await session.db.transaction((transaction) async {
-      // Authenticate the user
       final user = await authUser(session);
 
       final post = await Post.db.findById(
         session,
         postId,
+        transaction: transaction,
       );
 
       if (post == null) {
@@ -1948,12 +2169,14 @@ class PostEndpoint extends Endpoint {
       final exists = await PostSubscription.db.findFirstRow(
         session,
         where: (t) => t.userId.equals(user.id!) & t.postId.equals(postId),
+        transaction: transaction,
       );
 
       if (exists != null) {
         await PostSubscription.db.deleteWhere(
           session,
           where: (t) => t.userId.equals(user.id!) & t.postId.equals(postId),
+          transaction: transaction,
         );
         unawaited(
           EngagementEvent.db.insertRow(
@@ -1975,6 +2198,7 @@ class PostEndpoint extends Endpoint {
             postId: postId,
             createdAt: DateTime.now(),
           ),
+          transaction: transaction,
         );
 
         unawaited(
@@ -1994,6 +2218,7 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Returns paginated bookmarks for the authenticated user with enrichment.
   Future<PostList> getUserPostBookmarks(
     Session session, {
     int limit = 50,
@@ -2019,6 +2244,7 @@ class PostEndpoint extends Endpoint {
             owner: UserRecord.include(
               userInfo: UserInfo.include(),
             ),
+            mediaAssets: MediaAsset.includeList(),
             project: Project.include(
               owner: UserRecord.include(
                 userInfo: UserInfo.include(),
@@ -2032,6 +2258,7 @@ class PostEndpoint extends Endpoint {
               owner: UserRecord.include(
                 userInfo: UserInfo.include(),
               ),
+              mediaAssets: MediaAsset.includeList(),
             ),
           ),
         ),
@@ -2049,6 +2276,8 @@ class PostEndpoint extends Endpoint {
     });
   }
 
+  /// Enriches posts with user-specific state (likes, bookmarks, reposts,
+  /// subscriptions, following, and selected poll option).
   @doNotGenerate
   Future<List<PostWithUserState>> _enrichPosts(
     Session session,
@@ -2135,12 +2364,14 @@ class PostEndpoint extends Endpoint {
         .toList();
   }
 
+  /// Marks a post as "not interested" for the authenticated user.
+  /// Logs an engagement event of type `notInterested`.
   Future<void> markNotInterested(
     Session session,
     int postId,
     String reason,
   ) async {
-    try {
+    return await session.db.transaction((transaction) async {
       final user = await authUser(session);
       final entry = PostNotInterested(
         userId: user.id!,
@@ -2151,6 +2382,7 @@ class PostEndpoint extends Endpoint {
       await PostNotInterested.db.insertRow(
         session,
         entry,
+        transaction: transaction,
       );
 
       unawaited(
@@ -2164,16 +2396,11 @@ class PostEndpoint extends Endpoint {
           ),
         ),
       );
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in markPostNotInterested: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-    }
+    });
   }
 
+  /// Stream of post count updates (likes, reposts, bookmarks, comments,
+  /// impressions) for a given post id.
   Stream<PostCounts> postCountsUpdates(
     Session session,
     int postId,
@@ -2188,6 +2415,7 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  /// Stream of poll count updates for a given poll id.
   Stream<PollCounts> pollCountsUpdates(Session session, int pollId) async* {
     final stream =
         session.messages.createStream<PollCounts>('poll_counts_$pollId');
@@ -2198,6 +2426,7 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  /// Builds `PollCounts` from a `Poll` row.
   PollCounts _buildPollCounts(Poll poll) {
     return PollCounts(
       pollId: poll.id!,
@@ -2213,6 +2442,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Loads poll counts for a given poll id, including its options.
   Future<PollCounts?> _loadCounts(Session session, int pollId,
       {Transaction? transaction}) async {
     final poll = await Poll.db.findById(
@@ -2225,11 +2455,13 @@ class PostEndpoint extends Endpoint {
     return _buildPollCounts(poll);
   }
 
+  /// Returns the authenticated `UserRecord` or throws if unauthenticated.
+  /// Uses a local priority cache to speed up repeated lookups.
   @doNotGenerate
   Future<UserRecord> authUser(
     Session session,
   ) async {
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(
         message: 'You must be logged in',
@@ -2264,6 +2496,8 @@ class PostEndpoint extends Endpoint {
     return userRecord;
   }
 
+  /// Validates that a post exists and is owned by the user.
+  /// Returns the post with `Article`/`Poll` relations included.
   @doNotGenerate
   Future<Post> validatePostOwnership(
     Session session,
@@ -2273,6 +2507,12 @@ class PostEndpoint extends Endpoint {
     final post = await Post.db.findById(
       session,
       postId,
+      include: Post.include(
+        article: Article.include(),
+        poll: Poll.include(
+          options: PollOption.includeList(),
+        ),
+      ),
     );
     if (post == null) {
       throw ServerSideException(
@@ -2287,6 +2527,8 @@ class PostEndpoint extends Endpoint {
     return post;
   }
 
+  /// Validates that a comment or reply exists under the given parent post
+  /// and is owned by the user.
   @doNotGenerate
   Future<Post> validateCommentOwnership(
     Session session,
@@ -2318,6 +2560,7 @@ class PostEndpoint extends Endpoint {
     return comment;
   }
 
+  /// Persists changes to a post and emits real-time count updates.
   @doNotGenerate
   Future<void> updatePost(Session session, Post post) async {
     await Post.db.updateRow(session, post);
@@ -2327,6 +2570,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Persists changes to a poll and emits real-time count updates.
   @doNotGenerate
   Future<void> updatePoll(Session session, Poll poll,
       {Transaction? transaction}) async {
@@ -2341,6 +2585,7 @@ class PostEndpoint extends Endpoint {
     }
   }
 
+  /// Builds `PostCounts` from a `Post` row.
   @doNotGenerate
   PostCounts _buildPostCounts(Post post) {
     return PostCounts(
@@ -2354,6 +2599,7 @@ class PostEndpoint extends Endpoint {
     );
   }
 
+  /// Concatenates a user's full name, including middle name if present.
   @doNotGenerate
   String getFullName(String firstName, String? middleName, String lastName) {
     if (middleName == null || middleName.trim().isEmpty) {
@@ -2362,6 +2608,7 @@ class PostEndpoint extends Endpoint {
     return '$firstName $middleName $lastName';
   }
 
+  /// Builds an optional notification body from text, truncating to 150 chars.
   @doNotGenerate
   String? _getNotificationBody(String text) {
     if (text.isEmpty) return null;

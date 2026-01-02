@@ -14,8 +14,9 @@ Client client(Ref ref) {
     connectionTimeout: const Duration(
       seconds: 120,
     ),
-    authenticationKeyManager: FlutterAuthenticationKeyManager(),
-  )..connectivityMonitor = FlutterConnectivityMonitor();
+  )
+    ..connectivityMonitor = FlutterConnectivityMonitor()
+    ..authKeyProvider = FlutterAuthenticationKeyManager();
 }
 
 @Riverpod(keepAlive: true)

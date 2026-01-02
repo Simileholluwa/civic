@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class ImpressionLog implements _i1.SerializableModel {
   ImpressionLog._({
@@ -37,10 +39,12 @@ abstract class ImpressionLog implements _i1.SerializableModel {
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
-      postIds:
-          (jsonSerialization['postIds'] as List).map((e) => e as int).toList(),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
+      postIds: _i3.Protocol().deserialize<List<int>>(
+        jsonSerialization['postIds'],
+      ),
       page: jsonSerialization['page'] as int,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -77,6 +81,7 @@ abstract class ImpressionLog implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ImpressionLog',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -103,13 +108,13 @@ class _ImpressionLogImpl extends ImpressionLog {
     required int page,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          postIds: postIds,
-          page: page,
-          createdAt: createdAt,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         postIds: postIds,
+         page: page,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [ImpressionLog]
   /// with some or all fields replaced by the given arguments.

@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -20,12 +21,12 @@ abstract class PostCounts implements _i1.SerializableModel {
     int? commentCount,
     int? impressionsCount,
     DateTime? lastImpressionAt,
-  })  : likesCount = likesCount ?? 0,
-        repostCount = repostCount ?? 0,
-        bookmarksCount = bookmarksCount ?? 0,
-        commentCount = commentCount ?? 0,
-        impressionsCount = impressionsCount ?? 0,
-        lastImpressionAt = lastImpressionAt ?? DateTime.now();
+  }) : likesCount = likesCount ?? 0,
+       repostCount = repostCount ?? 0,
+       bookmarksCount = bookmarksCount ?? 0,
+       commentCount = commentCount ?? 0,
+       impressionsCount = impressionsCount ?? 0,
+       lastImpressionAt = lastImpressionAt ?? DateTime.now();
 
   factory PostCounts({
     required int postId,
@@ -48,7 +49,8 @@ abstract class PostCounts implements _i1.SerializableModel {
       lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['lastImpressionAt']),
+              jsonSerialization['lastImpressionAt'],
+            ),
     );
   }
 
@@ -81,6 +83,7 @@ abstract class PostCounts implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostCounts',
       'postId': postId,
       if (likesCount != null) 'likesCount': likesCount,
       if (repostCount != null) 'repostCount': repostCount,
@@ -110,14 +113,14 @@ class _PostCountsImpl extends PostCounts {
     int? impressionsCount,
     DateTime? lastImpressionAt,
   }) : super._(
-          postId: postId,
-          likesCount: likesCount,
-          repostCount: repostCount,
-          bookmarksCount: bookmarksCount,
-          commentCount: commentCount,
-          impressionsCount: impressionsCount,
-          lastImpressionAt: lastImpressionAt,
-        );
+         postId: postId,
+         likesCount: likesCount,
+         repostCount: repostCount,
+         bookmarksCount: bookmarksCount,
+         commentCount: commentCount,
+         impressionsCount: impressionsCount,
+         lastImpressionAt: lastImpressionAt,
+       );
 
   /// Returns a shallow copy of this [PostCounts]
   /// with some or all fields replaced by the given arguments.
@@ -136,11 +139,13 @@ class _PostCountsImpl extends PostCounts {
       postId: postId ?? this.postId,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       repostCount: repostCount is int? ? repostCount : this.repostCount,
-      bookmarksCount:
-          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
+      bookmarksCount: bookmarksCount is int?
+          ? bookmarksCount
+          : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
-      impressionsCount:
-          impressionsCount is int? ? impressionsCount : this.impressionsCount,
+      impressionsCount: impressionsCount is int?
+          ? impressionsCount
+          : this.impressionsCount,
       lastImpressionAt: lastImpressionAt is DateTime?
           ? lastImpressionAt
           : this.lastImpressionAt,

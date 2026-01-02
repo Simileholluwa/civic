@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../post/post_with_user_state.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class PostList implements _i1.SerializableModel {
   PostList._({
@@ -33,10 +35,9 @@ abstract class PostList implements _i1.SerializableModel {
 
   factory PostList.fromJson(Map<String, dynamic> jsonSerialization) {
     return PostList(
-      results: (jsonSerialization['results'] as List)
-          .map((e) =>
-              _i2.PostWithUserState.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      results: _i3.Protocol().deserialize<List<_i2.PostWithUserState>>(
+        jsonSerialization['results'],
+      ),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
       numPages: jsonSerialization['numPages'] as int,
@@ -71,6 +72,7 @@ abstract class PostList implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostList',
       'results': results.toJson(valueToJson: (v) => v.toJson()),
       'count': count,
       'page': page,
@@ -95,13 +97,13 @@ class _PostListImpl extends PostList {
     required int limit,
     required bool canLoadMore,
   }) : super._(
-          results: results,
-          count: count,
-          page: page,
-          numPages: numPages,
-          limit: limit,
-          canLoadMore: canLoadMore,
-        );
+         results: results,
+         count: count,
+         page: page,
+         numPages: numPages,
+         limit: limit,
+         canLoadMore: canLoadMore,
+       );
 
   /// Returns a shallow copy of this [PostList]
   /// with some or all fields replaced by the given arguments.

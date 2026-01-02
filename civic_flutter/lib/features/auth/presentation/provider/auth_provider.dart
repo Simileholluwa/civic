@@ -276,7 +276,7 @@ class Auth extends _$Auth {
       firstName: state.firstName,
       lastName: state.lastName,
       middleName: state.middleName,
-      politicalStatus: PoliticalStatus.fromJson(state.politicalStatus.index),
+      politicalStatus: PoliticalStatus.fromJson(state.politicalStatus.name),
     );
     final result = await validateAccount(
       ValidateCreateAccountParams(

@@ -19,8 +19,20 @@ class PostCardBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasText = post.text != null && post.text!.isNotEmpty;
-    final hasVideo = post.videoUrl != null && post.videoUrl!.isNotEmpty;
-    final hasImage = post.imageUrls != null && post.imageUrls!.isNotEmpty;
+    final assets = post.mediaAssets ?? const <MediaAsset>[];
+    final imageAssetUrls = assets
+        .where((a) => a.kind == MediaKind.image)
+        .map((a) => a.publicUrl)
+        .toList(growable: false);
+    String? videoAssetUrl;
+    for (final a in assets) {
+      if (a.kind == MediaKind.video && (a.publicUrl ?? '').isNotEmpty) {
+        videoAssetUrl = a.publicUrl;
+        break;
+      }
+    }
+    final hasVideo = videoAssetUrl != null && videoAssetUrl.isNotEmpty;
+    final hasImage = imageAssetUrls.isNotEmpty;
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +59,7 @@ class PostCardBuild extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: VideoPost(
-              videoUrl: post.videoUrl!,
+              videoUrl: videoAssetUrl,
             ),
           ),
       ],

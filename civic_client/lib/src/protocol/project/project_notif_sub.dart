@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class ProjectSubscription implements _i1.SerializableModel {
   ProjectSubscription._({
@@ -38,13 +40,15 @@ abstract class ProjectSubscription implements _i1.SerializableModel {
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
       projectId: jsonSerialization['projectId'] as int,
       project: jsonSerialization['project'] == null
           ? null
-          : _i3.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.Project>(
+              jsonSerialization['project'],
+            ),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -80,6 +84,7 @@ abstract class ProjectSubscription implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectSubscription',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -106,13 +111,13 @@ class _ProjectSubscriptionImpl extends ProjectSubscription {
     _i3.Project? project,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          projectId: projectId,
-          project: project,
-          createdAt: createdAt,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         projectId: projectId,
+         project: project,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [ProjectSubscription]
   /// with some or all fields replaced by the given arguments.

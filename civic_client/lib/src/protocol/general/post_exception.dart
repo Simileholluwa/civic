@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -44,6 +45,7 @@ abstract class ServerSideException
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ServerSideException',
       'message': message,
       if (action != null) 'action': action,
     };
@@ -51,7 +53,7 @@ abstract class ServerSideException
 
   @override
   String toString() {
-    return _i1.SerializationManager.encode(this);
+    return 'ServerSideException(message: $message, action: $action)';
   }
 }
 
@@ -62,9 +64,9 @@ class _ServerSideExceptionImpl extends ServerSideException {
     required String message,
     String? action,
   }) : super._(
-          message: message,
-          action: action,
-        );
+         message: message,
+         action: action,
+       );
 
   /// Returns a shallow copy of this [ServerSideException]
   /// with some or all fields replaced by the given arguments.

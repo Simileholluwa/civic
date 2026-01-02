@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:dio/dio.dart';
 import 'package:serverpod/serverpod.dart';
-import 'package:serverpod_auth_server/module.dart';
 import 'package:googleapis_auth/auth_io.dart' as google_auth;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class NotificationEndpoint extends Endpoint {
   static google_auth.AutoRefreshingAuthClient? _fcmAuthClient;
@@ -654,6 +654,15 @@ class NotificationEndpoint extends Endpoint {
               orderDescending: false,
             ),
           ),
+          parent: Post.include(
+            article: Article.include(),
+            poll: Poll.include(
+              options: PollOption.includeList(
+                orderBy: (p0) => p0.id,
+                orderDescending: false,
+              ),
+            ),
+          ),
         ),
         project: Project.include(),
       ),
@@ -993,7 +1002,7 @@ class NotificationEndpoint extends Endpoint {
   Future<UserRecord> authUser(
     Session session,
   ) async {
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(
         message: 'You must be logged in',

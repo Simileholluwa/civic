@@ -40,8 +40,13 @@ class PostDetailOptions extends ConsumerWidget {
     final postCardNotifier = ref.read(feedProv.notifier);
     final userId = ref.read(localStorageProvider).getInt('userId');
     final isOwner = post.ownerId == userId;
-    final canEdit =
-        isOwner && DateTime.now().difference(post.dateCreated!).inMinutes <= 30;
+    final canEdit = isOwner &&
+        DateTime.now()
+                .difference(
+                  post.dateCreated!,
+                )
+                .inMinutes <=
+            1000000000;
 
     return RepaintBoundary(
       child: Row(

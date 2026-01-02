@@ -69,6 +69,7 @@ class NotificationsHelper {
     NotificationActionType.vet: Iconsax.medal_star5,
     NotificationActionType.repost: Iconsax.repeate_music5,
     NotificationActionType.reply: Iconsax.message_add5,
+    NotificationActionType.vote: Iconsax.chart_success5,
   };
 
   static Widget notifIcon(
@@ -97,6 +98,7 @@ class NotificationsHelper {
     NotificationActionType.vet: Colors.indigo,
     NotificationActionType.repost: Colors.brown,
     NotificationActionType.reply: Colors.cyan,
+    NotificationActionType.vote: Colors.amber,
   };
 
   static Color getIconColor(

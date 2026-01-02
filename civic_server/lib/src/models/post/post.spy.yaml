@@ -4,8 +4,7 @@ fields:
     owner: UserRecord?, relation(onDelete=Cascade)
     postType: PostType?
     text: String?
-    imageUrls: List<String>?
-    videoUrl: String?, default=''
+    mediaAssets: List<MediaAsset>?, relation(name=post_media_assets)
     taggedUsers: List<UserRecord>?
     locations: List<AWSPlaces>?
     mentions: List<UserRecord>?

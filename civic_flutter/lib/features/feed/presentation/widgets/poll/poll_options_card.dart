@@ -86,7 +86,7 @@ class PollOptionsCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(
                 10,
               ),
-              color: highestVote == numberOfOptionVotes
+              color: highestVote == numberOfOptionVotes && highestVote != 0
                   ? Theme.of(context).primaryColor.withAlpha(50)
                   : null,
               border: Border.all(

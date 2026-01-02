@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../general/aws_places.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class Project implements _i1.SerializableModel {
   Project._({
@@ -48,13 +50,13 @@ abstract class Project implements _i1.SerializableModel {
     this.overAllCategoryRating,
     this.overallFundingRating,
     bool? isDeleted,
-  })  : dateCreated = dateCreated ?? DateTime.now(),
-        likesCount = likesCount ?? 0,
-        reviewsCount = reviewsCount ?? 0,
-        bookmarksCount = bookmarksCount ?? 0,
-        vettingsCount = vettingsCount ?? 0,
-        quotesCount = quotesCount ?? 0,
-        isDeleted = isDeleted ?? false;
+  }) : dateCreated = dateCreated ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       reviewsCount = reviewsCount ?? 0,
+       bookmarksCount = bookmarksCount ?? 0,
+       vettingsCount = vettingsCount ?? 0,
+       quotesCount = quotesCount ?? 0,
+       isDeleted = isDeleted ?? false;
 
   factory Project({
     int? id,
@@ -98,8 +100,9 @@ abstract class Project implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       title: jsonSerialization['title'] as String?,
       description: jsonSerialization['description'] as String?,
       projectCategory: jsonSerialization['projectCategory'] as String?,
@@ -116,23 +119,31 @@ abstract class Project implements _i1.SerializableModel {
       projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
       fundingNote: jsonSerialization['fundingNote'] as String?,
       projectImageAttachments:
-          (jsonSerialization['projectImageAttachments'] as List?)
-              ?.map((e) => e as String)
-              .toList(),
-      projectPDFAttachments:
-          (jsonSerialization['projectPDFAttachments'] as List?)
-              ?.map((e) => e as String)
-              .toList(),
-      physicalLocations: (jsonSerialization['physicalLocations'] as List?)
-          ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      virtualLocations: (jsonSerialization['virtualLocations'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+          jsonSerialization['projectImageAttachments'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['projectImageAttachments'],
+            ),
+      projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['projectPDFAttachments'],
+            ),
+      physicalLocations: jsonSerialization['physicalLocations'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<_i3.AWSPlaces>>(
+              jsonSerialization['physicalLocations'],
+            ),
+      virtualLocations: jsonSerialization['virtualLocations'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['virtualLocations'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
@@ -146,14 +157,14 @@ abstract class Project implements _i1.SerializableModel {
           (jsonSerialization['overallLocationRating'] as num?)?.toDouble(),
       overallDescriptionRating:
           (jsonSerialization['overallDescriptionRating'] as num?)?.toDouble(),
-      overallDatesRating:
-          (jsonSerialization['overallDatesRating'] as num?)?.toDouble(),
+      overallDatesRating: (jsonSerialization['overallDatesRating'] as num?)
+          ?.toDouble(),
       overallAttachmentsRating:
           (jsonSerialization['overallAttachmentsRating'] as num?)?.toDouble(),
       overAllCategoryRating:
           (jsonSerialization['overAllCategoryRating'] as num?)?.toDouble(),
-      overallFundingRating:
-          (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
+      overallFundingRating: (jsonSerialization['overallFundingRating'] as num?)
+          ?.toDouble(),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
@@ -268,6 +279,7 @@ abstract class Project implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Project',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -287,8 +299,9 @@ abstract class Project implements _i1.SerializableModel {
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
-        'physicalLocations':
-            physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
+        'physicalLocations': physicalLocations?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
@@ -358,40 +371,40 @@ class _ProjectImpl extends Project {
     double? overallFundingRating,
     bool? isDeleted,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          title: title,
-          description: description,
-          projectCategory: projectCategory,
-          projectSubCategory: projectSubCategory,
-          startDate: startDate,
-          endDate: endDate,
-          currency: currency,
-          fundingCategory: fundingCategory,
-          fundingSubCategory: fundingSubCategory,
-          projectCost: projectCost,
-          fundingNote: fundingNote,
-          projectImageAttachments: projectImageAttachments,
-          projectPDFAttachments: projectPDFAttachments,
-          physicalLocations: physicalLocations,
-          virtualLocations: virtualLocations,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          likesCount: likesCount,
-          reviewsCount: reviewsCount,
-          bookmarksCount: bookmarksCount,
-          vettingsCount: vettingsCount,
-          quotesCount: quotesCount,
-          overallRating: overallRating,
-          overallLocationRating: overallLocationRating,
-          overallDescriptionRating: overallDescriptionRating,
-          overallDatesRating: overallDatesRating,
-          overallAttachmentsRating: overallAttachmentsRating,
-          overAllCategoryRating: overAllCategoryRating,
-          overallFundingRating: overallFundingRating,
-          isDeleted: isDeleted,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         title: title,
+         description: description,
+         projectCategory: projectCategory,
+         projectSubCategory: projectSubCategory,
+         startDate: startDate,
+         endDate: endDate,
+         currency: currency,
+         fundingCategory: fundingCategory,
+         fundingSubCategory: fundingSubCategory,
+         projectCost: projectCost,
+         fundingNote: fundingNote,
+         projectImageAttachments: projectImageAttachments,
+         projectPDFAttachments: projectPDFAttachments,
+         physicalLocations: physicalLocations,
+         virtualLocations: virtualLocations,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         likesCount: likesCount,
+         reviewsCount: reviewsCount,
+         bookmarksCount: bookmarksCount,
+         vettingsCount: vettingsCount,
+         quotesCount: quotesCount,
+         overallRating: overallRating,
+         overallLocationRating: overallLocationRating,
+         overallDescriptionRating: overallDescriptionRating,
+         overallDatesRating: overallDatesRating,
+         overallAttachmentsRating: overallAttachmentsRating,
+         overAllCategoryRating: overAllCategoryRating,
+         overallFundingRating: overallFundingRating,
+         isDeleted: isDeleted,
+       );
 
   /// Returns a shallow copy of this [Project]
   /// with some or all fields replaced by the given arguments.
@@ -438,16 +451,18 @@ class _ProjectImpl extends Project {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       title: title is String? ? title : this.title,
       description: description is String? ? description : this.description,
-      projectCategory:
-          projectCategory is String? ? projectCategory : this.projectCategory,
+      projectCategory: projectCategory is String?
+          ? projectCategory
+          : this.projectCategory,
       projectSubCategory: projectSubCategory is String?
           ? projectSubCategory
           : this.projectSubCategory,
       startDate: startDate is DateTime? ? startDate : this.startDate,
       endDate: endDate is DateTime? ? endDate : this.endDate,
       currency: currency is String? ? currency : this.currency,
-      fundingCategory:
-          fundingCategory is String? ? fundingCategory : this.fundingCategory,
+      fundingCategory: fundingCategory is String?
+          ? fundingCategory
+          : this.fundingCategory,
       fundingSubCategory: fundingSubCategory is String?
           ? fundingSubCategory
           : this.fundingSubCategory,
@@ -469,12 +484,14 @@ class _ProjectImpl extends Project {
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
-      bookmarksCount:
-          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
+      bookmarksCount: bookmarksCount is int?
+          ? bookmarksCount
+          : this.bookmarksCount,
       vettingsCount: vettingsCount is int? ? vettingsCount : this.vettingsCount,
       quotesCount: quotesCount is int? ? quotesCount : this.quotesCount,
-      overallRating:
-          overallRating is double? ? overallRating : this.overallRating,
+      overallRating: overallRating is double?
+          ? overallRating
+          : this.overallRating,
       overallLocationRating: overallLocationRating is double?
           ? overallLocationRating
           : this.overallLocationRating,

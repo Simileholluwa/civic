@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class ImpressionLog
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -40,10 +42,12 @@ abstract class ImpressionLog
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
-      postIds:
-          (jsonSerialization['postIds'] as List).map((e) => e as int).toList(),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
+      postIds: _i3.Protocol().deserialize<List<int>>(
+        jsonSerialization['postIds'],
+      ),
       page: jsonSerialization['page'] as int,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -85,6 +89,7 @@ abstract class ImpressionLog
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ImpressionLog',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -97,6 +102,7 @@ abstract class ImpressionLog
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ImpressionLog',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJsonForProtocol(),
@@ -147,13 +153,13 @@ class _ImpressionLogImpl extends ImpressionLog {
     required int page,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          postIds: postIds,
-          page: page,
-          createdAt: createdAt,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         postIds: postIds,
+         page: page,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [ImpressionLog]
   /// with some or all fields replaced by the given arguments.
@@ -178,14 +184,41 @@ class _ImpressionLogImpl extends ImpressionLog {
   }
 }
 
+class ImpressionLogUpdateTable extends _i1.UpdateTable<ImpressionLogTable> {
+  ImpressionLogUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> userId(int value) => _i1.ColumnValue(
+    table.userId,
+    value,
+  );
+
+  _i1.ColumnValue<List<int>, List<int>> postIds(List<int> value) =>
+      _i1.ColumnValue(
+        table.postIds,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> page(int value) => _i1.ColumnValue(
+    table.page,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> createdAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.createdAt,
+        value,
+      );
+}
+
 class ImpressionLogTable extends _i1.Table<int?> {
   ImpressionLogTable({super.tableRelation})
-      : super(tableName: 'impression_log') {
+    : super(tableName: 'impression_log') {
+    updateTable = ImpressionLogUpdateTable(this);
     userId = _i1.ColumnInt(
       'userId',
       this,
     );
-    postIds = _i1.ColumnSerializable(
+    postIds = _i1.ColumnSerializable<List<int>>(
       'postIds',
       this,
     );
@@ -200,11 +233,13 @@ class ImpressionLogTable extends _i1.Table<int?> {
     );
   }
 
+  late final ImpressionLogUpdateTable updateTable;
+
   late final _i1.ColumnInt userId;
 
   _i2.UserRecordTable? _user;
 
-  late final _i1.ColumnSerializable postIds;
+  late final _i1.ColumnSerializable<List<int>> postIds;
 
   late final _i1.ColumnInt page;
 
@@ -225,12 +260,12 @@ class ImpressionLogTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        userId,
-        postIds,
-        page,
-        createdAt,
-      ];
+    id,
+    userId,
+    postIds,
+    page,
+    createdAt,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -438,6 +473,46 @@ class ImpressionLogRepository {
     return session.db.updateRow<ImpressionLog>(
       row,
       columns: columns?.call(ImpressionLog.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [ImpressionLog] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ImpressionLog?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ImpressionLogUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ImpressionLog>(
+      id,
+      columnValues: columnValues(ImpressionLog.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ImpressionLog]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ImpressionLog>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ImpressionLogUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<ImpressionLogTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ImpressionLogTable>? orderBy,
+    _i1.OrderByListBuilder<ImpressionLogTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ImpressionLog>(
+      columnValues: columnValues(ImpressionLog.t.updateTable),
+      where: where(ImpressionLog.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ImpressionLog.t),
+      orderByList: orderByList?.call(ImpressionLog.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

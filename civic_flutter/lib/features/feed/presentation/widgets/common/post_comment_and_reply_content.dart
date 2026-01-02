@@ -29,9 +29,13 @@ class PostCommentAndReplyContent extends StatelessWidget {
     final replyOrComment = postWithUserState.post;
     final text = replyOrComment.text;
     final hasText = text != null && text.isNotEmpty;
-    final imageUrls = replyOrComment.imageUrls;
-    final hasImages = imageUrls?.isNotEmpty ?? false;
-    final singleImage = hasImages && imageUrls!.length == 1;
+    final assets = replyOrComment.mediaAssets ?? const <MediaAsset>[];
+    final imageUrls = assets
+        .where((a) => a.kind == MediaKind.image)
+        .map((a) => a.publicUrl)
+        .toList(growable: false);
+    final hasImages = imageUrls.isNotEmpty;
+    final singleImage = hasImages && imageUrls.length == 1;
     final taggedUsers = replyOrComment.taggedUsers ?? [];
     final locations = replyOrComment.locations ?? [];
     final hasTags = taggedUsers.isNotEmpty;
@@ -86,7 +90,7 @@ class PostCommentAndReplyContent extends StatelessWidget {
                       useMargin: false,
                     )
                   : ContentMultipleCachedImage(
-                      imageUrls: imageUrls!,
+                      imageUrls: imageUrls,
                       useMargin: false,
                     ),
             ),

@@ -7,17 +7,20 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../post/post_type_enums.dart' as _i3;
-import '../general/aws_places.dart' as _i4;
-import '../post/posts_hashtags.dart' as _i5;
-import '../poll/poll.dart' as _i6;
-import '../article/article.dart' as _i7;
-import '../project/project.dart' as _i8;
-import '../post/post.dart' as _i9;
+import '../media/media_asset.dart' as _i4;
+import '../general/aws_places.dart' as _i5;
+import '../post/posts_hashtags.dart' as _i6;
+import '../poll/poll.dart' as _i7;
+import '../article/article.dart' as _i8;
+import '../project/project.dart' as _i9;
+import '../post/post.dart' as _i10;
+import 'package:civic_client/src/protocol/protocol.dart' as _i11;
 
 abstract class Post implements _i1.SerializableModel {
   Post._({
@@ -26,8 +29,7 @@ abstract class Post implements _i1.SerializableModel {
     this.owner,
     this.postType,
     this.text,
-    this.imageUrls,
-    String? videoUrl,
+    this.mediaAssets,
     this.taggedUsers,
     this.locations,
     this.mentions,
@@ -50,14 +52,13 @@ abstract class Post implements _i1.SerializableModel {
     bool? isDeleted,
     int? impressionsCount,
     this.lastImpressionAt,
-  })  : videoUrl = videoUrl ?? '',
-        dateCreated = dateCreated ?? DateTime.now(),
-        likesCount = likesCount ?? 0,
-        repostCount = repostCount ?? 0,
-        bookmarksCount = bookmarksCount ?? 0,
-        commentCount = commentCount ?? 0,
-        isDeleted = isDeleted ?? false,
-        impressionsCount = impressionsCount ?? 0;
+  }) : dateCreated = dateCreated ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       repostCount = repostCount ?? 0,
+       bookmarksCount = bookmarksCount ?? 0,
+       commentCount = commentCount ?? 0,
+       isDeleted = isDeleted ?? false,
+       impressionsCount = impressionsCount ?? 0;
 
   factory Post({
     int? id,
@@ -65,27 +66,26 @@ abstract class Post implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
     int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
@@ -97,38 +97,51 @@ abstract class Post implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       postType: jsonSerialization['postType'] == null
           ? null
-          : _i3.PostType.fromJson((jsonSerialization['postType'] as int)),
+          : _i3.PostType.fromJson((jsonSerialization['postType'] as String)),
       text: jsonSerialization['text'] as String?,
-      imageUrls: (jsonSerialization['imageUrls'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
-      videoUrl: jsonSerialization['videoUrl'] as String?,
-      taggedUsers: (jsonSerialization['taggedUsers'] as List?)
-          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      locations: (jsonSerialization['locations'] as List?)
-          ?.map((e) => _i4.AWSPlaces.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      mentions: (jsonSerialization['mentions'] as List?)
-          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      tags: (jsonSerialization['tags'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+      mediaAssets: jsonSerialization['mediaAssets'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i4.MediaAsset>>(
+              jsonSerialization['mediaAssets'],
+            ),
+      taggedUsers: jsonSerialization['taggedUsers'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i2.UserRecord>>(
+              jsonSerialization['taggedUsers'],
+            ),
+      locations: jsonSerialization['locations'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i5.AWSPlaces>>(
+              jsonSerialization['locations'],
+            ),
+      mentions: jsonSerialization['mentions'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i2.UserRecord>>(
+              jsonSerialization['mentions'],
+            ),
+      tags: jsonSerialization['tags'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<String>>(
+              jsonSerialization['tags'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      hashtags: jsonSerialization['hashtags'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i6.PostsHashtags>>(
+              jsonSerialization['hashtags'],
+            ),
       likesCount: jsonSerialization['likesCount'] as int?,
       repostCount: jsonSerialization['repostCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
@@ -136,29 +149,30 @@ abstract class Post implements _i1.SerializableModel {
       pollId: jsonSerialization['pollId'] as int?,
       poll: jsonSerialization['poll'] == null
           ? null
-          : _i6.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i7.Poll>(jsonSerialization['poll']),
       articleId: jsonSerialization['articleId'] as int?,
       article: jsonSerialization['article'] == null
           ? null
-          : _i7.Article.fromJson(
-              (jsonSerialization['article'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i8.Article>(
+              jsonSerialization['article'],
+            ),
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
-          : _i8.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i9.Project>(
+              jsonSerialization['project'],
+            ),
       parentId: jsonSerialization['parentId'] as int?,
       parent: jsonSerialization['parent'] == null
           ? null
-          : _i9.Post.fromJson(
-              (jsonSerialization['parent'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i10.Post>(jsonSerialization['parent']),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
       impressionsCount: jsonSerialization['impressionsCount'] as int?,
       lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['lastImpressionAt']),
+              jsonSerialization['lastImpressionAt'],
+            ),
     );
   }
 
@@ -175,13 +189,11 @@ abstract class Post implements _i1.SerializableModel {
 
   String? text;
 
-  List<String>? imageUrls;
-
-  String? videoUrl;
+  List<_i4.MediaAsset>? mediaAssets;
 
   List<_i2.UserRecord>? taggedUsers;
 
-  List<_i4.AWSPlaces>? locations;
+  List<_i5.AWSPlaces>? locations;
 
   List<_i2.UserRecord>? mentions;
 
@@ -191,7 +203,7 @@ abstract class Post implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  List<_i5.PostsHashtags>? hashtags;
+  List<_i6.PostsHashtags>? hashtags;
 
   int? likesCount;
 
@@ -203,19 +215,19 @@ abstract class Post implements _i1.SerializableModel {
 
   int? pollId;
 
-  _i6.Poll? poll;
+  _i7.Poll? poll;
 
   int? articleId;
 
-  _i7.Article? article;
+  _i8.Article? article;
 
   int? projectId;
 
-  _i8.Project? project;
+  _i9.Project? project;
 
   int? parentId;
 
-  _i9.Post? parent;
+  _i10.Post? parent;
 
   bool? isDeleted;
 
@@ -232,27 +244,26 @@ abstract class Post implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
     int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
@@ -260,13 +271,14 @@ abstract class Post implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Post',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       if (postType != null) 'postType': postType?.toJson(),
       if (text != null) 'text': text,
-      if (imageUrls != null) 'imageUrls': imageUrls?.toJson(),
-      if (videoUrl != null) 'videoUrl': videoUrl,
+      if (mediaAssets != null)
+        'mediaAssets': mediaAssets?.toJson(valueToJson: (v) => v.toJson()),
       if (taggedUsers != null)
         'taggedUsers': taggedUsers?.toJson(valueToJson: (v) => v.toJson()),
       if (locations != null)
@@ -312,61 +324,59 @@ class _PostImpl extends Post {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
     int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          postType: postType,
-          text: text,
-          imageUrls: imageUrls,
-          videoUrl: videoUrl,
-          taggedUsers: taggedUsers,
-          locations: locations,
-          mentions: mentions,
-          tags: tags,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          hashtags: hashtags,
-          likesCount: likesCount,
-          repostCount: repostCount,
-          bookmarksCount: bookmarksCount,
-          commentCount: commentCount,
-          pollId: pollId,
-          poll: poll,
-          articleId: articleId,
-          article: article,
-          projectId: projectId,
-          project: project,
-          parentId: parentId,
-          parent: parent,
-          isDeleted: isDeleted,
-          impressionsCount: impressionsCount,
-          lastImpressionAt: lastImpressionAt,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         postType: postType,
+         text: text,
+         mediaAssets: mediaAssets,
+         taggedUsers: taggedUsers,
+         locations: locations,
+         mentions: mentions,
+         tags: tags,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         hashtags: hashtags,
+         likesCount: likesCount,
+         repostCount: repostCount,
+         bookmarksCount: bookmarksCount,
+         commentCount: commentCount,
+         pollId: pollId,
+         poll: poll,
+         articleId: articleId,
+         article: article,
+         projectId: projectId,
+         project: project,
+         parentId: parentId,
+         parent: parent,
+         isDeleted: isDeleted,
+         impressionsCount: impressionsCount,
+         lastImpressionAt: lastImpressionAt,
+       );
 
   /// Returns a shallow copy of this [Post]
   /// with some or all fields replaced by the given arguments.
@@ -378,8 +388,7 @@ class _PostImpl extends Post {
     Object? owner = _Undefined,
     Object? postType = _Undefined,
     Object? text = _Undefined,
-    Object? imageUrls = _Undefined,
-    Object? videoUrl = _Undefined,
+    Object? mediaAssets = _Undefined,
     Object? taggedUsers = _Undefined,
     Object? locations = _Undefined,
     Object? mentions = _Undefined,
@@ -409,14 +418,13 @@ class _PostImpl extends Post {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postType: postType is _i3.PostType? ? postType : this.postType,
       text: text is String? ? text : this.text,
-      imageUrls: imageUrls is List<String>?
-          ? imageUrls
-          : this.imageUrls?.map((e0) => e0).toList(),
-      videoUrl: videoUrl is String? ? videoUrl : this.videoUrl,
+      mediaAssets: mediaAssets is List<_i4.MediaAsset>?
+          ? mediaAssets
+          : this.mediaAssets?.map((e0) => e0.copyWith()).toList(),
       taggedUsers: taggedUsers is List<_i2.UserRecord>?
           ? taggedUsers
           : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
-      locations: locations is List<_i4.AWSPlaces>?
+      locations: locations is List<_i5.AWSPlaces>?
           ? locations
           : this.locations?.map((e0) => e0.copyWith()).toList(),
       mentions: mentions is List<_i2.UserRecord>?
@@ -425,25 +433,27 @@ class _PostImpl extends Post {
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      hashtags: hashtags is List<_i5.PostsHashtags>?
+      hashtags: hashtags is List<_i6.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       repostCount: repostCount is int? ? repostCount : this.repostCount,
-      bookmarksCount:
-          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
+      bookmarksCount: bookmarksCount is int?
+          ? bookmarksCount
+          : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
       pollId: pollId is int? ? pollId : this.pollId,
-      poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
+      poll: poll is _i7.Poll? ? poll : this.poll?.copyWith(),
       articleId: articleId is int? ? articleId : this.articleId,
-      article: article is _i7.Article? ? article : this.article?.copyWith(),
+      article: article is _i8.Article? ? article : this.article?.copyWith(),
       projectId: projectId is int? ? projectId : this.projectId,
-      project: project is _i8.Project? ? project : this.project?.copyWith(),
+      project: project is _i9.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
-      parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
+      parent: parent is _i10.Post? ? parent : this.parent?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
-      impressionsCount:
-          impressionsCount is int? ? impressionsCount : this.impressionsCount,
+      impressionsCount: impressionsCount is int?
+          ? impressionsCount
+          : this.impressionsCount,
       lastImpressionAt: lastImpressionAt is DateTime?
           ? lastImpressionAt
           : this.lastImpressionAt,

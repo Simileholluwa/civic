@@ -62,6 +62,7 @@ class PaginatedPostList extends _$PaginatedPostList {
         }
         return p;
       });
+      return;
     }
     final updatedFirst = [post, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];

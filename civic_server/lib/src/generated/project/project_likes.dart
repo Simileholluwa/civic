@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../project/project.dart' as _i2;
 import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class ProjectLikes
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -41,17 +43,20 @@ abstract class ProjectLikes
       projectId: jsonSerialization['projectId'] as int,
       project: jsonSerialization['project'] == null
           ? null
-          : _i2.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Project>(
+              jsonSerialization['project'],
+            ),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
     );
   }
 
@@ -89,6 +94,7 @@ abstract class ProjectLikes
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectLikes',
       if (id != null) 'id': id,
       'projectId': projectId,
       if (project != null) 'project': project?.toJson(),
@@ -101,6 +107,7 @@ abstract class ProjectLikes
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ProjectLikes',
       if (id != null) 'id': id,
       'projectId': projectId,
       if (project != null) 'project': project?.toJsonForProtocol(),
@@ -157,13 +164,13 @@ class _ProjectLikesImpl extends ProjectLikes {
     _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
-          id: id,
-          projectId: projectId,
-          project: project,
-          ownerId: ownerId,
-          owner: owner,
-          dateCreated: dateCreated,
-        );
+         id: id,
+         projectId: projectId,
+         project: project,
+         ownerId: ownerId,
+         owner: owner,
+         dateCreated: dateCreated,
+       );
 
   /// Returns a shallow copy of this [ProjectLikes]
   /// with some or all fields replaced by the given arguments.
@@ -188,8 +195,29 @@ class _ProjectLikesImpl extends ProjectLikes {
   }
 }
 
+class ProjectLikesUpdateTable extends _i1.UpdateTable<ProjectLikesTable> {
+  ProjectLikesUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> projectId(int value) => _i1.ColumnValue(
+    table.projectId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+}
+
 class ProjectLikesTable extends _i1.Table<int?> {
   ProjectLikesTable({super.tableRelation}) : super(tableName: 'project_likes') {
+    updateTable = ProjectLikesUpdateTable(this);
     projectId = _i1.ColumnInt(
       'projectId',
       this,
@@ -204,6 +232,8 @@ class ProjectLikesTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final ProjectLikesUpdateTable updateTable;
 
   late final _i1.ColumnInt projectId;
 
@@ -243,11 +273,11 @@ class ProjectLikesTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        projectId,
-        ownerId,
-        dateCreated,
-      ];
+    id,
+    projectId,
+    ownerId,
+    dateCreated,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -276,9 +306,9 @@ class ProjectLikesInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'project': _project,
-        'owner': _owner,
-      };
+    'project': _project,
+    'owner': _owner,
+  };
 
   @override
   _i1.Table<int?> get table => ProjectLikes.t;
@@ -467,6 +497,46 @@ class ProjectLikesRepository {
     return session.db.updateRow<ProjectLikes>(
       row,
       columns: columns?.call(ProjectLikes.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [ProjectLikes] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ProjectLikes?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectLikesUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ProjectLikes>(
+      id,
+      columnValues: columnValues(ProjectLikes.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ProjectLikes]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ProjectLikes>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectLikesUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<ProjectLikesTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectLikesTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectLikesTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ProjectLikes>(
+      columnValues: columnValues(ProjectLikes.t.updateTable),
+      where: where(ProjectLikes.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectLikes.t),
+      orderByList: orderByList?.call(ProjectLikes.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
 import '../user/political_status_enum.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class UserRecord
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -36,10 +38,10 @@ abstract class UserRecord
     DateTime? createdAt,
     this.politicalStatus,
     double? credibilityScore,
-  })  : followersCount = followersCount ?? 0,
-        followingCount = followingCount ?? 0,
-        createdAt = createdAt ?? DateTime.now(),
-        credibilityScore = credibilityScore ?? 1.0;
+  }) : followersCount = followersCount ?? 0,
+       followingCount = followingCount ?? 0,
+       createdAt = createdAt ?? DateTime.now(),
+       credibilityScore = credibilityScore ?? 1.0;
 
   factory UserRecord({
     int? id,
@@ -71,8 +73,9 @@ abstract class UserRecord
       userInfoId: jsonSerialization['userInfoId'] as int?,
       userInfo: jsonSerialization['userInfo'] == null
           ? null
-          : _i2.UserInfo.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserInfo>(
+              jsonSerialization['userInfo'],
+            ),
       firstName: jsonSerialization['firstName'] as String?,
       lastName: jsonSerialization['lastName'] as String?,
       gender: jsonSerialization['gender'] as String?,
@@ -88,9 +91,10 @@ abstract class UserRecord
       politicalStatus: jsonSerialization['politicalStatus'] == null
           ? null
           : _i3.PoliticalStatus.fromJson(
-              (jsonSerialization['politicalStatus'] as int)),
-      credibilityScore:
-          (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
+              (jsonSerialization['politicalStatus'] as String),
+            ),
+      credibilityScore: (jsonSerialization['credibilityScore'] as num?)
+          ?.toDouble(),
     );
   }
 
@@ -164,6 +168,7 @@ abstract class UserRecord
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserRecord',
       if (id != null) 'id': id,
       if (bio != null) 'bio': bio,
       if (nin != null) 'nin': nin,
@@ -188,6 +193,7 @@ abstract class UserRecord
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'UserRecord',
       if (id != null) 'id': id,
       if (bio != null) 'bio': bio,
       if (nin != null) 'nin': nin,
@@ -262,25 +268,25 @@ class _UserRecordImpl extends UserRecord {
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
   }) : super._(
-          id: id,
-          bio: bio,
-          nin: nin,
-          phoneNumber: phoneNumber,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
-          firstName: firstName,
-          lastName: lastName,
-          gender: gender,
-          birthdate: birthdate,
-          middleName: middleName,
-          email: email,
-          profileImage: profileImage,
-          followersCount: followersCount,
-          followingCount: followingCount,
-          createdAt: createdAt,
-          politicalStatus: politicalStatus,
-          credibilityScore: credibilityScore,
-        );
+         id: id,
+         bio: bio,
+         nin: nin,
+         phoneNumber: phoneNumber,
+         userInfoId: userInfoId,
+         userInfo: userInfo,
+         firstName: firstName,
+         lastName: lastName,
+         gender: gender,
+         birthdate: birthdate,
+         middleName: middleName,
+         email: email,
+         profileImage: profileImage,
+         followersCount: followersCount,
+         followingCount: followingCount,
+         createdAt: createdAt,
+         politicalStatus: politicalStatus,
+         credibilityScore: credibilityScore,
+       );
 
   /// Returns a shallow copy of this [UserRecord]
   /// with some or all fields replaced by the given arguments.
@@ -312,8 +318,9 @@ class _UserRecordImpl extends UserRecord {
       nin: nin is String? ? nin : this.nin,
       phoneNumber: phoneNumber is String? ? phoneNumber : this.phoneNumber,
       userInfoId: userInfoId is int? ? userInfoId : this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
+      userInfo: userInfo is _i2.UserInfo?
+          ? userInfo
+          : this.userInfo?.copyWith(),
       firstName: firstName is String? ? firstName : this.firstName,
       lastName: lastName is String? ? lastName : this.lastName,
       gender: gender is String? ? gender : this.gender,
@@ -321,10 +328,12 @@ class _UserRecordImpl extends UserRecord {
       middleName: middleName is String? ? middleName : this.middleName,
       email: email is String? ? email : this.email,
       profileImage: profileImage is String? ? profileImage : this.profileImage,
-      followersCount:
-          followersCount is int? ? followersCount : this.followersCount,
-      followingCount:
-          followingCount is int? ? followingCount : this.followingCount,
+      followersCount: followersCount is int?
+          ? followersCount
+          : this.followersCount,
+      followingCount: followingCount is int?
+          ? followingCount
+          : this.followingCount,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       politicalStatus: politicalStatus is _i3.PoliticalStatus?
           ? politicalStatus
@@ -336,8 +345,98 @@ class _UserRecordImpl extends UserRecord {
   }
 }
 
+class UserRecordUpdateTable extends _i1.UpdateTable<UserRecordTable> {
+  UserRecordUpdateTable(super.table);
+
+  _i1.ColumnValue<String, String> bio(String? value) => _i1.ColumnValue(
+    table.bio,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> nin(String? value) => _i1.ColumnValue(
+    table.nin,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> phoneNumber(String? value) => _i1.ColumnValue(
+    table.phoneNumber,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> userInfoId(int? value) => _i1.ColumnValue(
+    table.userInfoId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> firstName(String? value) => _i1.ColumnValue(
+    table.firstName,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> lastName(String? value) => _i1.ColumnValue(
+    table.lastName,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> gender(String? value) => _i1.ColumnValue(
+    table.gender,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> birthdate(String? value) => _i1.ColumnValue(
+    table.birthdate,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> middleName(String? value) => _i1.ColumnValue(
+    table.middleName,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> email(String? value) => _i1.ColumnValue(
+    table.email,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> profileImage(String? value) =>
+      _i1.ColumnValue(
+        table.profileImage,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> followersCount(int? value) => _i1.ColumnValue(
+    table.followersCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> followingCount(int? value) => _i1.ColumnValue(
+    table.followingCount,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> createdAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.createdAt,
+        value,
+      );
+
+  _i1.ColumnValue<_i3.PoliticalStatus, _i3.PoliticalStatus> politicalStatus(
+    _i3.PoliticalStatus? value,
+  ) => _i1.ColumnValue(
+    table.politicalStatus,
+    value,
+  );
+
+  _i1.ColumnValue<double, double> credibilityScore(double? value) =>
+      _i1.ColumnValue(
+        table.credibilityScore,
+        value,
+      );
+}
+
 class UserRecordTable extends _i1.Table<int?> {
   UserRecordTable({super.tableRelation}) : super(tableName: 'user_record') {
+    updateTable = UserRecordUpdateTable(this);
     bio = _i1.ColumnString(
       'bio',
       this,
@@ -400,7 +499,7 @@ class UserRecordTable extends _i1.Table<int?> {
     politicalStatus = _i1.ColumnEnum(
       'politicalStatus',
       this,
-      _i1.EnumSerialization.byIndex,
+      _i1.EnumSerialization.byName,
     );
     credibilityScore = _i1.ColumnDouble(
       'credibilityScore',
@@ -408,6 +507,8 @@ class UserRecordTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final UserRecordUpdateTable updateTable;
 
   late final _i1.ColumnString bio;
 
@@ -458,24 +559,24 @@ class UserRecordTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        bio,
-        nin,
-        phoneNumber,
-        userInfoId,
-        firstName,
-        lastName,
-        gender,
-        birthdate,
-        middleName,
-        email,
-        profileImage,
-        followersCount,
-        followingCount,
-        createdAt,
-        politicalStatus,
-        credibilityScore,
-      ];
+    id,
+    bio,
+    nin,
+    phoneNumber,
+    userInfoId,
+    firstName,
+    lastName,
+    gender,
+    birthdate,
+    middleName,
+    email,
+    profileImage,
+    followersCount,
+    followingCount,
+    createdAt,
+    politicalStatus,
+    credibilityScore,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -689,6 +790,46 @@ class UserRecordRepository {
     );
   }
 
+  /// Updates a single [UserRecord] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<UserRecord?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<UserRecordUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<UserRecord>(
+      id,
+      columnValues: columnValues(UserRecord.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [UserRecord]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<UserRecord>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<UserRecordUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<UserRecordTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<UserRecordTable>? orderBy,
+    _i1.OrderByListBuilder<UserRecordTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<UserRecord>(
+      columnValues: columnValues(UserRecord.t.updateTable),
+      where: where(UserRecord.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(UserRecord.t),
+      orderByList: orderByList?.call(UserRecord.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [UserRecord]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -780,16 +921,16 @@ class UserRecordDetachRowRepository {
   /// the related record.
   Future<void> userInfo(
     _i1.Session session,
-    UserRecord userrecord, {
+    UserRecord userRecord, {
     _i1.Transaction? transaction,
   }) async {
-    if (userrecord.id == null) {
-      throw ArgumentError.notNull('userrecord.id');
+    if (userRecord.id == null) {
+      throw ArgumentError.notNull('userRecord.id');
     }
 
-    var $userrecord = userrecord.copyWith(userInfoId: null);
+    var $userRecord = userRecord.copyWith(userInfoId: null);
     await session.db.updateRow<UserRecord>(
-      $userrecord,
+      $userRecord,
       columns: [UserRecord.t.userInfoId],
       transaction: transaction,
     );

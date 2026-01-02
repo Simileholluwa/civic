@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i2;
 import '../user/political_status_enum.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class UserRecord implements _i1.SerializableModel {
   UserRecord._({
@@ -33,10 +35,10 @@ abstract class UserRecord implements _i1.SerializableModel {
     DateTime? createdAt,
     this.politicalStatus,
     double? credibilityScore,
-  })  : followersCount = followersCount ?? 0,
-        followingCount = followingCount ?? 0,
-        createdAt = createdAt ?? DateTime.now(),
-        credibilityScore = credibilityScore ?? 1.0;
+  }) : followersCount = followersCount ?? 0,
+       followingCount = followingCount ?? 0,
+       createdAt = createdAt ?? DateTime.now(),
+       credibilityScore = credibilityScore ?? 1.0;
 
   factory UserRecord({
     int? id,
@@ -68,8 +70,9 @@ abstract class UserRecord implements _i1.SerializableModel {
       userInfoId: jsonSerialization['userInfoId'] as int?,
       userInfo: jsonSerialization['userInfo'] == null
           ? null
-          : _i2.UserInfo.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserInfo>(
+              jsonSerialization['userInfo'],
+            ),
       firstName: jsonSerialization['firstName'] as String?,
       lastName: jsonSerialization['lastName'] as String?,
       gender: jsonSerialization['gender'] as String?,
@@ -85,9 +88,10 @@ abstract class UserRecord implements _i1.SerializableModel {
       politicalStatus: jsonSerialization['politicalStatus'] == null
           ? null
           : _i3.PoliticalStatus.fromJson(
-              (jsonSerialization['politicalStatus'] as int)),
-      credibilityScore:
-          (jsonSerialization['credibilityScore'] as num?)?.toDouble(),
+              (jsonSerialization['politicalStatus'] as String),
+            ),
+      credibilityScore: (jsonSerialization['credibilityScore'] as num?)
+          ?.toDouble(),
     );
   }
 
@@ -156,6 +160,7 @@ abstract class UserRecord implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserRecord',
       if (id != null) 'id': id,
       if (bio != null) 'bio': bio,
       if (nin != null) 'nin': nin,
@@ -206,25 +211,25 @@ class _UserRecordImpl extends UserRecord {
     _i3.PoliticalStatus? politicalStatus,
     double? credibilityScore,
   }) : super._(
-          id: id,
-          bio: bio,
-          nin: nin,
-          phoneNumber: phoneNumber,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
-          firstName: firstName,
-          lastName: lastName,
-          gender: gender,
-          birthdate: birthdate,
-          middleName: middleName,
-          email: email,
-          profileImage: profileImage,
-          followersCount: followersCount,
-          followingCount: followingCount,
-          createdAt: createdAt,
-          politicalStatus: politicalStatus,
-          credibilityScore: credibilityScore,
-        );
+         id: id,
+         bio: bio,
+         nin: nin,
+         phoneNumber: phoneNumber,
+         userInfoId: userInfoId,
+         userInfo: userInfo,
+         firstName: firstName,
+         lastName: lastName,
+         gender: gender,
+         birthdate: birthdate,
+         middleName: middleName,
+         email: email,
+         profileImage: profileImage,
+         followersCount: followersCount,
+         followingCount: followingCount,
+         createdAt: createdAt,
+         politicalStatus: politicalStatus,
+         credibilityScore: credibilityScore,
+       );
 
   /// Returns a shallow copy of this [UserRecord]
   /// with some or all fields replaced by the given arguments.
@@ -256,8 +261,9 @@ class _UserRecordImpl extends UserRecord {
       nin: nin is String? ? nin : this.nin,
       phoneNumber: phoneNumber is String? ? phoneNumber : this.phoneNumber,
       userInfoId: userInfoId is int? ? userInfoId : this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
+      userInfo: userInfo is _i2.UserInfo?
+          ? userInfo
+          : this.userInfo?.copyWith(),
       firstName: firstName is String? ? firstName : this.firstName,
       lastName: lastName is String? ? lastName : this.lastName,
       gender: gender is String? ? gender : this.gender,
@@ -265,10 +271,12 @@ class _UserRecordImpl extends UserRecord {
       middleName: middleName is String? ? middleName : this.middleName,
       email: email is String? ? email : this.email,
       profileImage: profileImage is String? ? profileImage : this.profileImage,
-      followersCount:
-          followersCount is int? ? followersCount : this.followersCount,
-      followingCount:
-          followingCount is int? ? followingCount : this.followingCount,
+      followersCount: followersCount is int?
+          ? followersCount
+          : this.followersCount,
+      followingCount: followingCount is int?
+          ? followingCount
+          : this.followingCount,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       politicalStatus: politicalStatus is _i3.PoliticalStatus?
           ? politicalStatus

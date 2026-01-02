@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../general/aws_places.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class Project
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -51,13 +53,13 @@ abstract class Project
     this.overAllCategoryRating,
     this.overallFundingRating,
     bool? isDeleted,
-  })  : dateCreated = dateCreated ?? DateTime.now(),
-        likesCount = likesCount ?? 0,
-        reviewsCount = reviewsCount ?? 0,
-        bookmarksCount = bookmarksCount ?? 0,
-        vettingsCount = vettingsCount ?? 0,
-        quotesCount = quotesCount ?? 0,
-        isDeleted = isDeleted ?? false;
+  }) : dateCreated = dateCreated ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       reviewsCount = reviewsCount ?? 0,
+       bookmarksCount = bookmarksCount ?? 0,
+       vettingsCount = vettingsCount ?? 0,
+       quotesCount = quotesCount ?? 0,
+       isDeleted = isDeleted ?? false;
 
   factory Project({
     int? id,
@@ -101,8 +103,9 @@ abstract class Project
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       title: jsonSerialization['title'] as String?,
       description: jsonSerialization['description'] as String?,
       projectCategory: jsonSerialization['projectCategory'] as String?,
@@ -119,23 +122,31 @@ abstract class Project
       projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
       fundingNote: jsonSerialization['fundingNote'] as String?,
       projectImageAttachments:
-          (jsonSerialization['projectImageAttachments'] as List?)
-              ?.map((e) => e as String)
-              .toList(),
-      projectPDFAttachments:
-          (jsonSerialization['projectPDFAttachments'] as List?)
-              ?.map((e) => e as String)
-              .toList(),
-      physicalLocations: (jsonSerialization['physicalLocations'] as List?)
-          ?.map((e) => _i3.AWSPlaces.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      virtualLocations: (jsonSerialization['virtualLocations'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+          jsonSerialization['projectImageAttachments'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['projectImageAttachments'],
+            ),
+      projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['projectPDFAttachments'],
+            ),
+      physicalLocations: jsonSerialization['physicalLocations'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<_i3.AWSPlaces>>(
+              jsonSerialization['physicalLocations'],
+            ),
+      virtualLocations: jsonSerialization['virtualLocations'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<String>>(
+              jsonSerialization['virtualLocations'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
@@ -149,14 +160,14 @@ abstract class Project
           (jsonSerialization['overallLocationRating'] as num?)?.toDouble(),
       overallDescriptionRating:
           (jsonSerialization['overallDescriptionRating'] as num?)?.toDouble(),
-      overallDatesRating:
-          (jsonSerialization['overallDatesRating'] as num?)?.toDouble(),
+      overallDatesRating: (jsonSerialization['overallDatesRating'] as num?)
+          ?.toDouble(),
       overallAttachmentsRating:
           (jsonSerialization['overallAttachmentsRating'] as num?)?.toDouble(),
       overAllCategoryRating:
           (jsonSerialization['overAllCategoryRating'] as num?)?.toDouble(),
-      overallFundingRating:
-          (jsonSerialization['overallFundingRating'] as num?)?.toDouble(),
+      overallFundingRating: (jsonSerialization['overallFundingRating'] as num?)
+          ?.toDouble(),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
     );
   }
@@ -276,6 +287,7 @@ abstract class Project
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Project',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -295,8 +307,9 @@ abstract class Project
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
-        'physicalLocations':
-            physicalLocations?.toJson(valueToJson: (v) => v.toJson()),
+        'physicalLocations': physicalLocations?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
@@ -325,6 +338,7 @@ abstract class Project
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'Project',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
@@ -345,7 +359,8 @@ abstract class Project
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
         'physicalLocations': physicalLocations?.toJson(
-            valueToJson: (v) => v.toJsonForProtocol()),
+          valueToJson: (v) => v.toJsonForProtocol(),
+        ),
       if (virtualLocations != null)
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
@@ -439,40 +454,40 @@ class _ProjectImpl extends Project {
     double? overallFundingRating,
     bool? isDeleted,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          title: title,
-          description: description,
-          projectCategory: projectCategory,
-          projectSubCategory: projectSubCategory,
-          startDate: startDate,
-          endDate: endDate,
-          currency: currency,
-          fundingCategory: fundingCategory,
-          fundingSubCategory: fundingSubCategory,
-          projectCost: projectCost,
-          fundingNote: fundingNote,
-          projectImageAttachments: projectImageAttachments,
-          projectPDFAttachments: projectPDFAttachments,
-          physicalLocations: physicalLocations,
-          virtualLocations: virtualLocations,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          likesCount: likesCount,
-          reviewsCount: reviewsCount,
-          bookmarksCount: bookmarksCount,
-          vettingsCount: vettingsCount,
-          quotesCount: quotesCount,
-          overallRating: overallRating,
-          overallLocationRating: overallLocationRating,
-          overallDescriptionRating: overallDescriptionRating,
-          overallDatesRating: overallDatesRating,
-          overallAttachmentsRating: overallAttachmentsRating,
-          overAllCategoryRating: overAllCategoryRating,
-          overallFundingRating: overallFundingRating,
-          isDeleted: isDeleted,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         title: title,
+         description: description,
+         projectCategory: projectCategory,
+         projectSubCategory: projectSubCategory,
+         startDate: startDate,
+         endDate: endDate,
+         currency: currency,
+         fundingCategory: fundingCategory,
+         fundingSubCategory: fundingSubCategory,
+         projectCost: projectCost,
+         fundingNote: fundingNote,
+         projectImageAttachments: projectImageAttachments,
+         projectPDFAttachments: projectPDFAttachments,
+         physicalLocations: physicalLocations,
+         virtualLocations: virtualLocations,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         likesCount: likesCount,
+         reviewsCount: reviewsCount,
+         bookmarksCount: bookmarksCount,
+         vettingsCount: vettingsCount,
+         quotesCount: quotesCount,
+         overallRating: overallRating,
+         overallLocationRating: overallLocationRating,
+         overallDescriptionRating: overallDescriptionRating,
+         overallDatesRating: overallDatesRating,
+         overallAttachmentsRating: overallAttachmentsRating,
+         overAllCategoryRating: overAllCategoryRating,
+         overallFundingRating: overallFundingRating,
+         isDeleted: isDeleted,
+       );
 
   /// Returns a shallow copy of this [Project]
   /// with some or all fields replaced by the given arguments.
@@ -519,16 +534,18 @@ class _ProjectImpl extends Project {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       title: title is String? ? title : this.title,
       description: description is String? ? description : this.description,
-      projectCategory:
-          projectCategory is String? ? projectCategory : this.projectCategory,
+      projectCategory: projectCategory is String?
+          ? projectCategory
+          : this.projectCategory,
       projectSubCategory: projectSubCategory is String?
           ? projectSubCategory
           : this.projectSubCategory,
       startDate: startDate is DateTime? ? startDate : this.startDate,
       endDate: endDate is DateTime? ? endDate : this.endDate,
       currency: currency is String? ? currency : this.currency,
-      fundingCategory:
-          fundingCategory is String? ? fundingCategory : this.fundingCategory,
+      fundingCategory: fundingCategory is String?
+          ? fundingCategory
+          : this.fundingCategory,
       fundingSubCategory: fundingSubCategory is String?
           ? fundingSubCategory
           : this.fundingSubCategory,
@@ -550,12 +567,14 @@ class _ProjectImpl extends Project {
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
-      bookmarksCount:
-          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
+      bookmarksCount: bookmarksCount is int?
+          ? bookmarksCount
+          : this.bookmarksCount,
       vettingsCount: vettingsCount is int? ? vettingsCount : this.vettingsCount,
       quotesCount: quotesCount is int? ? quotesCount : this.quotesCount,
-      overallRating:
-          overallRating is double? ? overallRating : this.overallRating,
+      overallRating: overallRating is double?
+          ? overallRating
+          : this.overallRating,
       overallLocationRating: overallLocationRating is double?
           ? overallLocationRating
           : this.overallLocationRating,
@@ -579,8 +598,191 @@ class _ProjectImpl extends Project {
   }
 }
 
+class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
+  ProjectUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> title(String? value) => _i1.ColumnValue(
+    table.title,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> description(String? value) => _i1.ColumnValue(
+    table.description,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> projectCategory(String? value) =>
+      _i1.ColumnValue(
+        table.projectCategory,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> projectSubCategory(String? value) =>
+      _i1.ColumnValue(
+        table.projectSubCategory,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> startDate(DateTime? value) =>
+      _i1.ColumnValue(
+        table.startDate,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> endDate(DateTime? value) =>
+      _i1.ColumnValue(
+        table.endDate,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> currency(String? value) => _i1.ColumnValue(
+    table.currency,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> fundingCategory(String? value) =>
+      _i1.ColumnValue(
+        table.fundingCategory,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> fundingSubCategory(String? value) =>
+      _i1.ColumnValue(
+        table.fundingSubCategory,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> projectCost(double? value) => _i1.ColumnValue(
+    table.projectCost,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> fundingNote(String? value) => _i1.ColumnValue(
+    table.fundingNote,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> projectImageAttachments(
+    List<String>? value,
+  ) => _i1.ColumnValue(
+    table.projectImageAttachments,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> projectPDFAttachments(
+    List<String>? value,
+  ) => _i1.ColumnValue(
+    table.projectPDFAttachments,
+    value,
+  );
+
+  _i1.ColumnValue<List<_i3.AWSPlaces>, List<_i3.AWSPlaces>> physicalLocations(
+    List<_i3.AWSPlaces>? value,
+  ) => _i1.ColumnValue(
+    table.physicalLocations,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> virtualLocations(
+    List<String>? value,
+  ) => _i1.ColumnValue(
+    table.virtualLocations,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> likesCount(int? value) => _i1.ColumnValue(
+    table.likesCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> reviewsCount(int? value) => _i1.ColumnValue(
+    table.reviewsCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> bookmarksCount(int? value) => _i1.ColumnValue(
+    table.bookmarksCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> vettingsCount(int? value) => _i1.ColumnValue(
+    table.vettingsCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> quotesCount(int? value) => _i1.ColumnValue(
+    table.quotesCount,
+    value,
+  );
+
+  _i1.ColumnValue<double, double> overallRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overallLocationRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallLocationRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overallDescriptionRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallDescriptionRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overallDatesRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallDatesRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overallAttachmentsRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallAttachmentsRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overAllCategoryRating(double? value) =>
+      _i1.ColumnValue(
+        table.overAllCategoryRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> overallFundingRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallFundingRating,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> isDeleted(bool? value) => _i1.ColumnValue(
+    table.isDeleted,
+    value,
+  );
+}
+
 class ProjectTable extends _i1.Table<int?> {
   ProjectTable({super.tableRelation}) : super(tableName: 'project') {
+    updateTable = ProjectUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -629,19 +831,19 @@ class ProjectTable extends _i1.Table<int?> {
       'fundingNote',
       this,
     );
-    projectImageAttachments = _i1.ColumnSerializable(
+    projectImageAttachments = _i1.ColumnSerializable<List<String>>(
       'projectImageAttachments',
       this,
     );
-    projectPDFAttachments = _i1.ColumnSerializable(
+    projectPDFAttachments = _i1.ColumnSerializable<List<String>>(
       'projectPDFAttachments',
       this,
     );
-    physicalLocations = _i1.ColumnSerializable(
+    physicalLocations = _i1.ColumnSerializable<List<_i3.AWSPlaces>>(
       'physicalLocations',
       this,
     );
-    virtualLocations = _i1.ColumnSerializable(
+    virtualLocations = _i1.ColumnSerializable<List<String>>(
       'virtualLocations',
       this,
     );
@@ -714,6 +916,8 @@ class ProjectTable extends _i1.Table<int?> {
     );
   }
 
+  late final ProjectUpdateTable updateTable;
+
   late final _i1.ColumnInt ownerId;
 
   _i2.UserRecordTable? _owner;
@@ -740,13 +944,13 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString fundingNote;
 
-  late final _i1.ColumnSerializable projectImageAttachments;
+  late final _i1.ColumnSerializable<List<String>> projectImageAttachments;
 
-  late final _i1.ColumnSerializable projectPDFAttachments;
+  late final _i1.ColumnSerializable<List<String>> projectPDFAttachments;
 
-  late final _i1.ColumnSerializable physicalLocations;
+  late final _i1.ColumnSerializable<List<_i3.AWSPlaces>> physicalLocations;
 
-  late final _i1.ColumnSerializable virtualLocations;
+  late final _i1.ColumnSerializable<List<String>> virtualLocations;
 
   late final _i1.ColumnDateTime dateCreated;
 
@@ -793,39 +997,39 @@ class ProjectTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        title,
-        description,
-        projectCategory,
-        projectSubCategory,
-        startDate,
-        endDate,
-        currency,
-        fundingCategory,
-        fundingSubCategory,
-        projectCost,
-        fundingNote,
-        projectImageAttachments,
-        projectPDFAttachments,
-        physicalLocations,
-        virtualLocations,
-        dateCreated,
-        updatedAt,
-        likesCount,
-        reviewsCount,
-        bookmarksCount,
-        vettingsCount,
-        quotesCount,
-        overallRating,
-        overallLocationRating,
-        overallDescriptionRating,
-        overallDatesRating,
-        overallAttachmentsRating,
-        overAllCategoryRating,
-        overallFundingRating,
-        isDeleted,
-      ];
+    id,
+    ownerId,
+    title,
+    description,
+    projectCategory,
+    projectSubCategory,
+    startDate,
+    endDate,
+    currency,
+    fundingCategory,
+    fundingSubCategory,
+    projectCost,
+    fundingNote,
+    projectImageAttachments,
+    projectPDFAttachments,
+    physicalLocations,
+    virtualLocations,
+    dateCreated,
+    updatedAt,
+    likesCount,
+    reviewsCount,
+    bookmarksCount,
+    vettingsCount,
+    quotesCount,
+    overallRating,
+    overallLocationRating,
+    overallDescriptionRating,
+    overallDatesRating,
+    overallAttachmentsRating,
+    overAllCategoryRating,
+    overallFundingRating,
+    isDeleted,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -1033,6 +1237,46 @@ class ProjectRepository {
     return session.db.updateRow<Project>(
       row,
       columns: columns?.call(Project.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [Project] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<Project?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<Project>(
+      id,
+      columnValues: columnValues(Project.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [Project]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<Project>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<ProjectTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<Project>(
+      columnValues: columnValues(Project.t.updateTable),
+      where: where(Project.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(Project.t),
+      orderByList: orderByList?.call(Project.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

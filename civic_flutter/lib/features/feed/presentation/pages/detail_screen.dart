@@ -223,6 +223,8 @@ class DetailScreen extends ConsumerWidget {
                       ),
                       child: PostDetailOptions(
                         postWithUserState: value,
+                        isPoll: postType == PostType.poll,
+                        isArticle: postType == PostType.article,
                       ),
                     ),
                     const Divider(

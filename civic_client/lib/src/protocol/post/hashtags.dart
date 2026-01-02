@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../post/posts_hashtags.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class Hashtag implements _i1.SerializableModel {
   Hashtag._({
@@ -32,9 +34,11 @@ abstract class Hashtag implements _i1.SerializableModel {
       id: jsonSerialization['id'] as int?,
       tag: jsonSerialization['tag'] as String,
       usageCount: jsonSerialization['usageCount'] as int,
-      hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i2.PostsHashtags.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      hashtags: jsonSerialization['hashtags'] == null
+          ? null
+          : _i3.Protocol().deserialize<List<_i2.PostsHashtags>>(
+              jsonSerialization['hashtags'],
+            ),
     );
   }
 
@@ -61,6 +65,7 @@ abstract class Hashtag implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Hashtag',
       if (id != null) 'id': id,
       'tag': tag,
       'usageCount': usageCount,
@@ -84,11 +89,11 @@ class _HashtagImpl extends Hashtag {
     required int usageCount,
     List<_i2.PostsHashtags>? hashtags,
   }) : super._(
-          id: id,
-          tag: tag,
-          usageCount: usageCount,
-          hashtags: hashtags,
-        );
+         id: id,
+         tag: tag,
+         usageCount: usageCount,
+         hashtags: hashtags,
+       );
 
   /// Returns a shallow copy of this [Hashtag]
   /// with some or all fields replaced by the given arguments.

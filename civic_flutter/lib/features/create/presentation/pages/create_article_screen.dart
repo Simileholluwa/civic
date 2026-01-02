@@ -41,7 +41,8 @@ class CreateArticleScreen extends ConsumerWidget {
     );
     final canSend = postState.imageUrls.isNotEmpty &&
         postState.text.isNotEmpty &&
-        postState.articleContent.isNotEmpty;
+        postState.articleContent.isNotEmpty &&
+        postState.articleContent.length >= 500;
 
     Future<void> saveDraftAndPop() async {
       await postNotifier.saveArticleAsDraft(

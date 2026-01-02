@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
@@ -14,13 +15,10 @@ class PostCreation extends _$PostCreation {
   static const int maxVideoSizeInMb = 10;
   static final RegExp _urlRegex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
 
-  // Track the current draft id to avoid creating duplicate drafts when
-  // saving the same draft multiple times.
   int? _currentDraftId;
 
   int get _ownerId => ref.read(localStorageProvider).getInt('userId')!;
 
-  // Keep the provider alive during async send operations to avoid disposal mid-flight.
   Future<T> _withKeepAlive<T>(Future<T> Function() action) async {
     final link = ref.keepAlive();
     try {
@@ -30,7 +28,6 @@ class PostCreation extends _$PostCreation {
     }
   }
 
-  // Retry helper with exponential backoff; retries on thrown exceptions.
   Future<void> _retryWithBackoff(
     Future<void> Function() action, {
     int maxAttempts = 3,
@@ -260,11 +257,7 @@ class PostCreation extends _$PostCreation {
     state = state.copyWith(videoUrl: '');
   }
 
-  /// Load the editor state from a draft [Post].
-  /// Disposes existing controllers/nodes, re-populates state, reattaches listeners,
-  /// restores mentions and initializes media players where needed.
   void loadFromDraft(Post draft) {
-    // Dispose old controllers and focus/scroll nodes to avoid leaked listeners.
     try {
       state.controller.dispose();
     } on Exception catch (_) {}
@@ -278,20 +271,16 @@ class PostCreation extends _$PostCreation {
       state.scrollController?.dispose();
     } on Exception catch (_) {}
 
-    // Restore selected mentions from draft
     final draftMentions = draft.mentions ?? <UserRecord>[];
     ref.read(selectedMentionsProvider.notifier).setMentions = draftMentions;
 
-    // Build fresh state from draft
     var next = PostCreationState.populate(draft);
 
-    // If draft contains a poll, normalize options to 2..5 and rebuild controllers.
     if (draft.poll?.options != null) {
       final raw = draft.poll!.options
               ?.map((o) => o.option ?? '')
               .toList(growable: true) ??
           <String>[];
-      // Ensure between 2 and 5 options
       if (raw.length < 2) {
         raw.addAll(List.filled(2 - raw.length, ''));
       } else if (raw.length > 5) {
@@ -309,7 +298,6 @@ class PostCreation extends _$PostCreation {
       );
     }
 
-    // Attach listeners to keep state in sync with user edits
     next.controller.addListener(() {
       if (!ref.mounted) return;
       setText(next.controller.text);
@@ -327,16 +315,11 @@ class PostCreation extends _$PostCreation {
         },
       );
     }
-
-    // Initialize video player if applicable
-    if ((draft.videoUrl ?? '').isNotEmpty) {
+    if ((draft.mediaAssets?.isNotEmpty ?? false) &&
+        draft.mediaAssets!.first.kind == MediaKind.video) {
       ref.read(mediaVideoPlayerProvider(next.videoUrl));
     }
-
-    // Commit new state
     state = next;
-
-    // Remember current draft id so subsequent saves update, not create new
     _currentDraftId = draft.id;
   }
 
@@ -359,7 +342,6 @@ class PostCreation extends _$PostCreation {
     int? id,
     String? errorMesage,
   ) async {
-    // Reuse previous draft id if present, else use provided id, else new id
     final effectiveId =
         _currentDraftId ?? id ?? DateTime.now().millisecondsSinceEpoch;
     _currentDraftId = effectiveId;
@@ -368,6 +350,7 @@ class PostCreation extends _$PostCreation {
       ownerId: _ownerId,
       state: state,
       mentions: ref.watch(selectedMentionsProvider),
+      includeLocalMedia: true,
     );
     final saveDraft = ref.read(savePostDraftProvider);
     final result = await saveDraft(
@@ -389,73 +372,37 @@ class PostCreation extends _$PostCreation {
     });
   }
 
-  Future<bool> sendMediaImages(int? id, bool saveDraft) async {
-    final existingUpload = <String>[];
-    final newUpload = <String>[];
-    if (state.imageUrls.isNotEmpty) {
-      for (final image in state.imageUrls) {
-        if (_urlRegex.hasMatch(image)) {
-          existingUpload.add(image);
-        } else {
-          newUpload.add(image);
-        }
+  Future<bool> _uploadAssetsToPostId() async {
+    final imagesToUpload = state.imageUrls
+        .where((p) => !_urlRegex.hasMatch(p))
+        .toList(growable: false);
+    final videoPath = state.videoUrl;
+    final assets = <MediaAsset>[];
+    if (imagesToUpload.isNotEmpty) {
+      final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
+            imagesToUpload,
+          );
+      if (res.isLeft()) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        final err = res.getLeft().toNullable()!;
+        log(err);
+        return false;
       }
-      if (newUpload.isEmpty) return true;
-      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
-            newUpload,
-            'posts',
-            'images',
-          );
-
-      return result.fold((error) async {
-        ref.read(sendPostLoadingProvider.notifier).value = false;
-        TToastMessages.errorToast(error);
-        if (saveDraft) {
-          await savePostAsDraft(
-            id,
-            error,
-          );
-        }
-        return false;
-      }, (mediaUrls) {
-        state = state.copyWith(
-          imageUrls: [...existingUpload, ...mediaUrls],
-        );
-        return true;
-      });
-    } else {
-      return true;
+      assets.addAll(res.getRight().toNullable()!);
     }
-  }
-
-  Future<bool> sendMediaVideo(int? id) async {
-    if (state.videoUrl.isNotEmpty) {
-      if (_urlRegex.hasMatch(state.videoUrl)) return true;
-
-      final result = await ref.read(assetServiceProvider).uploadMediaAssets(
-        [state.videoUrl],
-        'posts',
-        'videos',
+    if (videoPath.isNotEmpty && !_urlRegex.hasMatch(videoPath)) {
+      final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
+        [videoPath],
       );
-
-      return result.fold((error) async {
-        ref.read(sendPostLoadingProvider.notifier).value = false;
-        TToastMessages.errorToast(error);
-        await savePostAsDraft(
-          id,
-          error,
-        );
-
+      if (res.isLeft()) {
+        final err = res.getLeft().toNullable()!;
+        log(err);
         return false;
-      }, (videoUrl) {
-        state = state.copyWith(
-          videoUrl: videoUrl.first,
-        );
-        return true;
-      });
-    } else {
-      return true;
+      }
+      assets.addAll(res.getRight().toNullable()!);
     }
+    state = state.copyWith(uploadedAssets: assets);
+    return true;
   }
 
   Future<void> sendPost(
@@ -467,7 +414,9 @@ class PostCreation extends _$PostCreation {
 
       final result = await savePost(
         SavePostParams(
-          post,
+          post.copyWith(
+            mediaAssets: state.uploadedAssets,
+          ),
         ),
       );
       return result.fold((error) async {
@@ -510,7 +459,12 @@ class PostCreation extends _$PostCreation {
         postScheduledDateTimeProvider.notifier,
       );
       final result = await saveInFuture(
-        SchedulePostParams(post, dateTime),
+        SchedulePostParams(
+          post.copyWith(
+            mediaAssets: state.uploadedAssets,
+          ),
+          dateTime,
+        ),
       );
       return result.fold(
         (error) async {
@@ -531,7 +485,7 @@ class PostCreation extends _$PostCreation {
     });
   }
 
-  Future<void> repostOrQuote(
+  Future<void> quoteProject(
     int? postId,
     int? projectId,
   ) async {
@@ -553,13 +507,9 @@ class PostCreation extends _$PostCreation {
         ),
       );
       return result.fold((error) async {
-        error.action == 'deleted'
-            ? TToastMessages.successToast(
-                error.message,
-              )
-            : TToastMessages.errorToast(
-                error.message,
-              );
+        TToastMessages.errorToast(
+          error.message,
+        );
         return;
       }, (post) {
         if (postId == null) {
@@ -600,24 +550,30 @@ class PostCreation extends _$PostCreation {
         }
       }
 
-      final uploadedImages = await sendMediaImages(postId, true);
-      if (!uploadedImages) return;
-      final uploadedVideo = await sendMediaVideo(postId);
-      if (!uploadedVideo) return;
-      final post = PostBuilder.buildPost(
+      var post = PostBuilder.buildPost(
         id: postId,
         ownerId: ownerId,
         state: state,
         mentions: ref.watch(selectedMentionsProvider),
         postType: PostType.regular,
       );
+
+      final uploadedOk = await _uploadAssetsToPostId();
+      if (!uploadedOk) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        await savePostAsDraft(
+          null,
+          'Failed to upload media assets',
+        );
+        return;
+      }
+
+      post = post.copyWith(mediaAssets: state.uploadedAssets);
+
       await _retryWithBackoff(() async {
         if (scheduledDateTime == null &&
             !scheduledDateTimeProvider.canSendLater()) {
-          await sendPost(
-            post,
-            postId == null,
-          );
+          await sendPost(post, true);
         } else {
           await savePostInFuture(
             post,
@@ -637,27 +593,31 @@ class PostCreation extends _$PostCreation {
       ref.read(sendPostLoadingProvider.notifier).value = true;
       final ownerId = _ownerId;
       final saveComment = ref.read(savePostCommentProvider);
-      final sentImages = await sendMediaImages(postId, true);
-      if (!sentImages) return;
+      final uploadedOk = await _uploadAssetsToPostId();
+      if (!uploadedOk) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        return;
+      }
+      final mediaAssets = state.uploadedAssets;
       final result = await saveComment(
         SavePostCommentParams(
           Post(
             id: id,
             ownerId: ownerId,
             text: state.text.trim(),
-            imageUrls: state.imageUrls,
             locations: state.locations,
             taggedUsers: state.taggedUsers,
             mentions: ref.watch(selectedMentionsProvider),
             parentId: postId,
+            mediaAssets: mediaAssets,
           ),
           false,
         ),
       );
-      result.fold((l) {
+      await result.fold((l) {
         TToastMessages.errorToast(l.message);
         ref.read(sendPostLoadingProvider.notifier).value = false;
-      }, (r) {
+      }, (r) async {
         TToastMessages.successToast('Your comment has been sent.');
 
         ref
@@ -712,29 +672,33 @@ class PostCreation extends _$PostCreation {
       final saveReply = ref.read(
         savePostCommentProvider,
       );
-      final sentImages = await sendMediaImages(parentId, true);
-      if (!sentImages) return;
+      final uploadedOk = await _uploadAssetsToPostId();
+      if (!uploadedOk) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        return;
+      }
+      final mediaAssets = state.uploadedAssets;
       final result = await saveReply(
         SavePostCommentParams(
           Post(
             id: id,
             ownerId: ownerId,
             text: state.text.trim(),
-            imageUrls: state.imageUrls,
             locations: state.locations,
             taggedUsers: state.taggedUsers,
             mentions: ref.watch(selectedMentionsProvider),
             parentId: parentId,
+            mediaAssets: mediaAssets,
           ),
           true,
         ),
       );
-      result.fold(
+      await result.fold(
         (l) {
           TToastMessages.errorToast(l.message);
           ref.read(sendPostLoadingProvider.notifier).value = false;
         },
-        (r) {
+        (r) async {
           TToastMessages.successToast('Your reply has been sent.');
           if (id == null) {
             ref.read(paginatedRepliesListProvider(parentId).notifier).addReply(
@@ -764,6 +728,7 @@ class PostCreation extends _$PostCreation {
       state: state,
       mentions: ref.watch(selectedMentionsProvider),
       poll: poll,
+      includeLocalMedia: true,
     );
 
     final saveDraft = ref.read(savePostDraftProvider);
@@ -802,6 +767,7 @@ class PostCreation extends _$PostCreation {
       state: state,
       mentions: ref.watch(selectedMentionsProvider),
       article: article,
+      includeLocalMedia: true,
     );
 
     final saveDraft = ref.read(savePostDraftProvider);
@@ -831,14 +797,8 @@ class PostCreation extends _$PostCreation {
   ) async {
     return _withKeepAlive(() async {
       final savePoll = ref.read(savePollProvider);
-
-      final result = await savePoll(
-        SavePollParams(
-          post,
-        ),
-      );
+      final result = await savePoll(SavePollParams(post));
       return result.fold((error) async {
-        // Ensure loading state is cleared on error
         ref.read(sendPostLoadingProvider.notifier).value = false;
         TToastMessages.errorToast(error.message);
         await savePollAsDraft(
@@ -849,10 +809,15 @@ class PostCreation extends _$PostCreation {
         return;
       }, (data) async {
         ref.read(sendPostLoadingProvider.notifier).value = false;
-        final created = data ?? post;
+        if (data == null) {
+          await savePollAsDraft(
+            null,
+            'Something went wrong',
+          );
+        }
         if (addToList) {
           ref.read(paginatedPostListProvider.notifier).addPost(
-                PostWithUserState(post: created),
+                PostWithUserState(post: data!),
               );
         }
         TToastMessages.successToast(
@@ -884,11 +849,6 @@ class PostCreation extends _$PostCreation {
         }
       }
 
-      final uploadedImages = await sendMediaImages(postId, false);
-      if (!uploadedImages) {
-        await savePollAsDraft(id, 'Failed to upload images');
-        return;
-      }
       final poll = PostBuilder.buildPoll(
         id: pollId,
         ownerId: ownerId,
@@ -958,11 +918,9 @@ class PostCreation extends _$PostCreation {
 
   Future<void> sendArticle(
     Post post,
-    bool addToList,
   ) async {
     return _withKeepAlive(() async {
       final saveArticle = ref.read(saveArticleProvider);
-
       final result = await saveArticle(
         SaveArticleParams(
           post,
@@ -985,11 +943,10 @@ class PostCreation extends _$PostCreation {
           );
           return;
         }
-        if (addToList) {
-          ref.read(paginatedPostListProvider.notifier).addPost(
-                PostWithUserState(post: data),
-              );
-        }
+        ref.read(paginatedPostListProvider.notifier).addPost(
+              PostWithUserState(post: data),
+            );
+
         TToastMessages.successToast(
           'Your article was sent.',
         );
@@ -1018,11 +975,6 @@ class PostCreation extends _$PostCreation {
         }
       }
 
-      final uploadedImages = await sendMediaImages(postId, false);
-      if (!uploadedImages) {
-        await saveArticleAsDraft(id, 'Failed to upload banner');
-        return;
-      }
       final embeddedImages = THelperFunctions.getAllImagesFromEditor(
         state.articleContent,
       );
@@ -1039,7 +991,7 @@ class PostCreation extends _$PostCreation {
         state: state,
       );
 
-      final post = PostBuilder.buildPost(
+      var post = PostBuilder.buildPost(
         id: postId,
         ownerId: ownerId,
         state: state,
@@ -1048,12 +1000,23 @@ class PostCreation extends _$PostCreation {
         postType: PostType.article,
       );
 
+      final uploadedOk = await _uploadAssetsToPostId();
+      if (!uploadedOk) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        await saveArticleAsDraft(
+          null,
+          'Failed to upload media assets',
+        );
+        return;
+      }
+      final mediaAssets = state.uploadedAssets;
+      post = post.copyWith(mediaAssets: mediaAssets);
+
       await _retryWithBackoff(() async {
         if (scheduledDateTime == null &&
             !scheduledDateTimeProvider.canSendLater()) {
           await sendArticle(
             post,
-            postId == null,
           );
         } else {
           await savePostInFuture(
@@ -1094,16 +1057,6 @@ class PostCreation extends _$PostCreation {
                 ),
               );
             },
-          );
-        }
-      }
-
-      if (post.videoUrl != null) {
-        if (post.videoUrl!.isNotEmpty) {
-          ref.read(
-            mediaVideoPlayerProvider(
-              feedState.videoUrl,
-            ),
           );
         }
       }

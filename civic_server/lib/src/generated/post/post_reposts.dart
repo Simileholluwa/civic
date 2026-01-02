@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
 import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class PostReposts
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -41,15 +43,16 @@ abstract class PostReposts
       postId: jsonSerialization['postId'] as int,
       post: jsonSerialization['post'] == null
           ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
-      dateCreated:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['dateCreated']),
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['owner'],
+            ),
+      dateCreated: _i1.DateTimeJsonExtension.fromJson(
+        jsonSerialization['dateCreated'],
+      ),
     );
   }
 
@@ -87,6 +90,7 @@ abstract class PostReposts
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostReposts',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJson(),
@@ -99,6 +103,7 @@ abstract class PostReposts
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PostReposts',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJsonForProtocol(),
@@ -155,13 +160,13 @@ class _PostRepostsImpl extends PostReposts {
     _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
-          id: id,
-          postId: postId,
-          post: post,
-          ownerId: ownerId,
-          owner: owner,
-          dateCreated: dateCreated,
-        );
+         id: id,
+         postId: postId,
+         post: post,
+         ownerId: ownerId,
+         owner: owner,
+         dateCreated: dateCreated,
+       );
 
   /// Returns a shallow copy of this [PostReposts]
   /// with some or all fields replaced by the given arguments.
@@ -186,8 +191,29 @@ class _PostRepostsImpl extends PostReposts {
   }
 }
 
+class PostRepostsUpdateTable extends _i1.UpdateTable<PostRepostsTable> {
+  PostRepostsUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> postId(int value) => _i1.ColumnValue(
+    table.postId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+}
+
 class PostRepostsTable extends _i1.Table<int?> {
   PostRepostsTable({super.tableRelation}) : super(tableName: 'post_reposts') {
+    updateTable = PostRepostsUpdateTable(this);
     postId = _i1.ColumnInt(
       'postId',
       this,
@@ -202,6 +228,8 @@ class PostRepostsTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final PostRepostsUpdateTable updateTable;
 
   late final _i1.ColumnInt postId;
 
@@ -241,11 +269,11 @@ class PostRepostsTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        postId,
-        ownerId,
-        dateCreated,
-      ];
+    id,
+    postId,
+    ownerId,
+    dateCreated,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -274,9 +302,9 @@ class PostRepostsInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'post': _post,
-        'owner': _owner,
-      };
+    'post': _post,
+    'owner': _owner,
+  };
 
   @override
   _i1.Table<int?> get table => PostReposts.t;
@@ -465,6 +493,46 @@ class PostRepostsRepository {
     return session.db.updateRow<PostReposts>(
       row,
       columns: columns?.call(PostReposts.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [PostReposts] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<PostReposts?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PostRepostsUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<PostReposts>(
+      id,
+      columnValues: columnValues(PostReposts.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [PostReposts]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<PostReposts>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PostRepostsUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PostRepostsTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PostRepostsTable>? orderBy,
+    _i1.OrderByListBuilder<PostRepostsTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<PostReposts>(
+      columnValues: columnValues(PostReposts.t.updateTable),
+      where: where(PostReposts.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(PostReposts.t),
+      orderByList: orderByList?.call(PostReposts.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

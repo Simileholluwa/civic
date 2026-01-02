@@ -40,6 +40,20 @@ class PostVideoPlayer extends _$PostVideoPlayer {
     }
   }
 
+  void seekBy(Duration delta) {
+    if (state == null || state?.value == null) return;
+    final value = state!.value;
+    final target = value.position + delta;
+    final clamped = target < Duration.zero
+        ? Duration.zero
+        : (target > value.duration ? value.duration : target);
+    unawaited(
+      state!.seekTo(
+        clamped,
+      ),
+    );
+  }
+
   Future<void> pausePlay() async {
     if (state != null) {
       if (state!.value.isPlaying) {

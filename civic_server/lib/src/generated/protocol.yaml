@@ -7,6 +7,14 @@ hashtag:
 location:
   - searchLocation:
   - searchNearbyLocation:
+media:
+  - requestUploadTarget:
+  - confirmUpload:
+  - deleteAsset:
+  - deleteAssetsByPost:
+  - cleanupTemp:
+  - scheduleCleanup:
+  - listAssets:
 notification:
   - markAllNotificationsAsRead:
   - markNotificationAsRead:

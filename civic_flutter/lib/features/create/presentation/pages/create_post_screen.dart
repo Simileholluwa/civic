@@ -153,7 +153,7 @@ class CreatePostScreen extends ConsumerWidget {
                   context.pop();
                 }
                 if (isProjectQuote) {
-                  await postNotifier.repostOrQuote(
+                  await postNotifier.quoteProject(
                     data.value?.post.id,
                     projectToQuote?.id,
                   );

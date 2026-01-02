@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -55,6 +56,7 @@ abstract class LinkMetadata implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'LinkMetadata',
       'title': title,
       'description': description,
       'image': image,
@@ -75,11 +77,11 @@ class _LinkMetadataImpl extends LinkMetadata {
     required String image,
     required String url,
   }) : super._(
-          title: title,
-          description: description,
-          image: image,
-          url: url,
-        );
+         title: title,
+         description: description,
+         image: image,
+         url: url,
+       );
 
   /// Returns a shallow copy of this [LinkMetadata]
   /// with some or all fields replaced by the given arguments.

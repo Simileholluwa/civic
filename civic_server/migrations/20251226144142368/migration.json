@@ -1,0 +1,62 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "post",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "imageUrls",
+          "videoUrl"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"imageUrls\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "imageUrls"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"videoUrl\" of table \"post\" will be dropped.",
+            "table": "post",
+            "columns": [
+              "videoUrl"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"imageUrls\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "imageUrls"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"videoUrl\" of table \"post\" will be dropped.",
+      "table": "post",
+      "columns": [
+        "videoUrl"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

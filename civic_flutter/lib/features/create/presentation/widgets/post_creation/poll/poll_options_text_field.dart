@@ -56,13 +56,15 @@ class PollOptionsTextField extends ConsumerWidget {
                   ),
                 if (postState.controllers.length > 2)
                   GestureDetector(
-                    child: const Padding(
-                      padding: EdgeInsets.only(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
                         left: TSizes.sm,
                       ),
                       child: Icon(
                         Iconsax.trash,
-                        color: TColors.secondary,
+                        color: isEditing
+                            ? Theme.of(context).disabledColor
+                            : TColors.secondary,
                         size: 20,
                       ),
                     ),

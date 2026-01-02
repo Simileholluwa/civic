@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../poll/poll_option.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class Poll implements _i1.SerializableModel {
   Poll._({
@@ -38,11 +40,14 @@ abstract class Poll implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
-      options: (jsonSerialization['options'] as List?)
-          ?.map((e) => _i3.PollOption.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
+      options: jsonSerialization['options'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<_i3.PollOption>>(
+              jsonSerialization['options'],
+            ),
       expiresAt: jsonSerialization['expiresAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['expiresAt']),
@@ -79,6 +84,7 @@ abstract class Poll implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Poll',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -106,13 +112,13 @@ class _PollImpl extends Poll {
     DateTime? expiresAt,
     int? votesCount,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          options: options,
-          expiresAt: expiresAt,
-          votesCount: votesCount,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         options: options,
+         expiresAt: expiresAt,
+         votesCount: votesCount,
+       );
 
   /// Returns a shallow copy of this [Poll]
   /// with some or all fields replaced by the given arguments.

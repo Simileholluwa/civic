@@ -22,12 +22,15 @@ class PostImagePost extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final postState = ref.watch(
-      postCreationProvider(post),
-    );
+    final imageUrls = (post.mediaAssets ?? [])
+        .where((a) => a.kind == MediaKind.image)
+        .map((a) => a.publicUrl)
+        .whereType<String>()
+        .where((u) => u.isNotEmpty)
+        .toList(growable: false);
 
     Future<void> openGallery(String tappedImage) async {
-      final images = postState.imageUrls;
+      final images = imageUrls;
       if (images.isEmpty) return;
       final initialIndex = images.indexOf(tappedImage);
       ref.read(bottomNavVisibilityProvider.notifier).hide();
@@ -256,19 +259,19 @@ class PostImagePost extends ConsumerWidget {
               borderRadius: BorderRadius.circular(TSizes.md),
               child: AspectRatio(
                 aspectRatio: 1,
-                child: postState.imageUrls.length <= 1
-                    ? buildSingle(postState.imageUrls.first)
+                child: imageUrls.length <= 1
+                    ? buildSingle(imageUrls.first)
                     : LayoutBuilder(
                         builder: (context, constraints) {
                           return buildCollage(
-                            postState.imageUrls,
+                            imageUrls,
                           );
                         },
                       ),
               ),
             ),
           ),
-          if (postState.imageUrls.isNotEmpty && showInteractions)
+          if (imageUrls.isNotEmpty && showInteractions)
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: PostImageOptions(post: post),

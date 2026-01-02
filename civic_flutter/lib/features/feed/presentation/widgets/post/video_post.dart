@@ -24,10 +24,11 @@ class VideoPost extends ConsumerWidget {
         videoUrl,
       ).notifier,
     );
+    final isInitialized = controller?.value.isInitialized ?? false;
 
     Widget loader() => SizedBox(
           height: 300,
-          width: 200,
+          width: double.maxFinite,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -56,104 +57,115 @@ class VideoPost extends ConsumerWidget {
           RepaintBoundary(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 500),
-              child: controller != null && controller.value.isInitialized
-                  ? ContentKeepAliveWrapper(
-                      child: AspectRatio(
-                        aspectRatio: controller.value.aspectRatio,
-                        child: GestureDetector(
-                          onTap: controllerNotifier.pausePlay,
-                          child: ClipRRect(
-                            child: VideoPlayer(
-                              controller,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: isInitialized && controller != null
+                    ? ContentKeepAliveWrapper(
+                        child: AspectRatio(
+                          aspectRatio: controller.value.aspectRatio,
+                          child: GestureDetector(
+                            onTap: controllerNotifier.pausePlay,
+                            onDoubleTapDown: (TapDownDetails details) {
+                              final box =
+                                  context.findRenderObject() as RenderBox?;
+                              final width = box?.size.width ?? 0;
+                              final dx = details.localPosition.dx;
+                              if (width > 0) {
+                                if (dx >= width / 2) {
+                                  controllerNotifier.seekBy(
+                                    const Duration(
+                                      seconds: 10,
+                                    ),
+                                  );
+                                } else {
+                                  controllerNotifier.seekBy(
+                                    const Duration(
+                                      seconds: -10,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            child: ClipRRect(
+                              child: VideoPlayer(controller),
+                              borderRadius: controller.value.aspectRatio > 0.75
+                                  ? BorderRadius.circular(
+                                      TSizes.md,
+                                    )
+                                  : BorderRadius.zero,
                             ),
-                            borderRadius: controller.value.aspectRatio > 0.75
-                                ? BorderRadiusGeometry.circular(
-                                    TSizes.md,
-                                  )
-                                : BorderRadius.zero,
                           ),
                         ),
-                      ),
-                    )
-                  : loader(),
+                      )
+                    : loader(),
+              ),
             ),
           ),
-          if (controller != null && controller.value.isInitialized)
+          if (isInitialized && controller != null)
             Align(
               alignment: Alignment.bottomCenter,
               child: RepaintBoundary(
-                child: AnimatedOpacity(
-                  opacity: controller.value.isPlaying ? 0 : 1,
-                  duration: const Duration(milliseconds: 300),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(TSizes.md),
-                        bottomRight: Radius.circular(TSizes.md),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                controller.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                                color: Colors.white,
-                              ),
-                              onPressed: controllerNotifier.pausePlay,
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                controller.value.volume > 0
-                                    ? Icons.volume_off
-                                    : Icons.volume_up,
-                                color: Colors.white,
-                              ),
-                              onPressed: controllerNotifier.muteUnmute,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              controllerNotifier
-                                  .formatDuration(controller.value.position),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            const Spacer(),
-                            Text(
-                              controllerNotifier
-                                  .formatDuration(controller.value.duration),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            const SizedBox(width: 15),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                          child: SizedBox(
-                            height: 7,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: VideoProgressIndicator(
-                                controller,
-                                allowScrubbing: true,
-                                colors: const VideoProgressColors(
-                                  playedColor: TColors.primary,
-                                  bufferedColor: Colors.grey,
-                                  backgroundColor: Colors.white,
-                                ),
-                                padding: EdgeInsets.zero,
-                              ),
+                child: ValueListenableBuilder<VideoPlayerValue>(
+                  valueListenable: controller,
+                  builder: (context, value, _) {
+                    return IgnorePointer(
+                      ignoring: value.isPlaying,
+                      child: AnimatedOpacity(
+                        opacity: value.isPlaying ? 0 : 1,
+                        duration: const Duration(milliseconds: 300),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Colors.black12,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(TSizes.md),
+                              bottomRight: Radius.circular(TSizes.md),
                             ),
                           ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      value.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: controllerNotifier.pausePlay,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      value.volume > 0
+                                          ? Icons.volume_off
+                                          : Icons.volume_up,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: controllerNotifier.muteUnmute,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    controllerNotifier
+                                        .formatDuration(value.position),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    controllerNotifier
+                                        .formatDuration(value.duration),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(width: 15),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

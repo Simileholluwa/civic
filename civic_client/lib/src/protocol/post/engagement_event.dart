@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../post/post.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class EngagementEvent implements _i1.SerializableModel {
   EngagementEvent._({
@@ -40,13 +42,13 @@ abstract class EngagementEvent implements _i1.SerializableModel {
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
       postId: jsonSerialization['postId'] as int,
       post: jsonSerialization['post'] == null
           ? null
-          : _i3.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.Post>(jsonSerialization['post']),
       type: jsonSerialization['type'] as String,
       createdAt: jsonSerialization['createdAt'] == null
           ? null
@@ -86,6 +88,7 @@ abstract class EngagementEvent implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'EngagementEvent',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -114,14 +117,14 @@ class _EngagementEventImpl extends EngagementEvent {
     required String type,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          postId: postId,
-          post: post,
-          type: type,
-          createdAt: createdAt,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         postId: postId,
+         post: post,
+         type: type,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [EngagementEvent]
   /// with some or all fields replaced by the given arguments.

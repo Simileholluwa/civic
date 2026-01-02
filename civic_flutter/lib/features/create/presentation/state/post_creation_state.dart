@@ -12,6 +12,7 @@ class PostCreationState {
     this.locations = const <AWSPlaces>[],
     this.mentions = const <UserRecord>[],
     this.taggedUsers = const <UserRecord>[],
+    this.uploadedAssets = const <MediaAsset>[],
     this.tags = const <String>[],
     this.text = '',
     this.videoUrl = '',
@@ -47,15 +48,29 @@ class PostCreationState {
     } else {
       document = Document();
     }
+    final imagePaths = <String>[];
+    var videoPath = '';
+    final assets = post.mediaAssets ?? const <MediaAsset>[];
+    for (final a in assets) {
+      final url = a.publicUrl ?? '';
+      if (url.isEmpty) continue;
+      if (a.kind == MediaKind.image) {
+        imagePaths.add(url);
+      } else if (a.kind == MediaKind.video && videoPath.isEmpty) {
+        videoPath = url;
+      }
+    }
+
     return PostCreationState(
       text: post.text ?? '',
-      imageUrls: post.imageUrls ?? [],
-      videoUrl: post.videoUrl ?? '',
       taggedUsers: post.taggedUsers ?? [],
       locations: post.locations ?? [],
       mentions: post.mentions ?? [],
+      uploadedAssets: post.mediaAssets ?? [],
       tags: post.tags ?? [],
       controller: MentionHashtagLinkTextEditingController(text: post.text),
+      imageUrls: imagePaths,
+      videoUrl: videoPath,
       optionText: poll?.options?.map((e) => e.option!).toList(
                 growable: false,
               ) ??
@@ -86,6 +101,7 @@ class PostCreationState {
   final List<AWSPlaces> locations;
   final List<UserRecord> mentions;
   final List<UserRecord> taggedUsers;
+  final List<MediaAsset> uploadedAssets;
   final List<String> tags;
   final String text;
   final String videoUrl;
@@ -111,6 +127,7 @@ class PostCreationState {
     List<TextEditingController>? controllers,
     DateTime? expiresAt,
     List<String>? optionText,
+    List<MediaAsset>? uploadedAssets,
     String? articleContent,
     List<String>? articleTags,
     QuillController? articleController,
@@ -123,6 +140,7 @@ class PostCreationState {
       imageUrls: imageUrls ?? this.imageUrls,
       locations: locations ?? this.locations,
       mentions: mentions ?? this.mentions,
+      uploadedAssets: uploadedAssets ?? this.uploadedAssets,
       taggedUsers: taggedUsers ?? this.taggedUsers,
       tags: tags ?? this.tags,
       text: text ?? this.text,

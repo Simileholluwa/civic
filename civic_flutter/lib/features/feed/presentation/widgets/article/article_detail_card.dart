@@ -85,7 +85,7 @@ class ArticleDetailCard extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: ContentSingleCachedImage(
                   useMargin: false,
-                  imageUrl: post.imageUrls!.first,
+                  imageUrl: post.mediaAssets!.first.publicUrl,
                 ),
               ),
             ),

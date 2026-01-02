@@ -1,0 +1,3 @@
+class: MediaCleanupParams
+fields:
+  hours: int

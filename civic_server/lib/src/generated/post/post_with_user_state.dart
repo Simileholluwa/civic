@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class PostWithUserState
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -22,11 +24,11 @@ abstract class PostWithUserState
     bool? isSubscribed,
     bool? isFollower,
     this.selectedPollOptionId,
-  })  : hasLiked = hasLiked ?? false,
-        hasBookmarked = hasBookmarked ?? false,
-        hasReposted = hasReposted ?? false,
-        isSubscribed = isSubscribed ?? false,
-        isFollower = isFollower ?? false;
+  }) : hasLiked = hasLiked ?? false,
+       hasBookmarked = hasBookmarked ?? false,
+       hasReposted = hasReposted ?? false,
+       isSubscribed = isSubscribed ?? false,
+       isFollower = isFollower ?? false;
 
   factory PostWithUserState({
     required _i2.Post post,
@@ -40,8 +42,7 @@ abstract class PostWithUserState
 
   factory PostWithUserState.fromJson(Map<String, dynamic> jsonSerialization) {
     return PostWithUserState(
-      post: _i2.Post.fromJson(
-          (jsonSerialization['post'] as Map<String, dynamic>)),
+      post: _i3.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       hasLiked: jsonSerialization['hasLiked'] as bool?,
       hasBookmarked: jsonSerialization['hasBookmarked'] as bool?,
       hasReposted: jsonSerialization['hasReposted'] as bool?,
@@ -80,6 +81,7 @@ abstract class PostWithUserState
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostWithUserState',
       'post': post.toJson(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
@@ -94,6 +96,7 @@ abstract class PostWithUserState
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PostWithUserState',
       'post': post.toJsonForProtocol(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
@@ -123,14 +126,14 @@ class _PostWithUserStateImpl extends PostWithUserState {
     bool? isFollower,
     int? selectedPollOptionId,
   }) : super._(
-          post: post,
-          hasLiked: hasLiked,
-          hasBookmarked: hasBookmarked,
-          hasReposted: hasReposted,
-          isSubscribed: isSubscribed,
-          isFollower: isFollower,
-          selectedPollOptionId: selectedPollOptionId,
-        );
+         post: post,
+         hasLiked: hasLiked,
+         hasBookmarked: hasBookmarked,
+         hasReposted: hasReposted,
+         isSubscribed: isSubscribed,
+         isFollower: isFollower,
+         selectedPollOptionId: selectedPollOptionId,
+       );
 
   /// Returns a shallow copy of this [PostWithUserState]
   /// with some or all fields replaced by the given arguments.
@@ -148,8 +151,9 @@ class _PostWithUserStateImpl extends PostWithUserState {
     return PostWithUserState(
       post: post ?? this.post.copyWith(),
       hasLiked: hasLiked is bool? ? hasLiked : this.hasLiked,
-      hasBookmarked:
-          hasBookmarked is bool? ? hasBookmarked : this.hasBookmarked,
+      hasBookmarked: hasBookmarked is bool?
+          ? hasBookmarked
+          : this.hasBookmarked,
       hasReposted: hasReposted is bool? ? hasReposted : this.hasReposted,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
       isFollower: isFollower is bool? ? isFollower : this.isFollower,

@@ -1,7 +1,10 @@
 // import 'package:civic_server/env_settings.dart';
 // import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
+import 'dart:io';
+
 import 'package:civic_server/src/future_calls/post_future_call.dart';
 import 'package:civic_server/src/future_calls/project_future_call.dart';
+import 'package:civic_server/src/future_calls/media_cleanup_future_call.dart';
 import 'package:serverpod/serverpod.dart';
 
 import 'package:civic_server/src/web/routes/root.dart';
@@ -27,14 +30,12 @@ void run(List<String> args) async {
   );
 
   // Future calls
-  pod.registerFutureCall(
-    SchedulePostFutureCall(),
-    'schedulePostFutureCall',
-  );
+  pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
   pod.registerFutureCall(
     ScheduleProjectFutureCall(),
     'scheduleProjectFutureCall',
   );
+  pod.registerFutureCall(MediaCleanupFutureCall(), 'mediaCleanupFutureCall');
 
   // Auth
   auth.AuthConfig.set(
@@ -85,8 +86,7 @@ void run(List<String> args) async {
   pod.webServer.addRoute(RouteRoot(), '/index.html');
   // Serve all files in the /static directory.
   pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
-    '/*',
+    SpaRoute(Directory('web/app'), fallback: File('web/app/index.html')),
   );
 
   // Start the server.

@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project_vetting.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class ProjectVettingReaction
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -42,23 +44,27 @@ abstract class ProjectVettingReaction
   }) = _ProjectVettingReactionImpl;
 
   factory ProjectVettingReaction.fromJson(
-      Map<String, dynamic> jsonSerialization) {
+    Map<String, dynamic> jsonSerialization,
+  ) {
     return ProjectVettingReaction(
       id: jsonSerialization['id'] as int?,
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       vettingId: jsonSerialization['vettingId'] as int,
       vetting: jsonSerialization['vetting'] == null
           ? null
-          : _i3.ProjectVetting.fromJson(
-              (jsonSerialization['vetting'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.ProjectVetting>(
+              jsonSerialization['vetting'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
@@ -110,6 +116,7 @@ abstract class ProjectVettingReaction
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectVettingReaction',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -125,6 +132,7 @@ abstract class ProjectVettingReaction
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ProjectVettingReaction',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
@@ -187,16 +195,16 @@ class _ProjectVettingReactionImpl extends ProjectVettingReaction {
     bool? isLike,
     bool? isDeleted,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          vettingId: vettingId,
-          vetting: vetting,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          isLike: isLike,
-          isDeleted: isDeleted,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         vettingId: vettingId,
+         vetting: vetting,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         isLike: isLike,
+         isDeleted: isDeleted,
+       );
 
   /// Returns a shallow copy of this [ProjectVettingReaction]
   /// with some or all fields replaced by the given arguments.
@@ -218,8 +226,9 @@ class _ProjectVettingReactionImpl extends ProjectVettingReaction {
       ownerId: ownerId ?? this.ownerId,
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       vettingId: vettingId ?? this.vettingId,
-      vetting:
-          vetting is _i3.ProjectVetting? ? vetting : this.vetting?.copyWith(),
+      vetting: vetting is _i3.ProjectVetting?
+          ? vetting
+          : this.vetting?.copyWith(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       isLike: isLike is bool? ? isLike : this.isLike,
@@ -228,9 +237,47 @@ class _ProjectVettingReactionImpl extends ProjectVettingReaction {
   }
 }
 
+class ProjectVettingReactionUpdateTable
+    extends _i1.UpdateTable<ProjectVettingReactionTable> {
+  ProjectVettingReactionUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> vettingId(int value) => _i1.ColumnValue(
+    table.vettingId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> isLike(bool? value) => _i1.ColumnValue(
+    table.isLike,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> isDeleted(bool? value) => _i1.ColumnValue(
+    table.isDeleted,
+    value,
+  );
+}
+
 class ProjectVettingReactionTable extends _i1.Table<int?> {
   ProjectVettingReactionTable({super.tableRelation})
-      : super(tableName: 'project_vetting_reaction') {
+    : super(tableName: 'project_vetting_reaction') {
+    updateTable = ProjectVettingReactionUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -257,6 +304,8 @@ class ProjectVettingReactionTable extends _i1.Table<int?> {
       this,
     );
   }
+
+  late final ProjectVettingReactionUpdateTable updateTable;
 
   late final _i1.ColumnInt ownerId;
 
@@ -302,14 +351,14 @@ class ProjectVettingReactionTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        vettingId,
-        dateCreated,
-        updatedAt,
-        isLike,
-        isDeleted,
-      ];
+    id,
+    ownerId,
+    vettingId,
+    dateCreated,
+    updatedAt,
+    isLike,
+    isDeleted,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -338,9 +387,9 @@ class ProjectVettingReactionInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'owner': _owner,
-        'vetting': _vetting,
-      };
+    'owner': _owner,
+    'vetting': _vetting,
+  };
 
   @override
   _i1.Table<int?> get table => ProjectVettingReaction.t;
@@ -533,6 +582,48 @@ class ProjectVettingReactionRepository {
     );
   }
 
+  /// Updates a single [ProjectVettingReaction] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ProjectVettingReaction?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectVettingReactionUpdateTable>
+    columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ProjectVettingReaction>(
+      id,
+      columnValues: columnValues(ProjectVettingReaction.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ProjectVettingReaction]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ProjectVettingReaction>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectVettingReactionUpdateTable>
+    columnValues,
+    required _i1.WhereExpressionBuilder<ProjectVettingReactionTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectVettingReactionTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectVettingReactionTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ProjectVettingReaction>(
+      columnValues: columnValues(ProjectVettingReaction.t.updateTable),
+      where: where(ProjectVettingReaction.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectVettingReaction.t),
+      orderByList: orderByList?.call(ProjectVettingReaction.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [ProjectVettingReaction]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -605,8 +696,9 @@ class ProjectVettingReactionAttachRowRepository {
       throw ArgumentError.notNull('owner.id');
     }
 
-    var $projectVettingReaction =
-        projectVettingReaction.copyWith(ownerId: owner.id);
+    var $projectVettingReaction = projectVettingReaction.copyWith(
+      ownerId: owner.id,
+    );
     await session.db.updateRow<ProjectVettingReaction>(
       $projectVettingReaction,
       columns: [ProjectVettingReaction.t.ownerId],
@@ -629,8 +721,9 @@ class ProjectVettingReactionAttachRowRepository {
       throw ArgumentError.notNull('vetting.id');
     }
 
-    var $projectVettingReaction =
-        projectVettingReaction.copyWith(vettingId: vetting.id);
+    var $projectVettingReaction = projectVettingReaction.copyWith(
+      vettingId: vetting.id,
+    );
     await session.db.updateRow<ProjectVettingReaction>(
       $projectVettingReaction,
       columns: [ProjectVettingReaction.t.vettingId],

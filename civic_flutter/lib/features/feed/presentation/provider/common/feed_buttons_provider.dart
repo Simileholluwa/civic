@@ -371,6 +371,7 @@ class FeedButtons extends _$FeedButtons {
     final result = await deletePostUseCase(
       DeletePostParams(
         ctx.postId,
+        false,
       ),
     );
     return result.fold((error) {

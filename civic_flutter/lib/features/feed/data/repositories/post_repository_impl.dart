@@ -352,10 +352,12 @@ class FeedRepositoryImpl implements FeedRepository {
   @override
   Future<Either<Failure, void>> deletePost({
     required int postId,
+    required bool fullDelete,
   }) async {
     try {
       final result = await _remoteDatabase.deletePost(
         postId: postId,
+        fullDelete: fullDelete,
       );
       return Right(result);
     } on ServerException catch (e) {

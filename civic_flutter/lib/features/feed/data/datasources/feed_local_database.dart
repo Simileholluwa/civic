@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 abstract class FeedLocalDatabase {
@@ -44,7 +43,6 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       if (decoded is List) {
         return decoded.whereType<Map<String, dynamic>>().toList(growable: true);
       }
-      // Backward compat: if it was a single draft Map, wrap into list
       if (decoded is Map<String, dynamic>) {
         return <Map<String, dynamic>>[decoded];
       }
@@ -64,26 +62,19 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
 
   Future<void> _cleanupStoredDraftFiles(Map<String, dynamic> map) async {
     try {
-      final images =
-          (map['imageUrls'] as List?)?.whereType<String>() ?? const <String>[];
-      for (final p in images) {
-        if (!_urlRegex.hasMatch(p)) {
-          final f = File(p);
+      final assets =
+          (map['mediaAssets'] as List?)?.whereType<Map<String, dynamic>>() ??
+              const <Map<String, dynamic>>[];
+      for (final a in assets) {
+        final url = a['publicUrl'] as String?;
+        if (url != null && url.isNotEmpty && !_urlRegex.hasMatch(url)) {
+          final f = File(url);
           if (f.existsSync()) {
             await f.delete();
           }
         }
       }
-      final video = map['videoUrl'] as String?;
-      if (video != null && video.isNotEmpty && !_urlRegex.hasMatch(video)) {
-        final vf = File(video);
-        if (vf.existsSync()) {
-          await vf.delete();
-        }
-      }
-    } on Exception catch (_) {
-      // ignore cleanup failures
-    }
+    } on Exception catch (_) {}
   }
 
   @override
@@ -108,44 +99,10 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       final rawOwner = _prefs.getString('userRecord')!;
       final ownerMap = jsonDecode(rawOwner) as Map<String, dynamic>;
       final owner = UserRecord.fromJson(ownerMap);
-
-      final savedImagesPath = <String>[];
-      final existingUploadedImage = <String>[];
-      var existingUploadedVideo = '';
-      var savedVideoPath = '';
       final appDir = await getApplicationDocumentsDirectory();
       final directory = Directory('${appDir.path}/$draftType');
       if (!directory.existsSync()) {
         await directory.create(recursive: true);
-      }
-
-      if ((post.imageUrls ?? []).isNotEmpty) {
-        for (final img in post.imageUrls!) {
-          final match = _urlRegex.hasMatch(img);
-          if (match) {
-            existingUploadedImage.add(img);
-          } else {
-            final ext = path.extension(img);
-            final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
-            final savedFile = File(path.join(directory.path, fileName));
-            final copy = await File(img).copy(savedFile.path);
-            savedImagesPath.add(copy.path);
-          }
-        }
-      }
-
-      if ((post.videoUrl ?? '').isNotEmpty) {
-        final video = post.videoUrl!;
-        final match = _urlRegex.hasMatch(video);
-        if (match) {
-          existingUploadedVideo = video;
-        } else {
-          final ext = path.extension(video);
-          final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
-          final savedFile = File(path.join(directory.path, fileName));
-          final copy = await File(video).copy(savedFile.path);
-          savedVideoPath = copy.path;
-        }
       }
 
       final draftId = post.id ?? DateTime.now().millisecondsSinceEpoch;
@@ -154,24 +111,18 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
             id: draftId,
             ownerId: userId,
             owner: owner,
-            imageUrls: [...savedImagesPath, ...existingUploadedImage],
-            videoUrl: existingUploadedVideo.isNotEmpty
-                ? existingUploadedVideo
-                : savedVideoPath,
           )
           .toJson();
 
       final list = await _readDraftsJson(draftType);
       final idx = list.indexWhere((m) => m['id'] == draftId);
       if (idx >= 0) {
-        // update and move to end to mark most-recent
         list[idx] = toStore;
         final moved = list.removeAt(idx);
         list.add(moved);
       } else {
         list.add(toStore);
       }
-      // trim to max drafts, removing oldest first
       while (list.length > _maxDrafts) {
         final oldest = list.first;
         await _cleanupStoredDraftFiles(oldest);
@@ -192,7 +143,6 @@ class FeedLocalDatabaseImpl extends FeedLocalDatabase {
       final list = await _readDraftsJson(draftType);
       final idx = list.indexWhere((m) => m['id'] == draftId);
       if (idx >= 0) {
-        // Attempt to delete local files saved for this draft
         final map = list[idx];
         await _cleanupStoredDraftFiles(map);
         list.removeAt(idx);
