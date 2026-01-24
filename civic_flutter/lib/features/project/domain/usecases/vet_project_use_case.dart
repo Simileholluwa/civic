@@ -11,7 +11,7 @@ class VetProjectUseCase implements UseCase<ProjectVetting, VetProjectParams> {
   @override
   Future<Either<Failure, ProjectVetting>> call(VetProjectParams params) async {
     final result = await _projectRepository.vetProject(
-      projectVetting: params.projectVetting,      
+      projectVetting: params.projectVetting,
     );
     return result;
   }
@@ -20,8 +20,6 @@ class VetProjectUseCase implements UseCase<ProjectVetting, VetProjectParams> {
 class VetProjectParams {
   VetProjectParams(
     this.projectVetting,
-    
   );
   final ProjectVetting projectVetting;
-
 }

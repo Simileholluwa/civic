@@ -69,7 +69,7 @@ class ArticleNotificationTarget extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 16 / 9,
               child: ContentCachedImage(
-                url: notification.post!.imageUrls!.first,
+                url: notification.post!.mediaAssets!.first.publicUrl!,
                 height: 200,
               ),
             ),

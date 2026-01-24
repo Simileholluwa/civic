@@ -12,7 +12,8 @@ class ValidateCreateAccountUseCase
 
   @override
   Future<Either<Failure, UserInfo>> call(
-      ValidateCreateAccountParams params,) async {
+    ValidateCreateAccountParams params,
+  ) async {
     final result = await _authRepository.validateCreateAccount(
       email: params.email,
       code: params.code,

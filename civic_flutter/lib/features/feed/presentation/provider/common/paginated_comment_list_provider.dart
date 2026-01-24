@@ -8,7 +8,7 @@ part 'paginated_comment_list_provider.g.dart';
 @riverpod
 class PaginatedCommentList extends _$PaginatedCommentList {
   @override
-  PagingController<int, PostWithUserState> build(int postId) {
+  Raw<PagingController<int, PostWithUserState>> build(int postId) {
     final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

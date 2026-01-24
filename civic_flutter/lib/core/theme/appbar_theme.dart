@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +18,10 @@ class TAppBarTheme {
     iconTheme: IconThemeData(color: TColors.black, size: TSizes.iconMd),
     actionsIconTheme: IconThemeData(color: TColors.black, size: TSizes.iconMd),
     titleTextStyle: TextStyle(
-        fontSize: 18, fontWeight: FontWeight.w600, color: TColors.black,),
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: TColors.black,
+    ),
   );
 
   static const darkAppBarTheme = AppBarTheme(
@@ -29,8 +31,10 @@ class TAppBarTheme {
     backgroundColor: TColors.dark,
     surfaceTintColor: Colors.transparent,
     iconTheme: IconThemeData(size: TSizes.iconMd),
-    actionsIconTheme: IconThemeData( size: TSizes.iconMd),
+    actionsIconTheme: IconThemeData(size: TSizes.iconMd),
     titleTextStyle: TextStyle(
-        fontSize: 18, fontWeight: FontWeight.w600,),
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+    ),
   );
 }

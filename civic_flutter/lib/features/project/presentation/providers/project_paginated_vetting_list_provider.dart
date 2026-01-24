@@ -11,7 +11,7 @@ Timer? _debounceTimer;
 @Riverpod(keepAlive: true)
 class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
   @override
-  PagingController<int, ProjectVetting> build() {
+  Raw<PagingController<int, ProjectVetting>> build() {
     final controller = PagingController<int, ProjectVetting>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

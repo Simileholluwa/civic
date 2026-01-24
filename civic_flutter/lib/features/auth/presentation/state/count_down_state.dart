@@ -1,5 +1,4 @@
 class CountdownTimerState {
-
   CountdownTimerState({
     required this.secondsRemaining,
     required this.isCountingDown,

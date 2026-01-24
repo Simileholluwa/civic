@@ -11,6 +11,7 @@ export './helpers/image_helper.dart';
 export './providers/api_client_provider.dart';
 export './providers/assets_service_provider.dart';
 export './providers/boolean_providers.dart';
+export './providers/bottom_nav_visibility_provider.dart';
 export './providers/fcm_services_provider.dart';
 export './providers/initial_dependencies_provider.dart';
 export './providers/integer_provider.dart';

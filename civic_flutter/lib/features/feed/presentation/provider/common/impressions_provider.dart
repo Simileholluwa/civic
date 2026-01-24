@@ -1,13 +1,24 @@
+import 'dart:async';
+
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'impressions_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class FeedImpressions extends _$FeedImpressions {
   @override
   int build() {
-    ref.onDispose(flush);
+    final flushUsecase = ref.read(flushPostImpressionsProvider);
+    ref.onDispose(() {
+      unawaited(
+        flushUsecase(
+          FlushPostImpressionsParams(
+            source: 'feed',
+          ),
+        ),
+      );
+    });
     return 0;
   }
 

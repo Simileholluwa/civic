@@ -75,7 +75,7 @@ class _ImpressionVisibilityTrackerState
     }
   }
 
-  Future<void> _tryFireImpression() async {
+  void _tryFireImpression() {
     _dwellPending = false;
     if (_disposed) return;
     if (!mounted || !widget.enabled) return;
@@ -83,10 +83,12 @@ class _ImpressionVisibilityTrackerState
     if (_cooldownActive) return;
     if (widget.fireOnce && _firedOnce) return;
     if (widget.postId <= 0) return;
-    await ref.read(feedImpressionsProvider.notifier).record(
-          widget.postId,
-          source: widget.source,
-        );
+    unawaited(
+      ref.read(feedImpressionsProvider.notifier).record(
+            widget.postId,
+            source: widget.source,
+          ),
+    );
     _lastFireAt = DateTime.now();
     _firedOnce = true;
     if (widget.fireOnce) {

@@ -1,5 +1,4 @@
 class ProjectReviewQueryState {
-
   ProjectReviewQueryState({
     required this.rating,
     required this.cardinal,

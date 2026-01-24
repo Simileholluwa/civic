@@ -7,7 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class AddVettingImage extends ConsumerWidget {
   const AddVettingImage({
-    required this.projectVetting, super.key,
+    required this.projectVetting,
+    super.key,
   });
 
   final ProjectVetting? projectVetting;

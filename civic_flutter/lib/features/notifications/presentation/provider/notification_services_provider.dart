@@ -75,3 +75,10 @@ MarkAllNotificationsAsReadUseCase markAllNotificationAsRead(Ref ref) {
     notificationRepository: ref.read(notificationRepositoryImplProvider),
   );
 }
+
+@Riverpod(keepAlive: true)
+GetUnreadNotificationsUseCase getUnreadNotifications(Ref ref) {
+  return GetUnreadNotificationsUseCase(
+    notificationRepository: ref.read(notificationRepositoryImplProvider),
+  );
+}

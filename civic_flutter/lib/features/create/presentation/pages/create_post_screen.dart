@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
@@ -13,24 +11,49 @@ class CreatePostScreen extends ConsumerWidget {
   const CreatePostScreen({
     required this.id,
     super.key,
-    this.project,
-    this.parent,
-    this.post,
+    this.projectToQuote,
+    this.postToQuote,
+    this.rootPost,
+    this.isReply = false,
+    this.isComment = false,
   });
 
   final int id;
-  final Project? project;
-  final Post? parent;
-  final Post? post;
+  final Post? rootPost;
+  final Post? postToQuote;
+  final Project? projectToQuote;
+  final bool isComment;
+  final bool isReply;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final suggestions = ref.watch(mentionSuggestionsProvider.select((s) => s));
-    final hashtagsSuggestions =
-        ref.watch(hashtagsSuggestionsProvider.select((s) => s));
-    final data = ref.watch(postDetailProvider(id, post, PostType.regular));
-    final hasDraft = ref.watch(hasPostDraftProvider(TTexts.postDraft));
-    final postState = ref.watch(postCreationProvider(data.value?.post));
+    final suggestions = ref.watch(
+      mentionSuggestionsProvider.select(
+        (s) => s,
+      ),
+    );
+    final hashtagsSuggestions = ref.watch(
+      hashtagsSuggestionsProvider.select(
+        (s) => s,
+      ),
+    );
+    final data = ref.watch(
+      postDetailProvider(
+        id,
+        rootPost,
+        PostType.regular,
+      ),
+    );
+    final hasDraft = ref.watch(
+      hasPostDraftProvider(
+        TTexts.postDraft,
+      ),
+    );
+    final postState = ref.watch(
+      postCreationProvider(
+        data.value?.post,
+      ),
+    );
     final postNotifier = ref.read(
       postCreationProvider(data.value?.post).notifier,
     );
@@ -42,21 +65,11 @@ class CreatePostScreen extends ConsumerWidget {
             s.videoUrl.isNotEmpty,
       ),
     );
-    final isRepost = project != null;
-    final isReplyOrComment =
-        parent != null || data.value?.post.parentId != null;
-    final isComment = isReplyOrComment &&
-        (parent?.postType == PostType.regular ||
-            parent?.postType == PostType.projectRepost ||
-            parent?.postType == PostType.poll ||
-            parent?.postType == PostType.article ||
-            data.value?.post.postType == PostType.comment);
+    final isProjectQuote = projectToQuote != null;
+    final isPostQuote = postToQuote != null;
     final scheduledDateTimeState = ref.watch(
       postScheduledDateTimeProvider.select((dt) => dt),
     );
-    log('isComment: $isComment');
-    log('parentId: ${data.value?.post.parentId}');
-    log('post id: ${data.value?.post.id}');
     Future<void> saveDraftAndPop() async {
       await postNotifier.savePostAsDraft(
         data.value?.post.id,
@@ -66,7 +79,11 @@ class CreatePostScreen extends ConsumerWidget {
     }
 
     Future<void> handlePopAttempt() async {
-      if (canSendPost && !isRepost && !isReplyOrComment) {
+      if (canSendPost &&
+          !isProjectQuote &&
+          !isPostQuote &&
+          !isReply &&
+          !isComment) {
         final save = await savePostDraftDialog(
           context,
           PostType.regular,
@@ -135,29 +152,31 @@ class CreatePostScreen extends ConsumerWidget {
                 if (context.mounted) {
                   context.pop();
                 }
-                if (isRepost) {
-                  await postNotifier.repostOrQuote(
+                if (isProjectQuote) {
+                  await postNotifier.quoteProject(
                     data.value?.post.id,
-                    project?.id,
+                    projectToQuote?.id,
                   );
-                } else if (isReplyOrComment) {
-                  if (isComment) {
-                    await postNotifier.sendComment(
-                      parent?.id ?? data.value?.post.parentId ?? 0,
-                      data.value?.post.id,
-                    );
-                  } else {
-                    await postNotifier.sendReply(
-                      parent?.id ?? data.value?.post.parentId ?? 0,
-                      data.value?.post.id,
-                    );
-                  }
+                } else if (isPostQuote) {
+                  await postNotifier.quotePost(
+                    postToQuote!.id!,
+                  );
+                } else if (isComment) {
+                  await postNotifier.sendComment(
+                    data.value?.post.parentId ?? 0,
+                    data.value?.post.id,
+                  );
+                } else if (isReply) {
+                  await postNotifier.sendReply(
+                    data.value?.post.parentId ?? 0,
+                    data.value?.post.id,
+                  );
                 } else {
                   await postNotifier.send(id);
                 }
               },
               title: const CreateContentPrivacy(),
-              sendText: isRepost ? 'REPOST' : null,
+              sendText: isPostQuote || isProjectQuote ? 'QUOTE' : null,
               onCanSendPost: () async {
                 await handlePopAttempt();
               },
@@ -192,8 +211,10 @@ class CreatePostScreen extends ConsumerWidget {
             data: (value) => RepaintBoundary(
               child: CreatePostWidget(
                 post: value.post,
-                project: project,
-                isReplyOrComment: parent != null,
+                project: projectToQuote,
+                isReplyOrComment: isReply || isComment,
+                isQuote: isPostQuote || isProjectQuote,
+                postToQuote: postToQuote,
               ),
             ),
             error: (error, st) {

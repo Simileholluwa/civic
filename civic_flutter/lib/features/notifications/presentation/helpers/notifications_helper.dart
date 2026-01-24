@@ -64,9 +64,12 @@ class NotificationsHelper {
     NotificationActionType.react: Icons.thumb_up_alt_rounded,
     NotificationActionType.tag: Iconsax.tag_user5,
     NotificationActionType.mention: Iconsax.tag_user,
-    NotificationActionType.quote: Iconsax.repeat,
+    NotificationActionType.quote: Iconsax.repeate_music5,
     NotificationActionType.review: Iconsax.magic_star5,
     NotificationActionType.vet: Iconsax.medal_star5,
+    NotificationActionType.repost: Iconsax.repeate_music5,
+    NotificationActionType.reply: Iconsax.message_add5,
+    NotificationActionType.vote: Iconsax.chart_success5,
   };
 
   static Widget notifIcon(
@@ -93,6 +96,9 @@ class NotificationsHelper {
     NotificationActionType.quote: Colors.purple,
     NotificationActionType.review: Colors.green,
     NotificationActionType.vet: Colors.indigo,
+    NotificationActionType.repost: Colors.brown,
+    NotificationActionType.reply: Colors.cyan,
+    NotificationActionType.vote: Colors.amber,
   };
 
   static Color getIconColor(

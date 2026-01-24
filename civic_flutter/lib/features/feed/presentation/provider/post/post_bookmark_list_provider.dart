@@ -9,7 +9,7 @@ part 'post_bookmark_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedPostBookmarkList extends _$PaginatedPostBookmarkList {
   @override
-  PagingController<int, PostWithUserState> build() {
+  Raw<PagingController<int, PostWithUserState>> build() {
     final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

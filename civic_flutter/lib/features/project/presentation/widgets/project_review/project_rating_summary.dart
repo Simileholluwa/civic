@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class ProjectRatingSummary extends StatelessWidget {
   const ProjectRatingSummary({
-    required this.project, super.key,
+    required this.project,
+    super.key,
   });
 
   final Project project;
@@ -35,9 +36,8 @@ class ProjectRatingSummary extends StatelessWidget {
                 child: VerticalDivider(),
               ),
               ProjectTitleAndRating(
-                ratingNumber: project.overallDescriptionRating
-                    .toString()
-                    .substring(0, 3),
+                ratingNumber:
+                    project.overallDescriptionRating.toString().substring(0, 3),
                 rating: project.overallDescriptionRating!,
                 title: 'Description',
                 titleSize: 50,
@@ -49,9 +49,8 @@ class ProjectRatingSummary extends StatelessWidget {
                 child: VerticalDivider(),
               ),
               ProjectTitleAndRating(
-                ratingNumber: project.overallAttachmentsRating
-                    .toString()
-                    .substring(0, 3),
+                ratingNumber:
+                    project.overallAttachmentsRating.toString().substring(0, 3),
                 rating: project.overallAttachmentsRating!,
                 title: 'Attachments',
                 titleSize: 50,

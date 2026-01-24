@@ -16,7 +16,10 @@ class NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPostNotif = notification.targetType == NotificationTargetType.post;
+    final isPostNotif =
+        notification.targetType == NotificationTargetType.post ||
+            notification.targetType == NotificationTargetType.comment ||
+            notification.targetType == NotificationTargetType.reply;
     final isPollNotif = notification.targetType == NotificationTargetType.poll;
     final isArticleNotif =
         notification.targetType == NotificationTargetType.article;

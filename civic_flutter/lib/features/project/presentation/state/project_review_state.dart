@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewState {
-
   ProjectReviewState({
     required this.review,
     required this.locationRating,
@@ -14,7 +13,8 @@ class ProjectReviewState {
     required this.fundingRating,
     required this.datesRating,
     required this.overallRating,
-    required this.reviewController, this.isValid = false,
+    required this.reviewController,
+    this.isValid = false,
     this.isLoading = false,
     this.isEditing = false,
     this.isDeleting = false,

@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project_review.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class ProjectReviewReaction implements _i1.SerializableModel {
   ProjectReviewReaction._({
@@ -39,23 +41,27 @@ abstract class ProjectReviewReaction implements _i1.SerializableModel {
   }) = _ProjectReviewReactionImpl;
 
   factory ProjectReviewReaction.fromJson(
-      Map<String, dynamic> jsonSerialization) {
+    Map<String, dynamic> jsonSerialization,
+  ) {
     return ProjectReviewReaction(
       id: jsonSerialization['id'] as int?,
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       reviewId: jsonSerialization['reviewId'] as int,
       review: jsonSerialization['review'] == null
           ? null
-          : _i3.ProjectReview.fromJson(
-              (jsonSerialization['review'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.ProjectReview>(
+              jsonSerialization['review'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
@@ -102,6 +108,7 @@ abstract class ProjectReviewReaction implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectReviewReaction',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -134,16 +141,16 @@ class _ProjectReviewReactionImpl extends ProjectReviewReaction {
     bool? isLike,
     bool? isDeleted,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          reviewId: reviewId,
-          review: review,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          isLike: isLike,
-          isDeleted: isDeleted,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         reviewId: reviewId,
+         review: review,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         isLike: isLike,
+         isDeleted: isDeleted,
+       );
 
   /// Returns a shallow copy of this [ProjectReviewReaction]
   /// with some or all fields replaced by the given arguments.

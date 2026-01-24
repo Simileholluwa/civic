@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 class ContentCachedImage extends StatelessWidget {
   const ContentCachedImage({
-    required this.url, required this.height, super.key,
+    required this.url,
+    required this.height,
+    super.key,
   });
 
   final String url;
@@ -18,7 +20,6 @@ class ContentCachedImage extends StatelessWidget {
         return SizedBox(
           height: height,
         );
-        
       },
     );
   }

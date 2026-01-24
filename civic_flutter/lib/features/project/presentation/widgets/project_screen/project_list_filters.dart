@@ -1,12 +1,15 @@
-
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ProjectListFilters extends StatelessWidget {
   const ProjectListFilters({
-    required this.showModal, required this.filterText, required this.filterTextPlaceholder, required this.child, required this.onFilterTap, super.key,
+    required this.showModal,
+    required this.filterText,
+    required this.filterTextPlaceholder,
+    required this.child,
+    required this.onFilterTap,
+    super.key,
   });
 
   final Widget child;

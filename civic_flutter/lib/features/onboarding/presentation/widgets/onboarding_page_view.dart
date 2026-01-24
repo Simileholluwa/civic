@@ -1,4 +1,3 @@
-
 import 'package:civic_flutter/core/constants/sizes.dart';
 import 'package:civic_flutter/core/widgets/app/app_decoration_dot.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
@@ -28,7 +27,9 @@ class OnBoardingPageView extends StatelessWidget {
             children: [
               Text(
                 onboardingEntity.title,
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontSize: 30,),
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 30,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

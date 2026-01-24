@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class UserNotificationSettings
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -45,31 +47,31 @@ abstract class UserNotificationSettings
     bool? pushNewFollowers,
     bool? allowPlatformUpdates,
     bool? pushPlatformUpdates,
-  })  : pauseAllPush = pauseAllPush ?? false,
-        allowComments = allowComments ?? true,
-        pushComments = pushComments ?? true,
-        allowLikes = allowLikes ?? true,
-        pushLikes = pushLikes ?? true,
-        allowRepostsAndQuotes = allowRepostsAndQuotes ?? true,
-        pushRepostsAndQuotes = pushRepostsAndQuotes ?? true,
-        allowNewReviews = allowNewReviews ?? true,
-        pushNewReviews = pushNewReviews ?? true,
-        allowNewVettings = allowNewVettings ?? true,
-        pushNewVettings = pushNewVettings ?? true,
-        allowReactions = allowReactions ?? true,
-        pushReactions = pushReactions ?? true,
-        allowHelpfulReviews = allowHelpfulReviews ?? true,
-        pushHelpfulReviews = pushHelpfulReviews ?? true,
-        allowSubscribedContent = allowSubscribedContent ?? true,
-        pushSubscribedContent = pushSubscribedContent ?? true,
-        allowMentions = allowMentions ?? true,
-        pushMentions = pushMentions ?? true,
-        allowTags = allowTags ?? true,
-        pushTags = pushTags ?? true,
-        allowNewFollowers = allowNewFollowers ?? true,
-        pushNewFollowers = pushNewFollowers ?? true,
-        allowPlatformUpdates = allowPlatformUpdates ?? true,
-        pushPlatformUpdates = pushPlatformUpdates ?? true;
+  }) : pauseAllPush = pauseAllPush ?? false,
+       allowComments = allowComments ?? true,
+       pushComments = pushComments ?? true,
+       allowLikes = allowLikes ?? true,
+       pushLikes = pushLikes ?? true,
+       allowRepostsAndQuotes = allowRepostsAndQuotes ?? true,
+       pushRepostsAndQuotes = pushRepostsAndQuotes ?? true,
+       allowNewReviews = allowNewReviews ?? true,
+       pushNewReviews = pushNewReviews ?? true,
+       allowNewVettings = allowNewVettings ?? true,
+       pushNewVettings = pushNewVettings ?? true,
+       allowReactions = allowReactions ?? true,
+       pushReactions = pushReactions ?? true,
+       allowHelpfulReviews = allowHelpfulReviews ?? true,
+       pushHelpfulReviews = pushHelpfulReviews ?? true,
+       allowSubscribedContent = allowSubscribedContent ?? true,
+       pushSubscribedContent = pushSubscribedContent ?? true,
+       allowMentions = allowMentions ?? true,
+       pushMentions = pushMentions ?? true,
+       allowTags = allowTags ?? true,
+       pushTags = pushTags ?? true,
+       allowNewFollowers = allowNewFollowers ?? true,
+       pushNewFollowers = pushNewFollowers ?? true,
+       allowPlatformUpdates = allowPlatformUpdates ?? true,
+       pushPlatformUpdates = pushPlatformUpdates ?? true;
 
   factory UserNotificationSettings({
     int? id,
@@ -103,14 +105,16 @@ abstract class UserNotificationSettings
   }) = _UserNotificationSettingsImpl;
 
   factory UserNotificationSettings.fromJson(
-      Map<String, dynamic> jsonSerialization) {
+    Map<String, dynamic> jsonSerialization,
+  ) {
     return UserNotificationSettings(
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
       pauseAllPush: jsonSerialization['pauseAllPush'] as bool,
       allowComments: jsonSerialization['allowComments'] as bool,
       pushComments: jsonSerialization['pushComments'] as bool,
@@ -240,6 +244,7 @@ abstract class UserNotificationSettings
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserNotificationSettings',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -274,6 +279,7 @@ abstract class UserNotificationSettings
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'UserNotificationSettings',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJsonForProtocol(),
@@ -305,8 +311,9 @@ abstract class UserNotificationSettings
     };
   }
 
-  static UserNotificationSettingsInclude include(
-      {_i2.UserRecordInclude? user}) {
+  static UserNotificationSettingsInclude include({
+    _i2.UserRecordInclude? user,
+  }) {
     return UserNotificationSettingsInclude._(user: user);
   }
 
@@ -369,35 +376,35 @@ class _UserNotificationSettingsImpl extends UserNotificationSettings {
     bool? allowPlatformUpdates,
     bool? pushPlatformUpdates,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          pauseAllPush: pauseAllPush,
-          allowComments: allowComments,
-          pushComments: pushComments,
-          allowLikes: allowLikes,
-          pushLikes: pushLikes,
-          allowRepostsAndQuotes: allowRepostsAndQuotes,
-          pushRepostsAndQuotes: pushRepostsAndQuotes,
-          allowNewReviews: allowNewReviews,
-          pushNewReviews: pushNewReviews,
-          allowNewVettings: allowNewVettings,
-          pushNewVettings: pushNewVettings,
-          allowReactions: allowReactions,
-          pushReactions: pushReactions,
-          allowHelpfulReviews: allowHelpfulReviews,
-          pushHelpfulReviews: pushHelpfulReviews,
-          allowSubscribedContent: allowSubscribedContent,
-          pushSubscribedContent: pushSubscribedContent,
-          allowMentions: allowMentions,
-          pushMentions: pushMentions,
-          allowTags: allowTags,
-          pushTags: pushTags,
-          allowNewFollowers: allowNewFollowers,
-          pushNewFollowers: pushNewFollowers,
-          allowPlatformUpdates: allowPlatformUpdates,
-          pushPlatformUpdates: pushPlatformUpdates,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         pauseAllPush: pauseAllPush,
+         allowComments: allowComments,
+         pushComments: pushComments,
+         allowLikes: allowLikes,
+         pushLikes: pushLikes,
+         allowRepostsAndQuotes: allowRepostsAndQuotes,
+         pushRepostsAndQuotes: pushRepostsAndQuotes,
+         allowNewReviews: allowNewReviews,
+         pushNewReviews: pushNewReviews,
+         allowNewVettings: allowNewVettings,
+         pushNewVettings: pushNewVettings,
+         allowReactions: allowReactions,
+         pushReactions: pushReactions,
+         allowHelpfulReviews: allowHelpfulReviews,
+         pushHelpfulReviews: pushHelpfulReviews,
+         allowSubscribedContent: allowSubscribedContent,
+         pushSubscribedContent: pushSubscribedContent,
+         allowMentions: allowMentions,
+         pushMentions: pushMentions,
+         allowTags: allowTags,
+         pushTags: pushTags,
+         allowNewFollowers: allowNewFollowers,
+         pushNewFollowers: pushNewFollowers,
+         allowPlatformUpdates: allowPlatformUpdates,
+         pushPlatformUpdates: pushPlatformUpdates,
+       );
 
   /// Returns a shallow copy of this [UserNotificationSettings]
   /// with some or all fields replaced by the given arguments.
@@ -469,9 +476,152 @@ class _UserNotificationSettingsImpl extends UserNotificationSettings {
   }
 }
 
+class UserNotificationSettingsUpdateTable
+    extends _i1.UpdateTable<UserNotificationSettingsTable> {
+  UserNotificationSettingsUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> userId(int value) => _i1.ColumnValue(
+    table.userId,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pauseAllPush(bool value) => _i1.ColumnValue(
+    table.pauseAllPush,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowComments(bool value) => _i1.ColumnValue(
+    table.allowComments,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushComments(bool value) => _i1.ColumnValue(
+    table.pushComments,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowLikes(bool value) => _i1.ColumnValue(
+    table.allowLikes,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushLikes(bool value) => _i1.ColumnValue(
+    table.pushLikes,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowRepostsAndQuotes(bool value) =>
+      _i1.ColumnValue(
+        table.allowRepostsAndQuotes,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> pushRepostsAndQuotes(bool value) =>
+      _i1.ColumnValue(
+        table.pushRepostsAndQuotes,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> allowNewReviews(bool value) => _i1.ColumnValue(
+    table.allowNewReviews,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushNewReviews(bool value) => _i1.ColumnValue(
+    table.pushNewReviews,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowNewVettings(bool value) => _i1.ColumnValue(
+    table.allowNewVettings,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushNewVettings(bool value) => _i1.ColumnValue(
+    table.pushNewVettings,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowReactions(bool value) => _i1.ColumnValue(
+    table.allowReactions,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushReactions(bool value) => _i1.ColumnValue(
+    table.pushReactions,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowHelpfulReviews(bool value) =>
+      _i1.ColumnValue(
+        table.allowHelpfulReviews,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> pushHelpfulReviews(bool value) => _i1.ColumnValue(
+    table.pushHelpfulReviews,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowSubscribedContent(bool value) =>
+      _i1.ColumnValue(
+        table.allowSubscribedContent,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> pushSubscribedContent(bool value) =>
+      _i1.ColumnValue(
+        table.pushSubscribedContent,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> allowMentions(bool value) => _i1.ColumnValue(
+    table.allowMentions,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushMentions(bool value) => _i1.ColumnValue(
+    table.pushMentions,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowTags(bool value) => _i1.ColumnValue(
+    table.allowTags,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushTags(bool value) => _i1.ColumnValue(
+    table.pushTags,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowNewFollowers(bool value) => _i1.ColumnValue(
+    table.allowNewFollowers,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> pushNewFollowers(bool value) => _i1.ColumnValue(
+    table.pushNewFollowers,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> allowPlatformUpdates(bool value) =>
+      _i1.ColumnValue(
+        table.allowPlatformUpdates,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> pushPlatformUpdates(bool value) =>
+      _i1.ColumnValue(
+        table.pushPlatformUpdates,
+        value,
+      );
+}
+
 class UserNotificationSettingsTable extends _i1.Table<int?> {
   UserNotificationSettingsTable({super.tableRelation})
-      : super(tableName: 'user_notification_settings') {
+    : super(tableName: 'user_notification_settings') {
+    updateTable = UserNotificationSettingsUpdateTable(this);
     userId = _i1.ColumnInt(
       'userId',
       this,
@@ -603,6 +753,8 @@ class UserNotificationSettingsTable extends _i1.Table<int?> {
     );
   }
 
+  late final UserNotificationSettingsUpdateTable updateTable;
+
   late final _i1.ColumnInt userId;
 
   _i2.UserRecordTable? _user;
@@ -672,34 +824,34 @@ class UserNotificationSettingsTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        userId,
-        pauseAllPush,
-        allowComments,
-        pushComments,
-        allowLikes,
-        pushLikes,
-        allowRepostsAndQuotes,
-        pushRepostsAndQuotes,
-        allowNewReviews,
-        pushNewReviews,
-        allowNewVettings,
-        pushNewVettings,
-        allowReactions,
-        pushReactions,
-        allowHelpfulReviews,
-        pushHelpfulReviews,
-        allowSubscribedContent,
-        pushSubscribedContent,
-        allowMentions,
-        pushMentions,
-        allowTags,
-        pushTags,
-        allowNewFollowers,
-        pushNewFollowers,
-        allowPlatformUpdates,
-        pushPlatformUpdates,
-      ];
+    id,
+    userId,
+    pauseAllPush,
+    allowComments,
+    pushComments,
+    allowLikes,
+    pushLikes,
+    allowRepostsAndQuotes,
+    pushRepostsAndQuotes,
+    allowNewReviews,
+    pushNewReviews,
+    allowNewVettings,
+    pushNewVettings,
+    allowReactions,
+    pushReactions,
+    allowHelpfulReviews,
+    pushHelpfulReviews,
+    allowSubscribedContent,
+    pushSubscribedContent,
+    allowMentions,
+    pushMentions,
+    allowTags,
+    pushTags,
+    allowNewFollowers,
+    pushNewFollowers,
+    allowPlatformUpdates,
+    pushPlatformUpdates,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -911,6 +1063,48 @@ class UserNotificationSettingsRepository {
     );
   }
 
+  /// Updates a single [UserNotificationSettings] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<UserNotificationSettings?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<UserNotificationSettingsUpdateTable>
+    columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<UserNotificationSettings>(
+      id,
+      columnValues: columnValues(UserNotificationSettings.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [UserNotificationSettings]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<UserNotificationSettings>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<UserNotificationSettingsUpdateTable>
+    columnValues,
+    required _i1.WhereExpressionBuilder<UserNotificationSettingsTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<UserNotificationSettingsTable>? orderBy,
+    _i1.OrderByListBuilder<UserNotificationSettingsTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<UserNotificationSettings>(
+      columnValues: columnValues(UserNotificationSettings.t.updateTable),
+      where: where(UserNotificationSettings.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(UserNotificationSettings.t),
+      orderByList: orderByList?.call(UserNotificationSettings.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [UserNotificationSettings]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -983,8 +1177,9 @@ class UserNotificationSettingsAttachRowRepository {
       throw ArgumentError.notNull('user.id');
     }
 
-    var $userNotificationSettings =
-        userNotificationSettings.copyWith(userId: user.id);
+    var $userNotificationSettings = userNotificationSettings.copyWith(
+      userId: user.id,
+    );
     await session.db.updateRow<UserNotificationSettings>(
       $userNotificationSettings,
       columns: [UserNotificationSettings.t.userId],

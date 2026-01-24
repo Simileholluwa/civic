@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -10,26 +12,26 @@ class PollCard extends ConsumerWidget {
     required this.postWithUserState,
     super.key,
     this.onTap,
-    this.fromDetails = false,
+    this.canTap = false,
+    this.showInteractions = true,
   });
 
   final PostWithUserState postWithUserState;
-  final bool fromDetails;
+  final bool canTap;
   final VoidCallback? onTap;
+  final bool showInteractions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final post = postWithUserState.post;
-    final feedProv =
-        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final feedProv = feedButtonsProvider(
+      PostWithUserStateKey(
+        postWithUserState,
+      ),
+    );
     final totalVotes = ref.watch(
       feedProv.select(
         (s) => s.totalVotes,
-      ),
-    );
-    final numberOfVoters = ref.watch(
-      feedProv.select(
-        (s) => s.numberOfVoters,
       ),
     );
     final hasVoted = ref.watch(
@@ -42,11 +44,14 @@ class PollCard extends ConsumerWidget {
         (s) => s.pollEnded,
       ),
     );
+    final notifier = ref.read(
+      feedProv.notifier,
+    );
     final hasText = post.text != null && post.text!.isNotEmpty;
     final hasTags = post.tags != null && post.tags!.isNotEmpty;
     final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
-      onTap: fromDetails
+      onTap: !canTap
           ? null
           : onTap ??
               () async {
@@ -118,7 +123,7 @@ class PollCard extends ConsumerWidget {
                       Text(
                         totalVotes == 0
                             ? 'No votes'
-                            : '$numberOfVoters ${totalVotes == 1 ? 'vote' : 'votes'}',
+                            : '$totalVotes ${totalVotes == 1 ? 'vote' : 'votes'}',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: Theme.of(context).hintColor,
@@ -126,7 +131,7 @@ class PollCard extends ConsumerWidget {
                       ),
                       Text(
                         FeedHelperFunctions.formatTimeLeft(
-                          post.poll!.expiresAt!,
+                          post.poll!.expiresAt ?? DateTime.now(),
                         ),
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
@@ -137,7 +142,13 @@ class PollCard extends ConsumerWidget {
                   ),
                   if (hasVoted && !pollEnded)
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        unawaited(
+                          notifier.clearPollVote(
+                            post.poll!.id!,
+                          ),
+                        );
+                      },
                       child: Text(
                         'Clear vote',
                         style:
@@ -150,7 +161,7 @@ class PollCard extends ConsumerWidget {
               ),
             ),
           ),
-          if (!fromDetails)
+          if (showInteractions)
             PostInteractionButtons(
               postWithUserState: postWithUserState,
               onReply: () async {

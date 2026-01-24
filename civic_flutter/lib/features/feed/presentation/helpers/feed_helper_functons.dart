@@ -19,7 +19,8 @@ class FeedHelperFunctions {
       case PostType.poll:
       case PostType.regular:
         base = 0.50;
-      case PostType.projectRepost:
+      case PostType.projectQuote:
+      case PostType.postQuote:
       case PostType.postRepost:
         base = 0.50;
       case PostType.comment:
@@ -48,7 +49,6 @@ class FeedHelperFunctions {
 
   static Future<bool?> deletePostDialog(
     BuildContext context,
-    int postId,
   ) {
     return postDialog(
       context: context,
@@ -56,6 +56,22 @@ class FeedHelperFunctions {
       description: TTexts.deletePostSubtitle,
       onTapSkipButton: () => context.pop(false),
       activeButtonText: TTexts.delete,
+      activeButtonLoading: false,
+      skipButtonLoading: false,
+      skipText: TTexts.cancel,
+      onTapActiveButton: () => context.pop(true),
+    );
+  }
+
+  static Future<bool?> undoRepost(
+    BuildContext context,
+  ) {
+    return postDialog(
+      context: context,
+      title: 'Undo repost',
+      description: 'Are you sure want to undo your repost?',
+      onTapSkipButton: () => context.pop(false),
+      activeButtonText: 'Undo repost',
       activeButtonLoading: false,
       skipButtonLoading: false,
       skipText: TTexts.cancel,
@@ -87,7 +103,6 @@ class FeedHelperFunctions {
 
   static Future<bool?> deletePollDialog(
     BuildContext context,
-    int pollId,
   ) {
     return postDialog(
       context: context,

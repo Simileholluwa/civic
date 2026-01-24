@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 class CreateContentSearchBar extends StatelessWidget {
   const CreateContentSearchBar({
-    required this.onChanged, required this.trailingWidget, super.key,
+    required this.onChanged,
+    required this.trailingWidget,
+    super.key,
     this.height = 50,
     this.hintText = 'Tap here to search for places',
   });

@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../poll/poll.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class PollOption
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -38,8 +40,7 @@ abstract class PollOption
       pollId: jsonSerialization['pollId'] as int,
       poll: jsonSerialization['poll'] == null
           ? null
-          : _i2.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.Poll>(jsonSerialization['poll']),
       option: jsonSerialization['option'] as String?,
       votesCount: jsonSerialization['votesCount'] as int?,
     );
@@ -76,6 +77,7 @@ abstract class PollOption
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PollOption',
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
@@ -87,6 +89,7 @@ abstract class PollOption
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PollOption',
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJsonForProtocol(),
@@ -135,12 +138,12 @@ class _PollOptionImpl extends PollOption {
     String? option,
     int? votesCount,
   }) : super._(
-          id: id,
-          pollId: pollId,
-          poll: poll,
-          option: option,
-          votesCount: votesCount,
-        );
+         id: id,
+         pollId: pollId,
+         poll: poll,
+         option: option,
+         votesCount: votesCount,
+       );
 
   /// Returns a shallow copy of this [PollOption]
   /// with some or all fields replaced by the given arguments.
@@ -163,8 +166,28 @@ class _PollOptionImpl extends PollOption {
   }
 }
 
+class PollOptionUpdateTable extends _i1.UpdateTable<PollOptionTable> {
+  PollOptionUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> pollId(int value) => _i1.ColumnValue(
+    table.pollId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> option(String? value) => _i1.ColumnValue(
+    table.option,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> votesCount(int? value) => _i1.ColumnValue(
+    table.votesCount,
+    value,
+  );
+}
+
 class PollOptionTable extends _i1.Table<int?> {
   PollOptionTable({super.tableRelation}) : super(tableName: 'poll_option') {
+    updateTable = PollOptionUpdateTable(this);
     pollId = _i1.ColumnInt(
       'pollId',
       this,
@@ -179,6 +202,8 @@ class PollOptionTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final PollOptionUpdateTable updateTable;
 
   late final _i1.ColumnInt pollId;
 
@@ -203,11 +228,11 @@ class PollOptionTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        pollId,
-        option,
-        votesCount,
-      ];
+    id,
+    pollId,
+    option,
+    votesCount,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -415,6 +440,46 @@ class PollOptionRepository {
     return session.db.updateRow<PollOption>(
       row,
       columns: columns?.call(PollOption.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [PollOption] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<PollOption?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PollOptionUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<PollOption>(
+      id,
+      columnValues: columnValues(PollOption.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [PollOption]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<PollOption>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PollOptionUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PollOptionTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PollOptionTable>? orderBy,
+    _i1.OrderByListBuilder<PollOptionTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<PollOption>(
+      columnValues: columnValues(PollOption.t.updateTable),
+      where: where(PollOption.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(PollOption.t),
+      orderByList: orderByList?.call(PollOption.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

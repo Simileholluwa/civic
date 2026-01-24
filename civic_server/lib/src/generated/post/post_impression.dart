@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
 import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class PostImpression
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -47,13 +49,13 @@ abstract class PostImpression
       postId: jsonSerialization['postId'] as int,
       post: jsonSerialization['post'] == null
           ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       viewerId: jsonSerialization['viewerId'] as int,
       viewer: jsonSerialization['viewer'] == null
           ? null
-          : _i3.UserRecord.fromJson(
-              (jsonSerialization['viewer'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['viewer'],
+            ),
       sessionId: jsonSerialization['sessionId'] as String?,
       source: jsonSerialization['source'] as String?,
       hourBucket: jsonSerialization['hourBucket'] == null
@@ -108,6 +110,7 @@ abstract class PostImpression
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostImpression',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJson(),
@@ -123,6 +126,7 @@ abstract class PostImpression
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PostImpression',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJsonForProtocol(),
@@ -185,16 +189,16 @@ class _PostImpressionImpl extends PostImpression {
     DateTime? hourBucket,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          postId: postId,
-          post: post,
-          viewerId: viewerId,
-          viewer: viewer,
-          sessionId: sessionId,
-          source: source,
-          hourBucket: hourBucket,
-          createdAt: createdAt,
-        );
+         id: id,
+         postId: postId,
+         post: post,
+         viewerId: viewerId,
+         viewer: viewer,
+         sessionId: sessionId,
+         source: source,
+         hourBucket: hourBucket,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [PostImpression]
   /// with some or all fields replaced by the given arguments.
@@ -225,9 +229,46 @@ class _PostImpressionImpl extends PostImpression {
   }
 }
 
+class PostImpressionUpdateTable extends _i1.UpdateTable<PostImpressionTable> {
+  PostImpressionUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> postId(int value) => _i1.ColumnValue(
+    table.postId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> viewerId(int value) => _i1.ColumnValue(
+    table.viewerId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> sessionId(String? value) => _i1.ColumnValue(
+    table.sessionId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> source(String? value) => _i1.ColumnValue(
+    table.source,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> hourBucket(DateTime? value) =>
+      _i1.ColumnValue(
+        table.hourBucket,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> createdAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.createdAt,
+        value,
+      );
+}
+
 class PostImpressionTable extends _i1.Table<int?> {
   PostImpressionTable({super.tableRelation})
-      : super(tableName: 'post_impression') {
+    : super(tableName: 'post_impression') {
+    updateTable = PostImpressionUpdateTable(this);
     postId = _i1.ColumnInt(
       'postId',
       this,
@@ -254,6 +295,8 @@ class PostImpressionTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final PostImpressionUpdateTable updateTable;
 
   late final _i1.ColumnInt postId;
 
@@ -299,14 +342,14 @@ class PostImpressionTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        postId,
-        viewerId,
-        sessionId,
-        source,
-        hourBucket,
-        createdAt,
-      ];
+    id,
+    postId,
+    viewerId,
+    sessionId,
+    source,
+    hourBucket,
+    createdAt,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -335,9 +378,9 @@ class PostImpressionInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'post': _post,
-        'viewer': _viewer,
-      };
+    'post': _post,
+    'viewer': _viewer,
+  };
 
   @override
   _i1.Table<int?> get table => PostImpression.t;
@@ -526,6 +569,46 @@ class PostImpressionRepository {
     return session.db.updateRow<PostImpression>(
       row,
       columns: columns?.call(PostImpression.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [PostImpression] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<PostImpression?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PostImpressionUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<PostImpression>(
+      id,
+      columnValues: columnValues(PostImpression.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [PostImpression]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<PostImpression>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PostImpressionUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PostImpressionTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PostImpressionTable>? orderBy,
+    _i1.OrderByListBuilder<PostImpressionTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<PostImpression>(
+      columnValues: columnValues(PostImpression.t.updateTable),
+      where: where(PostImpression.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(PostImpression.t),
+      orderByList: orderByList?.call(PostImpression.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

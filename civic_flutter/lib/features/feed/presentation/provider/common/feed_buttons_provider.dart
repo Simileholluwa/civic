@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'feed_buttons_provider.g.dart';
 
-enum PostKind { post, comment, reply, poll, article, projectRepost }
+enum PostKind { post, comment, reply, poll, article, projectQuote }
 
 class DeleteContext {
   const DeleteContext({
@@ -23,7 +23,7 @@ class DeleteContext {
   bool get hasParent => parentId != null;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 class FeedButtons extends _$FeedButtons {
   Post? _post;
   Poll? _poll;
@@ -34,6 +34,7 @@ class FeedButtons extends _$FeedButtons {
   void _subscribeCounts() {
     final postId = _post?.id;
     if (postId == null) return;
+    unawaited(_countsSub?.cancel());
     _countsSub = ref
         .read(clientProvider)
         .post
@@ -47,6 +48,7 @@ class FeedButtons extends _$FeedButtons {
   void _subscribePollCounts() {
     final pollId = _poll?.id;
     if (pollId == null) return;
+    unawaited(_pollCountsSub?.cancel());
     _pollCountsSub = ref
         .read(clientProvider)
         .post
@@ -73,6 +75,29 @@ class FeedButtons extends _$FeedButtons {
     state = state.copyWith(
       isSendingPoll: value,
     );
+  }
+
+  Future<void> clearPollVote(int pollId) async {
+    final currentOption = state.votedOption;
+    setIsSendingPoll(true);
+    state = state.copyWith(
+      votedOption: PollOption(pollId: 0),
+      hasVoted: false,
+    );
+    final clearVote = ref.read(clearVoteProvider);
+    final result = await clearVote(
+      pollId,
+    );
+    return result.fold((error) {
+      setIsSendingPoll(false);
+      TToastMessages.errorToast(error.message);
+      state = state.copyWith(
+        votedOption: currentOption,
+        hasVoted: currentOption != null,
+      );
+    }, (_) async {
+      setIsSendingPoll(false);
+    });
   }
 
   Future<void> togglePostLikeStatus(int id) async {
@@ -143,6 +168,28 @@ class FeedButtons extends _$FeedButtons {
     );
   }
 
+  Future<void> repostPost(int postId) async {
+    final hasReposted = state.hasReposted;
+    state = state.copyWith(
+      hasReposted: !hasReposted,
+    );
+    final useCase = ref.read(repostPostProvider);
+    final result = await useCase(
+      postId,
+    );
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        state = state.copyWith(hasReposted: hasReposted);
+      },
+      (post) {
+        TToastMessages.successToast(
+          hasReposted ? 'Unrepost successful' : 'Repost action completed.',
+        );
+      },
+    );
+  }
+
   Future<bool> markPostNotInterested(
     int postId,
     String reason,
@@ -188,17 +235,26 @@ class FeedButtons extends _$FeedButtons {
     });
   }
 
-  Future<void> subscribeToNotifications(int postId) async {
+  Future<void> subscribeToNotifications(
+    int postId,
+  ) async {
+    final isSubbed = state.isSubscribed;
+    state = state.copyWith(
+      isSubscribed: !isSubbed,
+    );
     final subscribeToNotif = ref.read(subscribeToNotifProvider);
     final result = await subscribeToNotif(
       SubscribeToNotifParams(postId),
     );
     return result.fold((error) {
+      state = state.copyWith(
+        isSubscribed: isSubbed,
+      );
       TToastMessages.errorToast(
         'Subscription failed. Please try again.',
       );
     }, (success) {
-      if (!state.isSubscribed) {
+      if (!isSubbed) {
         TToastMessages.successToast(
           'You will now receive notifications on this post.',
         );
@@ -208,6 +264,29 @@ class FeedButtons extends _$FeedButtons {
         );
       }
     });
+  }
+
+  Future<Post> resolveRoot(Post starting) async {
+    var current = starting;
+    for (var i = 0; i < 10; i++) {
+      final pid = current.parentId;
+      if (pid == null) break;
+      final getPost = ref.read(
+        getPostProvider,
+      );
+      final res = await getPost(
+        GetPostParams(
+          pid,
+        ),
+      );
+      final next = res.match(
+        (l) => null,
+        (r) => r.post,
+      );
+      if (next == null) break;
+      current = next;
+    }
+    return current;
   }
 
   Future<bool> deletePost(DeleteContext ctx) async {
@@ -266,7 +345,7 @@ class FeedButtons extends _$FeedButtons {
       case PostKind.poll:
       case PostKind.article:
       case PostKind.post:
-      case PostKind.projectRepost:
+      case PostKind.projectQuote:
         final postNotifier = ref.read(
           paginatedPostListProvider.notifier,
         );
@@ -292,6 +371,7 @@ class FeedButtons extends _$FeedButtons {
     final result = await deletePostUseCase(
       DeletePostParams(
         ctx.postId,
+        false,
       ),
     );
     return result.fold((error) {
@@ -310,7 +390,7 @@ class FeedButtons extends _$FeedButtons {
         case PostKind.article:
           TToastMessages.infoToast('Your article has been deleted.');
         case PostKind.post:
-        case PostKind.projectRepost:
+        case PostKind.projectQuote:
           TToastMessages.infoToast('Your post has been deleted.');
       }
       state = state.copyWith(isDeleting: false);
@@ -349,7 +429,13 @@ class FeedButtons extends _$FeedButtons {
       TToastMessages.errorToast('This poll has ended.');
       return false;
     }
+    final currentOption = state.votedOption;
     setIsSendingPoll(true);
+    state = state.copyWith(
+      votedOption: _poll!.options!.firstWhere(
+        (option) => option.id == optionId,
+      ),
+    );
     final castVote = ref.read(castVoteProvider);
     final result = await castVote(
       CastVoteParams(
@@ -360,9 +446,13 @@ class FeedButtons extends _$FeedButtons {
     return result.fold((error) {
       setIsSendingPoll(false);
       TToastMessages.errorToast(error.message);
+      state = state.copyWith(
+        votedOption: currentOption,
+      );
       return false;
     }, (_) async {
       setIsSendingPoll(false);
+      state = state.copyWith(hasVoted: true);
       return true;
     });
   }

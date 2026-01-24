@@ -111,7 +111,7 @@ class ShowPostActions extends ConsumerWidget {
         if (!isOwner)
           MoreActionsListTile(
             title: 'Report',
-            subTitle: 'This post is inappropriate or offensive.',
+            subTitle: 'This $type is inappropriate or offensive.',
             icon: Iconsax.flag,
             color: Colors.red,
             onTap: () async {},

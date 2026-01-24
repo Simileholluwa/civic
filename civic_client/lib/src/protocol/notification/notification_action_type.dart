@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -18,6 +19,7 @@ enum NotificationActionType implements _i1.SerializableModel {
   react,
   tag,
   mention,
+  repost,
   quote,
   review,
   vet,
@@ -25,40 +27,43 @@ enum NotificationActionType implements _i1.SerializableModel {
   vote,
   reply;
 
-  static NotificationActionType fromJson(int index) {
-    switch (index) {
-      case 0:
+  static NotificationActionType fromJson(String name) {
+    switch (name) {
+      case 'like':
         return NotificationActionType.like;
-      case 1:
+      case 'comment':
         return NotificationActionType.comment;
-      case 2:
+      case 'follow':
         return NotificationActionType.follow;
-      case 3:
+      case 'react':
         return NotificationActionType.react;
-      case 4:
+      case 'tag':
         return NotificationActionType.tag;
-      case 5:
+      case 'mention':
         return NotificationActionType.mention;
-      case 6:
+      case 'repost':
+        return NotificationActionType.repost;
+      case 'quote':
         return NotificationActionType.quote;
-      case 7:
+      case 'review':
         return NotificationActionType.review;
-      case 8:
+      case 'vet':
         return NotificationActionType.vet;
-      case 9:
+      case 'system':
         return NotificationActionType.system;
-      case 10:
+      case 'vote':
         return NotificationActionType.vote;
-      case 11:
+      case 'reply':
         return NotificationActionType.reply;
       default:
         throw ArgumentError(
-            'Value "$index" cannot be converted to "NotificationActionType"');
+          'Value "$name" cannot be converted to "NotificationActionType"',
+        );
     }
   }
 
   @override
-  int toJson() => index;
+  String toJson() => name;
 
   @override
   String toString() => name;

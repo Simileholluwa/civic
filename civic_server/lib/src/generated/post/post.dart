@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,12 +15,14 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../post/post_type_enums.dart' as _i3;
-import '../general/aws_places.dart' as _i4;
-import '../post/posts_hashtags.dart' as _i5;
-import '../poll/poll.dart' as _i6;
-import '../article/article.dart' as _i7;
-import '../project/project.dart' as _i8;
-import '../post/post.dart' as _i9;
+import '../media/media_asset.dart' as _i4;
+import '../general/aws_places.dart' as _i5;
+import '../post/posts_hashtags.dart' as _i6;
+import '../poll/poll.dart' as _i7;
+import '../article/article.dart' as _i8;
+import '../project/project.dart' as _i9;
+import '../post/post.dart' as _i10;
+import 'package:civic_server/src/generated/protocol.dart' as _i11;
 
 abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   Post._({
@@ -28,8 +31,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.owner,
     this.postType,
     this.text,
-    this.imageUrls,
-    String? videoUrl,
+    this.mediaAssets,
     this.taggedUsers,
     this.locations,
     this.mentions,
@@ -38,6 +40,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     this.updatedAt,
     this.hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     this.pollId,
@@ -51,13 +54,13 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     bool? isDeleted,
     int? impressionsCount,
     this.lastImpressionAt,
-  })  : videoUrl = videoUrl ?? '',
-        dateCreated = dateCreated ?? DateTime.now(),
-        likesCount = likesCount ?? 0,
-        bookmarksCount = bookmarksCount ?? 0,
-        commentCount = commentCount ?? 0,
-        isDeleted = isDeleted ?? false,
-        impressionsCount = impressionsCount ?? 0;
+  }) : dateCreated = dateCreated ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       repostCount = repostCount ?? 0,
+       bookmarksCount = bookmarksCount ?? 0,
+       commentCount = commentCount ?? 0,
+       isDeleted = isDeleted ?? false,
+       impressionsCount = impressionsCount ?? 0;
 
   factory Post({
     int? id,
@@ -65,26 +68,26 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
@@ -96,67 +99,82 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       postType: jsonSerialization['postType'] == null
           ? null
-          : _i3.PostType.fromJson((jsonSerialization['postType'] as int)),
+          : _i3.PostType.fromJson((jsonSerialization['postType'] as String)),
       text: jsonSerialization['text'] as String?,
-      imageUrls: (jsonSerialization['imageUrls'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
-      videoUrl: jsonSerialization['videoUrl'] as String?,
-      taggedUsers: (jsonSerialization['taggedUsers'] as List?)
-          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      locations: (jsonSerialization['locations'] as List?)
-          ?.map((e) => _i4.AWSPlaces.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      mentions: (jsonSerialization['mentions'] as List?)
-          ?.map((e) => _i2.UserRecord.fromJson((e as Map<String, dynamic>)))
-          .toList(),
-      tags: (jsonSerialization['tags'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+      mediaAssets: jsonSerialization['mediaAssets'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i4.MediaAsset>>(
+              jsonSerialization['mediaAssets'],
+            ),
+      taggedUsers: jsonSerialization['taggedUsers'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i2.UserRecord>>(
+              jsonSerialization['taggedUsers'],
+            ),
+      locations: jsonSerialization['locations'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i5.AWSPlaces>>(
+              jsonSerialization['locations'],
+            ),
+      mentions: jsonSerialization['mentions'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i2.UserRecord>>(
+              jsonSerialization['mentions'],
+            ),
+      tags: jsonSerialization['tags'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<String>>(
+              jsonSerialization['tags'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      hashtags: (jsonSerialization['hashtags'] as List?)
-          ?.map((e) => _i5.PostsHashtags.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      hashtags: jsonSerialization['hashtags'] == null
+          ? null
+          : _i11.Protocol().deserialize<List<_i6.PostsHashtags>>(
+              jsonSerialization['hashtags'],
+            ),
       likesCount: jsonSerialization['likesCount'] as int?,
+      repostCount: jsonSerialization['repostCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
       commentCount: jsonSerialization['commentCount'] as int?,
       pollId: jsonSerialization['pollId'] as int?,
       poll: jsonSerialization['poll'] == null
           ? null
-          : _i6.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i7.Poll>(jsonSerialization['poll']),
       articleId: jsonSerialization['articleId'] as int?,
       article: jsonSerialization['article'] == null
           ? null
-          : _i7.Article.fromJson(
-              (jsonSerialization['article'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i8.Article>(
+              jsonSerialization['article'],
+            ),
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
-          : _i8.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i9.Project>(
+              jsonSerialization['project'],
+            ),
       parentId: jsonSerialization['parentId'] as int?,
       parent: jsonSerialization['parent'] == null
           ? null
-          : _i9.Post.fromJson(
-              (jsonSerialization['parent'] as Map<String, dynamic>)),
+          : _i11.Protocol().deserialize<_i10.Post>(jsonSerialization['parent']),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
       impressionsCount: jsonSerialization['impressionsCount'] as int?,
       lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['lastImpressionAt']),
+              jsonSerialization['lastImpressionAt'],
+            ),
     );
   }
 
@@ -175,13 +193,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   String? text;
 
-  List<String>? imageUrls;
-
-  String? videoUrl;
+  List<_i4.MediaAsset>? mediaAssets;
 
   List<_i2.UserRecord>? taggedUsers;
 
-  List<_i4.AWSPlaces>? locations;
+  List<_i5.AWSPlaces>? locations;
 
   List<_i2.UserRecord>? mentions;
 
@@ -191,9 +207,11 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   DateTime? updatedAt;
 
-  List<_i5.PostsHashtags>? hashtags;
+  List<_i6.PostsHashtags>? hashtags;
 
   int? likesCount;
+
+  int? repostCount;
 
   int? bookmarksCount;
 
@@ -201,19 +219,19 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   int? pollId;
 
-  _i6.Poll? poll;
+  _i7.Poll? poll;
 
   int? articleId;
 
-  _i7.Article? article;
+  _i8.Article? article;
 
   int? projectId;
 
-  _i8.Project? project;
+  _i9.Project? project;
 
   int? parentId;
 
-  _i9.Post? parent;
+  _i10.Post? parent;
 
   bool? isDeleted;
 
@@ -233,26 +251,26 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
@@ -260,13 +278,14 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'Post',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
       if (postType != null) 'postType': postType?.toJson(),
       if (text != null) 'text': text,
-      if (imageUrls != null) 'imageUrls': imageUrls?.toJson(),
-      if (videoUrl != null) 'videoUrl': videoUrl,
+      if (mediaAssets != null)
+        'mediaAssets': mediaAssets?.toJson(valueToJson: (v) => v.toJson()),
       if (taggedUsers != null)
         'taggedUsers': taggedUsers?.toJson(valueToJson: (v) => v.toJson()),
       if (locations != null)
@@ -279,6 +298,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJson()),
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
@@ -299,19 +319,24 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'Post',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
       if (postType != null) 'postType': postType?.toJson(),
       if (text != null) 'text': text,
-      if (imageUrls != null) 'imageUrls': imageUrls?.toJson(),
-      if (videoUrl != null) 'videoUrl': videoUrl,
+      if (mediaAssets != null)
+        'mediaAssets': mediaAssets?.toJson(
+          valueToJson: (v) => v.toJsonForProtocol(),
+        ),
       if (taggedUsers != null)
-        'taggedUsers':
-            taggedUsers?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+        'taggedUsers': taggedUsers?.toJson(
+          valueToJson: (v) => v.toJsonForProtocol(),
+        ),
       if (locations != null)
-        'locations':
-            locations?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+        'locations': locations?.toJson(
+          valueToJson: (v) => v.toJsonForProtocol(),
+        ),
       if (mentions != null)
         'mentions': mentions?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (tags != null) 'tags': tags?.toJson(),
@@ -320,6 +345,7 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
       if (hashtags != null)
         'hashtags': hashtags?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       if (likesCount != null) 'likesCount': likesCount,
+      if (repostCount != null) 'repostCount': repostCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
       if (commentCount != null) 'commentCount': commentCount,
       if (pollId != null) 'pollId': pollId,
@@ -339,14 +365,16 @@ abstract class Post implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
 
   static PostInclude include({
     _i2.UserRecordInclude? owner,
-    _i5.PostsHashtagsIncludeList? hashtags,
-    _i6.PollInclude? poll,
-    _i7.ArticleInclude? article,
-    _i8.ProjectInclude? project,
-    _i9.PostInclude? parent,
+    _i4.MediaAssetIncludeList? mediaAssets,
+    _i6.PostsHashtagsIncludeList? hashtags,
+    _i7.PollInclude? poll,
+    _i8.ArticleInclude? article,
+    _i9.ProjectInclude? project,
+    _i10.PostInclude? parent,
   }) {
     return PostInclude._(
       owner: owner,
+      mediaAssets: mediaAssets,
       hashtags: hashtags,
       poll: poll,
       article: article,
@@ -390,59 +418,59 @@ class _PostImpl extends Post {
     _i2.UserRecord? owner,
     _i3.PostType? postType,
     String? text,
-    List<String>? imageUrls,
-    String? videoUrl,
+    List<_i4.MediaAsset>? mediaAssets,
     List<_i2.UserRecord>? taggedUsers,
-    List<_i4.AWSPlaces>? locations,
+    List<_i5.AWSPlaces>? locations,
     List<_i2.UserRecord>? mentions,
     List<String>? tags,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<_i5.PostsHashtags>? hashtags,
+    List<_i6.PostsHashtags>? hashtags,
     int? likesCount,
+    int? repostCount,
     int? bookmarksCount,
     int? commentCount,
     int? pollId,
-    _i6.Poll? poll,
+    _i7.Poll? poll,
     int? articleId,
-    _i7.Article? article,
+    _i8.Article? article,
     int? projectId,
-    _i8.Project? project,
+    _i9.Project? project,
     int? parentId,
-    _i9.Post? parent,
+    _i10.Post? parent,
     bool? isDeleted,
     int? impressionsCount,
     DateTime? lastImpressionAt,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          postType: postType,
-          text: text,
-          imageUrls: imageUrls,
-          videoUrl: videoUrl,
-          taggedUsers: taggedUsers,
-          locations: locations,
-          mentions: mentions,
-          tags: tags,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          hashtags: hashtags,
-          likesCount: likesCount,
-          bookmarksCount: bookmarksCount,
-          commentCount: commentCount,
-          pollId: pollId,
-          poll: poll,
-          articleId: articleId,
-          article: article,
-          projectId: projectId,
-          project: project,
-          parentId: parentId,
-          parent: parent,
-          isDeleted: isDeleted,
-          impressionsCount: impressionsCount,
-          lastImpressionAt: lastImpressionAt,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         postType: postType,
+         text: text,
+         mediaAssets: mediaAssets,
+         taggedUsers: taggedUsers,
+         locations: locations,
+         mentions: mentions,
+         tags: tags,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         hashtags: hashtags,
+         likesCount: likesCount,
+         repostCount: repostCount,
+         bookmarksCount: bookmarksCount,
+         commentCount: commentCount,
+         pollId: pollId,
+         poll: poll,
+         articleId: articleId,
+         article: article,
+         projectId: projectId,
+         project: project,
+         parentId: parentId,
+         parent: parent,
+         isDeleted: isDeleted,
+         impressionsCount: impressionsCount,
+         lastImpressionAt: lastImpressionAt,
+       );
 
   /// Returns a shallow copy of this [Post]
   /// with some or all fields replaced by the given arguments.
@@ -454,8 +482,7 @@ class _PostImpl extends Post {
     Object? owner = _Undefined,
     Object? postType = _Undefined,
     Object? text = _Undefined,
-    Object? imageUrls = _Undefined,
-    Object? videoUrl = _Undefined,
+    Object? mediaAssets = _Undefined,
     Object? taggedUsers = _Undefined,
     Object? locations = _Undefined,
     Object? mentions = _Undefined,
@@ -464,6 +491,7 @@ class _PostImpl extends Post {
     Object? updatedAt = _Undefined,
     Object? hashtags = _Undefined,
     Object? likesCount = _Undefined,
+    Object? repostCount = _Undefined,
     Object? bookmarksCount = _Undefined,
     Object? commentCount = _Undefined,
     Object? pollId = _Undefined,
@@ -484,14 +512,13 @@ class _PostImpl extends Post {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postType: postType is _i3.PostType? ? postType : this.postType,
       text: text is String? ? text : this.text,
-      imageUrls: imageUrls is List<String>?
-          ? imageUrls
-          : this.imageUrls?.map((e0) => e0).toList(),
-      videoUrl: videoUrl is String? ? videoUrl : this.videoUrl,
+      mediaAssets: mediaAssets is List<_i4.MediaAsset>?
+          ? mediaAssets
+          : this.mediaAssets?.map((e0) => e0.copyWith()).toList(),
       taggedUsers: taggedUsers is List<_i2.UserRecord>?
           ? taggedUsers
           : this.taggedUsers?.map((e0) => e0.copyWith()).toList(),
-      locations: locations is List<_i4.AWSPlaces>?
+      locations: locations is List<_i5.AWSPlaces>?
           ? locations
           : this.locations?.map((e0) => e0.copyWith()).toList(),
       mentions: mentions is List<_i2.UserRecord>?
@@ -500,24 +527,27 @@ class _PostImpl extends Post {
       tags: tags is List<String>? ? tags : this.tags?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      hashtags: hashtags is List<_i5.PostsHashtags>?
+      hashtags: hashtags is List<_i6.PostsHashtags>?
           ? hashtags
           : this.hashtags?.map((e0) => e0.copyWith()).toList(),
       likesCount: likesCount is int? ? likesCount : this.likesCount,
-      bookmarksCount:
-          bookmarksCount is int? ? bookmarksCount : this.bookmarksCount,
+      repostCount: repostCount is int? ? repostCount : this.repostCount,
+      bookmarksCount: bookmarksCount is int?
+          ? bookmarksCount
+          : this.bookmarksCount,
       commentCount: commentCount is int? ? commentCount : this.commentCount,
       pollId: pollId is int? ? pollId : this.pollId,
-      poll: poll is _i6.Poll? ? poll : this.poll?.copyWith(),
+      poll: poll is _i7.Poll? ? poll : this.poll?.copyWith(),
       articleId: articleId is int? ? articleId : this.articleId,
-      article: article is _i7.Article? ? article : this.article?.copyWith(),
+      article: article is _i8.Article? ? article : this.article?.copyWith(),
       projectId: projectId is int? ? projectId : this.projectId,
-      project: project is _i8.Project? ? project : this.project?.copyWith(),
+      project: project is _i9.Project? ? project : this.project?.copyWith(),
       parentId: parentId is int? ? parentId : this.parentId,
-      parent: parent is _i9.Post? ? parent : this.parent?.copyWith(),
+      parent: parent is _i10.Post? ? parent : this.parent?.copyWith(),
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
-      impressionsCount:
-          impressionsCount is int? ? impressionsCount : this.impressionsCount,
+      impressionsCount: impressionsCount is int?
+          ? impressionsCount
+          : this.impressionsCount,
       lastImpressionAt: lastImpressionAt is DateTime?
           ? lastImpressionAt
           : this.lastImpressionAt,
@@ -525,8 +555,124 @@ class _PostImpl extends Post {
   }
 }
 
+class PostUpdateTable extends _i1.UpdateTable<PostTable> {
+  PostUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<_i3.PostType, _i3.PostType> postType(_i3.PostType? value) =>
+      _i1.ColumnValue(
+        table.postType,
+        value,
+      );
+
+  _i1.ColumnValue<String, String> text(String? value) => _i1.ColumnValue(
+    table.text,
+    value,
+  );
+
+  _i1.ColumnValue<List<_i2.UserRecord>, List<_i2.UserRecord>> taggedUsers(
+    List<_i2.UserRecord>? value,
+  ) => _i1.ColumnValue(
+    table.taggedUsers,
+    value,
+  );
+
+  _i1.ColumnValue<List<_i5.AWSPlaces>, List<_i5.AWSPlaces>> locations(
+    List<_i5.AWSPlaces>? value,
+  ) => _i1.ColumnValue(
+    table.locations,
+    value,
+  );
+
+  _i1.ColumnValue<List<_i2.UserRecord>, List<_i2.UserRecord>> mentions(
+    List<_i2.UserRecord>? value,
+  ) => _i1.ColumnValue(
+    table.mentions,
+    value,
+  );
+
+  _i1.ColumnValue<List<String>, List<String>> tags(List<String>? value) =>
+      _i1.ColumnValue(
+        table.tags,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<int, int> likesCount(int? value) => _i1.ColumnValue(
+    table.likesCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> repostCount(int? value) => _i1.ColumnValue(
+    table.repostCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> bookmarksCount(int? value) => _i1.ColumnValue(
+    table.bookmarksCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> commentCount(int? value) => _i1.ColumnValue(
+    table.commentCount,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> pollId(int? value) => _i1.ColumnValue(
+    table.pollId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> articleId(int? value) => _i1.ColumnValue(
+    table.articleId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> projectId(int? value) => _i1.ColumnValue(
+    table.projectId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> parentId(int? value) => _i1.ColumnValue(
+    table.parentId,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> isDeleted(bool? value) => _i1.ColumnValue(
+    table.isDeleted,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> impressionsCount(int? value) => _i1.ColumnValue(
+    table.impressionsCount,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> lastImpressionAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.lastImpressionAt,
+        value,
+      );
+}
+
 class PostTable extends _i1.Table<int?> {
   PostTable({super.tableRelation}) : super(tableName: 'post') {
+    updateTable = PostUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -534,34 +680,25 @@ class PostTable extends _i1.Table<int?> {
     postType = _i1.ColumnEnum(
       'postType',
       this,
-      _i1.EnumSerialization.byIndex,
+      _i1.EnumSerialization.byName,
     );
     text = _i1.ColumnString(
       'text',
       this,
     );
-    imageUrls = _i1.ColumnSerializable(
-      'imageUrls',
-      this,
-    );
-    videoUrl = _i1.ColumnString(
-      'videoUrl',
-      this,
-      hasDefault: true,
-    );
-    taggedUsers = _i1.ColumnSerializable(
+    taggedUsers = _i1.ColumnSerializable<List<_i2.UserRecord>>(
       'taggedUsers',
       this,
     );
-    locations = _i1.ColumnSerializable(
+    locations = _i1.ColumnSerializable<List<_i5.AWSPlaces>>(
       'locations',
       this,
     );
-    mentions = _i1.ColumnSerializable(
+    mentions = _i1.ColumnSerializable<List<_i2.UserRecord>>(
       'mentions',
       this,
     );
-    tags = _i1.ColumnSerializable(
+    tags = _i1.ColumnSerializable<List<String>>(
       'tags',
       this,
     );
@@ -576,6 +713,11 @@ class PostTable extends _i1.Table<int?> {
     );
     likesCount = _i1.ColumnInt(
       'likesCount',
+      this,
+      hasDefault: true,
+    );
+    repostCount = _i1.ColumnInt(
+      'repostCount',
       this,
       hasDefault: true,
     );
@@ -621,6 +763,8 @@ class PostTable extends _i1.Table<int?> {
     );
   }
 
+  late final PostUpdateTable updateTable;
+
   late final _i1.ColumnInt ownerId;
 
   _i2.UserRecordTable? _owner;
@@ -629,27 +773,29 @@ class PostTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString text;
 
-  late final _i1.ColumnSerializable imageUrls;
+  _i4.MediaAssetTable? ___mediaAssets;
 
-  late final _i1.ColumnString videoUrl;
+  _i1.ManyRelation<_i4.MediaAssetTable>? _mediaAssets;
 
-  late final _i1.ColumnSerializable taggedUsers;
+  late final _i1.ColumnSerializable<List<_i2.UserRecord>> taggedUsers;
 
-  late final _i1.ColumnSerializable locations;
+  late final _i1.ColumnSerializable<List<_i5.AWSPlaces>> locations;
 
-  late final _i1.ColumnSerializable mentions;
+  late final _i1.ColumnSerializable<List<_i2.UserRecord>> mentions;
 
-  late final _i1.ColumnSerializable tags;
+  late final _i1.ColumnSerializable<List<String>> tags;
 
   late final _i1.ColumnDateTime dateCreated;
 
   late final _i1.ColumnDateTime updatedAt;
 
-  _i5.PostsHashtagsTable? ___hashtags;
+  _i6.PostsHashtagsTable? ___hashtags;
 
-  _i1.ManyRelation<_i5.PostsHashtagsTable>? _hashtags;
+  _i1.ManyRelation<_i6.PostsHashtagsTable>? _hashtags;
 
   late final _i1.ColumnInt likesCount;
+
+  late final _i1.ColumnInt repostCount;
 
   late final _i1.ColumnInt bookmarksCount;
 
@@ -657,19 +803,19 @@ class PostTable extends _i1.Table<int?> {
 
   late final _i1.ColumnInt pollId;
 
-  _i6.PollTable? _poll;
+  _i7.PollTable? _poll;
 
   late final _i1.ColumnInt articleId;
 
-  _i7.ArticleTable? _article;
+  _i8.ArticleTable? _article;
 
   late final _i1.ColumnInt projectId;
 
-  _i8.ProjectTable? _project;
+  _i9.ProjectTable? _project;
 
   late final _i1.ColumnInt parentId;
 
-  _i9.PostTable? _parent;
+  _i10.PostTable? _parent;
 
   late final _i1.ColumnBool isDeleted;
 
@@ -690,119 +836,154 @@ class PostTable extends _i1.Table<int?> {
     return _owner!;
   }
 
-  _i5.PostsHashtagsTable get __hashtags {
+  _i4.MediaAssetTable get __mediaAssets {
+    if (___mediaAssets != null) return ___mediaAssets!;
+    ___mediaAssets = _i1.createRelationTable(
+      relationFieldName: '__mediaAssets',
+      field: Post.t.id,
+      foreignField: _i4.MediaAsset.t.postId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.MediaAssetTable(tableRelation: foreignTableRelation),
+    );
+    return ___mediaAssets!;
+  }
+
+  _i6.PostsHashtagsTable get __hashtags {
     if (___hashtags != null) return ___hashtags!;
     ___hashtags = _i1.createRelationTable(
       relationFieldName: '__hashtags',
       field: Post.t.id,
-      foreignField: _i5.PostsHashtags.t.postId,
+      foreignField: _i6.PostsHashtags.t.postId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i5.PostsHashtagsTable(tableRelation: foreignTableRelation),
+          _i6.PostsHashtagsTable(tableRelation: foreignTableRelation),
     );
     return ___hashtags!;
   }
 
-  _i6.PollTable get poll {
+  _i7.PollTable get poll {
     if (_poll != null) return _poll!;
     _poll = _i1.createRelationTable(
       relationFieldName: 'poll',
       field: Post.t.pollId,
-      foreignField: _i6.Poll.t.id,
+      foreignField: _i7.Poll.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i6.PollTable(tableRelation: foreignTableRelation),
+          _i7.PollTable(tableRelation: foreignTableRelation),
     );
     return _poll!;
   }
 
-  _i7.ArticleTable get article {
+  _i8.ArticleTable get article {
     if (_article != null) return _article!;
     _article = _i1.createRelationTable(
       relationFieldName: 'article',
       field: Post.t.articleId,
-      foreignField: _i7.Article.t.id,
+      foreignField: _i8.Article.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i7.ArticleTable(tableRelation: foreignTableRelation),
+          _i8.ArticleTable(tableRelation: foreignTableRelation),
     );
     return _article!;
   }
 
-  _i8.ProjectTable get project {
+  _i9.ProjectTable get project {
     if (_project != null) return _project!;
     _project = _i1.createRelationTable(
       relationFieldName: 'project',
       field: Post.t.projectId,
-      foreignField: _i8.Project.t.id,
+      foreignField: _i9.Project.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i8.ProjectTable(tableRelation: foreignTableRelation),
+          _i9.ProjectTable(tableRelation: foreignTableRelation),
     );
     return _project!;
   }
 
-  _i9.PostTable get parent {
+  _i10.PostTable get parent {
     if (_parent != null) return _parent!;
     _parent = _i1.createRelationTable(
       relationFieldName: 'parent',
       field: Post.t.parentId,
-      foreignField: _i9.Post.t.id,
+      foreignField: _i10.Post.t.id,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i9.PostTable(tableRelation: foreignTableRelation),
+          _i10.PostTable(tableRelation: foreignTableRelation),
     );
     return _parent!;
   }
 
-  _i1.ManyRelation<_i5.PostsHashtagsTable> get hashtags {
+  _i1.ManyRelation<_i4.MediaAssetTable> get mediaAssets {
+    if (_mediaAssets != null) return _mediaAssets!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'mediaAssets',
+      field: Post.t.id,
+      foreignField: _i4.MediaAsset.t.postId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.MediaAssetTable(tableRelation: foreignTableRelation),
+    );
+    _mediaAssets = _i1.ManyRelation<_i4.MediaAssetTable>(
+      tableWithRelations: relationTable,
+      table: _i4.MediaAssetTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
+    );
+    return _mediaAssets!;
+  }
+
+  _i1.ManyRelation<_i6.PostsHashtagsTable> get hashtags {
     if (_hashtags != null) return _hashtags!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'hashtags',
       field: Post.t.id,
-      foreignField: _i5.PostsHashtags.t.postId,
+      foreignField: _i6.PostsHashtags.t.postId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i5.PostsHashtagsTable(tableRelation: foreignTableRelation),
+          _i6.PostsHashtagsTable(tableRelation: foreignTableRelation),
     );
-    _hashtags = _i1.ManyRelation<_i5.PostsHashtagsTable>(
+    _hashtags = _i1.ManyRelation<_i6.PostsHashtagsTable>(
       tableWithRelations: relationTable,
-      table: _i5.PostsHashtagsTable(
-          tableRelation: relationTable.tableRelation!.lastRelation),
+      table: _i6.PostsHashtagsTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
     );
     return _hashtags!;
   }
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        postType,
-        text,
-        imageUrls,
-        videoUrl,
-        taggedUsers,
-        locations,
-        mentions,
-        tags,
-        dateCreated,
-        updatedAt,
-        likesCount,
-        bookmarksCount,
-        commentCount,
-        pollId,
-        articleId,
-        projectId,
-        parentId,
-        isDeleted,
-        impressionsCount,
-        lastImpressionAt,
-      ];
+    id,
+    ownerId,
+    postType,
+    text,
+    taggedUsers,
+    locations,
+    mentions,
+    tags,
+    dateCreated,
+    updatedAt,
+    likesCount,
+    repostCount,
+    bookmarksCount,
+    commentCount,
+    pollId,
+    articleId,
+    projectId,
+    parentId,
+    isDeleted,
+    impressionsCount,
+    lastImpressionAt,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
     if (relationField == 'owner') {
       return owner;
+    }
+    if (relationField == 'mediaAssets') {
+      return __mediaAssets;
     }
     if (relationField == 'hashtags') {
       return __hashtags;
@@ -826,13 +1007,15 @@ class PostTable extends _i1.Table<int?> {
 class PostInclude extends _i1.IncludeObject {
   PostInclude._({
     _i2.UserRecordInclude? owner,
-    _i5.PostsHashtagsIncludeList? hashtags,
-    _i6.PollInclude? poll,
-    _i7.ArticleInclude? article,
-    _i8.ProjectInclude? project,
-    _i9.PostInclude? parent,
+    _i4.MediaAssetIncludeList? mediaAssets,
+    _i6.PostsHashtagsIncludeList? hashtags,
+    _i7.PollInclude? poll,
+    _i8.ArticleInclude? article,
+    _i9.ProjectInclude? project,
+    _i10.PostInclude? parent,
   }) {
     _owner = owner;
+    _mediaAssets = mediaAssets;
     _hashtags = hashtags;
     _poll = poll;
     _article = article;
@@ -842,25 +1025,28 @@ class PostInclude extends _i1.IncludeObject {
 
   _i2.UserRecordInclude? _owner;
 
-  _i5.PostsHashtagsIncludeList? _hashtags;
+  _i4.MediaAssetIncludeList? _mediaAssets;
 
-  _i6.PollInclude? _poll;
+  _i6.PostsHashtagsIncludeList? _hashtags;
 
-  _i7.ArticleInclude? _article;
+  _i7.PollInclude? _poll;
 
-  _i8.ProjectInclude? _project;
+  _i8.ArticleInclude? _article;
 
-  _i9.PostInclude? _parent;
+  _i9.ProjectInclude? _project;
+
+  _i10.PostInclude? _parent;
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'owner': _owner,
-        'hashtags': _hashtags,
-        'poll': _poll,
-        'article': _article,
-        'project': _project,
-        'parent': _parent,
-      };
+    'owner': _owner,
+    'mediaAssets': _mediaAssets,
+    'hashtags': _hashtags,
+    'poll': _poll,
+    'article': _article,
+    'project': _project,
+    'parent': _parent,
+  };
 
   @override
   _i1.Table<int?> get table => Post.t;
@@ -1059,6 +1245,46 @@ class PostRepository {
     );
   }
 
+  /// Updates a single [Post] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<Post?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PostUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<Post>(
+      id,
+      columnValues: columnValues(Post.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [Post]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<Post>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PostUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PostTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PostTable>? orderBy,
+    _i1.OrderByListBuilder<PostTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<Post>(
+      columnValues: columnValues(Post.t.updateTable),
+      where: where(Post.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(Post.t),
+      orderByList: orderByList?.call(Post.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [Post]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -1116,12 +1342,37 @@ class PostRepository {
 class PostAttachRepository {
   const PostAttachRepository._();
 
+  /// Creates a relation between this [Post] and the given [MediaAsset]s
+  /// by setting each [MediaAsset]'s foreign key `postId` to refer to this [Post].
+  Future<void> mediaAssets(
+    _i1.Session session,
+    Post post,
+    List<_i4.MediaAsset> mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+
+    var $mediaAsset = mediaAsset
+        .map((e) => e.copyWith(postId: post.id))
+        .toList();
+    await session.db.update<_i4.MediaAsset>(
+      $mediaAsset,
+      columns: [_i4.MediaAsset.t.postId],
+      transaction: transaction,
+    );
+  }
+
   /// Creates a relation between this [Post] and the given [PostsHashtags]s
   /// by setting each [PostsHashtags]'s foreign key `postId` to refer to this [Post].
   Future<void> hashtags(
     _i1.Session session,
     Post post,
-    List<_i5.PostsHashtags> postsHashtags, {
+    List<_i6.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.any((e) => e.id == null)) {
@@ -1131,11 +1382,12 @@ class PostAttachRepository {
       throw ArgumentError.notNull('post.id');
     }
 
-    var $postsHashtags =
-        postsHashtags.map((e) => e.copyWith(postId: post.id)).toList();
-    await session.db.update<_i5.PostsHashtags>(
+    var $postsHashtags = postsHashtags
+        .map((e) => e.copyWith(postId: post.id))
+        .toList();
+    await session.db.update<_i6.PostsHashtags>(
       $postsHashtags,
-      columns: [_i5.PostsHashtags.t.postId],
+      columns: [_i6.PostsHashtags.t.postId],
       transaction: transaction,
     );
   }
@@ -1172,7 +1424,7 @@ class PostAttachRowRepository {
   Future<void> poll(
     _i1.Session session,
     Post post,
-    _i6.Poll poll, {
+    _i7.Poll poll, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1195,7 +1447,7 @@ class PostAttachRowRepository {
   Future<void> article(
     _i1.Session session,
     Post post,
-    _i7.Article article, {
+    _i8.Article article, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1218,7 +1470,7 @@ class PostAttachRowRepository {
   Future<void> project(
     _i1.Session session,
     Post post,
-    _i8.Project project, {
+    _i9.Project project, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1241,7 +1493,7 @@ class PostAttachRowRepository {
   Future<void> parent(
     _i1.Session session,
     Post post,
-    _i9.Post parent, {
+    _i10.Post parent, {
     _i1.Transaction? transaction,
   }) async {
     if (post.id == null) {
@@ -1259,12 +1511,35 @@ class PostAttachRowRepository {
     );
   }
 
+  /// Creates a relation between this [Post] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `postId` to refer to this [Post].
+  Future<void> mediaAssets(
+    _i1.Session session,
+    Post post,
+    _i4.MediaAsset mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+    if (post.id == null) {
+      throw ArgumentError.notNull('post.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(postId: post.id);
+    await session.db.updateRow<_i4.MediaAsset>(
+      $mediaAsset,
+      columns: [_i4.MediaAsset.t.postId],
+      transaction: transaction,
+    );
+  }
+
   /// Creates a relation between this [Post] and the given [PostsHashtags]
   /// by setting the [PostsHashtags]'s foreign key `postId` to refer to this [Post].
   Future<void> hashtags(
     _i1.Session session,
     Post post,
-    _i5.PostsHashtags postsHashtags, {
+    _i6.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.id == null) {
@@ -1275,9 +1550,9 @@ class PostAttachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(postId: post.id);
-    await session.db.updateRow<_i5.PostsHashtags>(
+    await session.db.updateRow<_i6.PostsHashtags>(
       $postsHashtags,
-      columns: [_i5.PostsHashtags.t.postId],
+      columns: [_i6.PostsHashtags.t.postId],
       transaction: transaction,
     );
   }
@@ -1286,6 +1561,28 @@ class PostAttachRowRepository {
 class PostDetachRepository {
   const PostDetachRepository._();
 
+  /// Detaches the relation between this [Post] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `postId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> mediaAssets(
+    _i1.Session session,
+    List<_i4.MediaAsset> mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+
+    var $mediaAsset = mediaAsset.map((e) => e.copyWith(postId: null)).toList();
+    await session.db.update<_i4.MediaAsset>(
+      $mediaAsset,
+      columns: [_i4.MediaAsset.t.postId],
+      transaction: transaction,
+    );
+  }
+
   /// Detaches the relation between this [Post] and the given [PostsHashtags]
   /// by setting the [PostsHashtags]'s foreign key `postId` to `null`.
   ///
@@ -1293,18 +1590,19 @@ class PostDetachRepository {
   /// the related record.
   Future<void> hashtags(
     _i1.Session session,
-    List<_i5.PostsHashtags> postsHashtags, {
+    List<_i6.PostsHashtags> postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.any((e) => e.id == null)) {
       throw ArgumentError.notNull('postsHashtags.id');
     }
 
-    var $postsHashtags =
-        postsHashtags.map((e) => e.copyWith(postId: null)).toList();
-    await session.db.update<_i5.PostsHashtags>(
+    var $postsHashtags = postsHashtags
+        .map((e) => e.copyWith(postId: null))
+        .toList();
+    await session.db.update<_i6.PostsHashtags>(
       $postsHashtags,
-      columns: [_i5.PostsHashtags.t.postId],
+      columns: [_i6.PostsHashtags.t.postId],
       transaction: transaction,
     );
   }
@@ -1401,6 +1699,28 @@ class PostDetachRowRepository {
     );
   }
 
+  /// Detaches the relation between this [Post] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `postId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> mediaAssets(
+    _i1.Session session,
+    _i4.MediaAsset mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(postId: null);
+    await session.db.updateRow<_i4.MediaAsset>(
+      $mediaAsset,
+      columns: [_i4.MediaAsset.t.postId],
+      transaction: transaction,
+    );
+  }
+
   /// Detaches the relation between this [Post] and the given [PostsHashtags]
   /// by setting the [PostsHashtags]'s foreign key `postId` to `null`.
   ///
@@ -1408,7 +1728,7 @@ class PostDetachRowRepository {
   /// the related record.
   Future<void> hashtags(
     _i1.Session session,
-    _i5.PostsHashtags postsHashtags, {
+    _i6.PostsHashtags postsHashtags, {
     _i1.Transaction? transaction,
   }) async {
     if (postsHashtags.id == null) {
@@ -1416,9 +1736,9 @@ class PostDetachRowRepository {
     }
 
     var $postsHashtags = postsHashtags.copyWith(postId: null);
-    await session.db.updateRow<_i5.PostsHashtags>(
+    await session.db.updateRow<_i6.PostsHashtags>(
       $postsHashtags,
-      columns: [_i5.PostsHashtags.t.postId],
+      columns: [_i6.PostsHashtags.t.postId],
       transaction: transaction,
     );
   }

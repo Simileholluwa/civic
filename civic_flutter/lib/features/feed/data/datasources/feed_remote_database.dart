@@ -7,6 +7,16 @@ abstract class FeedRemoteDatabase {
   Future<Post?> savePost({
     required Post post,
   });
+  Future<Post> repostPost({
+    required int postId,
+  });
+  Future<void> clearVote({
+    required int pollId,
+  });
+  Future<Post> quotePost({
+    required int postId,
+    required Post quoteContent,
+  });
   Future<PostList> getPosts({
     required int page,
     required int limit,
@@ -41,6 +51,7 @@ abstract class FeedRemoteDatabase {
   });
   Future<void> deletePost({
     required int postId,
+    required bool fullDelete,
   });
   Future<Post> savePostComment({
     required Post comment,
@@ -89,6 +100,81 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   }) async {
     try {
       final result = await _client.post.savePost(post);
+      if (result == null) {
+        throw const ServerException(
+          message: TTexts.failedToSavePost,
+        );
+      }
+      return result;
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: TTexts.failedToConnectToServer,
+      );
+    } on ServerException {
+      rethrow;
+    } on Exception catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<void> clearVote({
+    required int pollId,
+  }) async {
+    try {
+      return await _client.post.clearVote(
+        pollId,
+      );
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
+    } on Exception catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Post> repostPost({
+    required int postId,
+  }) async {
+    try {
+      final result = await _client.post.repostPost(postId);
+      if (result == null) {
+        throw const ServerException(
+          message: TTexts.somethingWentWrong,
+        );
+      }
+      return result;
+    } on ServerSideException catch (e) {
+      throw ServerException(message: e.message);
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: TTexts.failedToConnectToServer,
+      );
+    } on ServerException {
+      rethrow;
+    } on Exception catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<Post> quotePost({
+    required int postId,
+    required Post quoteContent,
+  }) async {
+    try {
+      final result = await _client.post.quotePost(
+        postId,
+        quoteContent,
+      );
       if (result == null) {
         throw const ServerException(
           message: TTexts.failedToSavePost,
@@ -356,9 +442,13 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
   @override
   Future<void> deletePost({
     required int postId,
+    required bool fullDelete,
   }) async {
     try {
-      return await _client.post.deletePost(postId);
+      return await _client.post.deletePost(
+        postId,
+        fullDelete: fullDelete,
+      );
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on Exception catch (e) {
@@ -498,11 +588,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       final result = await _client.post.saveArticle(
         post,
       );
-      if (result == null) {
-        throw const ServerException(
-          message: TTexts.failedToSaveArticle,
-        );
-      }
       return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
@@ -510,8 +595,6 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
       throw const ServerException(
         message: 'Failed to connect to server. Please try again.',
       );
-    } on ServerException {
-      rethrow;
     } on Exception catch (e) {
       throw ServerException(
         message: e.toString(),

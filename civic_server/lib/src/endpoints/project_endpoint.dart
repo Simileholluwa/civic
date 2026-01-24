@@ -2033,7 +2033,7 @@ class ProjectEndpoint extends Endpoint {
   Future<UserRecord> authUser(
     Session session,
   ) async {
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(
         message: 'You must be logged in',

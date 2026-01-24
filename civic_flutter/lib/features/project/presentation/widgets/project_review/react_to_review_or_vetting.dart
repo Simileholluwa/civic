@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 
 class ReactToReviewOrVetting extends StatelessWidget {
   const ReactToReviewOrVetting({
-    required this.text, required this.likesCount, required this.likeTextColor, required this.dislikeTextColor, required this.likeTapped, required this.dislikeTapped, super.key,
+    required this.text,
+    required this.likesCount,
+    required this.likeTextColor,
+    required this.dislikeTextColor,
+    required this.likeTapped,
+    required this.dislikeTapped,
+    super.key,
     this.onDelete,
     this.isOwner = false,
   });

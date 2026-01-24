@@ -113,8 +113,9 @@ class ProjectCardState {
           project.description!,
         ) as List,
       ),
-      canEdit: DateTime.now().difference(project.dateCreated!).inMinutes < 30 &&
-          userId == project.ownerId,
+      canEdit:
+          DateTime.now().difference(project.dateCreated!).inMinutes < 100 &&
+              userId == project.ownerId,
       title: project.title,
       currency: project.currency,
       amount: ProjectHelperFunctions.humanizeProjectCost(project.projectCost!),

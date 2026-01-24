@@ -11,6 +11,7 @@ class DeletePostUseCase implements UseCase<void, DeletePostParams> {
   Future<Either<Failure, void>> call(DeletePostParams params) async {
     final result = await _feedRepository.deletePost(
       postId: params.postId,
+      fullDelete: params.fullDelete,
     );
     return result;
   }
@@ -19,6 +20,8 @@ class DeletePostUseCase implements UseCase<void, DeletePostParams> {
 class DeletePostParams {
   DeletePostParams(
     this.postId,
+    this.fullDelete,
   );
   final int postId;
+  final bool fullDelete;
 }

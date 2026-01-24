@@ -16,7 +16,7 @@ class CountdownTimer extends _$CountdownTimer {
   }
 
   void startCountdown() {
-    if (_timer != null && _timer!.isActive) return; 
+    if (_timer != null && _timer!.isActive) return;
     state = state.copyWith(isCountingDown: true, secondsRemaining: 120);
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {

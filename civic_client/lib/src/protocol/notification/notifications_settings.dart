@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class UserNotificationSettings implements _i1.SerializableModel {
   UserNotificationSettings._({
@@ -42,31 +44,31 @@ abstract class UserNotificationSettings implements _i1.SerializableModel {
     bool? pushNewFollowers,
     bool? allowPlatformUpdates,
     bool? pushPlatformUpdates,
-  })  : pauseAllPush = pauseAllPush ?? false,
-        allowComments = allowComments ?? true,
-        pushComments = pushComments ?? true,
-        allowLikes = allowLikes ?? true,
-        pushLikes = pushLikes ?? true,
-        allowRepostsAndQuotes = allowRepostsAndQuotes ?? true,
-        pushRepostsAndQuotes = pushRepostsAndQuotes ?? true,
-        allowNewReviews = allowNewReviews ?? true,
-        pushNewReviews = pushNewReviews ?? true,
-        allowNewVettings = allowNewVettings ?? true,
-        pushNewVettings = pushNewVettings ?? true,
-        allowReactions = allowReactions ?? true,
-        pushReactions = pushReactions ?? true,
-        allowHelpfulReviews = allowHelpfulReviews ?? true,
-        pushHelpfulReviews = pushHelpfulReviews ?? true,
-        allowSubscribedContent = allowSubscribedContent ?? true,
-        pushSubscribedContent = pushSubscribedContent ?? true,
-        allowMentions = allowMentions ?? true,
-        pushMentions = pushMentions ?? true,
-        allowTags = allowTags ?? true,
-        pushTags = pushTags ?? true,
-        allowNewFollowers = allowNewFollowers ?? true,
-        pushNewFollowers = pushNewFollowers ?? true,
-        allowPlatformUpdates = allowPlatformUpdates ?? true,
-        pushPlatformUpdates = pushPlatformUpdates ?? true;
+  }) : pauseAllPush = pauseAllPush ?? false,
+       allowComments = allowComments ?? true,
+       pushComments = pushComments ?? true,
+       allowLikes = allowLikes ?? true,
+       pushLikes = pushLikes ?? true,
+       allowRepostsAndQuotes = allowRepostsAndQuotes ?? true,
+       pushRepostsAndQuotes = pushRepostsAndQuotes ?? true,
+       allowNewReviews = allowNewReviews ?? true,
+       pushNewReviews = pushNewReviews ?? true,
+       allowNewVettings = allowNewVettings ?? true,
+       pushNewVettings = pushNewVettings ?? true,
+       allowReactions = allowReactions ?? true,
+       pushReactions = pushReactions ?? true,
+       allowHelpfulReviews = allowHelpfulReviews ?? true,
+       pushHelpfulReviews = pushHelpfulReviews ?? true,
+       allowSubscribedContent = allowSubscribedContent ?? true,
+       pushSubscribedContent = pushSubscribedContent ?? true,
+       allowMentions = allowMentions ?? true,
+       pushMentions = pushMentions ?? true,
+       allowTags = allowTags ?? true,
+       pushTags = pushTags ?? true,
+       allowNewFollowers = allowNewFollowers ?? true,
+       pushNewFollowers = pushNewFollowers ?? true,
+       allowPlatformUpdates = allowPlatformUpdates ?? true,
+       pushPlatformUpdates = pushPlatformUpdates ?? true;
 
   factory UserNotificationSettings({
     int? id,
@@ -100,14 +102,16 @@ abstract class UserNotificationSettings implements _i1.SerializableModel {
   }) = _UserNotificationSettingsImpl;
 
   factory UserNotificationSettings.fromJson(
-      Map<String, dynamic> jsonSerialization) {
+    Map<String, dynamic> jsonSerialization,
+  ) {
     return UserNotificationSettings(
       id: jsonSerialization['id'] as int?,
       userId: jsonSerialization['userId'] as int,
       user: jsonSerialization['user'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['user'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['user'],
+            ),
       pauseAllPush: jsonSerialization['pauseAllPush'] as bool,
       allowComments: jsonSerialization['allowComments'] as bool,
       pushComments: jsonSerialization['pushComments'] as bool,
@@ -232,6 +236,7 @@ abstract class UserNotificationSettings implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserNotificationSettings',
       if (id != null) 'id': id,
       'userId': userId,
       if (user != null) 'user': user?.toJson(),
@@ -302,35 +307,35 @@ class _UserNotificationSettingsImpl extends UserNotificationSettings {
     bool? allowPlatformUpdates,
     bool? pushPlatformUpdates,
   }) : super._(
-          id: id,
-          userId: userId,
-          user: user,
-          pauseAllPush: pauseAllPush,
-          allowComments: allowComments,
-          pushComments: pushComments,
-          allowLikes: allowLikes,
-          pushLikes: pushLikes,
-          allowRepostsAndQuotes: allowRepostsAndQuotes,
-          pushRepostsAndQuotes: pushRepostsAndQuotes,
-          allowNewReviews: allowNewReviews,
-          pushNewReviews: pushNewReviews,
-          allowNewVettings: allowNewVettings,
-          pushNewVettings: pushNewVettings,
-          allowReactions: allowReactions,
-          pushReactions: pushReactions,
-          allowHelpfulReviews: allowHelpfulReviews,
-          pushHelpfulReviews: pushHelpfulReviews,
-          allowSubscribedContent: allowSubscribedContent,
-          pushSubscribedContent: pushSubscribedContent,
-          allowMentions: allowMentions,
-          pushMentions: pushMentions,
-          allowTags: allowTags,
-          pushTags: pushTags,
-          allowNewFollowers: allowNewFollowers,
-          pushNewFollowers: pushNewFollowers,
-          allowPlatformUpdates: allowPlatformUpdates,
-          pushPlatformUpdates: pushPlatformUpdates,
-        );
+         id: id,
+         userId: userId,
+         user: user,
+         pauseAllPush: pauseAllPush,
+         allowComments: allowComments,
+         pushComments: pushComments,
+         allowLikes: allowLikes,
+         pushLikes: pushLikes,
+         allowRepostsAndQuotes: allowRepostsAndQuotes,
+         pushRepostsAndQuotes: pushRepostsAndQuotes,
+         allowNewReviews: allowNewReviews,
+         pushNewReviews: pushNewReviews,
+         allowNewVettings: allowNewVettings,
+         pushNewVettings: pushNewVettings,
+         allowReactions: allowReactions,
+         pushReactions: pushReactions,
+         allowHelpfulReviews: allowHelpfulReviews,
+         pushHelpfulReviews: pushHelpfulReviews,
+         allowSubscribedContent: allowSubscribedContent,
+         pushSubscribedContent: pushSubscribedContent,
+         allowMentions: allowMentions,
+         pushMentions: pushMentions,
+         allowTags: allowTags,
+         pushTags: pushTags,
+         allowNewFollowers: allowNewFollowers,
+         pushNewFollowers: pushNewFollowers,
+         allowPlatformUpdates: allowPlatformUpdates,
+         pushPlatformUpdates: pushPlatformUpdates,
+       );
 
   /// Returns a shallow copy of this [UserNotificationSettings]
   /// with some or all fields replaced by the given arguments.

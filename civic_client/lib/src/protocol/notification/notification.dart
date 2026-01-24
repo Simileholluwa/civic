@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -15,6 +16,7 @@ import '../notification/notification_action_type.dart' as _i3;
 import '../notification/notification_target_type.dart' as _i4;
 import '../post/post.dart' as _i5;
 import '../project/project.dart' as _i6;
+import 'package:civic_client/src/protocol/protocol.dart' as _i7;
 
 abstract class AppNotification implements _i1.SerializableModel {
   AppNotification._({
@@ -40,8 +42,8 @@ abstract class AppNotification implements _i1.SerializableModel {
     this.post,
     this.projectId,
     this.project,
-  })  : isRead = isRead ?? false,
-        createdAt = createdAt ?? DateTime.now();
+  }) : isRead = isRead ?? false,
+       createdAt = createdAt ?? DateTime.now();
 
   factory AppNotification({
     int? id,
@@ -74,43 +76,50 @@ abstract class AppNotification implements _i1.SerializableModel {
       receiverId: jsonSerialization['receiverId'] as int,
       receiver: jsonSerialization['receiver'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['receiver'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['receiver'],
+            ),
       senderId: jsonSerialization['senderId'] as int,
       sender: jsonSerialization['sender'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['sender'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['sender'],
+            ),
       senderName: jsonSerialization['senderName'] as String?,
-      groupedSenderNames: (jsonSerialization['groupedSenderNames'] as List?)
-          ?.map((e) => e as String)
-          .toList(),
+      groupedSenderNames: jsonSerialization['groupedSenderNames'] == null
+          ? null
+          : _i7.Protocol().deserialize<List<String>>(
+              jsonSerialization['groupedSenderNames'],
+            ),
       title: jsonSerialization['title'] as String,
       body: jsonSerialization['body'] as String?,
       groupKey: jsonSerialization['groupKey'] as String?,
       actionType: _i3.NotificationActionType.fromJson(
-          (jsonSerialization['actionType'] as int)),
+        (jsonSerialization['actionType'] as String),
+      ),
       senderAvatarUrl: jsonSerialization['senderAvatarUrl'] as String?,
       targetType: _i4.NotificationTargetType.fromJson(
-          (jsonSerialization['targetType'] as int)),
+        (jsonSerialization['targetType'] as String),
+      ),
       actionRoute: jsonSerialization['actionRoute'] as String,
       targetId: jsonSerialization['targetId'] as int,
       isRead: jsonSerialization['isRead'] as bool,
-      createdAt:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      createdAt: _i1.DateTimeJsonExtension.fromJson(
+        jsonSerialization['createdAt'],
+      ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
       postId: jsonSerialization['postId'] as int?,
       post: jsonSerialization['post'] == null
           ? null
-          : _i5.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i5.Post>(jsonSerialization['post']),
       projectId: jsonSerialization['projectId'] as int?,
       project: jsonSerialization['project'] == null
           ? null
-          : _i6.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i7.Protocol().deserialize<_i6.Project>(
+              jsonSerialization['project'],
+            ),
     );
   }
 
@@ -191,6 +200,7 @@ abstract class AppNotification implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'AppNotification',
       if (id != null) 'id': id,
       'receiverId': receiverId,
       if (receiver != null) 'receiver': receiver?.toJson(),
@@ -250,29 +260,29 @@ class _AppNotificationImpl extends AppNotification {
     int? projectId,
     _i6.Project? project,
   }) : super._(
-          id: id,
-          receiverId: receiverId,
-          receiver: receiver,
-          senderId: senderId,
-          sender: sender,
-          senderName: senderName,
-          groupedSenderNames: groupedSenderNames,
-          title: title,
-          body: body,
-          groupKey: groupKey,
-          actionType: actionType,
-          senderAvatarUrl: senderAvatarUrl,
-          targetType: targetType,
-          actionRoute: actionRoute,
-          targetId: targetId,
-          isRead: isRead,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          postId: postId,
-          post: post,
-          projectId: projectId,
-          project: project,
-        );
+         id: id,
+         receiverId: receiverId,
+         receiver: receiver,
+         senderId: senderId,
+         sender: sender,
+         senderName: senderName,
+         groupedSenderNames: groupedSenderNames,
+         title: title,
+         body: body,
+         groupKey: groupKey,
+         actionType: actionType,
+         senderAvatarUrl: senderAvatarUrl,
+         targetType: targetType,
+         actionRoute: actionRoute,
+         targetId: targetId,
+         isRead: isRead,
+         createdAt: createdAt,
+         updatedAt: updatedAt,
+         postId: postId,
+         post: post,
+         projectId: projectId,
+         project: project,
+       );
 
   /// Returns a shallow copy of this [AppNotification]
   /// with some or all fields replaced by the given arguments.
@@ -305,8 +315,9 @@ class _AppNotificationImpl extends AppNotification {
     return AppNotification(
       id: id is int? ? id : this.id,
       receiverId: receiverId ?? this.receiverId,
-      receiver:
-          receiver is _i2.UserRecord? ? receiver : this.receiver?.copyWith(),
+      receiver: receiver is _i2.UserRecord?
+          ? receiver
+          : this.receiver?.copyWith(),
       senderId: senderId ?? this.senderId,
       sender: sender is _i2.UserRecord? ? sender : this.sender?.copyWith(),
       senderName: senderName is String? ? senderName : this.senderName,
@@ -317,8 +328,9 @@ class _AppNotificationImpl extends AppNotification {
       body: body is String? ? body : this.body,
       groupKey: groupKey is String? ? groupKey : this.groupKey,
       actionType: actionType ?? this.actionType,
-      senderAvatarUrl:
-          senderAvatarUrl is String? ? senderAvatarUrl : this.senderAvatarUrl,
+      senderAvatarUrl: senderAvatarUrl is String?
+          ? senderAvatarUrl
+          : this.senderAvatarUrl,
       targetType: targetType ?? this.targetType,
       actionRoute: actionRoute ?? this.actionRoute,
       targetId: targetId ?? this.targetId,

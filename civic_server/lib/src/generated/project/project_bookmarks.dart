@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../project/project.dart' as _i2;
 import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class ProjectBookmarks
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -41,15 +43,18 @@ abstract class ProjectBookmarks
       projectId: jsonSerialization['projectId'] as int,
       project: jsonSerialization['project'] == null
           ? null
-          : _i2.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Project>(
+              jsonSerialization['project'],
+            ),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
-      dateCreated:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['dateCreated']),
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['owner'],
+            ),
+      dateCreated: _i1.DateTimeJsonExtension.fromJson(
+        jsonSerialization['dateCreated'],
+      ),
     );
   }
 
@@ -87,6 +92,7 @@ abstract class ProjectBookmarks
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectBookmarks',
       if (id != null) 'id': id,
       'projectId': projectId,
       if (project != null) 'project': project?.toJson(),
@@ -99,6 +105,7 @@ abstract class ProjectBookmarks
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ProjectBookmarks',
       if (id != null) 'id': id,
       'projectId': projectId,
       if (project != null) 'project': project?.toJsonForProtocol(),
@@ -155,13 +162,13 @@ class _ProjectBookmarksImpl extends ProjectBookmarks {
     _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
-          id: id,
-          projectId: projectId,
-          project: project,
-          ownerId: ownerId,
-          owner: owner,
-          dateCreated: dateCreated,
-        );
+         id: id,
+         projectId: projectId,
+         project: project,
+         ownerId: ownerId,
+         owner: owner,
+         dateCreated: dateCreated,
+       );
 
   /// Returns a shallow copy of this [ProjectBookmarks]
   /// with some or all fields replaced by the given arguments.
@@ -186,9 +193,31 @@ class _ProjectBookmarksImpl extends ProjectBookmarks {
   }
 }
 
+class ProjectBookmarksUpdateTable
+    extends _i1.UpdateTable<ProjectBookmarksTable> {
+  ProjectBookmarksUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> projectId(int value) => _i1.ColumnValue(
+    table.projectId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+}
+
 class ProjectBookmarksTable extends _i1.Table<int?> {
   ProjectBookmarksTable({super.tableRelation})
-      : super(tableName: 'project_bookmarks') {
+    : super(tableName: 'project_bookmarks') {
+    updateTable = ProjectBookmarksUpdateTable(this);
     projectId = _i1.ColumnInt(
       'projectId',
       this,
@@ -203,6 +232,8 @@ class ProjectBookmarksTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final ProjectBookmarksUpdateTable updateTable;
 
   late final _i1.ColumnInt projectId;
 
@@ -242,11 +273,11 @@ class ProjectBookmarksTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        projectId,
-        ownerId,
-        dateCreated,
-      ];
+    id,
+    projectId,
+    ownerId,
+    dateCreated,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -275,9 +306,9 @@ class ProjectBookmarksInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'project': _project,
-        'owner': _owner,
-      };
+    'project': _project,
+    'owner': _owner,
+  };
 
   @override
   _i1.Table<int?> get table => ProjectBookmarks.t;
@@ -466,6 +497,48 @@ class ProjectBookmarksRepository {
     return session.db.updateRow<ProjectBookmarks>(
       row,
       columns: columns?.call(ProjectBookmarks.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [ProjectBookmarks] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ProjectBookmarks?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectBookmarksUpdateTable>
+    columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ProjectBookmarks>(
+      id,
+      columnValues: columnValues(ProjectBookmarks.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ProjectBookmarks]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ProjectBookmarks>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectBookmarksUpdateTable>
+    columnValues,
+    required _i1.WhereExpressionBuilder<ProjectBookmarksTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectBookmarksTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectBookmarksTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ProjectBookmarks>(
+      columnValues: columnValues(ProjectBookmarks.t.updateTable),
+      where: where(ProjectBookmarks.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectBookmarks.t),
+      orderByList: orderByList?.call(ProjectBookmarks.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

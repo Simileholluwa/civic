@@ -19,6 +19,10 @@ class CreateContentPrivacy extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(200),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: .5,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

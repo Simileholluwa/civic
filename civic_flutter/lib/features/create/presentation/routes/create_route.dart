@@ -22,9 +22,11 @@ class CreateRoutes {
               final data = state.extra as Map<String, dynamic>?;
               return CreatePostScreen(
                 id: int.tryParse(state.pathParameters['postId'] ?? '0') ?? 0,
-                project: data?['project'] as Project?,
-                parent: data?['parent'] as Post?,
-                post: data?['post'] as Post?,
+                projectToQuote: data?['projectToQuote'] as Project?,
+                rootPost: data?['rootPost'] as Post?,
+                postToQuote: data?['postToQuote'] as Post?,
+                isReply: data?['isReply'] as bool? ?? false,
+                isComment: data?['isComment'] as bool? ?? false,
               );
             },
           ),

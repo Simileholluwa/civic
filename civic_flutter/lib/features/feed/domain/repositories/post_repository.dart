@@ -36,6 +36,13 @@ abstract class FeedRepository {
   Future<Either<Failure, PostWithUserState>> getPost({
     required int postId,
   });
+  Future<Either<Failure, Post>> repostPost({
+    required int postId,
+  });
+  Future<Either<Failure, Post>> quotePost({
+    required int postId,
+    required Post quoteContent,
+  });
   Future<Either<Failure, void>> subscribeToNotifications({
     required int postId,
   });
@@ -59,6 +66,7 @@ abstract class FeedRepository {
   });
   Future<Either<Failure, void>> deletePost({
     required int postId,
+    required bool fullDelete,
   });
   Future<Either<Failure, void>> clearPostBookmarks();
   Future<Either<Failure, Post>> savePostComment({
@@ -91,5 +99,8 @@ abstract class FeedRepository {
   });
   Future<Either<Failure, void>> flushImpressions({
     String? source,
+  });
+  Future<Either<Failure, void>> clearVote({
+    required int pollId,
   });
 }

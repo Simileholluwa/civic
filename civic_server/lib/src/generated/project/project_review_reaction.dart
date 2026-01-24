@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project_review.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class ProjectReviewReaction
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -42,23 +44,27 @@ abstract class ProjectReviewReaction
   }) = _ProjectReviewReactionImpl;
 
   factory ProjectReviewReaction.fromJson(
-      Map<String, dynamic> jsonSerialization) {
+    Map<String, dynamic> jsonSerialization,
+  ) {
     return ProjectReviewReaction(
       id: jsonSerialization['id'] as int?,
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       reviewId: jsonSerialization['reviewId'] as int,
       review: jsonSerialization['review'] == null
           ? null
-          : _i3.ProjectReview.fromJson(
-              (jsonSerialization['review'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.ProjectReview>(
+              jsonSerialization['review'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
@@ -110,6 +116,7 @@ abstract class ProjectReviewReaction
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectReviewReaction',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -125,6 +132,7 @@ abstract class ProjectReviewReaction
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ProjectReviewReaction',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
@@ -187,16 +195,16 @@ class _ProjectReviewReactionImpl extends ProjectReviewReaction {
     bool? isLike,
     bool? isDeleted,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          reviewId: reviewId,
-          review: review,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          isLike: isLike,
-          isDeleted: isDeleted,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         reviewId: reviewId,
+         review: review,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         isLike: isLike,
+         isDeleted: isDeleted,
+       );
 
   /// Returns a shallow copy of this [ProjectReviewReaction]
   /// with some or all fields replaced by the given arguments.
@@ -227,9 +235,47 @@ class _ProjectReviewReactionImpl extends ProjectReviewReaction {
   }
 }
 
+class ProjectReviewReactionUpdateTable
+    extends _i1.UpdateTable<ProjectReviewReactionTable> {
+  ProjectReviewReactionUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> reviewId(int value) => _i1.ColumnValue(
+    table.reviewId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<bool, bool> isLike(bool? value) => _i1.ColumnValue(
+    table.isLike,
+    value,
+  );
+
+  _i1.ColumnValue<bool, bool> isDeleted(bool? value) => _i1.ColumnValue(
+    table.isDeleted,
+    value,
+  );
+}
+
 class ProjectReviewReactionTable extends _i1.Table<int?> {
   ProjectReviewReactionTable({super.tableRelation})
-      : super(tableName: 'project_review_reaction') {
+    : super(tableName: 'project_review_reaction') {
+    updateTable = ProjectReviewReactionUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -256,6 +302,8 @@ class ProjectReviewReactionTable extends _i1.Table<int?> {
       this,
     );
   }
+
+  late final ProjectReviewReactionUpdateTable updateTable;
 
   late final _i1.ColumnInt ownerId;
 
@@ -301,14 +349,14 @@ class ProjectReviewReactionTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        reviewId,
-        dateCreated,
-        updatedAt,
-        isLike,
-        isDeleted,
-      ];
+    id,
+    ownerId,
+    reviewId,
+    dateCreated,
+    updatedAt,
+    isLike,
+    isDeleted,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -337,9 +385,9 @@ class ProjectReviewReactionInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'owner': _owner,
-        'review': _review,
-      };
+    'owner': _owner,
+    'review': _review,
+  };
 
   @override
   _i1.Table<int?> get table => ProjectReviewReaction.t;
@@ -532,6 +580,48 @@ class ProjectReviewReactionRepository {
     );
   }
 
+  /// Updates a single [ProjectReviewReaction] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ProjectReviewReaction?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectReviewReactionUpdateTable>
+    columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ProjectReviewReaction>(
+      id,
+      columnValues: columnValues(ProjectReviewReaction.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ProjectReviewReaction]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ProjectReviewReaction>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectReviewReactionUpdateTable>
+    columnValues,
+    required _i1.WhereExpressionBuilder<ProjectReviewReactionTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectReviewReactionTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectReviewReactionTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ProjectReviewReaction>(
+      columnValues: columnValues(ProjectReviewReaction.t.updateTable),
+      where: where(ProjectReviewReaction.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectReviewReaction.t),
+      orderByList: orderByList?.call(ProjectReviewReaction.t),
+      orderDescending: orderDescending,
+      transaction: transaction,
+    );
+  }
+
   /// Deletes all [ProjectReviewReaction]s in the list and returns the deleted rows.
   /// This is an atomic operation, meaning that if one of the rows fail to
   /// be deleted, none of the rows will be deleted.
@@ -604,8 +694,9 @@ class ProjectReviewReactionAttachRowRepository {
       throw ArgumentError.notNull('owner.id');
     }
 
-    var $projectReviewReaction =
-        projectReviewReaction.copyWith(ownerId: owner.id);
+    var $projectReviewReaction = projectReviewReaction.copyWith(
+      ownerId: owner.id,
+    );
     await session.db.updateRow<ProjectReviewReaction>(
       $projectReviewReaction,
       columns: [ProjectReviewReaction.t.ownerId],
@@ -628,8 +719,9 @@ class ProjectReviewReactionAttachRowRepository {
       throw ArgumentError.notNull('review.id');
     }
 
-    var $projectReviewReaction =
-        projectReviewReaction.copyWith(reviewId: review.id);
+    var $projectReviewReaction = projectReviewReaction.copyWith(
+      reviewId: review.id,
+    );
     await session.db.updateRow<ProjectReviewReaction>(
       $projectReviewReaction,
       columns: [ProjectReviewReaction.t.reviewId],

@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../poll/poll_option_count.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class PollCounts implements _i1.SerializableModel {
   PollCounts._({
@@ -29,10 +31,11 @@ abstract class PollCounts implements _i1.SerializableModel {
     return PollCounts(
       pollId: jsonSerialization['pollId'] as int,
       votesCount: jsonSerialization['votesCount'] as int?,
-      options: (jsonSerialization['options'] as List?)
-          ?.map(
-              (e) => _i2.PollOptionCount.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      options: jsonSerialization['options'] == null
+          ? null
+          : _i3.Protocol().deserialize<List<_i2.PollOptionCount>>(
+              jsonSerialization['options'],
+            ),
     );
   }
 
@@ -53,6 +56,7 @@ abstract class PollCounts implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PollCounts',
       'pollId': pollId,
       if (votesCount != null) 'votesCount': votesCount,
       if (options != null)
@@ -74,10 +78,10 @@ class _PollCountsImpl extends PollCounts {
     int? votesCount,
     List<_i2.PollOptionCount>? options,
   }) : super._(
-          pollId: pollId,
-          votesCount: votesCount,
-          options: options,
-        );
+         pollId: pollId,
+         votesCount: votesCount,
+         options: options,
+       );
 
   /// Returns a shallow copy of this [PollCounts]
   /// with some or all fields replaced by the given arguments.

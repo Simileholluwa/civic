@@ -12,16 +12,17 @@ class PollNotificationTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final post = notification.post ?? notification.post?.parent;
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ContentExpandableText(
-          text: notification.post!.text!,
+          text: post?.text ?? '',
           onToggleTextTap: () {},
         ),
         ListView.separated(
-          itemCount: notification.post!.poll!.options!.length,
+          itemCount: post!.poll!.options!.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (context, index) {
@@ -30,9 +31,8 @@ class PollNotificationTarget extends StatelessWidget {
             );
           },
           itemBuilder: (context, index) {
-            final option = notification.post!.poll!.options![index];
-            final numberOfVotes =
-                notification.post!.poll!.options![index].votesCount!;
+            final option = post.poll!.options![index];
+            final numberOfVotes = post.poll!.options![index].votesCount!;
             final totalVotes = notification.post!.poll!.votesCount;
             return Container(
               decoration: BoxDecoration(

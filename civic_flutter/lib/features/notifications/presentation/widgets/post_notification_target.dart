@@ -14,31 +14,46 @@ class PostNotificationTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final post = notification.post ?? notification.post?.parent;
+    final assets = post?.mediaAssets ?? const <MediaAsset>[];
+    final imageAssetUrls = assets
+        .where((a) => a.kind == MediaKind.image)
+        .map((a) => a.publicUrl)
+        .toList(growable: false);
+    String? videoAssetUrl;
+    for (final a in assets) {
+      if (a.kind == MediaKind.video && (a.publicUrl ?? '').isNotEmpty) {
+        videoAssetUrl = a.publicUrl;
+        break;
+      }
+    }
+    final hasVideo = videoAssetUrl != null && videoAssetUrl.isNotEmpty;
+    final hasImage = imageAssetUrls.isNotEmpty;
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (notification.post!.text?.isNotEmpty ?? false)
+        if (post!.text?.isNotEmpty ?? false)
           ContentExpandableText(
-            text: notification.post!.text!,
-            hasImage: notification.post!.imageUrls?.isNotEmpty ?? false,
-            hasVideo: notification.post!.videoUrl?.isNotEmpty ?? false,
+            text: post.text!,
+            hasImage: hasImage,
+            hasVideo: hasVideo,
             onToggleTextTap: () {},
             textStyle: DefaultTextStyle.of(context).style.copyWith(
                   color: Theme.of(context).hintColor,
                 ),
           ),
-        if (notification.post!.imageUrls?.isNotEmpty ?? false)
+        if (hasImage)
           PostImagePost(
-            post: notification.post!,
+            post: post,
             showInteractions: false,
             addPadding: false,
           ),
-        if (notification.post!.videoUrl?.isNotEmpty ?? false)
+        if (hasVideo)
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: VideoPost(
-              videoUrl: notification.post!.videoUrl!,
+              videoUrl: videoAssetUrl,
             ),
           ),
       ],

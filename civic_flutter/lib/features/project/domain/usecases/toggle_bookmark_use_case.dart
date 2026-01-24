@@ -11,7 +11,6 @@ class ToggleBookmarkUseCase implements UseCase<void, ToggleBookmarkParams> {
   Future<Either<Failure, void>> call(ToggleBookmarkParams params) async {
     final result = await _projectRepository.toggleBookmark(
       projectId: params.projectId,
-      
     );
     return result;
   }
@@ -19,8 +18,7 @@ class ToggleBookmarkUseCase implements UseCase<void, ToggleBookmarkParams> {
 
 class ToggleBookmarkParams {
   ToggleBookmarkParams(
-    this.projectId, 
+    this.projectId,
   );
   final int projectId;
-
 }

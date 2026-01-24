@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class AppUserProfileImage extends StatelessWidget {
   const AppUserProfileImage({
-    required this.imageUrl, super.key,
+    required this.imageUrl,
+    super.key,
     this.radius = 25,
     this.iconSize = 47,
   });

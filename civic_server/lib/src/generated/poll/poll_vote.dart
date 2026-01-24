@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -15,6 +16,7 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../poll/poll.dart' as _i2;
 import '../poll/poll_option.dart' as _i3;
 import '../user/user_record.dart' as _i4;
+import 'package:civic_server/src/generated/protocol.dart' as _i5;
 
 abstract class PollVote
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -46,18 +48,19 @@ abstract class PollVote
       pollId: jsonSerialization['pollId'] as int,
       poll: jsonSerialization['poll'] == null
           ? null
-          : _i2.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i2.Poll>(jsonSerialization['poll']),
       optionId: jsonSerialization['optionId'] as int,
       option: jsonSerialization['option'] == null
           ? null
-          : _i3.PollOption.fromJson(
-              (jsonSerialization['option'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i3.PollOption>(
+              jsonSerialization['option'],
+            ),
       voterId: jsonSerialization['voterId'] as int,
       voter: jsonSerialization['voter'] == null
           ? null
-          : _i4.UserRecord.fromJson(
-              (jsonSerialization['voter'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i4.UserRecord>(
+              jsonSerialization['voter'],
+            ),
       votedAt: jsonSerialization['votedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['votedAt']),
@@ -104,6 +107,7 @@ abstract class PollVote
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PollVote',
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
@@ -118,6 +122,7 @@ abstract class PollVote
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PollVote',
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJsonForProtocol(),
@@ -180,15 +185,15 @@ class _PollVoteImpl extends PollVote {
     _i4.UserRecord? voter,
     DateTime? votedAt,
   }) : super._(
-          id: id,
-          pollId: pollId,
-          poll: poll,
-          optionId: optionId,
-          option: option,
-          voterId: voterId,
-          voter: voter,
-          votedAt: votedAt,
-        );
+         id: id,
+         pollId: pollId,
+         poll: poll,
+         optionId: optionId,
+         option: option,
+         voterId: voterId,
+         voter: voter,
+         votedAt: votedAt,
+       );
 
   /// Returns a shallow copy of this [PollVote]
   /// with some or all fields replaced by the given arguments.
@@ -217,8 +222,34 @@ class _PollVoteImpl extends PollVote {
   }
 }
 
+class PollVoteUpdateTable extends _i1.UpdateTable<PollVoteTable> {
+  PollVoteUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> pollId(int value) => _i1.ColumnValue(
+    table.pollId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> optionId(int value) => _i1.ColumnValue(
+    table.optionId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> voterId(int value) => _i1.ColumnValue(
+    table.voterId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> votedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.votedAt,
+        value,
+      );
+}
+
 class PollVoteTable extends _i1.Table<int?> {
   PollVoteTable({super.tableRelation}) : super(tableName: 'poll_vote') {
+    updateTable = PollVoteUpdateTable(this);
     pollId = _i1.ColumnInt(
       'pollId',
       this,
@@ -237,6 +268,8 @@ class PollVoteTable extends _i1.Table<int?> {
       hasDefault: true,
     );
   }
+
+  late final PollVoteUpdateTable updateTable;
 
   late final _i1.ColumnInt pollId;
 
@@ -293,12 +326,12 @@ class PollVoteTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        pollId,
-        optionId,
-        voterId,
-        votedAt,
-      ];
+    id,
+    pollId,
+    optionId,
+    voterId,
+    votedAt,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -334,10 +367,10 @@ class PollVoteInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'poll': _poll,
-        'option': _option,
-        'voter': _voter,
-      };
+    'poll': _poll,
+    'option': _option,
+    'voter': _voter,
+  };
 
   @override
   _i1.Table<int?> get table => PollVote.t;
@@ -526,6 +559,46 @@ class PollVoteRepository {
     return session.db.updateRow<PollVote>(
       row,
       columns: columns?.call(PollVote.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [PollVote] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<PollVote?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PollVoteUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<PollVote>(
+      id,
+      columnValues: columnValues(PollVote.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [PollVote]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<PollVote>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PollVoteUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PollVoteTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PollVoteTable>? orderBy,
+    _i1.OrderByListBuilder<PollVoteTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<PollVote>(
+      columnValues: columnValues(PollVote.t.updateTable),
+      where: where(PollVote.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(PollVote.t),
+      orderByList: orderByList?.call(PollVote.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

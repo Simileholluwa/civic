@@ -109,7 +109,9 @@ Future<Post?> loadPostDrafts(
                             caseSensitive: false,
                           );
                           return ListTile(
-                            leading: draft.imageUrls?.isNotEmpty ?? false
+                            leading: (draft.mediaAssets?.isNotEmpty ?? false) &&
+                                    (draft.mediaAssets?.first.kind ==
+                                        MediaKind.image)
                                 ? ClipRRect(
                                     borderRadius:
                                         BorderRadiusGeometry.circular(10),
@@ -117,14 +119,16 @@ Future<Post?> loadPostDrafts(
                                       placeholder:
                                           MemoryImage(kTransparentImage),
                                       image: imageUrlRegx.hasMatch(
-                                        draft.imageUrls!.first,
+                                        draft.mediaAssets!.first.publicUrl!,
                                       )
                                           ? CachedNetworkImageProvider(
-                                              draft.imageUrls!.first,
+                                              draft.mediaAssets!.first
+                                                  .publicUrl!,
                                             )
                                           : FileImage(
                                               File(
-                                                draft.imageUrls!.first,
+                                                draft.mediaAssets!.first
+                                                    .publicUrl!,
                                               ),
                                             ) as ImageProvider,
                                       height: 50,

@@ -51,6 +51,24 @@ class FeedRepositoryImpl implements FeedRepository {
   }
 
   @override
+  Future<Either<Failure, void>> clearVote({
+    required int pollId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.clearVote(
+        pollId: pollId,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, PostList>> getUserPostBookmarks({
     required int page,
     required int limit,
@@ -77,6 +95,44 @@ class FeedRepositoryImpl implements FeedRepository {
     try {
       final result = await _remoteDatabase.getPost(
         postId: postId,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> repostPost({
+    required int postId,
+  }) async {
+    try {
+      final result = await _remoteDatabase.repostPost(postId: postId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(
+        Failure(
+          message: e.message,
+          action: e.action,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Post>> quotePost({
+    required int postId,
+    required Post quoteContent,
+  }) async {
+    try {
+      final result = await _remoteDatabase.quotePost(
+        postId: postId,
+        quoteContent: quoteContent,
       );
       return Right(result);
     } on ServerException catch (e) {
@@ -296,10 +352,12 @@ class FeedRepositoryImpl implements FeedRepository {
   @override
   Future<Either<Failure, void>> deletePost({
     required int postId,
+    required bool fullDelete,
   }) async {
     try {
       final result = await _remoteDatabase.deletePost(
         postId: postId,
+        fullDelete: fullDelete,
       );
       return Right(result);
     } on ServerException catch (e) {

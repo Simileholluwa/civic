@@ -1,0 +1,10 @@
+class: PostQuotes
+table: post_quotes
+fields:
+    post: Post?, relation(onDelete=Cascade)
+    owner: UserRecord?, relation(onDelete=Cascade)
+    dateCreated: DateTime, default=now
+
+indexes:
+  post_quotes_id_idx:
+    fields: postId, ownerId

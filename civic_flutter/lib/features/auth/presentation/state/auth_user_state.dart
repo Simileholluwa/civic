@@ -1,5 +1,4 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:flutter/material.dart';
 
 @immutable
 sealed class AuthUserState {

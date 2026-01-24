@@ -1,0 +1,23 @@
+class: MediaAsset
+table: media_asset
+fields:
+  owner: UserRecord?, relation(onDelete=Cascade)
+  post: Post?, relation(name=post_media_assets, optional, onDelete=Cascade)
+  objectKey: String
+  publicUrl: String?
+  contentType: String?
+  size: int?
+  width: int?
+  height: int?
+  durationMs: int?
+  kind: MediaKind
+  createdAt: DateTime?, default=now
+  deletedAt: DateTime?
+indexes:
+  media_post_idx:
+    fields: postId, createdAt
+  media_owner_idx:
+    fields: ownerId, createdAt
+  post_object_key_unique:
+    fields: postId, objectKey
+    unique: true

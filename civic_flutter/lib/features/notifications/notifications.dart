@@ -5,6 +5,7 @@ export './domain/repository/notification_repository.dart';
 export './domain/usecases/delete_all_notifications_use_case.dart';
 export './domain/usecases/delete_notification_use_case.dart';
 export './domain/usecases/get_notifications_use_case.dart';
+export './domain/usecases/get_unread_notifications_use_case.dart';
 export './domain/usecases/get_user_notification_settings_use_case.dart';
 export './domain/usecases/mark_all_notification_as_read_use_case.dart';
 export './domain/usecases/mark_notification_as_read_use_case.dart';

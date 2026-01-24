@@ -9,7 +9,7 @@ part 'project_paginated_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedProjectList extends _$PaginatedProjectList {
   @override
-  PagingController<int, Project> build(String sortBy) {
+  Raw<PagingController<int, Project>> build(String sortBy) {
     final controller = PagingController<int, Project>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;

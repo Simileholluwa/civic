@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class PostWithUserState
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -18,18 +20,21 @@ abstract class PostWithUserState
     required this.post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     this.selectedPollOptionId,
-  })  : hasLiked = hasLiked ?? false,
-        hasBookmarked = hasBookmarked ?? false,
-        isSubscribed = isSubscribed ?? false,
-        isFollower = isFollower ?? false;
+  }) : hasLiked = hasLiked ?? false,
+       hasBookmarked = hasBookmarked ?? false,
+       hasReposted = hasReposted ?? false,
+       isSubscribed = isSubscribed ?? false,
+       isFollower = isFollower ?? false;
 
   factory PostWithUserState({
     required _i2.Post post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
@@ -37,10 +42,10 @@ abstract class PostWithUserState
 
   factory PostWithUserState.fromJson(Map<String, dynamic> jsonSerialization) {
     return PostWithUserState(
-      post: _i2.Post.fromJson(
-          (jsonSerialization['post'] as Map<String, dynamic>)),
+      post: _i3.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       hasLiked: jsonSerialization['hasLiked'] as bool?,
       hasBookmarked: jsonSerialization['hasBookmarked'] as bool?,
+      hasReposted: jsonSerialization['hasReposted'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
       isFollower: jsonSerialization['isFollower'] as bool?,
       selectedPollOptionId: jsonSerialization['selectedPollOptionId'] as int?,
@@ -52,6 +57,8 @@ abstract class PostWithUserState
   bool? hasLiked;
 
   bool? hasBookmarked;
+
+  bool? hasReposted;
 
   bool? isSubscribed;
 
@@ -66,6 +73,7 @@ abstract class PostWithUserState
     _i2.Post? post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
@@ -73,9 +81,11 @@ abstract class PostWithUserState
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostWithUserState',
       'post': post.toJson(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
+      if (hasReposted != null) 'hasReposted': hasReposted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
@@ -86,9 +96,11 @@ abstract class PostWithUserState
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PostWithUserState',
       'post': post.toJsonForProtocol(),
       if (hasLiked != null) 'hasLiked': hasLiked,
       if (hasBookmarked != null) 'hasBookmarked': hasBookmarked,
+      if (hasReposted != null) 'hasReposted': hasReposted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
@@ -109,17 +121,19 @@ class _PostWithUserStateImpl extends PostWithUserState {
     required _i2.Post post,
     bool? hasLiked,
     bool? hasBookmarked,
+    bool? hasReposted,
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
   }) : super._(
-          post: post,
-          hasLiked: hasLiked,
-          hasBookmarked: hasBookmarked,
-          isSubscribed: isSubscribed,
-          isFollower: isFollower,
-          selectedPollOptionId: selectedPollOptionId,
-        );
+         post: post,
+         hasLiked: hasLiked,
+         hasBookmarked: hasBookmarked,
+         hasReposted: hasReposted,
+         isSubscribed: isSubscribed,
+         isFollower: isFollower,
+         selectedPollOptionId: selectedPollOptionId,
+       );
 
   /// Returns a shallow copy of this [PostWithUserState]
   /// with some or all fields replaced by the given arguments.
@@ -129,6 +143,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     _i2.Post? post,
     Object? hasLiked = _Undefined,
     Object? hasBookmarked = _Undefined,
+    Object? hasReposted = _Undefined,
     Object? isSubscribed = _Undefined,
     Object? isFollower = _Undefined,
     Object? selectedPollOptionId = _Undefined,
@@ -136,8 +151,10 @@ class _PostWithUserStateImpl extends PostWithUserState {
     return PostWithUserState(
       post: post ?? this.post.copyWith(),
       hasLiked: hasLiked is bool? ? hasLiked : this.hasLiked,
-      hasBookmarked:
-          hasBookmarked is bool? ? hasBookmarked : this.hasBookmarked,
+      hasBookmarked: hasBookmarked is bool?
+          ? hasBookmarked
+          : this.hasBookmarked,
+      hasReposted: hasReposted is bool? ? hasReposted : this.hasReposted,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
       isFollower: isFollower is bool? ? isFollower : this.isFollower,
       selectedPollOptionId: selectedPollOptionId is int?

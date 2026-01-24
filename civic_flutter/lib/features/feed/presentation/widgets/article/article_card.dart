@@ -56,6 +56,7 @@ class ArticleCard extends ConsumerWidget {
                 );
               },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
           Padding(
@@ -140,7 +141,7 @@ class ArticleCard extends ConsumerWidget {
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: ContentCachedImage(
-                    url: post.imageUrls!.first,
+                    url: post.mediaAssets!.first.publicUrl!,
                     height: 200,
                   ),
                 ),
@@ -149,19 +150,13 @@ class ArticleCard extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 5,
-              children: [
-                RepaintBoundary(
-                  child: ContentExpandableText(
-                    text: articleContent,
-                    hasImage: true,
-                    maxLines: 3,
-                    onToggleTextTap: () {},
-                  ),
-                ),
-              ],
+            child: RepaintBoundary(
+              child: ContentExpandableText(
+                text: articleContent,
+                hasImage: true,
+                maxLines: 3,
+                onToggleTextTap: () {},
+              ),
             ),
           ),
           if (hasTags || hasLocations)

@@ -1,0 +1,60 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "media_asset",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [
+          {
+            "indexName": "post_object_key_unique",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "postId"
+              },
+              {
+                "type": 0,
+                "definition": "objectKey"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": false
+          }
+        ],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "uniqueIndexCreated",
+            "message": "Unique index \"post_object_key_unique\" is added to table \"media_asset\". If there are existing rows with duplicate values, this migration will fail.",
+            "table": "media_asset",
+            "columns": [
+              "postId",
+              "objectKey"
+            ],
+            "destrucive": false
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "uniqueIndexCreated",
+      "message": "Unique index \"post_object_key_unique\" is added to table \"media_asset\". If there are existing rows with duplicate values, this migration will fail.",
+      "table": "media_asset",
+      "columns": [
+        "postId",
+        "objectKey"
+      ],
+      "destrucive": false
+    }
+  ],
+  "migrationApiVersion": 1
+}

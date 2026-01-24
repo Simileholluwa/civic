@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LazyLoadTab extends StatelessWidget {
-
   const LazyLoadTab({
     required this.index,
     required this.tabController,

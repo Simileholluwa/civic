@@ -14,7 +14,8 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
       return ProjectReviewState.empty();
     } else {
       return ProjectReviewState.populate(
-        projectReview, ref,
+        projectReview,
+        ref,
       );
     }
   }
@@ -92,8 +93,11 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     );
   }
 
-  Future<bool> sendReview(int projectId, int? projectReviewId,
-      [bool addToList = true,]) async {
+  Future<bool> sendReview(
+    int projectId,
+    int? projectReviewId, [
+    bool addToList = true,
+  ]) async {
     state = state.copyWith(
       isLoading: true,
     );
@@ -103,7 +107,6 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     final saveReview = ref.read(saveProjectReviewProvider);
     final userId = ref.read(localStorageProvider).getInt('userId');
     final result = await saveReview(
-      
       SaveProjectReviewParams(
         ProjectReview(
           id: projectReviewId,
@@ -131,8 +134,8 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
       },
       (success) async {
         TToastMessages.successToast(
-            'Your review has been submitted successfully',
-          );
+          'Your review has been submitted successfully',
+        );
         if (addToList && projectReviewId == null) {
           ref
               .read(

@@ -8,6 +8,7 @@ abstract class NotificationRemoteDatasource {
   Future<void> deleteAllNotification();
   Future<void> markAllNotificationsAsRead();
   Future<void> markNotificationsAsRead({required int id});
+  Future<int> getUnreadNotifications();
   Future<NotificationList> getNotifications({
     required int limit,
     required int page,
@@ -33,6 +34,22 @@ class NotificationRemoteDatasourceImpl implements NotificationRemoteDatasource {
   Future<void> deleteAllNotification() async {
     try {
       final result = await _client.notification.deleteAllNotifications();
+      return result;
+    } on SocketException catch (_) {
+      throw const ServerException(
+        message: 'Failed to connect to server. Please try again.',
+      );
+    } catch (e) {
+      throw ServerException(
+        message: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<int> getUnreadNotifications() async {
+    try {
+      final result = await _client.notification.getUnreadNotificationCount();
       return result;
     } on SocketException catch (_) {
       throw const ServerException(

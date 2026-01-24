@@ -20,7 +20,7 @@ final class FeedButtonsProvider
       : super(
           retry: null,
           name: r'feedButtonsProvider',
-          isAutoDispose: false,
+          isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -58,7 +58,7 @@ final class FeedButtonsProvider
   }
 }
 
-String _$feedButtonsHash() => r'430180fb164d8cab71b997b4957358ccf9d2642e';
+String _$feedButtonsHash() => r'ece99e176c34c179ab1e71333f0953107be00fe6';
 
 final class FeedButtonsFamily extends $Family
     with
@@ -70,7 +70,7 @@ final class FeedButtonsFamily extends $Family
           name: r'feedButtonsProvider',
           dependencies: null,
           $allTransitiveDependencies: null,
-          isAutoDispose: false,
+          isAutoDispose: true,
         );
 
   FeedButtonsProvider call(

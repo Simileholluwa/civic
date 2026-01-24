@@ -6,7 +6,8 @@ import 'package:iconsax/iconsax.dart';
 
 class UserProfile extends ConsumerWidget {
   const UserProfile({
-    required this.userId, super.key,
+    required this.userId,
+    super.key,
   });
 
   final int userId;
@@ -56,8 +57,11 @@ class UserProfile extends ConsumerWidget {
                       child: Column(
                         children: [
                           Text(
-                            THelperFunctions.getFullName(currentUser.firstName!,
-                                currentUser.middleName, currentUser.lastName!,),
+                            THelperFunctions.getFullName(
+                              currentUser.firstName!,
+                              currentUser.middleName,
+                              currentUser.lastName!,
+                            ),
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!

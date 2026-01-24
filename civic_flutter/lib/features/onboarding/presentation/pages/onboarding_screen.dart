@@ -10,7 +10,8 @@ import 'package:iconsax/iconsax.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({
-    required this.isPolitical, super.key,
+    required this.isPolitical,
+    super.key,
   });
   final bool isPolitical;
 

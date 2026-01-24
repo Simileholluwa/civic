@@ -4,17 +4,21 @@ import 'package:iconsax/iconsax.dart';
 
 class CommentRepliesPageError extends StatelessWidget {
   const CommentRepliesPageError({
-    required this.onTap, required this.errorMessage, super.key,
+    required this.onTap,
+    required this.errorMessage,
+    super.key,
   });
 
   final VoidCallback onTap;
   final String errorMessage;
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70,),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 70,
+      ),
       child: Column(
         children: [
           Container(

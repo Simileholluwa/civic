@@ -3,7 +3,9 @@ import 'package:iconsax/iconsax.dart';
 
 class RatingBar extends StatelessWidget {
   const RatingBar({
-    required this.rating, required this.ratingCount, super.key,
+    required this.rating,
+    required this.ratingCount,
+    super.key,
     this.size = 18,
   });
   final double rating;
@@ -84,7 +86,6 @@ class RatingBar extends StatelessWidget {
 }
 
 class _Clipper extends CustomClipper<Rect> {
-
   _Clipper({required this.part});
   final int part;
 

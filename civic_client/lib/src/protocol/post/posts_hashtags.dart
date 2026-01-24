@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../post/post.dart' as _i2;
 import '../post/hashtags.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class PostsHashtags implements _i1.SerializableModel {
   PostsHashtags._({
@@ -36,13 +38,13 @@ abstract class PostsHashtags implements _i1.SerializableModel {
       postId: jsonSerialization['postId'] as int,
       post: jsonSerialization['post'] == null
           ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       hashtagId: jsonSerialization['hashtagId'] as int,
       hashtag: jsonSerialization['hashtag'] == null
           ? null
-          : _i3.Hashtag.fromJson(
-              (jsonSerialization['hashtag'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.Hashtag>(
+              jsonSerialization['hashtag'],
+            ),
     );
   }
 
@@ -72,6 +74,7 @@ abstract class PostsHashtags implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostsHashtags',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJson(),
@@ -96,12 +99,12 @@ class _PostsHashtagsImpl extends PostsHashtags {
     required int hashtagId,
     _i3.Hashtag? hashtag,
   }) : super._(
-          id: id,
-          postId: postId,
-          post: post,
-          hashtagId: hashtagId,
-          hashtag: hashtag,
-        );
+         id: id,
+         postId: postId,
+         post: post,
+         hashtagId: hashtagId,
+         hashtag: hashtag,
+       );
 
   /// Returns a shallow copy of this [PostsHashtags]
   /// with some or all fields replaced by the given arguments.

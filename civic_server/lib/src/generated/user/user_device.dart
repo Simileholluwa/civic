@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class UserDevice
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -36,8 +38,9 @@ abstract class UserDevice
       userInfoId: jsonSerialization['userInfoId'] as int,
       userInfo: jsonSerialization['userInfo'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['userInfo'],
+            ),
       token: jsonSerialization['token'] as String,
     );
   }
@@ -70,6 +73,7 @@ abstract class UserDevice
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserDevice',
       if (id != null) 'id': id,
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJson(),
@@ -80,6 +84,7 @@ abstract class UserDevice
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'UserDevice',
       if (id != null) 'id': id,
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJsonForProtocol(),
@@ -126,11 +131,11 @@ class _UserDeviceImpl extends UserDevice {
     _i2.UserRecord? userInfo,
     required String token,
   }) : super._(
-          id: id,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
-          token: token,
-        );
+         id: id,
+         userInfoId: userInfoId,
+         userInfo: userInfo,
+         token: token,
+       );
 
   /// Returns a shallow copy of this [UserDevice]
   /// with some or all fields replaced by the given arguments.
@@ -145,15 +150,31 @@ class _UserDeviceImpl extends UserDevice {
     return UserDevice(
       id: id is int? ? id : this.id,
       userInfoId: userInfoId ?? this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserRecord? ? userInfo : this.userInfo?.copyWith(),
+      userInfo: userInfo is _i2.UserRecord?
+          ? userInfo
+          : this.userInfo?.copyWith(),
       token: token ?? this.token,
     );
   }
 }
 
+class UserDeviceUpdateTable extends _i1.UpdateTable<UserDeviceTable> {
+  UserDeviceUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> userInfoId(int value) => _i1.ColumnValue(
+    table.userInfoId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> token(String value) => _i1.ColumnValue(
+    table.token,
+    value,
+  );
+}
+
 class UserDeviceTable extends _i1.Table<int?> {
   UserDeviceTable({super.tableRelation}) : super(tableName: 'user_device') {
+    updateTable = UserDeviceUpdateTable(this);
     userInfoId = _i1.ColumnInt(
       'userInfoId',
       this,
@@ -163,6 +184,8 @@ class UserDeviceTable extends _i1.Table<int?> {
       this,
     );
   }
+
+  late final UserDeviceUpdateTable updateTable;
 
   late final _i1.ColumnInt userInfoId;
 
@@ -185,10 +208,10 @@ class UserDeviceTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        userInfoId,
-        token,
-      ];
+    id,
+    userInfoId,
+    token,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -396,6 +419,46 @@ class UserDeviceRepository {
     return session.db.updateRow<UserDevice>(
       row,
       columns: columns?.call(UserDevice.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [UserDevice] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<UserDevice?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<UserDeviceUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<UserDevice>(
+      id,
+      columnValues: columnValues(UserDevice.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [UserDevice]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<UserDevice>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<UserDeviceUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<UserDeviceTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<UserDeviceTable>? orderBy,
+    _i1.OrderByListBuilder<UserDeviceTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<UserDevice>(
+      columnValues: columnValues(UserDevice.t.updateTable),
+      where: where(UserDevice.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(UserDevice.t),
+      orderByList: orderByList?.call(UserDevice.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

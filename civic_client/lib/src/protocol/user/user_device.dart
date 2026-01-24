@@ -7,10 +7,12 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
+import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class UserDevice implements _i1.SerializableModel {
   UserDevice._({
@@ -33,8 +35,9 @@ abstract class UserDevice implements _i1.SerializableModel {
       userInfoId: jsonSerialization['userInfoId'] as int,
       userInfo: jsonSerialization['userInfo'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
+          : _i3.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['userInfo'],
+            ),
       token: jsonSerialization['token'] as String,
     );
   }
@@ -62,6 +65,7 @@ abstract class UserDevice implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserDevice',
       if (id != null) 'id': id,
       'userInfoId': userInfoId,
       if (userInfo != null) 'userInfo': userInfo?.toJson(),
@@ -84,11 +88,11 @@ class _UserDeviceImpl extends UserDevice {
     _i2.UserRecord? userInfo,
     required String token,
   }) : super._(
-          id: id,
-          userInfoId: userInfoId,
-          userInfo: userInfo,
-          token: token,
-        );
+         id: id,
+         userInfoId: userInfoId,
+         userInfo: userInfo,
+         token: token,
+       );
 
   /// Returns a shallow copy of this [UserDevice]
   /// with some or all fields replaced by the given arguments.
@@ -103,8 +107,9 @@ class _UserDeviceImpl extends UserDevice {
     return UserDevice(
       id: id is int? ? id : this.id,
       userInfoId: userInfoId ?? this.userInfoId,
-      userInfo:
-          userInfo is _i2.UserRecord? ? userInfo : this.userInfo?.copyWith(),
+      userInfo: userInfo is _i2.UserRecord?
+          ? userInfo
+          : this.userInfo?.copyWith(),
       token: token ?? this.token,
     );
   }

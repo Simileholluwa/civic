@@ -11,14 +11,12 @@ class PostInteractionButtons extends ConsumerWidget {
     super.key,
     this.hasPadding = true,
     this.onReply,
-    this.replyIcon1 = Iconsax.message_text,
     this.iconSize = 20,
   });
 
   final PostWithUserState postWithUserState;
   final bool hasPadding;
   final VoidCallback? onReply;
-  final IconData replyIcon1;
   final double iconSize;
 
   @override
@@ -46,19 +44,22 @@ class PostInteractionButtons extends ConsumerWidget {
         (s) => s.hasBookmarked,
       ),
     );
+    final hasReposted = ref.watch(
+      feedProv.select(
+        (s) => s.hasReposted,
+      ),
+    );
     final bookmarkCount = ref.watch(
       feedProv.select(
         (s) => s.numberOfBookmarks,
       ),
     );
-    final impressionCount = ref.watch(
+    final repostsCount = ref.watch(
       feedProv.select(
-        (s) => s.impressionCount,
+        (s) => s.numberOfReposts,
       ),
     );
     final postCardNotifier = ref.read(feedProv.notifier);
-    final userId = ref.read(localStorageProvider).getInt('userId');
-    final isOwner = post.owner?.id == userId;
 
     return Padding(
       padding: hasPadding
@@ -80,7 +81,7 @@ class PostInteractionButtons extends ConsumerWidget {
               text: FeedHelperFunctions.humanizeNumber(likeCount),
             ),
             ContentInteractionButton(
-              icon: replyIcon1,
+              icon: Iconsax.message_text,
               text: FeedHelperFunctions.humanizeNumber(commentCount),
               onTap: onReply,
               color: Theme.of(context).hintColor,
@@ -103,10 +104,30 @@ class PostInteractionButtons extends ConsumerWidget {
                   hasBookmarked ? TColors.primary : Theme.of(context).hintColor,
             ),
             ContentInteractionButton(
-              icon: Iconsax.chart,
-              text: THelperFunctions.humanizeNumber(impressionCount),
-              onTap: isOwner ? () {} : null,
-              color: Theme.of(context).hintColor,
+              icon:
+                  hasReposted ? Iconsax.repeate_music5 : Iconsax.repeate_music,
+              text: THelperFunctions.humanizeNumber(repostsCount),
+              onTap: () async {
+                if (hasReposted) {
+                  if (!context.mounted) return;
+                  final res = await FeedHelperFunctions.undoRepost(context);
+                  if (res == null || !res) {
+                    return;
+                  } else {
+                    await postCardNotifier.repostPost(
+                      post.id!,
+                    );
+                  }
+                } else {
+                  final id = post.id;
+                  if (id == null) return;
+                  await postCardNotifier.repostPost(
+                    id,
+                  );
+                }
+              },
+              color:
+                  hasReposted ? TColors.primary : Theme.of(context).hintColor,
               iconSize: iconSize,
             ),
             ContentInteractionButton(

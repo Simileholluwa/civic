@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
 import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class PostLikes
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -41,17 +43,18 @@ abstract class PostLikes
       postId: jsonSerialization['postId'] as int,
       post: jsonSerialization['post'] == null
           ? null
-          : _i2.Post.fromJson(
-              (jsonSerialization['post'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i3.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
     );
   }
 
@@ -89,6 +92,7 @@ abstract class PostLikes
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PostLikes',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJson(),
@@ -101,6 +105,7 @@ abstract class PostLikes
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'PostLikes',
       if (id != null) 'id': id,
       'postId': postId,
       if (post != null) 'post': post?.toJsonForProtocol(),
@@ -157,13 +162,13 @@ class _PostLikesImpl extends PostLikes {
     _i3.UserRecord? owner,
     DateTime? dateCreated,
   }) : super._(
-          id: id,
-          postId: postId,
-          post: post,
-          ownerId: ownerId,
-          owner: owner,
-          dateCreated: dateCreated,
-        );
+         id: id,
+         postId: postId,
+         post: post,
+         ownerId: ownerId,
+         owner: owner,
+         dateCreated: dateCreated,
+       );
 
   /// Returns a shallow copy of this [PostLikes]
   /// with some or all fields replaced by the given arguments.
@@ -188,8 +193,29 @@ class _PostLikesImpl extends PostLikes {
   }
 }
 
+class PostLikesUpdateTable extends _i1.UpdateTable<PostLikesTable> {
+  PostLikesUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> postId(int value) => _i1.ColumnValue(
+    table.postId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+}
+
 class PostLikesTable extends _i1.Table<int?> {
   PostLikesTable({super.tableRelation}) : super(tableName: 'post_likes') {
+    updateTable = PostLikesUpdateTable(this);
     postId = _i1.ColumnInt(
       'postId',
       this,
@@ -203,6 +229,8 @@ class PostLikesTable extends _i1.Table<int?> {
       this,
     );
   }
+
+  late final PostLikesUpdateTable updateTable;
 
   late final _i1.ColumnInt postId;
 
@@ -242,11 +270,11 @@ class PostLikesTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        postId,
-        ownerId,
-        dateCreated,
-      ];
+    id,
+    postId,
+    ownerId,
+    dateCreated,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -275,9 +303,9 @@ class PostLikesInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'post': _post,
-        'owner': _owner,
-      };
+    'post': _post,
+    'owner': _owner,
+  };
 
   @override
   _i1.Table<int?> get table => PostLikes.t;
@@ -466,6 +494,46 @@ class PostLikesRepository {
     return session.db.updateRow<PostLikes>(
       row,
       columns: columns?.call(PostLikes.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [PostLikes] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<PostLikes?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<PostLikesUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<PostLikes>(
+      id,
+      columnValues: columnValues(PostLikes.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [PostLikes]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<PostLikes>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<PostLikesUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<PostLikesTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<PostLikesTable>? orderBy,
+    _i1.OrderByListBuilder<PostLikesTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<PostLikes>(
+      columnValues: columnValues(PostLikes.t.updateTable),
+      where: where(PostLikes.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(PostLikes.t),
+      orderByList: orderByList?.call(PostLikes.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

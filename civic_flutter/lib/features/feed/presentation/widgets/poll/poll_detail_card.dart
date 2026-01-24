@@ -18,7 +18,6 @@ class PollDetailCard extends StatelessWidget {
       children: [
         PollCard(
           postWithUserState: postWithUserState,
-          fromDetails: true,
         ),
         const Divider(
           height: 0,

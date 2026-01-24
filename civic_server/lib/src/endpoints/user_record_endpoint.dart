@@ -22,7 +22,7 @@ class UserRecordEndpoint extends Endpoint {
     final intUserId = int.tryParse(userId ?? '');
     int? id;
     if (intUserId == null) {
-      final authInfo = await session.authenticated;
+      final authInfo = session.authenticated;
       if (authInfo == null) return null;
       id = authInfo.userId;
     } else {
@@ -79,7 +79,7 @@ class UserRecordEndpoint extends Endpoint {
     int limit = 20,
     int page = 1,
   }) async {
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
@@ -173,7 +173,7 @@ class UserRecordEndpoint extends Endpoint {
     int limit = 20,
   }) async {
     // 1. Auth check
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
@@ -251,7 +251,7 @@ class UserRecordEndpoint extends Endpoint {
     Session session,
     int userId,
   ) async {
-    final authInfo = await session.authenticated;
+    final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
     }
@@ -407,7 +407,7 @@ class UserRecordEndpoint extends Endpoint {
 
   Future<void> registerDeviceToken(Session session, String token) async {
     // 1. Get the ID of the user who is *currently* logged in
-    final user = await session.authenticated;
+    final user = session.authenticated;
     final currentUserId = user!.userId;
 
     // 2. Look for the device token in the database

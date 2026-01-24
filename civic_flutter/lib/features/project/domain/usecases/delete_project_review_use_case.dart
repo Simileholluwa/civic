@@ -2,7 +2,8 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:fpdart/fpdart.dart';
 
-class DeleteProjectReviewUseCase implements UseCase<void, DeleteProjectReviewParams> {
+class DeleteProjectReviewUseCase
+    implements UseCase<void, DeleteProjectReviewParams> {
   DeleteProjectReviewUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
   final ProjectRepository _projectRepository;

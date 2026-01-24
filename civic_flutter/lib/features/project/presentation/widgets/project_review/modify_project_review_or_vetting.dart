@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class ModifyProjectReviewOrVetting extends StatelessWidget {
   const ModifyProjectReviewOrVetting({
-    required this.information, super.key,
+    required this.information,
+    super.key,
   });
 
   final String information;

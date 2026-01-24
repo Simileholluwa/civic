@@ -7,12 +7,14 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../poll/poll.dart' as _i2;
 import '../poll/poll_option.dart' as _i3;
 import '../user/user_record.dart' as _i4;
+import 'package:civic_client/src/protocol/protocol.dart' as _i5;
 
 abstract class PollVote implements _i1.SerializableModel {
   PollVote._({
@@ -43,18 +45,19 @@ abstract class PollVote implements _i1.SerializableModel {
       pollId: jsonSerialization['pollId'] as int,
       poll: jsonSerialization['poll'] == null
           ? null
-          : _i2.Poll.fromJson(
-              (jsonSerialization['poll'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i2.Poll>(jsonSerialization['poll']),
       optionId: jsonSerialization['optionId'] as int,
       option: jsonSerialization['option'] == null
           ? null
-          : _i3.PollOption.fromJson(
-              (jsonSerialization['option'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i3.PollOption>(
+              jsonSerialization['option'],
+            ),
       voterId: jsonSerialization['voterId'] as int,
       voter: jsonSerialization['voter'] == null
           ? null
-          : _i4.UserRecord.fromJson(
-              (jsonSerialization['voter'] as Map<String, dynamic>)),
+          : _i5.Protocol().deserialize<_i4.UserRecord>(
+              jsonSerialization['voter'],
+            ),
       votedAt: jsonSerialization['votedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['votedAt']),
@@ -96,6 +99,7 @@ abstract class PollVote implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'PollVote',
       if (id != null) 'id': id,
       'pollId': pollId,
       if (poll != null) 'poll': poll?.toJson(),
@@ -126,15 +130,15 @@ class _PollVoteImpl extends PollVote {
     _i4.UserRecord? voter,
     DateTime? votedAt,
   }) : super._(
-          id: id,
-          pollId: pollId,
-          poll: poll,
-          optionId: optionId,
-          option: option,
-          voterId: voterId,
-          voter: voter,
-          votedAt: votedAt,
-        );
+         id: id,
+         pollId: pollId,
+         poll: poll,
+         optionId: optionId,
+         option: option,
+         voterId: voterId,
+         voter: voter,
+         votedAt: votedAt,
+       );
 
   /// Returns a shallow copy of this [PollVote]
   /// with some or all fields replaced by the given arguments.

@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
@@ -15,34 +16,37 @@ enum PostType implements _i1.SerializableModel {
   postRepost,
   regular,
   comment,
-  projectRepost,
+  projectQuote,
   commentReply,
   poll,
-  article;
+  article,
+  postQuote;
 
-  static PostType fromJson(int index) {
-    switch (index) {
-      case 0:
+  static PostType fromJson(String name) {
+    switch (name) {
+      case 'postRepost':
         return PostType.postRepost;
-      case 1:
+      case 'regular':
         return PostType.regular;
-      case 2:
+      case 'comment':
         return PostType.comment;
-      case 3:
-        return PostType.projectRepost;
-      case 4:
+      case 'projectQuote':
+        return PostType.projectQuote;
+      case 'commentReply':
         return PostType.commentReply;
-      case 5:
+      case 'poll':
         return PostType.poll;
-      case 6:
+      case 'article':
         return PostType.article;
+      case 'postQuote':
+        return PostType.postQuote;
       default:
-        throw ArgumentError('Value "$index" cannot be converted to "PostType"');
+        throw ArgumentError('Value "$name" cannot be converted to "PostType"');
     }
   }
 
   @override
-  int toJson() => index;
+  String toJson() => name;
 
   @override
   String toString() => name;

@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 
 class CreateVettingBottomNavigation extends ConsumerWidget {
   const CreateVettingBottomNavigation({
-    required this.projectVetting, required this.projectId, super.key,
+    required this.projectVetting,
+    required this.projectId,
+    super.key,
   });
 
   final ProjectVetting? projectVetting;

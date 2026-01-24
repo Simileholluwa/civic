@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: unnecessary_null_comparison
 
@@ -14,6 +15,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class ProjectReview
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -63,19 +65,21 @@ abstract class ProjectReview
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       projectId: jsonSerialization['projectId'] as int,
       project: jsonSerialization['project'] == null
           ? null
-          : _i3.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.Project>(
+              jsonSerialization['project'],
+            ),
       review: jsonSerialization['review'] as String?,
       locationRating: (jsonSerialization['locationRating'] as num?)?.toDouble(),
-      descriptionRating:
-          (jsonSerialization['descriptionRating'] as num?)?.toDouble(),
-      attachmentsRating:
-          (jsonSerialization['attachmentsRating'] as num?)?.toDouble(),
+      descriptionRating: (jsonSerialization['descriptionRating'] as num?)
+          ?.toDouble(),
+      attachmentsRating: (jsonSerialization['attachmentsRating'] as num?)
+          ?.toDouble(),
       categoryRating: (jsonSerialization['categoryRating'] as num?)?.toDouble(),
       fundingRating: (jsonSerialization['fundingRating'] as num?)?.toDouble(),
       datesRating: (jsonSerialization['datesRating'] as num?)?.toDouble(),
@@ -83,16 +87,19 @@ abstract class ProjectReview
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likedBy: (jsonSerialization['likedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      dislikedBy: (jsonSerialization['dislikedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
+      likedBy: jsonSerialization['likedBy'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<int>>(jsonSerialization['likedBy']),
+      dislikedBy: jsonSerialization['dislikedBy'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<int>>(
+              jsonSerialization['dislikedBy'],
+            ),
     );
   }
 
@@ -163,6 +170,7 @@ abstract class ProjectReview
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectReview',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -186,6 +194,7 @@ abstract class ProjectReview
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'ProjectReview',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
@@ -264,24 +273,24 @@ class _ProjectReviewImpl extends ProjectReview {
     List<int>? likedBy,
     List<int>? dislikedBy,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          projectId: projectId,
-          project: project,
-          review: review,
-          locationRating: locationRating,
-          descriptionRating: descriptionRating,
-          attachmentsRating: attachmentsRating,
-          categoryRating: categoryRating,
-          fundingRating: fundingRating,
-          datesRating: datesRating,
-          overallRating: overallRating,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          likedBy: likedBy,
-          dislikedBy: dislikedBy,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         projectId: projectId,
+         project: project,
+         review: review,
+         locationRating: locationRating,
+         descriptionRating: descriptionRating,
+         attachmentsRating: attachmentsRating,
+         categoryRating: categoryRating,
+         fundingRating: fundingRating,
+         datesRating: datesRating,
+         overallRating: overallRating,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         likedBy: likedBy,
+         dislikedBy: dislikedBy,
+       );
 
   /// Returns a shallow copy of this [ProjectReview]
   /// with some or all fields replaced by the given arguments.
@@ -313,21 +322,25 @@ class _ProjectReviewImpl extends ProjectReview {
       projectId: projectId ?? this.projectId,
       project: project is _i3.Project? ? project : this.project?.copyWith(),
       review: review is String? ? review : this.review,
-      locationRating:
-          locationRating is double? ? locationRating : this.locationRating,
+      locationRating: locationRating is double?
+          ? locationRating
+          : this.locationRating,
       descriptionRating: descriptionRating is double?
           ? descriptionRating
           : this.descriptionRating,
       attachmentsRating: attachmentsRating is double?
           ? attachmentsRating
           : this.attachmentsRating,
-      categoryRating:
-          categoryRating is double? ? categoryRating : this.categoryRating,
-      fundingRating:
-          fundingRating is double? ? fundingRating : this.fundingRating,
+      categoryRating: categoryRating is double?
+          ? categoryRating
+          : this.categoryRating,
+      fundingRating: fundingRating is double?
+          ? fundingRating
+          : this.fundingRating,
       datesRating: datesRating is double? ? datesRating : this.datesRating,
-      overallRating:
-          overallRating is double? ? overallRating : this.overallRating,
+      overallRating: overallRating is double?
+          ? overallRating
+          : this.overallRating,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       likedBy: likedBy is List<int>?
@@ -340,9 +353,94 @@ class _ProjectReviewImpl extends ProjectReview {
   }
 }
 
+class ProjectReviewUpdateTable extends _i1.UpdateTable<ProjectReviewTable> {
+  ProjectReviewUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> ownerId(int value) => _i1.ColumnValue(
+    table.ownerId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> projectId(int value) => _i1.ColumnValue(
+    table.projectId,
+    value,
+  );
+
+  _i1.ColumnValue<String, String> review(String? value) => _i1.ColumnValue(
+    table.review,
+    value,
+  );
+
+  _i1.ColumnValue<double, double> locationRating(double? value) =>
+      _i1.ColumnValue(
+        table.locationRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> descriptionRating(double? value) =>
+      _i1.ColumnValue(
+        table.descriptionRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> attachmentsRating(double? value) =>
+      _i1.ColumnValue(
+        table.attachmentsRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> categoryRating(double? value) =>
+      _i1.ColumnValue(
+        table.categoryRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> fundingRating(double? value) =>
+      _i1.ColumnValue(
+        table.fundingRating,
+        value,
+      );
+
+  _i1.ColumnValue<double, double> datesRating(double? value) => _i1.ColumnValue(
+    table.datesRating,
+    value,
+  );
+
+  _i1.ColumnValue<double, double> overallRating(double? value) =>
+      _i1.ColumnValue(
+        table.overallRating,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> dateCreated(DateTime? value) =>
+      _i1.ColumnValue(
+        table.dateCreated,
+        value,
+      );
+
+  _i1.ColumnValue<DateTime, DateTime> updatedAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.updatedAt,
+        value,
+      );
+
+  _i1.ColumnValue<List<int>, List<int>> likedBy(List<int>? value) =>
+      _i1.ColumnValue(
+        table.likedBy,
+        value,
+      );
+
+  _i1.ColumnValue<List<int>, List<int>> dislikedBy(List<int>? value) =>
+      _i1.ColumnValue(
+        table.dislikedBy,
+        value,
+      );
+}
+
 class ProjectReviewTable extends _i1.Table<int?> {
   ProjectReviewTable({super.tableRelation})
-      : super(tableName: 'project_review') {
+    : super(tableName: 'project_review') {
+    updateTable = ProjectReviewUpdateTable(this);
     ownerId = _i1.ColumnInt(
       'ownerId',
       this,
@@ -392,15 +490,17 @@ class ProjectReviewTable extends _i1.Table<int?> {
       'updatedAt',
       this,
     );
-    likedBy = _i1.ColumnSerializable(
+    likedBy = _i1.ColumnSerializable<List<int>>(
       'likedBy',
       this,
     );
-    dislikedBy = _i1.ColumnSerializable(
+    dislikedBy = _i1.ColumnSerializable<List<int>>(
       'dislikedBy',
       this,
     );
   }
+
+  late final ProjectReviewUpdateTable updateTable;
 
   late final _i1.ColumnInt ownerId;
 
@@ -430,9 +530,9 @@ class ProjectReviewTable extends _i1.Table<int?> {
 
   late final _i1.ColumnDateTime updatedAt;
 
-  late final _i1.ColumnSerializable likedBy;
+  late final _i1.ColumnSerializable<List<int>> likedBy;
 
-  late final _i1.ColumnSerializable dislikedBy;
+  late final _i1.ColumnSerializable<List<int>> dislikedBy;
 
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
@@ -462,22 +562,22 @@ class ProjectReviewTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        ownerId,
-        projectId,
-        review,
-        locationRating,
-        descriptionRating,
-        attachmentsRating,
-        categoryRating,
-        fundingRating,
-        datesRating,
-        overallRating,
-        dateCreated,
-        updatedAt,
-        likedBy,
-        dislikedBy,
-      ];
+    id,
+    ownerId,
+    projectId,
+    review,
+    locationRating,
+    descriptionRating,
+    attachmentsRating,
+    categoryRating,
+    fundingRating,
+    datesRating,
+    overallRating,
+    dateCreated,
+    updatedAt,
+    likedBy,
+    dislikedBy,
+  ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
@@ -506,9 +606,9 @@ class ProjectReviewInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
-        'owner': _owner,
-        'project': _project,
-      };
+    'owner': _owner,
+    'project': _project,
+  };
 
   @override
   _i1.Table<int?> get table => ProjectReview.t;
@@ -697,6 +797,46 @@ class ProjectReviewRepository {
     return session.db.updateRow<ProjectReview>(
       row,
       columns: columns?.call(ProjectReview.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [ProjectReview] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<ProjectReview?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<ProjectReviewUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<ProjectReview>(
+      id,
+      columnValues: columnValues(ProjectReview.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [ProjectReview]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<ProjectReview>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<ProjectReviewUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<ProjectReviewTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ProjectReviewTable>? orderBy,
+    _i1.OrderByListBuilder<ProjectReviewTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<ProjectReview>(
+      columnValues: columnValues(ProjectReview.t.updateTable),
+      where: where(ProjectReview.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(ProjectReview.t),
+      orderByList: orderByList?.call(ProjectReview.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }

@@ -6,7 +6,6 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 
 class NetworkScreen extends ConsumerWidget {
   const NetworkScreen({super.key});
@@ -26,13 +25,6 @@ class NetworkScreen extends ConsumerWidget {
               snap: true,
               actions: [
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Iconsax.search_normal,
-                    size: 26,
-                  ),
-                ),
-                IconButton(
                   onPressed: () async {
                     await context.push(
                       '/network/${authUser.userInfo!.id}',
@@ -40,7 +32,7 @@ class NetworkScreen extends ConsumerWidget {
                   },
                   icon: AppUserProfileImage(
                     imageUrl: authUser.userInfo!.imageUrl!,
-                    radius: 15,
+                    radius: 18,
                     iconSize: 20,
                   ),
                 ),

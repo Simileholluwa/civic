@@ -8,7 +8,7 @@ part 'post_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedPostList extends _$PaginatedPostList {
   @override
-  PagingController<int, PostWithUserState> build() {
+  Raw<PagingController<int, PostWithUserState>> build() {
     final controller = PagingController<int, PostWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
@@ -62,6 +62,7 @@ class PaginatedPostList extends _$PaginatedPostList {
         }
         return p;
       });
+      return;
     }
     final updatedFirst = [post, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
@@ -76,7 +77,7 @@ class PaginatedPostList extends _$PaginatedPostList {
     );
   }
 
-  void removeProjectRepostById(int? projectId) {
+  void removeprojectQuoteById(int? projectId) {
     if (projectId == null) return;
     final prev = state.value;
     state.value = prev.filterItems((p) => p.post.projectId != projectId);

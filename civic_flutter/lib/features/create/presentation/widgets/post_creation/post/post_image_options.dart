@@ -59,9 +59,6 @@ class PostImageOptions extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              width: TSizes.xs,
-            ),
             IconButton(
               onPressed: () {
                 postNotifier.removeImageAtIndex(

@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../project/project.dart' as _i3;
+import 'package:civic_client/src/protocol/protocol.dart' as _i4;
 
 abstract class ProjectReview implements _i1.SerializableModel {
   ProjectReview._({
@@ -60,19 +62,21 @@ abstract class ProjectReview implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i2.UserRecord.fromJson(
-              (jsonSerialization['owner'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i2.UserRecord>(
+              jsonSerialization['owner'],
+            ),
       projectId: jsonSerialization['projectId'] as int,
       project: jsonSerialization['project'] == null
           ? null
-          : _i3.Project.fromJson(
-              (jsonSerialization['project'] as Map<String, dynamic>)),
+          : _i4.Protocol().deserialize<_i3.Project>(
+              jsonSerialization['project'],
+            ),
       review: jsonSerialization['review'] as String?,
       locationRating: (jsonSerialization['locationRating'] as num?)?.toDouble(),
-      descriptionRating:
-          (jsonSerialization['descriptionRating'] as num?)?.toDouble(),
-      attachmentsRating:
-          (jsonSerialization['attachmentsRating'] as num?)?.toDouble(),
+      descriptionRating: (jsonSerialization['descriptionRating'] as num?)
+          ?.toDouble(),
+      attachmentsRating: (jsonSerialization['attachmentsRating'] as num?)
+          ?.toDouble(),
       categoryRating: (jsonSerialization['categoryRating'] as num?)?.toDouble(),
       fundingRating: (jsonSerialization['fundingRating'] as num?)?.toDouble(),
       datesRating: (jsonSerialization['datesRating'] as num?)?.toDouble(),
@@ -80,16 +84,19 @@ abstract class ProjectReview implements _i1.SerializableModel {
       dateCreated: jsonSerialization['dateCreated'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(
-              jsonSerialization['dateCreated']),
+              jsonSerialization['dateCreated'],
+            ),
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likedBy: (jsonSerialization['likedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
-      dislikedBy: (jsonSerialization['dislikedBy'] as List?)
-          ?.map((e) => e as int)
-          .toList(),
+      likedBy: jsonSerialization['likedBy'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<int>>(jsonSerialization['likedBy']),
+      dislikedBy: jsonSerialization['dislikedBy'] == null
+          ? null
+          : _i4.Protocol().deserialize<List<int>>(
+              jsonSerialization['dislikedBy'],
+            ),
     );
   }
 
@@ -155,6 +162,7 @@ abstract class ProjectReview implements _i1.SerializableModel {
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'ProjectReview',
       if (id != null) 'id': id,
       'ownerId': ownerId,
       if (owner != null) 'owner': owner?.toJson(),
@@ -203,24 +211,24 @@ class _ProjectReviewImpl extends ProjectReview {
     List<int>? likedBy,
     List<int>? dislikedBy,
   }) : super._(
-          id: id,
-          ownerId: ownerId,
-          owner: owner,
-          projectId: projectId,
-          project: project,
-          review: review,
-          locationRating: locationRating,
-          descriptionRating: descriptionRating,
-          attachmentsRating: attachmentsRating,
-          categoryRating: categoryRating,
-          fundingRating: fundingRating,
-          datesRating: datesRating,
-          overallRating: overallRating,
-          dateCreated: dateCreated,
-          updatedAt: updatedAt,
-          likedBy: likedBy,
-          dislikedBy: dislikedBy,
-        );
+         id: id,
+         ownerId: ownerId,
+         owner: owner,
+         projectId: projectId,
+         project: project,
+         review: review,
+         locationRating: locationRating,
+         descriptionRating: descriptionRating,
+         attachmentsRating: attachmentsRating,
+         categoryRating: categoryRating,
+         fundingRating: fundingRating,
+         datesRating: datesRating,
+         overallRating: overallRating,
+         dateCreated: dateCreated,
+         updatedAt: updatedAt,
+         likedBy: likedBy,
+         dislikedBy: dislikedBy,
+       );
 
   /// Returns a shallow copy of this [ProjectReview]
   /// with some or all fields replaced by the given arguments.
@@ -252,21 +260,25 @@ class _ProjectReviewImpl extends ProjectReview {
       projectId: projectId ?? this.projectId,
       project: project is _i3.Project? ? project : this.project?.copyWith(),
       review: review is String? ? review : this.review,
-      locationRating:
-          locationRating is double? ? locationRating : this.locationRating,
+      locationRating: locationRating is double?
+          ? locationRating
+          : this.locationRating,
       descriptionRating: descriptionRating is double?
           ? descriptionRating
           : this.descriptionRating,
       attachmentsRating: attachmentsRating is double?
           ? attachmentsRating
           : this.attachmentsRating,
-      categoryRating:
-          categoryRating is double? ? categoryRating : this.categoryRating,
-      fundingRating:
-          fundingRating is double? ? fundingRating : this.fundingRating,
+      categoryRating: categoryRating is double?
+          ? categoryRating
+          : this.categoryRating,
+      fundingRating: fundingRating is double?
+          ? fundingRating
+          : this.fundingRating,
       datesRating: datesRating is double? ? datesRating : this.datesRating,
-      overallRating:
-          overallRating is double? ? overallRating : this.overallRating,
+      overallRating: overallRating is double?
+          ? overallRating
+          : this.overallRating,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
       likedBy: likedBy is List<int>?

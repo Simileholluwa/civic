@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_player/video_player.dart';
 part 'post_video_player_provider.g.dart';
@@ -39,6 +38,20 @@ class PostVideoPlayer extends _$PostVideoPlayer {
       );
       return controller;
     }
+  }
+
+  void seekBy(Duration delta) {
+    if (state == null || state?.value == null) return;
+    final value = state!.value;
+    final target = value.position + delta;
+    final clamped = target < Duration.zero
+        ? Duration.zero
+        : (target > value.duration ? value.duration : target);
+    unawaited(
+      state!.seekTo(
+        clamped,
+      ),
+    );
   }
 
   Future<void> pausePlay() async {
@@ -88,16 +101,5 @@ class PostVideoPlayer extends _$PostVideoPlayer {
     } else {
       return '${twoDigits(minutes)}:${twoDigits(seconds)}';
     }
-  }
-}
-
-@riverpod
-Future<String> getVideo(Ref ref, String videoUrl) async {
-  final fileInfo = await DefaultCacheManager().getFileFromCache(videoUrl);
-  if (fileInfo == null) {
-    final file = await DefaultCacheManager().getSingleFile(videoUrl);
-    return file.path;
-  } else {
-    return fileInfo.file.path;
   }
 }

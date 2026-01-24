@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
@@ -66,6 +67,7 @@ abstract class UserFollow
   @override
   Map<String, dynamic> toJson() {
     return {
+      '__className__': 'UserFollow',
       if (id != null) 'id': id,
       'followerId': followerId,
       'followeeId': followeeId,
@@ -76,6 +78,7 @@ abstract class UserFollow
   @override
   Map<String, dynamic> toJsonForProtocol() {
     return {
+      '__className__': 'UserFollow',
       if (id != null) 'id': id,
       'followerId': followerId,
       'followeeId': followeeId,
@@ -122,11 +125,11 @@ class _UserFollowImpl extends UserFollow {
     required int followeeId,
     DateTime? createdAt,
   }) : super._(
-          id: id,
-          followerId: followerId,
-          followeeId: followeeId,
-          createdAt: createdAt,
-        );
+         id: id,
+         followerId: followerId,
+         followeeId: followeeId,
+         createdAt: createdAt,
+       );
 
   /// Returns a shallow copy of this [UserFollow]
   /// with some or all fields replaced by the given arguments.
@@ -147,8 +150,29 @@ class _UserFollowImpl extends UserFollow {
   }
 }
 
+class UserFollowUpdateTable extends _i1.UpdateTable<UserFollowTable> {
+  UserFollowUpdateTable(super.table);
+
+  _i1.ColumnValue<int, int> followerId(int value) => _i1.ColumnValue(
+    table.followerId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> followeeId(int value) => _i1.ColumnValue(
+    table.followeeId,
+    value,
+  );
+
+  _i1.ColumnValue<DateTime, DateTime> createdAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.createdAt,
+        value,
+      );
+}
+
 class UserFollowTable extends _i1.Table<int?> {
   UserFollowTable({super.tableRelation}) : super(tableName: 'user_follow') {
+    updateTable = UserFollowUpdateTable(this);
     followerId = _i1.ColumnInt(
       'followerId',
       this,
@@ -164,6 +188,8 @@ class UserFollowTable extends _i1.Table<int?> {
     );
   }
 
+  late final UserFollowUpdateTable updateTable;
+
   late final _i1.ColumnInt followerId;
 
   late final _i1.ColumnInt followeeId;
@@ -172,11 +198,11 @@ class UserFollowTable extends _i1.Table<int?> {
 
   @override
   List<_i1.Column> get columns => [
-        id,
-        followerId,
-        followeeId,
-        createdAt,
-      ];
+    id,
+    followerId,
+    followeeId,
+    createdAt,
+  ];
 }
 
 class UserFollowInclude extends _i1.IncludeObject {
@@ -364,6 +390,46 @@ class UserFollowRepository {
     return session.db.updateRow<UserFollow>(
       row,
       columns: columns?.call(UserFollow.t),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates a single [UserFollow] by its [id] with the specified [columnValues].
+  /// Returns the updated row or null if no row with the given id exists.
+  Future<UserFollow?> updateById(
+    _i1.Session session,
+    int id, {
+    required _i1.ColumnValueListBuilder<UserFollowUpdateTable> columnValues,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateById<UserFollow>(
+      id,
+      columnValues: columnValues(UserFollow.t.updateTable),
+      transaction: transaction,
+    );
+  }
+
+  /// Updates all [UserFollow]s matching the [where] expression with the specified [columnValues].
+  /// Returns the list of updated rows.
+  Future<List<UserFollow>> updateWhere(
+    _i1.Session session, {
+    required _i1.ColumnValueListBuilder<UserFollowUpdateTable> columnValues,
+    required _i1.WhereExpressionBuilder<UserFollowTable> where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<UserFollowTable>? orderBy,
+    _i1.OrderByListBuilder<UserFollowTable>? orderByList,
+    bool orderDescending = false,
+    _i1.Transaction? transaction,
+  }) async {
+    return session.db.updateWhere<UserFollow>(
+      columnValues: columnValues(UserFollow.t.updateTable),
+      where: where(UserFollow.t),
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(UserFollow.t),
+      orderByList: orderByList?.call(UserFollow.t),
+      orderDescending: orderDescending,
       transaction: transaction,
     );
   }
