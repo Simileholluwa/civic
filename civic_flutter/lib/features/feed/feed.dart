@@ -66,7 +66,6 @@ export 'presentation/widgets/common/post_interaction_buttons.dart';
 export 'presentation/widgets/common/share_opinion.dart';
 export 'presentation/widgets/common/show_post_actions.dart';
 export 'presentation/widgets/poll/poll_card.dart';
-export 'presentation/widgets/poll/poll_detail_card.dart';
 export 'presentation/widgets/poll/poll_options_card.dart';
 export 'presentation/widgets/post/post_card_build.dart';
 export 'presentation/widgets/post/post_card_detail.dart';
