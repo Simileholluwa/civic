@@ -118,8 +118,9 @@ class PostCardDetail extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) {
                                       return AlertDialog(
-                                        contentPadding:
-                                            const EdgeInsets.only(bottom: 16),
+                                        contentPadding: const EdgeInsets.only(
+                                          bottom: 16,
+                                        ),
                                         content: ShowPostActions(
                                           postWithUserState: postWithUserState,
                                           originalPostId: post.id!,

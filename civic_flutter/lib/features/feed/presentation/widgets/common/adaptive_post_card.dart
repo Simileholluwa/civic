@@ -26,29 +26,29 @@ class AdaptivePostCard extends StatelessWidget {
             ),
           )
         : post.postType == PostType.poll
-            ? ImpressionVisibilityTracker(
-                postId: post.id!,
-                dwell: FeedHelperFunctions.dwellFor(post),
-                threshold: FeedHelperFunctions.thresholdFor(post),
-                child: PollCard(
-                  postWithUserState: postWithUserState,
-                  showInteractions: showPollInteractions,
-                  canTap: true,
-                ),
-              )
-            : ImpressionVisibilityTracker(
-                postId: post.id!,
-                dwell: FeedHelperFunctions.dwellFor(post),
-                threshold: FeedHelperFunctions.thresholdFor(post),
-                child: PostCardDetail(
-                  postWithUserState: postWithUserState,
-                  onTap: () async {
-                    await context.push(
-                      '/feed/post/${post.id}',
-                      extra: post,
-                    );
-                  },
-                ),
-              );
+        ? ImpressionVisibilityTracker(
+            postId: post.id!,
+            dwell: FeedHelperFunctions.dwellFor(post),
+            threshold: FeedHelperFunctions.thresholdFor(post),
+            child: PollCard(
+              postWithUserState: postWithUserState,
+              showInteractions: showPollInteractions,
+              canTap: true,
+            ),
+          )
+        : ImpressionVisibilityTracker(
+            postId: post.id!,
+            dwell: FeedHelperFunctions.dwellFor(post),
+            threshold: FeedHelperFunctions.thresholdFor(post),
+            child: PostCardDetail(
+              postWithUserState: postWithUserState,
+              onTap: () async {
+                await context.push(
+                  '/feed/post/${post.id}',
+                  extra: post,
+                );
+              },
+            ),
+          );
   }
 }

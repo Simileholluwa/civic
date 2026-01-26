@@ -163,13 +163,14 @@ class PostEndpoint extends Endpoint {
         );
 
         if ((post.mediaAssets?.isNotEmpty ?? false)) {
-          MediaAsset.db.insert(
+          await MediaAsset.db.insert(
             session,
             post.mediaAssets!
                 .map(
                   (e) => e.copyWith(ownerId: user.id!, postId: savedPost.id!),
                 )
                 .toList(),
+            transaction: transaction,
           );
         }
 
@@ -1067,7 +1068,7 @@ class PostEndpoint extends Endpoint {
           dateCreated: existingCommentOrReply.dateCreated,
         );
 
-        await updatePost(session, updatedComment);
+        await updatePost(session, updatedComment, transaction: transaction);
 
         return await Post.db.findById(
           session,
@@ -1076,6 +1077,7 @@ class PostEndpoint extends Endpoint {
             owner: UserRecord.include(userInfo: UserInfo.include()),
             mediaAssets: MediaAsset.includeList(),
           ),
+          transaction: transaction,
         );
       } else {
         Post? parent;
@@ -1084,11 +1086,13 @@ class PostEndpoint extends Endpoint {
             session,
             comment.parentId!,
             include: Post.include(owner: UserRecord.include()),
+            transaction: transaction,
           );
           if (parent != null) {
             await updatePost(
               session,
               parent.copyWith(commentCount: parent.commentCount! + 1),
+              transaction: transaction,
             );
           }
         }
@@ -1099,6 +1103,7 @@ class PostEndpoint extends Endpoint {
             owner: user,
             postType: isReply ? PostType.commentReply : PostType.comment,
           ),
+          transaction: transaction,
         );
 
         if (comment.mediaAssets != null && comment.mediaAssets!.isNotEmpty) {
@@ -1114,6 +1119,7 @@ class PostEndpoint extends Endpoint {
                       )
                       .toList()
                 : [],
+            transaction: transaction,
           );
         }
 
@@ -1180,9 +1186,10 @@ class PostEndpoint extends Endpoint {
           session,
           sentComment.id!,
           include: Post.include(
-            owner: UserRecord.include(),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
             mediaAssets: MediaAsset.includeList(),
           ),
+          transaction: transaction,
         );
         return enriched;
       }
@@ -1212,7 +1219,8 @@ class PostEndpoint extends Endpoint {
       where: (t) =>
           t.parentId.equals(postId) &
           t.postType.equals(PostType.comment) &
-          t.id.notInSet(ignoredIds),
+          t.id.notInSet(ignoredIds) &
+          t.isDeleted.equals(false),
     );
 
     final results = await Post.db.find(
@@ -1220,7 +1228,8 @@ class PostEndpoint extends Endpoint {
       where: (t) =>
           t.parentId.equals(postId) &
           t.postType.equals(PostType.comment) &
-          t.id.notInSet(ignoredIds),
+          t.id.notInSet(ignoredIds) &
+          t.isDeleted.equals(false),
       limit: limit,
       offset: (page * limit) - limit,
       orderBy: (t) => t.dateCreated,
@@ -1268,6 +1277,14 @@ class PostEndpoint extends Endpoint {
         message: isComment
             ? 'This comment does not exist. It may have been deleted.'
             : 'This reply does not exist. It may have been deleted.',
+      );
+    }
+
+    if (comment.isDeleted == true) {
+      throw ServerSideException(
+        message: isComment
+            ? 'This comment has been deleted.'
+            : 'This reply has been deleted.',
       );
     }
 
@@ -1501,6 +1518,16 @@ class PostEndpoint extends Endpoint {
       );
     }
 
+    if (result.isDeleted == true) {
+      throw ServerSideException(
+        message: result.postType == PostType.comment
+            ? 'This comment has been deleted.'
+            : result.postType == PostType.commentReply
+            ? 'This reply has been deleted.'
+            : 'This post has been deleted.',
+      );
+    }
+
     final enriched = await _enrichPosts(session, user, [result]);
     return enriched.first;
   }
@@ -1699,6 +1726,7 @@ class PostEndpoint extends Endpoint {
           await updatePost(
             session,
             parent.copyWith(commentCount: parent.commentCount),
+            transaction: tx,
           );
         }
       } else if (post.postType == PostType.projectQuote) {
@@ -1720,7 +1748,11 @@ class PostEndpoint extends Endpoint {
         await Post.db.deleteRow(session, post, transaction: tx);
         return;
       }
-      await updatePost(session, post.copyWith(isDeleted: true));
+      await updatePost(
+        session,
+        post.copyWith(isDeleted: true),
+        transaction: tx,
+      );
     });
   }
 
@@ -2321,8 +2353,12 @@ class PostEndpoint extends Endpoint {
 
   /// Persists changes to a post and emits real-time count updates.
   @doNotGenerate
-  Future<void> updatePost(Session session, Post post) async {
-    await Post.db.updateRow(session, post);
+  Future<void> updatePost(
+    Session session,
+    Post post, {
+    Transaction? transaction,
+  }) async {
+    await Post.db.updateRow(session, post, transaction: transaction);
     session.messages.postMessage(
       'post_counts_${post.id}',
       _buildPostCounts(post),

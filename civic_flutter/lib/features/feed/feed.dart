@@ -36,7 +36,6 @@ export 'presentation/pages/comment_screen.dart';
 export 'presentation/pages/detail_screen.dart';
 export 'presentation/pages/feed_screen.dart';
 export 'presentation/pages/mark_not_interested.dart';
-export 'presentation/pages/post/posts_screen.dart';
 export 'presentation/pages/post_bookmarks_screen.dart';
 export 'presentation/pages/replies_screen.dart';
 export 'presentation/provider/common/feed_buttons_provider.dart';

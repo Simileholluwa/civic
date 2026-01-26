@@ -132,7 +132,7 @@ class NotificationsSettingsScreen extends ConsumerWidget {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
             itemCount: notificationItems.length,
             separatorBuilder: (context, index) {
               return index != 0

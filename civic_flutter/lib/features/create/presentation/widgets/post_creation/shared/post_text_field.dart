@@ -9,14 +9,16 @@ class PostTextField extends ConsumerWidget {
     required this.userName,
     required this.controller,
     required this.post,
-    required this.isCommentOrReply,
+    required this.isComment,
+    required this.isReply,
     super.key,
   });
 
   final String userName;
   final MentionHashtagLinkTextEditingController controller;
   final Post post;
-  final bool isCommentOrReply;
+  final bool isComment;
+  final bool isReply;
 
   @override
   Widget build(
@@ -31,8 +33,8 @@ class PostTextField extends ConsumerWidget {
         TextFormField(
           controller: controller,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 18,
-              ),
+            fontSize: 18,
+          ),
           textCapitalization: TextCapitalization.sentences,
           onChanged: (text) => THelperFunctions.onTextChanged(
             ref,
@@ -45,7 +47,11 @@ class PostTextField extends ConsumerWidget {
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             hintMaxLines: 2,
-            hintText: postNotifier.hintText(userName, isCommentOrReply),
+            hintText: postNotifier.hintText(
+              userName,
+              isComment,
+              isReply,
+            ),
             counter: const SizedBox(),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: TSizes.md + 2,

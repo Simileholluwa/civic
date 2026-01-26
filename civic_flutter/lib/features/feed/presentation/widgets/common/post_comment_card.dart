@@ -55,7 +55,7 @@ class PostCommentCard extends ConsumerWidget {
                       await context.push(
                         '/create/post/0',
                         extra: {
-                          'parent': comment,
+                          'rootPost': comment,
                         },
                       );
                     },

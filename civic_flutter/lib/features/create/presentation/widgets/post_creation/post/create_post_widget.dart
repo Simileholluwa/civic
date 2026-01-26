@@ -16,7 +16,8 @@ import 'package:iconsax/iconsax.dart';
 class CreatePostWidget extends ConsumerWidget {
   const CreatePostWidget({
     required this.post,
-    required this.isReplyOrComment,
+    required this.isReply,
+    required this.isComment,
     super.key,
     this.project,
     this.postToQuote,
@@ -26,7 +27,8 @@ class CreatePostWidget extends ConsumerWidget {
   final Post post;
   final Project? project;
   final Post? postToQuote;
-  final bool isReplyOrComment;
+  final bool isReply;
+  final bool isComment;
   final bool isQuote;
 
   @override
@@ -44,7 +46,7 @@ class CreatePostWidget extends ConsumerWidget {
         if (!isQuote)
           PostBottomOptions(
             post: post,
-            isReplyOrComment: isReplyOrComment,
+            isReplyOrComment: isReply || isComment,
           ),
         if (!isQuote)
           const Divider(
@@ -62,7 +64,8 @@ class CreatePostWidget extends ConsumerWidget {
                   userName: safeUsername,
                   controller: postState.controller,
                   post: post,
-                  isCommentOrReply: isReplyOrComment,
+                  isComment: isComment,
+                  isReply: isReply,
                 ),
                 if (postState.imageUrls.isNotEmpty)
                   SizedBox(

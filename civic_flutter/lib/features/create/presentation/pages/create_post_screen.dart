@@ -14,16 +14,12 @@ class CreatePostScreen extends ConsumerWidget {
     this.projectToQuote,
     this.postToQuote,
     this.rootPost,
-    this.isReply = false,
-    this.isComment = false,
   });
 
   final int id;
   final Post? rootPost;
   final Post? postToQuote;
   final Project? projectToQuote;
-  final bool isComment;
-  final bool isReply;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +36,7 @@ class CreatePostScreen extends ConsumerWidget {
     final data = ref.watch(
       postDetailProvider(
         id,
-        rootPost,
+        null,
         PostType.regular,
       ),
     );
@@ -70,6 +66,16 @@ class CreatePostScreen extends ConsumerWidget {
     final scheduledDateTimeState = ref.watch(
       postScheduledDateTimeProvider.select((dt) => dt),
     );
+    final isComment =
+        rootPost != null &&
+        (rootPost!.postType == PostType.article ||
+            rootPost!.postType == PostType.regular ||
+            rootPost!.postType == PostType.projectQuote ||
+            rootPost!.postType == PostType.postQuote);
+    final isReply =
+        rootPost != null &&
+        (rootPost!.postType == PostType.comment ||
+            rootPost!.postType == PostType.commentReply);
     Future<void> saveDraftAndPop() async {
       await postNotifier.savePostAsDraft(
         data.value?.post.id,
@@ -163,12 +169,12 @@ class CreatePostScreen extends ConsumerWidget {
                   );
                 } else if (isComment) {
                   await postNotifier.sendComment(
-                    data.value?.post.parentId ?? 0,
+                    rootPost!.id ?? 0,
                     data.value?.post.id,
                   );
                 } else if (isReply) {
                   await postNotifier.sendReply(
-                    data.value?.post.parentId ?? 0,
+                    rootPost!.id ?? 0,
                     data.value?.post.id,
                   );
                 } else {
@@ -188,8 +194,9 @@ class CreatePostScreen extends ConsumerWidget {
                 ? const RepaintBoundary(child: CreateContentSchedule())
                 : null,
             error: (error, st) {
-              final err =
-                  error is Map<String, dynamic> ? error : <String, dynamic>{};
+              final err = error is Map<String, dynamic>
+                  ? error
+                  : <String, dynamic>{};
               if (err['action'] == 'retry') {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -212,7 +219,8 @@ class CreatePostScreen extends ConsumerWidget {
               child: CreatePostWidget(
                 post: value.post,
                 project: projectToQuote,
-                isReplyOrComment: isReply || isComment,
+                isReply: isReply,
+                isComment: isComment,
                 isQuote: isPostQuote || isProjectQuote,
                 postToQuote: postToQuote,
               ),

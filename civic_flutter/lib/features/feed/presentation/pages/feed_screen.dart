@@ -44,8 +44,8 @@ class FeedScreen extends ConsumerWidget {
                   Text(
                     'SOCIAL',
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 25,
-                        ),
+                      fontSize: 25,
+                    ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 22, left: 1),
@@ -64,7 +64,7 @@ class FeedScreen extends ConsumerWidget {
         },
         body: AppInfiniteList<PostWithUserState>(
           pagingController: pagingState,
-          scrollPhysics: const NeverScrollableScrollPhysics(),
+          scrollPhysics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, postWithUserState, index) {
             return AdaptivePostCard(
               postWithUserState: postWithUserState,

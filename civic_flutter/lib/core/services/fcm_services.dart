@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_flutter/core/core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +82,14 @@ class FcmServiceImpl implements FcmServices {
     final token = await _messaging.getToken();
     if (token != null) {
       await _sendTokenToServer(token);
+    } else {
+      late StreamSubscription<String> sub;
+      sub = _messaging.onTokenRefresh.listen((newToken) async {
+        if (newToken.isNotEmpty) {
+          await _sendTokenToServer(newToken);
+          await sub.cancel();
+        }
+      });
     }
   }
 

@@ -85,8 +85,11 @@ class AppInfiniteList<T> extends ConsumerWidget {
                       retry: () => Future.sync(
                         onRefresh,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
+                      padding: const EdgeInsets.fromLTRB(
+                        20,
+                        0,
+                        20,
+                        60,
                       ),
                       errorMessage: errorMessage,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,8 +98,11 @@ class AppInfiniteList<T> extends ConsumerWidget {
               },
               noItemsFoundIndicatorBuilder: (context) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
+                  padding: const EdgeInsets.fromLTRB(
+                    15,
+                    0,
+                    15,
+                    60
                   ),
                   child: noItemsFound ??
                       AppEmptyList(
@@ -205,12 +211,12 @@ class AppEmptyList extends StatelessWidget {
           ),
         if (canCreate)
           SizedBox(
-            height: 45,
-            width: 250,
+            height: 55,
+            width: double.maxFinite,
             child: ContentSingleButton(
               onPressed: onCreate,
               text: createText,
-              buttonIcon: Iconsax.magicpen,
+              buttonIcon: Iconsax.magicpen5,
             ),
           ),
       ],

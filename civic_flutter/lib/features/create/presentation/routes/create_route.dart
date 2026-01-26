@@ -25,8 +25,6 @@ class CreateRoutes {
                 projectToQuote: data?['projectToQuote'] as Project?,
                 rootPost: data?['rootPost'] as Post?,
                 postToQuote: data?['postToQuote'] as Post?,
-                isReply: data?['isReply'] as bool? ?? false,
-                isComment: data?['isComment'] as bool? ?? false,
               );
             },
           ),

@@ -43,10 +43,8 @@ class AppBottomNavbar extends ConsumerWidget {
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.transparent,
               elevation: 0,
-              selectedItemColor: Theme.of(context).primaryColor,
               unselectedItemColor: Theme.of(context).hintColor,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
+              selectedFontSize: 12,
               onTap: (index) {
                 if (index == 3) {
                   unawaited(
@@ -74,6 +72,14 @@ class AppBottomNavbar extends ConsumerWidget {
                     ][index],
                   );
 
+                  final label = [
+                    'Projects',
+                    'Social',
+                    'People',
+                    'Updates',
+                    'Create',
+                  ][index];
+
                   if (index == 3) {
                     final notifCount = ref.watch(
                       unreadNotificationsCountProvider,
@@ -95,7 +101,7 @@ class AppBottomNavbar extends ConsumerWidget {
                   }
                   return BottomNavigationBarItem(
                     icon: icon,
-                    label: '',
+                    label: label,
                   );
                 },
               ),

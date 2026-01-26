@@ -323,15 +323,17 @@ class PostCreation extends _$PostCreation {
     _currentDraftId = draft.id;
   }
 
-  String hintText(String username, bool? isCommentOrReply) {
+  String hintText(String username, bool? isComment, bool? isReply) {
     if (isImages()) {
       return '$username, caption your images';
     } else if (isImage()) {
       return '$username, caption your image';
     } else if (isVideo()) {
       return '$username, caption your video';
-    } else if (isCommentOrReply ?? false) {
-      return '$username, share your thoughts...';
+    } else if (isComment ?? false) {
+      return '$username, share your thoughts on this post...';
+    } else if (isReply ?? false) {
+      return '$username, share your thoughts on this reply...';
     } else {
       return "$username, what's happening in politics? Tap here "
           'to start typing.';
@@ -414,9 +416,7 @@ class PostCreation extends _$PostCreation {
 
       final result = await savePost(
         SavePostParams(
-          post.copyWith(
-            mediaAssets: state.uploadedAssets,
-          ),
+          post,
         ),
       );
       return result.fold((error) async {

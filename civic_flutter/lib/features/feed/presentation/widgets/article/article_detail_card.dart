@@ -76,6 +76,14 @@ class ArticleDetailCard extends StatelessWidget {
               );
             },
           ),
+          Text(
+            post.text!,
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                ),
+            textAlign: TextAlign.left,
+          ),
           RepaintBoundary(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(
@@ -89,14 +97,6 @@ class ArticleDetailCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          Text(
-            post.text!,
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                ),
-            textAlign: TextAlign.left,
           ),
           RepaintBoundary(
             child: QuillEditor(
