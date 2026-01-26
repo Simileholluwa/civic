@@ -1,30 +1,21 @@
+import 'package:civic_server/src/generated/endpoints.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class ScheduleProjectFutureCall extends FutureCall<Project> {
-  @override
-  Future<void> invoke(Session session, Project? object) async {
+  Future<void> sendProjectInFuture(Session session, Project? object) async {
     if (object != null) {
       try {
         if (object.id != null) {
-          await Project.db.updateRow(
-            session,
-            object,
-          );
+          await Project.db.updateRow(session, object);
         } else {
-          await Project.db.insertRow(
-            session,
-            object,
-          );
+          await Project.db.insertRow(session, object);
         }
       } catch (e) {
-        await session.serverpod.futureCallWithDelay(
-          'scheduleProjectFutureCall',
-          object,
-          Duration(
-            seconds: 60,
-          ),
-        );
+        await session.serverpod.futureCalls
+            .callWithDelay(const Duration(seconds: 60))
+            .scheduleProject
+            .sendProjectInFuture(object);
         print(e.toString());
       }
     }

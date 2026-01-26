@@ -29,7 +29,7 @@ class ProjectsInfiniteList extends ConsumerWidget {
           '/create/project/0',
         );
       },
-      itemBuilder: (__, project, _) {
+      itemBuilder: (_, project, _) {
         return ProjectCard(
           project: project,
         );

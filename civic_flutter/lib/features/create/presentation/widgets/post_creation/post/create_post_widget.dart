@@ -75,7 +75,7 @@ class CreatePostWidget extends ConsumerWidget {
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: postState.imageUrls.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      separatorBuilder: (_, _) => const SizedBox(width: 8),
                       itemBuilder: (context, index) {
                         final url = postState.imageUrls[index];
                         bool isUrl(String v) {

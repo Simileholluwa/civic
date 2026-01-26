@@ -18,30 +18,27 @@ class AppBottomNavbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 60,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(
-                top: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(30),
+      ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            border: Border(
+              top: BorderSide(
+                color: Theme.of(context).dividerColor,
               ),
             ),
-            child: BottomNavigationBar(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: BottomNavigationBar(
               currentIndex: navigatorShell.currentIndex,
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.transparent,
@@ -96,7 +93,6 @@ class AppBottomNavbar extends ConsumerWidget {
                       );
                     }
                   }
-
                   return BottomNavigationBarItem(
                     icon: icon,
                     label: '',
@@ -106,7 +102,6 @@ class AppBottomNavbar extends ConsumerWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

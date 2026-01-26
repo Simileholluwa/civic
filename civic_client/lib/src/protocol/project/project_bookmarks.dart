@@ -49,9 +49,11 @@ abstract class ProjectBookmarks implements _i1.SerializableModel {
           : _i4.Protocol().deserialize<_i3.UserRecord>(
               jsonSerialization['owner'],
             ),
-      dateCreated: _i1.DateTimeJsonExtension.fromJson(
-        jsonSerialization['dateCreated'],
-      ),
+      dateCreated: jsonSerialization['dateCreated'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['dateCreated'],
+            ),
     );
   }
 

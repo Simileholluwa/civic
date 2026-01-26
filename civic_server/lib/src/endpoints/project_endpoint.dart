@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:civic_server/src/endpoints/notification_endpoint.dart';
+import 'package:civic_server/src/generated/endpoints.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
@@ -31,9 +32,7 @@ class ProjectEndpoint extends Endpoint {
       session,
       projectId,
       include: Project.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
     );
 
@@ -49,42 +48,26 @@ class ProjectEndpoint extends Endpoint {
     final like = await ProjectLikes.db.findFirstRow(
       session,
       where: (t) =>
-          t.projectId.equals(projectId) &
-          t.ownerId.equals(
-            user.userInfoId,
-          ),
+          t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
     final bookmark = await ProjectBookmarks.db.findFirstRow(
       session,
       where: (t) =>
-          t.projectId.equals(projectId) &
-          t.ownerId.equals(
-            user.userInfoId,
-          ),
+          t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
     final subscription = await ProjectSubscription.db.findFirstRow(
       session,
-      where: (t) =>
-          t.projectId.equals(projectId) &
-          t.userId.equals(
-            user.id!,
-          ),
+      where: (t) => t.projectId.equals(projectId) & t.userId.equals(user.id!),
     );
     final review = await ProjectReview.db.findFirstRow(
       session,
       where: (t) =>
-          t.projectId.equals(projectId) &
-          t.ownerId.equals(
-            user.userInfoId,
-          ),
+          t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
     final vetting = await ProjectVetting.db.findFirstRow(
       session,
       where: (t) =>
-          t.projectId.equals(projectId) &
-          t.ownerId.equals(
-            user.userInfoId,
-          ),
+          t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
 
     // Following relationship: is the current user following this project's owner?
@@ -121,13 +104,8 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int projectId,
   ) async {
-    final user = await authUser(
-      session,
-    );
-    final project = await Project.db.findById(
-      session,
-      projectId,
-    );
+    final user = await authUser(session);
+    final project = await Project.db.findById(session, projectId);
 
     if (project != null) {
       if (project.isDeleted!) {
@@ -148,13 +126,8 @@ class ProjectEndpoint extends Endpoint {
     final result = await ProjectReview.db.findFirstRow(
       session,
       where: (row) =>
-          row.projectId.equals(projectId) &
-          row.ownerId.equals(
-            user.userInfoId,
-          ),
-      include: ProjectReview.include(
-        project: Project.include(),
-      ),
+          row.projectId.equals(projectId) & row.ownerId.equals(user.userInfoId),
+      include: ProjectReview.include(project: Project.include()),
     );
     return result;
   }
@@ -173,26 +146,14 @@ class ProjectEndpoint extends Endpoint {
   /// - [project]: The project to save or update.
   ///
   /// Returns the saved or updated [Project].
-  Future<Project> saveProject(
-    Session session,
-    Project project,
-  ) async {
+  Future<Project> saveProject(Session session, Project project) async {
     try {
-      final user = await authUser(
-        session,
-      );
+      final user = await authUser(session);
 
       if (project.id != null) {
-        await validateProjectOwnership(
-          session,
-          project.id!,
-          user,
-        );
+        await validateProjectOwnership(session, project.id!, user);
 
-        final existingProject = await Project.db.findById(
-          session,
-          project.id!,
-        );
+        final existingProject = await Project.db.findById(session, project.id!);
 
         if (existingProject == null) {
           throw ServerSideException(message: 'Project not found');
@@ -279,14 +240,13 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectReview.projectId,
           transaction: transaction,
-          include: Project.include(
-            owner: UserRecord.include(),
-          ),
+          include: Project.include(owner: UserRecord.include()),
         );
         if (project == null) {
           throw ServerSideException(
-              message:
-                  'This project cannot be found. It may have been permanently deleted.');
+            message:
+                'This project cannot be found. It may have been permanently deleted.',
+          );
         }
 
         // Helper function for rating calculations
@@ -315,7 +275,10 @@ class ProjectEndpoint extends Endpoint {
           }
 
           await validateProjectReviewOwnership(
-              session, projectReview.id!, user);
+            session,
+            projectReview.id!,
+            user,
+          );
 
           if (project.reviewsCount != 0) {
             final count = project.reviewsCount!;
@@ -512,7 +475,10 @@ class ProjectEndpoint extends Endpoint {
                 senderAvatarUrl: user.userInfo!.imageUrl!,
                 targetId: sentReview.projectId,
                 senderName: getFullName(
-                    user.firstName!, user.middleName, user.lastName!),
+                  user.firstName!,
+                  user.middleName,
+                  user.lastName!,
+                ),
                 actionRoute: '/project/${project.id}',
                 body: _getNotificationBody(projectReview.review ?? ''),
               ),
@@ -583,13 +549,15 @@ class ProjectEndpoint extends Endpoint {
 
         if (existingReview == null) {
           throw ServerSideException(
-              message:
-                  'This review cannot be found. It may have been permanently deleted.');
+            message:
+                'This review cannot be found. It may have been permanently deleted.',
+          );
         }
 
         if (existingReview.ownerId != user.id) {
           throw ServerSideException(
-              message: 'Unauthorized to delete this review');
+            message: 'Unauthorized to delete this review',
+          );
         }
 
         final project = await Project.db.findById(
@@ -737,13 +705,15 @@ class ProjectEndpoint extends Endpoint {
 
         if (existingVetting == null) {
           throw ServerSideException(
-              message:
-                  'This vetting cannot be found. It may have been permanently deleted.');
+            message:
+                'This vetting cannot be found. It may have been permanently deleted.',
+          );
         }
 
         if (existingVetting.ownerId != user.id) {
           throw ServerSideException(
-              message: 'Unauthorized to delete this vetting');
+            message: 'Unauthorized to delete this vetting',
+          );
         }
 
         final project = await Project.db.findById(
@@ -792,11 +762,10 @@ class ProjectEndpoint extends Endpoint {
     Project project,
     DateTime dateTime,
   ) async {
-    await session.serverpod.futureCallAtTime(
-      'scheduleProjectFutureCall',
-      project,
-      dateTime,
-    );
+    await session.serverpod.futureCalls
+        .callAtTime(dateTime)
+        .scheduleProject
+        .sendProjectInFuture(project);
   }
 
   /// Returns enriched feed projects including:
@@ -833,9 +802,7 @@ class ProjectEndpoint extends Endpoint {
       limit: limit,
       offset: (page - 1) * limit,
       include: Project.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
       where: (t) => t.id.notInSet(ignoredIds),
     );
@@ -847,7 +814,8 @@ class ProjectEndpoint extends Endpoint {
       projects.sort((a, b) => engagementScore(b).compareTo(engagementScore(a)));
     } else if (sortBy == 'rating') {
       projects.sort(
-          (a, b) => (b.overallRating ?? 0).compareTo(a.overallRating ?? 0));
+        (a, b) => (b.overallRating ?? 0).compareTo(a.overallRating ?? 0),
+      );
     }
 
     if (projects.isEmpty) {
@@ -865,7 +833,9 @@ class ProjectEndpoint extends Endpoint {
 
     // Bulk fetch user interactions.
     Future<Set<int>> projectIdsFor<T>(
-        Future<List<T>> future, int Function(T) idGetter) async {
+      Future<List<T>> future,
+      int Function(T) idGetter,
+    ) async {
       final rows = await future;
       return rows.map(idGetter).toSet();
     }
@@ -984,9 +954,7 @@ class ProjectEndpoint extends Endpoint {
   }) async {
     try {
       if (limit <= 0 || page <= 0) {
-        throw ServerSideException(
-          message: 'Invalid pagination parameters',
-        );
+        throw ServerSideException(message: 'Invalid pagination parameters');
       }
 
       // Initialize filters
@@ -1004,24 +972,17 @@ class ProjectEndpoint extends Endpoint {
         };
 
         if (!ratingMap.containsKey(cardinal)) {
-          throw ServerSideException(
-            message: 'Invalid cardinal parameter',
-          );
+          throw ServerSideException(message: 'Invalid cardinal parameter');
         }
 
-        filters.add(
-          ratingMap[cardinal]!.equals(rating),
-        );
+        filters.add(ratingMap[cardinal]!.equals(rating));
       }
 
       // Construct final where clause
       whereClause(t) => filters.reduce((a, b) => a & b);
 
       // Get count with filters applied
-      final count = await ProjectReview.db.count(
-        session,
-        where: whereClause,
-      );
+      final count = await ProjectReview.db.count(session, where: whereClause);
 
       // Fetch results with filters
       final results = await ProjectReview.db.find(
@@ -1029,9 +990,7 @@ class ProjectEndpoint extends Endpoint {
         limit: limit,
         offset: (page - 1) * limit,
         include: ProjectReview.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+          owner: UserRecord.include(userInfo: UserInfo.include()),
         ),
         where: whereClause,
         orderBy: (t) => t.dateCreated,
@@ -1053,9 +1012,7 @@ class ProjectEndpoint extends Endpoint {
         exception: e,
         stackTrace: stackTrace,
       );
-      throw ServerSideException(
-        message: 'Error fetching project reviews',
-      );
+      throw ServerSideException(message: 'Error fetching project reviews');
     }
   }
 
@@ -1066,9 +1023,7 @@ class ProjectEndpoint extends Endpoint {
         final userBookmarks = await ProjectBookmarks.db.find(
           session,
           where: (t) => t.ownerId.equals(user.id!),
-          include: ProjectBookmarks.include(
-            project: Project.include(),
-          ),
+          include: ProjectBookmarks.include(project: Project.include()),
         );
         final projects = userBookmarks.map((e) => e.project!);
         for (final project in projects) {
@@ -1089,9 +1044,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw ServerSideException(
-          message: 'Error clearing bookmarks',
-        );
+        throw ServerSideException(message: 'Error clearing bookmarks');
       }
     });
   }
@@ -1133,8 +1086,9 @@ class ProjectEndpoint extends Endpoint {
         );
         if (review == null) {
           throw ServerSideException(
-              message:
-                  'This review cannot be found. It may have been permanently deleted.');
+            message:
+                'This review cannot be found. It may have been permanently deleted.',
+          );
         }
 
         // Check for an existing reaction
@@ -1274,8 +1228,9 @@ class ProjectEndpoint extends Endpoint {
         );
         if (vetting == null) {
           throw ServerSideException(
-              message:
-                  'This review cannot be found. It may have been permanently deleted.');
+            message:
+                'This review cannot be found. It may have been permanently deleted.',
+          );
         }
 
         // Check for an existing reaction
@@ -1393,18 +1348,9 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Parameters:
   /// [projectId] - The ID of the project to delete.
-  Future<void> deleteProject(
-    Session session,
-    int projectId,
-  ) async {
-    final user = await authUser(
-      session,
-    );
-    await validateProjectOwnership(
-      session,
-      projectId,
-      user,
-    );
+  Future<void> deleteProject(Session session, int projectId) async {
+    final user = await authUser(session);
+    await validateProjectOwnership(session, projectId, user);
 
     final project = await Project.db.findById(session, projectId);
 
@@ -1412,9 +1358,7 @@ class ProjectEndpoint extends Endpoint {
       throw ServerSideException(message: 'Project not found');
     }
 
-    final newProject = project.copyWith(
-      isDeleted: true,
-    );
+    final newProject = project.copyWith(isDeleted: true);
 
     await updateProject(session, newProject);
   }
@@ -1432,10 +1376,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to toggle the bookmark for.
-  Future<void> toggleBookmark(
-    Session session,
-    int projectId,
-  ) async {
+  Future<void> toggleBookmark(Session session, int projectId) async {
     await session.db.transaction((transaction) async {
       try {
         final user = await authUser(session);
@@ -1443,25 +1384,16 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectId,
           transaction: transaction,
-          include: Project.include(
-            owner: UserRecord.include(),
-          ),
+          include: Project.include(owner: UserRecord.include()),
         );
         if (project == null) {
-          throw ServerSideException(
-            message: "Project not found",
-          );
+          throw ServerSideException(message: "Project not found");
         }
 
         final existingBookmark = await ProjectBookmarks.db.findFirstRow(
           session,
           where: (t) =>
-              t.projectId.equals(
-                projectId,
-              ) &
-              t.ownerId.equals(
-                user.userInfoId,
-              ),
+              t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
           transaction: transaction,
         );
 
@@ -1477,10 +1409,7 @@ class ProjectEndpoint extends Endpoint {
         } else {
           await ProjectBookmarks.db.insertRow(
             session,
-            ProjectBookmarks(
-              projectId: projectId,
-              ownerId: user.id!,
-            ),
+            ProjectBookmarks(projectId: projectId, ownerId: user.id!),
             transaction: transaction,
           );
           project.bookmarksCount = (project.bookmarksCount ?? 0) + 1;
@@ -1509,10 +1438,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Parameters:
   /// - [projectId]: The ID of the project to like or unlike.
-  Future<void> toggleLike(
-    Session session,
-    int projectId,
-  ) async {
+  Future<void> toggleLike(Session session, int projectId) async {
     await session.db.transaction((transaction) async {
       try {
         final user = await authUser(session);
@@ -1520,25 +1446,16 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectId,
           transaction: transaction,
-          include: Project.include(
-            owner: UserRecord.include(),
-          ),
+          include: Project.include(owner: UserRecord.include()),
         );
         if (project == null) {
-          throw ServerSideException(
-            message: "Project not found",
-          );
+          throw ServerSideException(message: "Project not found");
         }
 
         final existingLike = await ProjectLikes.db.findFirstRow(
           session,
           where: (t) =>
-              t.projectId.equals(
-                projectId,
-              ) &
-              t.ownerId.equals(
-                user.userInfoId,
-              ),
+              t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
           transaction: transaction,
         );
 
@@ -1548,8 +1465,9 @@ class ProjectEndpoint extends Endpoint {
             existingLike,
             transaction: transaction,
           );
-          project.likesCount =
-              ((project.likesCount ?? 0) > 0) ? (project.likesCount! - 1) : 0;
+          project.likesCount = ((project.likesCount ?? 0) > 0)
+              ? (project.likesCount! - 1)
+              : 0;
         } else {
           await ProjectLikes.db.insertRow(
             session,
@@ -1624,10 +1542,7 @@ class ProjectEndpoint extends Endpoint {
   /// [projectId] - The ID of the project to mark as not interested.
   ///
   /// Throws an exception if the operation fails.
-  Future<void> markNotInterested(
-    Session session,
-    int projectId,
-  ) async {
+  Future<void> markNotInterested(Session session, int projectId) async {
     try {
       final user = await authUser(session);
       final entry = ProjectNotInterested(
@@ -1635,10 +1550,7 @@ class ProjectEndpoint extends Endpoint {
         projectId: projectId,
       );
 
-      await ProjectNotInterested.db.insertRow(
-        session,
-        entry,
-      );
+      await ProjectNotInterested.db.insertRow(session, entry);
     } catch (e, stackTrace) {
       session.log(
         'Error in markNotInterested: $e',
@@ -1678,22 +1590,19 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectVetting.projectId,
           transaction: transaction,
-          include: Project.include(
-            owner: UserRecord.include(),
-          ),
+          include: Project.include(owner: UserRecord.include()),
         );
         if (project == null) {
           throw ServerSideException(
-              message:
-                  'This project cannot be found. It may have been permanently deleted.');
+            message:
+                'This project cannot be found. It may have been permanently deleted.',
+          );
         }
         final existingVet = await ProjectVetting.db.findFirstRow(
           session,
           where: (t) =>
               t.projectId.equals(projectVetting.projectId) &
-              t.ownerId.equals(
-                user.id,
-              ),
+              t.ownerId.equals(user.id),
           transaction: transaction,
         );
 
@@ -1711,10 +1620,7 @@ class ProjectEndpoint extends Endpoint {
           await updateProject(session, newProject);
           final newVetting = await ProjectVetting.db.insertRow(
             session,
-            projectVetting.copyWith(
-              likedBy: [],
-              dislikedBy: [],
-            ),
+            projectVetting.copyWith(likedBy: [], dislikedBy: []),
             transaction: transaction,
           );
 
@@ -1790,14 +1696,9 @@ class ProjectEndpoint extends Endpoint {
     Session session,
     int projectId,
   ) async {
-    final user = await authUser(
-      session,
-    );
+    final user = await authUser(session);
 
-    final project = await Project.db.findById(
-      session,
-      projectId,
-    );
+    final project = await Project.db.findById(session, projectId);
 
     if (project == null) {
       throw ServerSideException(
@@ -1809,13 +1710,8 @@ class ProjectEndpoint extends Endpoint {
     final result = await ProjectVetting.db.findFirstRow(
       session,
       where: (row) =>
-          row.projectId.equals(projectId) &
-          row.ownerId.equals(
-            user.userInfoId,
-          ),
-      include: ProjectVetting.include(
-        project: Project.include(),
-      ),
+          row.projectId.equals(projectId) & row.ownerId.equals(user.userInfoId),
+      include: ProjectVetting.include(project: Project.include()),
     );
     return result;
   }
@@ -1840,22 +1736,16 @@ class ProjectEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw ServerSideException(
-        message: 'Invalid pagination parameters',
-      );
+      throw ServerSideException(message: 'Invalid pagination parameters');
     }
 
-    final count = await ProjectVetting.db.count(
-      session,
-    );
+    final count = await ProjectVetting.db.count(session);
     final results = await ProjectVetting.db.find(
       session,
       limit: limit,
       offset: (page - 1) * limit,
       include: ProjectVetting.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
       orderBy: (t) => t.createdAt,
       orderDescending: true,
@@ -1890,9 +1780,7 @@ class ProjectEndpoint extends Endpoint {
           offset: (page - 1) * limit,
           include: ProjectBookmarks.include(
             project: Project.include(
-              owner: UserRecord.include(
-                userInfo: UserInfo.include(),
-              ),
+              owner: UserRecord.include(userInfo: UserInfo.include()),
             ),
           ),
           orderBy: (t) => t.dateCreated,
@@ -1915,7 +1803,9 @@ class ProjectEndpoint extends Endpoint {
         final projectIds = results.map((p) => p.id!).toSet();
 
         Future<Set<int>> asIdSet<T>(
-            Future<List<T>> fut, int Function(T) id) async {
+          Future<List<T>> fut,
+          int Function(T) id,
+        ) async {
           final rows = await fut;
           return rows.map(id).toSet();
         }
@@ -2009,9 +1899,7 @@ class ProjectEndpoint extends Endpoint {
           exception: e,
           stackTrace: stackTrace,
         );
-        throw ServerSideException(
-          message: e.toString(),
-        );
+        throw ServerSideException(message: e.toString());
       }
     });
   }
@@ -2030,14 +1918,10 @@ class ProjectEndpoint extends Endpoint {
   /// Returns:
   ///   - The authenticated [UserRecord] with included [UserInfo].
   @doNotGenerate
-  Future<UserRecord> authUser(
-    Session session,
-  ) async {
+  Future<UserRecord> authUser(Session session) async {
     final authInfo = session.authenticated;
     if (authInfo == null) {
-      throw ServerSideException(
-        message: 'You must be logged in',
-      );
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     // Fetch the user record from the local database
@@ -2048,17 +1932,13 @@ class ProjectEndpoint extends Endpoint {
       userRecord = await UserRecord.db.findFirstRow(
         session,
         where: (row) => row.userInfoId.equals(authInfo.userId),
-        include: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        include: UserRecord.include(userInfo: UserInfo.include()),
       );
       if (userRecord != null) {
         await session.caches.localPrio.put(
           cacheKey,
           userRecord,
-          lifetime: Duration(
-            days: 1,
-          ),
+          lifetime: Duration(days: 1),
         );
         return userRecord;
       }
@@ -2082,19 +1962,12 @@ class ProjectEndpoint extends Endpoint {
     int projectId,
     UserRecord user,
   ) async {
-    final project = await Project.db.findById(
-      session,
-      projectId,
-    );
+    final project = await Project.db.findById(session, projectId);
     if (project == null) {
-      throw ServerSideException(
-        message: 'Project not found',
-      );
+      throw ServerSideException(message: 'Project not found');
     }
     if (project.ownerId != user.userInfoId) {
-      throw ServerSideException(
-        message: 'Unauthorised operation',
-      );
+      throw ServerSideException(message: 'Unauthorised operation');
     }
   }
 
@@ -2116,14 +1989,10 @@ class ProjectEndpoint extends Endpoint {
       projectReviewId,
     );
     if (projectReview == null) {
-      throw ServerSideException(
-        message: 'Project review not found',
-      );
+      throw ServerSideException(message: 'Project review not found');
     }
     if (projectReview.ownerId != user.userInfoId) {
-      throw ServerSideException(
-        message: 'Unauthorised operation',
-      );
+      throw ServerSideException(message: 'Unauthorised operation');
     }
   }
 
@@ -2142,17 +2011,16 @@ class ProjectEndpoint extends Endpoint {
   ///   - Subsequent [Project] updates as they occur.
   Stream<Project> projectUpdates(Session session, int projectId) async* {
     // Create a message stream for this project
-    var updateStream =
-        session.messages.createStream<Project>('project_$projectId');
+    var updateStream = session.messages.createStream<Project>(
+      'project_$projectId',
+    );
 
     // Yield the latest project details when the client subscribes
     var project = await Project.db.findById(
       session,
       projectId,
       include: Project.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
     );
     if (project != null) {
@@ -2161,9 +2029,7 @@ class ProjectEndpoint extends Endpoint {
 
     // Send updates when changes occur
     await for (var projectUpdate in updateStream) {
-      yield projectUpdate.copyWith(
-        owner: project!.owner,
-      );
+      yield projectUpdate.copyWith(owner: project!.owner);
     }
   }
 
@@ -2172,15 +2038,10 @@ class ProjectEndpoint extends Endpoint {
       // Authenticate the user
       final user = await authUser(session);
 
-      final project = await Project.db.findById(
-        session,
-        projectId,
-      );
+      final project = await Project.db.findById(session, projectId);
 
       if (project == null) {
-        throw ServerSideException(
-          message: 'Project not found',
-        );
+        throw ServerSideException(message: 'Project not found');
       }
 
       final exists = await ProjectSubscription.db.findFirstRow(
@@ -2275,20 +2136,30 @@ class ProjectEndpoint extends Endpoint {
     }
 
     await upsert(
-        dimension: RatingDimension.location, value: review.locationRating);
+      dimension: RatingDimension.location,
+      value: review.locationRating,
+    );
     await upsert(
-        dimension: RatingDimension.description,
-        value: review.descriptionRating);
+      dimension: RatingDimension.description,
+      value: review.descriptionRating,
+    );
     await upsert(dimension: RatingDimension.dates, value: review.datesRating);
     await upsert(
-        dimension: RatingDimension.attachments,
-        value: review.attachmentsRating);
+      dimension: RatingDimension.attachments,
+      value: review.attachmentsRating,
+    );
     await upsert(
-        dimension: RatingDimension.category, value: review.categoryRating);
+      dimension: RatingDimension.category,
+      value: review.categoryRating,
+    );
     await upsert(
-        dimension: RatingDimension.funding, value: review.fundingRating);
+      dimension: RatingDimension.funding,
+      value: review.fundingRating,
+    );
     await upsert(
-        dimension: RatingDimension.overall, value: review.overallRating);
+      dimension: RatingDimension.overall,
+      value: review.overallRating,
+    );
   }
 
   /// Updates the given [project] in the database and notifies all clients
@@ -2305,10 +2176,7 @@ class ProjectEndpoint extends Endpoint {
     await Project.db.updateRow(session, project);
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage(
-      'project_${project.id}',
-      project,
-    );
+    session.messages.postMessage('project_${project.id}', project);
   }
 
   /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
@@ -2329,17 +2197,16 @@ class ProjectEndpoint extends Endpoint {
     int reviewId,
   ) async* {
     // Create a message stream for this project
-    var updateStream =
-        session.messages.createStream<ProjectReview>('review_$reviewId');
+    var updateStream = session.messages.createStream<ProjectReview>(
+      'review_$reviewId',
+    );
 
     // Yield the latest project details when the client subscribes
     var projectReview = await ProjectReview.db.findById(
       session,
       reviewId,
       include: ProjectReview.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
     );
     if (projectReview != null) {
@@ -2348,9 +2215,7 @@ class ProjectEndpoint extends Endpoint {
 
     // Send updates when changes occur
     await for (var projectReviewUpdate in updateStream) {
-      yield projectReviewUpdate.copyWith(
-        owner: projectReview!.owner,
-      );
+      yield projectReviewUpdate.copyWith(owner: projectReview!.owner);
     }
   }
 
@@ -2366,14 +2231,13 @@ class ProjectEndpoint extends Endpoint {
   ///
   @doNotGenerate
   Future<void> updateProjectReview(
-      Session session, ProjectReview projectReview) async {
+    Session session,
+    ProjectReview projectReview,
+  ) async {
     await ProjectReview.db.updateRow(session, projectReview);
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage(
-      'review_${projectReview.id}',
-      projectReview,
-    );
+    session.messages.postMessage('review_${projectReview.id}', projectReview);
   }
 
   /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
@@ -2393,17 +2257,16 @@ class ProjectEndpoint extends Endpoint {
     int vettingId,
   ) async* {
     // Create a message stream for this project
-    var updateStream =
-        session.messages.createStream<ProjectVetting>('review_$vettingId');
+    var updateStream = session.messages.createStream<ProjectVetting>(
+      'review_$vettingId',
+    );
 
     // Yield the latest project details when the client subscribes
     var projectVetting = await ProjectVetting.db.findById(
       session,
       vettingId,
       include: ProjectVetting.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
       ),
     );
     if (projectVetting != null) {
@@ -2412,9 +2275,7 @@ class ProjectEndpoint extends Endpoint {
 
     // Send updates when changes occur
     await for (var projectVettingUpdate in updateStream) {
-      yield projectVettingUpdate.copyWith(
-        owner: projectVetting!.owner,
-      );
+      yield projectVettingUpdate.copyWith(owner: projectVetting!.owner);
     }
   }
 
@@ -2430,15 +2291,14 @@ class ProjectEndpoint extends Endpoint {
   /// [projectVetting]: The project vetting object to update.
   @doNotGenerate
   Future<void> updateProjectVetting(
-      Session session, ProjectVetting projectVetting) async {
+    Session session,
+    ProjectVetting projectVetting,
+  ) async {
     // Update the project in the database
     await ProjectVetting.db.updateRow(session, projectVetting);
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage(
-      'review_${projectVetting.id}',
-      projectVetting,
-    );
+    session.messages.postMessage('review_${projectVetting.id}', projectVetting);
   }
 
   @doNotGenerate

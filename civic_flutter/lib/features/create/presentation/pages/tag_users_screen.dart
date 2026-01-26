@@ -118,7 +118,7 @@ class TagUsersScreen extends ConsumerWidget {
                 ),
               );
             },
-            separatorBuilder: (_, __) {
+            separatorBuilder: (_, _) {
               return const SizedBox(
                 width: TSizes.sm,
               );

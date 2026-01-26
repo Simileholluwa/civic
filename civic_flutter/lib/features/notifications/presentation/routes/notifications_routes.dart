@@ -13,11 +13,11 @@ class NotificationsRoutes {
     routes: [
       GoRoute(
         path: namespace,
-        builder: (_, __) => const NotificationsScreen(),
+        builder: (_, _) => const NotificationsScreen(),
         routes: [
           GoRoute(
             path: 'settings',
-            builder: (_, __) => const NotificationsSettingsScreen(),
+            builder: (_, _) => const NotificationsSettingsScreen(),
           ),
         ],
       ),

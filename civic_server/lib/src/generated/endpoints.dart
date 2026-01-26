@@ -31,6 +31,8 @@ import 'package:civic_server/src/generated/project/project_vetting.dart'
     as _i16;
 import 'package:civic_server/src/generated/user/user_record.dart' as _i17;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i18;
+import 'package:civic_server/src/generated/future_calls.dart' as _i19;
+export 'future_calls.dart' show ServerpodFutureCallsGetter;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -1907,5 +1909,10 @@ class Endpoints extends _i1.EndpointDispatch {
       },
     );
     modules['serverpod_auth'] = _i18.Endpoints()..initializeEndpoints(server);
+  }
+
+  @override
+  _i1.FutureCallDispatch? get futureCalls {
+    return _i19.FutureCalls();
   }
 }

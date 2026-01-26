@@ -1,10 +1,6 @@
 // import 'package:civic_server/env_settings.dart';
 // import 'package:civic_server/src/endpoints/send_email_endpoint.dart';
 import 'dart:io';
-
-import 'package:civic_server/src/future_calls/post_future_call.dart';
-import 'package:civic_server/src/future_calls/project_future_call.dart';
-import 'package:civic_server/src/future_calls/media_cleanup_future_call.dart';
 import 'package:serverpod/serverpod.dart';
 
 import 'package:civic_server/src/web/routes/root.dart';
@@ -29,13 +25,13 @@ void run(List<String> args) async {
     authenticationHandler: auth.authenticationHandler,
   );
 
-  // Future calls
-  pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
-  pod.registerFutureCall(
-    ScheduleProjectFutureCall(),
-    'scheduleProjectFutureCall',
-  );
-  pod.registerFutureCall(MediaCleanupFutureCall(), 'mediaCleanupFutureCall');
+  // // Future calls
+  // pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
+  // pod.registerFutureCall(
+  //   ScheduleProjectFutureCall(),
+  //   'scheduleProjectFutureCall',
+  // );
+  // pod.registerFutureCall(MediaCleanupFutureCall(), 'mediaCleanupFutureCall');
 
   // Auth
   auth.AuthConfig.set(

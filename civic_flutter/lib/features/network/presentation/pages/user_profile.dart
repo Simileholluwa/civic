@@ -87,7 +87,7 @@ class UserProfile extends ConsumerWidget {
                       user.toString(),
                     );
                   },
-                  error: (_, __) => const SizedBox(),
+                  error: (_, _) => const SizedBox(),
                   loading: () => const SizedBox(),
                 ),
                 const ListTile(

@@ -75,7 +75,6 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       final result = await _client.userRecord.checkIfNewUser(
         email,
       );
-
       if (result == null) {
         return null;
       }

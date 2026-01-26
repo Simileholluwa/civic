@@ -94,7 +94,7 @@ class PostBookmarksScreen extends ConsumerWidget {
             pagingController: pagingState,
             scrollPhysics: const NeverScrollableScrollPhysics(),
             canCreate: false,
-            itemBuilder: (__, postWithUserState, _) {
+            itemBuilder: (_, postWithUserState, _) {
               return AdaptivePostCard(
                 postWithUserState: postWithUserState,
               );

@@ -106,7 +106,7 @@ class ProjectVettingScreen extends ConsumerWidget {
                   );
                 }
               },
-              error: (_, __) {
+              error: (_, _) {
                 return const SizedBox.shrink();
               },
               loading: () {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:civic_server/src/endpoints/hashtag_endpoint.dart';
 import 'package:civic_server/src/endpoints/notification_endpoint.dart';
 import 'package:civic_server/src/endpoints/project_endpoint.dart';
+import 'package:civic_server/src/generated/endpoints.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 import 'package:civic_server/src/services/recommendation_service.dart';
@@ -49,15 +50,11 @@ class PostEndpoint extends Endpoint {
       incomingKeys.add(key);
       final current = existingByKey[key];
       if (current == null) {
-        inserts.add(
-          a.copyWith(
-            ownerId: user.id!,
-            postId: existingPost.id!,
-          ),
-        );
+        inserts.add(a.copyWith(ownerId: user.id!, postId: existingPost.id!));
         continue;
       }
-      final changed = (current.publicUrl != a.publicUrl) ||
+      final changed =
+          (current.publicUrl != a.publicUrl) ||
           (current.contentType != a.contentType) ||
           (current.size != a.size) ||
           (current.width != a.width) ||
@@ -79,8 +76,9 @@ class PostEndpoint extends Endpoint {
       }
     }
 
-    final staleKeys =
-        existingByKey.keys.where((k) => !incomingKeys.contains(k)).toSet();
+    final staleKeys = existingByKey.keys
+        .where((k) => !incomingKeys.contains(k))
+        .toSet();
     if (staleKeys.isNotEmpty) {
       await MediaAsset.db.deleteWhere(
         session,
@@ -89,31 +87,18 @@ class PostEndpoint extends Endpoint {
         transaction: transaction,
       );
       for (final key in staleKeys) {
-        unawaited(
-          session.storage.deleteFile(
-            storageId: 'public',
-            path: key,
-          ),
-        );
+        unawaited(session.storage.deleteFile(storageId: 'public', path: key));
       }
     }
 
     if (updates.isNotEmpty) {
       for (final u in updates) {
-        await MediaAsset.db.updateRow(
-          session,
-          u,
-          transaction: transaction,
-        );
+        await MediaAsset.db.updateRow(session, u, transaction: transaction);
       }
     }
 
     if (inserts.isNotEmpty) {
-      await MediaAsset.db.insert(
-        session,
-        inserts,
-        transaction: transaction,
-      );
+      await MediaAsset.db.insert(session, inserts, transaction: transaction);
     }
   }
 
@@ -121,14 +106,9 @@ class PostEndpoint extends Endpoint {
   ///
   /// On update, media assets are synchronized and hashtags recorded.
   /// Returns the enriched `Post` including owner and media assets.
-  Future<Post?> savePost(
-    Session session,
-    Post post,
-  ) async {
+  Future<Post?> savePost(Session session, Post post) async {
     return await session.db.transaction((transaction) async {
-      final user = await authUser(
-        session,
-      );
+      final user = await authUser(session);
       if (post.id != null) {
         final existingPost = await validatePostOwnership(
           session,
@@ -153,10 +133,7 @@ class PostEndpoint extends Endpoint {
           dateCreated: existingPost.dateCreated,
         );
 
-        await updatePost(
-          session,
-          updatedPost,
-        );
+        await updatePost(session, updatedPost);
 
         await HashtagEndpoint().sendPostHashtags(
           session,
@@ -189,10 +166,9 @@ class PostEndpoint extends Endpoint {
           MediaAsset.db.insert(
             session,
             post.mediaAssets!
-                .map((e) => e.copyWith(
-                      ownerId: user.id!,
-                      postId: savedPost.id!,
-                    ))
+                .map(
+                  (e) => e.copyWith(ownerId: user.id!, postId: savedPost.id!),
+                )
                 .toList(),
           );
         }
@@ -203,13 +179,7 @@ class PostEndpoint extends Endpoint {
           savedPost.id!,
         );
 
-        unawaited(
-          notifyTaggedOrMentionedUsers(
-            session,
-            user,
-            savedPost,
-          ),
-        );
+        unawaited(notifyTaggedOrMentionedUsers(session, user, savedPost));
 
         final withAssets = await Post.db.findById(
           session,
@@ -228,10 +198,7 @@ class PostEndpoint extends Endpoint {
   /// Reposts an existing post, toggling if already reposted.
   ///
   /// Updates repost counts, inserts engagement events and notifications.
-  Future<Post?> repostPost(
-    Session session,
-    int postId,
-  ) async {
+  Future<Post?> repostPost(Session session, int postId) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
       final original = await Post.db.findById(
@@ -242,7 +209,8 @@ class PostEndpoint extends Endpoint {
           article: Article.include(),
           poll: Poll.include(options: PollOption.includeList()),
           project: Project.include(
-              owner: UserRecord.include(userInfo: UserInfo.include())),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+          ),
         ),
         transaction: transaction,
       );
@@ -336,18 +304,18 @@ class PostEndpoint extends Endpoint {
         final targetType = original.postType == PostType.article
             ? NotificationTargetType.article
             : original.postType == PostType.poll
-                ? NotificationTargetType.poll
-                : original.postType == PostType.commentReply
-                    ? NotificationTargetType.reply
-                    : original.postType == PostType.comment
-                        ? NotificationTargetType.comment
-                        : NotificationTargetType.post;
+            ? NotificationTargetType.poll
+            : original.postType == PostType.commentReply
+            ? NotificationTargetType.reply
+            : original.postType == PostType.comment
+            ? NotificationTargetType.comment
+            : NotificationTargetType.post;
 
         final route = original.article != null
             ? 'article'
             : original.poll != null
-                ? 'poll'
-                : 'post';
+            ? 'poll'
+            : 'post';
 
         unawaited(
           NotificationEndpoint().sendNotification(
@@ -412,7 +380,8 @@ class PostEndpoint extends Endpoint {
           article: Article.include(),
           poll: Poll.include(options: PollOption.includeList()),
           project: Project.include(
-              owner: UserRecord.include(userInfo: UserInfo.include())),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+          ),
         ),
         transaction: transaction,
       );
@@ -424,10 +393,7 @@ class PostEndpoint extends Endpoint {
 
       final sentPost = await Post.db.insertRow(
         session,
-        quoteContent.copyWith(
-          ownerId: user.id!,
-          parentId: original.id,
-        ),
+        quoteContent.copyWith(ownerId: user.id!, parentId: original.id),
         transaction: transaction,
       );
 
@@ -468,8 +434,8 @@ class PostEndpoint extends Endpoint {
         final targetType = original.article != null
             ? NotificationTargetType.article
             : original.poll != null
-                ? NotificationTargetType.poll
-                : NotificationTargetType.post;
+            ? NotificationTargetType.poll
+            : NotificationTargetType.post;
 
         unawaited(
           NotificationEndpoint().sendNotification(
@@ -544,12 +510,7 @@ class PostEndpoint extends Endpoint {
     }
 
     final now = DateTime.now().toUtc();
-    final hourBucket = DateTime.utc(
-      now.year,
-      now.month,
-      now.day,
-      now.hour,
-    );
+    final hourBucket = DateTime.utc(now.year, now.month, now.day, now.hour);
 
     final distinctIds = postIds.toSet();
 
@@ -575,19 +536,11 @@ class PostEndpoint extends Endpoint {
           continue;
         }
 
-        final post = await Post.db.findById(
-          session,
-          pid,
-          transaction: tx,
-        );
+        final post = await Post.db.findById(session, pid, transaction: tx);
         if (post != null) {
           post.impressionsCount = (post.impressionsCount ?? 0) + 1;
           post.lastImpressionAt = now;
-          await Post.db.updateRow(
-            session,
-            post,
-            transaction: tx,
-          );
+          await Post.db.updateRow(session, post, transaction: tx);
         }
       }
     });
@@ -617,10 +570,7 @@ class PostEndpoint extends Endpoint {
           dateCreated: existingPost.dateCreated,
         );
 
-        await updatePost(
-          session,
-          updatedPost,
-        );
+        await updatePost(session, updatedPost);
         await HashtagEndpoint().sendPostHashtags(
           session,
           post.tags ?? [],
@@ -630,9 +580,7 @@ class PostEndpoint extends Endpoint {
       } else {
         final savedPost = await Post.db.insertRow(
           session,
-          post.copyWith(
-            ownerId: user.id!,
-          ),
+          post.copyWith(ownerId: user.id!),
           transaction: transaction,
         );
 
@@ -646,38 +594,22 @@ class PostEndpoint extends Endpoint {
         for (final option in post.poll!.options ?? []) {
           final savedOption = await PollOption.db.insertRow(
             session,
-            option.copyWith(
-              pollId: savedPoll.id,
-            ),
+            option.copyWith(pollId: savedPoll.id),
             transaction: transaction,
           );
           savedOptions.add(savedOption);
         }
 
-        final updatedPoll = savedPoll.copyWith(
-          options: savedOptions,
-        );
-        await Poll.db.updateRow(
-          session,
-          updatedPoll,
-          transaction: transaction,
-        );
+        final updatedPoll = savedPoll.copyWith(options: savedOptions);
+        await Poll.db.updateRow(session, updatedPoll, transaction: transaction);
 
         await Post.db.updateRow(
           session,
-          savedPost.copyWith(
-            pollId: updatedPoll.id,
-          ),
+          savedPost.copyWith(pollId: updatedPoll.id),
           transaction: transaction,
         );
 
-        unawaited(
-          notifyTaggedOrMentionedUsers(
-            session,
-            user,
-            savedPost,
-          ),
-        );
+        unawaited(notifyTaggedOrMentionedUsers(session, user, savedPost));
 
         return await Post.db.findById(
           session,
@@ -696,10 +628,7 @@ class PostEndpoint extends Endpoint {
   ///
   /// On update, preserves post metadata linkage, updates the article row,
   /// and returns the enriched `Post` with `Article` and assets.
-  Future<Post> saveArticle(
-    Session session,
-    Post post,
-  ) async {
+  Future<Post> saveArticle(Session session, Post post) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
       if (post.id != null) {
@@ -737,16 +666,11 @@ class PostEndpoint extends Endpoint {
 
         await Article.db.updateRow(
           session,
-          post.article!.copyWith(
-            id: existingPost.articleId,
-          ),
+          post.article!.copyWith(id: existingPost.articleId),
           transaction: transaction,
         );
 
-        await updatePost(
-          session,
-          updatedPost,
-        );
+        await updatePost(session, updatedPost);
 
         final enriched = await Post.db.findById(
           session,
@@ -762,9 +686,7 @@ class PostEndpoint extends Endpoint {
       } else {
         final savedPost = await Post.db.insertRow(
           session,
-          post.copyWith(
-            ownerId: user.id!,
-          ),
+          post.copyWith(ownerId: user.id!),
           transaction: transaction,
         );
 
@@ -776,9 +698,7 @@ class PostEndpoint extends Endpoint {
 
         await Post.db.updateRow(
           session,
-          savedPost.copyWith(
-            articleId: savedArticle.id,
-          ),
+          savedPost.copyWith(articleId: savedArticle.id),
           transaction: transaction,
         );
 
@@ -793,21 +713,13 @@ class PostEndpoint extends Endpoint {
           );
         }
 
-        unawaited(
-          notifyTaggedOrMentionedUsers(
-            session,
-            user,
-            savedPost,
-          ),
-        );
+        unawaited(notifyTaggedOrMentionedUsers(session, user, savedPost));
 
         final sent = await Post.db.findById(
           session,
           savedPost.id!,
           include: Post.include(
-            owner: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
             article: Article.include(),
             mediaAssets: MediaAsset.includeList(),
           ),
@@ -845,8 +757,8 @@ class PostEndpoint extends Endpoint {
             targetType: savedPost.article != null
                 ? NotificationTargetType.article
                 : savedPost.poll != null
-                    ? NotificationTargetType.poll
-                    : NotificationTargetType.post,
+                ? NotificationTargetType.poll
+                : NotificationTargetType.post,
             targetId: savedPost.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
@@ -855,7 +767,11 @@ class PostEndpoint extends Endpoint {
               user.lastName!,
             ),
             actionRoute:
-                '/feed/${savedPost.article != null ? 'article' : savedPost.poll != null ? 'poll' : 'post'}/${savedPost.id}',
+                '/feed/${savedPost.article != null
+                    ? 'article'
+                    : savedPost.poll != null
+                    ? 'poll'
+                    : 'post'}/${savedPost.id}',
             body: _getNotificationBody(savedPost.text ?? ''),
             postId: savedPost.id,
           ),
@@ -874,8 +790,8 @@ class PostEndpoint extends Endpoint {
             targetType: savedPost.article != null
                 ? NotificationTargetType.article
                 : savedPost.poll != null
-                    ? NotificationTargetType.poll
-                    : NotificationTargetType.post,
+                ? NotificationTargetType.poll
+                : NotificationTargetType.post,
             targetId: savedPost.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
@@ -884,7 +800,11 @@ class PostEndpoint extends Endpoint {
               user.lastName!,
             ),
             actionRoute:
-                '/feed/${savedPost.article != null ? 'article' : savedPost.poll != null ? 'poll' : 'post'}/${savedPost.id}',
+                '/feed/${savedPost.article != null
+                    ? 'article'
+                    : savedPost.poll != null
+                    ? 'poll'
+                    : 'post'}/${savedPost.id}',
             body: _getNotificationBody(savedPost.text ?? ''),
             postId: savedPost.id,
           ),
@@ -896,11 +816,7 @@ class PostEndpoint extends Endpoint {
   /// Casts or changes a vote on a poll option and updates counts.
   ///
   /// Emits engagement events and sends notifications if applicable.
-  Future<void> castVote(
-    Session session,
-    int postId,
-    int optionId,
-  ) async {
+  Future<void> castVote(Session session, int postId, int optionId) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
 
@@ -908,9 +824,7 @@ class PostEndpoint extends Endpoint {
         session,
         postId,
         include: Post.include(
-          poll: Poll.include(
-            options: PollOption.includeList(),
-          ),
+          poll: Poll.include(options: PollOption.includeList()),
           owner: UserRecord.include(),
         ),
         transaction: transaction,
@@ -943,10 +857,7 @@ class PostEndpoint extends Endpoint {
         }
         await PollVote.db.updateRow(
           session,
-          existingVote.copyWith(
-            optionId: optionId,
-            votedAt: DateTime.now(),
-          ),
+          existingVote.copyWith(optionId: optionId, votedAt: DateTime.now()),
           transaction: transaction,
         );
 
@@ -969,9 +880,7 @@ class PostEndpoint extends Endpoint {
 
         await PollOption.db.updateRow(
           session,
-          option.copyWith(
-            votesCount: (option.votesCount ?? 0) + 1,
-          ),
+          option.copyWith(votesCount: (option.votesCount ?? 0) + 1),
           transaction: transaction,
         );
 
@@ -990,17 +899,13 @@ class PostEndpoint extends Endpoint {
 
         await PollOption.db.updateRow(
           session,
-          option.copyWith(
-            votesCount: (option.votesCount ?? 0) + 1,
-          ),
+          option.copyWith(votesCount: (option.votesCount ?? 0) + 1),
           transaction: transaction,
         );
 
         await updatePoll(
           session,
-          poll.copyWith(
-            votesCount: (poll.votesCount ?? 0) + 1,
-          ),
+          poll.copyWith(votesCount: (poll.votesCount ?? 0) + 1),
           transaction: transaction,
         );
       }
@@ -1027,8 +932,11 @@ class PostEndpoint extends Endpoint {
             targetType: NotificationTargetType.poll,
             targetId: post.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
-            senderName:
-                getFullName(user.firstName!, user.middleName, user.lastName!),
+            senderName: getFullName(
+              user.firstName!,
+              user.middleName,
+              user.lastName!,
+            ),
             actionRoute: '/feed/poll/${post.id}',
             body: _getNotificationBody(post.text ?? ''),
             postId: postId,
@@ -1062,10 +970,7 @@ class PostEndpoint extends Endpoint {
   /// Clears the authenticated user's vote in a given poll.
   ///
   /// Updates option and poll counts accordingly.
-  Future<void> clearVote(
-    Session session,
-    int pollId,
-  ) async {
+  Future<void> clearVote(Session session, int pollId) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
 
@@ -1073,9 +978,7 @@ class PostEndpoint extends Endpoint {
         session,
         pollId,
         transaction: transaction,
-        include: Poll.include(
-          options: PollOption.includeList(),
-        ),
+        include: Poll.include(options: PollOption.includeList()),
       );
       if (poll == null) {
         throw Exception('Poll not found.');
@@ -1164,10 +1067,7 @@ class PostEndpoint extends Endpoint {
           dateCreated: existingCommentOrReply.dateCreated,
         );
 
-        await updatePost(
-          session,
-          updatedComment,
-        );
+        await updatePost(session, updatedComment);
 
         return await Post.db.findById(
           session,
@@ -1183,16 +1083,12 @@ class PostEndpoint extends Endpoint {
           parent = await Post.db.findById(
             session,
             comment.parentId!,
-            include: Post.include(
-              owner: UserRecord.include(),
-            ),
+            include: Post.include(owner: UserRecord.include()),
           );
           if (parent != null) {
             await updatePost(
               session,
-              parent.copyWith(
-                commentCount: parent.commentCount! + 1,
-              ),
+              parent.copyWith(commentCount: parent.commentCount! + 1),
             );
           }
         }
@@ -1210,11 +1106,13 @@ class PostEndpoint extends Endpoint {
             session,
             comment.mediaAssets != null
                 ? comment.mediaAssets!
-                    .map((e) => e.copyWith(
+                      .map(
+                        (e) => e.copyWith(
                           ownerId: user.id!,
                           postId: sentComment.id!,
-                        ))
-                    .toList()
+                        ),
+                      )
+                      .toList()
                 : [],
           );
         }
@@ -1276,13 +1174,7 @@ class PostEndpoint extends Endpoint {
           );
         }
 
-        unawaited(
-          notifyTaggedOrMentionedUsers(
-            session,
-            user,
-            sentComment,
-          ),
-        );
+        unawaited(notifyTaggedOrMentionedUsers(session, user, sentComment));
 
         final enriched = await Post.db.findById(
           session,
@@ -1307,9 +1199,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw ServerSideException(
-        message: 'Invalid pagination parameters',
-      );
+      throw ServerSideException(message: 'Invalid pagination parameters');
     }
     final user = await authUser(session);
     final ignored = await PostNotInterested.db.find(
@@ -1336,9 +1226,7 @@ class PostEndpoint extends Endpoint {
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
         mediaAssets: MediaAsset.includeList(),
       ),
     );
@@ -1367,9 +1255,7 @@ class PostEndpoint extends Endpoint {
       session,
       commentId,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
         mediaAssets: MediaAsset.includeList(),
         parent: Post.include(
           owner: UserRecord.include(userInfo: UserInfo.include()),
@@ -1385,11 +1271,7 @@ class PostEndpoint extends Endpoint {
       );
     }
 
-    final enriched = await _enrichPosts(
-      session,
-      user,
-      [comment],
-    );
+    final enriched = await _enrichPosts(session, user, [comment]);
     return enriched.first;
   }
 
@@ -1403,9 +1285,7 @@ class PostEndpoint extends Endpoint {
     int page = 1,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw ServerSideException(
-        message: 'Invalid pagination parameters',
-      );
+      throw ServerSideException(message: 'Invalid pagination parameters');
     }
 
     final user = await authUser(session);
@@ -1434,9 +1314,7 @@ class PostEndpoint extends Endpoint {
       orderBy: (t) => t.dateCreated,
       orderDescending: true,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
         mediaAssets: MediaAsset.includeList(),
       ),
     );
@@ -1459,11 +1337,10 @@ class PostEndpoint extends Endpoint {
     Post post,
     DateTime dateTime,
   ) async {
-    await session.serverpod.futureCallAtTime(
-      'schedulePostFutureCall',
-      post,
-      dateTime,
-    );
+    await session.serverpod.futureCalls
+        .callAtTime(dateTime)
+        .schedulePost
+        .sendPostInFuture(post);
   }
 
   /// Traverses the parent chain to return the root post for a thread.
@@ -1500,31 +1377,22 @@ class PostEndpoint extends Endpoint {
           postType: existingQuote.postType,
         );
 
-        await updatePost(
-          session,
-          updatedQuote,
-        );
+        await updatePost(session, updatedQuote);
 
         final quote = await Post.db.findById(
           session,
           quoteContent.id!,
           include: Post.include(
-            owner: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
             project: Project.include(
-              owner: UserRecord.include(
-                userInfo: UserInfo.include(),
-              ),
+              owner: UserRecord.include(userInfo: UserInfo.include()),
             ),
           ),
           transaction: transaction,
         );
 
         if (quote == null) {
-          throw ServerSideException(
-            message: 'Quote not found.',
-          );
+          throw ServerSideException(message: 'Quote not found.');
         }
 
         return quote;
@@ -1533,9 +1401,7 @@ class PostEndpoint extends Endpoint {
           session,
           projectId,
           transaction: transaction,
-          include: Project.include(
-            owner: UserRecord.include(),
-          ),
+          include: Project.include(owner: UserRecord.include()),
         );
 
         if (selectedProject == null) {
@@ -1553,10 +1419,7 @@ class PostEndpoint extends Endpoint {
 
         selectedProject.quotesCount = selectedProject.quotesCount! + 1;
 
-        await ProjectEndpoint().updateProject(
-          session,
-          selectedProject,
-        );
+        await ProjectEndpoint().updateProject(session, selectedProject);
 
         await HashtagEndpoint().sendPostHashtags(
           session,
@@ -1574,8 +1437,11 @@ class PostEndpoint extends Endpoint {
               targetType: NotificationTargetType.project,
               senderAvatarUrl: user.userInfo!.imageUrl!,
               targetId: sentPost.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
               actionRoute: '/feed/post/${sentPost.id}',
               body: _getNotificationBody(sentPost.text ?? ''),
               postId: sentPost.id!,
@@ -1590,58 +1456,41 @@ class PostEndpoint extends Endpoint {
               projectId: selectedProject.id!,
               senderAvatarUrl: user.userInfo!.imageUrl!,
               targetId: sentPost.id!,
-              senderName:
-                  getFullName(user.firstName!, user.middleName, user.lastName!),
+              senderName: getFullName(
+                user.firstName!,
+                user.middleName,
+                user.lastName!,
+              ),
               actionRoute: '/feed/post/${sentPost.id}',
               body: _getNotificationBody(sentPost.text ?? ''),
             ),
           );
         }
 
-        unawaited(
-          notifyTaggedOrMentionedUsers(
-            session,
-            user,
-            sentPost,
-          ),
-        );
+        unawaited(notifyTaggedOrMentionedUsers(session, user, sentPost));
 
-        return sentPost.copyWith(
-          owner: user,
-          project: selectedProject,
-        );
+        return sentPost.copyWith(owner: user, project: selectedProject);
       }
     });
   }
 
   /// Returns an enriched post by id, including owner, media, and related data.
-  Future<PostWithUserState> getPost(
-    Session session,
-    int id,
-  ) async {
+  Future<PostWithUserState> getPost(Session session, int id) async {
     final user = await authUser(session);
     final result = await Post.db.findById(
       session,
       id,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
         mediaAssets: MediaAsset.includeList(),
         project: Project.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+          owner: UserRecord.include(userInfo: UserInfo.include()),
         ),
         parent: Post.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+          owner: UserRecord.include(userInfo: UserInfo.include()),
           mediaAssets: MediaAsset.includeList(),
         ),
-        poll: Poll.include(
-          options: PollOption.includeList(),
-        ),
+        poll: Poll.include(options: PollOption.includeList()),
         article: Article.include(),
       ),
     );
@@ -1652,11 +1501,7 @@ class PostEndpoint extends Endpoint {
       );
     }
 
-    final enriched = await _enrichPosts(
-      session,
-      user,
-      [result],
-    );
+    final enriched = await _enrichPosts(session, user, [result]);
     return enriched.first;
   }
 
@@ -1670,9 +1515,7 @@ class PostEndpoint extends Endpoint {
     String? contentType,
   }) async {
     if (limit <= 0 || page <= 0) {
-      throw ServerSideException(
-        message: 'Invalid pagination parameters',
-      );
+      throw ServerSideException(message: 'Invalid pagination parameters');
     }
     final user = await authUser(session);
     final ignored = await PostNotInterested.db.find(
@@ -1689,7 +1532,7 @@ class PostEndpoint extends Endpoint {
       allowedTypes = {
         PostType.regular,
         PostType.postRepost,
-        PostType.projectQuote
+        PostType.projectQuote,
       };
     } else {
       allowedTypes = null;
@@ -1699,21 +1542,12 @@ class PostEndpoint extends Endpoint {
       final base = t.id.notInSet(ignoredIds) & t.isDeleted.equals(false);
       if (allowedTypes == null) {
         return base &
-            t.postType.notInSet({
-              PostType.comment,
-              PostType.commentReply,
-            });
+            t.postType.notInSet({PostType.comment, PostType.commentReply});
       }
-      return base &
-          t.postType.inSet(
-            allowedTypes,
-          );
+      return base & t.postType.inSet(allowedTypes);
     }
 
-    final count = await Post.db.count(
-      session,
-      where: whereBuilder,
-    );
+    final count = await Post.db.count(session, where: whereBuilder);
     final candidateLimit = (limit * 5).clamp(limit, 500);
     final candidates = await Post.db.find(
       session,
@@ -1721,24 +1555,16 @@ class PostEndpoint extends Endpoint {
       where: whereBuilder,
       offset: (page * limit) - limit,
       include: Post.include(
-        owner: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        owner: UserRecord.include(userInfo: UserInfo.include()),
         mediaAssets: MediaAsset.includeList(),
         project: Project.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+          owner: UserRecord.include(userInfo: UserInfo.include()),
         ),
         parent: Post.include(
-          owner: UserRecord.include(
-            userInfo: UserInfo.include(),
-          ),
+          owner: UserRecord.include(userInfo: UserInfo.include()),
           mediaAssets: MediaAsset.includeList(),
           project: Project.include(
-            owner: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
           ),
           poll: Poll.include(
             options: PollOption.includeList(
@@ -1852,17 +1678,14 @@ class PostEndpoint extends Endpoint {
   }
 
   /// Deletes or soft-deletes a post, updating related counts when needed.
-  Future<void> deletePost(Session session, int id,
-      {bool fullDelete = false}) async {
+  Future<void> deletePost(
+    Session session,
+    int id, {
+    bool fullDelete = false,
+  }) async {
     return await session.db.transaction((tx) async {
-      final user = await authUser(
-        session,
-      );
-      final post = await validatePostOwnership(
-        session,
-        id,
-        user,
-      );
+      final user = await authUser(session);
+      final post = await validatePostOwnership(session, id, user);
 
       if (post.postType == PostType.comment ||
           post.postType == PostType.commentReply) {
@@ -1875,9 +1698,7 @@ class PostEndpoint extends Endpoint {
           parent.commentCount = parent.commentCount! - 1;
           await updatePost(
             session,
-            parent.copyWith(
-              commentCount: parent.commentCount,
-            ),
+            parent.copyWith(commentCount: parent.commentCount),
           );
         }
       } else if (post.postType == PostType.projectQuote) {
@@ -1890,42 +1711,27 @@ class PostEndpoint extends Endpoint {
           project.quotesCount = project.quotesCount! - 1;
           await ProjectEndpoint().updateProject(
             session,
-            project.copyWith(
-              quotesCount: project.quotesCount,
-            ),
+            project.copyWith(quotesCount: project.quotesCount),
           );
         }
       }
 
       if (fullDelete) {
-        await Post.db.deleteRow(
-          session,
-          post,
-          transaction: tx,
-        );
+        await Post.db.deleteRow(session, post, transaction: tx);
         return;
       }
-      await updatePost(
-        session,
-        post.copyWith(
-          isDeleted: true,
-        ),
-      );
+      await updatePost(session, post.copyWith(isDeleted: true));
     });
   }
 
   /// Clears all bookmarks for the authenticated user and updates counts.
   Future<void> clearBookmarks(Session session) async {
     return await session.db.transaction((transaction) async {
-      final user = await authUser(
-        session,
-      );
+      final user = await authUser(session);
       final userBookmarks = await PostBookmarks.db.find(
         session,
         where: (t) => t.ownerId.equals(user.id!),
-        include: PostBookmarks.include(
-          post: Post.include(),
-        ),
+        include: PostBookmarks.include(post: Post.include()),
         transaction: transaction,
       );
       final posts = userBookmarks.map((e) => e.post!);
@@ -1945,35 +1751,22 @@ class PostEndpoint extends Endpoint {
   /// Toggles bookmark state on a post for the authenticated user.
   ///
   /// Updates counts and logs a corresponding engagement event.
-  Future<void> toggleBookmark(
-    Session session,
-    int postId,
-  ) async {
+  Future<void> toggleBookmark(Session session, int postId) async {
     await session.db.transaction((transaction) async {
       final user = await authUser(session);
       final post = await Post.db.findById(
         session,
         postId,
         transaction: transaction,
-        include: Post.include(
-          owner: UserRecord.include(),
-        ),
+        include: Post.include(owner: UserRecord.include()),
       );
       if (post == null) {
-        throw ServerSideException(
-          message: "Post not found",
-        );
+        throw ServerSideException(message: "Post not found");
       }
 
       final existingBookmark = await PostBookmarks.db.findFirstRow(
         session,
-        where: (t) =>
-            t.postId.equals(
-              postId,
-            ) &
-            t.ownerId.equals(
-              user.id!,
-            ),
+        where: (t) => t.postId.equals(postId) & t.ownerId.equals(user.id!),
         transaction: transaction,
       );
 
@@ -1989,10 +1782,7 @@ class PostEndpoint extends Endpoint {
       } else {
         await PostBookmarks.db.insertRow(
           session,
-          PostBookmarks(
-            postId: postId,
-            ownerId: user.id!,
-          ),
+          PostBookmarks(postId: postId, ownerId: user.id!),
           transaction: transaction,
         );
         post.bookmarksCount = post.bookmarksCount! + 1;
@@ -2017,38 +1807,23 @@ class PostEndpoint extends Endpoint {
   /// Toggles like state on a post for the authenticated user.
   ///
   /// Sends notifications to the post owner and subscribers on like.
-  Future<void> toggleLike(
-    Session session,
-    int postId,
-  ) async {
+  Future<void> toggleLike(Session session, int postId) async {
     await session.db.transaction((transaction) async {
-      final user = await authUser(
-        session,
-      );
+      final user = await authUser(session);
 
       final post = await Post.db.findById(
         session,
         postId,
         transaction: transaction,
-        include: Post.include(
-          owner: UserRecord.include(),
-        ),
+        include: Post.include(owner: UserRecord.include()),
       );
       if (post == null) {
-        throw ServerSideException(
-          message: "Post not found",
-        );
+        throw ServerSideException(message: "Post not found");
       }
 
       final existingLike = await PostLikes.db.findFirstRow(
         session,
-        where: (t) =>
-            t.postId.equals(
-              postId,
-            ) &
-            t.ownerId.equals(
-              user.id!,
-            ),
+        where: (t) => t.postId.equals(postId) & t.ownerId.equals(user.id!),
         transaction: transaction,
       );
 
@@ -2084,12 +1859,12 @@ class PostEndpoint extends Endpoint {
               targetType: post.postType == PostType.article
                   ? NotificationTargetType.article
                   : post.postType == PostType.poll
-                      ? NotificationTargetType.poll
-                      : post.postType == PostType.commentReply
-                          ? NotificationTargetType.reply
-                          : post.postType == PostType.comment
-                              ? NotificationTargetType.comment
-                              : NotificationTargetType.post,
+                  ? NotificationTargetType.poll
+                  : post.postType == PostType.commentReply
+                  ? NotificationTargetType.reply
+                  : post.postType == PostType.comment
+                  ? NotificationTargetType.comment
+                  : NotificationTargetType.post,
               targetId: post.id!,
               senderAvatarUrl: user.userInfo!.imageUrl!,
               senderName: getFullName(
@@ -2098,7 +1873,11 @@ class PostEndpoint extends Endpoint {
                 user.lastName!,
               ),
               actionRoute:
-                  '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
+                  '/feed/${post.article != null
+                      ? 'article'
+                      : post.poll != null
+                      ? 'poll'
+                      : 'post'}/${post.id}',
               body: _getNotificationBody(post.text ?? ''),
               postId: post.id!,
             ),
@@ -2112,12 +1891,12 @@ class PostEndpoint extends Endpoint {
               targetType: post.postType == PostType.article
                   ? NotificationTargetType.article
                   : post.postType == PostType.poll
-                      ? NotificationTargetType.poll
-                      : post.postType == PostType.commentReply
-                          ? NotificationTargetType.reply
-                          : post.postType == PostType.comment
-                              ? NotificationTargetType.comment
-                              : NotificationTargetType.post,
+                  ? NotificationTargetType.poll
+                  : post.postType == PostType.commentReply
+                  ? NotificationTargetType.reply
+                  : post.postType == PostType.comment
+                  ? NotificationTargetType.comment
+                  : NotificationTargetType.post,
               targetId: post.id!,
               senderAvatarUrl: user.userInfo!.imageUrl!,
               senderName: getFullName(
@@ -2126,7 +1905,11 @@ class PostEndpoint extends Endpoint {
                 user.lastName!,
               ),
               actionRoute:
-                  '/feed/${post.article != null ? 'article' : post.poll != null ? 'poll' : 'post'}/${post.id}',
+                  '/feed/${post.article != null
+                      ? 'article'
+                      : post.poll != null
+                      ? 'poll'
+                      : 'post'}/${post.id}',
               body: _getNotificationBody(post.text ?? ''),
             ),
           );
@@ -2161,9 +1944,7 @@ class PostEndpoint extends Endpoint {
       );
 
       if (post == null) {
-        throw ServerSideException(
-          message: 'Post not found',
-        );
+        throw ServerSideException(message: 'Post not found');
       }
 
       final exists = await PostSubscription.db.findFirstRow(
@@ -2241,23 +2022,15 @@ class PostEndpoint extends Endpoint {
         orderDescending: true,
         include: PostBookmarks.include(
           post: Post.include(
-            owner: UserRecord.include(
-              userInfo: UserInfo.include(),
-            ),
+            owner: UserRecord.include(userInfo: UserInfo.include()),
             mediaAssets: MediaAsset.includeList(),
             project: Project.include(
-              owner: UserRecord.include(
-                userInfo: UserInfo.include(),
-              ),
+              owner: UserRecord.include(userInfo: UserInfo.include()),
             ),
-            poll: Poll.include(
-              options: PollOption.includeList(),
-            ),
+            poll: Poll.include(options: PollOption.includeList()),
             article: Article.include(),
             parent: Post.include(
-              owner: UserRecord.include(
-                userInfo: UserInfo.include(),
-              ),
+              owner: UserRecord.include(userInfo: UserInfo.include()),
               mediaAssets: MediaAsset.includeList(),
             ),
           ),
@@ -2287,8 +2060,10 @@ class PostEndpoint extends Endpoint {
     if (posts.isEmpty) return const <PostWithUserState>[];
 
     final postIds = posts.map((p) => p.id!).toSet();
-    final pollIds =
-        posts.where((p) => p.pollId != null).map((p) => p.pollId!).toSet();
+    final pollIds = posts
+        .where((p) => p.pollId != null)
+        .map((p) => p.pollId!)
+        .toSet();
     final ownerIds = posts.map((p) => p.ownerId).whereType<int>().toSet();
 
     Future<Set<int>> asIdSet<T>(Future<List<T>> fut, int Function(T) id) async {
@@ -2357,8 +2132,9 @@ class PostEndpoint extends Endpoint {
             hasReposted: repostedSet.contains(p.id!),
             isSubscribed: subscribedSet.contains(p.id!),
             isFollower: followingOwnerSet.contains(p.ownerId),
-            selectedPollOptionId:
-                p.pollId != null ? selectedOptionByPollId[p.pollId!] : null,
+            selectedPollOptionId: p.pollId != null
+                ? selectedOptionByPollId[p.pollId!]
+                : null,
           ),
         )
         .toList();
@@ -2401,10 +2177,7 @@ class PostEndpoint extends Endpoint {
 
   /// Stream of post count updates (likes, reposts, bookmarks, comments,
   /// impressions) for a given post id.
-  Stream<PostCounts> postCountsUpdates(
-    Session session,
-    int postId,
-  ) async* {
+  Stream<PostCounts> postCountsUpdates(Session session, int postId) async* {
     final updateStream = session.messages.createStream<PostCounts>(
       'post_counts_$postId',
     );
@@ -2417,8 +2190,9 @@ class PostEndpoint extends Endpoint {
 
   /// Stream of poll count updates for a given poll id.
   Stream<PollCounts> pollCountsUpdates(Session session, int pollId) async* {
-    final stream =
-        session.messages.createStream<PollCounts>('poll_counts_$pollId');
+    final stream = session.messages.createStream<PollCounts>(
+      'poll_counts_$pollId',
+    );
     final initial = await _loadCounts(session, pollId);
     if (initial != null) yield initial;
     await for (final update in stream) {
@@ -2433,18 +2207,19 @@ class PostEndpoint extends Endpoint {
       votesCount: poll.votesCount ?? 0,
       options: poll.options
           ?.map(
-            (o) => PollOptionCount(
-              optionId: o.id!,
-              votesCount: o.votesCount ?? 0,
-            ),
+            (o) =>
+                PollOptionCount(optionId: o.id!, votesCount: o.votesCount ?? 0),
           )
           .toList(),
     );
   }
 
   /// Loads poll counts for a given poll id, including its options.
-  Future<PollCounts?> _loadCounts(Session session, int pollId,
-      {Transaction? transaction}) async {
+  Future<PollCounts?> _loadCounts(
+    Session session,
+    int pollId, {
+    Transaction? transaction,
+  }) async {
     final poll = await Poll.db.findById(
       session,
       pollId,
@@ -2458,14 +2233,10 @@ class PostEndpoint extends Endpoint {
   /// Returns the authenticated `UserRecord` or throws if unauthenticated.
   /// Uses a local priority cache to speed up repeated lookups.
   @doNotGenerate
-  Future<UserRecord> authUser(
-    Session session,
-  ) async {
+  Future<UserRecord> authUser(Session session) async {
     final authInfo = session.authenticated;
     if (authInfo == null) {
-      throw ServerSideException(
-        message: 'You must be logged in',
-      );
+      throw ServerSideException(message: 'You must be logged in');
     }
 
     var cacheKey = 'UserData-${authInfo.userId}';
@@ -2475,17 +2246,13 @@ class PostEndpoint extends Endpoint {
       userRecord = await UserRecord.db.findFirstRow(
         session,
         where: (row) => row.userInfoId.equals(authInfo.userId),
-        include: UserRecord.include(
-          userInfo: UserInfo.include(),
-        ),
+        include: UserRecord.include(userInfo: UserInfo.include()),
       );
       if (userRecord != null) {
         await session.caches.localPrio.put(
           cacheKey,
           userRecord,
-          lifetime: Duration(
-            days: 1,
-          ),
+          lifetime: Duration(days: 1),
         );
         return userRecord;
       }
@@ -2509,20 +2276,14 @@ class PostEndpoint extends Endpoint {
       postId,
       include: Post.include(
         article: Article.include(),
-        poll: Poll.include(
-          options: PollOption.includeList(),
-        ),
+        poll: Poll.include(options: PollOption.includeList()),
       ),
     );
     if (post == null) {
-      throw ServerSideException(
-        message: 'Post not found',
-      );
+      throw ServerSideException(message: 'Post not found');
     }
     if (post.ownerId != user.id) {
-      throw ServerSideException(
-        message: 'Unauthorised operation',
-      );
+      throw ServerSideException(message: 'Unauthorised operation');
     }
     return post;
   }
@@ -2553,9 +2314,7 @@ class PostEndpoint extends Endpoint {
       );
     }
     if (comment.ownerId != user.id) {
-      throw ServerSideException(
-        message: 'Unauthorised operation',
-      );
+      throw ServerSideException(message: 'Unauthorised operation');
     }
     return comment;
   }
@@ -2572,16 +2331,19 @@ class PostEndpoint extends Endpoint {
 
   /// Persists changes to a poll and emits real-time count updates.
   @doNotGenerate
-  Future<void> updatePoll(Session session, Poll poll,
-      {Transaction? transaction}) async {
+  Future<void> updatePoll(
+    Session session,
+    Poll poll, {
+    Transaction? transaction,
+  }) async {
     await Poll.db.updateRow(session, poll, transaction: transaction);
-    final counts =
-        await _loadCounts(session, poll.id!, transaction: transaction);
+    final counts = await _loadCounts(
+      session,
+      poll.id!,
+      transaction: transaction,
+    );
     if (counts != null) {
-      session.messages.postMessage(
-        'poll_counts_${poll.id}',
-        counts,
-      );
+      session.messages.postMessage('poll_counts_${poll.id}', counts);
     }
   }
 

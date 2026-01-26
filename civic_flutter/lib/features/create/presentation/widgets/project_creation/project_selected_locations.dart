@@ -132,7 +132,7 @@ class ProjectSelectedLocations extends ConsumerWidget {
             ],
           );
         },
-        separatorBuilder: (_, __) {
+        separatorBuilder: (_, _) {
           return const SizedBox(
             height: TSizes.md,
           );

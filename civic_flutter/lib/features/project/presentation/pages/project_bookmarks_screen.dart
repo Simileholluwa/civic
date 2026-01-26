@@ -98,7 +98,7 @@ class ProjectBookmarksScreen extends ConsumerWidget {
           body: AppInfiniteList<Project>(
             pagingController: pagingState,
             canCreate: false,
-            itemBuilder: (__, project, _) {
+            itemBuilder: (_, project, _) {
               return ProjectCard(
                 project: project,
               );

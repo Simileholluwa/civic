@@ -70,7 +70,7 @@ class CommentScreen extends ConsumerWidget {
                   const SizedBox(width: 5),
                 ];
               },
-              error: (_, __) => null,
+              error: (_, _) => null,
               loading: () => null,
             ),
           ),
@@ -96,7 +96,7 @@ class CommentScreen extends ConsumerWidget {
             ),
           ],
         ),
-        error: (error, __) {
+        error: (error, _) {
           final err = error as Map<String, dynamic>?;
           if (err != null && err['action'] == 'retry') {
             return Padding(

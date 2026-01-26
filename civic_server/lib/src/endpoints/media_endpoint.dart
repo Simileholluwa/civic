@@ -1,3 +1,4 @@
+import 'package:civic_server/src/generated/endpoints.dart';
 import 'package:civic_server/src/generated/protocol.dart';
 import 'package:civic_server/src/services/media_service.dart';
 import 'package:serverpod/serverpod.dart';
@@ -32,11 +33,7 @@ class MediaEndpoint extends Endpoint {
       (k) => k.name == kind,
       orElse: () => MediaKind.image,
     );
-    return _service.confirmUpload(
-      session,
-      path: path,
-      kind: mediaKind,
-    );
+    return _service.confirmUpload(session, path: path, kind: mediaKind);
   }
 
   Future<bool> deleteAsset(Session session, int assetId) async {
@@ -47,23 +44,23 @@ class MediaEndpoint extends Endpoint {
     return _service.deleteAssetsByPost(session, postId);
   }
 
-  Future<int> cleanupTemp(
-    Session session,
-  ) async {
+  Future<int> cleanupTemp(Session session) async {
     return _service.cleanupTemp(session);
   }
 
   Future<void> scheduleCleanup(Session session, {int hours = 24}) async {
     final h = hours <= 0 ? 24 : hours;
-    await session.serverpod.futureCallAtTime(
-      'mediaCleanupFutureCall',
-      MediaCleanupParams(hours: h),
-      DateTime.now().add(Duration(hours: h)),
-    );
+    await session.serverpod.futureCalls
+        .callAtTime(DateTime.now().add(Duration(hours: h)))
+        .mediaCleanup
+        .cleanUpMedia(MediaCleanupParams(hours: h));
   }
 
-  Future<List<MediaAsset>> listAssets(Session session, int postId,
-      {String? kind}) async {
+  Future<List<MediaAsset>> listAssets(
+    Session session,
+    int postId, {
+    String? kind,
+  }) async {
     MediaKind? k;
     if (kind != null) {
       k = MediaKind.values.firstWhere(

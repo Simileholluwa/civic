@@ -72,7 +72,7 @@ class RepliesScreen extends ConsumerWidget {
                   const SizedBox(width: 5),
                 ];
               },
-              error: (_, __) => null,
+              error: (_, _) => null,
               loading: () => null,
             ),
             title: Text(
@@ -106,7 +106,7 @@ class RepliesScreen extends ConsumerWidget {
             ],
           );
         },
-        error: (error, __) {
+        error: (error, _) {
           final err = error as Map<String, dynamic>;
           if (err['action'] == 'retry') {
             return Padding(
