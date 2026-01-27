@@ -11,7 +11,6 @@ class PostBookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Read controller once; internal listen handled by ValueListenableBuilder
     final pagingState = ref.read(paginatedPostBookmarkListProvider);
     final pagingNotifier = ref.read(paginatedPostBookmarkListProvider.notifier);
     return AppAndroidBottomNav(

@@ -142,7 +142,7 @@ class ArticleCard extends ConsumerWidget {
                   aspectRatio: 16 / 9,
                   child: ContentCachedImage(
                     url: post.mediaAssets!.first.publicUrl!,
-                    height: 200,
+                    height: post.mediaAssets!.first.height!.toDouble(),
                   ),
                 ),
               ),

@@ -27,7 +27,7 @@ class AppBottomNavbar extends ConsumerWidget {
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: .8,),
             border: Border(
               top: BorderSide(
                 color: Theme.of(context).dividerColor,

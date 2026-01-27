@@ -51,10 +51,19 @@ class PostCardBuild extends StatelessWidget {
             ),
           ),
         if (hasImage)
-          PostImagePost(
-            post: post,
-            showInteractions: false,
-          ),
+          imageAssetUrls.length == 1
+              ? ContentSingleCachedImage(
+                  imageUrl: imageAssetUrls.first!,
+                  aspectRatio: post.mediaAssets!.first.aspectRatio ??
+                      THelperFunctions.calculateAspectRatio(
+                        width: post.mediaAssets!.first.width,
+                        height: post.mediaAssets!.first.height,
+                      ) ??
+                      1.0,
+                )
+              : PostImagePost(
+                  post: post,
+                ),
         if (hasVideo)
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),

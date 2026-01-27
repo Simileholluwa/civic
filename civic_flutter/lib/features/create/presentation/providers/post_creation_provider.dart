@@ -375,15 +375,32 @@ class PostCreation extends _$PostCreation {
   }
 
   Future<bool> _uploadAssetsToPostId() async {
-    final imagesToUpload = state.imageUrls
+    // Separate local images (to upload) and remote images (already on server)
+    final localImages = state.imageUrls
         .where((p) => !_urlRegex.hasMatch(p))
+        .toList(growable: false);
+    final remoteImages = state.imageUrls
+        .where(_urlRegex.hasMatch)
         .toList(growable: false);
     final videoPath = state.videoUrl;
     final assets = <MediaAsset>[];
-    if (imagesToUpload.isNotEmpty) {
+
+    // Add existing remote image MediaAssets (from state.uploadedAssets)
+    if (remoteImages.isNotEmpty && state.uploadedAssets.isNotEmpty) {
+      final remoteAssets = state.uploadedAssets
+          .where((a) =>
+              a.kind == MediaKind.image &&
+              a.publicUrl != null &&
+              remoteImages.contains(a.publicUrl))
+          .toList();
+      assets.addAll(remoteAssets);
+    }
+
+    // Upload new local images
+    if (localImages.isNotEmpty) {
       final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
-            imagesToUpload,
-          );
+        localImages,
+      );
       if (res.isLeft()) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         final err = res.getLeft().toNullable()!;
@@ -392,6 +409,8 @@ class PostCreation extends _$PostCreation {
       }
       assets.addAll(res.getRight().toNullable()!);
     }
+
+    // Handle video (same logic as before)
     if (videoPath.isNotEmpty && !_urlRegex.hasMatch(videoPath)) {
       final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
         [videoPath],
@@ -403,6 +422,7 @@ class PostCreation extends _$PostCreation {
       }
       assets.addAll(res.getRight().toNullable()!);
     }
+
     state = state.copyWith(uploadedAssets: assets);
     return true;
   }

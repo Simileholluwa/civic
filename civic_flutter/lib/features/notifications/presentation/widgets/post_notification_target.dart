@@ -46,7 +46,6 @@ class PostNotificationTarget extends StatelessWidget {
         if (hasImage)
           PostImagePost(
             post: post,
-            showInteractions: false,
             addPadding: false,
           ),
         if (hasVideo)

@@ -9,6 +9,7 @@ fields:
   size: int?
   width: int?
   height: int?
+  aspectRatio: double?
   durationMs: int?
   kind: MediaKind
   createdAt: DateTime?, default=now

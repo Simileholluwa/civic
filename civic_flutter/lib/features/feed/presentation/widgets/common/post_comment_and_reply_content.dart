@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -86,12 +87,17 @@ class PostCommentAndReplyContent extends StatelessWidget {
             RepaintBoundary(
               child: singleImage
                   ? ContentSingleCachedImage(
-                      imageUrl: imageUrls.first,
+                      imageUrl: imageUrls.first!,
                       useMargin: false,
+                      aspectRatio: assets.first.aspectRatio ??
+                          THelperFunctions.calculateAspectRatio(
+                            width: assets.first.width,
+                            height: assets.first.height,
+                          ) ??
+                          1.0,
                     )
-                  : ContentMultipleCachedImage(
-                      imageUrls: imageUrls,
-                      useMargin: false,
+                  : PostImagePost(
+                      post: replyOrComment,
                     ),
             ),
           if (hasTags || hasLocations)
@@ -142,10 +148,10 @@ class RowIconText extends StatelessWidget {
           child: Text(
             title,
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                  fontSize: 16,
-                ),
+              fontWeight: FontWeight.bold,
+              color: color,
+              fontSize: 16,
+            ),
           ),
         ),
       ],

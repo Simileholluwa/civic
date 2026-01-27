@@ -18,64 +18,55 @@ class CommentScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor),
-              ),
-            ),
-            child: AppBar(
-              leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left_2),
-                onPressed: () => context.pop(),
-              ),
-              title: Text(
-                'Comments',
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 23,
-                    ),
-              ),
-              titleSpacing: 0,
-              actions: asyncPost.when(
-                data: (post) {
-                  final isOwner = post.post.owner?.id == userId;
-                  final isSubscribed = ref.watch(
-                    feedButtonsProvider(PostWithUserStateKey(post))
-                        .select((s) => s.isSubscribed),
-                  );
-                  final postButtonsNotifier = ref.read(
-                    feedButtonsProvider(PostWithUserStateKey(post)).notifier,
-                  );
-                  return [
-                    IconButton(
-                      onPressed: isOwner
-                          ? null
-                          : () async {
-                              await postButtonsNotifier.subscribeToNotifications(
-                                post.post.id!,
-                              );
-                            },
-                      icon: Icon(
-                        isSubscribed
-                            ? Iconsax.notification_bing5
-                            : Iconsax.notification_bing,
-                        color: isOwner
-                            ? Theme.of(context).disabledColor
-                            : isSubscribed
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color,
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                  ];
-                },
-                error: (_, _) => null,
-                loading: () => null,
-              ),
-            ),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Iconsax.arrow_left_2),
+            onPressed: () => context.pop(),
+          ),
+          title: Text(
+            'Comments',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 23,
+                ),
+          ),
+          titleSpacing: 0,
+          bottom: const PreferredSize(preferredSize: Size.fromHeight(1,), child: Divider(height: 0,),),
+          actions: asyncPost.when(
+            data: (post) {
+              final isOwner = post.post.owner?.id == userId;
+              final isSubscribed = ref.watch(
+                feedButtonsProvider(PostWithUserStateKey(post))
+                    .select((s) => s.isSubscribed),
+              );
+              final postButtonsNotifier = ref.read(
+                feedButtonsProvider(PostWithUserStateKey(post)).notifier,
+              );
+              return [
+                IconButton(
+                  onPressed: isOwner
+                      ? null
+                      : () async {
+                          await postButtonsNotifier.subscribeToNotifications(
+                            post.post.id!,
+                          );
+                        },
+                  icon: Icon(
+                    isSubscribed
+                        ? Iconsax.notification_bing5
+                        : Iconsax.notification_bing,
+                    color: isOwner
+                        ? Theme.of(context).disabledColor
+                        : isSubscribed
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color,
+                    size: 26,
+                  ),
+                ),
+                const SizedBox(width: 5),
+              ];
+            },
+            error: (_, _) => null,
+            loading: () => null,
           ),
         ),
         bottomNavigationBar: asyncPost.when(
@@ -115,16 +106,13 @@ class CommentScreen extends ConsumerWidget {
           loading: () => null,
         ),
         body: asyncPost.when(
-          data: (_) => Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: PostCommentCard(
-              id: id,
-              firstPageProgressIndicator: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: LoadingAnimationWidget.progressiveDots(
-                  color: TColors.primary,
-                  size: 50,
-                ),
+          data: (_) => PostCommentCard(
+            id: id,
+            firstPageProgressIndicator: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: LoadingAnimationWidget.progressiveDots(
+                color: TColors.primary,
+                size: 50,
               ),
             ),
           ),

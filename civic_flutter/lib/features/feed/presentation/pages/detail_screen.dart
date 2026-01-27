@@ -27,72 +27,68 @@ class DetailScreen extends ConsumerWidget {
     );
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
+        appBar: AppBar(
+          titleSpacing: 0,
+          leading: IconButton(
+            icon: const Icon(
+              Iconsax.arrow_left_2,
             ),
-            child: AppBar(
-              titleSpacing: 0,
-              leading: IconButton(
-                icon: const Icon(
-                  Iconsax.arrow_left_2,
-                ),
-                onPressed: () {
-                  context.pop();
-                },
-              ),
-              actions: [
-                asyncPost.when(
-                  data: (value) {
-                    final postData = value.post;
-                    final userId =
-                        ref.read(localStorageProvider).getInt('userId');
-                    final isOwner = postData.ownerId == userId;
-                    final isSubscribed = ref.watch(
-                      feedButtonsProvider(PostWithUserStateKey(value)).select(
-                        (s) => s.isSubscribed,
-                      ),
-                    );
-                    final notifier = ref.read(
-                      feedButtonsProvider(PostWithUserStateKey(value)).notifier,
-                    );
-                    return Row(
-                      children: [
-                        IconButton(
-                          onPressed: isOwner
-                              ? null
-                              : () async {
-                                  await notifier.subscribeToNotifications(
-                                    postData.id!,
-                                  );
-                                },
-                          icon: Icon(
-                            isSubscribed
-                                ? Iconsax.notification5
-                                : Iconsax.notification,
-                            color: isOwner
-                                ? Theme.of(context).disabledColor
-                                : isSubscribed
-                                    ? TColors.primary
-                                    : Theme.of(context).iconTheme.color,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                      ],
-                    );
-                  },
-                  error: (_, _) => const SizedBox.shrink(),
-                  loading: () => const SizedBox.shrink(),
-                ),
-              ],
+            onPressed: () {
+              context.pop();
+            },
+          ),
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(
+              1,
+            ),
+            child: Divider(
+              height: 0,
             ),
           ),
+          actions: [
+            asyncPost.when(
+              data: (value) {
+                final postData = value.post;
+                final userId =
+                    ref.read(localStorageProvider).getInt('userId');
+                final isOwner = postData.ownerId == userId;
+                final isSubscribed = ref.watch(
+                  feedButtonsProvider(PostWithUserStateKey(value)).select(
+                    (s) => s.isSubscribed,
+                  ),
+                );
+                final notifier = ref.read(
+                  feedButtonsProvider(PostWithUserStateKey(value)).notifier,
+                );
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: isOwner
+                          ? null
+                          : () async {
+                              await notifier.subscribeToNotifications(
+                                postData.id!,
+                              );
+                            },
+                      icon: Icon(
+                        isSubscribed
+                            ? Iconsax.notification5
+                            : Iconsax.notification,
+                        color: isOwner
+                            ? Theme.of(context).disabledColor
+                            : isSubscribed
+                                ? TColors.primary
+                                : Theme.of(context).iconTheme.color,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                  ],
+                );
+              },
+              error: (_, _) => const SizedBox.shrink(),
+              loading: () => const SizedBox.shrink(),
+            ),
+          ],
         ),
         body: asyncPost.when(
           data: (value) {
@@ -155,7 +151,7 @@ class DetailScreen extends ConsumerWidget {
                   else
                     Column(
                       children: [
-                        if (postType == PostType.regular)
+                        if (postType == PostType.regular || postType == PostType.comment || postType == PostType.commentReply)
                           RepaintBoundary(
                             child: PostCardDetail(
                               postWithUserState: value,

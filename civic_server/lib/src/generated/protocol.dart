@@ -696,6 +696,12 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int?',
         ),
         _i2.ColumnDefinition(
+          name: 'aspectRatio',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
           name: 'durationMs',
           columnType: _i2.ColumnType.bigint,
           isNullable: true,

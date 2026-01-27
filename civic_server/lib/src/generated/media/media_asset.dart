@@ -31,6 +31,7 @@ abstract class MediaAsset
     this.size,
     this.width,
     this.height,
+    this.aspectRatio,
     this.durationMs,
     required this.kind,
     DateTime? createdAt,
@@ -49,6 +50,7 @@ abstract class MediaAsset
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     required _i4.MediaKind kind,
     DateTime? createdAt,
@@ -74,6 +76,7 @@ abstract class MediaAsset
       size: jsonSerialization['size'] as int?,
       width: jsonSerialization['width'] as int?,
       height: jsonSerialization['height'] as int?,
+      aspectRatio: (jsonSerialization['aspectRatio'] as num?)?.toDouble(),
       durationMs: jsonSerialization['durationMs'] as int?,
       kind: _i4.MediaKind.fromJson((jsonSerialization['kind'] as String)),
       createdAt: jsonSerialization['createdAt'] == null
@@ -112,6 +115,8 @@ abstract class MediaAsset
 
   int? height;
 
+  double? aspectRatio;
+
   int? durationMs;
 
   _i4.MediaKind kind;
@@ -138,6 +143,7 @@ abstract class MediaAsset
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     _i4.MediaKind? kind,
     DateTime? createdAt,
@@ -158,6 +164,7 @@ abstract class MediaAsset
       if (size != null) 'size': size,
       if (width != null) 'width': width,
       if (height != null) 'height': height,
+      if (aspectRatio != null) 'aspectRatio': aspectRatio,
       if (durationMs != null) 'durationMs': durationMs,
       'kind': kind.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
@@ -180,6 +187,7 @@ abstract class MediaAsset
       if (size != null) 'size': size,
       if (width != null) 'width': width,
       if (height != null) 'height': height,
+      if (aspectRatio != null) 'aspectRatio': aspectRatio,
       if (durationMs != null) 'durationMs': durationMs,
       'kind': kind.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
@@ -238,6 +246,7 @@ class _MediaAssetImpl extends MediaAsset {
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     required _i4.MediaKind kind,
     DateTime? createdAt,
@@ -254,6 +263,7 @@ class _MediaAssetImpl extends MediaAsset {
          size: size,
          width: width,
          height: height,
+         aspectRatio: aspectRatio,
          durationMs: durationMs,
          kind: kind,
          createdAt: createdAt,
@@ -276,6 +286,7 @@ class _MediaAssetImpl extends MediaAsset {
     Object? size = _Undefined,
     Object? width = _Undefined,
     Object? height = _Undefined,
+    Object? aspectRatio = _Undefined,
     Object? durationMs = _Undefined,
     _i4.MediaKind? kind,
     Object? createdAt = _Undefined,
@@ -293,6 +304,7 @@ class _MediaAssetImpl extends MediaAsset {
       size: size is int? ? size : this.size,
       width: width is int? ? width : this.width,
       height: height is int? ? height : this.height,
+      aspectRatio: aspectRatio is double? ? aspectRatio : this.aspectRatio,
       durationMs: durationMs is int? ? durationMs : this.durationMs,
       kind: kind ?? this.kind,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
@@ -341,6 +353,11 @@ class MediaAssetUpdateTable extends _i1.UpdateTable<MediaAssetTable> {
 
   _i1.ColumnValue<int, int> height(int? value) => _i1.ColumnValue(
     table.height,
+    value,
+  );
+
+  _i1.ColumnValue<double, double> aspectRatio(double? value) => _i1.ColumnValue(
+    table.aspectRatio,
     value,
   );
 
@@ -403,6 +420,10 @@ class MediaAssetTable extends _i1.Table<int?> {
       'height',
       this,
     );
+    aspectRatio = _i1.ColumnDouble(
+      'aspectRatio',
+      this,
+    );
     durationMs = _i1.ColumnInt(
       'durationMs',
       this,
@@ -444,6 +465,8 @@ class MediaAssetTable extends _i1.Table<int?> {
   late final _i1.ColumnInt width;
 
   late final _i1.ColumnInt height;
+
+  late final _i1.ColumnDouble aspectRatio;
 
   late final _i1.ColumnInt durationMs;
 
@@ -490,6 +513,7 @@ class MediaAssetTable extends _i1.Table<int?> {
     size,
     width,
     height,
+    aspectRatio,
     durationMs,
     kind,
     createdAt,

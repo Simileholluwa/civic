@@ -52,6 +52,7 @@ class ProjectVettingCard extends ConsumerWidget {
             ContentSingleCachedImage(
               useMargin: false,
               imageUrl: projectVetting.images![0],
+              aspectRatio: 300,
             )
           else
             ContentMultipleCachedImage(

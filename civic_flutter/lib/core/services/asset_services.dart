@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
@@ -53,6 +52,16 @@ class AssetService {
     } on Exception catch (_) {
       return null;
     }
+  }
+
+  double getAspectRatio({
+    required int? width,
+    required int? height,
+  }) {
+    return THelperFunctions.calculateAspectRatio(
+      width: width,
+      height: height,
+    ) ?? 1.0;
   }
 
   bool _isRetryable(Object e) {
@@ -235,11 +244,16 @@ class AssetService {
       int? width;
       int? height;
       int? durationMs;
+      double? aspectRatio;
       if (kind == MediaKind.image) {
         final dims = await _getImageDimensions(mediaPath);
         if (dims != null) {
           width = dims['width'];
           height = dims['height'];
+          aspectRatio = getAspectRatio(
+            width: width,
+            height: height,
+          );
         }
       } else if (kind == MediaKind.video) {
         final dims = await _getVideoDimensions(mediaPath);
@@ -247,6 +261,10 @@ class AssetService {
           width = dims['width'];
           height = dims['height'];
           durationMs = dims['durationMs'];
+          aspectRatio = getAspectRatio(
+            width: width,
+            height: height,
+          );
         }
       }
       final asset = MediaAsset(
@@ -254,13 +272,13 @@ class AssetService {
         objectKey: inferObjectKeyFromUrl(publicUrl) ?? '',
         publicUrl: publicUrl,
         contentType: contentType,
+        aspectRatio: aspectRatio,
         size: length,
         width: width,
         height: height,
         durationMs: durationMs,
         kind: kind,
       );
-      dev.log(asset.toString());
       return right(asset);
     } on ServerpodClientException catch (e) {
       return left(e.message);

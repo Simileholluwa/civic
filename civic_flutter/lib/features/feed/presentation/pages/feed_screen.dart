@@ -64,7 +64,6 @@ class FeedScreen extends ConsumerWidget {
         },
         body: AppInfiniteList<PostWithUserState>(
           pagingController: pagingState,
-          scrollPhysics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, postWithUserState, index) {
             return AdaptivePostCard(
               postWithUserState: postWithUserState,

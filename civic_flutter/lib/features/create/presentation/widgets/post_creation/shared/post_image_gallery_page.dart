@@ -40,10 +40,9 @@ class PostImageGalleryPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(5),
+          preferredSize: Size.fromHeight(1),
           child: Divider(
             height: 0,
-            thickness: .5,
           ),
         ),
         leading: IconButton(

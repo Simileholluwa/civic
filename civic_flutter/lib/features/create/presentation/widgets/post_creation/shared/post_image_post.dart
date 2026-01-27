@@ -11,22 +11,23 @@ class PostImagePost extends ConsumerWidget {
   const PostImagePost({
     required this.post,
     this.addPadding = true,
-    this.showInteractions = true,
     super.key,
   });
 
   final Post post;
-  final bool showInteractions;
   final bool addPadding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final imageUrls = (post.mediaAssets ?? [])
-        .where((a) => a.kind == MediaKind.image)
-        .map((a) => a.publicUrl)
-        .whereType<String>()
-        .where((u) => u.isNotEmpty)
+    final imageAssets = (post.mediaAssets ?? [])
+        .where(
+          (a) =>
+              a.kind == MediaKind.image && (a.publicUrl?.isNotEmpty ?? false),
+        )
+        .toList(growable: false);
+    final imageUrls = imageAssets
+        .map((a) => a.publicUrl!)
         .toList(growable: false);
 
     Future<void> openGallery(String tappedImage) async {
@@ -63,11 +64,12 @@ class PostImagePost extends ConsumerWidget {
       );
     }
 
-    Widget buildCollage(List<String> images) {
-      final display = images.take(4).toList(growable: false);
-      final extra = images.length - display.length;
+    Widget buildDynamicCollage(List<MediaAsset> assets) {
+      final display = assets.take(4).toList(growable: false);
+      final extra = assets.length - display.length;
 
-      Widget tile(String img, {BorderRadius? radius}) {
+      Widget tile(MediaAsset asset, {BorderRadius? radius}) {
+        final img = asset.publicUrl!;
         return ClipRRect(
           borderRadius: radius ?? BorderRadius.circular(TSizes.sm),
           child: InkWell(
@@ -82,27 +84,27 @@ class PostImagePost extends ConsumerWidget {
         );
       }
 
-      Widget overlayTile(String img, int extra) {
+      Widget overlayTile(MediaAsset asset, int extra) {
         return Stack(
           fit: StackFit.expand,
           children: [
             tile(
-              img,
+              asset,
               radius: const BorderRadius.only(
                 bottomRight: Radius.circular(TSizes.md),
               ),
             ),
             InkWell(
-              onTap: () => openGallery(img),
+              onTap: () => openGallery(asset.publicUrl!),
               child: Container(
                 color: Colors.black45,
                 alignment: Alignment.center,
                 child: Text(
                   '+$extra',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -110,48 +112,167 @@ class PostImagePost extends ConsumerWidget {
         );
       }
 
+      final aspectRatios = display.map((a) {
+        final w = a.width ?? 1;
+        final h = a.height ?? 1;
+        return w / h;
+      }).toList();
+
       if (display.length == 2) {
-        return Row(
-          children: [
-            Expanded(
-              child: tile(
-                display[0],
-                radius: const BorderRadius.only(
-                  topLeft: Radius.circular(TSizes.md),
-                  bottomLeft: Radius.circular(
-                    TSizes.md,
+        final ar0 = aspectRatios[0];
+        final ar1 = aspectRatios[1];
+        final isLandscape0 = ar0 >= 1.0;
+        final isLandscape1 = ar1 >= 1.0;
+
+        if (isLandscape0 && isLandscape1) {
+          return Column(
+            children: [
+              Expanded(
+                flex: (ar0 * 100).toInt(),
+                child: tile(
+                  display[0],
+                  radius: const BorderRadius.only(
+                    topLeft: Radius.circular(TSizes.md),
+                    topRight: Radius.circular(TSizes.md),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: tile(
-                display[1],
-                radius: const BorderRadius.only(
-                  topRight: Radius.circular(TSizes.md),
-                  bottomRight: Radius.circular(
-                    TSizes.md,
+              const SizedBox(height: 4),
+              Expanded(
+                flex: (ar1 * 100).toInt(),
+                child: tile(
+                  display[1],
+                  radius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(TSizes.md),
+                    bottomRight: Radius.circular(TSizes.md),
                   ),
                 ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
+        } else if (!isLandscape0 && !isLandscape1) {
+          return Row(
+            children: [
+              Expanded(
+                flex: (1 / ar0 * 100).toInt(),
+                child: tile(
+                  display[0],
+                  radius: const BorderRadius.only(
+                    topLeft: Radius.circular(TSizes.md),
+                    topRight: Radius.circular(TSizes.md),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                flex: (1 / ar1 * 100).toInt(),
+                child: tile(
+                  display[1],
+                  radius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(TSizes.md),
+                    bottomRight: Radius.circular(TSizes.md),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Row(
+            children: [
+              Expanded(
+                child: tile(
+                  display[0],
+                  radius: const BorderRadius.only(
+                    topLeft: Radius.circular(TSizes.md),
+                    bottomLeft: Radius.circular(TSizes.md),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: tile(
+                  display[1],
+                  radius: const BorderRadius.only(
+                    topRight: Radius.circular(TSizes.md),
+                    bottomRight: Radius.circular(TSizes.md),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
       }
+
       if (display.length == 3) {
+        final maxIdx = aspectRatios.indexOf(
+          aspectRatios.reduce((a, b) => a > b ? a : b),
+        );
+        final main = display[maxIdx];
+        final others = List<MediaAsset>.from(display)..removeAt(maxIdx);
         return Row(
           children: [
             Expanded(
               flex: 2,
               child: tile(
-                display[0],
+                main,
                 radius: const BorderRadius.only(
                   topLeft: Radius.circular(TSizes.md),
-                  bottomLeft: Radius.circular(
-                    TSizes.md,
-                  ),
+                  bottomLeft: Radius.circular(TSizes.md),
                 ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: tile(
+                      others[0],
+                      radius: const BorderRadius.only(
+                        topRight: Radius.circular(TSizes.md),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Expanded(
+                    child: tile(
+                      others[1],
+                      radius: const BorderRadius.only(
+                        bottomRight: Radius.circular(TSizes.md),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+
+      if (display.length == 4) {
+        return Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: tile(
+                      display[0],
+                      radius: const BorderRadius.only(
+                        topLeft: Radius.circular(TSizes.md),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Expanded(
+                    child: tile(
+                      display[2],
+                      radius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(TSizes.md),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(width: 4),
@@ -162,22 +283,20 @@ class PostImagePost extends ConsumerWidget {
                     child: tile(
                       display[1],
                       radius: const BorderRadius.only(
-                        topRight: Radius.circular(
-                          TSizes.md,
-                        ),
+                        topRight: Radius.circular(TSizes.md),
                       ),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Expanded(
-                    child: tile(
-                      display[2],
-                      radius: const BorderRadius.only(
-                        bottomRight: Radius.circular(
-                          TSizes.md,
-                        ),
-                      ),
-                    ),
+                    child: extra > 0
+                        ? overlayTile(display[3], extra)
+                        : tile(
+                            display[3],
+                            radius: const BorderRadius.only(
+                              bottomRight: Radius.circular(TSizes.md),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -185,97 +304,37 @@ class PostImagePost extends ConsumerWidget {
           ],
         );
       }
-      return Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: tile(
-              display[0],
-              radius: const BorderRadius.only(
-                topLeft: Radius.circular(TSizes.md),
-                bottomLeft: Radius.circular(TSizes.md),
-              ),
-            ),
-          ),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: tile(
-                    display[1],
-                    radius: const BorderRadius.only(
-                      topRight: Radius.circular(TSizes.md),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Expanded(
-                  child: tile(
-                    display[2],
-                    radius: BorderRadius.zero,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Expanded(
-                  child: extra > 0
-                      ? overlayTile(display[3], extra)
-                      : tile(
-                          display[3],
-                          radius: const BorderRadius.only(
-                            bottomRight: Radius.circular(TSizes.md),
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
+
+      return buildSingle(display.first.publicUrl!);
     }
 
     return Padding(
       padding: addPadding
-          ? const EdgeInsets.symmetric(
-              horizontal: TSizes.md,
-            )
+          ? const EdgeInsets.symmetric(horizontal: TSizes.md)
           : EdgeInsets.zero,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            constraints: const BoxConstraints(
-              maxHeight: 500,
-            ),
+            constraints: const BoxConstraints(maxHeight: 500),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).dividerColor,
-              ),
-              borderRadius: BorderRadius.circular(
-                TSizes.md,
-              ),
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(TSizes.md),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(TSizes.md),
               child: AspectRatio(
                 aspectRatio: 1,
-                child: imageUrls.length <= 1
+                child: imageAssets.length <= 1
                     ? buildSingle(imageUrls.first)
                     : LayoutBuilder(
                         builder: (context, constraints) {
-                          return buildCollage(
-                            imageUrls,
-                          );
+                          return buildDynamicCollage(imageAssets);
                         },
                       ),
               ),
             ),
           ),
-          if (imageUrls.isNotEmpty && showInteractions)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: PostImageOptions(post: post),
-            ),
         ],
       ),
     );

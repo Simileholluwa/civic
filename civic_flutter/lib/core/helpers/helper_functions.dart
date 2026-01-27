@@ -18,6 +18,14 @@ import 'package:permission_handler/permission_handler.dart';
 class THelperFunctions {
   THelperFunctions._();
 
+  static double? calculateAspectRatio({
+    required int? width,
+    required int? height,
+  }) {
+    if (width == null || height == null || height == 0) return null;
+    return width / height;
+  }
+
   static Future<void> saveImage(String url) async {
     try {
       final permitted = await _ensureSavePermission();
@@ -50,7 +58,8 @@ class THelperFunctions {
         quality: 100,
         name: name,
       );
-      final success = (result is Map &&
+      final success =
+          (result is Map &&
               (result['isSuccess'] == true || result['isSuccess'] == 'true')) ||
           (result is bool && result);
       if (!success) {
@@ -246,9 +255,9 @@ class THelperFunctions {
     return DefaultStyles(
       h1: DefaultTextBlockStyle(
         Theme.of(context).textTheme.titleLarge!.copyWith(
-              fontSize: 23,
-              height: 1.15,
-            ),
+          fontSize: 23,
+          height: 1.15,
+        ),
         HorizontalSpacing.zero,
         const VerticalSpacing(16, 0),
         VerticalSpacing.zero,
@@ -256,8 +265,8 @@ class THelperFunctions {
       ),
       paragraph: DefaultTextBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 18,
-            ),
+          fontSize: 18,
+        ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
         VerticalSpacing.zero,
@@ -265,9 +274,9 @@ class THelperFunctions {
       ),
       placeHolder: DefaultTextBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 18,
-              color: Theme.of(context).hintColor,
-            ),
+          fontSize: 18,
+          color: Theme.of(context).hintColor,
+        ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
         VerticalSpacing.zero,
@@ -276,8 +285,8 @@ class THelperFunctions {
       sizeSmall: defaultTextStyle.style.copyWith(fontSize: 12),
       lists: DefaultListBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 18,
-            ),
+          fontSize: 18,
+        ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
         VerticalSpacing.zero,
@@ -286,8 +295,8 @@ class THelperFunctions {
       ),
       leading: DefaultListBlockStyle(
         Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 18,
-            ),
+          fontSize: 18,
+        ),
         HorizontalSpacing.zero,
         VerticalSpacing.zero,
         VerticalSpacing.zero,
@@ -438,7 +447,8 @@ class THelperFunctions {
       final start = lastWordMatch.start;
       final end = lastWordMatch.end;
 
-      final newText = textBeforeCursor.replaceRange(start, end, suggestion) +
+      final newText =
+          textBeforeCursor.replaceRange(start, end, suggestion) +
           textAfterCursor;
       textController
         ..text = newText
@@ -451,8 +461,9 @@ class THelperFunctions {
       // If the replaced token was a hashtag, record it in recent hashtags (store without '#').
       final replacedToken = lastWordMatch.group(0)!;
       if (replacedToken.startsWith('#')) {
-        final tagToRecord =
-            suggestion.startsWith('#') ? suggestion.substring(1) : suggestion;
+        final tagToRecord = suggestion.startsWith('#')
+            ? suggestion.substring(1)
+            : suggestion;
         if (tagToRecord.isNotEmpty) {
           ref.read(recentHashtagsProvider.notifier).add(tagToRecord);
         }
@@ -460,10 +471,11 @@ class THelperFunctions {
       ref.read(mentionSuggestionsProvider.notifier).setSuggestions =
           <UserRecord>[];
       ref
-          .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <String>[];
+              .read(
+                hashtagsSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <String>[];
     }
   }
 
@@ -474,15 +486,17 @@ class THelperFunctions {
   ) {
     if (text.isEmpty) {
       ref
-          .read(
-            mentionSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <UserRecord>[];
+              .read(
+                mentionSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <UserRecord>[];
       ref
-          .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <String>[];
+              .read(
+                hashtagsSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <String>[];
       return;
     }
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -497,9 +511,9 @@ class THelperFunctions {
         final recents = selected.length <= 8
             ? selected
             : selected
-                .sublist(selected.length - 8)
-                .reversed
-                .toList(growable: false);
+                  .sublist(selected.length - 8)
+                  .reversed
+                  .toList(growable: false);
         ref.read(mentionSuggestionsProvider.notifier).setSuggestions = recents;
       } else if (lastWord == '#') {
         final recentTags = ref.read(recentHashtagsProvider);
@@ -572,11 +586,12 @@ class THelperFunctions {
       0,
       cursorIndex,
     );
-    final lastWordMatch = RegExp(
-      r'[@#][\w]*$',
-    ).firstMatch(
-      textBeforeCursor,
-    );
+    final lastWordMatch =
+        RegExp(
+          r'[@#][\w]*$',
+        ).firstMatch(
+          textBeforeCursor,
+        );
     return lastWordMatch?.group(
           0,
         ) ??
@@ -600,26 +615,29 @@ class THelperFunctions {
 
     if (results.isNotEmpty) {
       ref
-          .read(
-            mentionSuggestionsProvider.notifier,
-          )
-          .setSuggestions = results;
+              .read(
+                mentionSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          results;
     } else {
       ref
-          .read(
-            mentionSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <UserRecord>[];
+              .read(
+                mentionSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <UserRecord>[];
     }
   }
 
   static Future<void> _fetchHashtags(WidgetRef ref, String query) async {
     if (query.isEmpty) {
       ref
-          .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <String>[];
+              .read(
+                hashtagsSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <String>[];
       return;
     }
     if (query.length <= 1) {
@@ -637,16 +655,18 @@ class THelperFunctions {
 
     if (results.isNotEmpty) {
       ref
-          .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
-          .setSuggestions = results;
+              .read(
+                hashtagsSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          results;
     } else {
       ref
-          .read(
-            hashtagsSuggestionsProvider.notifier,
-          )
-          .setSuggestions = <String>[];
+              .read(
+                hashtagsSuggestionsProvider.notifier,
+              )
+              .setSuggestions =
+          <String>[];
     }
   }
 }

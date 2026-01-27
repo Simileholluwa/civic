@@ -29,6 +29,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
     this.size,
     this.width,
     this.height,
+    this.aspectRatio,
     this.durationMs,
     required this.kind,
     DateTime? createdAt,
@@ -47,6 +48,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     required _i4.MediaKind kind,
     DateTime? createdAt,
@@ -72,6 +74,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
       size: jsonSerialization['size'] as int?,
       width: jsonSerialization['width'] as int?,
       height: jsonSerialization['height'] as int?,
+      aspectRatio: (jsonSerialization['aspectRatio'] as num?)?.toDouble(),
       durationMs: jsonSerialization['durationMs'] as int?,
       kind: _i4.MediaKind.fromJson((jsonSerialization['kind'] as String)),
       createdAt: jsonSerialization['createdAt'] == null
@@ -108,6 +111,8 @@ abstract class MediaAsset implements _i1.SerializableModel {
 
   int? height;
 
+  double? aspectRatio;
+
   int? durationMs;
 
   _i4.MediaKind kind;
@@ -131,6 +136,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     _i4.MediaKind? kind,
     DateTime? createdAt,
@@ -151,6 +157,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
       if (size != null) 'size': size,
       if (width != null) 'width': width,
       if (height != null) 'height': height,
+      if (aspectRatio != null) 'aspectRatio': aspectRatio,
       if (durationMs != null) 'durationMs': durationMs,
       'kind': kind.toJson(),
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
@@ -179,6 +186,7 @@ class _MediaAssetImpl extends MediaAsset {
     int? size,
     int? width,
     int? height,
+    double? aspectRatio,
     int? durationMs,
     required _i4.MediaKind kind,
     DateTime? createdAt,
@@ -195,6 +203,7 @@ class _MediaAssetImpl extends MediaAsset {
          size: size,
          width: width,
          height: height,
+         aspectRatio: aspectRatio,
          durationMs: durationMs,
          kind: kind,
          createdAt: createdAt,
@@ -217,6 +226,7 @@ class _MediaAssetImpl extends MediaAsset {
     Object? size = _Undefined,
     Object? width = _Undefined,
     Object? height = _Undefined,
+    Object? aspectRatio = _Undefined,
     Object? durationMs = _Undefined,
     _i4.MediaKind? kind,
     Object? createdAt = _Undefined,
@@ -234,6 +244,7 @@ class _MediaAssetImpl extends MediaAsset {
       size: size is int? ? size : this.size,
       width: width is int? ? width : this.width,
       height: height is int? ? height : this.height,
+      aspectRatio: aspectRatio is double? ? aspectRatio : this.aspectRatio,
       durationMs: durationMs is int? ? durationMs : this.durationMs,
       kind: kind ?? this.kind,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,

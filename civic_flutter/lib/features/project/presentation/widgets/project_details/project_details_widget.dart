@@ -31,6 +31,7 @@ class ProjectDetailsWidget extends ConsumerWidget {
             ContentSingleCachedImage(
               imageUrl: projectCardState.imagesUrl!.first,
               useMargin: false,
+              aspectRatio: 300,
             )
           else
             ContentMultipleCachedImage(

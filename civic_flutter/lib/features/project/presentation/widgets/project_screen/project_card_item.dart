@@ -56,7 +56,7 @@ class ProjectCardItem extends ConsumerWidget {
             projectCardState.imagesUrl!.length == 1
                 ? ContentSingleCachedImage(
                     imageUrl: projectCardState.imagesUrl!.first,
-                    maxHeight: maxHeight,
+                    aspectRatio: maxHeight,
                   )
                 : ContentMultipleCachedImage(
                     imageUrls: projectCardState.imagesUrl!,

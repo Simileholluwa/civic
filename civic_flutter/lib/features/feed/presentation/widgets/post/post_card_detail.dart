@@ -59,7 +59,9 @@ class PostCardDetail extends StatelessWidget {
             ),
           if (post.postType == PostType.regular ||
               post.postType == PostType.projectQuote ||
-              post.postType == PostType.postQuote)
+              post.postType == PostType.postQuote ||
+              post.postType == PostType.comment ||
+              post.postType == PostType.commentReply)
             PostCardBuild(
               post: post,
               noMaxLines: noMaxLines,

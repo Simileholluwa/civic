@@ -33,6 +33,14 @@ class PostCommentCard extends ConsumerWidget {
       showDivider: false,
       itemBuilder: (context, postWithUserState, index) {
         final comment = postWithUserState.post;
+        final feedProv = feedButtonsProvider(
+          PostWithUserStateKey(postWithUserState),
+        );
+        final commentCount = ref.watch(
+          feedProv.select(
+            (s) => s.numberOfComments,
+          ),
+        );
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -40,14 +48,14 @@ class PostCommentCard extends ConsumerWidget {
           child: Column(
             children: [
               if (index == 0)
-                const SizedBox(height: 5)
+                const SizedBox(height: 15)
               else
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
               PostCommentTreeWidget(
                 commentId: comment.id!,
                 postId: id,
                 comment,
-                comment.commentCount != 0,
+                commentCount != 0,
                 contentRoot: (context, reply) {
                   return PostCommentAndReplyContent(
                     postWithUserState: postWithUserState,
