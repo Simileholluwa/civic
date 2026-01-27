@@ -16,15 +16,15 @@ final class LocalStorageProvider
     extends $FunctionalProvider<LocalStorage, LocalStorage, LocalStorage>
     with $Provider<LocalStorage> {
   const LocalStorageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'localStorageProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localStorageProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$localStorageHash();

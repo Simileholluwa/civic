@@ -14,16 +14,16 @@ const reviewReactionProvider = ReviewReactionFamily._();
 
 final class ReviewReactionProvider
     extends $NotifierProvider<ReviewReaction, ProjectReviewReactionState> {
-  const ReviewReactionProvider._(
-      {required ReviewReactionFamily super.from,
-      required ProjectReview super.argument})
-      : super(
-          retry: null,
-          name: r'reviewReactionProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ReviewReactionProvider._({
+    required ReviewReactionFamily super.from,
+    required ProjectReview super.argument,
+  }) : super(
+         retry: null,
+         name: r'reviewReactionProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$reviewReactionHash();
@@ -63,23 +63,22 @@ String _$reviewReactionHash() => r'ce57572c0c8305dcd752b5a17ed4a45200a37ee9';
 final class ReviewReactionFamily extends $Family
     with
         $ClassFamilyOverride<
-            ReviewReaction,
-            ProjectReviewReactionState,
-            ProjectReviewReactionState,
-            ProjectReviewReactionState,
-            ProjectReview> {
+          ReviewReaction,
+          ProjectReviewReactionState,
+          ProjectReviewReactionState,
+          ProjectReviewReactionState,
+          ProjectReview
+        > {
   const ReviewReactionFamily._()
-      : super(
-          retry: null,
-          name: r'reviewReactionProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'reviewReactionProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ReviewReactionProvider call(
-    ProjectReview projectReview,
-  ) =>
+  ReviewReactionProvider call(ProjectReview projectReview) =>
       ReviewReactionProvider._(argument: projectReview, from: this);
 
   @override
@@ -90,22 +89,25 @@ abstract class _$ReviewReaction extends $Notifier<ProjectReviewReactionState> {
   late final _$args = ref.$arg as ProjectReview;
   ProjectReview get projectReview => _$args;
 
-  ProjectReviewReactionState build(
-    ProjectReview projectReview,
-  );
+  ProjectReviewReactionState build(ProjectReview projectReview);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref
-        as $Ref<ProjectReviewReactionState, ProjectReviewReactionState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<ProjectReviewReactionState, ProjectReviewReactionState>,
-        ProjectReviewReactionState,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<ProjectReviewReactionState, ProjectReviewReactionState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                ProjectReviewReactionState,
+                ProjectReviewReactionState
+              >,
+              ProjectReviewReactionState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

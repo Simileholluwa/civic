@@ -12,18 +12,22 @@ part of 'paginated_comment_list_provider.dart';
 @ProviderFor(PaginatedCommentList)
 const paginatedCommentListProvider = PaginatedCommentListFamily._();
 
-final class PaginatedCommentListProvider extends $NotifierProvider<
-    PaginatedCommentList, Raw<PagingController<int, PostWithUserState>>> {
-  const PaginatedCommentListProvider._(
-      {required PaginatedCommentListFamily super.from,
-      required int super.argument})
-      : super(
-          retry: null,
-          name: r'paginatedCommentListProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+final class PaginatedCommentListProvider
+    extends
+        $NotifierProvider<
+          PaginatedCommentList,
+          Raw<PagingController<int, PostWithUserState>>
+        > {
+  const PaginatedCommentListProvider._({
+    required PaginatedCommentListFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedCommentListProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$paginatedCommentListHash();
@@ -41,12 +45,14 @@ final class PaginatedCommentListProvider extends $NotifierProvider<
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(
-      Raw<PagingController<int, PostWithUserState>> value) {
+    Raw<PagingController<int, PostWithUserState>> value,
+  ) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
           $SyncValueProvider<Raw<PagingController<int, PostWithUserState>>>(
-              value),
+            value,
+          ),
     );
   }
 
@@ -67,23 +73,22 @@ String _$paginatedCommentListHash() =>
 final class PaginatedCommentListFamily extends $Family
     with
         $ClassFamilyOverride<
-            PaginatedCommentList,
-            Raw<PagingController<int, PostWithUserState>>,
-            Raw<PagingController<int, PostWithUserState>>,
-            Raw<PagingController<int, PostWithUserState>>,
-            int> {
+          PaginatedCommentList,
+          Raw<PagingController<int, PostWithUserState>>,
+          Raw<PagingController<int, PostWithUserState>>,
+          Raw<PagingController<int, PostWithUserState>>,
+          int
+        > {
   const PaginatedCommentListFamily._()
-      : super(
-          retry: null,
-          name: r'paginatedCommentListProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'paginatedCommentListProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  PaginatedCommentListProvider call(
-    int postId,
-  ) =>
+  PaginatedCommentListProvider call(int postId) =>
       PaginatedCommentListProvider._(argument: postId, from: this);
 
   @override
@@ -95,23 +100,28 @@ abstract class _$PaginatedCommentList
   late final _$args = ref.$arg as int;
   int get postId => _$args;
 
-  Raw<PagingController<int, PostWithUserState>> build(
-    int postId,
-  );
+  Raw<PagingController<int, PostWithUserState>> build(int postId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref as $Ref<Raw<PagingController<int, PostWithUserState>>,
-        Raw<PagingController<int, PostWithUserState>>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PagingController<int, PostWithUserState>>,
-            Raw<PagingController<int, PostWithUserState>>>,
-        Raw<PagingController<int, PostWithUserState>>,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<
+              Raw<PagingController<int, PostWithUserState>>,
+              Raw<PagingController<int, PostWithUserState>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<PagingController<int, PostWithUserState>>,
+                Raw<PagingController<int, PostWithUserState>>
+              >,
+              Raw<PagingController<int, PostWithUserState>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

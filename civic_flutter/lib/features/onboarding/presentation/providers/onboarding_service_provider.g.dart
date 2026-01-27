@@ -12,20 +12,24 @@ part of 'onboarding_service_provider.dart';
 @ProviderFor(onboardingLocalDatabase)
 const onboardingLocalDatabaseProvider = OnboardingLocalDatabaseProvider._();
 
-final class OnboardingLocalDatabaseProvider extends $FunctionalProvider<
-    OnboardingLocalDatabaseImpl,
-    OnboardingLocalDatabaseImpl,
-    OnboardingLocalDatabaseImpl> with $Provider<OnboardingLocalDatabaseImpl> {
+final class OnboardingLocalDatabaseProvider
+    extends
+        $FunctionalProvider<
+          OnboardingLocalDatabaseImpl,
+          OnboardingLocalDatabaseImpl,
+          OnboardingLocalDatabaseImpl
+        >
+    with $Provider<OnboardingLocalDatabaseImpl> {
   const OnboardingLocalDatabaseProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'onboardingLocalDatabaseProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'onboardingLocalDatabaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$onboardingLocalDatabaseHash();
@@ -33,8 +37,8 @@ final class OnboardingLocalDatabaseProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<OnboardingLocalDatabaseImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   OnboardingLocalDatabaseImpl create(Ref ref) {
@@ -56,20 +60,24 @@ String _$onboardingLocalDatabaseHash() =>
 @ProviderFor(onboardingRepository)
 const onboardingRepositoryProvider = OnboardingRepositoryProvider._();
 
-final class OnboardingRepositoryProvider extends $FunctionalProvider<
-    OnboardingRepositoryImpl,
-    OnboardingRepositoryImpl,
-    OnboardingRepositoryImpl> with $Provider<OnboardingRepositoryImpl> {
+final class OnboardingRepositoryProvider
+    extends
+        $FunctionalProvider<
+          OnboardingRepositoryImpl,
+          OnboardingRepositoryImpl,
+          OnboardingRepositoryImpl
+        >
+    with $Provider<OnboardingRepositoryImpl> {
   const OnboardingRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'onboardingRepositoryProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'onboardingRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$onboardingRepositoryHash();
@@ -77,8 +85,8 @@ final class OnboardingRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<OnboardingRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   OnboardingRepositoryImpl create(Ref ref) {
@@ -100,20 +108,24 @@ String _$onboardingRepositoryHash() =>
 @ProviderFor(cacheFirstTimeUseCase)
 const cacheFirstTimeUseCaseProvider = CacheFirstTimeUseCaseProvider._();
 
-final class CacheFirstTimeUseCaseProvider extends $FunctionalProvider<
-    CacheFirstTimerUseCase,
-    CacheFirstTimerUseCase,
-    CacheFirstTimerUseCase> with $Provider<CacheFirstTimerUseCase> {
+final class CacheFirstTimeUseCaseProvider
+    extends
+        $FunctionalProvider<
+          CacheFirstTimerUseCase,
+          CacheFirstTimerUseCase,
+          CacheFirstTimerUseCase
+        >
+    with $Provider<CacheFirstTimerUseCase> {
   const CacheFirstTimeUseCaseProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'cacheFirstTimeUseCaseProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cacheFirstTimeUseCaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$cacheFirstTimeUseCaseHash();
@@ -121,8 +133,8 @@ final class CacheFirstTimeUseCaseProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<CacheFirstTimerUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   CacheFirstTimerUseCase create(Ref ref) {

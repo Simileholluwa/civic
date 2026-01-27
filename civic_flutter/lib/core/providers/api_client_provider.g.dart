@@ -15,15 +15,15 @@ const clientProvider = ClientProvider._();
 final class ClientProvider extends $FunctionalProvider<Client, Client, Client>
     with $Provider<Client> {
   const ClientProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'clientProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clientProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$clientHash();
@@ -47,25 +47,29 @@ final class ClientProvider extends $FunctionalProvider<Client, Client, Client>
   }
 }
 
-String _$clientHash() => r'1e9e56e37a6e5ccf828c6a8fefb9786c3d481637';
+String _$clientHash() => r'2198fef6fde7871d338afb7dfa73ec5cebb25d87';
 
 @ProviderFor(session)
 const sessionProvider = SessionProvider._();
 
-final class SessionProvider extends $FunctionalProvider<
-    Raw<SessionManager>,
-    Raw<SessionManager>,
-    Raw<SessionManager>> with $Provider<Raw<SessionManager>> {
+final class SessionProvider
+    extends
+        $FunctionalProvider<
+          Raw<SessionManager>,
+          Raw<SessionManager>,
+          Raw<SessionManager>
+        >
+    with $Provider<Raw<SessionManager>> {
   const SessionProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'sessionProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$sessionHash();
@@ -73,8 +77,8 @@ final class SessionProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<Raw<SessionManager>> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   Raw<SessionManager> create(Ref ref) {
@@ -95,20 +99,24 @@ String _$sessionHash() => r'9b5a88b134b0d73282d813be5e40fbc068fff553';
 @ProviderFor(authEmail)
 const authEmailProvider = AuthEmailProvider._();
 
-final class AuthEmailProvider extends $FunctionalProvider<
-    EmailAuthController,
-    EmailAuthController,
-    EmailAuthController> with $Provider<EmailAuthController> {
+final class AuthEmailProvider
+    extends
+        $FunctionalProvider<
+          EmailAuthController,
+          EmailAuthController,
+          EmailAuthController
+        >
+    with $Provider<EmailAuthController> {
   const AuthEmailProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authEmailProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authEmailProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authEmailHash();
@@ -116,8 +124,8 @@ final class AuthEmailProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<EmailAuthController> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   EmailAuthController create(Ref ref) {

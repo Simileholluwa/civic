@@ -12,19 +12,24 @@ part of 'load_project_drafts_provider.dart';
 @ProviderFor(loaddraftProjects)
 const loaddraftProjectsProvider = LoaddraftProjectsProvider._();
 
-final class LoaddraftProjectsProvider extends $FunctionalProvider<
-        AsyncValue<List<Project>>, List<Project>, FutureOr<List<Project>>>
+final class LoaddraftProjectsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Project>>,
+          List<Project>,
+          FutureOr<List<Project>>
+        >
     with $FutureModifier<List<Project>>, $FutureProvider<List<Project>> {
   const LoaddraftProjectsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'loaddraftProjectsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'loaddraftProjectsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$loaddraftProjectsHash();
@@ -32,8 +37,8 @@ final class LoaddraftProjectsProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<Project>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<Project>> create(Ref ref) {

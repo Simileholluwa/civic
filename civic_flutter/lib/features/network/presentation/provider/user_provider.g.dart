@@ -15,15 +15,15 @@ const currentActiveUserProvider = CurrentActiveUserProvider._();
 final class CurrentActiveUserProvider
     extends $NotifierProvider<CurrentActiveUser, UserState> {
   const CurrentActiveUserProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'currentActiveUserProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentActiveUserProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$currentActiveUserHash();
@@ -50,8 +50,14 @@ abstract class _$CurrentActiveUser extends $Notifier<UserState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<UserState, UserState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<UserState, UserState>, UserState, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<UserState, UserState>,
+              UserState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

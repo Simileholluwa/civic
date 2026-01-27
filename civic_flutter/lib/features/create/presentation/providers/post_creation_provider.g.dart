@@ -14,15 +14,16 @@ const postCreationProvider = PostCreationFamily._();
 
 final class PostCreationProvider
     extends $NotifierProvider<PostCreation, PostCreationState> {
-  const PostCreationProvider._(
-      {required PostCreationFamily super.from, required Post? super.argument})
-      : super(
-          retry: null,
-          name: r'postCreationProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const PostCreationProvider._({
+    required PostCreationFamily super.from,
+    required Post? super.argument,
+  }) : super(
+         retry: null,
+         name: r'postCreationProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$postCreationHash();
@@ -57,24 +58,27 @@ final class PostCreationProvider
   }
 }
 
-String _$postCreationHash() => r'5c7edc6b33e76d3453044424baf3fdbf95c86dea';
+String _$postCreationHash() => r'9d75e9e7362c820208facf33f14f708b89d3fa5e';
 
 final class PostCreationFamily extends $Family
     with
-        $ClassFamilyOverride<PostCreation, PostCreationState, PostCreationState,
-            PostCreationState, Post?> {
+        $ClassFamilyOverride<
+          PostCreation,
+          PostCreationState,
+          PostCreationState,
+          PostCreationState,
+          Post?
+        > {
   const PostCreationFamily._()
-      : super(
-          retry: null,
-          name: r'postCreationProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'postCreationProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  PostCreationProvider call(
-    Post? post,
-  ) =>
+  PostCreationProvider call(Post? post) =>
       PostCreationProvider._(argument: post, from: this);
 
   @override
@@ -85,21 +89,20 @@ abstract class _$PostCreation extends $Notifier<PostCreationState> {
   late final _$args = ref.$arg as Post?;
   Post? get post => _$args;
 
-  PostCreationState build(
-    Post? post,
-  );
+  PostCreationState build(Post? post);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<PostCreationState, PostCreationState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PostCreationState, PostCreationState>,
-        PostCreationState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<PostCreationState, PostCreationState>,
+              PostCreationState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

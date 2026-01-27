@@ -15,15 +15,15 @@ const feedImpressionsProvider = FeedImpressionsProvider._();
 final class FeedImpressionsProvider
     extends $NotifierProvider<FeedImpressions, int> {
   const FeedImpressionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedImpressionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedImpressionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedImpressionsHash();
@@ -50,8 +50,14 @@ abstract class _$FeedImpressions extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

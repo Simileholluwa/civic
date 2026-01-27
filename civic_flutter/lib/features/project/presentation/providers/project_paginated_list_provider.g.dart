@@ -12,18 +12,22 @@ part of 'project_paginated_list_provider.dart';
 @ProviderFor(PaginatedProjectList)
 const paginatedProjectListProvider = PaginatedProjectListFamily._();
 
-final class PaginatedProjectListProvider extends $NotifierProvider<
-    PaginatedProjectList, Raw<PagingController<int, Project>>> {
-  const PaginatedProjectListProvider._(
-      {required PaginatedProjectListFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'paginatedProjectListProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+final class PaginatedProjectListProvider
+    extends
+        $NotifierProvider<
+          PaginatedProjectList,
+          Raw<PagingController<int, Project>>
+        > {
+  const PaginatedProjectListProvider._({
+    required PaginatedProjectListFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedProjectListProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$paginatedProjectListHash();
@@ -43,8 +47,9 @@ final class PaginatedProjectListProvider extends $NotifierProvider<
   Override overrideWithValue(Raw<PagingController<int, Project>> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<Raw<PagingController<int, Project>>>(value),
+      providerOverride: $SyncValueProvider<Raw<PagingController<int, Project>>>(
+        value,
+      ),
     );
   }
 
@@ -65,23 +70,22 @@ String _$paginatedProjectListHash() =>
 final class PaginatedProjectListFamily extends $Family
     with
         $ClassFamilyOverride<
-            PaginatedProjectList,
-            Raw<PagingController<int, Project>>,
-            Raw<PagingController<int, Project>>,
-            Raw<PagingController<int, Project>>,
-            String> {
+          PaginatedProjectList,
+          Raw<PagingController<int, Project>>,
+          Raw<PagingController<int, Project>>,
+          Raw<PagingController<int, Project>>,
+          String
+        > {
   const PaginatedProjectListFamily._()
-      : super(
-          retry: null,
-          name: r'paginatedProjectListProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: false,
-        );
+    : super(
+        retry: null,
+        name: r'paginatedProjectListProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
 
-  PaginatedProjectListProvider call(
-    String sortBy,
-  ) =>
+  PaginatedProjectListProvider call(String sortBy) =>
       PaginatedProjectListProvider._(argument: sortBy, from: this);
 
   @override
@@ -93,23 +97,28 @@ abstract class _$PaginatedProjectList
   late final _$args = ref.$arg as String;
   String get sortBy => _$args;
 
-  Raw<PagingController<int, Project>> build(
-    String sortBy,
-  );
+  Raw<PagingController<int, Project>> build(String sortBy);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref as $Ref<Raw<PagingController<int, Project>>,
-        Raw<PagingController<int, Project>>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PagingController<int, Project>>,
-            Raw<PagingController<int, Project>>>,
-        Raw<PagingController<int, Project>>,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<
+              Raw<PagingController<int, Project>>,
+              Raw<PagingController<int, Project>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<PagingController<int, Project>>,
+                Raw<PagingController<int, Project>>
+              >,
+              Raw<PagingController<int, Project>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

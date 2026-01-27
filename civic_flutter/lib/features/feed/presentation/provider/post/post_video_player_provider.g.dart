@@ -14,16 +14,16 @@ const postVideoPlayerProvider = PostVideoPlayerFamily._();
 
 final class PostVideoPlayerProvider
     extends $NotifierProvider<PostVideoPlayer, Raw<VideoPlayerController?>?> {
-  const PostVideoPlayerProvider._(
-      {required PostVideoPlayerFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'postVideoPlayerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const PostVideoPlayerProvider._({
+    required PostVideoPlayerFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'postVideoPlayerProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$postVideoPlayerHash();
@@ -58,28 +58,27 @@ final class PostVideoPlayerProvider
   }
 }
 
-String _$postVideoPlayerHash() => r'7b9a12afcb959a56ab4087192598e6871e01fa5f';
+String _$postVideoPlayerHash() => r'26933f87d6b336040eca7c873f87788196e30d5f';
 
 final class PostVideoPlayerFamily extends $Family
     with
         $ClassFamilyOverride<
-            PostVideoPlayer,
-            Raw<VideoPlayerController?>?,
-            Raw<VideoPlayerController?>?,
-            Raw<VideoPlayerController?>?,
-            String> {
+          PostVideoPlayer,
+          Raw<VideoPlayerController?>?,
+          Raw<VideoPlayerController?>?,
+          Raw<VideoPlayerController?>?,
+          String
+        > {
   const PostVideoPlayerFamily._()
-      : super(
-          retry: null,
-          name: r'postVideoPlayerProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'postVideoPlayerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  PostVideoPlayerProvider call(
-    String videoUrl,
-  ) =>
+  PostVideoPlayerProvider call(String videoUrl) =>
       PostVideoPlayerProvider._(argument: videoUrl, from: this);
 
   @override
@@ -91,22 +90,25 @@ abstract class _$PostVideoPlayer
   late final _$args = ref.$arg as String;
   String get videoUrl => _$args;
 
-  Raw<VideoPlayerController?>? build(
-    String videoUrl,
-  );
+  Raw<VideoPlayerController?>? build(String videoUrl);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref
-        as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>,
-        Raw<VideoPlayerController?>?,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<VideoPlayerController?>?,
+                Raw<VideoPlayerController?>?
+              >,
+              Raw<VideoPlayerController?>?,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

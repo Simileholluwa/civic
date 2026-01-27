@@ -14,15 +14,15 @@ const pageChangedProvider = PageChangedProvider._();
 
 final class PageChangedProvider extends $NotifierProvider<PageChanged, int> {
   const PageChangedProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'pageChangedProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'pageChangedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$pageChangedHash();
@@ -49,8 +49,14 @@ abstract class _$PageChanged extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -61,15 +67,15 @@ const vettingImagePageChangedProvider = VettingImagePageChangedProvider._();
 final class VettingImagePageChangedProvider
     extends $NotifierProvider<VettingImagePageChanged, int> {
   const VettingImagePageChangedProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'vettingImagePageChangedProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'vettingImagePageChangedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$vettingImagePageChangedHash();
@@ -97,8 +103,14 @@ abstract class _$VettingImagePageChanged extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -110,15 +122,15 @@ const projectImageAttachmentPageChangedProvider =
 final class ProjectImageAttachmentPageChangedProvider
     extends $NotifierProvider<ProjectImageAttachmentPageChanged, int> {
   const ProjectImageAttachmentPageChangedProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectImageAttachmentPageChangedProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectImageAttachmentPageChangedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() =>
@@ -148,8 +160,69 @@ abstract class _$ProjectImageAttachmentPageChanged extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(PostImageAttachmentPageChanged)
+const postImageAttachmentPageChangedProvider =
+    PostImageAttachmentPageChangedProvider._();
+
+final class PostImageAttachmentPageChangedProvider
+    extends $NotifierProvider<PostImageAttachmentPageChanged, int> {
+  const PostImageAttachmentPageChangedProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postImageAttachmentPageChangedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$postImageAttachmentPageChangedHash();
+
+  @$internal
+  @override
+  PostImageAttachmentPageChanged create() => PostImageAttachmentPageChanged();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$postImageAttachmentPageChangedHash() =>
+    r'2dcf7551a49883bef0ca1c27966f555a37b2754b';
+
+abstract class _$PostImageAttachmentPageChanged extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -161,15 +234,15 @@ const projectPDFAttachmentPageChangedProvider =
 final class ProjectPDFAttachmentPageChangedProvider
     extends $NotifierProvider<ProjectPDFAttachmentPageChanged, int> {
   const ProjectPDFAttachmentPageChangedProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectPDFAttachmentPageChangedProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectPDFAttachmentPageChangedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectPDFAttachmentPageChangedHash();
@@ -197,8 +270,14 @@ abstract class _$ProjectPDFAttachmentPageChanged extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -209,15 +288,15 @@ const notificationsCountProvider = NotificationsCountProvider._();
 final class NotificationsCountProvider
     extends $NotifierProvider<NotificationsCount, int> {
   const NotificationsCountProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notificationsCountProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationsCountProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notificationsCountHash();
@@ -245,8 +324,14 @@ abstract class _$NotificationsCount extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

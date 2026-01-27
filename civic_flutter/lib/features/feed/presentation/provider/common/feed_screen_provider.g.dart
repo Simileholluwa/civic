@@ -16,15 +16,15 @@ final class FeedVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
   const FeedVsyncProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedVsyncProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedVsyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedVsyncHash();
@@ -57,15 +57,15 @@ final class FeedFilterVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
   const FeedFilterVsyncProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedFilterVsyncProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedFilterVsyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedFilterVsyncHash();
@@ -97,15 +97,15 @@ const feedScreenTabControllerProvider = FeedScreenTabControllerProvider._();
 final class FeedScreenTabControllerProvider
     extends $NotifierProvider<FeedScreenTabController, Raw<TabController>> {
   const FeedScreenTabControllerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedScreenTabControllerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedScreenTabControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedScreenTabControllerHash();
@@ -133,11 +133,14 @@ abstract class _$FeedScreenTabController extends $Notifier<Raw<TabController>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<TabController>, Raw<TabController>>,
-        Raw<TabController>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<TabController>, Raw<TabController>>,
+              Raw<TabController>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -148,15 +151,15 @@ const feedCurrentPageProvider = FeedCurrentPageProvider._();
 final class FeedCurrentPageProvider
     extends $NotifierProvider<FeedCurrentPage, int> {
   const FeedCurrentPageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedCurrentPageProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedCurrentPageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedCurrentPageHash();
@@ -183,8 +186,14 @@ abstract class _$FeedCurrentPage extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

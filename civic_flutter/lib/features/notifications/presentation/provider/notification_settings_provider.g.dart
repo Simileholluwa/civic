@@ -12,18 +12,22 @@ part of 'notification_settings_provider.dart';
 @ProviderFor(NotificationSettingsNotifier)
 const notificationSettingsProvider = NotificationSettingsNotifierFamily._();
 
-final class NotificationSettingsNotifierProvider extends $NotifierProvider<
-    NotificationSettingsNotifier, AppNotificationSettings> {
-  const NotificationSettingsNotifierProvider._(
-      {required NotificationSettingsNotifierFamily super.from,
-      required UserNotificationSettings? super.argument})
-      : super(
-          retry: null,
-          name: r'notificationSettingsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+final class NotificationSettingsNotifierProvider
+    extends
+        $NotifierProvider<
+          NotificationSettingsNotifier,
+          AppNotificationSettings
+        > {
+  const NotificationSettingsNotifierProvider._({
+    required NotificationSettingsNotifierFamily super.from,
+    required UserNotificationSettings? super.argument,
+  }) : super(
+         retry: null,
+         name: r'notificationSettingsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$notificationSettingsNotifierHash();
@@ -65,24 +69,24 @@ String _$notificationSettingsNotifierHash() =>
 final class NotificationSettingsNotifierFamily extends $Family
     with
         $ClassFamilyOverride<
-            NotificationSettingsNotifier,
-            AppNotificationSettings,
-            AppNotificationSettings,
-            AppNotificationSettings,
-            UserNotificationSettings?> {
+          NotificationSettingsNotifier,
+          AppNotificationSettings,
+          AppNotificationSettings,
+          AppNotificationSettings,
+          UserNotificationSettings?
+        > {
   const NotificationSettingsNotifierFamily._()
-      : super(
-          retry: null,
-          name: r'notificationSettingsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'notificationSettingsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   NotificationSettingsNotifierProvider call(
     UserNotificationSettings? settings,
-  ) =>
-      NotificationSettingsNotifierProvider._(argument: settings, from: this);
+  ) => NotificationSettingsNotifierProvider._(argument: settings, from: this);
 
   @override
   String toString() => r'notificationSettingsProvider';
@@ -93,22 +97,21 @@ abstract class _$NotificationSettingsNotifier
   late final _$args = ref.$arg as UserNotificationSettings?;
   UserNotificationSettings? get settings => _$args;
 
-  AppNotificationSettings build(
-    UserNotificationSettings? settings,
-  );
+  AppNotificationSettings build(UserNotificationSettings? settings);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref =
         this.ref as $Ref<AppNotificationSettings, AppNotificationSettings>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AppNotificationSettings, AppNotificationSettings>,
-        AppNotificationSettings,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AppNotificationSettings, AppNotificationSettings>,
+              AppNotificationSettings,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

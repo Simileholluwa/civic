@@ -15,15 +15,15 @@ const projectCurrentPageProvider = ProjectCurrentPageProvider._();
 final class ProjectCurrentPageProvider
     extends $NotifierProvider<ProjectCurrentPage, int> {
   const ProjectCurrentPageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectCurrentPageProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectCurrentPageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectCurrentPageHash();
@@ -51,8 +51,14 @@ abstract class _$ProjectCurrentPage extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -63,15 +69,15 @@ const projectPageControllerProvider = ProjectPageControllerProvider._();
 final class ProjectPageControllerProvider
     extends $NotifierProvider<ProjectPageController, Raw<PageController>> {
   const ProjectPageControllerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectPageControllerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectPageControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectPageControllerHash();
@@ -99,11 +105,14 @@ abstract class _$ProjectPageController extends $Notifier<Raw<PageController>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<PageController>, Raw<PageController>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PageController>, Raw<PageController>>,
-        Raw<PageController>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<PageController>, Raw<PageController>>,
+              Raw<PageController>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -114,15 +123,15 @@ const projectTabControllerProvider = ProjectTabControllerProvider._();
 final class ProjectTabControllerProvider
     extends $NotifierProvider<ProjectTabController, Raw<TabController>> {
   const ProjectTabControllerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectTabControllerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectTabControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectTabControllerHash();
@@ -150,11 +159,14 @@ abstract class _$ProjectTabController extends $Notifier<Raw<TabController>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<TabController>, Raw<TabController>>,
-        Raw<TabController>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<TabController>, Raw<TabController>>,
+              Raw<TabController>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -166,15 +178,15 @@ const projectDetailsTabControllerProvider =
 final class ProjectDetailsTabControllerProvider
     extends $NotifierProvider<ProjectDetailsTabController, Raw<TabController>> {
   const ProjectDetailsTabControllerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectDetailsTabControllerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectDetailsTabControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectDetailsTabControllerHash();
@@ -203,11 +215,14 @@ abstract class _$ProjectDetailsTabController
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<TabController>, Raw<TabController>>,
-        Raw<TabController>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<TabController>, Raw<TabController>>,
+              Raw<TabController>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -218,15 +233,15 @@ const projectDetailCurrentPageProvider = ProjectDetailCurrentPageProvider._();
 final class ProjectDetailCurrentPageProvider
     extends $NotifierProvider<ProjectDetailCurrentPage, int> {
   const ProjectDetailCurrentPageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectDetailCurrentPageProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectDetailCurrentPageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectDetailCurrentPageHash();
@@ -254,8 +269,14 @@ abstract class _$ProjectDetailCurrentPage extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

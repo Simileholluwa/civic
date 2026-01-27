@@ -16,15 +16,15 @@ final class NetworkVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
   const NetworkVsyncProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'networkVsyncProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'networkVsyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$networkVsyncHash();
@@ -56,15 +56,15 @@ const networkTabControllerProvider = NetworkTabControllerProvider._();
 final class NetworkTabControllerProvider
     extends $NotifierProvider<NetworkTabController, Raw<TabController>> {
   const NetworkTabControllerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'networkTabControllerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'networkTabControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$networkTabControllerHash();
@@ -92,11 +92,14 @@ abstract class _$NetworkTabController extends $Notifier<Raw<TabController>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<TabController>, Raw<TabController>>,
-        Raw<TabController>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<TabController>, Raw<TabController>>,
+              Raw<TabController>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -107,15 +110,15 @@ const networkCurrentPageProvider = NetworkCurrentPageProvider._();
 final class NetworkCurrentPageProvider
     extends $NotifierProvider<NetworkCurrentPage, int> {
   const NetworkCurrentPageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'networkCurrentPageProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'networkCurrentPageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$networkCurrentPageHash();
@@ -143,8 +146,14 @@ abstract class _$NetworkCurrentPage extends $Notifier<int> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<int, int>;
-    final element = ref.element
-        as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

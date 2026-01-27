@@ -12,20 +12,24 @@ part of 'app_router.dart';
 @ProviderFor(rootNavigator)
 const rootNavigatorProvider = RootNavigatorProvider._();
 
-final class RootNavigatorProvider extends $FunctionalProvider<
-    GlobalKey<NavigatorState>,
-    GlobalKey<NavigatorState>,
-    GlobalKey<NavigatorState>> with $Provider<GlobalKey<NavigatorState>> {
+final class RootNavigatorProvider
+    extends
+        $FunctionalProvider<
+          GlobalKey<NavigatorState>,
+          GlobalKey<NavigatorState>,
+          GlobalKey<NavigatorState>
+        >
+    with $Provider<GlobalKey<NavigatorState>> {
   const RootNavigatorProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'rootNavigatorProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'rootNavigatorProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$rootNavigatorHash();
@@ -33,8 +37,8 @@ final class RootNavigatorProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GlobalKey<NavigatorState>> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GlobalKey<NavigatorState> create(Ref ref) {
@@ -59,15 +63,15 @@ final class RouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
   const RouterProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'routerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'routerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$routerHash();

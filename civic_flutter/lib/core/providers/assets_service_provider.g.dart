@@ -16,15 +16,15 @@ final class AssetServiceProvider
     extends $FunctionalProvider<AssetService, AssetService, AssetService>
     with $Provider<AssetService> {
   const AssetServiceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'assetServiceProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'assetServiceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$assetServiceHash();

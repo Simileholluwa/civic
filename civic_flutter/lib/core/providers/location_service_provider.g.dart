@@ -12,20 +12,24 @@ part of 'location_service_provider.dart';
 @ProviderFor(locationService)
 const locationServiceProvider = LocationServiceProvider._();
 
-final class LocationServiceProvider extends $FunctionalProvider<
-    LocationServices,
-    LocationServices,
-    LocationServices> with $Provider<LocationServices> {
+final class LocationServiceProvider
+    extends
+        $FunctionalProvider<
+          LocationServices,
+          LocationServices,
+          LocationServices
+        >
+    with $Provider<LocationServices> {
   const LocationServiceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'locationServiceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'locationServiceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$locationServiceHash();
@@ -57,15 +61,15 @@ const currentLocationDataProvider = CurrentLocationDataProvider._();
 final class CurrentLocationDataProvider
     extends $AsyncNotifierProvider<CurrentLocationData, List<double>> {
   const CurrentLocationDataProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'currentLocationDataProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentLocationDataProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$currentLocationDataHash();
@@ -85,11 +89,14 @@ abstract class _$CurrentLocationData extends $AsyncNotifier<List<double>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<double>>, List<double>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AsyncValue<List<double>>, List<double>>,
-        AsyncValue<List<double>>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<double>>, List<double>>,
+              AsyncValue<List<double>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -97,21 +104,24 @@ abstract class _$CurrentLocationData extends $AsyncNotifier<List<double>> {
 @ProviderFor(searchNearbyPlaces)
 const searchNearbyPlacesProvider = SearchNearbyPlacesProvider._();
 
-final class SearchNearbyPlacesProvider extends $FunctionalProvider<
-        AsyncValue<List<AWSPlaces>?>,
-        List<AWSPlaces>?,
-        FutureOr<List<AWSPlaces>?>>
+final class SearchNearbyPlacesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<AWSPlaces>?>,
+          List<AWSPlaces>?,
+          FutureOr<List<AWSPlaces>?>
+        >
     with $FutureModifier<List<AWSPlaces>?>, $FutureProvider<List<AWSPlaces>?> {
   const SearchNearbyPlacesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'searchNearbyPlacesProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchNearbyPlacesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$searchNearbyPlacesHash();
@@ -119,8 +129,8 @@ final class SearchNearbyPlacesProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<AWSPlaces>?> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<AWSPlaces>?> create(Ref ref) {
@@ -134,21 +144,24 @@ String _$searchNearbyPlacesHash() =>
 @ProviderFor(searchPlaces)
 const searchPlacesProvider = SearchPlacesProvider._();
 
-final class SearchPlacesProvider extends $FunctionalProvider<
-        AsyncValue<List<AWSPlaces>?>,
-        List<AWSPlaces>?,
-        FutureOr<List<AWSPlaces>?>>
+final class SearchPlacesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<AWSPlaces>?>,
+          List<AWSPlaces>?,
+          FutureOr<List<AWSPlaces>?>
+        >
     with $FutureModifier<List<AWSPlaces>?>, $FutureProvider<List<AWSPlaces>?> {
   const SearchPlacesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'searchPlacesProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchPlacesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$searchPlacesHash();
@@ -156,8 +169,8 @@ final class SearchPlacesProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<AWSPlaces>?> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<AWSPlaces>?> create(Ref ref) {
@@ -173,15 +186,15 @@ const locationSearchQueryProvider = LocationSearchQueryProvider._();
 final class LocationSearchQueryProvider
     extends $NotifierProvider<LocationSearchQuery, String> {
   const LocationSearchQueryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'locationSearchQueryProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'locationSearchQueryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$locationSearchQueryHash();
@@ -209,8 +222,14 @@ abstract class _$LocationSearchQuery extends $Notifier<String> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<String, String>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<String, String>, String, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -221,15 +240,15 @@ const selectLocationsProvider = SelectLocationsProvider._();
 final class SelectLocationsProvider
     extends $NotifierProvider<SelectLocations, List<AWSPlaces>> {
   const SelectLocationsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'selectLocationsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'selectLocationsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$selectLocationsHash();
@@ -256,11 +275,14 @@ abstract class _$SelectLocations extends $Notifier<List<AWSPlaces>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<AWSPlaces>, List<AWSPlaces>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<AWSPlaces>, List<AWSPlaces>>,
-        List<AWSPlaces>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<AWSPlaces>, List<AWSPlaces>>,
+              List<AWSPlaces>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

@@ -12,20 +12,24 @@ part of 'auth_service_provider.dart';
 @ProviderFor(authLocalDatasource)
 const authLocalDatasourceProvider = AuthLocalDatasourceProvider._();
 
-final class AuthLocalDatasourceProvider extends $FunctionalProvider<
-    AuthLocalDatasourceImpl,
-    AuthLocalDatasourceImpl,
-    AuthLocalDatasourceImpl> with $Provider<AuthLocalDatasourceImpl> {
+final class AuthLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          AuthLocalDatasourceImpl,
+          AuthLocalDatasourceImpl,
+          AuthLocalDatasourceImpl
+        >
+    with $Provider<AuthLocalDatasourceImpl> {
   const AuthLocalDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authLocalDatasourceProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authLocalDatasourceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authLocalDatasourceHash();
@@ -33,8 +37,8 @@ final class AuthLocalDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<AuthLocalDatasourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   AuthLocalDatasourceImpl create(Ref ref) {
@@ -56,20 +60,24 @@ String _$authLocalDatasourceHash() =>
 @ProviderFor(authRemoteDatabase)
 const authRemoteDatabaseProvider = AuthRemoteDatabaseProvider._();
 
-final class AuthRemoteDatabaseProvider extends $FunctionalProvider<
-    AuthRemoteDatabaseImpl,
-    AuthRemoteDatabaseImpl,
-    AuthRemoteDatabaseImpl> with $Provider<AuthRemoteDatabaseImpl> {
+final class AuthRemoteDatabaseProvider
+    extends
+        $FunctionalProvider<
+          AuthRemoteDatabaseImpl,
+          AuthRemoteDatabaseImpl,
+          AuthRemoteDatabaseImpl
+        >
+    with $Provider<AuthRemoteDatabaseImpl> {
   const AuthRemoteDatabaseProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authRemoteDatabaseProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRemoteDatabaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authRemoteDatabaseHash();
@@ -77,8 +85,8 @@ final class AuthRemoteDatabaseProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<AuthRemoteDatabaseImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   AuthRemoteDatabaseImpl create(Ref ref) {
@@ -100,20 +108,24 @@ String _$authRemoteDatabaseHash() =>
 @ProviderFor(authRepository)
 const authRepositoryProvider = AuthRepositoryProvider._();
 
-final class AuthRepositoryProvider extends $FunctionalProvider<
-    AuthRepositoryImpl,
-    AuthRepositoryImpl,
-    AuthRepositoryImpl> with $Provider<AuthRepositoryImpl> {
+final class AuthRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AuthRepositoryImpl,
+          AuthRepositoryImpl,
+          AuthRepositoryImpl
+        >
+    with $Provider<AuthRepositoryImpl> {
   const AuthRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authRepositoryProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authRepositoryHash();
@@ -121,8 +133,8 @@ final class AuthRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<AuthRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   AuthRepositoryImpl create(Ref ref) {
@@ -143,20 +155,24 @@ String _$authRepositoryHash() => r'a8ccccfb7339ced909584054d0666dd5ccceaa71';
 @ProviderFor(createAccountRequest)
 const createAccountRequestProvider = CreateAccountRequestProvider._();
 
-final class CreateAccountRequestProvider extends $FunctionalProvider<
-    CreateAccountRequestUseCase,
-    CreateAccountRequestUseCase,
-    CreateAccountRequestUseCase> with $Provider<CreateAccountRequestUseCase> {
+final class CreateAccountRequestProvider
+    extends
+        $FunctionalProvider<
+          CreateAccountRequestUseCase,
+          CreateAccountRequestUseCase,
+          CreateAccountRequestUseCase
+        >
+    with $Provider<CreateAccountRequestUseCase> {
   const CreateAccountRequestProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'createAccountRequestProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'createAccountRequestProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$createAccountRequestHash();
@@ -164,8 +180,8 @@ final class CreateAccountRequestProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<CreateAccountRequestUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   CreateAccountRequestUseCase create(Ref ref) {
@@ -187,18 +203,24 @@ String _$createAccountRequestHash() =>
 @ProviderFor(userSignIn)
 const userSignInProvider = UserSignInProvider._();
 
-final class UserSignInProvider extends $FunctionalProvider<UserSignInUseCase,
-    UserSignInUseCase, UserSignInUseCase> with $Provider<UserSignInUseCase> {
+final class UserSignInProvider
+    extends
+        $FunctionalProvider<
+          UserSignInUseCase,
+          UserSignInUseCase,
+          UserSignInUseCase
+        >
+    with $Provider<UserSignInUseCase> {
   const UserSignInProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'userSignInProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userSignInProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$userSignInHash();
@@ -206,8 +228,8 @@ final class UserSignInProvider extends $FunctionalProvider<UserSignInUseCase,
   @$internal
   @override
   $ProviderElement<UserSignInUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   UserSignInUseCase create(Ref ref) {
@@ -228,20 +250,24 @@ String _$userSignInHash() => r'2adacc5f69874ed818ff3878e1a329a0d7d6d097';
 @ProviderFor(initiatePasswordReset)
 const initiatePasswordResetProvider = InitiatePasswordResetProvider._();
 
-final class InitiatePasswordResetProvider extends $FunctionalProvider<
-    InitiatePasswordResetUseCase,
-    InitiatePasswordResetUseCase,
-    InitiatePasswordResetUseCase> with $Provider<InitiatePasswordResetUseCase> {
+final class InitiatePasswordResetProvider
+    extends
+        $FunctionalProvider<
+          InitiatePasswordResetUseCase,
+          InitiatePasswordResetUseCase,
+          InitiatePasswordResetUseCase
+        >
+    with $Provider<InitiatePasswordResetUseCase> {
   const InitiatePasswordResetProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'initiatePasswordResetProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'initiatePasswordResetProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$initiatePasswordResetHash();
@@ -249,8 +275,8 @@ final class InitiatePasswordResetProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<InitiatePasswordResetUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   InitiatePasswordResetUseCase create(Ref ref) {
@@ -272,20 +298,24 @@ String _$initiatePasswordResetHash() =>
 @ProviderFor(checkIfNewUser)
 const checkIfNewUserProvider = CheckIfNewUserProvider._();
 
-final class CheckIfNewUserProvider extends $FunctionalProvider<
-    CheckIfNewUserUseCase,
-    CheckIfNewUserUseCase,
-    CheckIfNewUserUseCase> with $Provider<CheckIfNewUserUseCase> {
+final class CheckIfNewUserProvider
+    extends
+        $FunctionalProvider<
+          CheckIfNewUserUseCase,
+          CheckIfNewUserUseCase,
+          CheckIfNewUserUseCase
+        >
+    with $Provider<CheckIfNewUserUseCase> {
   const CheckIfNewUserProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'checkIfNewUserProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'checkIfNewUserProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$checkIfNewUserHash();
@@ -293,8 +323,8 @@ final class CheckIfNewUserProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<CheckIfNewUserUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   CheckIfNewUserUseCase create(Ref ref) {
@@ -319,15 +349,15 @@ final class LogOutProvider
     extends $FunctionalProvider<LogoutUseCase, LogoutUseCase, LogoutUseCase>
     with $Provider<LogoutUseCase> {
   const LogOutProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'logOutProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'logOutProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$logOutHash();
@@ -356,20 +386,24 @@ String _$logOutHash() => r'40db795015672880a5d6e20dda78d2373d1dd3c7';
 @ProviderFor(validateCreateAccount)
 const validateCreateAccountProvider = ValidateCreateAccountProvider._();
 
-final class ValidateCreateAccountProvider extends $FunctionalProvider<
-    ValidateCreateAccountUseCase,
-    ValidateCreateAccountUseCase,
-    ValidateCreateAccountUseCase> with $Provider<ValidateCreateAccountUseCase> {
+final class ValidateCreateAccountProvider
+    extends
+        $FunctionalProvider<
+          ValidateCreateAccountUseCase,
+          ValidateCreateAccountUseCase,
+          ValidateCreateAccountUseCase
+        >
+    with $Provider<ValidateCreateAccountUseCase> {
   const ValidateCreateAccountProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'validateCreateAccountProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'validateCreateAccountProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$validateCreateAccountHash();
@@ -377,8 +411,8 @@ final class ValidateCreateAccountProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ValidateCreateAccountUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ValidateCreateAccountUseCase create(Ref ref) {
@@ -400,20 +434,24 @@ String _$validateCreateAccountHash() =>
 @ProviderFor(searchUserNin)
 const searchUserNinProvider = SearchUserNinProvider._();
 
-final class SearchUserNinProvider extends $FunctionalProvider<
-    SearchUserNinUseCase,
-    SearchUserNinUseCase,
-    SearchUserNinUseCase> with $Provider<SearchUserNinUseCase> {
+final class SearchUserNinProvider
+    extends
+        $FunctionalProvider<
+          SearchUserNinUseCase,
+          SearchUserNinUseCase,
+          SearchUserNinUseCase
+        >
+    with $Provider<SearchUserNinUseCase> {
   const SearchUserNinProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'searchUserNinProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchUserNinProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$searchUserNinHash();
@@ -421,8 +459,8 @@ final class SearchUserNinProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SearchUserNinUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SearchUserNinUseCase create(Ref ref) {
@@ -443,20 +481,24 @@ String _$searchUserNinHash() => r'ed11554b209d5982c8764ee68516b4575cb5533f';
 @ProviderFor(uploadProfileImage)
 const uploadProfileImageProvider = UploadProfileImageProvider._();
 
-final class UploadProfileImageProvider extends $FunctionalProvider<
-    UploadProfileImageUseCase,
-    UploadProfileImageUseCase,
-    UploadProfileImageUseCase> with $Provider<UploadProfileImageUseCase> {
+final class UploadProfileImageProvider
+    extends
+        $FunctionalProvider<
+          UploadProfileImageUseCase,
+          UploadProfileImageUseCase,
+          UploadProfileImageUseCase
+        >
+    with $Provider<UploadProfileImageUseCase> {
   const UploadProfileImageProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'uploadProfileImageProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'uploadProfileImageProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$uploadProfileImageHash();
@@ -464,8 +506,8 @@ final class UploadProfileImageProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<UploadProfileImageUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   UploadProfileImageUseCase create(Ref ref) {
@@ -487,20 +529,24 @@ String _$uploadProfileImageHash() =>
 @ProviderFor(resetUserPassword)
 const resetUserPasswordProvider = ResetUserPasswordProvider._();
 
-final class ResetUserPasswordProvider extends $FunctionalProvider<
-    ResetUserPasswordUseCase,
-    ResetUserPasswordUseCase,
-    ResetUserPasswordUseCase> with $Provider<ResetUserPasswordUseCase> {
+final class ResetUserPasswordProvider
+    extends
+        $FunctionalProvider<
+          ResetUserPasswordUseCase,
+          ResetUserPasswordUseCase,
+          ResetUserPasswordUseCase
+        >
+    with $Provider<ResetUserPasswordUseCase> {
   const ResetUserPasswordProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'resetUserPasswordProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'resetUserPasswordProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$resetUserPasswordHash();
@@ -508,8 +554,8 @@ final class ResetUserPasswordProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ResetUserPasswordUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ResetUserPasswordUseCase create(Ref ref) {

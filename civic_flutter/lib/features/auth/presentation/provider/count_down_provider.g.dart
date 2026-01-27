@@ -15,15 +15,15 @@ const countdownTimerProvider = CountdownTimerProvider._();
 final class CountdownTimerProvider
     extends $NotifierProvider<CountdownTimer, CountdownTimerState> {
   const CountdownTimerProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'countdownTimerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'countdownTimerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$countdownTimerHash();
@@ -50,11 +50,14 @@ abstract class _$CountdownTimer extends $Notifier<CountdownTimerState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<CountdownTimerState, CountdownTimerState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<CountdownTimerState, CountdownTimerState>,
-        CountdownTimerState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<CountdownTimerState, CountdownTimerState>,
+              CountdownTimerState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

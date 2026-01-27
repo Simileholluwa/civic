@@ -12,23 +12,26 @@ part of 'get_user_notifications_settings_provider.dart';
 @ProviderFor(getUserNotifSettings)
 const getUserNotifSettingsProvider = GetUserNotifSettingsProvider._();
 
-final class GetUserNotifSettingsProvider extends $FunctionalProvider<
-        AsyncValue<UserNotificationSettings>,
-        UserNotificationSettings,
-        FutureOr<UserNotificationSettings>>
+final class GetUserNotifSettingsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<UserNotificationSettings>,
+          UserNotificationSettings,
+          FutureOr<UserNotificationSettings>
+        >
     with
         $FutureModifier<UserNotificationSettings>,
         $FutureProvider<UserNotificationSettings> {
   const GetUserNotifSettingsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getUserNotifSettingsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getUserNotifSettingsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getUserNotifSettingsHash();
@@ -36,8 +39,8 @@ final class GetUserNotifSettingsProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<UserNotificationSettings> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<UserNotificationSettings> create(Ref ref) {

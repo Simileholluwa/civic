@@ -15,20 +15,16 @@ const verifyUserProximityProvider = VerifyUserProximityFamily._();
 final class VerifyUserProximityProvider
     extends $FunctionalProvider<AsyncValue<double>, double, FutureOr<double>>
     with $FutureModifier<double>, $FutureProvider<double> {
-  const VerifyUserProximityProvider._(
-      {required VerifyUserProximityFamily super.from,
-      required (
-        List<AWSPlaces>?,
-        int?,
-      )
-          super.argument})
-      : super(
-          retry: null,
-          name: r'verifyUserProximityProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const VerifyUserProximityProvider._({
+    required VerifyUserProximityFamily super.from,
+    required (List<AWSPlaces>?, int?) super.argument,
+  }) : super(
+         retry: null,
+         name: r'verifyUserProximityProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$verifyUserProximityHash();
@@ -47,15 +43,8 @@ final class VerifyUserProximityProvider
 
   @override
   FutureOr<double> create(Ref ref) {
-    final argument = this.argument as (
-      List<AWSPlaces>?,
-      int?,
-    );
-    return verifyUserProximity(
-      ref,
-      argument.$1,
-      argument.$2,
-    );
+    final argument = this.argument as (List<AWSPlaces>?, int?);
+    return verifyUserProximity(ref, argument.$1, argument.$2);
   }
 
   @override
@@ -73,30 +62,23 @@ String _$verifyUserProximityHash() =>
     r'302b5a98049f987eade0940d86db90b07a1a5d1c';
 
 final class VerifyUserProximityFamily extends $Family
-    with
-        $FunctionalFamilyOverride<
-            FutureOr<double>,
-            (
-              List<AWSPlaces>?,
-              int?,
-            )> {
+    with $FunctionalFamilyOverride<FutureOr<double>, (List<AWSPlaces>?, int?)> {
   const VerifyUserProximityFamily._()
-      : super(
-          retry: null,
-          name: r'verifyUserProximityProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'verifyUserProximityProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   VerifyUserProximityProvider call(
     List<AWSPlaces>? projectLocations,
     int? projectId,
-  ) =>
-      VerifyUserProximityProvider._(argument: (
-        projectLocations,
-        projectId,
-      ), from: this);
+  ) => VerifyUserProximityProvider._(
+    argument: (projectLocations, projectId),
+    from: this,
+  );
 
   @override
   String toString() => r'verifyUserProximityProvider';

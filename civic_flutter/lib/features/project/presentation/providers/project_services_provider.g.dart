@@ -12,20 +12,24 @@ part of 'project_services_provider.dart';
 @ProviderFor(projectRemoteDatasource)
 const projectRemoteDatasourceProvider = ProjectRemoteDatasourceProvider._();
 
-final class ProjectRemoteDatasourceProvider extends $FunctionalProvider<
-    ProjectRemoteDatasourceImpl,
-    ProjectRemoteDatasourceImpl,
-    ProjectRemoteDatasourceImpl> with $Provider<ProjectRemoteDatasourceImpl> {
+final class ProjectRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ProjectRemoteDatasourceImpl,
+          ProjectRemoteDatasourceImpl,
+          ProjectRemoteDatasourceImpl
+        >
+    with $Provider<ProjectRemoteDatasourceImpl> {
   const ProjectRemoteDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectRemoteDatasourceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectRemoteDatasourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectRemoteDatasourceHash();
@@ -33,8 +37,8 @@ final class ProjectRemoteDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ProjectRemoteDatasourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ProjectRemoteDatasourceImpl create(Ref ref) {
@@ -56,20 +60,24 @@ String _$projectRemoteDatasourceHash() =>
 @ProviderFor(projectLocalDatasource)
 const projectLocalDatasourceProvider = ProjectLocalDatasourceProvider._();
 
-final class ProjectLocalDatasourceProvider extends $FunctionalProvider<
-    ProjectLocalDataSourceImpl,
-    ProjectLocalDataSourceImpl,
-    ProjectLocalDataSourceImpl> with $Provider<ProjectLocalDataSourceImpl> {
+final class ProjectLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          ProjectLocalDataSourceImpl,
+          ProjectLocalDataSourceImpl,
+          ProjectLocalDataSourceImpl
+        >
+    with $Provider<ProjectLocalDataSourceImpl> {
   const ProjectLocalDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectLocalDatasourceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectLocalDatasourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectLocalDatasourceHash();
@@ -77,8 +85,8 @@ final class ProjectLocalDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ProjectLocalDataSourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ProjectLocalDataSourceImpl create(Ref ref) {
@@ -100,20 +108,24 @@ String _$projectLocalDatasourceHash() =>
 @ProviderFor(projectRepositoryImpl)
 const projectRepositoryImplProvider = ProjectRepositoryImplProvider._();
 
-final class ProjectRepositoryImplProvider extends $FunctionalProvider<
-    ProjectRepositoryImpl,
-    ProjectRepositoryImpl,
-    ProjectRepositoryImpl> with $Provider<ProjectRepositoryImpl> {
+final class ProjectRepositoryImplProvider
+    extends
+        $FunctionalProvider<
+          ProjectRepositoryImpl,
+          ProjectRepositoryImpl,
+          ProjectRepositoryImpl
+        >
+    with $Provider<ProjectRepositoryImpl> {
   const ProjectRepositoryImplProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectRepositoryImplProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectRepositoryImplProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectRepositoryImplHash();
@@ -121,8 +133,8 @@ final class ProjectRepositoryImplProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ProjectRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ProjectRepositoryImpl create(Ref ref) {
@@ -144,18 +156,24 @@ String _$projectRepositoryImplHash() =>
 @ProviderFor(saveProject)
 const saveProjectProvider = SaveProjectProvider._();
 
-final class SaveProjectProvider extends $FunctionalProvider<SaveProjectUseCase,
-    SaveProjectUseCase, SaveProjectUseCase> with $Provider<SaveProjectUseCase> {
+final class SaveProjectProvider
+    extends
+        $FunctionalProvider<
+          SaveProjectUseCase,
+          SaveProjectUseCase,
+          SaveProjectUseCase
+        >
+    with $Provider<SaveProjectUseCase> {
   const SaveProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'saveProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$saveProjectHash();
@@ -163,8 +181,8 @@ final class SaveProjectProvider extends $FunctionalProvider<SaveProjectUseCase,
   @$internal
   @override
   $ProviderElement<SaveProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SaveProjectUseCase create(Ref ref) {
@@ -185,18 +203,24 @@ String _$saveProjectHash() => r'507675307fc80c41dab9e59306f49c034a5e2bb1';
 @ProviderFor(getProjects)
 const getProjectsProvider = GetProjectsProvider._();
 
-final class GetProjectsProvider extends $FunctionalProvider<GetProjectsUseCase,
-    GetProjectsUseCase, GetProjectsUseCase> with $Provider<GetProjectsUseCase> {
+final class GetProjectsProvider
+    extends
+        $FunctionalProvider<
+          GetProjectsUseCase,
+          GetProjectsUseCase,
+          GetProjectsUseCase
+        >
+    with $Provider<GetProjectsUseCase> {
   const GetProjectsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getProjectsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getProjectsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getProjectsHash();
@@ -204,8 +228,8 @@ final class GetProjectsProvider extends $FunctionalProvider<GetProjectsUseCase,
   @$internal
   @override
   $ProviderElement<GetProjectsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetProjectsUseCase create(Ref ref) {
@@ -226,18 +250,24 @@ String _$getProjectsHash() => r'277a8073e4733318649ca55c4890d69ed21b77e4';
 @ProviderFor(getProject)
 const getProjectProvider = GetProjectProvider._();
 
-final class GetProjectProvider extends $FunctionalProvider<GetProjectUseCase,
-    GetProjectUseCase, GetProjectUseCase> with $Provider<GetProjectUseCase> {
+final class GetProjectProvider
+    extends
+        $FunctionalProvider<
+          GetProjectUseCase,
+          GetProjectUseCase,
+          GetProjectUseCase
+        >
+    with $Provider<GetProjectUseCase> {
   const GetProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getProjectHash();
@@ -245,8 +275,8 @@ final class GetProjectProvider extends $FunctionalProvider<GetProjectUseCase,
   @$internal
   @override
   $ProviderElement<GetProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetProjectUseCase create(Ref ref) {
@@ -267,20 +297,24 @@ String _$getProjectHash() => r'34fc69c563165bf3169974155598aae3dde66437';
 @ProviderFor(saveProjectReview)
 const saveProjectReviewProvider = SaveProjectReviewProvider._();
 
-final class SaveProjectReviewProvider extends $FunctionalProvider<
-    SaveProjectReviewUseCase,
-    SaveProjectReviewUseCase,
-    SaveProjectReviewUseCase> with $Provider<SaveProjectReviewUseCase> {
+final class SaveProjectReviewProvider
+    extends
+        $FunctionalProvider<
+          SaveProjectReviewUseCase,
+          SaveProjectReviewUseCase,
+          SaveProjectReviewUseCase
+        >
+    with $Provider<SaveProjectReviewUseCase> {
   const SaveProjectReviewProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'saveProjectReviewProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveProjectReviewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$saveProjectReviewHash();
@@ -288,8 +322,8 @@ final class SaveProjectReviewProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SaveProjectReviewUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SaveProjectReviewUseCase create(Ref ref) {
@@ -310,20 +344,24 @@ String _$saveProjectReviewHash() => r'92a7b5986f4adaead3c5e26540f84620072fc4e0';
 @ProviderFor(getProjectReviews)
 const getProjectReviewsProvider = GetProjectReviewsProvider._();
 
-final class GetProjectReviewsProvider extends $FunctionalProvider<
-    GetProjectReviewsUseCase,
-    GetProjectReviewsUseCase,
-    GetProjectReviewsUseCase> with $Provider<GetProjectReviewsUseCase> {
+final class GetProjectReviewsProvider
+    extends
+        $FunctionalProvider<
+          GetProjectReviewsUseCase,
+          GetProjectReviewsUseCase,
+          GetProjectReviewsUseCase
+        >
+    with $Provider<GetProjectReviewsUseCase> {
   const GetProjectReviewsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getProjectReviewsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getProjectReviewsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getProjectReviewsHash();
@@ -331,8 +369,8 @@ final class GetProjectReviewsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetProjectReviewsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetProjectReviewsUseCase create(Ref ref) {
@@ -353,20 +391,24 @@ String _$getProjectReviewsHash() => r'36184da1c8a65301a2b59f327ba8c23aedc231ee';
 @ProviderFor(getProjectReview)
 const getProjectReviewProvider = GetProjectReviewProvider._();
 
-final class GetProjectReviewProvider extends $FunctionalProvider<
-    GetProjectReviewUseCase,
-    GetProjectReviewUseCase,
-    GetProjectReviewUseCase> with $Provider<GetProjectReviewUseCase> {
+final class GetProjectReviewProvider
+    extends
+        $FunctionalProvider<
+          GetProjectReviewUseCase,
+          GetProjectReviewUseCase,
+          GetProjectReviewUseCase
+        >
+    with $Provider<GetProjectReviewUseCase> {
   const GetProjectReviewProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getProjectReviewProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getProjectReviewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getProjectReviewHash();
@@ -374,8 +416,8 @@ final class GetProjectReviewProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetProjectReviewUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetProjectReviewUseCase create(Ref ref) {
@@ -396,21 +438,24 @@ String _$getProjectReviewHash() => r'2f0aaa2efd3a5c28e84f8db96632efe52548811c';
 @ProviderFor(getPaginatedBookmarks)
 const getPaginatedBookmarksProvider = GetPaginatedBookmarksProvider._();
 
-final class GetPaginatedBookmarksProvider extends $FunctionalProvider<
-        GetUserProjectBookmarksUseCase,
-        GetUserProjectBookmarksUseCase,
-        GetUserProjectBookmarksUseCase>
+final class GetPaginatedBookmarksProvider
+    extends
+        $FunctionalProvider<
+          GetUserProjectBookmarksUseCase,
+          GetUserProjectBookmarksUseCase,
+          GetUserProjectBookmarksUseCase
+        >
     with $Provider<GetUserProjectBookmarksUseCase> {
   const GetPaginatedBookmarksProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPaginatedBookmarksProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPaginatedBookmarksProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPaginatedBookmarksHash();
@@ -418,8 +463,8 @@ final class GetPaginatedBookmarksProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetUserProjectBookmarksUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetUserProjectBookmarksUseCase create(Ref ref) {
@@ -430,8 +475,9 @@ final class GetPaginatedBookmarksProvider extends $FunctionalProvider<
   Override overrideWithValue(GetUserProjectBookmarksUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<GetUserProjectBookmarksUseCase>(value),
+      providerOverride: $SyncValueProvider<GetUserProjectBookmarksUseCase>(
+        value,
+      ),
     );
   }
 }
@@ -442,20 +488,24 @@ String _$getPaginatedBookmarksHash() =>
 @ProviderFor(subToProjectNotif)
 const subToProjectNotifProvider = SubToProjectNotifProvider._();
 
-final class SubToProjectNotifProvider extends $FunctionalProvider<
-    SubToProjectNotifUseCase,
-    SubToProjectNotifUseCase,
-    SubToProjectNotifUseCase> with $Provider<SubToProjectNotifUseCase> {
+final class SubToProjectNotifProvider
+    extends
+        $FunctionalProvider<
+          SubToProjectNotifUseCase,
+          SubToProjectNotifUseCase,
+          SubToProjectNotifUseCase
+        >
+    with $Provider<SubToProjectNotifUseCase> {
   const SubToProjectNotifProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'subToProjectNotifProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'subToProjectNotifProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$subToProjectNotifHash();
@@ -463,8 +513,8 @@ final class SubToProjectNotifProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SubToProjectNotifUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SubToProjectNotifUseCase create(Ref ref) {
@@ -485,20 +535,24 @@ String _$subToProjectNotifHash() => r'b291a1dd992869a364084ead0c3b858ca39b6007';
 @ProviderFor(scheduleProject)
 const scheduleProjectProvider = ScheduleProjectProvider._();
 
-final class ScheduleProjectProvider extends $FunctionalProvider<
-    ScheduleProjectUseCase,
-    ScheduleProjectUseCase,
-    ScheduleProjectUseCase> with $Provider<ScheduleProjectUseCase> {
+final class ScheduleProjectProvider
+    extends
+        $FunctionalProvider<
+          ScheduleProjectUseCase,
+          ScheduleProjectUseCase,
+          ScheduleProjectUseCase
+        >
+    with $Provider<ScheduleProjectUseCase> {
   const ScheduleProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'scheduleProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$scheduleProjectHash();
@@ -506,8 +560,8 @@ final class ScheduleProjectProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ScheduleProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ScheduleProjectUseCase create(Ref ref) {
@@ -528,18 +582,24 @@ String _$scheduleProjectHash() => r'92b6eeb0dc4bb039e784f9b256f4e7d738da469d';
 @ProviderFor(toggleLike)
 const toggleLikeProvider = ToggleLikeProvider._();
 
-final class ToggleLikeProvider extends $FunctionalProvider<ToggleLikeUseCase,
-    ToggleLikeUseCase, ToggleLikeUseCase> with $Provider<ToggleLikeUseCase> {
+final class ToggleLikeProvider
+    extends
+        $FunctionalProvider<
+          ToggleLikeUseCase,
+          ToggleLikeUseCase,
+          ToggleLikeUseCase
+        >
+    with $Provider<ToggleLikeUseCase> {
   const ToggleLikeProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'toggleLikeProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'toggleLikeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$toggleLikeHash();
@@ -547,8 +607,8 @@ final class ToggleLikeProvider extends $FunctionalProvider<ToggleLikeUseCase,
   @$internal
   @override
   $ProviderElement<ToggleLikeUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ToggleLikeUseCase create(Ref ref) {
@@ -569,20 +629,24 @@ String _$toggleLikeHash() => r'6610dd1971c4bc0f3245dfa3b80af78912f3420a';
 @ProviderFor(clearProjectBookmarks)
 const clearProjectBookmarksProvider = ClearProjectBookmarksProvider._();
 
-final class ClearProjectBookmarksProvider extends $FunctionalProvider<
-    ClearProjectBookmarksUseCase,
-    ClearProjectBookmarksUseCase,
-    ClearProjectBookmarksUseCase> with $Provider<ClearProjectBookmarksUseCase> {
+final class ClearProjectBookmarksProvider
+    extends
+        $FunctionalProvider<
+          ClearProjectBookmarksUseCase,
+          ClearProjectBookmarksUseCase,
+          ClearProjectBookmarksUseCase
+        >
+    with $Provider<ClearProjectBookmarksUseCase> {
   const ClearProjectBookmarksProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'clearProjectBookmarksProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clearProjectBookmarksProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$clearProjectBookmarksHash();
@@ -590,8 +654,8 @@ final class ClearProjectBookmarksProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ClearProjectBookmarksUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ClearProjectBookmarksUseCase create(Ref ref) {
@@ -613,20 +677,24 @@ String _$clearProjectBookmarksHash() =>
 @ProviderFor(reactToProjectReview)
 const reactToProjectReviewProvider = ReactToProjectReviewProvider._();
 
-final class ReactToProjectReviewProvider extends $FunctionalProvider<
-    ReactToProjectReviewUseCase,
-    ReactToProjectReviewUseCase,
-    ReactToProjectReviewUseCase> with $Provider<ReactToProjectReviewUseCase> {
+final class ReactToProjectReviewProvider
+    extends
+        $FunctionalProvider<
+          ReactToProjectReviewUseCase,
+          ReactToProjectReviewUseCase,
+          ReactToProjectReviewUseCase
+        >
+    with $Provider<ReactToProjectReviewUseCase> {
   const ReactToProjectReviewProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'reactToProjectReviewProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reactToProjectReviewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$reactToProjectReviewHash();
@@ -634,8 +702,8 @@ final class ReactToProjectReviewProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ReactToProjectReviewUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ReactToProjectReviewUseCase create(Ref ref) {
@@ -657,20 +725,24 @@ String _$reactToProjectReviewHash() =>
 @ProviderFor(reactToProjectVetting)
 const reactToProjectVettingProvider = ReactToProjectVettingProvider._();
 
-final class ReactToProjectVettingProvider extends $FunctionalProvider<
-    ReactToProjectVettingUseCase,
-    ReactToProjectVettingUseCase,
-    ReactToProjectVettingUseCase> with $Provider<ReactToProjectVettingUseCase> {
+final class ReactToProjectVettingProvider
+    extends
+        $FunctionalProvider<
+          ReactToProjectVettingUseCase,
+          ReactToProjectVettingUseCase,
+          ReactToProjectVettingUseCase
+        >
+    with $Provider<ReactToProjectVettingUseCase> {
   const ReactToProjectVettingProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'reactToProjectVettingProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'reactToProjectVettingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$reactToProjectVettingHash();
@@ -678,8 +750,8 @@ final class ReactToProjectVettingProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ReactToProjectVettingUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ReactToProjectVettingUseCase create(Ref ref) {
@@ -701,20 +773,24 @@ String _$reactToProjectVettingHash() =>
 @ProviderFor(toggleBookmark)
 const toggleBookmarkProvider = ToggleBookmarkProvider._();
 
-final class ToggleBookmarkProvider extends $FunctionalProvider<
-    ToggleBookmarkUseCase,
-    ToggleBookmarkUseCase,
-    ToggleBookmarkUseCase> with $Provider<ToggleBookmarkUseCase> {
+final class ToggleBookmarkProvider
+    extends
+        $FunctionalProvider<
+          ToggleBookmarkUseCase,
+          ToggleBookmarkUseCase,
+          ToggleBookmarkUseCase
+        >
+    with $Provider<ToggleBookmarkUseCase> {
   const ToggleBookmarkProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'toggleBookmarkProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'toggleBookmarkProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$toggleBookmarkHash();
@@ -722,8 +798,8 @@ final class ToggleBookmarkProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ToggleBookmarkUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ToggleBookmarkUseCase create(Ref ref) {
@@ -744,20 +820,24 @@ String _$toggleBookmarkHash() => r'fd9ae908bd8bf0829edc5f463e5ea18cd68a05e3';
 @ProviderFor(deleteProject)
 const deleteProjectProvider = DeleteProjectProvider._();
 
-final class DeleteProjectProvider extends $FunctionalProvider<
-    DeleteProjectUseCase,
-    DeleteProjectUseCase,
-    DeleteProjectUseCase> with $Provider<DeleteProjectUseCase> {
+final class DeleteProjectProvider
+    extends
+        $FunctionalProvider<
+          DeleteProjectUseCase,
+          DeleteProjectUseCase,
+          DeleteProjectUseCase
+        >
+    with $Provider<DeleteProjectUseCase> {
   const DeleteProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteProjectHash();
@@ -765,8 +845,8 @@ final class DeleteProjectProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteProjectUseCase create(Ref ref) {
@@ -787,20 +867,24 @@ String _$deleteProjectHash() => r'b877c510c65d1a2eb25340af7864d168b1172672';
 @ProviderFor(notInterestedProject)
 const notInterestedProjectProvider = NotInterestedProjectProvider._();
 
-final class NotInterestedProjectProvider extends $FunctionalProvider<
-    MarkNotInterestedUseCase,
-    MarkNotInterestedUseCase,
-    MarkNotInterestedUseCase> with $Provider<MarkNotInterestedUseCase> {
+final class NotInterestedProjectProvider
+    extends
+        $FunctionalProvider<
+          MarkNotInterestedUseCase,
+          MarkNotInterestedUseCase,
+          MarkNotInterestedUseCase
+        >
+    with $Provider<MarkNotInterestedUseCase> {
   const NotInterestedProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notInterestedProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notInterestedProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notInterestedProjectHash();
@@ -808,8 +892,8 @@ final class NotInterestedProjectProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MarkNotInterestedUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MarkNotInterestedUseCase create(Ref ref) {
@@ -831,20 +915,24 @@ String _$notInterestedProjectHash() =>
 @ProviderFor(deleteProjectReview)
 const deleteProjectReviewProvider = DeleteProjectReviewProvider._();
 
-final class DeleteProjectReviewProvider extends $FunctionalProvider<
-    DeleteProjectReviewUseCase,
-    DeleteProjectReviewUseCase,
-    DeleteProjectReviewUseCase> with $Provider<DeleteProjectReviewUseCase> {
+final class DeleteProjectReviewProvider
+    extends
+        $FunctionalProvider<
+          DeleteProjectReviewUseCase,
+          DeleteProjectReviewUseCase,
+          DeleteProjectReviewUseCase
+        >
+    with $Provider<DeleteProjectReviewUseCase> {
   const DeleteProjectReviewProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteProjectReviewProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteProjectReviewProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteProjectReviewHash();
@@ -852,8 +940,8 @@ final class DeleteProjectReviewProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteProjectReviewUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteProjectReviewUseCase create(Ref ref) {
@@ -875,20 +963,24 @@ String _$deleteProjectReviewHash() =>
 @ProviderFor(deleteProjectVetting)
 const deleteProjectVettingProvider = DeleteProjectVettingProvider._();
 
-final class DeleteProjectVettingProvider extends $FunctionalProvider<
-    DeleteProjectVettingUseCase,
-    DeleteProjectVettingUseCase,
-    DeleteProjectVettingUseCase> with $Provider<DeleteProjectVettingUseCase> {
+final class DeleteProjectVettingProvider
+    extends
+        $FunctionalProvider<
+          DeleteProjectVettingUseCase,
+          DeleteProjectVettingUseCase,
+          DeleteProjectVettingUseCase
+        >
+    with $Provider<DeleteProjectVettingUseCase> {
   const DeleteProjectVettingProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteProjectVettingProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteProjectVettingProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteProjectVettingHash();
@@ -896,8 +988,8 @@ final class DeleteProjectVettingProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteProjectVettingUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteProjectVettingUseCase create(Ref ref) {
@@ -919,18 +1011,24 @@ String _$deleteProjectVettingHash() =>
 @ProviderFor(vetProject)
 const vetProjectProvider = VetProjectProvider._();
 
-final class VetProjectProvider extends $FunctionalProvider<VetProjectUseCase,
-    VetProjectUseCase, VetProjectUseCase> with $Provider<VetProjectUseCase> {
+final class VetProjectProvider
+    extends
+        $FunctionalProvider<
+          VetProjectUseCase,
+          VetProjectUseCase,
+          VetProjectUseCase
+        >
+    with $Provider<VetProjectUseCase> {
   const VetProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'vetProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'vetProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$vetProjectHash();
@@ -938,8 +1036,8 @@ final class VetProjectProvider extends $FunctionalProvider<VetProjectUseCase,
   @$internal
   @override
   $ProviderElement<VetProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   VetProjectUseCase create(Ref ref) {
@@ -960,20 +1058,24 @@ String _$vetProjectHash() => r'2d819f29e6abd9622c251523f9b445a2cb85ed39';
 @ProviderFor(getVettedProject)
 const getVettedProjectProvider = GetVettedProjectProvider._();
 
-final class GetVettedProjectProvider extends $FunctionalProvider<
-    GetVettedProjectUseCase,
-    GetVettedProjectUseCase,
-    GetVettedProjectUseCase> with $Provider<GetVettedProjectUseCase> {
+final class GetVettedProjectProvider
+    extends
+        $FunctionalProvider<
+          GetVettedProjectUseCase,
+          GetVettedProjectUseCase,
+          GetVettedProjectUseCase
+        >
+    with $Provider<GetVettedProjectUseCase> {
   const GetVettedProjectProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getVettedProjectProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getVettedProjectProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getVettedProjectHash();
@@ -981,8 +1083,8 @@ final class GetVettedProjectProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetVettedProjectUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetVettedProjectUseCase create(Ref ref) {
@@ -1003,20 +1105,24 @@ String _$getVettedProjectHash() => r'50a007e5e425e0c0e2b53c1dc643d69126170eed';
 @ProviderFor(getVettedProjects)
 const getVettedProjectsProvider = GetVettedProjectsProvider._();
 
-final class GetVettedProjectsProvider extends $FunctionalProvider<
-    GetVettedProjectsUseCase,
-    GetVettedProjectsUseCase,
-    GetVettedProjectsUseCase> with $Provider<GetVettedProjectsUseCase> {
+final class GetVettedProjectsProvider
+    extends
+        $FunctionalProvider<
+          GetVettedProjectsUseCase,
+          GetVettedProjectsUseCase,
+          GetVettedProjectsUseCase
+        >
+    with $Provider<GetVettedProjectsUseCase> {
   const GetVettedProjectsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getVettedProjectsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getVettedProjectsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getVettedProjectsHash();
@@ -1024,8 +1130,8 @@ final class GetVettedProjectsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetVettedProjectsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetVettedProjectsUseCase create(Ref ref) {
@@ -1046,20 +1152,24 @@ String _$getVettedProjectsHash() => r'1b02c9a15613c3978265afe71745114ed76d20eb';
 @ProviderFor(getProjectDrafts)
 const getProjectDraftsProvider = GetProjectDraftsProvider._();
 
-final class GetProjectDraftsProvider extends $FunctionalProvider<
-    GetProjectDraftsUseCase,
-    GetProjectDraftsUseCase,
-    GetProjectDraftsUseCase> with $Provider<GetProjectDraftsUseCase> {
+final class GetProjectDraftsProvider
+    extends
+        $FunctionalProvider<
+          GetProjectDraftsUseCase,
+          GetProjectDraftsUseCase,
+          GetProjectDraftsUseCase
+        >
+    with $Provider<GetProjectDraftsUseCase> {
   const GetProjectDraftsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getProjectDraftsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getProjectDraftsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getProjectDraftsHash();
@@ -1067,8 +1177,8 @@ final class GetProjectDraftsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetProjectDraftsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetProjectDraftsUseCase create(Ref ref) {
@@ -1089,20 +1199,24 @@ String _$getProjectDraftsHash() => r'498f739d874a9c50f10ab138af65fc86bcf6885f';
 @ProviderFor(saveProjectDraft)
 const saveProjectDraftProvider = SaveProjectDraftProvider._();
 
-final class SaveProjectDraftProvider extends $FunctionalProvider<
-    SaveProjectDraftUseCase,
-    SaveProjectDraftUseCase,
-    SaveProjectDraftUseCase> with $Provider<SaveProjectDraftUseCase> {
+final class SaveProjectDraftProvider
+    extends
+        $FunctionalProvider<
+          SaveProjectDraftUseCase,
+          SaveProjectDraftUseCase,
+          SaveProjectDraftUseCase
+        >
+    with $Provider<SaveProjectDraftUseCase> {
   const SaveProjectDraftProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'saveProjectDraftProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveProjectDraftProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$saveProjectDraftHash();
@@ -1110,8 +1224,8 @@ final class SaveProjectDraftProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SaveProjectDraftUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SaveProjectDraftUseCase create(Ref ref) {
@@ -1132,20 +1246,24 @@ String _$saveProjectDraftHash() => r'7686d532f63383c0c09fa6242f7f124d1f37ab2d';
 @ProviderFor(deleteProjectDraft)
 const deleteProjectDraftProvider = DeleteProjectDraftProvider._();
 
-final class DeleteProjectDraftProvider extends $FunctionalProvider<
-    DeleteProjectDraftUseCase,
-    DeleteProjectDraftUseCase,
-    DeleteProjectDraftUseCase> with $Provider<DeleteProjectDraftUseCase> {
+final class DeleteProjectDraftProvider
+    extends
+        $FunctionalProvider<
+          DeleteProjectDraftUseCase,
+          DeleteProjectDraftUseCase,
+          DeleteProjectDraftUseCase
+        >
+    with $Provider<DeleteProjectDraftUseCase> {
   const DeleteProjectDraftProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteProjectDraftProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteProjectDraftProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteProjectDraftHash();
@@ -1153,8 +1271,8 @@ final class DeleteProjectDraftProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteProjectDraftUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteProjectDraftUseCase create(Ref ref) {
@@ -1176,21 +1294,24 @@ String _$deleteProjectDraftHash() =>
 @ProviderFor(deleteAllProjectDrafts)
 const deleteAllProjectDraftsProvider = DeleteAllProjectDraftsProvider._();
 
-final class DeleteAllProjectDraftsProvider extends $FunctionalProvider<
-        DeleteAllProjectDraftsUseCase,
-        DeleteAllProjectDraftsUseCase,
-        DeleteAllProjectDraftsUseCase>
+final class DeleteAllProjectDraftsProvider
+    extends
+        $FunctionalProvider<
+          DeleteAllProjectDraftsUseCase,
+          DeleteAllProjectDraftsUseCase,
+          DeleteAllProjectDraftsUseCase
+        >
     with $Provider<DeleteAllProjectDraftsUseCase> {
   const DeleteAllProjectDraftsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteAllProjectDraftsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteAllProjectDraftsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteAllProjectDraftsHash();
@@ -1198,8 +1319,8 @@ final class DeleteAllProjectDraftsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteAllProjectDraftsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteAllProjectDraftsUseCase create(Ref ref) {
@@ -1210,8 +1331,9 @@ final class DeleteAllProjectDraftsProvider extends $FunctionalProvider<
   Override overrideWithValue(DeleteAllProjectDraftsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<DeleteAllProjectDraftsUseCase>(value),
+      providerOverride: $SyncValueProvider<DeleteAllProjectDraftsUseCase>(
+        value,
+      ),
     );
   }
 }

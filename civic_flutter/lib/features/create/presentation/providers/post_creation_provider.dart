@@ -103,7 +103,7 @@ class PostCreation extends _$PostCreation {
   }
 
   void setImages(List<String> images) {
-    state = state.copyWith(imageUrls: images);
+    state = state.copyWith(imageUrls: images.toSet().toList(),);
   }
 
   void setVideo(String video) {
@@ -196,7 +196,7 @@ class PostCreation extends _$PostCreation {
     }
   }
 
-  Future<void> pickPicture([int maxImageCount = 10]) async {
+  Future<void> pickPicture([int maxImageCount = 5]) async {
     if (state.imageUrls.length >= maxImageCount) return;
     final imageLength = maxImageCount - state.imageUrls.length;
     final image = await imageHelper.pickImage(
@@ -211,10 +211,10 @@ class PostCreation extends _$PostCreation {
         imagePaths.add(img.path);
       }
       state = state.copyWith(
-        imageUrls: [
+        imageUrls: {
           ...state.imageUrls,
           ...imagePaths.take(imageLength),
-        ],
+        }.toList(),
       );
       if (image.length > imageLength) {
         TToastMessages.infoToast(
@@ -229,6 +229,10 @@ class PostCreation extends _$PostCreation {
     if (index < 0 || index >= images.length) return;
     images.removeAt(index);
     state = state.copyWith(imageUrls: images);
+  }
+
+  void removeAllImages() {
+    state = state.copyWith(imageUrls: []);
   }
 
   bool isImage() {

@@ -12,18 +12,24 @@ part of 'user_details_provider.dart';
 @ProviderFor(getUserDetails)
 const getUserDetailsProvider = GetUserDetailsFamily._();
 
-final class GetUserDetailsProvider extends $FunctionalProvider<
-        AsyncValue<UserRecord>, UserRecord, FutureOr<UserRecord>>
+final class GetUserDetailsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<UserRecord>,
+          UserRecord,
+          FutureOr<UserRecord>
+        >
     with $FutureModifier<UserRecord>, $FutureProvider<UserRecord> {
-  const GetUserDetailsProvider._(
-      {required GetUserDetailsFamily super.from, required int super.argument})
-      : super(
-          retry: null,
-          name: r'getUserDetailsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const GetUserDetailsProvider._({
+    required GetUserDetailsFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'getUserDetailsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$getUserDetailsHash();
@@ -43,10 +49,7 @@ final class GetUserDetailsProvider extends $FunctionalProvider<
   @override
   FutureOr<UserRecord> create(Ref ref) {
     final argument = this.argument as int;
-    return getUserDetails(
-      ref,
-      argument,
-    );
+    return getUserDetails(ref, argument);
   }
 
   @override
@@ -65,17 +68,15 @@ String _$getUserDetailsHash() => r'4aefeaec1c73e3377bba2ee3e3810ed22b9f1a76';
 final class GetUserDetailsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<UserRecord>, int> {
   const GetUserDetailsFamily._()
-      : super(
-          retry: null,
-          name: r'getUserDetailsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'getUserDetailsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  GetUserDetailsProvider call(
-    int userId,
-  ) =>
+  GetUserDetailsProvider call(int userId) =>
       GetUserDetailsProvider._(argument: userId, from: this);
 
   @override

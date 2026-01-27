@@ -12,27 +12,26 @@ part of 'get_comment_provider.dart';
 @ProviderFor(getComment)
 const getCommentProvider = GetCommentFamily._();
 
-final class GetCommentProvider extends $FunctionalProvider<
-        AsyncValue<PostWithUserState>,
-        PostWithUserState,
-        FutureOr<PostWithUserState>>
+final class GetCommentProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<PostWithUserState>,
+          PostWithUserState,
+          FutureOr<PostWithUserState>
+        >
     with
         $FutureModifier<PostWithUserState>,
         $FutureProvider<PostWithUserState> {
-  const GetCommentProvider._(
-      {required GetCommentFamily super.from,
-      required (
-        int,
-        bool,
-      )
-          super.argument})
-      : super(
-          retry: null,
-          name: r'getCommentProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const GetCommentProvider._({
+    required GetCommentFamily super.from,
+    required (int, bool) super.argument,
+  }) : super(
+         retry: null,
+         name: r'getCommentProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$getCommentHash();
@@ -47,20 +46,13 @@ final class GetCommentProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<PostWithUserState> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<PostWithUserState> create(Ref ref) {
-    final argument = this.argument as (
-      int,
-      bool,
-    );
-    return getComment(
-      ref,
-      argument.$1,
-      argument.$2,
-    );
+    final argument = this.argument as (int, bool);
+    return getComment(ref, argument.$1, argument.$2);
   }
 
   @override
@@ -77,30 +69,18 @@ final class GetCommentProvider extends $FunctionalProvider<
 String _$getCommentHash() => r'f47b28a49788fe5d62f5b2148d70fe7cc1ae30a6';
 
 final class GetCommentFamily extends $Family
-    with
-        $FunctionalFamilyOverride<
-            FutureOr<PostWithUserState>,
-            (
-              int,
-              bool,
-            )> {
+    with $FunctionalFamilyOverride<FutureOr<PostWithUserState>, (int, bool)> {
   const GetCommentFamily._()
-      : super(
-          retry: null,
-          name: r'getCommentProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'getCommentProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  GetCommentProvider call(
-    int commentId,
-    bool isComment,
-  ) =>
-      GetCommentProvider._(argument: (
-        commentId,
-        isComment,
-      ), from: this);
+  GetCommentProvider call(int commentId, bool isComment) =>
+      GetCommentProvider._(argument: (commentId, isComment), from: this);
 
   @override
   String toString() => r'getCommentProvider';

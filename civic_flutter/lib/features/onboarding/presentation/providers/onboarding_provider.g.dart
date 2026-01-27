@@ -14,15 +14,15 @@ const onboardingProvider = OnboardingProvider._();
 
 final class OnboardingProvider extends $NotifierProvider<Onboarding, void> {
   const OnboardingProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'onboardingProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'onboardingProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$onboardingHash();
@@ -49,8 +49,14 @@ abstract class _$Onboarding extends $Notifier<void> {
   void runBuild() {
     build();
     final ref = this.ref as $Ref<void, void>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<void, void>, void, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<void, void>,
+              void,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, null);
   }
 }

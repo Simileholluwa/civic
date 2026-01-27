@@ -15,15 +15,15 @@ const bottomNavVisibilityProvider = BottomNavVisibilityProvider._();
 final class BottomNavVisibilityProvider
     extends $NotifierProvider<BottomNavVisibility, bool> {
   const BottomNavVisibilityProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'bottomNavVisibilityProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'bottomNavVisibilityProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$bottomNavVisibilityHash();
@@ -42,7 +42,7 @@ final class BottomNavVisibilityProvider
 }
 
 String _$bottomNavVisibilityHash() =>
-    r'6199eda540314ca6a34053f5c202acb6d11c395a';
+    r'0d0afcc32828cfd9008ddaf1a95465122c3ad5f3';
 
 abstract class _$BottomNavVisibility extends $Notifier<bool> {
   bool build();
@@ -51,8 +51,14 @@ abstract class _$BottomNavVisibility extends $Notifier<bool> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<bool, bool>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<bool, bool>, bool, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

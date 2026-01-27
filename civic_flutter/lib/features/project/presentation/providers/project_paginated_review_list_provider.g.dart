@@ -12,18 +12,22 @@ part of 'project_paginated_review_list_provider.dart';
 @ProviderFor(PaginatedProjectReviewList)
 const paginatedProjectReviewListProvider = PaginatedProjectReviewListFamily._();
 
-final class PaginatedProjectReviewListProvider extends $NotifierProvider<
-    PaginatedProjectReviewList, Raw<PagingController<int, ProjectReview>>> {
-  const PaginatedProjectReviewListProvider._(
-      {required PaginatedProjectReviewListFamily super.from,
-      required int super.argument})
-      : super(
-          retry: null,
-          name: r'paginatedProjectReviewListProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+final class PaginatedProjectReviewListProvider
+    extends
+        $NotifierProvider<
+          PaginatedProjectReviewList,
+          Raw<PagingController<int, ProjectReview>>
+        > {
+  const PaginatedProjectReviewListProvider._({
+    required PaginatedProjectReviewListFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedProjectReviewListProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$paginatedProjectReviewListHash();
@@ -66,23 +70,22 @@ String _$paginatedProjectReviewListHash() =>
 final class PaginatedProjectReviewListFamily extends $Family
     with
         $ClassFamilyOverride<
-            PaginatedProjectReviewList,
-            Raw<PagingController<int, ProjectReview>>,
-            Raw<PagingController<int, ProjectReview>>,
-            Raw<PagingController<int, ProjectReview>>,
-            int> {
+          PaginatedProjectReviewList,
+          Raw<PagingController<int, ProjectReview>>,
+          Raw<PagingController<int, ProjectReview>>,
+          Raw<PagingController<int, ProjectReview>>,
+          int
+        > {
   const PaginatedProjectReviewListFamily._()
-      : super(
-          retry: null,
-          name: r'paginatedProjectReviewListProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: false,
-        );
+    : super(
+        retry: null,
+        name: r'paginatedProjectReviewListProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
 
-  PaginatedProjectReviewListProvider call(
-    int projectId,
-  ) =>
+  PaginatedProjectReviewListProvider call(int projectId) =>
       PaginatedProjectReviewListProvider._(argument: projectId, from: this);
 
   @override
@@ -94,23 +97,28 @@ abstract class _$PaginatedProjectReviewList
   late final _$args = ref.$arg as int;
   int get projectId => _$args;
 
-  Raw<PagingController<int, ProjectReview>> build(
-    int projectId,
-  );
+  Raw<PagingController<int, ProjectReview>> build(int projectId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref as $Ref<Raw<PagingController<int, ProjectReview>>,
-        Raw<PagingController<int, ProjectReview>>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PagingController<int, ProjectReview>>,
-            Raw<PagingController<int, ProjectReview>>>,
-        Raw<PagingController<int, ProjectReview>>,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<
+              Raw<PagingController<int, ProjectReview>>,
+              Raw<PagingController<int, ProjectReview>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<PagingController<int, ProjectReview>>,
+                Raw<PagingController<int, ProjectReview>>
+              >,
+              Raw<PagingController<int, ProjectReview>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -121,15 +129,15 @@ const projectReviewListQueryProvider = ProjectReviewListQueryProvider._();
 final class ProjectReviewListQueryProvider
     extends $NotifierProvider<ProjectReviewListQuery, ProjectReviewQueryState> {
   const ProjectReviewListQueryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectReviewListQueryProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectReviewListQueryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectReviewListQueryHash();
@@ -159,11 +167,14 @@ abstract class _$ProjectReviewListQuery
     final created = build();
     final ref =
         this.ref as $Ref<ProjectReviewQueryState, ProjectReviewQueryState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<ProjectReviewQueryState, ProjectReviewQueryState>,
-        ProjectReviewQueryState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ProjectReviewQueryState, ProjectReviewQueryState>,
+              ProjectReviewQueryState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

@@ -12,20 +12,24 @@ part of 'user_services_provider.dart';
 @ProviderFor(userRemoteDatasource)
 const userRemoteDatasourceProvider = UserRemoteDatasourceProvider._();
 
-final class UserRemoteDatasourceProvider extends $FunctionalProvider<
-    UserRemoteDatasourceImpl,
-    UserRemoteDatasourceImpl,
-    UserRemoteDatasourceImpl> with $Provider<UserRemoteDatasourceImpl> {
+final class UserRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          UserRemoteDatasourceImpl,
+          UserRemoteDatasourceImpl,
+          UserRemoteDatasourceImpl
+        >
+    with $Provider<UserRemoteDatasourceImpl> {
   const UserRemoteDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'userRemoteDatasourceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userRemoteDatasourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$userRemoteDatasourceHash();
@@ -33,8 +37,8 @@ final class UserRemoteDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<UserRemoteDatasourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   UserRemoteDatasourceImpl create(Ref ref) {
@@ -56,20 +60,24 @@ String _$userRemoteDatasourceHash() =>
 @ProviderFor(userRepositoryImpl)
 const userRepositoryImplProvider = UserRepositoryImplProvider._();
 
-final class UserRepositoryImplProvider extends $FunctionalProvider<
-    UserRepositoryImpl,
-    UserRepositoryImpl,
-    UserRepositoryImpl> with $Provider<UserRepositoryImpl> {
+final class UserRepositoryImplProvider
+    extends
+        $FunctionalProvider<
+          UserRepositoryImpl,
+          UserRepositoryImpl,
+          UserRepositoryImpl
+        >
+    with $Provider<UserRepositoryImpl> {
   const UserRepositoryImplProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'userRepositoryImplProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userRepositoryImplProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$userRepositoryImplHash();
@@ -77,8 +85,8 @@ final class UserRepositoryImplProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<UserRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   UserRepositoryImpl create(Ref ref) {
@@ -100,20 +108,24 @@ String _$userRepositoryImplHash() =>
 @ProviderFor(toggleFollow)
 const toggleFollowProvider = ToggleFollowProvider._();
 
-final class ToggleFollowProvider extends $FunctionalProvider<
-    ToggleFollowUseCase,
-    ToggleFollowUseCase,
-    ToggleFollowUseCase> with $Provider<ToggleFollowUseCase> {
+final class ToggleFollowProvider
+    extends
+        $FunctionalProvider<
+          ToggleFollowUseCase,
+          ToggleFollowUseCase,
+          ToggleFollowUseCase
+        >
+    with $Provider<ToggleFollowUseCase> {
   const ToggleFollowProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'toggleFollowProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'toggleFollowProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$toggleFollowHash();
@@ -121,8 +133,8 @@ final class ToggleFollowProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ToggleFollowUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ToggleFollowUseCase create(Ref ref) {
@@ -147,15 +159,15 @@ final class FetchUserProvider
     extends $FunctionalProvider<GetUserUseCase, GetUserUseCase, GetUserUseCase>
     with $Provider<GetUserUseCase> {
   const FetchUserProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'fetchUserProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'fetchUserProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$fetchUserHash();

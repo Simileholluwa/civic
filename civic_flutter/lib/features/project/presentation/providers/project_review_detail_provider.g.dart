@@ -12,19 +12,24 @@ part of 'project_review_detail_provider.dart';
 @ProviderFor(projectReviewDetail)
 const projectReviewDetailProvider = ProjectReviewDetailFamily._();
 
-final class ProjectReviewDetailProvider extends $FunctionalProvider<
-        AsyncValue<ProjectReview?>, ProjectReview?, FutureOr<ProjectReview?>>
+final class ProjectReviewDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ProjectReview?>,
+          ProjectReview?,
+          FutureOr<ProjectReview?>
+        >
     with $FutureModifier<ProjectReview?>, $FutureProvider<ProjectReview?> {
-  const ProjectReviewDetailProvider._(
-      {required ProjectReviewDetailFamily super.from,
-      required int super.argument})
-      : super(
-          retry: null,
-          name: r'projectReviewDetailProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ProjectReviewDetailProvider._({
+    required ProjectReviewDetailFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'projectReviewDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$projectReviewDetailHash();
@@ -39,16 +44,13 @@ final class ProjectReviewDetailProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<ProjectReview?> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<ProjectReview?> create(Ref ref) {
     final argument = this.argument as int;
-    return projectReviewDetail(
-      ref,
-      argument,
-    );
+    return projectReviewDetail(ref, argument);
   }
 
   @override
@@ -68,17 +70,15 @@ String _$projectReviewDetailHash() =>
 final class ProjectReviewDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<ProjectReview?>, int> {
   const ProjectReviewDetailFamily._()
-      : super(
-          retry: null,
-          name: r'projectReviewDetailProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'projectReviewDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ProjectReviewDetailProvider call(
-    int id,
-  ) =>
+  ProjectReviewDetailProvider call(int id) =>
       ProjectReviewDetailProvider._(argument: id, from: this);
 
   @override

@@ -14,16 +14,16 @@ const projectVetProvider = ProjectVetFamily._();
 
 final class ProjectVetProvider
     extends $NotifierProvider<ProjectVet, VetProjectState> {
-  const ProjectVetProvider._(
-      {required ProjectVetFamily super.from,
-      required ProjectVetting? super.argument})
-      : super(
-          retry: null,
-          name: r'projectVetProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ProjectVetProvider._({
+    required ProjectVetFamily super.from,
+    required ProjectVetting? super.argument,
+  }) : super(
+         retry: null,
+         name: r'projectVetProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$projectVetHash();
@@ -62,20 +62,23 @@ String _$projectVetHash() => r'b9e9bb0de68b63aed740aac3f722013367b13334';
 
 final class ProjectVetFamily extends $Family
     with
-        $ClassFamilyOverride<ProjectVet, VetProjectState, VetProjectState,
-            VetProjectState, ProjectVetting?> {
+        $ClassFamilyOverride<
+          ProjectVet,
+          VetProjectState,
+          VetProjectState,
+          VetProjectState,
+          ProjectVetting?
+        > {
   const ProjectVetFamily._()
-      : super(
-          retry: null,
-          name: r'projectVetProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'projectVetProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ProjectVetProvider call(
-    ProjectVetting? projectVetting,
-  ) =>
+  ProjectVetProvider call(ProjectVetting? projectVetting) =>
       ProjectVetProvider._(argument: projectVetting, from: this);
 
   @override
@@ -86,21 +89,20 @@ abstract class _$ProjectVet extends $Notifier<VetProjectState> {
   late final _$args = ref.$arg as ProjectVetting?;
   ProjectVetting? get projectVetting => _$args;
 
-  VetProjectState build(
-    ProjectVetting? projectVetting,
-  );
+  VetProjectState build(ProjectVetting? projectVetting);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<VetProjectState, VetProjectState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<VetProjectState, VetProjectState>,
-        VetProjectState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<VetProjectState, VetProjectState>,
+              VetProjectState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

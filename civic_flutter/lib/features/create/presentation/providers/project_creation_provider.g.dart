@@ -14,16 +14,16 @@ const createProjectNotifProvider = CreateProjectNotifFamily._();
 
 final class CreateProjectNotifProvider
     extends $NotifierProvider<CreateProjectNotif, ProjectCreationState> {
-  const CreateProjectNotifProvider._(
-      {required CreateProjectNotifFamily super.from,
-      required Project? super.argument})
-      : super(
-          retry: null,
-          name: r'createProjectNotifProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const CreateProjectNotifProvider._({
+    required CreateProjectNotifFamily super.from,
+    required Project? super.argument,
+  }) : super(
+         retry: null,
+         name: r'createProjectNotifProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$createProjectNotifHash();
@@ -63,20 +63,23 @@ String _$createProjectNotifHash() =>
 
 final class CreateProjectNotifFamily extends $Family
     with
-        $ClassFamilyOverride<CreateProjectNotif, ProjectCreationState,
-            ProjectCreationState, ProjectCreationState, Project?> {
+        $ClassFamilyOverride<
+          CreateProjectNotif,
+          ProjectCreationState,
+          ProjectCreationState,
+          ProjectCreationState,
+          Project?
+        > {
   const CreateProjectNotifFamily._()
-      : super(
-          retry: null,
-          name: r'createProjectNotifProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'createProjectNotifProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  CreateProjectNotifProvider call(
-    Project? project,
-  ) =>
+  CreateProjectNotifProvider call(Project? project) =>
       CreateProjectNotifProvider._(argument: project, from: this);
 
   @override
@@ -87,21 +90,20 @@ abstract class _$CreateProjectNotif extends $Notifier<ProjectCreationState> {
   late final _$args = ref.$arg as Project?;
   Project? get project => _$args;
 
-  ProjectCreationState build(
-    Project? project,
-  );
+  ProjectCreationState build(Project? project);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<ProjectCreationState, ProjectCreationState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<ProjectCreationState, ProjectCreationState>,
-        ProjectCreationState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ProjectCreationState, ProjectCreationState>,
+              ProjectCreationState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

@@ -15,15 +15,15 @@ const tagSelectionsProvider = TagSelectionsProvider._();
 final class TagSelectionsProvider
     extends $NotifierProvider<TagSelections, List<UserRecord>> {
   const TagSelectionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'tagSelectionsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'tagSelectionsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$tagSelectionsHash();
@@ -50,11 +50,14 @@ abstract class _$TagSelections extends $Notifier<List<UserRecord>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<UserRecord>, List<UserRecord>>,
-        List<UserRecord>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<UserRecord>, List<UserRecord>>,
+              List<UserRecord>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

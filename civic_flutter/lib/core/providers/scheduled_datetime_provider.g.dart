@@ -15,15 +15,15 @@ const postScheduledDateTimeProvider = PostScheduledDateTimeProvider._();
 final class PostScheduledDateTimeProvider
     extends $NotifierProvider<PostScheduledDateTime, DateTime?> {
   const PostScheduledDateTimeProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'postScheduledDateTimeProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'postScheduledDateTimeProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$postScheduledDateTimeHash();
@@ -51,8 +51,14 @@ abstract class _$PostScheduledDateTime extends $Notifier<DateTime?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<DateTime?, DateTime?>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<DateTime?, DateTime?>, DateTime?, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<DateTime?, DateTime?>,
+              DateTime?,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

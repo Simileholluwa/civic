@@ -14,16 +14,16 @@ const mediaVideoPlayerProvider = MediaVideoPlayerFamily._();
 
 final class MediaVideoPlayerProvider
     extends $NotifierProvider<MediaVideoPlayer, Raw<VideoPlayerController?>?> {
-  const MediaVideoPlayerProvider._(
-      {required MediaVideoPlayerFamily super.from,
-      required String? super.argument})
-      : super(
-          retry: null,
-          name: r'mediaVideoPlayerProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const MediaVideoPlayerProvider._({
+    required MediaVideoPlayerFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'mediaVideoPlayerProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$mediaVideoPlayerHash();
@@ -63,23 +63,22 @@ String _$mediaVideoPlayerHash() => r'186319a1c893cf3b19d23b5d507f12280ef2d7bf';
 final class MediaVideoPlayerFamily extends $Family
     with
         $ClassFamilyOverride<
-            MediaVideoPlayer,
-            Raw<VideoPlayerController?>?,
-            Raw<VideoPlayerController?>?,
-            Raw<VideoPlayerController?>?,
-            String?> {
+          MediaVideoPlayer,
+          Raw<VideoPlayerController?>?,
+          Raw<VideoPlayerController?>?,
+          Raw<VideoPlayerController?>?,
+          String?
+        > {
   const MediaVideoPlayerFamily._()
-      : super(
-          retry: null,
-          name: r'mediaVideoPlayerProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'mediaVideoPlayerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  MediaVideoPlayerProvider call(
-    String? videoUrl,
-  ) =>
+  MediaVideoPlayerProvider call(String? videoUrl) =>
       MediaVideoPlayerProvider._(argument: videoUrl, from: this);
 
   @override
@@ -91,22 +90,25 @@ abstract class _$MediaVideoPlayer
   late final _$args = ref.$arg as String?;
   String? get videoUrl => _$args;
 
-  Raw<VideoPlayerController?>? build(
-    String? videoUrl,
-  );
+  Raw<VideoPlayerController?>? build(String? videoUrl);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref
-        as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>,
-        Raw<VideoPlayerController?>?,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<VideoPlayerController?>?,
+                Raw<VideoPlayerController?>?
+              >,
+              Raw<VideoPlayerController?>?,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

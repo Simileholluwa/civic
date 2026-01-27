@@ -1,17 +1,11 @@
-import 'dart:io' show File;
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax/iconsax.dart';
 
 class CreatePostWidget extends ConsumerWidget {
   const CreatePostWidget({
@@ -33,10 +27,35 @@ class CreatePostWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postState = ref.watch(postCreationProvider(post));
+    final videoUrl = ref.watch(
+      postCreationProvider(post).select(
+        (s) => s.videoUrl,
+      ),
+    );
+    final taggedUsers = ref.watch(
+      postCreationProvider(post).select(
+        (s) => s.taggedUsers,
+      ),
+    );
+    final locations = ref.watch(
+      postCreationProvider(post).select(
+        (s) => s.locations,
+      ),
+    );
+    final controller = ref.watch(
+      postCreationProvider(post).select(
+        (s) => s.controller,
+      ),
+    );
     final postNotifier = ref.read(postCreationProvider(post).notifier);
+    final imagesUrl = ref.read(
+      postCreationProvider(post).select(
+        (s) => s.imageUrls,
+      ),
+    );
     final authState = ref.watch(authUserProvider);
-    final safeUsername = post.owner?.userInfo?.userName ??
+    final safeUsername =
+        post.owner?.userInfo?.userName ??
         (authState is AuthUserStateSuccess
             ? authState.userRecord.userInfo!.userName!
             : 'Hey');
@@ -62,167 +81,38 @@ class CreatePostWidget extends ConsumerWidget {
               children: [
                 PostTextField(
                   userName: safeUsername,
-                  controller: postState.controller,
+                  controller: controller,
                   post: post,
                   isComment: isComment,
                   isReply: isReply,
                 ),
-                if (postState.imageUrls.isNotEmpty)
-                  SizedBox(
-                    height: 500,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: postState.imageUrls.length,
-                      separatorBuilder: (_, _) => const SizedBox(width: 8),
-                      itemBuilder: (context, index) {
-                        final url = postState.imageUrls[index];
-                        bool isUrl(String v) {
-                          final lower = v.toLowerCase();
-                          return lower.startsWith('http://') ||
-                              lower.startsWith('https://');
-                        }
-
-                        return ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(
-                            16,
-                          ),
-                          child: Stack(
-                            alignment: Alignment.bottomRight,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.sizeOf(context).width * .9,
-                                  maxHeight: 500,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(context).dividerColor,
-                                  ),
-                                  borderRadius: BorderRadiusGeometry.circular(
-                                    16,
-                                  ),
-                                ),
-                                child: (isUrl(url) || kIsWeb)
-                                    ? CachedNetworkImage(
-                                        imageUrl: url,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.file(
-                                        File(url),
-                                        fit: BoxFit.cover,
-                                      ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 16,
-                                  bottom: 16,
-                                ),
-                                child: Container(
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadius.circular(
-                                      100,
-                                    ),
-                                    border: Border.all(
-                                      color: Theme.of(context).dividerColor,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        height: 45,
-                                        width: 45,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          border: Border.all(
-                                            color:
-                                                Theme.of(context).dividerColor,
-                                          ),
-                                        ),
-                                        child: IconButton(
-                                          onPressed: postNotifier.clearMedia,
-                                          icon: const Icon(
-                                            CupertinoIcons.clear,
-                                            size: 22,
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          postNotifier.removeImageAtIndex(
-                                            index,
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Iconsax.trash,
-                                          color: TColors.textWhite,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Iconsax.crop,
-                                          color: TColors.textWhite,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Iconsax.magicpen,
-                                          color: TColors.textWhite,
-                                          size: 22,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: TSizes.xs,
-                                      ),
-                                      Container(
-                                        height: 45,
-                                        width: 45,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          border: Border.all(
-                                            color:
-                                                Theme.of(context).dividerColor,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '${index + 1}/${postState.imageUrls.length}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                if (imagesUrl.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20,),
+                    child: ContentCreationImageViewer(
+                      imageLength: imagesUrl.length,
+                      maxLength: 5,
+                      takeImage: postNotifier.takePicture,
+                      pickImage: postNotifier.pickPicture,
+                      current: ref.watch(postImageAttachmentPageChangedProvider),
+                      imageUrls: imagesUrl,
+                      removeAllImages: postNotifier.removeAllImages,
+                      removeImageAtIndex: postNotifier.removeImageAtIndex,
+                      onPageChanged: (index, reason) {
+                        ref
+                            .read(
+                              postImageAttachmentPageChangedProvider.notifier,
+                            )
+                            .carouselPageChanged(
+                              index,
+                              reason,
+                            );
                       },
+                      pageIndex:
+                          ref.watch(postImageAttachmentPageChangedProvider) + 1,
                     ),
                   ),
-                if (postState.videoUrl.isNotEmpty)
+                if (videoUrl.isNotEmpty)
                   PostVideoPost(
                     post: post,
                   ),
@@ -269,31 +159,30 @@ class CreatePostWidget extends ConsumerWidget {
                             showInteractions: false,
                           )
                         : postToQuote!.postType == PostType.article
-                            ? ArticleCard(
-                                postWithUserState: PostWithUserState(
-                                  post: postToQuote!,
-                                ),
-                                fromDetails: true,
-                              )
-                            : PostCardDetail(
-                                postWithUserState: PostWithUserState(
-                                  post: postToQuote!,
-                                ),
-                                onTap: null,
-                                showInteractions: false,
-                              ),
+                        ? ArticleCard(
+                            postWithUserState: PostWithUserState(
+                              post: postToQuote!,
+                            ),
+                            fromDetails: true,
+                          )
+                        : PostCardDetail(
+                            postWithUserState: PostWithUserState(
+                              post: postToQuote!,
+                            ),
+                            onTap: null,
+                            showInteractions: false,
+                          ),
                   ),
-                if (postState.taggedUsers.isNotEmpty ||
-                    postState.locations.isNotEmpty)
+                if (taggedUsers.isNotEmpty || locations.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(
                       top: 10,
                     ),
                     child: ContentEngagementTagsAndLocations(
-                      tags: postState.taggedUsers,
-                      locations: postState.locations,
-                      hasTags: postState.taggedUsers.isNotEmpty,
-                      hasLocations: postState.locations.isNotEmpty,
+                      tags: taggedUsers,
+                      locations: locations,
+                      hasTags: taggedUsers.isNotEmpty,
+                      hasLocations: locations.isNotEmpty,
                       onTaggedUsersTap: () async {
                         await CreateHelperFunctions.selectLocationBottomSheet(
                           context: context,

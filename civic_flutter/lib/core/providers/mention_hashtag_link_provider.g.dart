@@ -12,20 +12,24 @@ part of 'mention_hashtag_link_provider.dart';
 @ProviderFor(mentionServices)
 const mentionServicesProvider = MentionServicesProvider._();
 
-final class MentionServicesProvider extends $FunctionalProvider<
-    MentionHashTagLinkServices,
-    MentionHashTagLinkServices,
-    MentionHashTagLinkServices> with $Provider<MentionHashTagLinkServices> {
+final class MentionServicesProvider
+    extends
+        $FunctionalProvider<
+          MentionHashTagLinkServices,
+          MentionHashTagLinkServices,
+          MentionHashTagLinkServices
+        >
+    with $Provider<MentionHashTagLinkServices> {
   const MentionServicesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'mentionServicesProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'mentionServicesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$mentionServicesHash();
@@ -33,8 +37,8 @@ final class MentionServicesProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MentionHashTagLinkServices> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MentionHashTagLinkServices create(Ref ref) {
@@ -55,20 +59,24 @@ String _$mentionServicesHash() => r'bd3b5edaf82eee204df7723d0b3bc049d1fcc6e5';
 @ProviderFor(recentMentionSuggestions)
 const recentMentionSuggestionsProvider = RecentMentionSuggestionsProvider._();
 
-final class RecentMentionSuggestionsProvider extends $FunctionalProvider<
-    List<UserRecord>,
-    List<UserRecord>,
-    List<UserRecord>> with $Provider<List<UserRecord>> {
+final class RecentMentionSuggestionsProvider
+    extends
+        $FunctionalProvider<
+          List<UserRecord>,
+          List<UserRecord>,
+          List<UserRecord>
+        >
+    with $Provider<List<UserRecord>> {
   const RecentMentionSuggestionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'recentMentionSuggestionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recentMentionSuggestionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$recentMentionSuggestionsHash();
@@ -98,21 +106,24 @@ String _$recentMentionSuggestionsHash() =>
 @ProviderFor(fetchUsersToMention)
 const fetchUsersToMentionProvider = FetchUsersToMentionFamily._();
 
-final class FetchUsersToMentionProvider extends $FunctionalProvider<
-        AsyncValue<List<UserRecord>>,
-        List<UserRecord>,
-        FutureOr<List<UserRecord>>>
+final class FetchUsersToMentionProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<UserRecord>>,
+          List<UserRecord>,
+          FutureOr<List<UserRecord>>
+        >
     with $FutureModifier<List<UserRecord>>, $FutureProvider<List<UserRecord>> {
-  const FetchUsersToMentionProvider._(
-      {required FetchUsersToMentionFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'fetchUsersToMentionProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const FetchUsersToMentionProvider._({
+    required FetchUsersToMentionFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'fetchUsersToMentionProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$fetchUsersToMentionHash();
@@ -127,16 +138,13 @@ final class FetchUsersToMentionProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<UserRecord>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<UserRecord>> create(Ref ref) {
     final argument = this.argument as String;
-    return fetchUsersToMention(
-      ref,
-      argument,
-    );
+    return fetchUsersToMention(ref, argument);
   }
 
   @override
@@ -156,17 +164,15 @@ String _$fetchUsersToMentionHash() =>
 final class FetchUsersToMentionFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<UserRecord>>, String> {
   const FetchUsersToMentionFamily._()
-      : super(
-          retry: null,
-          name: r'fetchUsersToMentionProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'fetchUsersToMentionProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  FetchUsersToMentionProvider call(
-    String query,
-  ) =>
+  FetchUsersToMentionProvider call(String query) =>
       FetchUsersToMentionProvider._(argument: query, from: this);
 
   @override
@@ -179,15 +185,15 @@ const mentionSuggestionsProvider = MentionSuggestionsProvider._();
 final class MentionSuggestionsProvider
     extends $NotifierProvider<MentionSuggestions, List<UserRecord>> {
   const MentionSuggestionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'mentionSuggestionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'mentionSuggestionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$mentionSuggestionsHash();
@@ -215,11 +221,14 @@ abstract class _$MentionSuggestions extends $Notifier<List<UserRecord>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<UserRecord>, List<UserRecord>>,
-        List<UserRecord>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<UserRecord>, List<UserRecord>>,
+              List<UserRecord>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -230,15 +239,15 @@ const selectedMentionsProvider = SelectedMentionsProvider._();
 final class SelectedMentionsProvider
     extends $NotifierProvider<SelectedMentions, List<UserRecord>> {
   const SelectedMentionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'selectedMentionsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'selectedMentionsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$selectedMentionsHash();
@@ -265,11 +274,14 @@ abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<UserRecord>, List<UserRecord>>,
-        List<UserRecord>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<UserRecord>, List<UserRecord>>,
+              List<UserRecord>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -279,16 +291,16 @@ const extractedMentionsProvider = ExtractedMentionsFamily._();
 
 final class ExtractedMentionsProvider
     extends $NotifierProvider<ExtractedMentions, List<String>> {
-  const ExtractedMentionsProvider._(
-      {required ExtractedMentionsFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'extractedMentionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ExtractedMentionsProvider._({
+    required ExtractedMentionsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'extractedMentionsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$extractedMentionsHash();
@@ -327,20 +339,23 @@ String _$extractedMentionsHash() => r'44b5d345a943a8f7f2d19047696d21ae7f79f4b1';
 
 final class ExtractedMentionsFamily extends $Family
     with
-        $ClassFamilyOverride<ExtractedMentions, List<String>, List<String>,
-            List<String>, String> {
+        $ClassFamilyOverride<
+          ExtractedMentions,
+          List<String>,
+          List<String>,
+          List<String>,
+          String
+        > {
   const ExtractedMentionsFamily._()
-      : super(
-          retry: null,
-          name: r'extractedMentionsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'extractedMentionsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ExtractedMentionsProvider call(
-    String text,
-  ) =>
+  ExtractedMentionsProvider call(String text) =>
       ExtractedMentionsProvider._(argument: text, from: this);
 
   @override
@@ -351,21 +366,20 @@ abstract class _$ExtractedMentions extends $Notifier<List<String>> {
   late final _$args = ref.$arg as String;
   String get text => _$args;
 
-  List<String> build(
-    String text,
-  );
+  List<String> build(String text);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<List<String>, List<String>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<String>, List<String>>,
-        List<String>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<String>, List<String>>,
+              List<String>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -375,20 +389,16 @@ const validMentionsProvider = ValidMentionsFamily._();
 
 final class ValidMentionsProvider
     extends $NotifierProvider<ValidMentions, bool> {
-  const ValidMentionsProvider._(
-      {required ValidMentionsFamily super.from,
-      required (
-        String,
-        String,
-      )
-          super.argument})
-      : super(
-          retry: null,
-          name: r'validMentionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ValidMentionsProvider._({
+    required ValidMentionsFamily super.from,
+    required (String, String) super.argument,
+  }) : super(
+         retry: null,
+         name: r'validMentionsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$validMentionsHash();
@@ -428,58 +438,47 @@ String _$validMentionsHash() => r'5115e7d306ad573e1d1448f0aec0b47ca62728ed';
 final class ValidMentionsFamily extends $Family
     with
         $ClassFamilyOverride<
-            ValidMentions,
-            bool,
-            bool,
-            bool,
-            (
-              String,
-              String,
-            )> {
+          ValidMentions,
+          bool,
+          bool,
+          bool,
+          (String, String)
+        > {
   const ValidMentionsFamily._()
-      : super(
-          retry: null,
-          name: r'validMentionsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'validMentionsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ValidMentionsProvider call(
-    String username,
-    String text,
-  ) =>
-      ValidMentionsProvider._(argument: (
-        username,
-        text,
-      ), from: this);
+  ValidMentionsProvider call(String username, String text) =>
+      ValidMentionsProvider._(argument: (username, text), from: this);
 
   @override
   String toString() => r'validMentionsProvider';
 }
 
 abstract class _$ValidMentions extends $Notifier<bool> {
-  late final _$args = ref.$arg as (
-    String,
-    String,
-  );
+  late final _$args = ref.$arg as (String, String);
   String get username => _$args.$1;
   String get text => _$args.$2;
 
-  bool build(
-    String username,
-    String text,
-  );
+  bool build(String username, String text);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args.$1,
-      _$args.$2,
-    );
+    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<bool, bool>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<bool, bool>, bool, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -488,15 +487,16 @@ abstract class _$ValidMentions extends $Notifier<bool> {
 const hashtagsProvider = HashtagsFamily._();
 
 final class HashtagsProvider extends $NotifierProvider<Hashtags, List<String>> {
-  const HashtagsProvider._(
-      {required HashtagsFamily super.from, required String super.argument})
-      : super(
-          retry: null,
-          name: r'hashtagsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const HashtagsProvider._({
+    required HashtagsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'hashtagsProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$hashtagsHash();
@@ -535,20 +535,23 @@ String _$hashtagsHash() => r'51eddcb9de8d581aa95991b5baa38960d0ee197f';
 
 final class HashtagsFamily extends $Family
     with
-        $ClassFamilyOverride<Hashtags, List<String>, List<String>, List<String>,
-            String> {
+        $ClassFamilyOverride<
+          Hashtags,
+          List<String>,
+          List<String>,
+          List<String>,
+          String
+        > {
   const HashtagsFamily._()
-      : super(
-          retry: null,
-          name: r'hashtagsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: false,
-        );
+    : super(
+        retry: null,
+        name: r'hashtagsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
 
-  HashtagsProvider call(
-    String text,
-  ) =>
+  HashtagsProvider call(String text) =>
       HashtagsProvider._(argument: text, from: this);
 
   @override
@@ -559,21 +562,20 @@ abstract class _$Hashtags extends $Notifier<List<String>> {
   late final _$args = ref.$arg as String;
   String get text => _$args;
 
-  List<String> build(
-    String text,
-  );
+  List<String> build(String text);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<List<String>, List<String>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<String>, List<String>>,
-        List<String>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<String>, List<String>>,
+              List<String>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -581,18 +583,24 @@ abstract class _$Hashtags extends $Notifier<List<String>> {
 @ProviderFor(fetchHashtags)
 const fetchHashtagsProvider = FetchHashtagsFamily._();
 
-final class FetchHashtagsProvider extends $FunctionalProvider<
-        AsyncValue<List<String>>, List<String>, FutureOr<List<String>>>
+final class FetchHashtagsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<String>>,
+          List<String>,
+          FutureOr<List<String>>
+        >
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
-  const FetchHashtagsProvider._(
-      {required FetchHashtagsFamily super.from, required String super.argument})
-      : super(
-          retry: null,
-          name: r'fetchHashtagsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const FetchHashtagsProvider._({
+    required FetchHashtagsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'fetchHashtagsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$fetchHashtagsHash();
@@ -607,16 +615,13 @@ final class FetchHashtagsProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<String>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<String>> create(Ref ref) {
     final argument = this.argument as String;
-    return fetchHashtags(
-      ref,
-      argument,
-    );
+    return fetchHashtags(ref, argument);
   }
 
   @override
@@ -635,17 +640,15 @@ String _$fetchHashtagsHash() => r'9e8aac021494bcc22b52460cf06e6ff20de64288';
 final class FetchHashtagsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
   const FetchHashtagsFamily._()
-      : super(
-          retry: null,
-          name: r'fetchHashtagsProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'fetchHashtagsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  FetchHashtagsProvider call(
-    String query,
-  ) =>
+  FetchHashtagsProvider call(String query) =>
       FetchHashtagsProvider._(argument: query, from: this);
 
   @override
@@ -658,15 +661,15 @@ const hashtagsSuggestionsProvider = HashtagsSuggestionsProvider._();
 final class HashtagsSuggestionsProvider
     extends $NotifierProvider<HashtagsSuggestions, List<String>> {
   const HashtagsSuggestionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'hashtagsSuggestionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hashtagsSuggestionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$hashtagsSuggestionsHash();
@@ -694,11 +697,14 @@ abstract class _$HashtagsSuggestions extends $Notifier<List<String>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<String>, List<String>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<String>, List<String>>,
-        List<String>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<String>, List<String>>,
+              List<String>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -709,15 +715,15 @@ const recentHashtagsProvider = RecentHashtagsProvider._();
 final class RecentHashtagsProvider
     extends $NotifierProvider<RecentHashtags, List<String>> {
   const RecentHashtagsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'recentHashtagsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recentHashtagsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$recentHashtagsHash();
@@ -744,11 +750,14 @@ abstract class _$RecentHashtags extends $Notifier<List<String>> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<List<String>, List<String>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<String>, List<String>>,
-        List<String>,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<String>, List<String>>,
+              List<String>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -756,19 +765,24 @@ abstract class _$RecentHashtags extends $Notifier<List<String>> {
 @ProviderFor(fetchLinkMetadata)
 const fetchLinkMetadataProvider = FetchLinkMetadataFamily._();
 
-final class FetchLinkMetadataProvider extends $FunctionalProvider<
-        AsyncValue<LinkMetadata?>, LinkMetadata?, FutureOr<LinkMetadata?>>
+final class FetchLinkMetadataProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<LinkMetadata?>,
+          LinkMetadata?,
+          FutureOr<LinkMetadata?>
+        >
     with $FutureModifier<LinkMetadata?>, $FutureProvider<LinkMetadata?> {
-  const FetchLinkMetadataProvider._(
-      {required FetchLinkMetadataFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'fetchLinkMetadataProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const FetchLinkMetadataProvider._({
+    required FetchLinkMetadataFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'fetchLinkMetadataProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$fetchLinkMetadataHash();
@@ -783,16 +797,13 @@ final class FetchLinkMetadataProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<LinkMetadata?> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<LinkMetadata?> create(Ref ref) {
     final argument = this.argument as String;
-    return fetchLinkMetadata(
-      ref,
-      argument,
-    );
+    return fetchLinkMetadata(ref, argument);
   }
 
   @override
@@ -811,17 +822,15 @@ String _$fetchLinkMetadataHash() => r'b0290afa80dd1b859732fa2b0a2bcdd26f7f846b';
 final class FetchLinkMetadataFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<LinkMetadata?>, String> {
   const FetchLinkMetadataFamily._()
-      : super(
-          retry: null,
-          name: r'fetchLinkMetadataProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'fetchLinkMetadataProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  FetchLinkMetadataProvider call(
-    String text,
-  ) =>
+  FetchLinkMetadataProvider call(String text) =>
       FetchLinkMetadataProvider._(argument: text, from: this);
 
   @override
@@ -832,15 +841,16 @@ final class FetchLinkMetadataFamily extends $Family
 const extractLinkProvider = ExtractLinkFamily._();
 
 final class ExtractLinkProvider extends $NotifierProvider<ExtractLink, String> {
-  const ExtractLinkProvider._(
-      {required ExtractLinkFamily super.from, required String super.argument})
-      : super(
-          retry: null,
-          name: r'extractLinkProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const ExtractLinkProvider._({
+    required ExtractLinkFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'extractLinkProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$extractLinkHash();
@@ -880,17 +890,15 @@ String _$extractLinkHash() => r'b04ec29c93e1c00eef28891b4cadf028ed19f101';
 final class ExtractLinkFamily extends $Family
     with $ClassFamilyOverride<ExtractLink, String, String, String, String> {
   const ExtractLinkFamily._()
-      : super(
-          retry: null,
-          name: r'extractLinkProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'extractLinkProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  ExtractLinkProvider call(
-    String text,
-  ) =>
+  ExtractLinkProvider call(String text) =>
       ExtractLinkProvider._(argument: text, from: this);
 
   @override
@@ -901,18 +909,20 @@ abstract class _$ExtractLink extends $Notifier<String> {
   late final _$args = ref.$arg as String;
   String get text => _$args;
 
-  String build(
-    String text,
-  );
+  String build(String text);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
+    final created = build(_$args);
     final ref = this.ref as $Ref<String, String>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<String, String>, String, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

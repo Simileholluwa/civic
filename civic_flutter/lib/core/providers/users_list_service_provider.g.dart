@@ -12,20 +12,24 @@ part of 'users_list_service_provider.dart';
 @ProviderFor(usersListService)
 const usersListServiceProvider = UsersListServiceProvider._();
 
-final class UsersListServiceProvider extends $FunctionalProvider<
-    UsersListService,
-    UsersListService,
-    UsersListService> with $Provider<UsersListService> {
+final class UsersListServiceProvider
+    extends
+        $FunctionalProvider<
+          UsersListService,
+          UsersListService,
+          UsersListService
+        >
+    with $Provider<UsersListService> {
   const UsersListServiceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'usersListServiceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'usersListServiceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$usersListServiceHash();
@@ -54,18 +58,22 @@ String _$usersListServiceHash() => r'125d68440db5707cc3888b53e653b0f45b09bef7';
 @ProviderFor(PaginatedUsersList)
 const paginatedUsersListProvider = PaginatedUsersListFamily._();
 
-final class PaginatedUsersListProvider extends $NotifierProvider<
-    PaginatedUsersList, Raw<PagingController<int, UserRecord>>> {
-  const PaginatedUsersListProvider._(
-      {required PaginatedUsersListFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'paginatedUsersListProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+final class PaginatedUsersListProvider
+    extends
+        $NotifierProvider<
+          PaginatedUsersList,
+          Raw<PagingController<int, UserRecord>>
+        > {
+  const PaginatedUsersListProvider._({
+    required PaginatedUsersListFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'paginatedUsersListProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$paginatedUsersListHash();
@@ -107,23 +115,22 @@ String _$paginatedUsersListHash() =>
 final class PaginatedUsersListFamily extends $Family
     with
         $ClassFamilyOverride<
-            PaginatedUsersList,
-            Raw<PagingController<int, UserRecord>>,
-            Raw<PagingController<int, UserRecord>>,
-            Raw<PagingController<int, UserRecord>>,
-            String> {
+          PaginatedUsersList,
+          Raw<PagingController<int, UserRecord>>,
+          Raw<PagingController<int, UserRecord>>,
+          Raw<PagingController<int, UserRecord>>,
+          String
+        > {
   const PaginatedUsersListFamily._()
-      : super(
-          retry: null,
-          name: r'paginatedUsersListProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: false,
-        );
+    : super(
+        retry: null,
+        name: r'paginatedUsersListProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
 
-  PaginatedUsersListProvider call(
-    String query,
-  ) =>
+  PaginatedUsersListProvider call(String query) =>
       PaginatedUsersListProvider._(argument: query, from: this);
 
   @override
@@ -135,23 +142,28 @@ abstract class _$PaginatedUsersList
   late final _$args = ref.$arg as String;
   String get query => _$args;
 
-  Raw<PagingController<int, UserRecord>> build(
-    String query,
-  );
+  Raw<PagingController<int, UserRecord>> build(String query);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(
-      _$args,
-    );
-    final ref = this.ref as $Ref<Raw<PagingController<int, UserRecord>>,
-        Raw<PagingController<int, UserRecord>>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PagingController<int, UserRecord>>,
-            Raw<PagingController<int, UserRecord>>>,
-        Raw<PagingController<int, UserRecord>>,
-        Object?,
-        Object?>;
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<
+              Raw<PagingController<int, UserRecord>>,
+              Raw<PagingController<int, UserRecord>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<PagingController<int, UserRecord>>,
+                Raw<PagingController<int, UserRecord>>
+              >,
+              Raw<PagingController<int, UserRecord>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -162,15 +174,15 @@ const searchUsersListQueryProvider = SearchUsersListQueryProvider._();
 final class SearchUsersListQueryProvider
     extends $NotifierProvider<SearchUsersListQuery, String> {
   const SearchUsersListQueryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'searchUsersListQueryProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchUsersListQueryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$searchUsersListQueryHash();
@@ -198,8 +210,14 @@ abstract class _$SearchUsersListQuery extends $Notifier<String> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<String, String>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<String, String>, String, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

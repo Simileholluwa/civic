@@ -13,21 +13,24 @@ part of 'notification_services_provider.dart';
 const notificationLocalDatasourceProvider =
     NotificationLocalDatasourceProvider._();
 
-final class NotificationLocalDatasourceProvider extends $FunctionalProvider<
-        NotificationLocalDatasourceImpl,
-        NotificationLocalDatasourceImpl,
-        NotificationLocalDatasourceImpl>
+final class NotificationLocalDatasourceProvider
+    extends
+        $FunctionalProvider<
+          NotificationLocalDatasourceImpl,
+          NotificationLocalDatasourceImpl,
+          NotificationLocalDatasourceImpl
+        >
     with $Provider<NotificationLocalDatasourceImpl> {
   const NotificationLocalDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notificationLocalDatasourceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationLocalDatasourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notificationLocalDatasourceHash();
@@ -35,8 +38,8 @@ final class NotificationLocalDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<NotificationLocalDatasourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   NotificationLocalDatasourceImpl create(Ref ref) {
@@ -47,8 +50,9 @@ final class NotificationLocalDatasourceProvider extends $FunctionalProvider<
   Override overrideWithValue(NotificationLocalDatasourceImpl value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<NotificationLocalDatasourceImpl>(value),
+      providerOverride: $SyncValueProvider<NotificationLocalDatasourceImpl>(
+        value,
+      ),
     );
   }
 }
@@ -60,21 +64,24 @@ String _$notificationLocalDatasourceHash() =>
 const notificationRemoteDatasourceProvider =
     NotificationRemoteDatasourceProvider._();
 
-final class NotificationRemoteDatasourceProvider extends $FunctionalProvider<
-        NotificationRemoteDatasourceImpl,
-        NotificationRemoteDatasourceImpl,
-        NotificationRemoteDatasourceImpl>
+final class NotificationRemoteDatasourceProvider
+    extends
+        $FunctionalProvider<
+          NotificationRemoteDatasourceImpl,
+          NotificationRemoteDatasourceImpl,
+          NotificationRemoteDatasourceImpl
+        >
     with $Provider<NotificationRemoteDatasourceImpl> {
   const NotificationRemoteDatasourceProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notificationRemoteDatasourceProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationRemoteDatasourceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notificationRemoteDatasourceHash();
@@ -82,8 +89,8 @@ final class NotificationRemoteDatasourceProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<NotificationRemoteDatasourceImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   NotificationRemoteDatasourceImpl create(Ref ref) {
@@ -94,8 +101,9 @@ final class NotificationRemoteDatasourceProvider extends $FunctionalProvider<
   Override overrideWithValue(NotificationRemoteDatasourceImpl value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<NotificationRemoteDatasourceImpl>(value),
+      providerOverride: $SyncValueProvider<NotificationRemoteDatasourceImpl>(
+        value,
+      ),
     );
   }
 }
@@ -107,20 +115,24 @@ String _$notificationRemoteDatasourceHash() =>
 const notificationRepositoryImplProvider =
     NotificationRepositoryImplProvider._();
 
-final class NotificationRepositoryImplProvider extends $FunctionalProvider<
-    NotificationRepositoryImpl,
-    NotificationRepositoryImpl,
-    NotificationRepositoryImpl> with $Provider<NotificationRepositoryImpl> {
+final class NotificationRepositoryImplProvider
+    extends
+        $FunctionalProvider<
+          NotificationRepositoryImpl,
+          NotificationRepositoryImpl,
+          NotificationRepositoryImpl
+        >
+    with $Provider<NotificationRepositoryImpl> {
   const NotificationRepositoryImplProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notificationRepositoryImplProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notificationRepositoryImplProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notificationRepositoryImplHash();
@@ -128,8 +140,8 @@ final class NotificationRepositoryImplProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<NotificationRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   NotificationRepositoryImpl create(Ref ref) {
@@ -151,20 +163,24 @@ String _$notificationRepositoryImplHash() =>
 @ProviderFor(getNotifications)
 const getNotificationsProvider = GetNotificationsProvider._();
 
-final class GetNotificationsProvider extends $FunctionalProvider<
-    GetNotificationsUseCase,
-    GetNotificationsUseCase,
-    GetNotificationsUseCase> with $Provider<GetNotificationsUseCase> {
+final class GetNotificationsProvider
+    extends
+        $FunctionalProvider<
+          GetNotificationsUseCase,
+          GetNotificationsUseCase,
+          GetNotificationsUseCase
+        >
+    with $Provider<GetNotificationsUseCase> {
   const GetNotificationsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getNotificationsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getNotificationsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getNotificationsHash();
@@ -172,8 +188,8 @@ final class GetNotificationsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetNotificationsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetNotificationsUseCase create(Ref ref) {
@@ -195,21 +211,24 @@ String _$getNotificationsHash() => r'f789e9b2a96903caed8ecdb8ec31834556f6dcaa';
 const getUserNotificationSettingsProvider =
     GetUserNotificationSettingsProvider._();
 
-final class GetUserNotificationSettingsProvider extends $FunctionalProvider<
-        GetUserNotificationSettingsUseCase,
-        GetUserNotificationSettingsUseCase,
-        GetUserNotificationSettingsUseCase>
+final class GetUserNotificationSettingsProvider
+    extends
+        $FunctionalProvider<
+          GetUserNotificationSettingsUseCase,
+          GetUserNotificationSettingsUseCase,
+          GetUserNotificationSettingsUseCase
+        >
     with $Provider<GetUserNotificationSettingsUseCase> {
   const GetUserNotificationSettingsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getUserNotificationSettingsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getUserNotificationSettingsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getUserNotificationSettingsHash();
@@ -217,8 +236,8 @@ final class GetUserNotificationSettingsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetUserNotificationSettingsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetUserNotificationSettingsUseCase create(Ref ref) {
@@ -229,8 +248,9 @@ final class GetUserNotificationSettingsProvider extends $FunctionalProvider<
   Override overrideWithValue(GetUserNotificationSettingsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<GetUserNotificationSettingsUseCase>(value),
+      providerOverride: $SyncValueProvider<GetUserNotificationSettingsUseCase>(
+        value,
+      ),
     );
   }
 }
@@ -242,21 +262,24 @@ String _$getUserNotificationSettingsHash() =>
 const updateUserNotificationSettingsProvider =
     UpdateUserNotificationSettingsProvider._();
 
-final class UpdateUserNotificationSettingsProvider extends $FunctionalProvider<
-        UpdateUserNotificationSettingsUseCase,
-        UpdateUserNotificationSettingsUseCase,
-        UpdateUserNotificationSettingsUseCase>
+final class UpdateUserNotificationSettingsProvider
+    extends
+        $FunctionalProvider<
+          UpdateUserNotificationSettingsUseCase,
+          UpdateUserNotificationSettingsUseCase,
+          UpdateUserNotificationSettingsUseCase
+        >
     with $Provider<UpdateUserNotificationSettingsUseCase> {
   const UpdateUserNotificationSettingsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'updateUserNotificationSettingsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'updateUserNotificationSettingsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$updateUserNotificationSettingsHash();
@@ -264,8 +287,8 @@ final class UpdateUserNotificationSettingsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<UpdateUserNotificationSettingsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   UpdateUserNotificationSettingsUseCase create(Ref ref) {
@@ -288,21 +311,24 @@ String _$updateUserNotificationSettingsHash() =>
 @ProviderFor(deleteAllNotifications)
 const deleteAllNotificationsProvider = DeleteAllNotificationsProvider._();
 
-final class DeleteAllNotificationsProvider extends $FunctionalProvider<
-        DeleteAllNotificationsUseCase,
-        DeleteAllNotificationsUseCase,
-        DeleteAllNotificationsUseCase>
+final class DeleteAllNotificationsProvider
+    extends
+        $FunctionalProvider<
+          DeleteAllNotificationsUseCase,
+          DeleteAllNotificationsUseCase,
+          DeleteAllNotificationsUseCase
+        >
     with $Provider<DeleteAllNotificationsUseCase> {
   const DeleteAllNotificationsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteAllNotificationsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteAllNotificationsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteAllNotificationsHash();
@@ -310,8 +336,8 @@ final class DeleteAllNotificationsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteAllNotificationsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteAllNotificationsUseCase create(Ref ref) {
@@ -322,8 +348,9 @@ final class DeleteAllNotificationsProvider extends $FunctionalProvider<
   Override overrideWithValue(DeleteAllNotificationsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<DeleteAllNotificationsUseCase>(value),
+      providerOverride: $SyncValueProvider<DeleteAllNotificationsUseCase>(
+        value,
+      ),
     );
   }
 }
@@ -334,20 +361,24 @@ String _$deleteAllNotificationsHash() =>
 @ProviderFor(deleteNotification)
 const deleteNotificationProvider = DeleteNotificationProvider._();
 
-final class DeleteNotificationProvider extends $FunctionalProvider<
-    DeleteNotificationUseCase,
-    DeleteNotificationUseCase,
-    DeleteNotificationUseCase> with $Provider<DeleteNotificationUseCase> {
+final class DeleteNotificationProvider
+    extends
+        $FunctionalProvider<
+          DeleteNotificationUseCase,
+          DeleteNotificationUseCase,
+          DeleteNotificationUseCase
+        >
+    with $Provider<DeleteNotificationUseCase> {
   const DeleteNotificationProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deleteNotificationProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deleteNotificationProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deleteNotificationHash();
@@ -355,8 +386,8 @@ final class DeleteNotificationProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeleteNotificationUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeleteNotificationUseCase create(Ref ref) {
@@ -378,21 +409,24 @@ String _$deleteNotificationHash() =>
 @ProviderFor(markNotificationAsRead)
 const markNotificationAsReadProvider = MarkNotificationAsReadProvider._();
 
-final class MarkNotificationAsReadProvider extends $FunctionalProvider<
-        MarkNotificationAsReadUseCase,
-        MarkNotificationAsReadUseCase,
-        MarkNotificationAsReadUseCase>
+final class MarkNotificationAsReadProvider
+    extends
+        $FunctionalProvider<
+          MarkNotificationAsReadUseCase,
+          MarkNotificationAsReadUseCase,
+          MarkNotificationAsReadUseCase
+        >
     with $Provider<MarkNotificationAsReadUseCase> {
   const MarkNotificationAsReadProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'markNotificationAsReadProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markNotificationAsReadProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$markNotificationAsReadHash();
@@ -400,8 +434,8 @@ final class MarkNotificationAsReadProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MarkNotificationAsReadUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MarkNotificationAsReadUseCase create(Ref ref) {
@@ -412,8 +446,9 @@ final class MarkNotificationAsReadProvider extends $FunctionalProvider<
   Override overrideWithValue(MarkNotificationAsReadUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<MarkNotificationAsReadUseCase>(value),
+      providerOverride: $SyncValueProvider<MarkNotificationAsReadUseCase>(
+        value,
+      ),
     );
   }
 }
@@ -424,21 +459,24 @@ String _$markNotificationAsReadHash() =>
 @ProviderFor(markAllNotificationAsRead)
 const markAllNotificationAsReadProvider = MarkAllNotificationAsReadProvider._();
 
-final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
-        MarkAllNotificationsAsReadUseCase,
-        MarkAllNotificationsAsReadUseCase,
-        MarkAllNotificationsAsReadUseCase>
+final class MarkAllNotificationAsReadProvider
+    extends
+        $FunctionalProvider<
+          MarkAllNotificationsAsReadUseCase,
+          MarkAllNotificationsAsReadUseCase,
+          MarkAllNotificationsAsReadUseCase
+        >
     with $Provider<MarkAllNotificationsAsReadUseCase> {
   const MarkAllNotificationAsReadProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'markAllNotificationAsReadProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markAllNotificationAsReadProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$markAllNotificationAsReadHash();
@@ -446,8 +484,8 @@ final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MarkAllNotificationsAsReadUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MarkAllNotificationsAsReadUseCase create(Ref ref) {
@@ -458,8 +496,9 @@ final class MarkAllNotificationAsReadProvider extends $FunctionalProvider<
   Override overrideWithValue(MarkAllNotificationsAsReadUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<MarkAllNotificationsAsReadUseCase>(value),
+      providerOverride: $SyncValueProvider<MarkAllNotificationsAsReadUseCase>(
+        value,
+      ),
     );
   }
 }
@@ -470,21 +509,24 @@ String _$markAllNotificationAsReadHash() =>
 @ProviderFor(getUnreadNotifications)
 const getUnreadNotificationsProvider = GetUnreadNotificationsProvider._();
 
-final class GetUnreadNotificationsProvider extends $FunctionalProvider<
-        GetUnreadNotificationsUseCase,
-        GetUnreadNotificationsUseCase,
-        GetUnreadNotificationsUseCase>
+final class GetUnreadNotificationsProvider
+    extends
+        $FunctionalProvider<
+          GetUnreadNotificationsUseCase,
+          GetUnreadNotificationsUseCase,
+          GetUnreadNotificationsUseCase
+        >
     with $Provider<GetUnreadNotificationsUseCase> {
   const GetUnreadNotificationsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getUnreadNotificationsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getUnreadNotificationsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getUnreadNotificationsHash();
@@ -492,8 +534,8 @@ final class GetUnreadNotificationsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetUnreadNotificationsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetUnreadNotificationsUseCase create(Ref ref) {
@@ -504,8 +546,9 @@ final class GetUnreadNotificationsProvider extends $FunctionalProvider<
   Override overrideWithValue(GetUnreadNotificationsUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride:
-          $SyncValueProvider<GetUnreadNotificationsUseCase>(value),
+      providerOverride: $SyncValueProvider<GetUnreadNotificationsUseCase>(
+        value,
+      ),
     );
   }
 }

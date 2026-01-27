@@ -15,15 +15,15 @@ const notifProvider = NotifProvider._();
 final class NotifProvider
     extends $NotifierProvider<Notif, NotificationCardState> {
   const NotifProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'notifProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'notifProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$notifHash();
@@ -50,11 +50,14 @@ abstract class _$Notif extends $Notifier<NotificationCardState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<NotificationCardState, NotificationCardState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<NotificationCardState, NotificationCardState>,
-        NotificationCardState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<NotificationCardState, NotificationCardState>,
+              NotificationCardState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

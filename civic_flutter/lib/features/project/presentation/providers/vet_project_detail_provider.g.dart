@@ -12,19 +12,24 @@ part of 'vet_project_detail_provider.dart';
 @ProviderFor(getVettedProjectDetail)
 const getVettedProjectDetailProvider = GetVettedProjectDetailFamily._();
 
-final class GetVettedProjectDetailProvider extends $FunctionalProvider<
-        AsyncValue<ProjectVetting?>, ProjectVetting?, FutureOr<ProjectVetting?>>
+final class GetVettedProjectDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ProjectVetting?>,
+          ProjectVetting?,
+          FutureOr<ProjectVetting?>
+        >
     with $FutureModifier<ProjectVetting?>, $FutureProvider<ProjectVetting?> {
-  const GetVettedProjectDetailProvider._(
-      {required GetVettedProjectDetailFamily super.from,
-      required int super.argument})
-      : super(
-          retry: null,
-          name: r'getVettedProjectDetailProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const GetVettedProjectDetailProvider._({
+    required GetVettedProjectDetailFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'getVettedProjectDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$getVettedProjectDetailHash();
@@ -39,16 +44,13 @@ final class GetVettedProjectDetailProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<ProjectVetting?> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<ProjectVetting?> create(Ref ref) {
     final argument = this.argument as int;
-    return getVettedProjectDetail(
-      ref,
-      argument,
-    );
+    return getVettedProjectDetail(ref, argument);
   }
 
   @override
@@ -69,17 +71,15 @@ String _$getVettedProjectDetailHash() =>
 final class GetVettedProjectDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<ProjectVetting?>, int> {
   const GetVettedProjectDetailFamily._()
-      : super(
-          retry: null,
-          name: r'getVettedProjectDetailProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'getVettedProjectDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  GetVettedProjectDetailProvider call(
-    int id,
-  ) =>
+  GetVettedProjectDetailProvider call(int id) =>
       GetVettedProjectDetailProvider._(argument: id, from: this);
 
   @override

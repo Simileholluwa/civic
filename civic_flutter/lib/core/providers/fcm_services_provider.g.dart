@@ -16,15 +16,15 @@ final class FcmServiceImplProvider
     extends $FunctionalProvider<FcmServiceImpl, FcmServiceImpl, FcmServiceImpl>
     with $Provider<FcmServiceImpl> {
   const FcmServiceImplProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'fcmServiceImplProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'fcmServiceImplProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$fcmServiceImplHash();

@@ -16,15 +16,15 @@ final class HasProjectDraftProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
   const HasProjectDraftProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'hasProjectDraftProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hasProjectDraftProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$hasProjectDraftHash();

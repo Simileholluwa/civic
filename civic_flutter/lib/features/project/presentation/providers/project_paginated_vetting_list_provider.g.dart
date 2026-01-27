@@ -13,18 +13,22 @@ part of 'project_paginated_vetting_list_provider.dart';
 const paginatedProjectVettingListProvider =
     PaginatedProjectVettingListProvider._();
 
-final class PaginatedProjectVettingListProvider extends $NotifierProvider<
-    PaginatedProjectVettingList, Raw<PagingController<int, ProjectVetting>>> {
+final class PaginatedProjectVettingListProvider
+    extends
+        $NotifierProvider<
+          PaginatedProjectVettingList,
+          Raw<PagingController<int, ProjectVetting>>
+        > {
   const PaginatedProjectVettingListProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'paginatedProjectVettingListProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'paginatedProjectVettingListProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$paginatedProjectVettingListHash();
@@ -53,14 +57,23 @@ abstract class _$PaginatedProjectVettingList
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<Raw<PagingController<int, ProjectVetting>>,
-        Raw<PagingController<int, ProjectVetting>>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<Raw<PagingController<int, ProjectVetting>>,
-            Raw<PagingController<int, ProjectVetting>>>,
-        Raw<PagingController<int, ProjectVetting>>,
-        Object?,
-        Object?>;
+    final ref =
+        this.ref
+            as $Ref<
+              Raw<PagingController<int, ProjectVetting>>,
+              Raw<PagingController<int, ProjectVetting>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Raw<PagingController<int, ProjectVetting>>,
+                Raw<PagingController<int, ProjectVetting>>
+              >,
+              Raw<PagingController<int, ProjectVetting>>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

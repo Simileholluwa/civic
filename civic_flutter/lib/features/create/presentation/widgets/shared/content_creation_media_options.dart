@@ -1,31 +1,32 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/create/create.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ProjectImageAttachmentsOptions extends ConsumerWidget {
-  const ProjectImageAttachmentsOptions({
-    required this.project,
+class ContentCreationMediaOptions extends ConsumerWidget {
+  const ContentCreationMediaOptions({
+    required this.pageIndex,
+    required this.imageLength,
+    required this.maxLength,
+    required this.pickImage,
+    required this.removeAllImages,
+    required this.removeImageAtIndex,
+    required this.takeImage,
     super.key,
   });
 
-  final Project project;
+  final int pageIndex;
+  final VoidCallback removeAllImages;
+  final void Function(int) removeImageAtIndex;
+  final int maxLength;
+  final int imageLength;
+  final VoidCallback pickImage;
+  final VoidCallback takeImage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imagesLength = ref.watch(
-      createProjectNotifProvider(project).select(
-        (s) => s.projectImageAttachments.length,
-      ),
-    );
-    final projectNotifier = ref.read(
-      createProjectNotifProvider(project).notifier,
-    );
-
-    final pageIndex = ref.watch(projectImageAttachmentPageChangedProvider) + 1;
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 16,
@@ -55,7 +56,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
                 ),
               ),
               child: IconButton(
-                onPressed: projectNotifier.removeAllImages,
+                onPressed: removeAllImages,
                 icon: const Icon(
                   CupertinoIcons.clear,
                   size: 22,
@@ -67,7 +68,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
             ),
             IconButton(
               onPressed: () {
-                projectNotifier.removeImageAtIndex(
+                removeImageAtIndex(
                   pageIndex - 1,
                 );
               },
@@ -91,17 +92,17 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
                 color: TColors.textWhite,
               ),
             ),
-            if (imagesLength < 5)
+            if (imageLength < maxLength)
               Row(
                 children: [
                   IconButton(
                     icon: const Icon(Iconsax.gallery_add),
-                    onPressed: projectNotifier.pickPicture,
+                    onPressed: pickImage,
                     color: TColors.textWhite,
                   ),
                   IconButton(
                     icon: const Icon(Iconsax.camera),
-                    onPressed: projectNotifier.takePicture,
+                    onPressed: takeImage,
                     color: TColors.textWhite,
                   ),
                 ],
@@ -121,7 +122,7 @@ class ProjectImageAttachmentsOptions extends ConsumerWidget {
               ),
               child: Center(
                 child: Text(
-                  '$pageIndex/$imagesLength',
+                  '$pageIndex/$imageLength',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

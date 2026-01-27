@@ -12,20 +12,24 @@ part of 'feed_service_provider.dart';
 @ProviderFor(feedLocalDatabase)
 const feedLocalDatabaseProvider = FeedLocalDatabaseProvider._();
 
-final class FeedLocalDatabaseProvider extends $FunctionalProvider<
-    FeedLocalDatabaseImpl,
-    FeedLocalDatabaseImpl,
-    FeedLocalDatabaseImpl> with $Provider<FeedLocalDatabaseImpl> {
+final class FeedLocalDatabaseProvider
+    extends
+        $FunctionalProvider<
+          FeedLocalDatabaseImpl,
+          FeedLocalDatabaseImpl,
+          FeedLocalDatabaseImpl
+        >
+    with $Provider<FeedLocalDatabaseImpl> {
   const FeedLocalDatabaseProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedLocalDatabaseProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedLocalDatabaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedLocalDatabaseHash();
@@ -33,8 +37,8 @@ final class FeedLocalDatabaseProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<FeedLocalDatabaseImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   FeedLocalDatabaseImpl create(Ref ref) {
@@ -55,20 +59,24 @@ String _$feedLocalDatabaseHash() => r'3a4e9a761dd9064543e1277c6a5e33a39c4ec269';
 @ProviderFor(feedRemoteDatabase)
 const feedRemoteDatabaseProvider = FeedRemoteDatabaseProvider._();
 
-final class FeedRemoteDatabaseProvider extends $FunctionalProvider<
-    FeedRemoteDatabaseImpl,
-    FeedRemoteDatabaseImpl,
-    FeedRemoteDatabaseImpl> with $Provider<FeedRemoteDatabaseImpl> {
+final class FeedRemoteDatabaseProvider
+    extends
+        $FunctionalProvider<
+          FeedRemoteDatabaseImpl,
+          FeedRemoteDatabaseImpl,
+          FeedRemoteDatabaseImpl
+        >
+    with $Provider<FeedRemoteDatabaseImpl> {
   const FeedRemoteDatabaseProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedRemoteDatabaseProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedRemoteDatabaseProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedRemoteDatabaseHash();
@@ -76,8 +84,8 @@ final class FeedRemoteDatabaseProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<FeedRemoteDatabaseImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   FeedRemoteDatabaseImpl create(Ref ref) {
@@ -99,20 +107,24 @@ String _$feedRemoteDatabaseHash() =>
 @ProviderFor(feedRepositoryImpl)
 const feedRepositoryImplProvider = FeedRepositoryImplProvider._();
 
-final class FeedRepositoryImplProvider extends $FunctionalProvider<
-    FeedRepositoryImpl,
-    FeedRepositoryImpl,
-    FeedRepositoryImpl> with $Provider<FeedRepositoryImpl> {
+final class FeedRepositoryImplProvider
+    extends
+        $FunctionalProvider<
+          FeedRepositoryImpl,
+          FeedRepositoryImpl,
+          FeedRepositoryImpl
+        >
+    with $Provider<FeedRepositoryImpl> {
   const FeedRepositoryImplProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'feedRepositoryImplProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'feedRepositoryImplProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$feedRepositoryImplHash();
@@ -120,8 +132,8 @@ final class FeedRepositoryImplProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<FeedRepositoryImpl> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   FeedRepositoryImpl create(Ref ref) {
@@ -143,18 +155,20 @@ String _$feedRepositoryImplHash() =>
 @ProviderFor(savePost)
 const savePostProvider = SavePostProvider._();
 
-final class SavePostProvider extends $FunctionalProvider<SavePostUseCase,
-    SavePostUseCase, SavePostUseCase> with $Provider<SavePostUseCase> {
+final class SavePostProvider
+    extends
+        $FunctionalProvider<SavePostUseCase, SavePostUseCase, SavePostUseCase>
+    with $Provider<SavePostUseCase> {
   const SavePostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'savePostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savePostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$savePostHash();
@@ -183,18 +197,20 @@ String _$savePostHash() => r'40d473d438893063be0d35535006bd399ab71948';
 @ProviderFor(getPosts)
 const getPostsProvider = GetPostsProvider._();
 
-final class GetPostsProvider extends $FunctionalProvider<GetPostsUseCase,
-    GetPostsUseCase, GetPostsUseCase> with $Provider<GetPostsUseCase> {
+final class GetPostsProvider
+    extends
+        $FunctionalProvider<GetPostsUseCase, GetPostsUseCase, GetPostsUseCase>
+    with $Provider<GetPostsUseCase> {
   const GetPostsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPostsProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPostsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPostsHash();
@@ -227,15 +243,15 @@ final class GetPostProvider
     extends $FunctionalProvider<GetPostUseCase, GetPostUseCase, GetPostUseCase>
     with $Provider<GetPostUseCase> {
   const GetPostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPostHash();
@@ -264,20 +280,24 @@ String _$getPostHash() => r'0d07205d6703097db52f9e084fdda86248c93036';
 @ProviderFor(getUserPostBookmarks)
 const getUserPostBookmarksProvider = GetUserPostBookmarksProvider._();
 
-final class GetUserPostBookmarksProvider extends $FunctionalProvider<
-    GetUserBookmarksUseCase,
-    GetUserBookmarksUseCase,
-    GetUserBookmarksUseCase> with $Provider<GetUserBookmarksUseCase> {
+final class GetUserPostBookmarksProvider
+    extends
+        $FunctionalProvider<
+          GetUserBookmarksUseCase,
+          GetUserBookmarksUseCase,
+          GetUserBookmarksUseCase
+        >
+    with $Provider<GetUserBookmarksUseCase> {
   const GetUserPostBookmarksProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getUserPostBookmarksProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getUserPostBookmarksProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getUserPostBookmarksHash();
@@ -285,8 +305,8 @@ final class GetUserPostBookmarksProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetUserBookmarksUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetUserBookmarksUseCase create(Ref ref) {
@@ -308,20 +328,24 @@ String _$getUserPostBookmarksHash() =>
 @ProviderFor(clearPostBookmarks)
 const clearPostBookmarksProvider = ClearPostBookmarksProvider._();
 
-final class ClearPostBookmarksProvider extends $FunctionalProvider<
-    ClearPostBookmarksUseCase,
-    ClearPostBookmarksUseCase,
-    ClearPostBookmarksUseCase> with $Provider<ClearPostBookmarksUseCase> {
+final class ClearPostBookmarksProvider
+    extends
+        $FunctionalProvider<
+          ClearPostBookmarksUseCase,
+          ClearPostBookmarksUseCase,
+          ClearPostBookmarksUseCase
+        >
+    with $Provider<ClearPostBookmarksUseCase> {
   const ClearPostBookmarksProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'clearPostBookmarksProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clearPostBookmarksProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$clearPostBookmarksHash();
@@ -329,8 +353,8 @@ final class ClearPostBookmarksProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ClearPostBookmarksUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ClearPostBookmarksUseCase create(Ref ref) {
@@ -352,20 +376,24 @@ String _$clearPostBookmarksHash() =>
 @ProviderFor(savePostDraft)
 const savePostDraftProvider = SavePostDraftProvider._();
 
-final class SavePostDraftProvider extends $FunctionalProvider<
-    SaveOrUpdatePostDraftUseCase,
-    SaveOrUpdatePostDraftUseCase,
-    SaveOrUpdatePostDraftUseCase> with $Provider<SaveOrUpdatePostDraftUseCase> {
+final class SavePostDraftProvider
+    extends
+        $FunctionalProvider<
+          SaveOrUpdatePostDraftUseCase,
+          SaveOrUpdatePostDraftUseCase,
+          SaveOrUpdatePostDraftUseCase
+        >
+    with $Provider<SaveOrUpdatePostDraftUseCase> {
   const SavePostDraftProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'savePostDraftProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savePostDraftProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$savePostDraftHash();
@@ -373,8 +401,8 @@ final class SavePostDraftProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SaveOrUpdatePostDraftUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SaveOrUpdatePostDraftUseCase create(Ref ref) {
@@ -395,20 +423,24 @@ String _$savePostDraftHash() => r'1331f63d0fdbbbbc337121888ca9f7fa2c01ee08';
 @ProviderFor(getPostDrafts)
 const getPostDraftsProvider = GetPostDraftsProvider._();
 
-final class GetPostDraftsProvider extends $FunctionalProvider<
-    GetPostDraftsUseCase,
-    GetPostDraftsUseCase,
-    GetPostDraftsUseCase> with $Provider<GetPostDraftsUseCase> {
+final class GetPostDraftsProvider
+    extends
+        $FunctionalProvider<
+          GetPostDraftsUseCase,
+          GetPostDraftsUseCase,
+          GetPostDraftsUseCase
+        >
+    with $Provider<GetPostDraftsUseCase> {
   const GetPostDraftsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPostDraftsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPostDraftsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPostDraftsHash();
@@ -416,8 +448,8 @@ final class GetPostDraftsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetPostDraftsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetPostDraftsUseCase create(Ref ref) {
@@ -438,20 +470,24 @@ String _$getPostDraftsHash() => r'3052c5991d4c8ce0eba7fabef8df797c4f86b1a3';
 @ProviderFor(deletePostDraft)
 const deletePostDraftProvider = DeletePostDraftProvider._();
 
-final class DeletePostDraftProvider extends $FunctionalProvider<
-    DeletePostDraftByIdUseCase,
-    DeletePostDraftByIdUseCase,
-    DeletePostDraftByIdUseCase> with $Provider<DeletePostDraftByIdUseCase> {
+final class DeletePostDraftProvider
+    extends
+        $FunctionalProvider<
+          DeletePostDraftByIdUseCase,
+          DeletePostDraftByIdUseCase,
+          DeletePostDraftByIdUseCase
+        >
+    with $Provider<DeletePostDraftByIdUseCase> {
   const DeletePostDraftProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deletePostDraftProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deletePostDraftProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deletePostDraftHash();
@@ -459,8 +495,8 @@ final class DeletePostDraftProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DeletePostDraftByIdUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeletePostDraftByIdUseCase create(Ref ref) {
@@ -481,20 +517,24 @@ String _$deletePostDraftHash() => r'a19972a588e94c2231848c49f4d1900ab75af088';
 @ProviderFor(clearPostDrafts)
 const clearPostDraftsProvider = ClearPostDraftsProvider._();
 
-final class ClearPostDraftsProvider extends $FunctionalProvider<
-    ClearPostDraftsUseCase,
-    ClearPostDraftsUseCase,
-    ClearPostDraftsUseCase> with $Provider<ClearPostDraftsUseCase> {
+final class ClearPostDraftsProvider
+    extends
+        $FunctionalProvider<
+          ClearPostDraftsUseCase,
+          ClearPostDraftsUseCase,
+          ClearPostDraftsUseCase
+        >
+    with $Provider<ClearPostDraftsUseCase> {
   const ClearPostDraftsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'clearPostDraftsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clearPostDraftsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$clearPostDraftsHash();
@@ -502,8 +542,8 @@ final class ClearPostDraftsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<ClearPostDraftsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ClearPostDraftsUseCase create(Ref ref) {
@@ -524,18 +564,24 @@ String _$clearPostDraftsHash() => r'58502d2762808eb0577a267062e00d38508f9d1f';
 @ProviderFor(deletePost)
 const deletePostProvider = DeletePostProvider._();
 
-final class DeletePostProvider extends $FunctionalProvider<DeletePostUseCase,
-    DeletePostUseCase, DeletePostUseCase> with $Provider<DeletePostUseCase> {
+final class DeletePostProvider
+    extends
+        $FunctionalProvider<
+          DeletePostUseCase,
+          DeletePostUseCase,
+          DeletePostUseCase
+        >
+    with $Provider<DeletePostUseCase> {
   const DeletePostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'deletePostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deletePostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$deletePostHash();
@@ -543,8 +589,8 @@ final class DeletePostProvider extends $FunctionalProvider<DeletePostUseCase,
   @$internal
   @override
   $ProviderElement<DeletePostUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DeletePostUseCase create(Ref ref) {
@@ -565,20 +611,24 @@ String _$deletePostHash() => r'182fd4e3d3532a8268d0853b913eeda56ece0c04';
 @ProviderFor(subscribeToNotif)
 const subscribeToNotifProvider = SubscribeToNotifProvider._();
 
-final class SubscribeToNotifProvider extends $FunctionalProvider<
-    SubscribeToNotifUseCase,
-    SubscribeToNotifUseCase,
-    SubscribeToNotifUseCase> with $Provider<SubscribeToNotifUseCase> {
+final class SubscribeToNotifProvider
+    extends
+        $FunctionalProvider<
+          SubscribeToNotifUseCase,
+          SubscribeToNotifUseCase,
+          SubscribeToNotifUseCase
+        >
+    with $Provider<SubscribeToNotifUseCase> {
   const SubscribeToNotifProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'subscribeToNotifProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'subscribeToNotifProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$subscribeToNotifHash();
@@ -586,8 +636,8 @@ final class SubscribeToNotifProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SubscribeToNotifUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SubscribeToNotifUseCase create(Ref ref) {
@@ -608,20 +658,24 @@ String _$subscribeToNotifHash() => r'86e000194bcb5bb390ae0a6002bf802a76fa3237';
 @ProviderFor(schedulePost)
 const schedulePostProvider = SchedulePostProvider._();
 
-final class SchedulePostProvider extends $FunctionalProvider<
-    SchedulePostUseCase,
-    SchedulePostUseCase,
-    SchedulePostUseCase> with $Provider<SchedulePostUseCase> {
+final class SchedulePostProvider
+    extends
+        $FunctionalProvider<
+          SchedulePostUseCase,
+          SchedulePostUseCase,
+          SchedulePostUseCase
+        >
+    with $Provider<SchedulePostUseCase> {
   const SchedulePostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'schedulePostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'schedulePostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$schedulePostHash();
@@ -629,8 +683,8 @@ final class SchedulePostProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SchedulePostUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SchedulePostUseCase create(Ref ref) {
@@ -651,20 +705,24 @@ String _$schedulePostHash() => r'8948010478ff7b49dd72477f1b5b3d0985918ab7';
 @ProviderFor(togglePostLike)
 const togglePostLikeProvider = TogglePostLikeProvider._();
 
-final class TogglePostLikeProvider extends $FunctionalProvider<
-    TogglePostLikeUseCase,
-    TogglePostLikeUseCase,
-    TogglePostLikeUseCase> with $Provider<TogglePostLikeUseCase> {
+final class TogglePostLikeProvider
+    extends
+        $FunctionalProvider<
+          TogglePostLikeUseCase,
+          TogglePostLikeUseCase,
+          TogglePostLikeUseCase
+        >
+    with $Provider<TogglePostLikeUseCase> {
   const TogglePostLikeProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'togglePostLikeProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'togglePostLikeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$togglePostLikeHash();
@@ -672,8 +730,8 @@ final class TogglePostLikeProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<TogglePostLikeUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   TogglePostLikeUseCase create(Ref ref) {
@@ -694,18 +752,24 @@ String _$togglePostLikeHash() => r'32d530992c88f5ff16c1034b99382eb74c2b17cd';
 @ProviderFor(quotePost)
 const quotePostProvider = QuotePostProvider._();
 
-final class QuotePostProvider extends $FunctionalProvider<QuotePostUseCase,
-    QuotePostUseCase, QuotePostUseCase> with $Provider<QuotePostUseCase> {
+final class QuotePostProvider
+    extends
+        $FunctionalProvider<
+          QuotePostUseCase,
+          QuotePostUseCase,
+          QuotePostUseCase
+        >
+    with $Provider<QuotePostUseCase> {
   const QuotePostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'quotePostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'quotePostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$quotePostHash();
@@ -734,18 +798,24 @@ String _$quotePostHash() => r'423255e3e002a82b09748de1062cdbed8c126033';
 @ProviderFor(clearVote)
 const clearVoteProvider = ClearVoteProvider._();
 
-final class ClearVoteProvider extends $FunctionalProvider<ClearVoteUseCase,
-    ClearVoteUseCase, ClearVoteUseCase> with $Provider<ClearVoteUseCase> {
+final class ClearVoteProvider
+    extends
+        $FunctionalProvider<
+          ClearVoteUseCase,
+          ClearVoteUseCase,
+          ClearVoteUseCase
+        >
+    with $Provider<ClearVoteUseCase> {
   const ClearVoteProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'clearVoteProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clearVoteProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$clearVoteHash();
@@ -774,18 +844,24 @@ String _$clearVoteHash() => r'cfd22173b9f46766fcba0c76599ec43b92e84ab0';
 @ProviderFor(repostPost)
 const repostPostProvider = RepostPostProvider._();
 
-final class RepostPostProvider extends $FunctionalProvider<RepostPostUseCase,
-    RepostPostUseCase, RepostPostUseCase> with $Provider<RepostPostUseCase> {
+final class RepostPostProvider
+    extends
+        $FunctionalProvider<
+          RepostPostUseCase,
+          RepostPostUseCase,
+          RepostPostUseCase
+        >
+    with $Provider<RepostPostUseCase> {
   const RepostPostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'repostPostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'repostPostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$repostPostHash();
@@ -793,8 +869,8 @@ final class RepostPostProvider extends $FunctionalProvider<RepostPostUseCase,
   @$internal
   @override
   $ProviderElement<RepostPostUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   RepostPostUseCase create(Ref ref) {
@@ -815,20 +891,24 @@ String _$repostPostHash() => r'4dee7f31e6299fdf9f4607ecb1b33060b2809e5c';
 @ProviderFor(repostOrQuotePost)
 const repostOrQuotePostProvider = RepostOrQuotePostProvider._();
 
-final class RepostOrQuotePostProvider extends $FunctionalProvider<
-    RepostOrQuoteUseCase,
-    RepostOrQuoteUseCase,
-    RepostOrQuoteUseCase> with $Provider<RepostOrQuoteUseCase> {
+final class RepostOrQuotePostProvider
+    extends
+        $FunctionalProvider<
+          RepostOrQuoteUseCase,
+          RepostOrQuoteUseCase,
+          RepostOrQuoteUseCase
+        >
+    with $Provider<RepostOrQuoteUseCase> {
   const RepostOrQuotePostProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'repostOrQuotePostProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'repostOrQuotePostProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$repostOrQuotePostHash();
@@ -836,8 +916,8 @@ final class RepostOrQuotePostProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<RepostOrQuoteUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   RepostOrQuoteUseCase create(Ref ref) {
@@ -858,20 +938,24 @@ String _$repostOrQuotePostHash() => r'657b6b9ba08984176a32079ae67c8bd8d94dc2ee';
 @ProviderFor(togglePostBookmark)
 const togglePostBookmarkProvider = TogglePostBookmarkProvider._();
 
-final class TogglePostBookmarkProvider extends $FunctionalProvider<
-    TogglePostBookmarkUseCase,
-    TogglePostBookmarkUseCase,
-    TogglePostBookmarkUseCase> with $Provider<TogglePostBookmarkUseCase> {
+final class TogglePostBookmarkProvider
+    extends
+        $FunctionalProvider<
+          TogglePostBookmarkUseCase,
+          TogglePostBookmarkUseCase,
+          TogglePostBookmarkUseCase
+        >
+    with $Provider<TogglePostBookmarkUseCase> {
   const TogglePostBookmarkProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'togglePostBookmarkProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'togglePostBookmarkProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$togglePostBookmarkHash();
@@ -879,8 +963,8 @@ final class TogglePostBookmarkProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<TogglePostBookmarkUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   TogglePostBookmarkUseCase create(Ref ref) {
@@ -902,20 +986,24 @@ String _$togglePostBookmarkHash() =>
 @ProviderFor(markPostNotInterested)
 const markPostNotInterestedProvider = MarkPostNotInterestedProvider._();
 
-final class MarkPostNotInterestedProvider extends $FunctionalProvider<
-    MarkPostNotInterestedUseCase,
-    MarkPostNotInterestedUseCase,
-    MarkPostNotInterestedUseCase> with $Provider<MarkPostNotInterestedUseCase> {
+final class MarkPostNotInterestedProvider
+    extends
+        $FunctionalProvider<
+          MarkPostNotInterestedUseCase,
+          MarkPostNotInterestedUseCase,
+          MarkPostNotInterestedUseCase
+        >
+    with $Provider<MarkPostNotInterestedUseCase> {
   const MarkPostNotInterestedProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'markPostNotInterestedProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'markPostNotInterestedProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$markPostNotInterestedHash();
@@ -923,8 +1011,8 @@ final class MarkPostNotInterestedProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MarkPostNotInterestedUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MarkPostNotInterestedUseCase create(Ref ref) {
@@ -946,20 +1034,24 @@ String _$markPostNotInterestedHash() =>
 @ProviderFor(savePostComment)
 const savePostCommentProvider = SavePostCommentProvider._();
 
-final class SavePostCommentProvider extends $FunctionalProvider<
-    SavePostCommentUseCase,
-    SavePostCommentUseCase,
-    SavePostCommentUseCase> with $Provider<SavePostCommentUseCase> {
+final class SavePostCommentProvider
+    extends
+        $FunctionalProvider<
+          SavePostCommentUseCase,
+          SavePostCommentUseCase,
+          SavePostCommentUseCase
+        >
+    with $Provider<SavePostCommentUseCase> {
   const SavePostCommentProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'savePostCommentProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savePostCommentProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$savePostCommentHash();
@@ -967,8 +1059,8 @@ final class SavePostCommentProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<SavePostCommentUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SavePostCommentUseCase create(Ref ref) {
@@ -989,20 +1081,24 @@ String _$savePostCommentHash() => r'2fee4e8f9c70a3af59a9d7feb406b093a875a231';
 @ProviderFor(getPostComments)
 const getPostCommentsProvider = GetPostCommentsProvider._();
 
-final class GetPostCommentsProvider extends $FunctionalProvider<
-    GetPostCommentsUseCase,
-    GetPostCommentsUseCase,
-    GetPostCommentsUseCase> with $Provider<GetPostCommentsUseCase> {
+final class GetPostCommentsProvider
+    extends
+        $FunctionalProvider<
+          GetPostCommentsUseCase,
+          GetPostCommentsUseCase,
+          GetPostCommentsUseCase
+        >
+    with $Provider<GetPostCommentsUseCase> {
   const GetPostCommentsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPostCommentsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPostCommentsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPostCommentsHash();
@@ -1010,8 +1106,8 @@ final class GetPostCommentsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetPostCommentsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetPostCommentsUseCase create(Ref ref) {
@@ -1032,20 +1128,24 @@ String _$getPostCommentsHash() => r'9aad0697e93bfe227f2d565f9bd54930fa20db7f';
 @ProviderFor(getCommentDetail)
 const getCommentDetailProvider = GetCommentDetailProvider._();
 
-final class GetCommentDetailProvider extends $FunctionalProvider<
-    GetCommentUseCase,
-    GetCommentUseCase,
-    GetCommentUseCase> with $Provider<GetCommentUseCase> {
+final class GetCommentDetailProvider
+    extends
+        $FunctionalProvider<
+          GetCommentUseCase,
+          GetCommentUseCase,
+          GetCommentUseCase
+        >
+    with $Provider<GetCommentUseCase> {
   const GetCommentDetailProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getCommentDetailProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getCommentDetailProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getCommentDetailHash();
@@ -1053,8 +1153,8 @@ final class GetCommentDetailProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetCommentUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetCommentUseCase create(Ref ref) {
@@ -1075,20 +1175,24 @@ String _$getCommentDetailHash() => r'793ecbe9cf295f18b117ba94bdb1683432d2072d';
 @ProviderFor(getPostCommentReplies)
 const getPostCommentRepliesProvider = GetPostCommentRepliesProvider._();
 
-final class GetPostCommentRepliesProvider extends $FunctionalProvider<
-    GetPostCommentRepliesUseCase,
-    GetPostCommentRepliesUseCase,
-    GetPostCommentRepliesUseCase> with $Provider<GetPostCommentRepliesUseCase> {
+final class GetPostCommentRepliesProvider
+    extends
+        $FunctionalProvider<
+          GetPostCommentRepliesUseCase,
+          GetPostCommentRepliesUseCase,
+          GetPostCommentRepliesUseCase
+        >
+    with $Provider<GetPostCommentRepliesUseCase> {
   const GetPostCommentRepliesProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'getPostCommentRepliesProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getPostCommentRepliesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$getPostCommentRepliesHash();
@@ -1096,8 +1200,8 @@ final class GetPostCommentRepliesProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<GetPostCommentRepliesUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   GetPostCommentRepliesUseCase create(Ref ref) {
@@ -1119,18 +1223,20 @@ String _$getPostCommentRepliesHash() =>
 @ProviderFor(savePoll)
 const savePollProvider = SavePollProvider._();
 
-final class SavePollProvider extends $FunctionalProvider<SavePollUseCase,
-    SavePollUseCase, SavePollUseCase> with $Provider<SavePollUseCase> {
+final class SavePollProvider
+    extends
+        $FunctionalProvider<SavePollUseCase, SavePollUseCase, SavePollUseCase>
+    with $Provider<SavePollUseCase> {
   const SavePollProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'savePollProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'savePollProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$savePollHash();
@@ -1159,18 +1265,20 @@ String _$savePollHash() => r'692b9d9a420e91437f1e514bc3ac4794b795c9b2';
 @ProviderFor(castVote)
 const castVoteProvider = CastVoteProvider._();
 
-final class CastVoteProvider extends $FunctionalProvider<CastVoteUseCase,
-    CastVoteUseCase, CastVoteUseCase> with $Provider<CastVoteUseCase> {
+final class CastVoteProvider
+    extends
+        $FunctionalProvider<CastVoteUseCase, CastVoteUseCase, CastVoteUseCase>
+    with $Provider<CastVoteUseCase> {
   const CastVoteProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'castVoteProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'castVoteProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$castVoteHash();
@@ -1199,18 +1307,24 @@ String _$castVoteHash() => r'6aa14e73aa61064e97aa186840c48c8a1fb58063';
 @ProviderFor(saveArticle)
 const saveArticleProvider = SaveArticleProvider._();
 
-final class SaveArticleProvider extends $FunctionalProvider<SaveArticleUseCase,
-    SaveArticleUseCase, SaveArticleUseCase> with $Provider<SaveArticleUseCase> {
+final class SaveArticleProvider
+    extends
+        $FunctionalProvider<
+          SaveArticleUseCase,
+          SaveArticleUseCase,
+          SaveArticleUseCase
+        >
+    with $Provider<SaveArticleUseCase> {
   const SaveArticleProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'saveArticleProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveArticleProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$saveArticleHash();
@@ -1218,8 +1332,8 @@ final class SaveArticleProvider extends $FunctionalProvider<SaveArticleUseCase,
   @$internal
   @override
   $ProviderElement<SaveArticleUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   SaveArticleUseCase create(Ref ref) {
@@ -1240,20 +1354,24 @@ String _$saveArticleHash() => r'e23dda5fa1e9f638255ae1c06bd790814abf258f';
 @ProviderFor(recordPostImpression)
 const recordPostImpressionProvider = RecordPostImpressionProvider._();
 
-final class RecordPostImpressionProvider extends $FunctionalProvider<
-    RecordPostImpressionUseCase,
-    RecordPostImpressionUseCase,
-    RecordPostImpressionUseCase> with $Provider<RecordPostImpressionUseCase> {
+final class RecordPostImpressionProvider
+    extends
+        $FunctionalProvider<
+          RecordPostImpressionUseCase,
+          RecordPostImpressionUseCase,
+          RecordPostImpressionUseCase
+        >
+    with $Provider<RecordPostImpressionUseCase> {
   const RecordPostImpressionProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'recordPostImpressionProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recordPostImpressionProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$recordPostImpressionHash();
@@ -1261,8 +1379,8 @@ final class RecordPostImpressionProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<RecordPostImpressionUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   RecordPostImpressionUseCase create(Ref ref) {
@@ -1284,20 +1402,24 @@ String _$recordPostImpressionHash() =>
 @ProviderFor(flushPostImpressions)
 const flushPostImpressionsProvider = FlushPostImpressionsProvider._();
 
-final class FlushPostImpressionsProvider extends $FunctionalProvider<
-    FlushPostImpressionsUseCase,
-    FlushPostImpressionsUseCase,
-    FlushPostImpressionsUseCase> with $Provider<FlushPostImpressionsUseCase> {
+final class FlushPostImpressionsProvider
+    extends
+        $FunctionalProvider<
+          FlushPostImpressionsUseCase,
+          FlushPostImpressionsUseCase,
+          FlushPostImpressionsUseCase
+        >
+    with $Provider<FlushPostImpressionsUseCase> {
   const FlushPostImpressionsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'flushPostImpressionsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'flushPostImpressionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$flushPostImpressionsHash();
@@ -1305,8 +1427,8 @@ final class FlushPostImpressionsProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<FlushPostImpressionsUseCase> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   FlushPostImpressionsUseCase create(Ref ref) {

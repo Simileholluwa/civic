@@ -15,15 +15,15 @@ const authUserProvider = AuthUserProvider._();
 final class AuthUserProvider
     extends $NotifierProvider<AuthUser, AuthUserState> {
   const AuthUserProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authUserProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authUserProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authUserHash();
@@ -50,11 +50,14 @@ abstract class _$AuthUser extends $Notifier<AuthUserState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AuthUserState, AuthUserState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AuthUserState, AuthUserState>,
-        AuthUserState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AuthUserState, AuthUserState>,
+              AuthUserState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

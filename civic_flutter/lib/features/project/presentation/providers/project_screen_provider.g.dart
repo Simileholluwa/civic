@@ -15,15 +15,15 @@ const projectScreenWidgetsProvider = ProjectScreenWidgetsProvider._();
 final class ProjectScreenWidgetsProvider
     extends $NotifierProvider<ProjectScreenWidgets, ProjectScreenState> {
   const ProjectScreenWidgetsProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectScreenWidgetsProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectScreenWidgetsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectScreenWidgetsHash();
@@ -51,11 +51,14 @@ abstract class _$ProjectScreenWidgets extends $Notifier<ProjectScreenState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<ProjectScreenState, ProjectScreenState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<ProjectScreenState, ProjectScreenState>,
-        ProjectScreenState,
-        Object?,
-        Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ProjectScreenState, ProjectScreenState>,
+              ProjectScreenState,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
@@ -67,15 +70,15 @@ final class ProjectVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
   const ProjectVsyncProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectVsyncProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectVsyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectVsyncHash();
@@ -108,15 +111,15 @@ final class ProjectCardVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
   const ProjectCardVsyncProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectCardVsyncProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectCardVsyncProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectCardVsyncHash();
@@ -145,20 +148,24 @@ String _$projectCardVsyncHash() => r'97c42cc37d6e81e13ee416c489b1fa13aa1d6063';
 @ProviderFor(projectScreenTab)
 const projectScreenTabProvider = ProjectScreenTabProvider._();
 
-final class ProjectScreenTabProvider extends $FunctionalProvider<
-    Raw<TabController>,
-    Raw<TabController>,
-    Raw<TabController>> with $Provider<Raw<TabController>> {
+final class ProjectScreenTabProvider
+    extends
+        $FunctionalProvider<
+          Raw<TabController>,
+          Raw<TabController>,
+          Raw<TabController>
+        >
+    with $Provider<Raw<TabController>> {
   const ProjectScreenTabProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'projectScreenTabProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectScreenTabProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$projectScreenTabHash();
@@ -166,8 +173,8 @@ final class ProjectScreenTabProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<Raw<TabController>> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   Raw<TabController> create(Ref ref) {
