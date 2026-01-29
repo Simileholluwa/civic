@@ -73,7 +73,7 @@ project:
   - getVettedProject:
   - getVettedProjects:
   - getUserProjectBookmarks:
-  - projectUpdates:
+  - projectCountUpdates:
   - subscribeToProject:
   - projectReviewUpdates:
   - projectVettingUpdates:

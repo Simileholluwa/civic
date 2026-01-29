@@ -26,12 +26,12 @@ class CreateProjectScreen extends ConsumerWidget {
     );
     final state = ref.watch(
       createProjectNotifProvider(
-        data.value,
+        data.value?.project,
       ),
     );
     final notifier = ref.read(
       createProjectNotifProvider(
-        data.value,
+        data.value?.project,
       ).notifier,
     );
 
@@ -88,7 +88,7 @@ class CreateProjectScreen extends ConsumerWidget {
               sendPressed: () async {
                 context.pop();
                 await notifier.sendProject(
-                  data.value?.id,
+                  data.value?.project.id,
                 );
               },
               onCanSendPost: handlePop,
@@ -97,7 +97,7 @@ class CreateProjectScreen extends ConsumerWidget {
           body: data.when(
             data: (value) {
               return CreateProjectWidget(
-                project: value,
+                project: value.project,
               );
             },
             error: (error, st) {

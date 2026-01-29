@@ -1,0 +1,10 @@
+class: ProjectCounts
+fields:
+  projectId: int
+  likesCount: int?, default=0
+  quotesCount: int?, default=0
+  bookmarksCount: int?, default=0
+  reviewsCount: int?, default=0
+  vettingsCount: int?, default=0
+  impressionsCount: int?, default=0
+  lastImpressionAt: DateTime?, default=now

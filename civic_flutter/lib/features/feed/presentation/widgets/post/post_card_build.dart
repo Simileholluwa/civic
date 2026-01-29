@@ -1,6 +1,5 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 
@@ -61,8 +60,8 @@ class PostCardBuild extends StatelessWidget {
                       ) ??
                       1.0,
                 )
-              : PostImagePost(
-                  post: post,
+              : ContentImageViewer(
+                  mediaAssets: post.mediaAssets ?? [],
                 ),
         if (hasVideo)
           Padding(

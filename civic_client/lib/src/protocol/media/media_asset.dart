@@ -13,8 +13,9 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../post/post.dart' as _i3;
-import '../media/media_kind.dart' as _i4;
-import 'package:civic_client/src/protocol/protocol.dart' as _i5;
+import '../project/project.dart' as _i4;
+import '../media/media_kind.dart' as _i5;
+import 'package:civic_client/src/protocol/protocol.dart' as _i6;
 
 abstract class MediaAsset implements _i1.SerializableModel {
   MediaAsset._({
@@ -23,6 +24,8 @@ abstract class MediaAsset implements _i1.SerializableModel {
     this.owner,
     this.postId,
     this.post,
+    this.projectId,
+    this.project,
     required this.objectKey,
     this.publicUrl,
     this.contentType,
@@ -42,6 +45,8 @@ abstract class MediaAsset implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     required String objectKey,
     String? publicUrl,
     String? contentType,
@@ -50,7 +55,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
     int? height,
     double? aspectRatio,
     int? durationMs,
-    required _i4.MediaKind kind,
+    required _i5.MediaKind kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _MediaAssetImpl;
@@ -61,13 +66,19 @@ abstract class MediaAsset implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i5.Protocol().deserialize<_i2.UserRecord>(
+          : _i6.Protocol().deserialize<_i2.UserRecord>(
               jsonSerialization['owner'],
             ),
       postId: jsonSerialization['postId'] as int?,
       post: jsonSerialization['post'] == null
           ? null
-          : _i5.Protocol().deserialize<_i3.Post>(jsonSerialization['post']),
+          : _i6.Protocol().deserialize<_i3.Post>(jsonSerialization['post']),
+      projectId: jsonSerialization['projectId'] as int?,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i6.Protocol().deserialize<_i4.Project>(
+              jsonSerialization['project'],
+            ),
       objectKey: jsonSerialization['objectKey'] as String,
       publicUrl: jsonSerialization['publicUrl'] as String?,
       contentType: jsonSerialization['contentType'] as String?,
@@ -76,7 +87,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
       height: jsonSerialization['height'] as int?,
       aspectRatio: (jsonSerialization['aspectRatio'] as num?)?.toDouble(),
       durationMs: jsonSerialization['durationMs'] as int?,
-      kind: _i4.MediaKind.fromJson((jsonSerialization['kind'] as String)),
+      kind: _i5.MediaKind.fromJson((jsonSerialization['kind'] as String)),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -99,6 +110,10 @@ abstract class MediaAsset implements _i1.SerializableModel {
 
   _i3.Post? post;
 
+  int? projectId;
+
+  _i4.Project? project;
+
   String objectKey;
 
   String? publicUrl;
@@ -115,7 +130,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
 
   int? durationMs;
 
-  _i4.MediaKind kind;
+  _i5.MediaKind kind;
 
   DateTime? createdAt;
 
@@ -130,6 +145,8 @@ abstract class MediaAsset implements _i1.SerializableModel {
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     String? objectKey,
     String? publicUrl,
     String? contentType,
@@ -138,7 +155,7 @@ abstract class MediaAsset implements _i1.SerializableModel {
     int? height,
     double? aspectRatio,
     int? durationMs,
-    _i4.MediaKind? kind,
+    _i5.MediaKind? kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -151,6 +168,8 @@ abstract class MediaAsset implements _i1.SerializableModel {
       if (owner != null) 'owner': owner?.toJson(),
       if (postId != null) 'postId': postId,
       if (post != null) 'post': post?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
       'objectKey': objectKey,
       if (publicUrl != null) 'publicUrl': publicUrl,
       if (contentType != null) 'contentType': contentType,
@@ -180,6 +199,8 @@ class _MediaAssetImpl extends MediaAsset {
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     required String objectKey,
     String? publicUrl,
     String? contentType,
@@ -188,7 +209,7 @@ class _MediaAssetImpl extends MediaAsset {
     int? height,
     double? aspectRatio,
     int? durationMs,
-    required _i4.MediaKind kind,
+    required _i5.MediaKind kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -197,6 +218,8 @@ class _MediaAssetImpl extends MediaAsset {
          owner: owner,
          postId: postId,
          post: post,
+         projectId: projectId,
+         project: project,
          objectKey: objectKey,
          publicUrl: publicUrl,
          contentType: contentType,
@@ -220,6 +243,8 @@ class _MediaAssetImpl extends MediaAsset {
     Object? owner = _Undefined,
     Object? postId = _Undefined,
     Object? post = _Undefined,
+    Object? projectId = _Undefined,
+    Object? project = _Undefined,
     String? objectKey,
     Object? publicUrl = _Undefined,
     Object? contentType = _Undefined,
@@ -228,7 +253,7 @@ class _MediaAssetImpl extends MediaAsset {
     Object? height = _Undefined,
     Object? aspectRatio = _Undefined,
     Object? durationMs = _Undefined,
-    _i4.MediaKind? kind,
+    _i5.MediaKind? kind,
     Object? createdAt = _Undefined,
     Object? deletedAt = _Undefined,
   }) {
@@ -238,6 +263,8 @@ class _MediaAssetImpl extends MediaAsset {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postId: postId is int? ? postId : this.postId,
       post: post is _i3.Post? ? post : this.post?.copyWith(),
+      projectId: projectId is int? ? projectId : this.projectId,
+      project: project is _i4.Project? ? project : this.project?.copyWith(),
       objectKey: objectKey ?? this.objectKey,
       publicUrl: publicUrl is String? ? publicUrl : this.publicUrl,
       contentType: contentType is String? ? contentType : this.contentType,

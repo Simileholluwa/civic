@@ -30,7 +30,6 @@ export 'presentation/widgets/post_creation/shared/delete_all_post_draft_dialog.d
 export 'presentation/widgets/post_creation/shared/post_bottom_options.dart';
 export 'presentation/widgets/post_creation/shared/post_draft_sheet.dart';
 export 'presentation/widgets/post_creation/shared/post_image_gallery_page.dart';
-export 'presentation/widgets/post_creation/shared/post_image_post.dart';
 export 'presentation/widgets/post_creation/shared/post_selected_locations.dart';
 export 'presentation/widgets/post_creation/shared/post_selected_tags.dart';
 export 'presentation/widgets/post_creation/shared/post_text_field.dart';

@@ -21,8 +21,11 @@ class PostInteractionButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feedProv =
-        feedButtonsProvider(PostWithUserStateKey(postWithUserState));
+    final feedProv = feedButtonsProvider(
+      PostWithUserStateKey(
+        postWithUserState,
+      ),
+    );
     final post = postWithUserState.post;
     final hasLiked = ref.watch(
       feedProv.select(
@@ -88,24 +91,26 @@ class PostInteractionButtons extends ConsumerWidget {
               iconSize: iconSize,
             ),
             ContentInteractionButton(
-              icon:
-                  hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
+              icon: hasBookmarked
+                  ? Icons.bookmark
+                  : Icons.bookmark_add_outlined,
               onTap: () async {
                 final id = post.id;
                 if (id == null) return;
                 await postCardNotifier.togglePostBookmarkStatus(
                   id,
-                  hasBookmarked,
                 );
               },
               iconSize: iconSize,
               text: FeedHelperFunctions.humanizeNumber(bookmarkCount),
-              color:
-                  hasBookmarked ? TColors.primary : Theme.of(context).hintColor,
+              color: hasBookmarked
+                  ? TColors.primary
+                  : Theme.of(context).hintColor,
             ),
             ContentInteractionButton(
-              icon:
-                  hasReposted ? Iconsax.repeate_music5 : Iconsax.repeate_music,
+              icon: hasReposted
+                  ? Iconsax.repeate_music5
+                  : Iconsax.repeate_music,
               text: THelperFunctions.humanizeNumber(repostsCount),
               onTap: () async {
                 if (hasReposted) {
@@ -126,8 +131,9 @@ class PostInteractionButtons extends ConsumerWidget {
                   );
                 }
               },
-              color:
-                  hasReposted ? TColors.primary : Theme.of(context).hintColor,
+              color: hasReposted
+                  ? TColors.primary
+                  : Theme.of(context).hintColor,
               iconSize: iconSize,
             ),
             ContentInteractionButton(

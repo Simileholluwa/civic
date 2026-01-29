@@ -14,8 +14,9 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
 import '../post/post.dart' as _i3;
-import '../media/media_kind.dart' as _i4;
-import 'package:civic_server/src/generated/protocol.dart' as _i5;
+import '../project/project.dart' as _i4;
+import '../media/media_kind.dart' as _i5;
+import 'package:civic_server/src/generated/protocol.dart' as _i6;
 
 abstract class MediaAsset
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -25,6 +26,8 @@ abstract class MediaAsset
     this.owner,
     this.postId,
     this.post,
+    this.projectId,
+    this.project,
     required this.objectKey,
     this.publicUrl,
     this.contentType,
@@ -44,6 +47,8 @@ abstract class MediaAsset
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     required String objectKey,
     String? publicUrl,
     String? contentType,
@@ -52,7 +57,7 @@ abstract class MediaAsset
     int? height,
     double? aspectRatio,
     int? durationMs,
-    required _i4.MediaKind kind,
+    required _i5.MediaKind kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) = _MediaAssetImpl;
@@ -63,13 +68,19 @@ abstract class MediaAsset
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i5.Protocol().deserialize<_i2.UserRecord>(
+          : _i6.Protocol().deserialize<_i2.UserRecord>(
               jsonSerialization['owner'],
             ),
       postId: jsonSerialization['postId'] as int?,
       post: jsonSerialization['post'] == null
           ? null
-          : _i5.Protocol().deserialize<_i3.Post>(jsonSerialization['post']),
+          : _i6.Protocol().deserialize<_i3.Post>(jsonSerialization['post']),
+      projectId: jsonSerialization['projectId'] as int?,
+      project: jsonSerialization['project'] == null
+          ? null
+          : _i6.Protocol().deserialize<_i4.Project>(
+              jsonSerialization['project'],
+            ),
       objectKey: jsonSerialization['objectKey'] as String,
       publicUrl: jsonSerialization['publicUrl'] as String?,
       contentType: jsonSerialization['contentType'] as String?,
@@ -78,7 +89,7 @@ abstract class MediaAsset
       height: jsonSerialization['height'] as int?,
       aspectRatio: (jsonSerialization['aspectRatio'] as num?)?.toDouble(),
       durationMs: jsonSerialization['durationMs'] as int?,
-      kind: _i4.MediaKind.fromJson((jsonSerialization['kind'] as String)),
+      kind: _i5.MediaKind.fromJson((jsonSerialization['kind'] as String)),
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
@@ -103,6 +114,10 @@ abstract class MediaAsset
 
   _i3.Post? post;
 
+  int? projectId;
+
+  _i4.Project? project;
+
   String objectKey;
 
   String? publicUrl;
@@ -119,7 +134,7 @@ abstract class MediaAsset
 
   int? durationMs;
 
-  _i4.MediaKind kind;
+  _i5.MediaKind kind;
 
   DateTime? createdAt;
 
@@ -137,6 +152,8 @@ abstract class MediaAsset
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     String? objectKey,
     String? publicUrl,
     String? contentType,
@@ -145,7 +162,7 @@ abstract class MediaAsset
     int? height,
     double? aspectRatio,
     int? durationMs,
-    _i4.MediaKind? kind,
+    _i5.MediaKind? kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   });
@@ -158,6 +175,8 @@ abstract class MediaAsset
       if (owner != null) 'owner': owner?.toJson(),
       if (postId != null) 'postId': postId,
       if (post != null) 'post': post?.toJson(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJson(),
       'objectKey': objectKey,
       if (publicUrl != null) 'publicUrl': publicUrl,
       if (contentType != null) 'contentType': contentType,
@@ -181,6 +200,8 @@ abstract class MediaAsset
       if (owner != null) 'owner': owner?.toJsonForProtocol(),
       if (postId != null) 'postId': postId,
       if (post != null) 'post': post?.toJsonForProtocol(),
+      if (projectId != null) 'projectId': projectId,
+      if (project != null) 'project': project?.toJsonForProtocol(),
       'objectKey': objectKey,
       if (publicUrl != null) 'publicUrl': publicUrl,
       if (contentType != null) 'contentType': contentType,
@@ -198,10 +219,12 @@ abstract class MediaAsset
   static MediaAssetInclude include({
     _i2.UserRecordInclude? owner,
     _i3.PostInclude? post,
+    _i4.ProjectInclude? project,
   }) {
     return MediaAssetInclude._(
       owner: owner,
       post: post,
+      project: project,
     );
   }
 
@@ -240,6 +263,8 @@ class _MediaAssetImpl extends MediaAsset {
     _i2.UserRecord? owner,
     int? postId,
     _i3.Post? post,
+    int? projectId,
+    _i4.Project? project,
     required String objectKey,
     String? publicUrl,
     String? contentType,
@@ -248,7 +273,7 @@ class _MediaAssetImpl extends MediaAsset {
     int? height,
     double? aspectRatio,
     int? durationMs,
-    required _i4.MediaKind kind,
+    required _i5.MediaKind kind,
     DateTime? createdAt,
     DateTime? deletedAt,
   }) : super._(
@@ -257,6 +282,8 @@ class _MediaAssetImpl extends MediaAsset {
          owner: owner,
          postId: postId,
          post: post,
+         projectId: projectId,
+         project: project,
          objectKey: objectKey,
          publicUrl: publicUrl,
          contentType: contentType,
@@ -280,6 +307,8 @@ class _MediaAssetImpl extends MediaAsset {
     Object? owner = _Undefined,
     Object? postId = _Undefined,
     Object? post = _Undefined,
+    Object? projectId = _Undefined,
+    Object? project = _Undefined,
     String? objectKey,
     Object? publicUrl = _Undefined,
     Object? contentType = _Undefined,
@@ -288,7 +317,7 @@ class _MediaAssetImpl extends MediaAsset {
     Object? height = _Undefined,
     Object? aspectRatio = _Undefined,
     Object? durationMs = _Undefined,
-    _i4.MediaKind? kind,
+    _i5.MediaKind? kind,
     Object? createdAt = _Undefined,
     Object? deletedAt = _Undefined,
   }) {
@@ -298,6 +327,8 @@ class _MediaAssetImpl extends MediaAsset {
       owner: owner is _i2.UserRecord? ? owner : this.owner?.copyWith(),
       postId: postId is int? ? postId : this.postId,
       post: post is _i3.Post? ? post : this.post?.copyWith(),
+      projectId: projectId is int? ? projectId : this.projectId,
+      project: project is _i4.Project? ? project : this.project?.copyWith(),
       objectKey: objectKey ?? this.objectKey,
       publicUrl: publicUrl is String? ? publicUrl : this.publicUrl,
       contentType: contentType is String? ? contentType : this.contentType,
@@ -323,6 +354,11 @@ class MediaAssetUpdateTable extends _i1.UpdateTable<MediaAssetTable> {
 
   _i1.ColumnValue<int, int> postId(int? value) => _i1.ColumnValue(
     table.postId,
+    value,
+  );
+
+  _i1.ColumnValue<int, int> projectId(int? value) => _i1.ColumnValue(
+    table.projectId,
     value,
   );
 
@@ -366,7 +402,7 @@ class MediaAssetUpdateTable extends _i1.UpdateTable<MediaAssetTable> {
     value,
   );
 
-  _i1.ColumnValue<_i4.MediaKind, _i4.MediaKind> kind(_i4.MediaKind value) =>
+  _i1.ColumnValue<_i5.MediaKind, _i5.MediaKind> kind(_i5.MediaKind value) =>
       _i1.ColumnValue(
         table.kind,
         value,
@@ -394,6 +430,10 @@ class MediaAssetTable extends _i1.Table<int?> {
     );
     postId = _i1.ColumnInt(
       'postId',
+      this,
+    );
+    projectId = _i1.ColumnInt(
+      'projectId',
       this,
     );
     objectKey = _i1.ColumnString(
@@ -454,6 +494,10 @@ class MediaAssetTable extends _i1.Table<int?> {
 
   _i3.PostTable? _post;
 
+  late final _i1.ColumnInt projectId;
+
+  _i4.ProjectTable? _project;
+
   late final _i1.ColumnString objectKey;
 
   late final _i1.ColumnString publicUrl;
@@ -470,7 +514,7 @@ class MediaAssetTable extends _i1.Table<int?> {
 
   late final _i1.ColumnInt durationMs;
 
-  late final _i1.ColumnEnum<_i4.MediaKind> kind;
+  late final _i1.ColumnEnum<_i5.MediaKind> kind;
 
   late final _i1.ColumnDateTime createdAt;
 
@@ -502,11 +546,25 @@ class MediaAssetTable extends _i1.Table<int?> {
     return _post!;
   }
 
+  _i4.ProjectTable get project {
+    if (_project != null) return _project!;
+    _project = _i1.createRelationTable(
+      relationFieldName: 'project',
+      field: MediaAsset.t.projectId,
+      foreignField: _i4.Project.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i4.ProjectTable(tableRelation: foreignTableRelation),
+    );
+    return _project!;
+  }
+
   @override
   List<_i1.Column> get columns => [
     id,
     ownerId,
     postId,
+    projectId,
     objectKey,
     publicUrl,
     contentType,
@@ -528,6 +586,9 @@ class MediaAssetTable extends _i1.Table<int?> {
     if (relationField == 'post') {
       return post;
     }
+    if (relationField == 'project') {
+      return project;
+    }
     return null;
   }
 }
@@ -536,19 +597,24 @@ class MediaAssetInclude extends _i1.IncludeObject {
   MediaAssetInclude._({
     _i2.UserRecordInclude? owner,
     _i3.PostInclude? post,
+    _i4.ProjectInclude? project,
   }) {
     _owner = owner;
     _post = post;
+    _project = project;
   }
 
   _i2.UserRecordInclude? _owner;
 
   _i3.PostInclude? _post;
 
+  _i4.ProjectInclude? _project;
+
   @override
   Map<String, _i1.Include?> get includes => {
     'owner': _owner,
     'post': _post,
+    'project': _project,
   };
 
   @override
@@ -886,6 +952,29 @@ class MediaAssetAttachRowRepository {
       transaction: transaction,
     );
   }
+
+  /// Creates a relation between the given [MediaAsset] and [Project]
+  /// by setting the [MediaAsset]'s foreign key `projectId` to refer to the [Project].
+  Future<void> project(
+    _i1.Session session,
+    MediaAsset mediaAsset,
+    _i4.Project project, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(projectId: project.id);
+    await session.db.updateRow<MediaAsset>(
+      $mediaAsset,
+      columns: [MediaAsset.t.projectId],
+      transaction: transaction,
+    );
+  }
 }
 
 class MediaAssetDetachRowRepository {
@@ -909,6 +998,28 @@ class MediaAssetDetachRowRepository {
     await session.db.updateRow<MediaAsset>(
       $mediaAsset,
       columns: [MediaAsset.t.postId],
+      transaction: transaction,
+    );
+  }
+
+  /// Detaches the relation between this [MediaAsset] and the [Project] set in `project`
+  /// by setting the [MediaAsset]'s foreign key `projectId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> project(
+    _i1.Session session,
+    MediaAsset mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(projectId: null);
+    await session.db.updateRow<MediaAsset>(
+      $mediaAsset,
+      columns: [MediaAsset.t.projectId],
       transaction: transaction,
     );
   }

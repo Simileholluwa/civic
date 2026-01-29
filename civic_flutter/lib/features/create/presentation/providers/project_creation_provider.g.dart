@@ -59,7 +59,7 @@ final class CreateProjectNotifProvider
 }
 
 String _$createProjectNotifHash() =>
-    r'ad4e071728a1bf36d30ab4875a6d82ca281b6ad9';
+    r'53967924b5b89d6cf6ba8363ae933eb2baef0d2c';
 
 final class CreateProjectNotifFamily extends $Family
     with

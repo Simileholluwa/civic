@@ -20,7 +20,6 @@ class FeedWidgetsState {
     this.isSubscribed = false,
     this.votedOption,
     this.impressionCount = 0,
-    this.isDeleting = false,
   });
 
   factory FeedWidgetsState.empty() => FeedWidgetsState();
@@ -78,7 +77,6 @@ class FeedWidgetsState {
   final int totalVotes;
   final PollOption? votedOption;
   final int impressionCount;
-  final bool isDeleting;
 
   FeedWidgetsState copyWith({
     bool? hasBookmarked,
@@ -88,7 +86,6 @@ class FeedWidgetsState {
     bool? isOwner,
     bool? isSendingNotInterested,
     bool? isSendingPoll,
-    bool? isDeleting,
     int? numberOfBookmarks,
     int? numberOfComments,
     int? numberOfLikes,
@@ -112,7 +109,6 @@ class FeedWidgetsState {
         isSendingNotInterested:
             isSendingNotInterested ?? this.isSendingNotInterested,
         isSendingPoll: isSendingPoll ?? this.isSendingPoll,
-        isDeleting: isDeleting ?? this.isDeleting,
         numberOfBookmarks: numberOfBookmarks ?? this.numberOfBookmarks,
         numberOfComments: numberOfComments ?? this.numberOfComments,
         numberOfLikes: numberOfLikes ?? this.numberOfLikes,

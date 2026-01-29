@@ -9,27 +9,46 @@ import 'package:iconsax/iconsax.dart';
 
 class ShowProjectActions extends ConsumerWidget {
   const ShowProjectActions({
-    required this.project,
+    required this.projectWithUserState,
     super.key,
     this.fromDetails = false,
   });
 
-  final Project project;
+  final ProjectWithUserState projectWithUserState;
   final bool fromDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userNotifier = ref.watch(currentActiveUserProvider.notifier);
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        project,
+    final projectProv = projectCardWidgetProvider(
+      ProjectWithUserStateKey(
+        projectWithUserState,
       ),
     );
-    final projectCardNotifier = ref.watch(
-      projectCardWidgetProvider(
-        project,
-      ).notifier,
+    final project = projectWithUserState.project;
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final isOwner = userId == project.ownerId;
+    final canVet = ProjectHelperFunctions.canVet(
+      project.startDate!,
+      project.endDate!,
     );
+    final canEdit =
+        DateTime.now().difference(project.dateCreated!).inMinutes < 100 &&
+        userId == project.ownerId;
+    final hasBookmarked = ref.watch(
+      projectProv.select(
+        (s) => s.isBookmarked,
+      ),
+    );
+    final isFollower = ref.watch(
+      projectProv.select(
+        (s) => s.isFollower,
+      ),
+    );
+    final projectCardNotifier = ref.read(
+      projectProv.notifier,
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -56,43 +75,34 @@ class ShowProjectActions extends ConsumerWidget {
         const Divider(
           height: 0,
         ),
-        if (projectCardState.canVet! && !projectCardState.isOwner!)
+        if (canVet && !isOwner)
           MoreActionsListTile(
             title:
-                projectCardState.isBookmarked! ? 'Remove Bookmark' : 'Bookmark',
-            subTitle: projectCardState.isBookmarked!
+                hasBookmarked ? 'Remove Bookmark' : 'Bookmark',
+            subTitle: hasBookmarked
                 ? 'This project will be removed from your bookmarks.'
                 : "Bookmarking let's you easily access your favorite projects.",
-            icon: projectCardState.isBookmarked!
+            icon: hasBookmarked
                 ? Icons.bookmark
                 : Icons.bookmark_add_outlined,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
               }
-              final result = await projectCardNotifier.toggleBookmarkStatus(
+              await projectCardNotifier.toggleBookmarkStatus(
                 project.id!,
-                projectCardState.isBookmarked!,
+                showToast: true,
               );
-              if (result) {
-                if (!projectCardState.isBookmarked!) {
-                  TToastMessages.infoToast('Project has been bookmarked');
-                } else {
-                  TToastMessages.infoToast(
-                    'Project has been removed from bookmarks',
-                  );
-                }
-              }
             },
           ),
-        if (!projectCardState.canEdit)
+        if (!canEdit)
           MoreActionsListTile(
             title: 'Share',
             subTitle: 'Invite others to vet or review this project.',
             icon: Icons.share,
             onTap: () async {},
           ),
-        if (!projectCardState.isOwner!)
+        if (!isOwner)
           MoreActionsListTile(
             title: 'Not interested',
             subTitle: "I don't want to see this project in my feed.",
@@ -114,13 +124,13 @@ class ShowProjectActions extends ConsumerWidget {
               }
             },
           ),
-        if (!projectCardState.isOwner!)
+        if (!isOwner)
           MoreActionsListTile(
-            title: projectCardState.isFollower! ? 'Unfollow' : 'Follow',
-            subTitle: projectCardState.isFollower!
+            title: isFollower ? 'Unfollow' : 'Follow',
+            subTitle: isFollower
                 ? 'You will no longer see projects from ${project.owner!.userInfo!.userName}.'
                 : 'You will now see more projects from ${project.owner!.userInfo!.userName}.',
-            icon: projectCardState.isFollower!
+            icon: isFollower
                 ? Iconsax.user_remove
                 : Iconsax.user_cirlce_add,
             onTap: () async {
@@ -133,7 +143,7 @@ class ShowProjectActions extends ConsumerWidget {
 
               if (result) {
                 projectCardNotifier.setIsFollower();
-                if (!projectCardState.isFollower!) {
+                if (!isFollower) {
                   TToastMessages.infoToast(
                     'You are now following ${project.owner!.userInfo!.userName}',
                   );
@@ -145,7 +155,7 @@ class ShowProjectActions extends ConsumerWidget {
               }
             },
           ),
-        if (projectCardState.isOwner!)
+        if (isOwner)
           MoreActionsListTile(
             title: 'Delete',
             subTitle:
@@ -156,14 +166,14 @@ class ShowProjectActions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
-              await ProjectHelperFunctions.deleteProjectBottomSheet(
+              await deleteProjectBottomSheet(
                 context,
-                project,
+                projectWithUserState,
                 fromDetails,
               );
             },
           ),
-        if (!projectCardState.isOwner!)
+        if (!isOwner)
           MoreActionsListTile(
             title: 'Report',
             subTitle: 'This project is inappropriate or offensive.',

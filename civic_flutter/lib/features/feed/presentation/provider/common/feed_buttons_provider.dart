@@ -121,13 +121,12 @@ class FeedButtons extends _$FeedButtons {
 
   Future<void> togglePostBookmarkStatus(
     int postId,
-    bool isBookmarked,
   ) async {
     final currentBookmarked = state.hasBookmarked;
     state = state.copyWith(
       hasBookmarked: !currentBookmarked,
     );
-    if (isBookmarked) {
+    if (currentBookmarked) {
       ref
           .read(
             paginatedPostBookmarkListProvider.notifier,
@@ -164,7 +163,7 @@ class FeedButtons extends _$FeedButtons {
         );
         return;
       },
-      (_) async {},
+      (_) {},
     );
   }
 
@@ -289,9 +288,7 @@ class FeedButtons extends _$FeedButtons {
     return current;
   }
 
-  Future<bool> deletePost(DeleteContext ctx) async {
-    if (state.isDeleting) return false;
-    state = state.copyWith(isDeleting: true);
+  Future<void> deletePost(DeleteContext ctx) async {
     var rollback = () {};
     switch (ctx.kind) {
       case PostKind.reply:
@@ -376,9 +373,8 @@ class FeedButtons extends _$FeedButtons {
     );
     return result.fold((error) {
       rollback();
-      state = state.copyWith(isDeleting: false);
       TToastMessages.errorToast(error.message);
-      return false;
+      return;
     }, (_) {
       switch (ctx.kind) {
         case PostKind.reply:
@@ -393,8 +389,7 @@ class FeedButtons extends _$FeedButtons {
         case PostKind.projectQuote:
           TToastMessages.infoToast('Your post has been deleted.');
       }
-      state = state.copyWith(isDeleting: false);
-      return true;
+      return;
     });
   }
 

@@ -32,7 +32,7 @@ class ProjectFundingPageView extends ConsumerWidget {
         (s) => s.fundingSubCategory,
       ),
     );
-    final projectCostController = ref.read(
+      final projectCostController = ref.read(
       createProjectNotifProvider(project).select(
         (s) => s.projectCostController,
       ),

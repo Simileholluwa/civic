@@ -15,6 +15,9 @@ class ProjectsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pagingState = ref.watch(
+      paginatedProjectListProvider(''),
+    );
     final savedRecordString = ref
         .read(
           localStorageProvider,
@@ -22,9 +25,11 @@ class ProjectsScreen extends ConsumerWidget {
         .getString(
           'userRecord',
         );
-    final decoded = jsonDecode(
-      savedRecordString.toString(),
-    ) as Map<String, dynamic>;
+    final decoded =
+        jsonDecode(
+              savedRecordString.toString(),
+            )
+            as Map<String, dynamic>;
     final userRecord = UserRecord.fromJson(decoded);
     final isLeader = userRecord.politicalStatus!.index != 3;
     return Scaffold(
@@ -56,8 +61,8 @@ class ProjectsScreen extends ConsumerWidget {
                   Text(
                     'PROJECTS',
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 25,
-                        ),
+                      fontSize: 25,
+                    ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 21, left: 1),
@@ -66,7 +71,7 @@ class ProjectsScreen extends ConsumerWidget {
                 ],
               ),
               bottom: const PreferredSize(
-                preferredSize: Size.fromHeight(5),
+                preferredSize: Size.fromHeight(1),
                 child: Divider(
                   height: 0,
                 ),
@@ -74,9 +79,21 @@ class ProjectsScreen extends ConsumerWidget {
             ),
           ];
         },
-        body: ProjectsInfiniteList(
-          sortBy: '',
-          isLeader: isLeader,
+        body: AppInfiniteList<ProjectWithUserState>(
+          pagingController: pagingState,
+          scrollPhysics: const NeverScrollableScrollPhysics(),
+          canCreate: isLeader,
+          onCreate: () async {
+            await context.push(
+              '/create/project/0',
+            );
+          },
+          itemBuilder: (_, projectWithUserState, _) {
+            return ProjectCard(
+              projectWithUserState: projectWithUserState,
+            );
+          },
+          onRefresh: pagingState.refresh,
         ),
       ),
     );

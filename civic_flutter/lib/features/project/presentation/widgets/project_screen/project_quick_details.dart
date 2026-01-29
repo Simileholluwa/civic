@@ -15,15 +15,21 @@ class ProjectQuickDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        project,
-      ),
+    final amount = ProjectHelperFunctions.humanizeProjectCost(
+      project.projectCost!,
     );
     final textStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        );
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    );
+    final completionRate = ProjectHelperFunctions.percentageElapsed(
+      project.startDate!,
+      project.endDate!,
+    );
+    final duration = ProjectHelperFunctions.humanizeProjectDuration(
+      project.startDate!,
+      project.endDate!,
+    );
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       scrollDirection: Axis.horizontal,
@@ -32,19 +38,19 @@ class ProjectQuickDetails extends ConsumerWidget {
         children: [
           ProjectQuickDetailWidget(
             icon: Iconsax.buy_crypto5,
-            title: '${projectCardState.currency} ${projectCardState.amount}',
+            title: '${project.currency} $amount',
             color: TColors.primary,
             textStyle: textStyle,
           ),
           ProjectQuickDetailWidget(
             icon: Iconsax.percentage_circle5,
-            title: projectCardState.completionRate!,
+            title: completionRate,
             color: TColors.warning,
             textStyle: textStyle,
           ),
           ProjectQuickDetailWidget(
             icon: Iconsax.calendar_25,
-            title: projectCardState.duration!,
+            title: duration,
             color: Colors.blue,
             textStyle: textStyle,
           ),

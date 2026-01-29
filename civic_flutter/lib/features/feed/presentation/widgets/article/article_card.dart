@@ -5,10 +5,9 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ArticleCard extends ConsumerWidget {
+class ArticleCard extends StatelessWidget {
   const ArticleCard({
     required this.postWithUserState,
     super.key,
@@ -23,7 +22,7 @@ class ArticleCard extends ConsumerWidget {
   static final Map<int, String> _plainTextCache = <int, String>{};
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     var articleContent = '';
     final post = postWithUserState.post;
     final postId = post.id;

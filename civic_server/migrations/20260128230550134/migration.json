@@ -1,0 +1,194 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "media_asset",
+        "schema": "public",
+        "addColumns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "projectId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "__className__": "serverpod.ForeignKeyDefinition",
+            "constraintName": "media_asset_fk_2",
+            "columns": [
+              "projectId"
+            ],
+            "referenceTable": "project",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "deleteForeignKeys": [],
+        "warnings": []
+      }
+    },
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "project",
+        "schema": "public",
+        "addColumns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "impressionsCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "lastImpressionAt",
+            "columnType": 4,
+            "isNullable": true,
+            "columnDefault": "CURRENT_TIMESTAMP",
+            "dartType": "DateTime?"
+          }
+        ],
+        "deleteColumns": [
+          "projectImageAttachments"
+        ],
+        "modifyColumns": [
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "fundingCategory",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "''::text"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "fundingSubCategory",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "''::text"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "projectCost",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "fundingNote",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "''::text"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallLocationRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallDescriptionRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallDatesRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallAttachmentsRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overAllCategoryRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallFundingRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"projectImageAttachments\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "projectImageAttachments"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"projectImageAttachments\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "projectImageAttachments"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

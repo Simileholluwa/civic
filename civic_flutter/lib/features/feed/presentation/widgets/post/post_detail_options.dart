@@ -71,7 +71,6 @@ class PostDetailOptions extends ConsumerWidget {
               if (id == null) return;
               await postCardNotifier.togglePostBookmarkStatus(
                 id,
-                hasBookmarked,
               );
             },
             icon: Icon(

@@ -88,13 +88,17 @@ class CreatePostWidget extends ConsumerWidget {
                 ),
                 if (imagesUrl.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20,),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
                     child: ContentCreationImageViewer(
                       imageLength: imagesUrl.length,
                       maxLength: 5,
                       takeImage: postNotifier.takePicture,
                       pickImage: postNotifier.pickPicture,
-                      current: ref.watch(postImageAttachmentPageChangedProvider),
+                      current: ref.watch(
+                        postImageAttachmentPageChangedProvider,
+                      ),
                       imageUrls: imagesUrl,
                       removeAllImages: postNotifier.removeAllImages,
                       removeImageAtIndex: postNotifier.removeImageAtIndex,
@@ -131,7 +135,9 @@ class CreatePostWidget extends ConsumerWidget {
                       ),
                     ),
                     child: ProjectCard(
-                      project: project!,
+                      projectWithUserState: ProjectWithUserState(
+                        project: project!,
+                      ),
                       canTap: false,
                       showInteractions: false,
                       maxHeight: 200,

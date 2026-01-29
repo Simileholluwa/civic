@@ -3,8 +3,6 @@ import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-// Sentinel used in copyWith to distinguish between an explicit null and an
-// omitted parameter for nullable category-related fields.
 const _unset = Object();
 
 class ProjectCreationState {
@@ -16,6 +14,7 @@ class ProjectCreationState {
     this.currency = 'NGN',
     this.startDate,
     this.endDate,
+    this.imageUrls = const <String>[],
     this.projectCategory,
     this.projectSubCategory,
     this.fundingCategory,
@@ -43,6 +42,15 @@ class ProjectCreationState {
   factory ProjectCreationState.empty() => ProjectCreationState();
 
   factory ProjectCreationState.populate(Project project) {
+    final imagePaths = <String>[];
+    final assets = project.projectImageAttachments ?? const <MediaAsset>[];
+    for (final a in assets) {
+      final url = a.publicUrl ?? '';
+      if (url.isEmpty) continue;
+      if (a.kind == MediaKind.image) {
+        imagePaths.add(url);
+      }
+    }
     return ProjectCreationState(
       title: project.title ?? '',
       description: project.description ?? '',
@@ -51,6 +59,7 @@ class ProjectCreationState {
       currency: project.currency ?? 'NGN',
       projectCost: project.projectCost ?? 0,
       fundingNote: project.fundingNote,
+      imageUrls: imagePaths,
       projectImageAttachments: project.projectImageAttachments ?? [],
       projectPDFAttachments: project.projectPDFAttachments,
       virtualLocations: project.virtualLocations,
@@ -59,7 +68,8 @@ class ProjectCreationState {
       fundingSubCategory: project.fundingSubCategory,
       projectCategory: project.projectCategory,
       projectSubCategory: project.projectSubCategory,
-      canAddLocations: (project.virtualLocations?.length ?? 0) +
+      canAddLocations:
+          (project.virtualLocations?.length ?? 0) +
               (project.physicalLocations?.length ?? 0) <
           4,
     );
@@ -77,12 +87,13 @@ class ProjectCreationState {
   final String? fundingSubCategory;
   final String? fundingNote;
   final String? status;
-  final List<String> projectImageAttachments;
+  final List<MediaAsset> projectImageAttachments;
   final List<String>? projectPDFAttachments;
   final List<Uint8List>? pdfAttachmentsThumbnail;
   final List<AWSPlaces> physicalLocations;
   final List<String>? virtualLocations;
   final bool isDirty;
+  final List<String> imageUrls;
   TextEditingController? titleController;
   TextEditingController? startDateController;
   TextEditingController? endDateController;
@@ -107,8 +118,9 @@ class ProjectCreationState {
     Object? fundingSubCategory = _unset,
     String? fundingNote,
     String? status,
-    List<String>? projectImageAttachments,
+    List<MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
+    List<String>? imageUrls,
     List<AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     bool? isDirty,
@@ -130,6 +142,7 @@ class ProjectCreationState {
       currency: currency ?? this.currency,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      imageUrls: imageUrls ?? this.imageUrls,
       projectCategory: identical(projectCategory, _unset)
           ? this.projectCategory
           : projectCategory as String?,
@@ -144,8 +157,8 @@ class ProjectCreationState {
           : fundingSubCategory as String?,
       fundingNote: fundingNote ?? this.fundingNote,
       status: status ?? this.status,
-      projectImageAttachments: projectImageAttachments ??
-          List<String>.from(this.projectImageAttachments),
+      projectImageAttachments:
+          projectImageAttachments ?? this.projectImageAttachments,
       projectPDFAttachments:
           projectPDFAttachments ?? this.projectPDFAttachments,
       physicalLocations:
@@ -180,7 +193,7 @@ class ProjectCreationState {
       fundingCategory != null &&
       fundingSubCategory != null &&
       (physicalLocations.isNotEmpty || (virtualLocations ?? []).isNotEmpty) &&
-      projectImageAttachments.isNotEmpty;
+      imageUrls.isNotEmpty;
 
   @override
   String toString() {

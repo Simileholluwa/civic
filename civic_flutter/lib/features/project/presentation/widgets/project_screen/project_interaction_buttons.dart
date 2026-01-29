@@ -8,179 +8,191 @@ import 'package:iconsax/iconsax.dart';
 
 class ProjectInteractionButtons extends ConsumerWidget {
   const ProjectInteractionButtons({
-    required this.project,
+    required this.projectWithUserState,
     super.key,
   });
-  final Project project;
+  final ProjectWithUserState projectWithUserState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        project,
+    final projectProv = projectCardWidgetProvider(
+      ProjectWithUserStateKey(
+        projectWithUserState,
       ),
     );
     final projectCardNotifier = ref.watch(
       projectCardWidgetProvider(
-        project,
+        ProjectWithUserStateKey(
+          projectWithUserState,
+        ),
       ).notifier,
+    );
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final project = projectWithUserState.project;
+    final isOwner = userId == project.ownerId;
+    final canVet = ProjectHelperFunctions.canVet(
+      project.startDate!,
+      project.endDate!,
+    );
+    final canEdit =
+        DateTime.now().difference(project.dateCreated!).inMinutes < 100 &&
+        userId == project.ownerId;
+    final hasLiked = ref.watch(
+      projectProv.select(
+        (s) => s.hasLiked,
+      ),
+    );
+    final numberOfLikes = ref.watch(
+      projectProv.select(
+        (s) => s.numberOfLikes,
+      ),
+    );
+    final numberOfReposts = ref.watch(
+      projectProv.select(
+        (s) => s.numberOfReposts,
+      ),
+    );
+    final hasReviewed = ref.watch(
+      projectProv.select(
+        (s) => s.hasReviewed,
+      ),
+    );
+    final numberOfReviews = ref.watch(
+      projectProv.select(
+        (s) => s.numberOfReviews,
+      ),
+    );
+    final hasBookmarked = ref.watch(
+      projectProv.select(
+        (s) => s.isBookmarked,
+      ),
+    );
+    final numberOfBookmarks = ref.watch(
+      projectProv.select(
+        (s) => s.numberOfBookmarks,
+      ),
+    );
+    final hasVetted = ref.watch(
+      projectProv.select(
+        (s) => s.hasVetted,
+      ),
+    );
+    final numberOfVettings = ref.watch(
+      projectProv.select(
+        (s) => s.numberOfVettings,
+      ),
+    );
+    final hasReposted = ref.watch(
+      projectProv.select(
+        (s) => s.hasReposted,
+      ),
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ContentInteractionButton(
-          icon: projectCardState.hasLiked! ? Iconsax.heart5 : Iconsax.heart,
-          onTap: projectCardState.isDeleted!
-              ? null
-              : () async {
-                  await projectCardNotifier.toggleLikeStatus(
-                    project.id!,
-                  );
-                },
-          text: projectCardState.numberOfLikes!,
-          color: projectCardState.isDeleted!
-              ? Theme.of(context).disabledColor
-              : projectCardState.hasLiked!
-                  ? TColors.primary
-                  : Theme.of(context).hintColor,
+          icon: hasLiked ? Iconsax.heart5 : Iconsax.heart,
+          onTap: () async {
+            await projectCardNotifier.toggleLikeStatus(
+              project.id!,
+            );
+          },
+          text: '$numberOfLikes',
+          color: hasLiked ? TColors.primary : Theme.of(context).hintColor,
         ),
         ContentInteractionButton(
           icon: Iconsax.repeate_music,
-          onTap: projectCardState.isDeleted!
-              ? null
-              : () async {
-                  await context.push(
-                    '/create/post/0',
-                    extra: {
-                      'projectToQuote': project,
-                    },
-                  );
-                },
-          text: projectCardState.numberOfReposts!,
-          color: projectCardState.isDeleted!
-              ? Theme.of(context).disabledColor
-              : Theme.of(context).hintColor,
+          onTap: () async {
+            await context.push(
+              '/create/post/0',
+              extra: {
+                'projectToQuote': project,
+              },
+            );
+          },
+          text: '$numberOfReposts',
+          color: hasReposted ? TColors.primary : Theme.of(context).hintColor,
         ),
-        if (!projectCardState.isOwner!)
+        if (!isOwner)
           ContentInteractionButton(
-            icon: projectCardState.hasReviewed!
-                ? Icons.star
-                : Icons.star_border_outlined,
+            icon: hasReviewed ? Icons.star : Icons.star_border_outlined,
             iconSize: 22,
-            text: projectCardState.numberOfReviews!,
-            onTap: projectCardState.isDeleted!
-                ? null
-                : () async {
-                    await context.push(
-                      '/project/${project.id}/review',
-                    );
-                  },
-            color: projectCardState.isDeleted!
-                ? Theme.of(context).disabledColor
-                : projectCardState.hasReviewed!
-                    ? TColors.primary
-                    : Theme.of(context).hintColor,
+            text: '$numberOfReviews',
+            onTap: () async {
+              await context.push(
+                '/project/${project.id}/review',
+              );
+            },
+            color: hasReviewed ? TColors.primary : Theme.of(context).hintColor,
           )
         else
           ContentInteractionButton(
-            icon: projectCardState.isBookmarked!
-                ? Icons.bookmark
-                : Icons.bookmark_add_outlined,
-            text: projectCardState.numberOfBookmarks!,
-            onTap: projectCardState.isDeleted!
-                ? null
-                : () async {
-                    await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!,
-                      projectCardState.isBookmarked!,
-                    );
-                  },
-            color: projectCardState.isDeleted!
-                ? Theme.of(context).disabledColor
-                : projectCardState.isBookmarked!
-                    ? Theme.of(context).primaryColor
-                    : Theme.of(context).hintColor,
+            icon: hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
+            text: '$numberOfBookmarks',
+            onTap: () async {
+              await projectCardNotifier.toggleBookmarkStatus(
+                project.id!,
+              );
+            },
+            color: hasBookmarked
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).hintColor,
           ),
-        if (projectCardState.canVet! && !projectCardState.isOwner!)
+        if (canVet && !isOwner)
           ContentInteractionButton(
-            icon: projectCardState.hasVetted!
-                ? Iconsax.medal_star5
-                : Iconsax.medal_star,
-            text: projectCardState.numberOfVettings!,
-            onTap: projectCardState.isDeleted!
-                ? null
-                : () async {
-                    await context.push(
-                      '/project/${project.id}/vet',
-                      extra: project.physicalLocations,
-                    );
-                  },
-            color: projectCardState.isDeleted!
-                ? Theme.of(context).disabledColor
-                : projectCardState.hasVetted!
-                    ? TColors.primary
-                    : Theme.of(context).hintColor,
+            icon: hasVetted ? Iconsax.medal_star5 : Iconsax.medal_star,
+            text: '$numberOfVettings',
+            onTap: () async {
+              await context.push(
+                '/project/${project.id}/vet',
+                extra: project.physicalLocations,
+              );
+            },
+            color: hasVetted ? TColors.primary : Theme.of(context).hintColor,
           ),
-        if (projectCardState.canEdit)
+        if (canEdit)
           ContentInteractionButton(
             icon: Iconsax.edit,
             showText: false,
-            color: projectCardState.isDeleted!
-                ? Theme.of(context).disabledColor
-                : projectCardState.hasVetted!
-                    ? TColors.primary
-                    : Theme.of(context).hintColor,
-            onTap: projectCardState.isDeleted!
-                ? null
-                : () async {
-                    await context.push(
-                      '/create/project/${project.id}',
-                      extra: project,
-                    );
-                  },
+            color: hasVetted ? TColors.primary : Theme.of(context).hintColor,
+            onTap: () async {
+              await context.push(
+                '/create/project/${project.id}',
+                extra: project,
+              );
+            },
           ),
-        if (!projectCardState.canVet! && !projectCardState.isOwner!)
+        if (!canVet && !isOwner)
           ContentInteractionButton(
-            icon: projectCardState.isBookmarked!
-                ? Icons.bookmark
-                : Icons.bookmark_add_outlined,
-            text: projectCardState.numberOfBookmarks!,
-            onTap: projectCardState.isDeleted!
-                ? null
-                : () async {
-                    await projectCardNotifier.toggleBookmarkStatus(
-                      project.id!,
-                      projectCardState.isBookmarked!,
-                    );
-                  },
-            color: projectCardState.isDeleted!
-                ? Theme.of(context).disabledColor
-                : projectCardState.isBookmarked!
-                    ? Theme.of(context).primaryColor
-                    : Theme.of(context).hintColor,
+            icon: hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
+            text: '$numberOfBookmarks',
+            onTap: () async {
+              await projectCardNotifier.toggleBookmarkStatus(
+                project.id!,
+              );
+            },
+            color: hasBookmarked
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).hintColor,
           ),
         ContentInteractionButton(
           icon: Iconsax.more_circle,
-          onTap: projectCardState.isDeleted!
-              ? null
-              : () async {
-                  await showDialog<dynamic>(
-                    context: context,
-                    builder: (ctx) {
-                      return AlertDialog(
-                        contentPadding: const EdgeInsets.only(
-                          bottom: 16,
-                        ),
-                        content: ShowProjectActions(
-                          project: project,
-                        ),
-                      );
-                    },
-                  );
-                },
-          color: projectCardState.isDeleted!
-              ? Theme.of(context).disabledColor
-              : Theme.of(context).hintColor,
+          onTap: () async {
+            await showDialog<dynamic>(
+              context: context,
+              builder: (ctx) {
+                return AlertDialog(
+                  contentPadding: const EdgeInsets.only(
+                    bottom: 16,
+                  ),
+                  content: ShowProjectActions(
+                    projectWithUserState: projectWithUserState,
+                  ),
+                );
+              },
+            );
+          },
+          color: Theme.of(context).hintColor,
         ),
       ],
     );

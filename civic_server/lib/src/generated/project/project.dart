@@ -13,8 +13,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../user/user_record.dart' as _i2;
-import '../general/aws_places.dart' as _i3;
-import 'package:civic_server/src/generated/protocol.dart' as _i4;
+import '../media/media_asset.dart' as _i3;
+import '../general/aws_places.dart' as _i4;
+import 'package:civic_server/src/generated/protocol.dart' as _i5;
 
 abstract class Project
     implements _i1.TableRow<int?>, _i1.ProtocolSerialization {
@@ -29,36 +30,51 @@ abstract class Project
     this.startDate,
     this.endDate,
     this.currency,
-    this.fundingCategory,
-    this.fundingSubCategory,
-    this.projectCost,
-    this.fundingNote,
+    String? fundingCategory,
+    String? fundingSubCategory,
+    double? projectCost,
+    String? fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
     this.physicalLocations,
     this.virtualLocations,
     DateTime? dateCreated,
     this.updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
     int? vettingsCount,
     int? quotesCount,
-    this.overallRating,
-    this.overallLocationRating,
-    this.overallDescriptionRating,
-    this.overallDatesRating,
-    this.overallAttachmentsRating,
-    this.overAllCategoryRating,
-    this.overallFundingRating,
+    double? overallRating,
+    double? overallLocationRating,
+    double? overallDescriptionRating,
+    double? overallDatesRating,
+    double? overallAttachmentsRating,
+    double? overAllCategoryRating,
+    double? overallFundingRating,
     bool? isDeleted,
-  }) : dateCreated = dateCreated ?? DateTime.now(),
+    DateTime? lastImpressionAt,
+  }) : fundingCategory = fundingCategory ?? '',
+       fundingSubCategory = fundingSubCategory ?? '',
+       projectCost = projectCost ?? 0.0,
+       fundingNote = fundingNote ?? '',
+       dateCreated = dateCreated ?? DateTime.now(),
+       impressionsCount = impressionsCount ?? 0,
        likesCount = likesCount ?? 0,
        reviewsCount = reviewsCount ?? 0,
        bookmarksCount = bookmarksCount ?? 0,
        vettingsCount = vettingsCount ?? 0,
        quotesCount = quotesCount ?? 0,
-       isDeleted = isDeleted ?? false;
+       overallRating = overallRating ?? 0.0,
+       overallLocationRating = overallLocationRating ?? 0.0,
+       overallDescriptionRating = overallDescriptionRating ?? 0.0,
+       overallDatesRating = overallDatesRating ?? 0.0,
+       overallAttachmentsRating = overallAttachmentsRating ?? 0.0,
+       overAllCategoryRating = overAllCategoryRating ?? 0.0,
+       overallFundingRating = overallFundingRating ?? 0.0,
+       isDeleted = isDeleted ?? false,
+       lastImpressionAt = lastImpressionAt ?? DateTime.now();
 
   factory Project({
     int? id,
@@ -75,12 +91,13 @@ abstract class Project
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -94,6 +111,7 @@ abstract class Project
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -102,7 +120,7 @@ abstract class Project
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i4.Protocol().deserialize<_i2.UserRecord>(
+          : _i5.Protocol().deserialize<_i2.UserRecord>(
               jsonSerialization['owner'],
             ),
       title: jsonSerialization['title'] as String?,
@@ -123,22 +141,22 @@ abstract class Project
       projectImageAttachments:
           jsonSerialization['projectImageAttachments'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<_i3.MediaAsset>>(
               jsonSerialization['projectImageAttachments'],
             ),
       projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<String>>(
               jsonSerialization['projectPDFAttachments'],
             ),
       physicalLocations: jsonSerialization['physicalLocations'] == null
           ? null
-          : _i4.Protocol().deserialize<List<_i3.AWSPlaces>>(
+          : _i5.Protocol().deserialize<List<_i4.AWSPlaces>>(
               jsonSerialization['physicalLocations'],
             ),
       virtualLocations: jsonSerialization['virtualLocations'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<String>>(
               jsonSerialization['virtualLocations'],
             ),
       dateCreated: jsonSerialization['dateCreated'] == null
@@ -149,6 +167,7 @@ abstract class Project
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      impressionsCount: jsonSerialization['impressionsCount'] as int?,
       likesCount: jsonSerialization['likesCount'] as int?,
       reviewsCount: jsonSerialization['reviewsCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
@@ -168,6 +187,11 @@ abstract class Project
       overallFundingRating: (jsonSerialization['overallFundingRating'] as num?)
           ?.toDouble(),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
+      lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['lastImpressionAt'],
+            ),
     );
   }
 
@@ -204,17 +228,19 @@ abstract class Project
 
   String? fundingNote;
 
-  List<String>? projectImageAttachments;
+  List<_i3.MediaAsset>? projectImageAttachments;
 
   List<String>? projectPDFAttachments;
 
-  List<_i3.AWSPlaces>? physicalLocations;
+  List<_i4.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
 
   DateTime? dateCreated;
 
   DateTime? updatedAt;
+
+  int? impressionsCount;
 
   int? likesCount;
 
@@ -242,6 +268,8 @@ abstract class Project
 
   bool? isDeleted;
 
+  DateTime? lastImpressionAt;
+
   @override
   _i1.Table<int?> get table => t;
 
@@ -263,12 +291,13 @@ abstract class Project
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -282,6 +311,7 @@ abstract class Project
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -302,7 +332,9 @@ abstract class Project
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
       if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(),
+        'projectImageAttachments': projectImageAttachments?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
@@ -313,6 +345,7 @@ abstract class Project
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
       if (likesCount != null) 'likesCount': likesCount,
       if (reviewsCount != null) 'reviewsCount': reviewsCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
@@ -331,6 +364,8 @@ abstract class Project
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
@@ -353,7 +388,9 @@ abstract class Project
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
       if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(),
+        'projectImageAttachments': projectImageAttachments?.toJson(
+          valueToJson: (v) => v.toJsonForProtocol(),
+        ),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
@@ -364,6 +401,7 @@ abstract class Project
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
       if (likesCount != null) 'likesCount': likesCount,
       if (reviewsCount != null) 'reviewsCount': reviewsCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
@@ -382,11 +420,19 @@ abstract class Project
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
-  static ProjectInclude include({_i2.UserRecordInclude? owner}) {
-    return ProjectInclude._(owner: owner);
+  static ProjectInclude include({
+    _i2.UserRecordInclude? owner,
+    _i3.MediaAssetIncludeList? projectImageAttachments,
+  }) {
+    return ProjectInclude._(
+      owner: owner,
+      projectImageAttachments: projectImageAttachments,
+    );
   }
 
   static ProjectIncludeList includeList({
@@ -433,12 +479,13 @@ class _ProjectImpl extends Project {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -452,6 +499,7 @@ class _ProjectImpl extends Project {
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   }) : super._(
          id: id,
          ownerId: ownerId,
@@ -473,6 +521,7 @@ class _ProjectImpl extends Project {
          virtualLocations: virtualLocations,
          dateCreated: dateCreated,
          updatedAt: updatedAt,
+         impressionsCount: impressionsCount,
          likesCount: likesCount,
          reviewsCount: reviewsCount,
          bookmarksCount: bookmarksCount,
@@ -486,6 +535,7 @@ class _ProjectImpl extends Project {
          overAllCategoryRating: overAllCategoryRating,
          overallFundingRating: overallFundingRating,
          isDeleted: isDeleted,
+         lastImpressionAt: lastImpressionAt,
        );
 
   /// Returns a shallow copy of this [Project]
@@ -513,6 +563,7 @@ class _ProjectImpl extends Project {
     Object? virtualLocations = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? impressionsCount = _Undefined,
     Object? likesCount = _Undefined,
     Object? reviewsCount = _Undefined,
     Object? bookmarksCount = _Undefined,
@@ -526,6 +577,7 @@ class _ProjectImpl extends Project {
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
     Object? isDeleted = _Undefined,
+    Object? lastImpressionAt = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -550,13 +602,13 @@ class _ProjectImpl extends Project {
           : this.fundingSubCategory,
       projectCost: projectCost is double? ? projectCost : this.projectCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
-      projectImageAttachments: projectImageAttachments is List<String>?
+      projectImageAttachments: projectImageAttachments is List<_i3.MediaAsset>?
           ? projectImageAttachments
-          : this.projectImageAttachments?.map((e0) => e0).toList(),
+          : this.projectImageAttachments?.map((e0) => e0.copyWith()).toList(),
       projectPDFAttachments: projectPDFAttachments is List<String>?
           ? projectPDFAttachments
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
-      physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
+      physicalLocations: physicalLocations is List<_i4.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
       virtualLocations: virtualLocations is List<String>?
@@ -564,6 +616,9 @@ class _ProjectImpl extends Project {
           : this.virtualLocations?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      impressionsCount: impressionsCount is int?
+          ? impressionsCount
+          : this.impressionsCount,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
       bookmarksCount: bookmarksCount is int?
@@ -593,6 +648,9 @@ class _ProjectImpl extends Project {
           ? overallFundingRating
           : this.overallFundingRating,
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
+      lastImpressionAt: lastImpressionAt is DateTime?
+          ? lastImpressionAt
+          : this.lastImpressionAt,
     );
   }
 }
@@ -666,13 +724,6 @@ class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
     value,
   );
 
-  _i1.ColumnValue<List<String>, List<String>> projectImageAttachments(
-    List<String>? value,
-  ) => _i1.ColumnValue(
-    table.projectImageAttachments,
-    value,
-  );
-
   _i1.ColumnValue<List<String>, List<String>> projectPDFAttachments(
     List<String>? value,
   ) => _i1.ColumnValue(
@@ -680,8 +731,8 @@ class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
     value,
   );
 
-  _i1.ColumnValue<List<_i3.AWSPlaces>, List<_i3.AWSPlaces>> physicalLocations(
-    List<_i3.AWSPlaces>? value,
+  _i1.ColumnValue<List<_i4.AWSPlaces>, List<_i4.AWSPlaces>> physicalLocations(
+    List<_i4.AWSPlaces>? value,
   ) => _i1.ColumnValue(
     table.physicalLocations,
     value,
@@ -705,6 +756,11 @@ class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
         table.updatedAt,
         value,
       );
+
+  _i1.ColumnValue<int, int> impressionsCount(int? value) => _i1.ColumnValue(
+    table.impressionsCount,
+    value,
+  );
 
   _i1.ColumnValue<int, int> likesCount(int? value) => _i1.ColumnValue(
     table.likesCount,
@@ -777,6 +833,12 @@ class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
     table.isDeleted,
     value,
   );
+
+  _i1.ColumnValue<DateTime, DateTime> lastImpressionAt(DateTime? value) =>
+      _i1.ColumnValue(
+        table.lastImpressionAt,
+        value,
+      );
 }
 
 class ProjectTable extends _i1.Table<int?> {
@@ -817,28 +879,28 @@ class ProjectTable extends _i1.Table<int?> {
     fundingCategory = _i1.ColumnString(
       'fundingCategory',
       this,
+      hasDefault: true,
     );
     fundingSubCategory = _i1.ColumnString(
       'fundingSubCategory',
       this,
+      hasDefault: true,
     );
     projectCost = _i1.ColumnDouble(
       'projectCost',
       this,
+      hasDefault: true,
     );
     fundingNote = _i1.ColumnString(
       'fundingNote',
       this,
-    );
-    projectImageAttachments = _i1.ColumnSerializable<List<String>>(
-      'projectImageAttachments',
-      this,
+      hasDefault: true,
     );
     projectPDFAttachments = _i1.ColumnSerializable<List<String>>(
       'projectPDFAttachments',
       this,
     );
-    physicalLocations = _i1.ColumnSerializable<List<_i3.AWSPlaces>>(
+    physicalLocations = _i1.ColumnSerializable<List<_i4.AWSPlaces>>(
       'physicalLocations',
       this,
     );
@@ -854,6 +916,11 @@ class ProjectTable extends _i1.Table<int?> {
     updatedAt = _i1.ColumnDateTime(
       'updatedAt',
       this,
+    );
+    impressionsCount = _i1.ColumnInt(
+      'impressionsCount',
+      this,
+      hasDefault: true,
     );
     likesCount = _i1.ColumnInt(
       'likesCount',
@@ -883,33 +950,45 @@ class ProjectTable extends _i1.Table<int?> {
     overallRating = _i1.ColumnDouble(
       'overallRating',
       this,
+      hasDefault: true,
     );
     overallLocationRating = _i1.ColumnDouble(
       'overallLocationRating',
       this,
+      hasDefault: true,
     );
     overallDescriptionRating = _i1.ColumnDouble(
       'overallDescriptionRating',
       this,
+      hasDefault: true,
     );
     overallDatesRating = _i1.ColumnDouble(
       'overallDatesRating',
       this,
+      hasDefault: true,
     );
     overallAttachmentsRating = _i1.ColumnDouble(
       'overallAttachmentsRating',
       this,
+      hasDefault: true,
     );
     overAllCategoryRating = _i1.ColumnDouble(
       'overAllCategoryRating',
       this,
+      hasDefault: true,
     );
     overallFundingRating = _i1.ColumnDouble(
       'overallFundingRating',
       this,
+      hasDefault: true,
     );
     isDeleted = _i1.ColumnBool(
       'isDeleted',
+      this,
+      hasDefault: true,
+    );
+    lastImpressionAt = _i1.ColumnDateTime(
+      'lastImpressionAt',
       this,
       hasDefault: true,
     );
@@ -943,17 +1022,21 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString fundingNote;
 
-  late final _i1.ColumnSerializable<List<String>> projectImageAttachments;
+  _i3.MediaAssetTable? ___projectImageAttachments;
+
+  _i1.ManyRelation<_i3.MediaAssetTable>? _projectImageAttachments;
 
   late final _i1.ColumnSerializable<List<String>> projectPDFAttachments;
 
-  late final _i1.ColumnSerializable<List<_i3.AWSPlaces>> physicalLocations;
+  late final _i1.ColumnSerializable<List<_i4.AWSPlaces>> physicalLocations;
 
   late final _i1.ColumnSerializable<List<String>> virtualLocations;
 
   late final _i1.ColumnDateTime dateCreated;
 
   late final _i1.ColumnDateTime updatedAt;
+
+  late final _i1.ColumnInt impressionsCount;
 
   late final _i1.ColumnInt likesCount;
 
@@ -981,6 +1064,8 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnBool isDeleted;
 
+  late final _i1.ColumnDateTime lastImpressionAt;
+
   _i2.UserRecordTable get owner {
     if (_owner != null) return _owner!;
     _owner = _i1.createRelationTable(
@@ -992,6 +1077,38 @@ class ProjectTable extends _i1.Table<int?> {
           _i2.UserRecordTable(tableRelation: foreignTableRelation),
     );
     return _owner!;
+  }
+
+  _i3.MediaAssetTable get __projectImageAttachments {
+    if (___projectImageAttachments != null) return ___projectImageAttachments!;
+    ___projectImageAttachments = _i1.createRelationTable(
+      relationFieldName: '__projectImageAttachments',
+      field: Project.t.id,
+      foreignField: _i3.MediaAsset.t.projectId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.MediaAssetTable(tableRelation: foreignTableRelation),
+    );
+    return ___projectImageAttachments!;
+  }
+
+  _i1.ManyRelation<_i3.MediaAssetTable> get projectImageAttachments {
+    if (_projectImageAttachments != null) return _projectImageAttachments!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'projectImageAttachments',
+      field: Project.t.id,
+      foreignField: _i3.MediaAsset.t.projectId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i3.MediaAssetTable(tableRelation: foreignTableRelation),
+    );
+    _projectImageAttachments = _i1.ManyRelation<_i3.MediaAssetTable>(
+      tableWithRelations: relationTable,
+      table: _i3.MediaAssetTable(
+        tableRelation: relationTable.tableRelation!.lastRelation,
+      ),
+    );
+    return _projectImageAttachments!;
   }
 
   @override
@@ -1009,12 +1126,12 @@ class ProjectTable extends _i1.Table<int?> {
     fundingSubCategory,
     projectCost,
     fundingNote,
-    projectImageAttachments,
     projectPDFAttachments,
     physicalLocations,
     virtualLocations,
     dateCreated,
     updatedAt,
+    impressionsCount,
     likesCount,
     reviewsCount,
     bookmarksCount,
@@ -1028,6 +1145,7 @@ class ProjectTable extends _i1.Table<int?> {
     overAllCategoryRating,
     overallFundingRating,
     isDeleted,
+    lastImpressionAt,
   ];
 
   @override
@@ -1035,19 +1153,31 @@ class ProjectTable extends _i1.Table<int?> {
     if (relationField == 'owner') {
       return owner;
     }
+    if (relationField == 'projectImageAttachments') {
+      return __projectImageAttachments;
+    }
     return null;
   }
 }
 
 class ProjectInclude extends _i1.IncludeObject {
-  ProjectInclude._({_i2.UserRecordInclude? owner}) {
+  ProjectInclude._({
+    _i2.UserRecordInclude? owner,
+    _i3.MediaAssetIncludeList? projectImageAttachments,
+  }) {
     _owner = owner;
+    _projectImageAttachments = projectImageAttachments;
   }
 
   _i2.UserRecordInclude? _owner;
 
+  _i3.MediaAssetIncludeList? _projectImageAttachments;
+
   @override
-  Map<String, _i1.Include?> get includes => {'owner': _owner};
+  Map<String, _i1.Include?> get includes => {
+    'owner': _owner,
+    'projectImageAttachments': _projectImageAttachments,
+  };
 
   @override
   _i1.Table<int?> get table => Project.t;
@@ -1076,7 +1206,13 @@ class ProjectIncludeList extends _i1.IncludeList {
 class ProjectRepository {
   const ProjectRepository._();
 
+  final attach = const ProjectAttachRepository._();
+
   final attachRow = const ProjectAttachRowRepository._();
+
+  final detach = const ProjectDetachRepository._();
+
+  final detachRow = const ProjectDetachRowRepository._();
 
   /// Returns a list of [Project]s matching the given query parameters.
   ///
@@ -1334,6 +1470,35 @@ class ProjectRepository {
   }
 }
 
+class ProjectAttachRepository {
+  const ProjectAttachRepository._();
+
+  /// Creates a relation between this [Project] and the given [MediaAsset]s
+  /// by setting each [MediaAsset]'s foreign key `projectId` to refer to this [Project].
+  Future<void> projectImageAttachments(
+    _i1.Session session,
+    Project project,
+    List<_i3.MediaAsset> mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+
+    var $mediaAsset = mediaAsset
+        .map((e) => e.copyWith(projectId: project.id))
+        .toList();
+    await session.db.update<_i3.MediaAsset>(
+      $mediaAsset,
+      columns: [_i3.MediaAsset.t.projectId],
+      transaction: transaction,
+    );
+  }
+}
+
 class ProjectAttachRowRepository {
   const ProjectAttachRowRepository._();
 
@@ -1356,6 +1521,83 @@ class ProjectAttachRowRepository {
     await session.db.updateRow<Project>(
       $project,
       columns: [Project.t.ownerId],
+      transaction: transaction,
+    );
+  }
+
+  /// Creates a relation between this [Project] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `projectId` to refer to this [Project].
+  Future<void> projectImageAttachments(
+    _i1.Session session,
+    Project project,
+    _i3.MediaAsset mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+    if (project.id == null) {
+      throw ArgumentError.notNull('project.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(projectId: project.id);
+    await session.db.updateRow<_i3.MediaAsset>(
+      $mediaAsset,
+      columns: [_i3.MediaAsset.t.projectId],
+      transaction: transaction,
+    );
+  }
+}
+
+class ProjectDetachRepository {
+  const ProjectDetachRepository._();
+
+  /// Detaches the relation between this [Project] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `projectId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> projectImageAttachments(
+    _i1.Session session,
+    List<_i3.MediaAsset> mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+
+    var $mediaAsset = mediaAsset
+        .map((e) => e.copyWith(projectId: null))
+        .toList();
+    await session.db.update<_i3.MediaAsset>(
+      $mediaAsset,
+      columns: [_i3.MediaAsset.t.projectId],
+      transaction: transaction,
+    );
+  }
+}
+
+class ProjectDetachRowRepository {
+  const ProjectDetachRowRepository._();
+
+  /// Detaches the relation between this [Project] and the given [MediaAsset]
+  /// by setting the [MediaAsset]'s foreign key `projectId` to `null`.
+  ///
+  /// This removes the association between the two models without deleting
+  /// the related record.
+  Future<void> projectImageAttachments(
+    _i1.Session session,
+    _i3.MediaAsset mediaAsset, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (mediaAsset.id == null) {
+      throw ArgumentError.notNull('mediaAsset.id');
+    }
+
+    var $mediaAsset = mediaAsset.copyWith(projectId: null);
+    await session.db.updateRow<_i3.MediaAsset>(
+      $mediaAsset,
+      columns: [_i3.MediaAsset.t.projectId],
       transaction: transaction,
     );
   }

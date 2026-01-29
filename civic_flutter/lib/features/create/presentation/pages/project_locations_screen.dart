@@ -29,188 +29,190 @@ class ProjectLocationsScreen extends ConsumerWidget {
       createProjectNotifProvider(project).notifier,
     );
     final locations = projectCreationSate.physicalLocations;
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(
-          75,
-        ),
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.only(
-              top: TSizes.sm - 2,
-              bottom: TSizes.sm - 2,
-            ),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).dividerColor,
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(
+            75,
+          ),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: TSizes.sm - 2,
+                bottom: TSizes.sm - 2,
+              ),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                  ),
+                ),
+              ),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                centerTitle: true,
+                title: CreateContentSearchBar(
+                  onChanged: (text) {
+                    searchQueryProvider.searchQuery = text;
+                  },
+                  trailingWidget: [
+                    IconButton(
+                      onPressed: () {
+                        ref
+                          ..invalidate(searchNearbyPlacesProvider)
+                          ..invalidate(searchPlacesProvider);
+                      },
+                      icon: const Icon(
+                        Iconsax.refresh,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: locations.isEmpty ? null : context.pop,
+                      child: Container(
+                        height: 25,
+                        width: 25,
+                        margin: const EdgeInsets.only(
+                          left: TSizes.sm,
+                        ),
+                        decoration: BoxDecoration(
+                          color: locations.isEmpty
+                              ? Theme.of(context).disabledColor
+                              : TColors.primary,
+                          borderRadius: BorderRadius.circular(
+                            TSizes.xs,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: CreateContentSearchBar(
-                onChanged: (text) {
-                  searchQueryProvider.searchQuery = text;
+          ),
+        ),
+        body: data.isLoading
+            ? const AppLoadingWidget()
+            : data.when(
+                data: (data) {
+                  return AnimatedCrossFade(
+                    firstChild: const CreateContentLocationError(),
+                    crossFadeState: (data == null || data.isEmpty)
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: const Duration(
+                      milliseconds: 300,
+                    ),
+                    secondChild: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return const Divider(
+                          height: 0,
+                        );
+                      },
+                      itemCount: data!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final place = data[index];
+                        final selectedIndex = locations.contains(place);
+                        return InkWell(
+                          onTap: () {
+                            if (!selectedIndex) {
+                              projectNotifier.addPhysicalLocation(
+                                [place],
+                              );
+                            } else {
+                              projectNotifier.removePhysicalLocation(
+                                place,
+                              );
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(
+                              20,
+                              TSizes.sm + 4,
+                              20,
+                              index == 0 ? TSizes.md : TSizes.sm + 4,
+                            ),
+                            color: selectedIndex
+                                ? TColors.primary.withAlpha(
+                                    50,
+                                  )
+                                : null,
+                            child: Text(
+                              place.place,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
-                trailingWidget: [
-                  IconButton(
-                    onPressed: () {
-                      ref
-                        ..invalidate(searchNearbyPlacesProvider)
-                        ..invalidate(searchPlacesProvider);
-                    },
-                    icon: const Icon(
-                      Iconsax.refresh,
+                error: (error, st) {
+                  return const CreateContentLocationError();
+                },
+                loading: () {
+                  return const AppLoadingWidget(
+                    textWidget: Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: Text('Searching nearby location...'),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: locations.isEmpty ? null : context.pop,
-                    child: Container(
-                      height: 25,
-                      width: 25,
-                      margin: const EdgeInsets.only(
-                        left: TSizes.sm,
-                      ),
-                      decoration: BoxDecoration(
-                        color: locations.isEmpty
-                            ? Theme.of(context).disabledColor
-                            : TColors.primary,
-                        borderRadius: BorderRadius.circular(
-                          TSizes.xs,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-          ),
-        ),
-      ),
-      body: data.isLoading
-          ? const AppLoadingWidget()
-          : data.when(
-              data: (data) {
-                return AnimatedCrossFade(
-                  firstChild: const CreateContentLocationError(),
-                  crossFadeState: (data == null || data.isEmpty)
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  duration: const Duration(
-                    milliseconds: 300,
+        bottomNavigationBar: AnimatedCrossFade(
+          firstChild: SizedBox(
+            height: 50,
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(
+                horizontal: TSizes.md,
+              ),
+              itemBuilder: (context, index) {
+                return Chip(
+                  label: Text(
+                    locations[index].place,
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  secondChild: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return const Divider(
-                        height: 0,
-                      );
-                    },
-                    itemCount: data!.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final place = data[index];
-                      final selectedIndex = locations.contains(place);
-                      return InkWell(
-                        onTap: () {
-                          if (!selectedIndex) {
-                            projectNotifier.addPhysicalLocation(
-                              [place],
-                            );
-                          } else {
-                            projectNotifier.removePhysicalLocation(
-                              place,
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(
-                            20,
-                            TSizes.sm + 4,
-                            20,
-                            index == 0 ? TSizes.md : TSizes.sm + 4,
-                          ),
-                          color: selectedIndex
-                              ? TColors.primary.withAlpha(
-                                  50,
-                                )
-                              : null,
-                          child: Text(
-                            place.place,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              error: (error, st) {
-                return const CreateContentLocationError();
-              },
-              loading: () {
-                return const AppLoadingWidget(
-                  textWidget: Padding(
-                    padding: EdgeInsets.only(
-                      top: 10,
+                  elevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      100,
                     ),
-                    child: Text('Searching nearby location...'),
+                  ),
+                  backgroundColor: Colors.transparent,
+                  deleteIcon: const Icon(
+                    Icons.clear,
+                    color: TColors.secondary,
+                  ),
+                  onDeleted: () => projectNotifier.removePhysicalLocation(
+                    locations[index],
                   ),
                 );
               },
+              separatorBuilder: (_, _) {
+                return const SizedBox(
+                  width: TSizes.sm,
+                );
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: locations.length,
             ),
-      bottomNavigationBar: AnimatedCrossFade(
-        firstChild: SizedBox(
-          height: 50,
-          child: ListView.separated(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(
-              horizontal: TSizes.md,
-            ),
-            itemBuilder: (context, index) {
-              return Chip(
-                label: Text(
-                  locations[index].place,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                elevation: 0,
-                surfaceTintColor: Colors.transparent,
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    100,
-                  ),
-                ),
-                backgroundColor: Colors.transparent,
-                deleteIcon: const Icon(
-                  Icons.clear,
-                  color: TColors.secondary,
-                ),
-                onDeleted: () => projectNotifier.removePhysicalLocation(
-                  locations[index],
-                ),
-              );
-            },
-            separatorBuilder: (_, _) {
-              return const SizedBox(
-                width: TSizes.sm,
-              );
-            },
-            scrollDirection: Axis.horizontal,
-            itemCount: locations.length,
           ),
-        ),
-        secondChild: const SizedBox.shrink(),
-        crossFadeState: locations.isNotEmpty
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-        duration: const Duration(
-          milliseconds: 300,
+          secondChild: const SizedBox.shrink(),
+          crossFadeState: locations.isNotEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: const Duration(
+            milliseconds: 300,
+          ),
         ),
       ),
     );

@@ -33,6 +33,7 @@ class ProjectEndpoint extends Endpoint {
       projectId,
       include: Project.include(
         owner: UserRecord.include(userInfo: UserInfo.include()),
+        projectImageAttachments: MediaAsset.includeList(),
       ),
     );
 
@@ -55,6 +56,11 @@ class ProjectEndpoint extends Endpoint {
       where: (t) =>
           t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
+    final reposted = await Post.db.findFirstRow(
+      session,
+      where: (t) =>
+          t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
+    );
     final subscription = await ProjectSubscription.db.findFirstRow(
       session,
       where: (t) => t.projectId.equals(projectId) & t.userId.equals(user.id!),
@@ -70,7 +76,6 @@ class ProjectEndpoint extends Endpoint {
           t.projectId.equals(projectId) & t.ownerId.equals(user.userInfoId),
     );
 
-    // Following relationship: is the current user following this project's owner?
     bool isFollower = false;
     final followRow = await UserFollow.db.findFirstRow(
       session,
@@ -86,8 +91,91 @@ class ProjectEndpoint extends Endpoint {
       hasReviewed: review != null,
       hasVetted: vetting != null,
       isSubscribed: subscription != null,
+      hasReposted: reposted != null,
       isFollower: isFollower,
     );
+  }
+
+  /// Synchronizes media assets for a given project.
+  ///
+  @doNotGenerate
+  Future<void> _syncMediaAssetsForProject(
+    Session session, {
+    required UserRecord user,
+    required Project existingProject,
+    required List<MediaAsset>? incoming,
+    Transaction? transaction,
+  }) async {
+    final existing = await MediaAsset.db.find(
+      session,
+      where: (t) => t.projectId.equals(existingProject.id!),
+      transaction: transaction,
+    );
+    final existingByKey = {for (final e in existing) e.objectKey: e};
+    final incomingList = incoming ?? const <MediaAsset>[];
+    final incomingKeys = <String>{};
+    final inserts = <MediaAsset>[];
+    final updates = <MediaAsset>[];
+
+    for (final a in incomingList) {
+      final key = a.objectKey;
+      if (key.isEmpty || incomingKeys.contains(key)) continue;
+      incomingKeys.add(key);
+      final current = existingByKey[key];
+      if (current == null) {
+        inserts.add(
+          a.copyWith(ownerId: user.id!, projectId: existingProject.id!),
+        );
+        continue;
+      }
+      final changed =
+          (current.publicUrl != a.publicUrl) ||
+          (current.contentType != a.contentType) ||
+          (current.size != a.size) ||
+          (current.width != a.width) ||
+          (current.height != a.height) ||
+          (current.durationMs != a.durationMs) ||
+          (current.kind != a.kind);
+      if (changed) {
+        updates.add(
+          current.copyWith(
+            publicUrl: a.publicUrl,
+            contentType: a.contentType,
+            size: a.size,
+            width: a.width,
+            height: a.height,
+            durationMs: a.durationMs,
+            kind: a.kind,
+          ),
+        );
+      }
+    }
+
+    final staleKeys = existingByKey.keys
+        .where((k) => !incomingKeys.contains(k))
+        .toSet();
+    if (staleKeys.isNotEmpty) {
+      await MediaAsset.db.deleteWhere(
+        session,
+        where: (t) =>
+            t.projectId.equals(existingProject.id!) &
+            t.objectKey.inSet(staleKeys),
+        transaction: transaction,
+      );
+      for (final key in staleKeys) {
+        unawaited(session.storage.deleteFile(storageId: 'public', path: key));
+      }
+    }
+
+    if (updates.isNotEmpty) {
+      for (final u in updates) {
+        await MediaAsset.db.updateRow(session, u, transaction: transaction);
+      }
+    }
+
+    if (inserts.isNotEmpty) {
+      await MediaAsset.db.insert(session, inserts, transaction: transaction);
+    }
   }
 
   /// Retrieves the [ProjectReview] for a given project and the authenticated user.
@@ -147,62 +235,114 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// Returns the saved or updated [Project].
   Future<Project> saveProject(Session session, Project project) async {
-    try {
-      final user = await authUser(session);
+    return session.db.transaction((transaction) async {
+      try {
+        final user = await authUser(session, transaction: transaction);
 
-      if (project.id != null) {
-        await validateProjectOwnership(session, project.id!, user);
+        if (project.id != null) {
+          await validateProjectOwnership(
+            session,
+            project.id!,
+            user,
+            transaction: transaction,
+          );
 
-        final existingProject = await Project.db.findById(session, project.id!);
+          final existingProject = await Project.db.findById(
+            session,
+            project.id!,
+            transaction: transaction,
+          );
 
-        if (existingProject == null) {
-          throw ServerSideException(message: 'Project not found');
+          if (existingProject == null) {
+            throw ServerSideException(message: 'Project not found');
+          }
+
+          await _syncMediaAssetsForProject(
+            session,
+            user: user,
+            existingProject: existingProject,
+            incoming: project.projectImageAttachments,
+            transaction: transaction,
+          );
+
+          final updatedProject = project.copyWith(
+            updatedAt: DateTime.now(),
+            dateCreated: existingProject.dateCreated,
+            ownerId: existingProject.ownerId,
+            owner: user,
+            isDeleted: existingProject.isDeleted,
+            overallRating: existingProject.overallRating,
+            overallLocationRating: existingProject.overallLocationRating,
+            overallDescriptionRating: existingProject.overallDescriptionRating,
+            overallDatesRating: existingProject.overallDatesRating,
+            overallAttachmentsRating: existingProject.overallAttachmentsRating,
+            overAllCategoryRating: existingProject.overAllCategoryRating,
+            overallFundingRating: existingProject.overallFundingRating,
+            quotesCount: existingProject.quotesCount,
+            likesCount: existingProject.likesCount,
+            reviewsCount: existingProject.reviewsCount,
+            bookmarksCount: existingProject.bookmarksCount,
+            vettingsCount: existingProject.vettingsCount,
+            physicalLocations: existingProject.physicalLocations,
+            virtualLocations: existingProject.virtualLocations,
+            projectImageAttachments: existingProject.projectImageAttachments,
+            projectPDFAttachments: existingProject.projectPDFAttachments,
+          );
+          await updateProject(
+            session,
+            updatedProject,
+            transaction: transaction,
+          );
+          return updatedProject;
+        } else {
+          final newProject = project.copyWith(
+            ownerId: user.userInfoId,
+            owner: user,
+            projectPDFAttachments: project.projectPDFAttachments ?? [],
+          );
+          final insertedProject = await Project.db.insertRow(
+            session,
+            newProject,
+            transaction: transaction,
+          );
+          await MediaAsset.db.insert(
+            session,
+            newProject.projectImageAttachments!
+                .map(
+                  (e) => e.copyWith(
+                    ownerId: user.id!,
+                    projectId: insertedProject.id!,
+                  ),
+                )
+                .toList(),
+            transaction: transaction,
+          );
+          final insertedProjectWithRelations = await Project.db.findById(
+            session,
+            insertedProject.id!,
+            include: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              projectImageAttachments: MediaAsset.includeList(),
+            ),
+            transaction: transaction,
+          );
+          if (insertedProjectWithRelations == null) {
+            throw ServerSideException(
+              message: 'Failed to retrieve inserted project',
+            );
+          }
+          return insertedProjectWithRelations;
         }
-
-        final updatedProject = project.copyWith(
-          updatedAt: DateTime.now(),
-          dateCreated: existingProject.dateCreated,
-          ownerId: existingProject.ownerId,
-          owner: user,
-          isDeleted: existingProject.isDeleted,
-          overallRating: existingProject.overallRating,
-          overallLocationRating: existingProject.overallLocationRating,
-          overallDescriptionRating: existingProject.overallDescriptionRating,
-          overallDatesRating: existingProject.overallDatesRating,
-          overallAttachmentsRating: existingProject.overallAttachmentsRating,
-          overAllCategoryRating: existingProject.overAllCategoryRating,
-          overallFundingRating: existingProject.overallFundingRating,
-          quotesCount: existingProject.quotesCount,
-          likesCount: existingProject.likesCount,
-          reviewsCount: existingProject.reviewsCount,
-          bookmarksCount: existingProject.bookmarksCount,
-          vettingsCount: existingProject.vettingsCount,
-          physicalLocations: existingProject.physicalLocations,
-          virtualLocations: existingProject.virtualLocations,
-          projectImageAttachments: existingProject.projectImageAttachments,
-          projectPDFAttachments: existingProject.projectPDFAttachments,
+      } catch (e, stackTrace) {
+        session.log(
+          'Error in saveProject: $e',
+          level: LogLevel.error,
+          exception: e,
+          stackTrace: stackTrace,
         );
-        await updateProject(session, updatedProject);
-        return updatedProject;
-      } else {
-        // Defensive initialization of server-managed fields for new project
-        final newProject = project.copyWith(
-          ownerId: user.userInfoId,
-          owner: user,
-          projectImageAttachments: project.projectImageAttachments ?? [],
-          projectPDFAttachments: project.projectPDFAttachments ?? [],
-        );
-        return await Project.db.insertRow(session, newProject);
+        throw ServerSideException(message: e.toString());
       }
-    } catch (e, stackTrace) {
-      session.log(
-        'Error in saveProject: $e',
-        level: LogLevel.error,
-        exception: e,
-        stackTrace: stackTrace,
-      );
-      throw ServerSideException(message: e.toString());
-    }
+    });
   }
 
   /// Saves a [ProjectReview] for a given project. This method handles both creating a new review
@@ -1918,7 +2058,10 @@ class ProjectEndpoint extends Endpoint {
   /// Returns:
   ///   - The authenticated [UserRecord] with included [UserInfo].
   @doNotGenerate
-  Future<UserRecord> authUser(Session session) async {
+  Future<UserRecord> authUser(
+    Session session, {
+    Transaction? transaction,
+  }) async {
     final authInfo = session.authenticated;
     if (authInfo == null) {
       throw ServerSideException(message: 'You must be logged in');
@@ -1960,9 +2103,14 @@ class ProjectEndpoint extends Endpoint {
   Future<void> validateProjectOwnership(
     Session session,
     int projectId,
-    UserRecord user,
-  ) async {
-    final project = await Project.db.findById(session, projectId);
+    UserRecord user, {
+    Transaction? transaction,
+  }) async {
+    final project = await Project.db.findFirstRow(
+      session,
+      where: (t) => t.id.equals(projectId) & t.ownerId.equals(user.userInfoId),
+      transaction: transaction,
+    );
     if (project == null) {
       throw ServerSideException(message: 'Project not found');
     }
@@ -2009,27 +2157,22 @@ class ProjectEndpoint extends Endpoint {
   /// Yields:
   ///   - The initial [Project] details.
   ///   - Subsequent [Project] updates as they occur.
-  Stream<Project> projectUpdates(Session session, int projectId) async* {
+  Stream<ProjectCounts> projectCountUpdates(
+    Session session,
+    int projectId,
+  ) async* {
     // Create a message stream for this project
-    var updateStream = session.messages.createStream<Project>(
-      'project_$projectId',
+    var updateStream = session.messages.createStream<ProjectCounts>(
+      'project_counts_$projectId',
     );
 
     // Yield the latest project details when the client subscribes
-    var project = await Project.db.findById(
-      session,
-      projectId,
-      include: Project.include(
-        owner: UserRecord.include(userInfo: UserInfo.include()),
-      ),
-    );
-    if (project != null) {
-      yield project;
-    }
+    var project = await Project.db.findById(session, projectId);
+    if (project != null) yield _buildProjectCounts(project);
 
     // Send updates when changes occur
-    await for (var projectUpdate in updateStream) {
-      yield projectUpdate.copyWith(owner: project!.owner);
+    await for (final counts in updateStream) {
+      yield counts;
     }
   }
 
@@ -2171,12 +2314,19 @@ class ProjectEndpoint extends Endpoint {
   /// This method first updates the project in the database, then posts a message
   /// to all clients subscribed to the project's channel to notify them of the update.
   @doNotGenerate
-  Future<void> updateProject(Session session, Project project) async {
+  Future<void> updateProject(
+    Session session,
+    Project project, {
+    Transaction? transaction,
+  }) async {
     // Update the project in the database
-    await Project.db.updateRow(session, project);
+    await Project.db.updateRow(session, project, transaction: transaction);
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage('project_${project.id}', project);
+    session.messages.postMessage(
+      'project_counts_${project.id}',
+      _buildProjectCounts(project),
+    );
   }
 
   /// Returns a stream of [ProjectReview] updates for the specified [reviewId].
@@ -2328,5 +2478,20 @@ class ProjectEndpoint extends Endpoint {
       return '${text.substring(0, 150)}...';
     }
     return text;
+  }
+
+  /// Builds `PostCounts` from a `Post` row.
+  @doNotGenerate
+  ProjectCounts _buildProjectCounts(Project project) {
+    return ProjectCounts(
+      projectId: project.id!,
+      likesCount: project.likesCount ?? 0,
+      quotesCount: project.quotesCount ?? 0,
+      bookmarksCount: project.bookmarksCount ?? 0,
+      reviewsCount: project.reviewsCount ?? 0,
+      vettingsCount: project.vettingsCount ?? 0,
+      impressionsCount: project.impressionsCount ?? 0,
+      lastImpressionAt: project.lastImpressionAt,
+    );
   }
 }

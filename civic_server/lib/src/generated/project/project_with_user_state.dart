@@ -24,12 +24,14 @@ abstract class ProjectWithUserState
     bool? hasVetted,
     bool? isSubscribed,
     bool? isFollower,
+    bool? hasReposted,
   }) : hasLiked = hasLiked ?? false,
        hasBookmarked = hasBookmarked ?? false,
        hasReviewed = hasReviewed ?? false,
        hasVetted = hasVetted ?? false,
        isSubscribed = isSubscribed ?? false,
-       isFollower = isFollower ?? false;
+       isFollower = isFollower ?? false,
+       hasReposted = hasReposted ?? false;
 
   factory ProjectWithUserState({
     required _i2.Project project,
@@ -39,6 +41,7 @@ abstract class ProjectWithUserState
     bool? hasVetted,
     bool? isSubscribed,
     bool? isFollower,
+    bool? hasReposted,
   }) = _ProjectWithUserStateImpl;
 
   factory ProjectWithUserState.fromJson(
@@ -54,6 +57,7 @@ abstract class ProjectWithUserState
       hasVetted: jsonSerialization['hasVetted'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
       isFollower: jsonSerialization['isFollower'] as bool?,
+      hasReposted: jsonSerialization['hasReposted'] as bool?,
     );
   }
 
@@ -71,6 +75,8 @@ abstract class ProjectWithUserState
 
   bool? isFollower;
 
+  bool? hasReposted;
+
   /// Returns a shallow copy of this [ProjectWithUserState]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -82,6 +88,7 @@ abstract class ProjectWithUserState
     bool? hasVetted,
     bool? isSubscribed,
     bool? isFollower,
+    bool? hasReposted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,6 +101,7 @@ abstract class ProjectWithUserState
       if (hasVetted != null) 'hasVetted': hasVetted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
+      if (hasReposted != null) 'hasReposted': hasReposted,
     };
   }
 
@@ -108,6 +116,7 @@ abstract class ProjectWithUserState
       if (hasVetted != null) 'hasVetted': hasVetted,
       if (isSubscribed != null) 'isSubscribed': isSubscribed,
       if (isFollower != null) 'isFollower': isFollower,
+      if (hasReposted != null) 'hasReposted': hasReposted,
     };
   }
 
@@ -128,6 +137,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
     bool? hasVetted,
     bool? isSubscribed,
     bool? isFollower,
+    bool? hasReposted,
   }) : super._(
          project: project,
          hasLiked: hasLiked,
@@ -136,6 +146,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
          hasVetted: hasVetted,
          isSubscribed: isSubscribed,
          isFollower: isFollower,
+         hasReposted: hasReposted,
        );
 
   /// Returns a shallow copy of this [ProjectWithUserState]
@@ -150,6 +161,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
     Object? hasVetted = _Undefined,
     Object? isSubscribed = _Undefined,
     Object? isFollower = _Undefined,
+    Object? hasReposted = _Undefined,
   }) {
     return ProjectWithUserState(
       project: project ?? this.project.copyWith(),
@@ -161,6 +173,7 @@ class _ProjectWithUserStateImpl extends ProjectWithUserState {
       hasVetted: hasVetted is bool? ? hasVetted : this.hasVetted,
       isSubscribed: isSubscribed is bool? ? isSubscribed : this.isSubscribed,
       isFollower: isFollower is bool? ? isFollower : this.isFollower,
+      hasReposted: hasReposted is bool? ? hasReposted : this.hasReposted,
     );
   }
 }

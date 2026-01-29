@@ -28,7 +28,6 @@ class DetailScreen extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          titleSpacing: 0,
           leading: IconButton(
             icon: const Icon(
               Iconsax.arrow_left_2,
@@ -37,6 +36,14 @@ class DetailScreen extends ConsumerWidget {
               context.pop();
             },
           ),
+          title: Text(
+            'Details',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 23,
+                ),
+          ),
+          centerTitle: false,
+          titleSpacing: 0,
           bottom: const PreferredSize(
             preferredSize: Size.fromHeight(
               1,

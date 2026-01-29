@@ -26,6 +26,7 @@ class PostEndpoint extends Endpoint {
   /// - [existingPost]: The post whose assets are being updated.
   /// - [incoming]: Desired list of `MediaAsset` (may be null/empty).
   /// - [transaction]: Optional DB transaction context.
+  @doNotGenerate
   Future<void> _syncMediaAssetsForPost(
     Session session, {
     required UserRecord user,
@@ -1436,7 +1437,11 @@ class PostEndpoint extends Endpoint {
 
         selectedProject.quotesCount = selectedProject.quotesCount! + 1;
 
-        await ProjectEndpoint().updateProject(session, selectedProject);
+        await ProjectEndpoint().updateProject(
+          session,
+          selectedProject,
+          transaction: transaction,
+        );
 
         await HashtagEndpoint().sendPostHashtags(
           session,

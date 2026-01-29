@@ -81,7 +81,9 @@ class PostCardDetail extends StatelessWidget {
                 ),
               ),
               child: ProjectCard(
-                project: post.project!,
+                projectWithUserState: ProjectWithUserState(
+                  project: post.project!,
+                ),
                 showInteractions: false,
                 maxHeight: 200,
               ),
@@ -152,7 +154,9 @@ class PostCardDetail extends StatelessWidget {
                                   ),
                                 ),
                                 child: ProjectCard(
-                                  project: post.parent!.project!,
+                                  projectWithUserState: ProjectWithUserState(
+                                    project: post.parent!.project!,
+                                  ),
                                   showInteractions: false,
                                   maxHeight: 200,
                                 ),

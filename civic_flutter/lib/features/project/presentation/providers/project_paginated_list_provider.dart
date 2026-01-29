@@ -9,8 +9,8 @@ part 'project_paginated_list_provider.g.dart';
 @Riverpod(keepAlive: true)
 class PaginatedProjectList extends _$PaginatedProjectList {
   @override
-  Raw<PagingController<int, Project>> build(String sortBy) {
-    final controller = PagingController<int, Project>(
+  Raw<PagingController<int, ProjectWithUserState>> build(String sortBy) {
+    final controller = PagingController<int, ProjectWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -21,44 +21,33 @@ class PaginatedProjectList extends _$PaginatedProjectList {
     return controller;
   }
 
-  Future<List<Project>> _fetchPage(
+  Future<List<ProjectWithUserState>> _fetchPage(
     int pageKey, {
     required String sortBy,
     int limit = 50,
   }) async {
     final listProjectUseCase = ref.read(getProjectsProvider);
-    final completer = Completer<List<Project>>();
-    try {
-      final result = await listProjectUseCase(
-        GetProjectsParams(
-          pageKey,
-          limit,
-          sortBy,
-        ),
-      );
-      result.fold(
-        (error) => completer.completeError(error.message),
-        (data) => completer.complete(
-          data.results.map((e) => e.project).toList(),
-        ),
-      );
-    } on Exception catch (e) {
-      completer.completeError(e.toString());
-    }
-    return completer.future;
+    final result = await listProjectUseCase(
+      GetProjectsParams(
+        pageKey,
+        limit,
+        sortBy,
+      ),
+    );
+    return result.fold(
+      (error) => throw error,
+      (data) => data.results,
+    );
   }
 
   void refresh() {
     state.refresh();
   }
 
-  void addProject(Project? project) {
+  void addProject(ProjectWithUserState? project) {
     if (project == null) return;
     final current = state.value;
     final pages = current.pages;
-
-    bool containsDuplicate(List<Project> list) =>
-        list.any((p) => p.id == project.id);
 
     if (pages == null || pages.isEmpty) {
       state.value = current.copyWith(
@@ -72,7 +61,15 @@ class PaginatedProjectList extends _$PaginatedProjectList {
     }
 
     final firstPage = pages.first;
-    if (containsDuplicate(firstPage)) return;
+    if (firstPage.any((p) => p.project.id == project.project.id)) {
+      state.value = state.value.mapItems((p) {
+        if (p.project.id == project.project.id) {
+          return project;
+        }
+        return p;
+      });
+      return;
+    }
 
     final updatedFirst = [project, ...firstPage];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
@@ -88,25 +85,10 @@ class PaginatedProjectList extends _$PaginatedProjectList {
     );
   }
 
-  void updateProject(Project project) {
-    final prev = state.value;
-    state.value = prev.mapItems(
-      (p) => p.id == project.id ? project : p,
-    );
-  }
-
-  void replaceProjectById(int? tempId, Project realProject) {
-    if (tempId == null) return;
-    final prev = state.value;
-    state.value = prev.mapItems(
-      (p) => p.id == tempId ? realProject : p,
-    );
-  }
-
   void removeProjectById(int projectId) {
     final prev = state.value;
     state.value = prev.filterItems(
-      (p) => p.id != projectId,
+      (p) => p.project.id != projectId,
     );
   }
 }

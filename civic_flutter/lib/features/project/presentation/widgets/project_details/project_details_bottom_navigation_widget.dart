@@ -2,11 +2,10 @@ import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
+class ProjectDetailsBottomNavigationWidget extends StatelessWidget {
   const ProjectDetailsBottomNavigationWidget({
     required this.project,
     super.key,
@@ -15,18 +14,17 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
   final Project project;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        project,
-      ),
+  Widget build(BuildContext context) {
+    final canVet = ProjectHelperFunctions.canVet(
+      project.startDate!,
+      project.endDate!,
     );
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
       child: Row(
         spacing: 10,
         children: [
-          if (projectCardState.canVet!)
+          if (canVet)
             Expanded(
               child: SizedBox(
                 height: 50,
@@ -72,7 +70,7 @@ class ProjectDetailsBottomNavigationWidget extends ConsumerWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
-                      projectCardState.canVet! ? Colors.blue : TColors.primary,
+                      canVet ? Colors.blue : TColors.primary,
                   foregroundColor: TColors.textWhite,
                   padding: const EdgeInsets.symmetric(
                     vertical: 10,

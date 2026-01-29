@@ -3,10 +3,9 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/presentation/widgets/project_creation/pdf_attacments_detail.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProjectOverviewWidget extends ConsumerWidget {
+class ProjectOverviewWidget extends StatelessWidget {
   const ProjectOverviewWidget({
     required this.project,
     super.key,
@@ -15,12 +14,25 @@ class ProjectOverviewWidget extends ConsumerWidget {
   final Project project;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        project,
-      ),
-    );
+  Widget build(BuildContext context) {
+    final pdfs = project.projectPDFAttachments;
+    final hasPdfs = pdfs != null && pdfs.isNotEmpty;
+    final startDateIso = project.startDate!.toIso8601String().substring(0, 10);
+    final endDateIso = project.endDate!.toIso8601String().substring(0, 10);
+    final fundingAmount =
+        '${project.currency!} ${ProjectHelperFunctions.formatNumber(
+          project.projectCost!,
+        )}';
+    final percentageElapsedInString =
+        ProjectHelperFunctions.percentageElapsedInString(
+          project.startDate!,
+          project.endDate!,
+        );
+    final percentageElapsedInDouble =
+        ProjectHelperFunctions.percentageElapsedInDouble(
+          project.startDate!,
+          project.endDate!,
+        );
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
       child: Column(
@@ -69,7 +81,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                         children: [
                           ProjectDetailTitleAndSubtitle(
                             title: 'Start Date',
-                            subtitle: projectCardState.startDateISO!,
+                            subtitle: startDateIso,
                           ),
                           Stack(
                             alignment: Alignment.center,
@@ -88,12 +100,12 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                     width: 70,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
                                     ),
                                     child: CircularProgressIndicator(
-                                      value: projectCardState
-                                          .percentageElapsedInDouble,
+                                      value: percentageElapsedInDouble,
                                       strokeWidth: 4,
                                       color: Theme.of(context).primaryColor,
                                       backgroundColor: Theme.of(context)
@@ -107,11 +119,10 @@ class ProjectOverviewWidget extends ConsumerWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        projectCardState
-                                            .percentageElapsedInString!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineLarge,
+                                        percentageElapsedInString,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.headlineLarge,
                                       ),
                                       Text(
                                         'complete',
@@ -130,7 +141,7 @@ class ProjectOverviewWidget extends ConsumerWidget {
                           ),
                           ProjectDetailTitleAndSubtitle(
                             title: 'End Date',
-                            subtitle: projectCardState.endDateISO!,
+                            subtitle: endDateIso,
                           ),
                         ],
                       ),
@@ -141,32 +152,32 @@ class ProjectOverviewWidget extends ConsumerWidget {
                   ),
                   ProjectDetailTitleAndSubtitle(
                     title: 'Category',
-                    subtitle: projectCardState.category!,
+                    subtitle: project.projectCategory!,
                   ),
                   ProjectDetailTitleAndSubtitle(
                     title: 'Sub-Category',
-                    subtitle: projectCardState.subCategory!,
+                    subtitle: project.projectSubCategory!,
                   ),
                   const Divider(
                     height: 0,
                   ),
                   ProjectDetailTitleAndSubtitle(
                     title: 'Funding',
-                    subtitle: projectCardState.fundingAmount!,
+                    subtitle: fundingAmount,
                   ),
                   ProjectDetailTitleAndSubtitle(
                     title: 'Funding Category',
-                    subtitle: projectCardState.fundingCategory!,
+                    subtitle: project.fundingCategory!,
                   ),
                   ProjectDetailTitleAndSubtitle(
                     title: 'Funding Sub-Category',
-                    subtitle: projectCardState.fundingSubCategory!,
+                    subtitle: project.fundingSubCategory!,
                   ),
-                  if (projectCardState.hasPdf!)
+                  if (hasPdfs)
                     const Divider(
                       height: 0,
                     ),
-                  if (projectCardState.hasPdf!)
+                  if (hasPdfs)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -175,30 +186,27 @@ class ProjectOverviewWidget extends ConsumerWidget {
                         ProjectDetailTitleAndSubtitle(
                           title: 'Attachments',
                           subtitle:
-                              '${projectCardState.pdfAttachments!.length} PDF '
-                              '${projectCardState.pdfAttachments!.length == 1 ? 'Attachment' : 'Attachments'} ',
+                              '${pdfs.length} PDF '
+                              '${pdfs.length == 1 ? 'Attachment' : 'Attachments'} ',
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             spacing: 10,
-                            children: projectCardState.pdfAttachments!
-                                .asMap()
-                                .entries
-                                .map(
+                            children: pdfs.asMap().entries.map(
                               (entry) {
                                 final index = entry.key;
                                 return GestureDetector(
                                   onTap: () async {
                                     await launchUrl(
                                       Uri.parse(
-                                        projectCardState.pdfAttachments![index],
+                                        pdfs[index],
                                       ),
                                     );
                                   },
                                   child: PdfAttacmentsDetail(
-                                    pdfPaths: projectCardState.pdfAttachments!,
+                                    pdfPaths: pdfs,
                                     index: index,
                                     showRemove: false,
                                   ),

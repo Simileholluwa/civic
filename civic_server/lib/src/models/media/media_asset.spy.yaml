@@ -3,6 +3,7 @@ table: media_asset
 fields:
   owner: UserRecord?, relation(onDelete=Cascade)
   post: Post?, relation(name=post_media_assets, optional, onDelete=Cascade)
+  project: Project?, relation(name=project_media_assets, optional, onDelete=Cascade)
   objectKey: String
   publicUrl: String?
   contentType: String?

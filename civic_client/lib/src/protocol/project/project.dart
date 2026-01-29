@@ -12,8 +12,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import '../user/user_record.dart' as _i2;
-import '../general/aws_places.dart' as _i3;
-import 'package:civic_client/src/protocol/protocol.dart' as _i4;
+import '../media/media_asset.dart' as _i3;
+import '../general/aws_places.dart' as _i4;
+import 'package:civic_client/src/protocol/protocol.dart' as _i5;
 
 abstract class Project implements _i1.SerializableModel {
   Project._({
@@ -27,36 +28,51 @@ abstract class Project implements _i1.SerializableModel {
     this.startDate,
     this.endDate,
     this.currency,
-    this.fundingCategory,
-    this.fundingSubCategory,
-    this.projectCost,
-    this.fundingNote,
+    String? fundingCategory,
+    String? fundingSubCategory,
+    double? projectCost,
+    String? fundingNote,
     this.projectImageAttachments,
     this.projectPDFAttachments,
     this.physicalLocations,
     this.virtualLocations,
     DateTime? dateCreated,
     this.updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
     int? vettingsCount,
     int? quotesCount,
-    this.overallRating,
-    this.overallLocationRating,
-    this.overallDescriptionRating,
-    this.overallDatesRating,
-    this.overallAttachmentsRating,
-    this.overAllCategoryRating,
-    this.overallFundingRating,
+    double? overallRating,
+    double? overallLocationRating,
+    double? overallDescriptionRating,
+    double? overallDatesRating,
+    double? overallAttachmentsRating,
+    double? overAllCategoryRating,
+    double? overallFundingRating,
     bool? isDeleted,
-  }) : dateCreated = dateCreated ?? DateTime.now(),
+    DateTime? lastImpressionAt,
+  }) : fundingCategory = fundingCategory ?? '',
+       fundingSubCategory = fundingSubCategory ?? '',
+       projectCost = projectCost ?? 0.0,
+       fundingNote = fundingNote ?? '',
+       dateCreated = dateCreated ?? DateTime.now(),
+       impressionsCount = impressionsCount ?? 0,
        likesCount = likesCount ?? 0,
        reviewsCount = reviewsCount ?? 0,
        bookmarksCount = bookmarksCount ?? 0,
        vettingsCount = vettingsCount ?? 0,
        quotesCount = quotesCount ?? 0,
-       isDeleted = isDeleted ?? false;
+       overallRating = overallRating ?? 0.0,
+       overallLocationRating = overallLocationRating ?? 0.0,
+       overallDescriptionRating = overallDescriptionRating ?? 0.0,
+       overallDatesRating = overallDatesRating ?? 0.0,
+       overallAttachmentsRating = overallAttachmentsRating ?? 0.0,
+       overAllCategoryRating = overAllCategoryRating ?? 0.0,
+       overallFundingRating = overallFundingRating ?? 0.0,
+       isDeleted = isDeleted ?? false,
+       lastImpressionAt = lastImpressionAt ?? DateTime.now();
 
   factory Project({
     int? id,
@@ -73,12 +89,13 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -92,6 +109,7 @@ abstract class Project implements _i1.SerializableModel {
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   }) = _ProjectImpl;
 
   factory Project.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -100,7 +118,7 @@ abstract class Project implements _i1.SerializableModel {
       ownerId: jsonSerialization['ownerId'] as int,
       owner: jsonSerialization['owner'] == null
           ? null
-          : _i4.Protocol().deserialize<_i2.UserRecord>(
+          : _i5.Protocol().deserialize<_i2.UserRecord>(
               jsonSerialization['owner'],
             ),
       title: jsonSerialization['title'] as String?,
@@ -121,22 +139,22 @@ abstract class Project implements _i1.SerializableModel {
       projectImageAttachments:
           jsonSerialization['projectImageAttachments'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<_i3.MediaAsset>>(
               jsonSerialization['projectImageAttachments'],
             ),
       projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<String>>(
               jsonSerialization['projectPDFAttachments'],
             ),
       physicalLocations: jsonSerialization['physicalLocations'] == null
           ? null
-          : _i4.Protocol().deserialize<List<_i3.AWSPlaces>>(
+          : _i5.Protocol().deserialize<List<_i4.AWSPlaces>>(
               jsonSerialization['physicalLocations'],
             ),
       virtualLocations: jsonSerialization['virtualLocations'] == null
           ? null
-          : _i4.Protocol().deserialize<List<String>>(
+          : _i5.Protocol().deserialize<List<String>>(
               jsonSerialization['virtualLocations'],
             ),
       dateCreated: jsonSerialization['dateCreated'] == null
@@ -147,6 +165,7 @@ abstract class Project implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
+      impressionsCount: jsonSerialization['impressionsCount'] as int?,
       likesCount: jsonSerialization['likesCount'] as int?,
       reviewsCount: jsonSerialization['reviewsCount'] as int?,
       bookmarksCount: jsonSerialization['bookmarksCount'] as int?,
@@ -166,6 +185,11 @@ abstract class Project implements _i1.SerializableModel {
       overallFundingRating: (jsonSerialization['overallFundingRating'] as num?)
           ?.toDouble(),
       isDeleted: jsonSerialization['isDeleted'] as bool?,
+      lastImpressionAt: jsonSerialization['lastImpressionAt'] == null
+          ? null
+          : _i1.DateTimeJsonExtension.fromJson(
+              jsonSerialization['lastImpressionAt'],
+            ),
     );
   }
 
@@ -200,17 +224,19 @@ abstract class Project implements _i1.SerializableModel {
 
   String? fundingNote;
 
-  List<String>? projectImageAttachments;
+  List<_i3.MediaAsset>? projectImageAttachments;
 
   List<String>? projectPDFAttachments;
 
-  List<_i3.AWSPlaces>? physicalLocations;
+  List<_i4.AWSPlaces>? physicalLocations;
 
   List<String>? virtualLocations;
 
   DateTime? dateCreated;
 
   DateTime? updatedAt;
+
+  int? impressionsCount;
 
   int? likesCount;
 
@@ -238,6 +264,8 @@ abstract class Project implements _i1.SerializableModel {
 
   bool? isDeleted;
 
+  DateTime? lastImpressionAt;
+
   /// Returns a shallow copy of this [Project]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -256,12 +284,13 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -275,6 +304,7 @@ abstract class Project implements _i1.SerializableModel {
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -295,7 +325,9 @@ abstract class Project implements _i1.SerializableModel {
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
       if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(),
+        'projectImageAttachments': projectImageAttachments?.toJson(
+          valueToJson: (v) => v.toJson(),
+        ),
       if (projectPDFAttachments != null)
         'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
@@ -306,6 +338,7 @@ abstract class Project implements _i1.SerializableModel {
         'virtualLocations': virtualLocations?.toJson(),
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
+      if (impressionsCount != null) 'impressionsCount': impressionsCount,
       if (likesCount != null) 'likesCount': likesCount,
       if (reviewsCount != null) 'reviewsCount': reviewsCount,
       if (bookmarksCount != null) 'bookmarksCount': bookmarksCount,
@@ -324,6 +357,8 @@ abstract class Project implements _i1.SerializableModel {
       if (overallFundingRating != null)
         'overallFundingRating': overallFundingRating,
       if (isDeleted != null) 'isDeleted': isDeleted,
+      if (lastImpressionAt != null)
+        'lastImpressionAt': lastImpressionAt?.toJson(),
     };
   }
 
@@ -351,12 +386,13 @@ class _ProjectImpl extends Project {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<String>? projectImageAttachments,
+    List<_i3.MediaAsset>? projectImageAttachments,
     List<String>? projectPDFAttachments,
-    List<_i3.AWSPlaces>? physicalLocations,
+    List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
     DateTime? updatedAt,
+    int? impressionsCount,
     int? likesCount,
     int? reviewsCount,
     int? bookmarksCount,
@@ -370,6 +406,7 @@ class _ProjectImpl extends Project {
     double? overAllCategoryRating,
     double? overallFundingRating,
     bool? isDeleted,
+    DateTime? lastImpressionAt,
   }) : super._(
          id: id,
          ownerId: ownerId,
@@ -391,6 +428,7 @@ class _ProjectImpl extends Project {
          virtualLocations: virtualLocations,
          dateCreated: dateCreated,
          updatedAt: updatedAt,
+         impressionsCount: impressionsCount,
          likesCount: likesCount,
          reviewsCount: reviewsCount,
          bookmarksCount: bookmarksCount,
@@ -404,6 +442,7 @@ class _ProjectImpl extends Project {
          overAllCategoryRating: overAllCategoryRating,
          overallFundingRating: overallFundingRating,
          isDeleted: isDeleted,
+         lastImpressionAt: lastImpressionAt,
        );
 
   /// Returns a shallow copy of this [Project]
@@ -431,6 +470,7 @@ class _ProjectImpl extends Project {
     Object? virtualLocations = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
+    Object? impressionsCount = _Undefined,
     Object? likesCount = _Undefined,
     Object? reviewsCount = _Undefined,
     Object? bookmarksCount = _Undefined,
@@ -444,6 +484,7 @@ class _ProjectImpl extends Project {
     Object? overAllCategoryRating = _Undefined,
     Object? overallFundingRating = _Undefined,
     Object? isDeleted = _Undefined,
+    Object? lastImpressionAt = _Undefined,
   }) {
     return Project(
       id: id is int? ? id : this.id,
@@ -468,13 +509,13 @@ class _ProjectImpl extends Project {
           : this.fundingSubCategory,
       projectCost: projectCost is double? ? projectCost : this.projectCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
-      projectImageAttachments: projectImageAttachments is List<String>?
+      projectImageAttachments: projectImageAttachments is List<_i3.MediaAsset>?
           ? projectImageAttachments
-          : this.projectImageAttachments?.map((e0) => e0).toList(),
+          : this.projectImageAttachments?.map((e0) => e0.copyWith()).toList(),
       projectPDFAttachments: projectPDFAttachments is List<String>?
           ? projectPDFAttachments
           : this.projectPDFAttachments?.map((e0) => e0).toList(),
-      physicalLocations: physicalLocations is List<_i3.AWSPlaces>?
+      physicalLocations: physicalLocations is List<_i4.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
       virtualLocations: virtualLocations is List<String>?
@@ -482,6 +523,9 @@ class _ProjectImpl extends Project {
           : this.virtualLocations?.map((e0) => e0).toList(),
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
+      impressionsCount: impressionsCount is int?
+          ? impressionsCount
+          : this.impressionsCount,
       likesCount: likesCount is int? ? likesCount : this.likesCount,
       reviewsCount: reviewsCount is int? ? reviewsCount : this.reviewsCount,
       bookmarksCount: bookmarksCount is int?
@@ -511,6 +555,9 @@ class _ProjectImpl extends Project {
           ? overallFundingRating
           : this.overallFundingRating,
       isDeleted: isDeleted is bool? ? isDeleted : this.isDeleted,
+      lastImpressionAt: lastImpressionAt is DateTime?
+          ? lastImpressionAt
+          : this.lastImpressionAt,
     );
   }
 }

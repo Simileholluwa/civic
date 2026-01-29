@@ -95,12 +95,12 @@ class ProjectBookmarksScreen extends ConsumerWidget {
               ),
             ];
           },
-          body: AppInfiniteList<Project>(
+          body: AppInfiniteList<ProjectWithUserState>(
             pagingController: pagingState,
             canCreate: false,
-            itemBuilder: (_, project, _) {
+            itemBuilder: (_, projectWithUserState, _) {
               return ProjectCard(
-                project: project,
+                projectWithUserState: projectWithUserState,
               );
             },
             onRefresh: pagingState.refresh,

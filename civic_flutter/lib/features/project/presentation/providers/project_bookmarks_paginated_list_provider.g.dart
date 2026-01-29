@@ -17,7 +17,7 @@ final class PaginatedProjectBookmarksListProvider
     extends
         $NotifierProvider<
           PaginatedProjectBookmarksList,
-          Raw<PagingController<int, Project>>
+          Raw<PagingController<int, ProjectWithUserState>>
         > {
   const PaginatedProjectBookmarksListProvider._()
     : super(
@@ -38,22 +38,25 @@ final class PaginatedProjectBookmarksListProvider
   PaginatedProjectBookmarksList create() => PaginatedProjectBookmarksList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Raw<PagingController<int, Project>> value) {
+  Override overrideWithValue(
+    Raw<PagingController<int, ProjectWithUserState>> value,
+  ) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<Raw<PagingController<int, Project>>>(
-        value,
-      ),
+      providerOverride:
+          $SyncValueProvider<Raw<PagingController<int, ProjectWithUserState>>>(
+            value,
+          ),
     );
   }
 }
 
 String _$paginatedProjectBookmarksListHash() =>
-    r'8cc404496897b17f3d0cdf170ca33065f73a523d';
+    r'0b2685f805310ef43e02a9ddbec3bc4addb2e347';
 
 abstract class _$PaginatedProjectBookmarksList
-    extends $Notifier<Raw<PagingController<int, Project>>> {
-  Raw<PagingController<int, Project>> build();
+    extends $Notifier<Raw<PagingController<int, ProjectWithUserState>>> {
+  Raw<PagingController<int, ProjectWithUserState>> build();
   @$mustCallSuper
   @override
   void runBuild() {
@@ -61,17 +64,17 @@ abstract class _$PaginatedProjectBookmarksList
     final ref =
         this.ref
             as $Ref<
-              Raw<PagingController<int, Project>>,
-              Raw<PagingController<int, Project>>
+              Raw<PagingController<int, ProjectWithUserState>>,
+              Raw<PagingController<int, ProjectWithUserState>>
             >;
     final element =
         ref.element
             as $ClassProviderElement<
               AnyNotifier<
-                Raw<PagingController<int, Project>>,
-                Raw<PagingController<int, Project>>
+                Raw<PagingController<int, ProjectWithUserState>>,
+                Raw<PagingController<int, ProjectWithUserState>>
               >,
-              Raw<PagingController<int, Project>>,
+              Raw<PagingController<int, ProjectWithUserState>>,
               Object?,
               Object?
             >;

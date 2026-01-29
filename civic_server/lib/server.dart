@@ -24,15 +24,7 @@ void run(List<String> args) async {
     Endpoints(),
     authenticationHandler: auth.authenticationHandler,
   );
-
-  // // Future calls
-  // pod.registerFutureCall(SchedulePostFutureCall(), 'schedulePostFutureCall');
-  // pod.registerFutureCall(
-  //   ScheduleProjectFutureCall(),
-  //   'scheduleProjectFutureCall',
-  // );
-  // pod.registerFutureCall(MediaCleanupFutureCall(), 'mediaCleanupFutureCall');
-
+  
   // Auth
   auth.AuthConfig.set(
     auth.AuthConfig(

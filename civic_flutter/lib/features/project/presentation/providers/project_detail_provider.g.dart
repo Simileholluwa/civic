@@ -13,8 +13,15 @@ part of 'project_detail_provider.dart';
 const projectDetailProvider = ProjectDetailFamily._();
 
 final class ProjectDetailProvider
-    extends $FunctionalProvider<AsyncValue<Project>, Project, FutureOr<Project>>
-    with $FutureModifier<Project>, $FutureProvider<Project> {
+    extends
+        $FunctionalProvider<
+          AsyncValue<ProjectWithUserState>,
+          ProjectWithUserState,
+          FutureOr<ProjectWithUserState>
+        >
+    with
+        $FutureModifier<ProjectWithUserState>,
+        $FutureProvider<ProjectWithUserState> {
   const ProjectDetailProvider._({
     required ProjectDetailFamily super.from,
     required (int, Project?) super.argument,
@@ -38,11 +45,12 @@ final class ProjectDetailProvider
 
   @$internal
   @override
-  $FutureProviderElement<Project> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $FutureProviderElement<ProjectWithUserState> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Project> create(Ref ref) {
+  FutureOr<ProjectWithUserState> create(Ref ref) {
     final argument = this.argument as (int, Project?);
     return projectDetail(ref, argument.$1, argument.$2);
   }
@@ -58,10 +66,14 @@ final class ProjectDetailProvider
   }
 }
 
-String _$projectDetailHash() => r'11d7193cd829f5d13cc33a85e6098c465752114f';
+String _$projectDetailHash() => r'92501ff8905867e7ad55723a2df342641d5f7240';
 
 final class ProjectDetailFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<Project>, (int, Project?)> {
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<ProjectWithUserState>,
+          (int, Project?)
+        > {
   const ProjectDetailFamily._()
     : super(
         retry: null,

@@ -16,7 +16,7 @@ final class PaginatedProjectListProvider
     extends
         $NotifierProvider<
           PaginatedProjectList,
-          Raw<PagingController<int, Project>>
+          Raw<PagingController<int, ProjectWithUserState>>
         > {
   const PaginatedProjectListProvider._({
     required PaginatedProjectListFamily super.from,
@@ -44,12 +44,15 @@ final class PaginatedProjectListProvider
   PaginatedProjectList create() => PaginatedProjectList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Raw<PagingController<int, Project>> value) {
+  Override overrideWithValue(
+    Raw<PagingController<int, ProjectWithUserState>> value,
+  ) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<Raw<PagingController<int, Project>>>(
-        value,
-      ),
+      providerOverride:
+          $SyncValueProvider<Raw<PagingController<int, ProjectWithUserState>>>(
+            value,
+          ),
     );
   }
 
@@ -65,15 +68,15 @@ final class PaginatedProjectListProvider
 }
 
 String _$paginatedProjectListHash() =>
-    r'9acc27296a15990ed1f97ec3840a80754a93332d';
+    r'9997598f0e3487ddf0ea1889cf493615593c4a07';
 
 final class PaginatedProjectListFamily extends $Family
     with
         $ClassFamilyOverride<
           PaginatedProjectList,
-          Raw<PagingController<int, Project>>,
-          Raw<PagingController<int, Project>>,
-          Raw<PagingController<int, Project>>,
+          Raw<PagingController<int, ProjectWithUserState>>,
+          Raw<PagingController<int, ProjectWithUserState>>,
+          Raw<PagingController<int, ProjectWithUserState>>,
           String
         > {
   const PaginatedProjectListFamily._()
@@ -93,11 +96,11 @@ final class PaginatedProjectListFamily extends $Family
 }
 
 abstract class _$PaginatedProjectList
-    extends $Notifier<Raw<PagingController<int, Project>>> {
+    extends $Notifier<Raw<PagingController<int, ProjectWithUserState>>> {
   late final _$args = ref.$arg as String;
   String get sortBy => _$args;
 
-  Raw<PagingController<int, Project>> build(String sortBy);
+  Raw<PagingController<int, ProjectWithUserState>> build(String sortBy);
   @$mustCallSuper
   @override
   void runBuild() {
@@ -105,17 +108,17 @@ abstract class _$PaginatedProjectList
     final ref =
         this.ref
             as $Ref<
-              Raw<PagingController<int, Project>>,
-              Raw<PagingController<int, Project>>
+              Raw<PagingController<int, ProjectWithUserState>>,
+              Raw<PagingController<int, ProjectWithUserState>>
             >;
     final element =
         ref.element
             as $ClassProviderElement<
               AnyNotifier<
-                Raw<PagingController<int, Project>>,
-                Raw<PagingController<int, Project>>
+                Raw<PagingController<int, ProjectWithUserState>>,
+                Raw<PagingController<int, ProjectWithUserState>>
               >,
-              Raw<PagingController<int, Project>>,
+              Raw<PagingController<int, ProjectWithUserState>>,
               Object?,
               Object?
             >;

@@ -20,50 +20,54 @@ Timer? _quillDebounce;
 class CreateProjectNotif extends _$CreateProjectNotif {
   static final imageHelper = ImageHelper();
   static const int maxImageCount = 5;
+  static final RegExp _urlRegex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
 
   Project? _baselineProject;
   int? _currentDraftId;
 
   @override
   ProjectCreationState build(Project? project) {
-    final initialState = project == null
-        ? ProjectCreationState.empty()
-        : ProjectCreationState.populate(project)
-      ..titleController = TextEditingController(text: project?.title)
-      ..scrollController = ScrollController()
-      ..descriptionFocusNode = FocusNode()
-      ..quillController = QuillController(
-        document: project?.description != null &&
-                project!.description!.trim().isNotEmpty
-            ? Document.fromJson(
-                jsonDecode(
-                  project.description!,
-                ) as List,
-              )
-            : Document(),
-        selection: const TextSelection.collapsed(offset: 0),
-      )
-      ..startDateController = TextEditingController(
-        text: project?.startDate == null
-            ? null
-            : DateFormat('MMM d, y').format(project!.startDate!),
-      )
-      ..endDateController = TextEditingController(
-        text: project?.endDate == null
-            ? null
-            : DateFormat('MMM d, y').format(project!.endDate!),
-      )
-      ..projectCostController = TextEditingController(
-        text: project?.projectCost == null
-            ? null
-            : NumberFormat('#,##0.##').format(
-                project!.projectCost,
-              ),
-      )
-      ..fundingNoteController = TextEditingController(
-        text: project?.fundingNote,
-      )
-      ..virtualLocationController = TextEditingController();
+    final initialState =
+        project == null
+              ? ProjectCreationState.empty()
+              : ProjectCreationState.populate(project)
+          ..titleController = TextEditingController(text: project?.title)
+          ..scrollController = ScrollController()
+          ..descriptionFocusNode = FocusNode()
+          ..quillController = QuillController(
+            document:
+                project?.description != null &&
+                    project!.description!.trim().isNotEmpty
+                ? Document.fromJson(
+                    jsonDecode(
+                          project.description!,
+                        )
+                        as List,
+                  )
+                : Document(),
+            selection: const TextSelection.collapsed(offset: 0),
+          )
+          ..startDateController = TextEditingController(
+            text: project?.startDate == null
+                ? null
+                : DateFormat('MMM d, y').format(project!.startDate!),
+          )
+          ..endDateController = TextEditingController(
+            text: project?.endDate == null
+                ? null
+                : DateFormat('MMM d, y').format(project!.endDate!),
+          )
+          ..projectCostController = TextEditingController(
+            text: project?.projectCost == null
+                ? null
+                : NumberFormat('#,##0.##').format(
+                    project!.projectCost,
+                  ),
+          )
+          ..fundingNoteController = TextEditingController(
+            text: project?.fundingNote,
+          )
+          ..virtualLocationController = TextEditingController();
 
     _baselineProject = project;
 
@@ -113,9 +117,10 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     var different = false;
 
     if (baseline == null) {
-      different = state.title.isNotEmpty ||
+      different =
+          state.title.isNotEmpty ||
           (_plainTextFromDelta(state.description).trim().isNotEmpty) ||
-          state.projectImageAttachments.isNotEmpty ||
+          state.projectImageAttachments.isNotEmpty || state.imageUrls.isNotEmpty ||
           (state.projectPDFAttachments?.isNotEmpty ?? false) ||
           (state.virtualLocations?.isNotEmpty ?? false) ||
           state.physicalLocations.isNotEmpty ||
@@ -133,10 +138,10 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       );
 
       final baselineImages = Set<String>.from(
-        baseline.projectImageAttachments ?? [],
+        baseline.projectImageAttachments?.map((e) => e.publicUrl ?? '') ?? [],
       );
       final stateImages = Set<String>.from(
-        state.projectImageAttachments,
+        state.imageUrls,
       );
 
       final baselinePdfs = Set<String>.from(
@@ -164,7 +169,8 @@ class CreateProjectNotif extends _$CreateProjectNotif {
         ),
       );
 
-      different = (baseline.title ?? '') != state.title ||
+      different =
+          (baseline.title ?? '') != state.title ||
           baselineDesc != stateDesc ||
           baseline.startDate != state.startDate ||
           baseline.endDate != state.endDate ||
@@ -333,7 +339,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     final image = await imageHelper.takeImage();
     if (image != null) {
       state = state.copyWith(
-        projectImageAttachments: [...state.projectImageAttachments, image.path],
+        imageUrls: [...state.imageUrls, image.path],
       );
       _updateIsDirty();
     }
@@ -348,8 +354,8 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     if (images != null) {
       final imagePaths = images.map((img) => img.path).toList();
       state = state.copyWith(
-        projectImageAttachments: [
-          ...state.projectImageAttachments,
+        imageUrls: [
+          ...state.imageUrls,
           ...imagePaths.take(imageLength),
         ],
       );
@@ -362,14 +368,13 @@ class CreateProjectNotif extends _$CreateProjectNotif {
 
   void removeImageAtIndex(int index) {
     if (index < 0 || index >= state.projectImageAttachments.length) return;
-    final newImages = List<String>.from(state.projectImageAttachments)
-      ..removeAt(index);
-    state = state.copyWith(projectImageAttachments: newImages);
+    final newImages = List<String>.from(state.imageUrls)..removeAt(index);
+    state = state.copyWith(imageUrls: newImages);
     _updateIsDirty();
   }
 
   void removeAllImages() {
-    state = state.copyWith(projectImageAttachments: []);
+    state = state.copyWith(imageUrls: []);
     _updateIsDirty();
   }
 
@@ -417,20 +422,78 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     } else if (state.projectCategory == null ||
         state.projectSubCategory == null) {
       TToastMessages.infoToast('Category is required.');
+    } else if (state.startDate == null || state.endDate == null) {
+      TToastMessages.infoToast('Start and end dates are required.');
+    } else if (state.startDate != null &&
+        state.endDate != null &&
+        state.startDate!.isAfter(state.endDate!)) {
+      TToastMessages.infoToast('Start date must be before end date.');
+    } else if (state.projectCost <= 0.0) {
+      TToastMessages.infoToast('Project cost must be greater than zero.');
+    } else if (state.fundingCategory == null ||
+        state.fundingSubCategory == null) {
+      TToastMessages.infoToast('Funding category is required.');
+    } else if (state.physicalLocations.isEmpty &&
+        (state.virtualLocations == null ||
+            state.virtualLocations!.isEmpty)) {
+      TToastMessages.infoToast('At least one location is required.');
+    } else if (state.imageUrls.isEmpty) {
+      TToastMessages.infoToast('At least one image is required.');
     } else {
-      TToastMessages.infoToast('Please fill in all required fields.');
+      TToastMessages.infoToast('Please complete all required fields.');
     }
     return false;
   }
 
   void setImages(List<String> images) {
-    state = state.copyWith(projectImageAttachments: images);
+    state = state.copyWith(imageUrls: images);
     _updateIsDirty();
   }
 
   void setPDFAttachments(List<String> pdfs) {
     state = state.copyWith(projectPDFAttachments: pdfs);
     _updateIsDirty();
+  }
+
+  Future<bool> _uploadAssets() async {
+    // Separate local images (to upload) and remote images (already on server)
+    final localImages = state.imageUrls
+        .where((p) => !_urlRegex.hasMatch(p))
+        .toList(growable: false);
+    final remoteImages = state.imageUrls
+        .where(_urlRegex.hasMatch)
+        .toList(growable: false);
+    final assets = <MediaAsset>[];
+
+    // Add existing remote image MediaAssets (from state.uploadedAssets)
+    if (remoteImages.isNotEmpty && state.projectImageAttachments.isNotEmpty) {
+      final remoteAssets = state.projectImageAttachments
+          .where(
+            (a) =>
+                a.kind == MediaKind.image &&
+                a.publicUrl != null &&
+                remoteImages.contains(a.publicUrl),
+          )
+          .toList();
+      assets.addAll(remoteAssets);
+    }
+
+    // Upload new local images
+    if (localImages.isNotEmpty) {
+      final res = await ref
+          .read(assetServiceProvider)
+          .uploadPostMediaAssets(
+            localImages,
+          );
+      if (res.isLeft()) {
+        ref.read(sendPostLoadingProvider.notifier).value = false;
+        return false;
+      }
+      assets.addAll(res.getRight().toNullable()!);
+    }
+
+    state = state.copyWith(projectImageAttachments: assets);
+    return true;
   }
 
   Future<bool> _sendMediaAttachments({
@@ -455,7 +518,9 @@ class CreateProjectNotif extends _$CreateProjectNotif {
 
     if (newUploads.isEmpty) return true;
 
-    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+    final result = await ref
+        .read(assetServiceProvider)
+        .uploadMediaAssets(
           newUploads,
           folder,
           subFolder,
@@ -501,33 +566,36 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     List<String> embeddedImages,
     String content,
   ) async {
-    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+    final result = await ref
+        .read(assetServiceProvider)
+        .uploadMediaAssets(
           embeddedImages,
           'embedded_project_images',
           'images',
         );
 
-    return result.fold((error) async {
-      TToastMessages.errorToast(error);
-      await saveProjectDraft();
-      TToastMessages.errorToast(
-        'Unable to upload embedded images. Project has been saved as draft.',
-      );
-      return;
-    }, (mediaUrls) {
-      final pathReplacements = THelperFunctions.mapEmbededImages(
-        embeddedImages,
-        mediaUrls,
-      );
-      final modifiedContent = THelperFunctions.modifyArticleContent(
-        content,
-        pathReplacements,
-      );
+    return result.fold(
+      (error) async {
+        await saveProjectDraft();
+        TToastMessages.errorToast(
+          '$error. Project has been saved as draft.',
+        );
+        return;
+      },
+      (mediaUrls) {
+        final pathReplacements = THelperFunctions.mapEmbededImages(
+          embeddedImages,
+          mediaUrls,
+        );
+        final modifiedContent = THelperFunctions.modifyArticleContent(
+          content,
+          pathReplacements,
+        );
 
-      // Persist the modified description into state so subsequent steps send the updated content
-      state = state.copyWith(description: modifiedContent);
-      return;
-    });
+        state = state.copyWith(description: modifiedContent);
+        return;
+      },
+    );
   }
 
   Project _buildProjectFromState({
@@ -556,21 +624,17 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   Future<void> sendProject(int? projectId) async {
-    // Prevent accidental double submit
     if (ref.read(sendPostLoadingProvider.notifier).value) return;
     ref.read(sendPostLoadingProvider.notifier).value = true;
-    // Keep provider alive for the duration of the submission (survives navigation/rebuild)
+    if (!validateProject()) {
+      ref.read(sendPostLoadingProvider.notifier).value = false;
+      return;
+    }
     final keepAliveLink = ref.keepAlive();
 
     const maxAttempts = 3;
     var attempt = 0;
     var backoff = const Duration(milliseconds: 600);
-
-    // Basic client-side validation
-    if (!validateProject()) {
-      ref.read(sendPostLoadingProvider.notifier).value = false;
-      return;
-    }
 
     final embeddedImages = THelperFunctions.getAllImagesFromEditor(
       state.description,
@@ -579,7 +643,6 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       while (true) {
         attempt++;
         try {
-          // Upload embedded editor images first (content modified on success)
           if (embeddedImages.isNotEmpty) {
             await sendMediaAndModifyContent(
               embeddedImages,
@@ -587,12 +650,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
             );
           }
 
-          final imagesUploaded = await _sendMediaAttachments(
-            attachments: state.projectImageAttachments,
-            folder: 'projects',
-            subFolder: 'images',
-            onUploadSuccess: setImages,
-          );
+          final imagesUploaded = await _uploadAssets();
           if (!imagesUploaded) {
             throw Exception('Unable to upload images.');
           }
@@ -622,30 +680,25 @@ class CreateProjectNotif extends _$CreateProjectNotif {
             (error) async {
               throw Exception(error.message);
             },
-            (response) async {
-              // Only after success, update paginated lists
-              final realProject = response;
-              if (projectId == null) {
-                ref
-                    .read(
-                      paginatedProjectListProvider('').notifier,
-                    )
-                    .addProject(realProject);
-              } else {
-                ref
-                    .read(
-                      paginatedProjectListProvider('').notifier,
-                    )
-                    .updateProject(realProject);
-              }
+            (project) async {
+              ref
+                  .read(
+                    paginatedProjectListProvider('').notifier,
+                  )
+                  .addProject(
+                    ProjectWithUserState(
+                      project: project,
+                    ),
+                  );
+
               TToastMessages.successToast(
                 'Your project was sent.',
               );
-              _setBaseline(realProject);
+              _setBaseline(project);
               return true;
             },
           );
-          if (success) break; // Done
+          if (success) break;
         } on Exception catch (e) {
           if (attempt >= maxAttempts) {
             await saveProjectDraft();
@@ -654,20 +707,17 @@ class CreateProjectNotif extends _$CreateProjectNotif {
             );
             break;
           }
-          // Backoff before retrying
           await Future<void>.delayed(backoff);
           backoff *= 2;
         }
       }
     } finally {
       ref.read(sendPostLoadingProvider.notifier).value = false;
-      // Release keep-alive so provider can dispose normally after completion
       keepAliveLink.close();
     }
   }
 
   void loadDraft(Project draft) {
-    // Preserve existing controllers created during build.
     final existingTitleController = state.titleController;
     final existingQuillController = state.quillController;
     final existingStartDateController = state.startDateController;
@@ -678,13 +728,12 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     final existingScrollController = state.scrollController;
     final existingDescriptionFocusNode = state.descriptionFocusNode;
 
-    // Update controller text values from draft.
     existingTitleController?.text = draft.title ?? '';
     if (existingQuillController != null) {
       existingQuillController.document =
           draft.description != null && draft.description!.trim().isNotEmpty
-              ? Document.fromJson(jsonDecode(draft.description!) as List)
-              : Document();
+          ? Document.fromJson(jsonDecode(draft.description!) as List)
+          : Document();
     }
     existingStartDateController?.text = draft.startDate == null
         ? ''
@@ -699,7 +748,6 @@ class CreateProjectNotif extends _$CreateProjectNotif {
           );
     existingFundingNoteController?.text = draft.fundingNote ?? '';
 
-    // Replace state data while re-attaching preserved controllers.
     state = ProjectCreationState.populate(draft).copyWith(
       isDirty: false,
       titleController: existingTitleController,

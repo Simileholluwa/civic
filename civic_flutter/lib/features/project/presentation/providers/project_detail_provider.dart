@@ -8,22 +8,28 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_detail_provider.g.dart';
 
 @riverpod
-Future<Project> projectDetail(
+Future<ProjectWithUserState> projectDetail(
   Ref ref,
   int id,
   Project? project,
 ) async {
-  final completer = Completer<Project>();
+  final completer = Completer<ProjectWithUserState>();
   if (id == 0) {
     final userId = ref.read(localStorageProvider).getInt('userId')!;
     completer.complete(
-      Project(
-        ownerId: userId,
+      ProjectWithUserState(
+        project: Project(
+          ownerId: userId,
+        ),
       ),
     );
     return completer.future;
   } else if (project != null) {
-    completer.complete(project);
+    completer.complete(
+      ProjectWithUserState(
+        project: project,
+      ),
+    );
     return completer.future;
   } else {
     final retrieveProject = ref.read(getProjectProvider);
@@ -32,7 +38,6 @@ Future<Project> projectDetail(
         id,
       ),
     );
-
     await result.fold(
       (error) {
         completer.completeError({
@@ -41,7 +46,7 @@ Future<Project> projectDetail(
         });
       },
       (projectWithUserState) async {
-        completer.complete(projectWithUserState.project);
+        completer.complete(projectWithUserState);
       },
     );
 

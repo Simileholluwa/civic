@@ -378,7 +378,7 @@ class PostCreation extends _$PostCreation {
     });
   }
 
-  Future<bool> _uploadAssetsToPostId() async {
+  Future<bool> _uploadAssets() async {
     // Separate local images (to upload) and remote images (already on server)
     final localImages = state.imageUrls
         .where((p) => !_urlRegex.hasMatch(p))
@@ -582,7 +582,7 @@ class PostCreation extends _$PostCreation {
         postType: PostType.regular,
       );
 
-      final uploadedOk = await _uploadAssetsToPostId();
+      final uploadedOk = await _uploadAssets();
       if (!uploadedOk) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         await savePostAsDraft(
@@ -617,7 +617,7 @@ class PostCreation extends _$PostCreation {
       ref.read(sendPostLoadingProvider.notifier).value = true;
       final ownerId = _ownerId;
       final saveComment = ref.read(savePostCommentProvider);
-      final uploadedOk = await _uploadAssetsToPostId();
+      final uploadedOk = await _uploadAssets();
       if (!uploadedOk) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         return;
@@ -696,7 +696,7 @@ class PostCreation extends _$PostCreation {
       final saveReply = ref.read(
         savePostCommentProvider,
       );
-      final uploadedOk = await _uploadAssetsToPostId();
+      final uploadedOk = await _uploadAssets();
       if (!uploadedOk) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         return;
@@ -1024,7 +1024,7 @@ class PostCreation extends _$PostCreation {
         postType: PostType.article,
       );
 
-      final uploadedOk = await _uploadAssetsToPostId();
+      final uploadedOk = await _uploadAssets();
       if (!uploadedOk) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
         await saveArticleAsDraft(

@@ -78,6 +78,7 @@ export './widgets/content/content_comment_tree.dart';
 export './widgets/content/content_creator_info.dart';
 export './widgets/content/content_double_button.dart';
 export './widgets/content/content_expandable_text.dart';
+export './widgets/content/content_image_viewer.dart';
 export './widgets/content/content_interaction_buttons.dart';
 export './widgets/content/content_keep_alive_wrapper.dart';
 export './widgets/content/content_multiple_cached_image.dart';

@@ -5,28 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'stream_service_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-Stream<Project> projectStream(
-  Ref ref,
-  int projectId,
-  Project? project,
-) async* {
-  if (project != null) {
-    yield project;
-  }
-  final updates = ref
-      .read(
-        clientProvider,
-      )
-      .project
-      .projectUpdates(
-        projectId,
-      );
-  await for (final update in updates) {
-    yield update;
-  }
-}
-
-@Riverpod(keepAlive: true)
 Stream<ProjectReview> projectReviewStream(
   Ref ref,
   int projectReviewId,

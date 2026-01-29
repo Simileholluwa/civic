@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class PostImagePost extends ConsumerWidget {
-  const PostImagePost({
-    required this.post,
+class ContentImageViewer extends ConsumerWidget {
+  const ContentImageViewer({
+    required this.mediaAssets,
     this.addPadding = true,
     super.key,
   });
 
-  final Post post;
+  final List<MediaAsset> mediaAssets;
   final bool addPadding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final regex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-    final imageAssets = (post.mediaAssets ?? [])
+    final imageAssets = mediaAssets
         .where(
           (a) =>
               a.kind == MediaKind.image && (a.publicUrl?.isNotEmpty ?? false),

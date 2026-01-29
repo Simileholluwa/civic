@@ -16,7 +16,7 @@ final class ProjectCardWidgetProvider
     extends $NotifierProvider<ProjectCardWidget, ProjectCardState> {
   const ProjectCardWidgetProvider._({
     required ProjectCardWidgetFamily super.from,
-    required Project? super.argument,
+    required ProjectWithUserStateKey? super.argument,
   }) : super(
          retry: null,
          name: r'projectCardWidgetProvider',
@@ -58,7 +58,7 @@ final class ProjectCardWidgetProvider
   }
 }
 
-String _$projectCardWidgetHash() => r'1dab47d790116a2a80cd2f5aa879b6d4ccfa873a';
+String _$projectCardWidgetHash() => r'546b606f8df993167ea995601145041219ee61b2';
 
 final class ProjectCardWidgetFamily extends $Family
     with
@@ -67,7 +67,7 @@ final class ProjectCardWidgetFamily extends $Family
           ProjectCardState,
           ProjectCardState,
           ProjectCardState,
-          Project?
+          ProjectWithUserStateKey?
         > {
   const ProjectCardWidgetFamily._()
     : super(
@@ -78,18 +78,18 @@ final class ProjectCardWidgetFamily extends $Family
         isAutoDispose: true,
       );
 
-  ProjectCardWidgetProvider call(Project? project) =>
-      ProjectCardWidgetProvider._(argument: project, from: this);
+  ProjectCardWidgetProvider call(ProjectWithUserStateKey? key) =>
+      ProjectCardWidgetProvider._(argument: key, from: this);
 
   @override
   String toString() => r'projectCardWidgetProvider';
 }
 
 abstract class _$ProjectCardWidget extends $Notifier<ProjectCardState> {
-  late final _$args = ref.$arg as Project?;
-  Project? get project => _$args;
+  late final _$args = ref.$arg as ProjectWithUserStateKey?;
+  ProjectWithUserStateKey? get key => _$args;
 
-  ProjectCardState build(Project? project);
+  ProjectCardState build(ProjectWithUserStateKey? key);
   @$mustCallSuper
   @override
   void runBuild() {

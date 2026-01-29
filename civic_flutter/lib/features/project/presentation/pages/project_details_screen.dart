@@ -21,125 +21,124 @@ class ProjectDetailsScreen extends ConsumerWidget {
     final data = ref.watch(
       projectDetailProvider(projectId, project),
     );
-    final liveProject = ref.watch(
-      projectStreamProvider(
-        projectId,
-        project,
-      ),
-    );
-    final newProject = liveProject.value ?? data.value;
-    final projectCardState = ref.watch(
-      projectCardWidgetProvider(
-        newProject,
-      ),
-    );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
-    final projectCardNotifier = ref.watch(
-      projectCardWidgetProvider(newProject).notifier,
-    );
     return Scaffold(
       appBar: AppBar(
-        actions: data.hasValue && !data.hasError
-            ? data.value == null
-                ? []
-                : [
+        actions: [
+          data.when(
+            data: (value) {
+              final projectProv = projectCardWidgetProvider(
+                ProjectWithUserStateKey(
+                  value,
+                ),
+              );
+              final projectNotif = ref.read(projectProv.notifier);
+              final project = value.project;
+              final userId = ref.read(localStorageProvider).getInt('userId');
+              final isOwner = project.ownerId == userId;
+              final hasLiked = ref.watch(
+                projectProv.select(
+                  (s) => s.hasLiked,
+                ),
+              );
+              final hasReposted = ref.watch(
+                projectProv.select(
+                  (s) => s.hasReposted,
+                ),
+              );
+              final isSubscribed = ref.watch(
+                projectProv.select(
+                  (s) => s.isSubscribed,
+                ),
+              );
+              return Padding(
+                padding: const EdgeInsets.only(
+                  right: 5,
+                ),
+                child: Row(
+                  spacing: 5,
+                  children: [
                     IconButton(
-                      onPressed: projectCardState.isDeleted!
-                          ? null
-                          : () async {
-                              await projectCardNotifier.toggleLikeStatus(
-                                data.value!.id!,
-                              );
-                            },
+                      onPressed: () async {
+                        await projectNotif.toggleLikeStatus(
+                          project.id!,
+                        );
+                      },
                       icon: Icon(
-                        projectCardState.hasLiked!
-                            ? Iconsax.heart5
-                            : Iconsax.heart,
-                        color: projectCardState.isDeleted!
-                            ? Theme.of(context).disabledColor
-                            : projectCardState.hasLiked!
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color!,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    IconButton(
-                      onPressed: projectCardState.isDeleted!
-                          ? null
-                          : () async {
-                              await context.push(
-                                '/create/post/0',
-                                extra: {
-                                  'project': project,
-                                },
-                              );
-                            },
-                      icon: Icon(
-                        Iconsax.repeate_music,
-                        color: projectCardState.isDeleted!
-                            ? Theme.of(context).disabledColor
+                        hasLiked ? Iconsax.heart5 : Iconsax.heart,
+                        color: hasLiked
+                            ? TColors.primary
                             : Theme.of(context).iconTheme.color!,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
+
                     IconButton(
-                      onPressed: projectCardState.isOwner!
+                      onPressed: () async {
+                        await context.push(
+                          '/create/post/0',
+                          extra: {
+                            'project': project,
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Iconsax.repeate_music,
+                        color: hasReposted
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).iconTheme.color!,
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: isOwner
                           ? null
                           : () async {
-                              await projectCardNotifier
-                                  .subscribeToNotifications(
-                                data.value!.id!,
+                              await projectNotif.subscribeToNotifications(
+                                project.id!,
                               );
                             },
                       icon: Icon(
-                        projectCardState.isSubscribed
+                        isSubscribed
                             ? Iconsax.notification_bing5
                             : Iconsax.notification_bing,
-                        color: projectCardState.isOwner!
+                        color: isOwner
                             ? null
-                            : projectCardState.isSubscribed
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color,
+                            : isSubscribed
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
+
                     IconButton(
-                      onPressed: projectCardState.isDeleted!
-                          ? null
-                          : () async {
-                              await showDialog<dynamic>(
-                                context: context,
-                                builder: (ctx) {
-                                  return AlertDialog(
-                                    contentPadding: const EdgeInsets.only(
-                                      bottom: 16,
-                                    ),
-                                    content: ShowProjectActions(
-                                      project: newProject!,
-                                      fromDetails: true,
-                                    ),
-                                  );
-                                },
-                              );
-                            },
+                      onPressed: () async {
+                        await showDialog<dynamic>(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              contentPadding: const EdgeInsets.only(
+                                bottom: 16,
+                              ),
+                              content: ShowProjectActions(
+                                projectWithUserState: value,
+                                fromDetails: true,
+                              ),
+                            );
+                          },
+                        );
+                      },
                       icon: Icon(
                         Iconsax.more_circle,
-                        color: projectCardState.isDeleted!
-                            ? Theme.of(context).disabledColor
-                            : Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ]
-            : [],
+                  ],
+                ),
+              );
+            },
+            error: (_, _) => const SizedBox.shrink(),
+            loading: () => const SizedBox.shrink(),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppTabBarDesign(
@@ -160,11 +159,14 @@ class ProjectDetailsScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: data.when(
         data: (value) {
-          if (projectCardState.isOwner! || projectCardState.isDeleted!) {
+          final project = value.project;
+          final userId = ref.read(localStorageProvider).getInt('userId');
+          final isOwner = project.ownerId == userId;
+          if (isOwner) {
             return null;
           }
           return ProjectDetailsBottomNavigationWidget(
-            project: newProject!,
+            project: project,
           );
         },
         error: (error, st) {
@@ -189,18 +191,18 @@ class ProjectDetailsScreen extends ConsumerWidget {
         },
       ),
       body: data.when(
-        data: (project) {
+        data: (value) {
           return TabBarView(
             controller: tabController,
             children: [
               ProjectDetailsWidget(
-                project: newProject!,
+                project: value.project,
               ),
               ProjectOverviewWidget(
-                project: newProject,
+                project: value.project,
               ),
               ProjectReviewsList(
-                project: newProject,
+                project: value.project,
               ),
               const ProjectVettingsList(),
             ],

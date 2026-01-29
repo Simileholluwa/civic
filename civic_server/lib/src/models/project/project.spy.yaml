@@ -9,29 +9,31 @@ fields:
     startDate: DateTime?
     endDate: DateTime?
     currency: String?
-    fundingCategory: String?
-    fundingSubCategory: String?
-    projectCost: double?
-    fundingNote: String?
-    projectImageAttachments: List<String>?
+    fundingCategory: String?, default=""
+    fundingSubCategory: String?, default=""
+    projectCost: double?, default=0.0
+    fundingNote: String?, default=""
+    projectImageAttachments: List<MediaAsset>?, relation(name=project_media_assets)
     projectPDFAttachments: List<String>?
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
+    impressionsCount: int?, default=0
     likesCount: int?, default=0
     reviewsCount: int?, default=0
     bookmarksCount: int?, default=0
     vettingsCount: int?, default=0
     quotesCount: int?, default=0
-    overallRating: double?
-    overallLocationRating: double?
-    overallDescriptionRating: double?
-    overallDatesRating: double?
-    overallAttachmentsRating: double?
-    overAllCategoryRating: double?
-    overallFundingRating: double?
+    overallRating: double?, default=0.0
+    overallLocationRating: double?, default=0.0
+    overallDescriptionRating: double?, default=0.0
+    overallDatesRating: double?,  default=0.0
+    overallAttachmentsRating: double?, default=0.0
+    overAllCategoryRating: double?, default=0.0
+    overallFundingRating: double?, default=0.0
     isDeleted: bool?, default=false
+    lastImpressionAt: DateTime?, default=now
 
 indexes:
   project_idx:

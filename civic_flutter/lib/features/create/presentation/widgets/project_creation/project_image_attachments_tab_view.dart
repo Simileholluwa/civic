@@ -16,7 +16,7 @@ class ProjectImageAttachmentsTabView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageUrls = ref.watch(
       createProjectNotifProvider(project).select(
-        (s) => s.projectImageAttachments,
+        (s) => s.imageUrls,
       ),
     );
     final projectNotifier = ref.read(
