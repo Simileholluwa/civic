@@ -404,6 +404,7 @@ class PostCreation extends _$PostCreation {
     if (localImages.isNotEmpty) {
       final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
         localImages,
+        'public/posts',
       );
       if (res.isLeft()) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
@@ -418,6 +419,7 @@ class PostCreation extends _$PostCreation {
     if (videoPath.isNotEmpty && !_urlRegex.hasMatch(videoPath)) {
       final res = await ref.read(assetServiceProvider).uploadPostMediaAssets(
         [videoPath],
+        'public/posts',
       );
       if (res.isLeft()) {
         final err = res.getLeft().toNullable()!;
@@ -913,8 +915,7 @@ class PostCreation extends _$PostCreation {
   ) async {
     final result = await ref.read(assetServiceProvider).uploadMediaAssets(
           embeddedImages,
-          'articles',
-          'images',
+          'public/posts',
         );
 
     return result.fold((error) async {

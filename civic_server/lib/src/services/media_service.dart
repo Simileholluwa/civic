@@ -5,8 +5,11 @@ import 'package:serverpod/serverpod.dart';
 import 'package:serverpod_auth_server/serverpod_auth_server.dart';
 
 class MediaService {
+
   static const String storageId = 'public';
-  static const String postsPrefix = 'public/posts';
+  final String prefix;
+
+  MediaService({String? prefix}) : prefix = prefix ?? 'public/posts';
 
   String _randId() {
     final r = Random.secure();
@@ -28,7 +31,7 @@ class MediaService {
     final id = _randId();
     final e = _buildExt(ext);
     final k = kind.name;
-    return '$postsPrefix/$userId/$k/$id$e';
+    return '$prefix/$userId/$k/$id$e';
   }
 
   Future<Map<String, String?>> requestUploadTarget(

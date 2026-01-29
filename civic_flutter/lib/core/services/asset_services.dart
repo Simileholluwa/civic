@@ -77,6 +77,7 @@ class AssetService {
 
   Future<Either<String, String>> _uploadSingleWithRetry(
     String mediaPath,
+    String prefix,
   ) async {
     var attempt = 0;
     Object? lastError;
@@ -88,6 +89,7 @@ class AssetService {
         final target = await client.media.requestUploadTarget(
           kind: kind.name,
           ext: ext,
+          prefix: prefix,
         );
         final uploadDescription = target['description'];
         final path = target['path'];
@@ -137,14 +139,14 @@ class AssetService {
 
   Future<Either<String, List<String>>> uploadMediaAssets(
     List<String> media,
-    String folderName,
-    String subFolderName,
+    String prefix,
   ) async {
     try {
       final mediaUrls = <String>[];
       for (final mediaPath in media) {
         final single = await _uploadSingleWithRetry(
           mediaPath,
+          prefix,
         );
         if (single.isLeft()) {
           return left(single.getLeft().toNullable()!);
@@ -178,6 +180,18 @@ class AssetService {
       'heif',
     };
     const videoExts = {'mp4', 'mov', 'm4v', 'webm', 'avi', 'mkv'};
+    const documentExts = {
+      'pdf',
+      'doc',
+      'docx',
+      'xls',
+      'xlsx',
+      'ppt',
+      'pptx',
+      'txt',
+      'rtf',
+    };
+    if (documentExts.contains(ext)) return MediaKind.document;
     if (imageExts.contains(ext)) return MediaKind.image;
     if (videoExts.contains(ext)) return MediaKind.video;
     return MediaKind.image;
@@ -211,6 +225,21 @@ class AssetService {
         return 'video/x-msvideo';
       case 'mkv':
         return 'video/x-matroska';
+      case 'pdf':
+        return 'application/pdf';
+      case 'doc':
+      case 'docx':
+        return 'application/msword';
+      case 'xls':
+      case 'xlsx':
+        return 'application/vnd.ms-excel';
+      case 'ppt':
+      case 'pptx':
+        return 'application/vnd.ms-powerpoint';
+      case 'txt':
+        return 'text/plain';
+      case 'rtf':
+        return 'application/rtf';
       default:
         return null;
     }
@@ -230,9 +259,11 @@ class AssetService {
 
   Future<Either<String, MediaAsset>> uploadSingleMediaAsset({
     required String mediaPath,
+    required String prefix,
   }) async {
     final retry = await _uploadSingleWithRetry(
       mediaPath,
+      prefix,
     );
     if (retry.isLeft()) return left(retry.getLeft().toNullable()!);
     final publicUrl = retry.getRight().toNullable()!;
@@ -291,12 +322,14 @@ class AssetService {
 
   Future<Either<String, List<MediaAsset>>> uploadPostMediaAssets(
     List<String> media,
+    String prefix,
   ) async {
     try {
       final results = <MediaAsset>[];
       for (final mediaPath in media) {
         final single = await uploadSingleMediaAsset(
           mediaPath: mediaPath,
+          prefix: prefix,
         );
         if (single.isLeft()) {
           return left(single.getLeft().toNullable()!);

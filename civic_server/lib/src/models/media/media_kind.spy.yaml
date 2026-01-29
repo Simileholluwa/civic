@@ -2,3 +2,4 @@ enum: MediaKind
 values:
   - image
   - video
+  - document

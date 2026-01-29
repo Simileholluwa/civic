@@ -14,7 +14,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 enum MediaKind implements _i1.SerializableModel {
   image,
-  video;
+  video,
+  document;
 
   static MediaKind fromJson(String name) {
     switch (name) {
@@ -22,6 +23,8 @@ enum MediaKind implements _i1.SerializableModel {
         return MediaKind.image;
       case 'video':
         return MediaKind.video;
+      case 'document':
+        return MediaKind.document;
       default:
         throw ArgumentError('Value "$name" cannot be converted to "MediaKind"');
     }

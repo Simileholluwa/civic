@@ -131,6 +131,7 @@ class EndpointMedia extends _i1.EndpointRef {
     required String kind,
     required String ext,
     int? postId,
+    String? prefix,
   }) => caller.callServerEndpoint<Map<String, String?>>(
     'media',
     'requestUploadTarget',
@@ -138,6 +139,7 @@ class EndpointMedia extends _i1.EndpointRef {
       'kind': kind,
       'ext': ext,
       'postId': postId,
+      'prefix': prefix,
     },
   );
 

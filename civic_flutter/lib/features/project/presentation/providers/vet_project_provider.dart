@@ -139,8 +139,7 @@ class ProjectVet extends _$ProjectVet {
     }
     final result = await ref.read(assetServiceProvider).uploadMediaAssets(
           newUpload,
-          'projects',
-          'images',
+          'public/vettings',
         );
 
     return result.fold((error) async {

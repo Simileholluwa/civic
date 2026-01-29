@@ -484,6 +484,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
           .read(assetServiceProvider)
           .uploadPostMediaAssets(
             localImages,
+            'public/projects',
           );
       if (res.isLeft()) {
         ref.read(sendPostLoadingProvider.notifier).value = false;
@@ -522,8 +523,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
         .read(assetServiceProvider)
         .uploadMediaAssets(
           newUploads,
-          folder,
-          subFolder,
+          'public/projects',
         );
 
     return result.fold(
@@ -570,8 +570,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
         .read(assetServiceProvider)
         .uploadMediaAssets(
           embeddedImages,
-          'embedded_project_images',
-          'images',
+          'public/projects',
         );
 
     return result.fold(

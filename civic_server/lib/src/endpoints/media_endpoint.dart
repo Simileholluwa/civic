@@ -4,19 +4,21 @@ import 'package:civic_server/src/services/media_service.dart';
 import 'package:serverpod/serverpod.dart';
 
 class MediaEndpoint extends Endpoint {
-  final _service = MediaService();
+  final _defaultService = MediaService();
 
   Future<Map<String, String?>> requestUploadTarget(
     Session session, {
     required String kind,
     required String ext,
     int? postId,
+    String? prefix,
   }) async {
     final mediaKind = MediaKind.values.firstWhere(
       (k) => k.name == kind,
       orElse: () => MediaKind.image,
     );
-    return _service.requestUploadTarget(
+    final service = prefix != null ? MediaService(prefix: prefix) : _defaultService;
+    return service.requestUploadTarget(
       session,
       kind: mediaKind,
       ext: ext,
@@ -33,19 +35,19 @@ class MediaEndpoint extends Endpoint {
       (k) => k.name == kind,
       orElse: () => MediaKind.image,
     );
-    return _service.confirmUpload(session, path: path, kind: mediaKind);
+    return _defaultService.confirmUpload(session, path: path, kind: mediaKind);
   }
 
   Future<bool> deleteAsset(Session session, int assetId) async {
-    return _service.deleteAssetById(session, assetId);
+    return _defaultService.deleteAssetById(session, assetId);
   }
 
   Future<int> deleteAssetsByPost(Session session, int postId) async {
-    return _service.deleteAssetsByPost(session, postId);
+    return _defaultService.deleteAssetsByPost(session, postId);
   }
 
   Future<int> cleanupTemp(Session session) async {
-    return _service.cleanupTemp(session);
+    return _defaultService.cleanupTemp(session);
   }
 
   Future<void> scheduleCleanup(Session session, {int hours = 24}) async {

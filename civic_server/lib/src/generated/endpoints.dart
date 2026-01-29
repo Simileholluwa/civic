@@ -259,6 +259,11 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<int?>(),
               nullable: true,
             ),
+            'prefix': _i1.ParameterDescription(
+              name: 'prefix',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -270,6 +275,7 @@ class Endpoints extends _i1.EndpointDispatch {
                     kind: params['kind'],
                     ext: params['ext'],
                     postId: params['postId'],
+                    prefix: params['prefix'],
                   ),
         ),
         'confirmUpload': _i1.MethodConnector(
