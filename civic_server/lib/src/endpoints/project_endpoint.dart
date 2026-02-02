@@ -33,7 +33,7 @@ class ProjectEndpoint extends Endpoint {
       projectId,
       include: Project.include(
         owner: UserRecord.include(userInfo: UserInfo.include()),
-        projectImageAttachments: MediaAsset.includeList(),
+        projectMediaAssets: MediaAsset.includeList(),
       ),
     );
 
@@ -261,7 +261,7 @@ class ProjectEndpoint extends Endpoint {
             session,
             user: user,
             existingProject: existingProject,
-            incoming: project.projectImageAttachments,
+            incoming: project.projectMediaAssets,
             transaction: transaction,
           );
 
@@ -285,8 +285,7 @@ class ProjectEndpoint extends Endpoint {
             vettingsCount: existingProject.vettingsCount,
             physicalLocations: existingProject.physicalLocations,
             virtualLocations: existingProject.virtualLocations,
-            projectImageAttachments: existingProject.projectImageAttachments,
-            projectPDFAttachments: existingProject.projectPDFAttachments,
+            projectMediaAssets: existingProject.projectMediaAssets,
           );
           await updateProject(
             session,
@@ -295,19 +294,14 @@ class ProjectEndpoint extends Endpoint {
           );
           return updatedProject;
         } else {
-          final newProject = project.copyWith(
-            ownerId: user.userInfoId,
-            owner: user,
-            projectPDFAttachments: project.projectPDFAttachments ?? [],
-          );
           final insertedProject = await Project.db.insertRow(
             session,
-            newProject,
+            project.copyWith(ownerId: user.userInfoId, owner: user),
             transaction: transaction,
           );
           await MediaAsset.db.insert(
             session,
-            newProject.projectImageAttachments!
+            project.projectMediaAssets!
                 .map(
                   (e) => e.copyWith(
                     ownerId: user.id!,
@@ -322,7 +316,7 @@ class ProjectEndpoint extends Endpoint {
             insertedProject.id!,
             include: Project.include(
               owner: UserRecord.include(userInfo: UserInfo.include()),
-              projectImageAttachments: MediaAsset.includeList(),
+              projectMediaAssets: MediaAsset.includeList(),
             ),
             transaction: transaction,
           );
@@ -943,8 +937,9 @@ class ProjectEndpoint extends Endpoint {
       offset: (page - 1) * limit,
       include: Project.include(
         owner: UserRecord.include(userInfo: UserInfo.include()),
+        projectMediaAssets: MediaAsset.includeList(),
       ),
-      where: (t) => t.id.notInSet(ignoredIds),
+      where: (t) => t.id.notInSet(ignoredIds) & t.isDeleted.equals(false),
     );
 
     // In-memory sort variants.
@@ -1911,16 +1906,17 @@ class ProjectEndpoint extends Endpoint {
         final user = await authUser(session);
         final count = await ProjectBookmarks.db.count(
           session,
-          where: (t) => t.ownerId.equals(user.id!),
+          where: (t) => t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
         );
         final bookmarks = await ProjectBookmarks.db.find(
           session,
-          where: (t) => t.ownerId.equals(user.id!),
+          where: (t) => t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
           limit: limit,
           offset: (page - 1) * limit,
           include: ProjectBookmarks.include(
             project: Project.include(
               owner: UserRecord.include(userInfo: UserInfo.include()),
+              projectMediaAssets: MediaAsset.includeList(),
             ),
           ),
           orderBy: (t) => t.dateCreated,

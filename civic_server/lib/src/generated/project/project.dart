@@ -34,8 +34,7 @@ abstract class Project
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    this.projectImageAttachments,
-    this.projectPDFAttachments,
+    this.projectMediaAssets,
     this.physicalLocations,
     this.virtualLocations,
     DateTime? dateCreated,
@@ -91,8 +90,7 @@ abstract class Project
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -138,16 +136,10 @@ abstract class Project
       fundingSubCategory: jsonSerialization['fundingSubCategory'] as String?,
       projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
       fundingNote: jsonSerialization['fundingNote'] as String?,
-      projectImageAttachments:
-          jsonSerialization['projectImageAttachments'] == null
+      projectMediaAssets: jsonSerialization['projectMediaAssets'] == null
           ? null
           : _i5.Protocol().deserialize<List<_i3.MediaAsset>>(
-              jsonSerialization['projectImageAttachments'],
-            ),
-      projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
-          ? null
-          : _i5.Protocol().deserialize<List<String>>(
-              jsonSerialization['projectPDFAttachments'],
+              jsonSerialization['projectMediaAssets'],
             ),
       physicalLocations: jsonSerialization['physicalLocations'] == null
           ? null
@@ -228,9 +220,7 @@ abstract class Project
 
   String? fundingNote;
 
-  List<_i3.MediaAsset>? projectImageAttachments;
-
-  List<String>? projectPDFAttachments;
+  List<_i3.MediaAsset>? projectMediaAssets;
 
   List<_i4.AWSPlaces>? physicalLocations;
 
@@ -291,8 +281,7 @@ abstract class Project
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -331,12 +320,10 @@ abstract class Project
       if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
-      if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(
+      if (projectMediaAssets != null)
+        'projectMediaAssets': projectMediaAssets?.toJson(
           valueToJson: (v) => v.toJson(),
         ),
-      if (projectPDFAttachments != null)
-        'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
         'physicalLocations': physicalLocations?.toJson(
           valueToJson: (v) => v.toJson(),
@@ -387,12 +374,10 @@ abstract class Project
       if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
-      if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(
+      if (projectMediaAssets != null)
+        'projectMediaAssets': projectMediaAssets?.toJson(
           valueToJson: (v) => v.toJsonForProtocol(),
         ),
-      if (projectPDFAttachments != null)
-        'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
         'physicalLocations': physicalLocations?.toJson(
           valueToJson: (v) => v.toJsonForProtocol(),
@@ -427,11 +412,11 @@ abstract class Project
 
   static ProjectInclude include({
     _i2.UserRecordInclude? owner,
-    _i3.MediaAssetIncludeList? projectImageAttachments,
+    _i3.MediaAssetIncludeList? projectMediaAssets,
   }) {
     return ProjectInclude._(
       owner: owner,
-      projectImageAttachments: projectImageAttachments,
+      projectMediaAssets: projectMediaAssets,
     );
   }
 
@@ -479,8 +464,7 @@ class _ProjectImpl extends Project {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -515,8 +499,7 @@ class _ProjectImpl extends Project {
          fundingSubCategory: fundingSubCategory,
          projectCost: projectCost,
          fundingNote: fundingNote,
-         projectImageAttachments: projectImageAttachments,
-         projectPDFAttachments: projectPDFAttachments,
+         projectMediaAssets: projectMediaAssets,
          physicalLocations: physicalLocations,
          virtualLocations: virtualLocations,
          dateCreated: dateCreated,
@@ -557,8 +540,7 @@ class _ProjectImpl extends Project {
     Object? fundingSubCategory = _Undefined,
     Object? projectCost = _Undefined,
     Object? fundingNote = _Undefined,
-    Object? projectImageAttachments = _Undefined,
-    Object? projectPDFAttachments = _Undefined,
+    Object? projectMediaAssets = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? dateCreated = _Undefined,
@@ -602,12 +584,9 @@ class _ProjectImpl extends Project {
           : this.fundingSubCategory,
       projectCost: projectCost is double? ? projectCost : this.projectCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
-      projectImageAttachments: projectImageAttachments is List<_i3.MediaAsset>?
-          ? projectImageAttachments
-          : this.projectImageAttachments?.map((e0) => e0.copyWith()).toList(),
-      projectPDFAttachments: projectPDFAttachments is List<String>?
-          ? projectPDFAttachments
-          : this.projectPDFAttachments?.map((e0) => e0).toList(),
+      projectMediaAssets: projectMediaAssets is List<_i3.MediaAsset>?
+          ? projectMediaAssets
+          : this.projectMediaAssets?.map((e0) => e0.copyWith()).toList(),
       physicalLocations: physicalLocations is List<_i4.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
@@ -721,13 +700,6 @@ class ProjectUpdateTable extends _i1.UpdateTable<ProjectTable> {
 
   _i1.ColumnValue<String, String> fundingNote(String? value) => _i1.ColumnValue(
     table.fundingNote,
-    value,
-  );
-
-  _i1.ColumnValue<List<String>, List<String>> projectPDFAttachments(
-    List<String>? value,
-  ) => _i1.ColumnValue(
-    table.projectPDFAttachments,
     value,
   );
 
@@ -896,10 +868,6 @@ class ProjectTable extends _i1.Table<int?> {
       this,
       hasDefault: true,
     );
-    projectPDFAttachments = _i1.ColumnSerializable<List<String>>(
-      'projectPDFAttachments',
-      this,
-    );
     physicalLocations = _i1.ColumnSerializable<List<_i4.AWSPlaces>>(
       'physicalLocations',
       this,
@@ -1022,11 +990,9 @@ class ProjectTable extends _i1.Table<int?> {
 
   late final _i1.ColumnString fundingNote;
 
-  _i3.MediaAssetTable? ___projectImageAttachments;
+  _i3.MediaAssetTable? ___projectMediaAssets;
 
-  _i1.ManyRelation<_i3.MediaAssetTable>? _projectImageAttachments;
-
-  late final _i1.ColumnSerializable<List<String>> projectPDFAttachments;
+  _i1.ManyRelation<_i3.MediaAssetTable>? _projectMediaAssets;
 
   late final _i1.ColumnSerializable<List<_i4.AWSPlaces>> physicalLocations;
 
@@ -1079,36 +1045,36 @@ class ProjectTable extends _i1.Table<int?> {
     return _owner!;
   }
 
-  _i3.MediaAssetTable get __projectImageAttachments {
-    if (___projectImageAttachments != null) return ___projectImageAttachments!;
-    ___projectImageAttachments = _i1.createRelationTable(
-      relationFieldName: '__projectImageAttachments',
+  _i3.MediaAssetTable get __projectMediaAssets {
+    if (___projectMediaAssets != null) return ___projectMediaAssets!;
+    ___projectMediaAssets = _i1.createRelationTable(
+      relationFieldName: '__projectMediaAssets',
       field: Project.t.id,
       foreignField: _i3.MediaAsset.t.projectId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i3.MediaAssetTable(tableRelation: foreignTableRelation),
     );
-    return ___projectImageAttachments!;
+    return ___projectMediaAssets!;
   }
 
-  _i1.ManyRelation<_i3.MediaAssetTable> get projectImageAttachments {
-    if (_projectImageAttachments != null) return _projectImageAttachments!;
+  _i1.ManyRelation<_i3.MediaAssetTable> get projectMediaAssets {
+    if (_projectMediaAssets != null) return _projectMediaAssets!;
     var relationTable = _i1.createRelationTable(
-      relationFieldName: 'projectImageAttachments',
+      relationFieldName: 'projectMediaAssets',
       field: Project.t.id,
       foreignField: _i3.MediaAsset.t.projectId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i3.MediaAssetTable(tableRelation: foreignTableRelation),
     );
-    _projectImageAttachments = _i1.ManyRelation<_i3.MediaAssetTable>(
+    _projectMediaAssets = _i1.ManyRelation<_i3.MediaAssetTable>(
       tableWithRelations: relationTable,
       table: _i3.MediaAssetTable(
         tableRelation: relationTable.tableRelation!.lastRelation,
       ),
     );
-    return _projectImageAttachments!;
+    return _projectMediaAssets!;
   }
 
   @override
@@ -1126,7 +1092,6 @@ class ProjectTable extends _i1.Table<int?> {
     fundingSubCategory,
     projectCost,
     fundingNote,
-    projectPDFAttachments,
     physicalLocations,
     virtualLocations,
     dateCreated,
@@ -1153,8 +1118,8 @@ class ProjectTable extends _i1.Table<int?> {
     if (relationField == 'owner') {
       return owner;
     }
-    if (relationField == 'projectImageAttachments') {
-      return __projectImageAttachments;
+    if (relationField == 'projectMediaAssets') {
+      return __projectMediaAssets;
     }
     return null;
   }
@@ -1163,20 +1128,20 @@ class ProjectTable extends _i1.Table<int?> {
 class ProjectInclude extends _i1.IncludeObject {
   ProjectInclude._({
     _i2.UserRecordInclude? owner,
-    _i3.MediaAssetIncludeList? projectImageAttachments,
+    _i3.MediaAssetIncludeList? projectMediaAssets,
   }) {
     _owner = owner;
-    _projectImageAttachments = projectImageAttachments;
+    _projectMediaAssets = projectMediaAssets;
   }
 
   _i2.UserRecordInclude? _owner;
 
-  _i3.MediaAssetIncludeList? _projectImageAttachments;
+  _i3.MediaAssetIncludeList? _projectMediaAssets;
 
   @override
   Map<String, _i1.Include?> get includes => {
     'owner': _owner,
-    'projectImageAttachments': _projectImageAttachments,
+    'projectMediaAssets': _projectMediaAssets,
   };
 
   @override
@@ -1475,7 +1440,7 @@ class ProjectAttachRepository {
 
   /// Creates a relation between this [Project] and the given [MediaAsset]s
   /// by setting each [MediaAsset]'s foreign key `projectId` to refer to this [Project].
-  Future<void> projectImageAttachments(
+  Future<void> projectMediaAssets(
     _i1.Session session,
     Project project,
     List<_i3.MediaAsset> mediaAsset, {
@@ -1527,7 +1492,7 @@ class ProjectAttachRowRepository {
 
   /// Creates a relation between this [Project] and the given [MediaAsset]
   /// by setting the [MediaAsset]'s foreign key `projectId` to refer to this [Project].
-  Future<void> projectImageAttachments(
+  Future<void> projectMediaAssets(
     _i1.Session session,
     Project project,
     _i3.MediaAsset mediaAsset, {
@@ -1557,7 +1522,7 @@ class ProjectDetachRepository {
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
-  Future<void> projectImageAttachments(
+  Future<void> projectMediaAssets(
     _i1.Session session,
     List<_i3.MediaAsset> mediaAsset, {
     _i1.Transaction? transaction,
@@ -1585,7 +1550,7 @@ class ProjectDetachRowRepository {
   ///
   /// This removes the association between the two models without deleting
   /// the related record.
-  Future<void> projectImageAttachments(
+  Future<void> projectMediaAssets(
     _i1.Session session,
     _i3.MediaAsset mediaAsset, {
     _i1.Transaction? transaction,

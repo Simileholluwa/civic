@@ -33,18 +33,32 @@ class Auth extends _$Auth {
       ..passwordResetCodeFormKey = GlobalKey<FormState>()
       ..newAccountPasswordFormKey = GlobalKey<FormState>()
       ..resetPasswordEmailFormKey = GlobalKey<FormState>();
+
+    // Store controllers in local variables for disposal
+    final emailController = authState.emailController;
+    final firstNameController = authState.firstNameController;
+    final lastNameController = authState.lastNameController;
+    final middleNameController = authState.middleNameController;
+    final passwordController = authState.passwordController;
+    final verificationCodeController = authState.verificationCodeController;
+    final newPasswordController = authState.newPasswordController;
+    final passwordResetCodeController = authState.passwordResetCodeController;
+    final newAccountPasswordController = authState.newAccountPasswordController;
+    final resetPasswordEmailController = authState.resetPasswordEmailController;
+    final ninController = authState.ninController;
+
     ref.onDispose(() {
-      state.emailController?.dispose();
-      state.firstNameController?.dispose();
-      state.lastNameController?.dispose();
-      state.middleNameController?.dispose();
-      state.passwordController?.dispose();
-      state.verificationCodeController?.dispose();
-      state.newPasswordController?.dispose();
-      state.passwordResetCodeController?.dispose();
-      state.newAccountPasswordController?.dispose();
-      state.resetPasswordEmailController?.dispose();
-      state.ninController?.dispose();
+      emailController?.dispose();
+      firstNameController?.dispose();
+      lastNameController?.dispose();
+      middleNameController?.dispose();
+      passwordController?.dispose();
+      verificationCodeController?.dispose();
+      newPasswordController?.dispose();
+      passwordResetCodeController?.dispose();
+      newAccountPasswordController?.dispose();
+      resetPasswordEmailController?.dispose();
+      ninController?.dispose();
     });
     return authState;
   }
@@ -189,16 +203,19 @@ class Auth extends _$Auth {
     final result = await logOutUseCase(
       NoParams(),
     );
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return false;
-    }, (r) {
-      // Do not invalidate paginated providers here. Invalidating while their widgets
-      // are still mounted can dispose PagingControllers mid-build and trigger
-      // "PagingController used after being disposed" errors. Instead, callers
-      // should navigate away first and then invalidate on the next frame.
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return false;
+      },
+      (r) {
+        // Do not invalidate paginated providers here. Invalidating while their widgets
+        // are still mounted can dispose PagingControllers mid-build and trigger
+        // "PagingController used after being disposed" errors. Instead, callers
+        // should navigate away first and then invalidate on the next frame.
+        return true;
+      },
+    );
   }
 
   Future<bool> signInWithEmailAndPassword() async {
@@ -211,12 +228,15 @@ class Auth extends _$Auth {
       ),
     );
     setSignInLoading(false);
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return false;
-    }, (_) {
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return false;
+      },
+      (_) {
+        return true;
+      },
+    );
   }
 
   Future<bool?> checkIfNewUser() async {
@@ -226,17 +246,20 @@ class Auth extends _$Auth {
       state.email,
     );
     setCheckEmailLoading(false);
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return null;
-    }, (firstName) {
-      if (firstName != null) {
-        setFirstName(firstName);
-        return false;
-      } else {
-        return true;
-      }
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return null;
+      },
+      (firstName) {
+        if (firstName != null) {
+          setFirstName(firstName);
+          return false;
+        } else {
+          return true;
+        }
+      },
+    );
   }
 
   Future<bool> createAccountRequest() async {
@@ -256,15 +279,18 @@ class Auth extends _$Auth {
       ),
     );
     setCreateAccountLoading(false);
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return false;
-    }, (r) {
-      TToastMessages.successToast(
-        'A verification code has been sent to your email.',
-      );
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return false;
+      },
+      (r) {
+        TToastMessages.successToast(
+          'A verification code has been sent to your email.',
+        );
+        return true;
+      },
+    );
   }
 
   Future<bool> validateCreateAccount() async {
@@ -287,15 +313,18 @@ class Auth extends _$Auth {
       ),
     );
     setValidatCreateAccountLoading(false);
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return false;
-    }, (r) {
-      TToastMessages.successToast(
-        'Great! Your account has been created.',
-      );
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        return false;
+      },
+      (r) {
+        TToastMessages.successToast(
+          'Great! Your account has been created.',
+        );
+        return true;
+      },
+    );
   }
 
   Future<bool> initiatePasswordRequest() async {
@@ -305,17 +334,20 @@ class Auth extends _$Auth {
       state.resetPasswordEmail,
     );
     setInitiatePasswordResetLoading(false);
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      ref.read(countdownTimerProvider.notifier).resetTimer();
-      return false;
-    }, (r) {
-      TToastMessages.successToast(
-        'Password reset code has been sent to your email',
-      );
-      ref.read(countdownTimerProvider.notifier).startCountdown();
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
+        ref.read(countdownTimerProvider.notifier).resetTimer();
+        return false;
+      },
+      (r) {
+        TToastMessages.successToast(
+          'Password reset code has been sent to your email',
+        );
+        ref.read(countdownTimerProvider.notifier).startCountdown();
+        return true;
+      },
+    );
   }
 
   Future<bool> resetPassword() async {
@@ -349,23 +381,26 @@ class Auth extends _$Auth {
       ninNumber,
     );
     ref.read(searchNinLoadingProvider.notifier).value = false;
-    return result.fold((error) {
-      TToastMessages.errorToast(error.message);
-      return false;
-    }, (r) {
-      if (r != null) {
-        setFirstName(r.firstName ?? '');
-        setMiddleName(r.middleName ?? '');
-        setLastName(r.lastName ?? '');
-        state.firstNameController?.text = state.firstName;
-        state.middleNameController?.text = state.middleName;
-        state.lastNameController?.text = state.lastName;
-        return true;
-      } else {
-        TToastMessages.errorToast('NIN already exists');
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(error.message);
         return false;
-      }
-    });
+      },
+      (r) {
+        if (r != null) {
+          setFirstName(r.firstName ?? '');
+          setMiddleName(r.middleName ?? '');
+          setLastName(r.lastName ?? '');
+          state.firstNameController?.text = state.firstName;
+          state.middleNameController?.text = state.middleName;
+          state.lastNameController?.text = state.lastName;
+          return true;
+        } else {
+          TToastMessages.errorToast('NIN already exists');
+          return false;
+        }
+      },
+    );
   }
 
   Future<bool> uploadProfileImage() async {
@@ -375,12 +410,15 @@ class Auth extends _$Auth {
       state.imagePath,
     );
     setPhotoUrlLoading(false);
-    return result.fold((l) {
-      TToastMessages.errorToast(l.message);
-      return false;
-    }, (r) {
-      TToastMessages.successToast('Profile image uploaded');
-      return true;
-    });
+    return result.fold(
+      (l) {
+        TToastMessages.errorToast(l.message);
+        return false;
+      },
+      (r) {
+        TToastMessages.successToast('Profile image uploaded');
+        return true;
+      },
+    );
   }
 }

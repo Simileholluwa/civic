@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/network/network.dart';
@@ -77,14 +79,11 @@ class ShowProjectActions extends ConsumerWidget {
         ),
         if (canVet && !isOwner)
           MoreActionsListTile(
-            title:
-                hasBookmarked ? 'Remove Bookmark' : 'Bookmark',
+            title: hasBookmarked ? 'Remove Bookmark' : 'Bookmark',
             subTitle: hasBookmarked
                 ? 'This project will be removed from your bookmarks.'
                 : "Bookmarking let's you easily access your favorite projects.",
-            icon: hasBookmarked
-                ? Icons.bookmark
-                : Icons.bookmark_add_outlined,
+            icon: hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
@@ -130,9 +129,7 @@ class ShowProjectActions extends ConsumerWidget {
             subTitle: isFollower
                 ? 'You will no longer see projects from ${project.owner!.userInfo!.userName}.'
                 : 'You will now see more projects from ${project.owner!.userInfo!.userName}.',
-            icon: isFollower
-                ? Iconsax.user_remove
-                : Iconsax.user_cirlce_add,
+            icon: isFollower ? Iconsax.user_remove : Iconsax.user_cirlce_add,
             onTap: () async {
               if (context.mounted) {
                 context.pop();
@@ -163,14 +160,19 @@ class ShowProjectActions extends ConsumerWidget {
             icon: Iconsax.trash,
             color: Colors.red,
             onTap: () async {
-              if (context.mounted) {
-                context.pop();
-              }
-              await deleteProjectBottomSheet(
+              final res = await deleteProjectBottomSheet(
                 context,
                 projectWithUserState,
                 fromDetails,
               );
+              if (res ?? false) {
+                unawaited(
+                  projectCardNotifier.deleteProject(
+                    project.id!,
+                  ),
+                );
+              }
+              if (context.mounted) context.pop();
             },
           ),
         if (!isOwner)

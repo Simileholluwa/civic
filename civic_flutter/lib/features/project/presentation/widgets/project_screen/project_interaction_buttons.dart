@@ -124,19 +124,6 @@ class ProjectInteractionButtons extends ConsumerWidget {
               );
             },
             color: hasReviewed ? TColors.primary : Theme.of(context).hintColor,
-          )
-        else
-          ContentInteractionButton(
-            icon: hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
-            text: '$numberOfBookmarks',
-            onTap: () async {
-              await projectCardNotifier.toggleBookmarkStatus(
-                project.id!,
-              );
-            },
-            color: hasBookmarked
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).hintColor,
           ),
         if (canVet && !isOwner)
           ContentInteractionButton(
@@ -162,7 +149,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
               );
             },
           ),
-        if (!canVet && !isOwner)
+          if (!canVet || isOwner)
           ContentInteractionButton(
             icon: hasBookmarked ? Icons.bookmark : Icons.bookmark_add_outlined,
             text: '$numberOfBookmarks',
@@ -176,22 +163,8 @@ class ProjectInteractionButtons extends ConsumerWidget {
                 : Theme.of(context).hintColor,
           ),
         ContentInteractionButton(
-          icon: Iconsax.more_circle,
-          onTap: () async {
-            await showDialog<dynamic>(
-              context: context,
-              builder: (ctx) {
-                return AlertDialog(
-                  contentPadding: const EdgeInsets.only(
-                    bottom: 16,
-                  ),
-                  content: ShowProjectActions(
-                    projectWithUserState: projectWithUserState,
-                  ),
-                );
-              },
-            );
-          },
+          icon: Icons.share,
+          onTap: () async {},
           color: Theme.of(context).hintColor,
         ),
       ],

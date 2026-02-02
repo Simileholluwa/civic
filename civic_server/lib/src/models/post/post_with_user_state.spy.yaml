@@ -7,3 +7,4 @@ fields:
     isSubscribed: bool?, default=false
     isFollower: bool?, default=false
     selectedPollOptionId: int?
+    repostedBy: UserRecord?

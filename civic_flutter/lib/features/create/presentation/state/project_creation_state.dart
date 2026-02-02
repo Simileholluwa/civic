@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:civic_client/civic_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -15,15 +14,14 @@ class ProjectCreationState {
     this.startDate,
     this.endDate,
     this.imageUrls = const <String>[],
+    this.pdfUrls = const <String>[],
     this.projectCategory,
     this.projectSubCategory,
     this.fundingCategory,
     this.fundingSubCategory,
     this.fundingNote,
     this.status,
-    this.projectImageAttachments = const [],
-    this.projectPDFAttachments,
-    this.pdfAttachmentsThumbnail,
+    this.projectMediaAssets= const [],
     this.physicalLocations = const [],
     this.virtualLocations,
     this.isDirty = false,
@@ -43,12 +41,15 @@ class ProjectCreationState {
 
   factory ProjectCreationState.populate(Project project) {
     final imagePaths = <String>[];
-    final assets = project.projectImageAttachments ?? const <MediaAsset>[];
+    final pdfPaths = <String>[];
+    final assets = project.projectMediaAssets ?? const <MediaAsset>[];
     for (final a in assets) {
       final url = a.publicUrl ?? '';
       if (url.isEmpty) continue;
       if (a.kind == MediaKind.image) {
         imagePaths.add(url);
+      } else if (a.kind == MediaKind.document) {
+        pdfPaths.add(url);
       }
     }
     return ProjectCreationState(
@@ -60,8 +61,8 @@ class ProjectCreationState {
       projectCost: project.projectCost ?? 0,
       fundingNote: project.fundingNote,
       imageUrls: imagePaths,
-      projectImageAttachments: project.projectImageAttachments ?? [],
-      projectPDFAttachments: project.projectPDFAttachments,
+      pdfUrls: pdfPaths,
+      projectMediaAssets: project.projectMediaAssets ?? [],
       virtualLocations: project.virtualLocations,
       physicalLocations: project.physicalLocations ?? [],
       fundingCategory: project.fundingCategory,
@@ -87,13 +88,12 @@ class ProjectCreationState {
   final String? fundingSubCategory;
   final String? fundingNote;
   final String? status;
-  final List<MediaAsset> projectImageAttachments;
-  final List<String>? projectPDFAttachments;
-  final List<Uint8List>? pdfAttachmentsThumbnail;
+  final List<MediaAsset> projectMediaAssets;
   final List<AWSPlaces> physicalLocations;
   final List<String>? virtualLocations;
   final bool isDirty;
   final List<String> imageUrls;
+  final List<String> pdfUrls;
   TextEditingController? titleController;
   TextEditingController? startDateController;
   TextEditingController? endDateController;
@@ -118,8 +118,8 @@ class ProjectCreationState {
     Object? fundingSubCategory = _unset,
     String? fundingNote,
     String? status,
-    List<MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<String>? pdfUrls,
+    List<MediaAsset>? projectMediaAssets,
     List<String>? imageUrls,
     List<AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
@@ -143,6 +143,7 @@ class ProjectCreationState {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       imageUrls: imageUrls ?? this.imageUrls,
+      pdfUrls: pdfUrls ?? this.pdfUrls,
       projectCategory: identical(projectCategory, _unset)
           ? this.projectCategory
           : projectCategory as String?,
@@ -157,10 +158,8 @@ class ProjectCreationState {
           : fundingSubCategory as String?,
       fundingNote: fundingNote ?? this.fundingNote,
       status: status ?? this.status,
-      projectImageAttachments:
-          projectImageAttachments ?? this.projectImageAttachments,
-      projectPDFAttachments:
-          projectPDFAttachments ?? this.projectPDFAttachments,
+      projectMediaAssets:
+          projectMediaAssets ?? this.projectMediaAssets,
       physicalLocations:
           physicalLocations ?? List<AWSPlaces>.from(this.physicalLocations),
       virtualLocations: virtualLocations ?? this.virtualLocations,

@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -25,38 +22,16 @@ class ProjectCard extends StatelessWidget {
   final bool showInteractions;
   final bool showPolitcalStatus;
 
-  static final Map<int, String> _plainTextCache = <int, String>{};
-
-  String _resolvePlainTextDescription() {
-    final project = projectWithUserState.project;
-    final projectId = project.id;
-    var description = '';
-    if (projectId != null && _plainTextCache.containsKey(projectId)) {
-      description = _plainTextCache[projectId]!;
-    } else {
-      final raw = project.description;
-      if (raw != null) {
-        final dynamic decoded = jsonDecode(raw);
-        if (decoded is List) {
-          description = Document.fromJson(decoded).toPlainText();
-        } else if (decoded is Map<String, dynamic>) {
-          description = Document.fromJson([decoded]).toPlainText();
-        }
-      }
-      if (projectId != null) {
-        _plainTextCache[projectId] = description;
-      }
-    }
-    return description;
-  }
-
   @override
   Widget build(BuildContext context) {
     final project = projectWithUserState.project;
-    final imagesUrl = project.projectImageAttachments!
-        .map((e) => e.publicUrl)
-        .toList();
-    final description = _resolvePlainTextDescription();
+    final imagesUrl =
+        project.projectMediaAssets
+            ?.where((e) => e.kind == MediaKind.image)
+            .map((e) => e.publicUrl)
+            .whereType<String>()
+            .toList() ??
+        [];
     return InkWell(
       onTap: canTap
           ? () async {
@@ -79,17 +54,40 @@ class ProjectCard extends StatelessWidget {
               ),
               radius: creatorAvatarRadius,
               showPoliticalStatus: showPolitcalStatus,
+              onMoreTapped: () async {
+                await showDialog<dynamic>(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      contentPadding: const EdgeInsets.only(
+                        bottom: 16,
+                      ),
+                      content: ShowProjectActions(
+                        projectWithUserState: projectWithUserState,
+                        fromDetails: true,
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
           if (imagesUrl.length == 1)
             ContentSingleCachedImage(
-              imageUrl: imagesUrl.first!,
+              imageUrl: imagesUrl.first,
               aspectRatio:
-                  project.projectImageAttachments?.first.aspectRatio ?? 1.0,
+                  project.projectMediaAssets
+                      ?.firstWhere((e) => e.kind == MediaKind.image)
+                      .aspectRatio ??
+                  1.0,
             )
           else
             ContentImageViewer(
-              mediaAssets: project.projectImageAttachments!,
+              mediaAssets:
+                  project.projectMediaAssets
+                      ?.where((e) => e.kind == MediaKind.image)
+                      .toList() ??
+                  [],
             ),
           ProjectQuickDetails(
             project: project,
@@ -108,11 +106,8 @@ class ProjectCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                ContentExpandableText(
-                  text: description,
-                  onToggleTextTap: () {},
-                  hasImage: true,
-                  maxLines: 3,
+                ProjectPlainTextDescription(
+                  project: project,
                 ),
               ],
             ),

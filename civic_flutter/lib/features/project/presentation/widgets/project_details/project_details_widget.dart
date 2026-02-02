@@ -44,9 +44,17 @@ class ProjectDetailsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final decodedDocument = _resolveDocument();
-    final imagesUrl = project.projectImageAttachments!
+    final imagesUrl = project.projectMediaAssets!
+        .where((e) => e.kind == MediaKind.image)
         .map((e) => e.publicUrl)
         .toList();
+    final aspectRatio = imagesUrl.isNotEmpty
+        ? project.projectMediaAssets!
+              .firstWhere(
+                (e) => e.kind == MediaKind.image,
+              )
+              .aspectRatio
+        : 1.0;
     final defaultTextStyle = DefaultTextStyle.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
@@ -57,11 +65,14 @@ class ProjectDetailsWidget extends ConsumerWidget {
           if (imagesUrl.length == 1)
             ContentSingleCachedImage(
               imageUrl: imagesUrl.first!,
-              aspectRatio: project.projectImageAttachments?.first.aspectRatio ?? 1.0,
+              aspectRatio: aspectRatio!,
             )
           else
             ContentImageViewer(
-              mediaAssets: project.projectImageAttachments!,
+              mediaAssets: project.projectMediaAssets!
+                  .where((e) => e.kind == MediaKind.image)
+                  .toList(),
+              addPadding: false,
             ),
           Padding(
             padding: const EdgeInsets.only(
@@ -70,8 +81,8 @@ class ProjectDetailsWidget extends ConsumerWidget {
             child: Text(
               project.title!,
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 23,
-                  ),
+                fontSize: 23,
+              ),
             ),
           ),
           QuillEditor(

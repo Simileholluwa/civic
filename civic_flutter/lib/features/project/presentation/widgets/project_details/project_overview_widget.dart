@@ -15,7 +15,11 @@ class ProjectOverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pdfs = project.projectPDFAttachments;
+    final pdfs = project.projectMediaAssets
+        ?.where((e) => e.kind == MediaKind.document)
+        .map((e) => e.publicUrl)
+        .whereType<String>()
+        .toList();
     final hasPdfs = pdfs != null && pdfs.isNotEmpty;
     final startDateIso = project.startDate!.toIso8601String().substring(0, 10);
     final endDateIso = project.endDate!.toIso8601String().substring(0, 10);

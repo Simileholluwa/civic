@@ -69,5 +69,6 @@ export 'presentation/widgets/poll/poll_options_card.dart';
 export 'presentation/widgets/post/post_card_build.dart';
 export 'presentation/widgets/post/post_card_detail.dart';
 export 'presentation/widgets/post/post_detail_options.dart';
+export 'presentation/widgets/post/project_quote_card.dart';
 export 'presentation/widgets/post/repost_header.dart';
 export 'presentation/widgets/post/video_post.dart';

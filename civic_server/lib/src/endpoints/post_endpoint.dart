@@ -1591,6 +1591,7 @@ class PostEndpoint extends Endpoint {
         mediaAssets: MediaAsset.includeList(),
         project: Project.include(
           owner: UserRecord.include(userInfo: UserInfo.include()),
+          projectMediaAssets: MediaAsset.includeList(),
         ),
         parent: Post.include(
           owner: UserRecord.include(userInfo: UserInfo.include()),
@@ -2047,12 +2048,12 @@ class PostEndpoint extends Endpoint {
 
       final count = await PostBookmarks.db.count(
         session,
-        where: (t) => t.ownerId.equals(user.id!),
+        where: (t) => t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
       );
 
       final bookmarks = await PostBookmarks.db.find(
         session,
-        where: (t) => t.ownerId.equals(user.id!),
+        where: (t) => t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
         limit: limit,
         offset: (page - 1) * limit,
         orderBy: (t) => t.dateCreated,

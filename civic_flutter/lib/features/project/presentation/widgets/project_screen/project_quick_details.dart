@@ -8,10 +8,12 @@ import 'package:iconsax/iconsax.dart';
 class ProjectQuickDetails extends ConsumerWidget {
   const ProjectQuickDetails({
     required this.project,
+    this.showPadding = true,
     super.key,
   });
 
   final Project project;
+  final bool showPadding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +33,9 @@ class ProjectQuickDetails extends ConsumerWidget {
       project.endDate!,
     );
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: showPadding
+          ? const EdgeInsets.symmetric(horizontal: 15)
+          : EdgeInsets.zero,
       scrollDirection: Axis.horizontal,
       child: Row(
         spacing: 10,

@@ -12,7 +12,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../post/post.dart' as _i2;
-import 'package:civic_server/src/generated/protocol.dart' as _i3;
+import '../user/user_record.dart' as _i3;
+import 'package:civic_server/src/generated/protocol.dart' as _i4;
 
 abstract class PostWithUserState
     implements _i1.SerializableModel, _i1.ProtocolSerialization {
@@ -24,6 +25,7 @@ abstract class PostWithUserState
     bool? isSubscribed,
     bool? isFollower,
     this.selectedPollOptionId,
+    this.repostedBy,
   }) : hasLiked = hasLiked ?? false,
        hasBookmarked = hasBookmarked ?? false,
        hasReposted = hasReposted ?? false,
@@ -38,17 +40,23 @@ abstract class PostWithUserState
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
+    _i3.UserRecord? repostedBy,
   }) = _PostWithUserStateImpl;
 
   factory PostWithUserState.fromJson(Map<String, dynamic> jsonSerialization) {
     return PostWithUserState(
-      post: _i3.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
+      post: _i4.Protocol().deserialize<_i2.Post>(jsonSerialization['post']),
       hasLiked: jsonSerialization['hasLiked'] as bool?,
       hasBookmarked: jsonSerialization['hasBookmarked'] as bool?,
       hasReposted: jsonSerialization['hasReposted'] as bool?,
       isSubscribed: jsonSerialization['isSubscribed'] as bool?,
       isFollower: jsonSerialization['isFollower'] as bool?,
       selectedPollOptionId: jsonSerialization['selectedPollOptionId'] as int?,
+      repostedBy: jsonSerialization['repostedBy'] == null
+          ? null
+          : _i4.Protocol().deserialize<_i3.UserRecord>(
+              jsonSerialization['repostedBy'],
+            ),
     );
   }
 
@@ -66,6 +74,8 @@ abstract class PostWithUserState
 
   int? selectedPollOptionId;
 
+  _i3.UserRecord? repostedBy;
+
   /// Returns a shallow copy of this [PostWithUserState]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -77,6 +87,7 @@ abstract class PostWithUserState
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
+    _i3.UserRecord? repostedBy,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -90,6 +101,7 @@ abstract class PostWithUserState
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
         'selectedPollOptionId': selectedPollOptionId,
+      if (repostedBy != null) 'repostedBy': repostedBy?.toJson(),
     };
   }
 
@@ -105,6 +117,7 @@ abstract class PostWithUserState
       if (isFollower != null) 'isFollower': isFollower,
       if (selectedPollOptionId != null)
         'selectedPollOptionId': selectedPollOptionId,
+      if (repostedBy != null) 'repostedBy': repostedBy?.toJsonForProtocol(),
     };
   }
 
@@ -125,6 +138,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     bool? isSubscribed,
     bool? isFollower,
     int? selectedPollOptionId,
+    _i3.UserRecord? repostedBy,
   }) : super._(
          post: post,
          hasLiked: hasLiked,
@@ -133,6 +147,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
          isSubscribed: isSubscribed,
          isFollower: isFollower,
          selectedPollOptionId: selectedPollOptionId,
+         repostedBy: repostedBy,
        );
 
   /// Returns a shallow copy of this [PostWithUserState]
@@ -147,6 +162,7 @@ class _PostWithUserStateImpl extends PostWithUserState {
     Object? isSubscribed = _Undefined,
     Object? isFollower = _Undefined,
     Object? selectedPollOptionId = _Undefined,
+    Object? repostedBy = _Undefined,
   }) {
     return PostWithUserState(
       post: post ?? this.post.copyWith(),
@@ -160,6 +176,9 @@ class _PostWithUserStateImpl extends PostWithUserState {
       selectedPollOptionId: selectedPollOptionId is int?
           ? selectedPollOptionId
           : this.selectedPollOptionId,
+      repostedBy: repostedBy is _i3.UserRecord?
+          ? repostedBy
+          : this.repostedBy?.copyWith(),
     );
   }
 }

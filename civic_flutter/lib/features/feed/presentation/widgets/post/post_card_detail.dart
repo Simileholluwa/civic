@@ -28,7 +28,7 @@ class PostCardDetail extends StatelessWidget {
     final timeAgo = THelperFunctions.humanizeDateTime(post.dateCreated!);
     final hasTags = post.tags != null && post.tags!.isNotEmpty;
     final hasLocations = post.locations != null && post.locations!.isNotEmpty;
-
+    final project = post.project;
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -67,25 +67,15 @@ class PostCardDetail extends StatelessWidget {
               noMaxLines: noMaxLines,
             ),
           if (post.postType == PostType.projectQuote)
-            Container(
-              margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              padding: const EdgeInsets.only(
-                bottom: 16,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
-                border: Border.all(
-                  color: theme.dividerColor,
-                ),
-              ),
-              child: ProjectCard(
-                projectWithUserState: ProjectWithUserState(
-                  project: post.project!,
-                ),
-                showInteractions: false,
-                maxHeight: 200,
+            GestureDetector(
+              onTap: () async {
+                await context.push(
+                  '/project/${project.id}',
+                  extra: project,
+                );
+              },
+              child: ProjectQuoteCard(
+                project: project!,
               ),
             ),
           if (post.postType == PostType.postRepost)

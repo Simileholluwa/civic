@@ -18,7 +18,7 @@ class ProjectPDFttachmentsOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pdfs = ref.watch(
       createProjectNotifProvider(project).select(
-        (s) => s.projectPDFAttachments ?? <String>[],
+        (s) => s.pdfUrls,
       ),
     );
     final projectNotifier = ref.read(

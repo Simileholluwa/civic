@@ -3,7 +3,6 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/create/create.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
-import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -121,27 +120,8 @@ class CreatePostWidget extends ConsumerWidget {
                     post: post,
                   ),
                 if (project != null)
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    padding: const EdgeInsets.only(
-                      bottom: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        TSizes.md,
-                      ),
-                      border: Border.all(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                    child: ProjectCard(
-                      projectWithUserState: ProjectWithUserState(
-                        project: project!,
-                      ),
-                      canTap: false,
-                      showInteractions: false,
-                      maxHeight: 200,
-                    ),
+                  ProjectQuoteCard(
+                    project: project!,
                   ),
                 if (postToQuote != null)
                   Container(

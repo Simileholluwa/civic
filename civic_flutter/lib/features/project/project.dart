@@ -89,6 +89,7 @@ export 'presentation/widgets/project_screen/project_filter_overlay.dart';
 export 'presentation/widgets/project_screen/project_funding_filter.dart';
 export 'presentation/widgets/project_screen/project_interaction_buttons.dart';
 export 'presentation/widgets/project_screen/project_location_filter.dart';
+export 'presentation/widgets/project_screen/project_plain_text_description.dart';
 export 'presentation/widgets/project_screen/project_quick_detail_widget.dart';
 export 'presentation/widgets/project_screen/project_quick_details.dart';
 export 'presentation/widgets/project_screen/project_search_bar.dart';

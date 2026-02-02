@@ -56,8 +56,6 @@ class MediaService {
       path: path,
     );
 
-    print(description);
-
     return <String, String?>{
       'path': path,
       'description': description,

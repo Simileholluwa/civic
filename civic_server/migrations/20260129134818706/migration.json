@@ -1,0 +1,48 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "project",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "projectPDFAttachments"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"projectPDFAttachments\" of table \"project\" will be dropped.",
+            "table": "project",
+            "columns": [
+              "projectPDFAttachments"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"projectPDFAttachments\" of table \"project\" will be dropped.",
+      "table": "project",
+      "columns": [
+        "projectPDFAttachments"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

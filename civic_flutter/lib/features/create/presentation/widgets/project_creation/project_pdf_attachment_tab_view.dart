@@ -17,7 +17,7 @@ class ProjectPDFAttachmentsTabView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pdfPaths = ref.watch(
       createProjectNotifProvider(project).select(
-        (s) => s.projectPDFAttachments ?? <String>[],
+        (s) => s.pdfUrls,
       ),
     );
     final notifier = ref.read(

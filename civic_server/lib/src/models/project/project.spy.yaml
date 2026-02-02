@@ -13,8 +13,7 @@ fields:
     fundingSubCategory: String?, default=""
     projectCost: double?, default=0.0
     fundingNote: String?, default=""
-    projectImageAttachments: List<MediaAsset>?, relation(name=project_media_assets)
-    projectPDFAttachments: List<String>?
+    projectMediaAssets: List<MediaAsset>?, relation(name=project_media_assets)
     physicalLocations: List<AWSPlaces>?
     virtualLocations: List<String>?
     dateCreated: DateTime?, default=now

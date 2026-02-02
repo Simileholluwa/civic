@@ -120,8 +120,8 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       different =
           state.title.isNotEmpty ||
           (_plainTextFromDelta(state.description).trim().isNotEmpty) ||
-          state.projectImageAttachments.isNotEmpty || state.imageUrls.isNotEmpty ||
-          (state.projectPDFAttachments?.isNotEmpty ?? false) ||
+          state.pdfUrls.isNotEmpty ||
+          state.imageUrls.isNotEmpty ||
           (state.virtualLocations?.isNotEmpty ?? false) ||
           state.physicalLocations.isNotEmpty ||
           state.projectCategory != null ||
@@ -138,17 +138,23 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       );
 
       final baselineImages = Set<String>.from(
-        baseline.projectImageAttachments?.map((e) => e.publicUrl ?? '') ?? [],
+        baseline.projectMediaAssets
+                ?.where((e) => e.kind == MediaKind.image)
+                .map((e) => e.publicUrl ?? '') ??
+            [],
       );
       final stateImages = Set<String>.from(
         state.imageUrls,
       );
 
       final baselinePdfs = Set<String>.from(
-        baseline.projectPDFAttachments ?? [],
+        baseline.projectMediaAssets
+                ?.where((e) => e.kind == MediaKind.document)
+                .map((e) => e.publicUrl ?? '') ??
+            [],
       );
       final statePdfs = Set<String>.from(
-        state.projectPDFAttachments ?? [],
+        state.pdfUrls,
       );
 
       final baselineVirtual = Set<String>.from(
@@ -335,7 +341,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   Future<void> takePicture() async {
-    if (state.projectImageAttachments.length >= maxImageCount) return;
+    if (state.imageUrls.length >= maxImageCount) return;
     final image = await imageHelper.takeImage();
     if (image != null) {
       state = state.copyWith(
@@ -346,8 +352,8 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   Future<void> pickPicture() async {
-    if (state.projectImageAttachments.length >= maxImageCount) return;
-    final imageLength = maxImageCount - state.projectImageAttachments.length;
+    if (state.imageUrls.length >= maxImageCount) return;
+    final imageLength = maxImageCount - state.imageUrls.length;
     final images = await imageHelper.pickImage(
       multipleImages: imageLength > 1,
     );
@@ -367,7 +373,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   void removeImageAtIndex(int index) {
-    if (index < 0 || index >= state.projectImageAttachments.length) return;
+    if (index < 0 || index >= state.imageUrls.length) return;
     final newImages = List<String>.from(state.imageUrls)..removeAt(index);
     state = state.copyWith(imageUrls: newImages);
     _updateIsDirty();
@@ -388,7 +394,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
     if (result != null) {
       final pdfPaths = result.paths.map((path) => path!).toList();
       state = state.copyWith(
-        projectPDFAttachments: [...?state.projectPDFAttachments, ...pdfPaths],
+        pdfUrls: [...state.pdfUrls, ...pdfPaths],
       );
       _updateIsDirty();
     } else {
@@ -397,19 +403,16 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   void removePDFAtIndex(int index) {
-    if (state.projectPDFAttachments == null ||
-        index < 0 ||
-        index >= state.projectPDFAttachments!.length) {
+    if (state.pdfUrls.isEmpty || index < 0 || index >= state.pdfUrls.length) {
       return;
     }
-    final newPdfs = List<String>.from(state.projectPDFAttachments!)
-      ..removeAt(index);
-    state = state.copyWith(projectPDFAttachments: newPdfs);
+    final newPdfs = List<String>.from(state.pdfUrls)..removeAt(index);
+    state = state.copyWith(pdfUrls: newPdfs);
     _updateIsDirty();
   }
 
   void removeAllPDFs() {
-    state = state.copyWith(projectPDFAttachments: []);
+    state = state.copyWith(pdfUrls: []);
     _updateIsDirty();
   }
 
@@ -434,8 +437,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
         state.fundingSubCategory == null) {
       TToastMessages.infoToast('Funding category is required.');
     } else if (state.physicalLocations.isEmpty &&
-        (state.virtualLocations == null ||
-            state.virtualLocations!.isEmpty)) {
+        (state.virtualLocations == null || state.virtualLocations!.isEmpty)) {
       TToastMessages.infoToast('At least one location is required.');
     } else if (state.imageUrls.isEmpty) {
       TToastMessages.infoToast('At least one image is required.');
@@ -451,39 +453,47 @@ class CreateProjectNotif extends _$CreateProjectNotif {
   }
 
   void setPDFAttachments(List<String> pdfs) {
-    state = state.copyWith(projectPDFAttachments: pdfs);
+    state = state.copyWith(pdfUrls: pdfs);
     _updateIsDirty();
   }
 
   Future<bool> _uploadAssets() async {
-    // Separate local images (to upload) and remote images (already on server)
-    final localImages = state.imageUrls
-        .where((p) => !_urlRegex.hasMatch(p))
-        .toList(growable: false);
-    final remoteImages = state.imageUrls
+    // Separate local assets (to upload) and remote assets (already on server)
+    final localAssets =
+        state.imageUrls
+            .where((p) => !_urlRegex.hasMatch(p))
+            .toList(growable: false) +
+        state.pdfUrls
+            .where((p) => !_urlRegex.hasMatch(p))
+            .toList(
+              growable: false,
+            );
+    final remoteAssets = state.imageUrls
+        .where(_urlRegex.hasMatch)
+        .toList(growable: false) + state.pdfUrls
         .where(_urlRegex.hasMatch)
         .toList(growable: false);
     final assets = <MediaAsset>[];
 
     // Add existing remote image MediaAssets (from state.uploadedAssets)
-    if (remoteImages.isNotEmpty && state.projectImageAttachments.isNotEmpty) {
-      final remoteAssets = state.projectImageAttachments
+    if (remoteAssets.isNotEmpty && state.projectMediaAssets.isNotEmpty) {
+      final allRemoteAssets = state.projectMediaAssets
           .where(
             (a) =>
-                a.kind == MediaKind.image &&
+                (a.kind == MediaKind.image || a.kind == MediaKind.document) &&
                 a.publicUrl != null &&
-                remoteImages.contains(a.publicUrl),
+                remoteAssets.contains(a.publicUrl),
           )
           .toList();
-      assets.addAll(remoteAssets);
+      assets.addAll(allRemoteAssets);
     }
 
-    // Upload new local images
-    if (localImages.isNotEmpty) {
+    // Upload new local assets
+    if (localAssets.isNotEmpty) {
       final res = await ref
           .read(assetServiceProvider)
           .uploadPostMediaAssets(
-            localImages,
+            localAssets,
             'public/projects',
           );
       if (res.isLeft()) {
@@ -493,49 +503,8 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       assets.addAll(res.getRight().toNullable()!);
     }
 
-    state = state.copyWith(projectImageAttachments: assets);
+    state = state.copyWith(projectMediaAssets: assets);
     return true;
-  }
-
-  Future<bool> _sendMediaAttachments({
-    required List<String>? attachments,
-    required String folder,
-    required String subFolder,
-    required void Function(List<String>) onUploadSuccess,
-  }) async {
-    if (attachments == null || attachments.isEmpty) return true;
-
-    final existingUploads = <String>[];
-    final newUploads = <String>[];
-    final urlRegex = RegExp(r'\b(https?://[^\s/$.?#].[^\s]*)\b');
-
-    for (final attachment in attachments) {
-      if (urlRegex.hasMatch(attachment)) {
-        existingUploads.add(attachment);
-      } else {
-        newUploads.add(attachment);
-      }
-    }
-
-    if (newUploads.isEmpty) return true;
-
-    final result = await ref
-        .read(assetServiceProvider)
-        .uploadMediaAssets(
-          newUploads,
-          'public/projects',
-        );
-
-    return result.fold(
-      (error) {
-        ref.read(sendPostLoadingProvider.notifier).value = false;
-        return false;
-      },
-      (urls) {
-        onUploadSuccess(existingUploads + urls);
-        return true;
-      },
-    );
   }
 
   Future<bool> saveProjectDraft() async {
@@ -617,8 +586,7 @@ class CreateProjectNotif extends _$CreateProjectNotif {
       fundingNote: state.fundingNote,
       physicalLocations: state.physicalLocations,
       virtualLocations: state.virtualLocations,
-      projectImageAttachments: state.projectImageAttachments,
-      projectPDFAttachments: state.projectPDFAttachments,
+      projectMediaAssets: state.projectMediaAssets,
     );
   }
 
@@ -649,19 +617,9 @@ class CreateProjectNotif extends _$CreateProjectNotif {
             );
           }
 
-          final imagesUploaded = await _uploadAssets();
-          if (!imagesUploaded) {
-            throw Exception('Unable to upload images.');
-          }
-
-          final pdfsUploaded = await _sendMediaAttachments(
-            attachments: state.projectPDFAttachments,
-            folder: 'projects',
-            subFolder: 'pdfs',
-            onUploadSuccess: setPDFAttachments,
-          );
-          if (!pdfsUploaded) {
-            throw Exception('Unable to upload PDFs.');
+          final assetsUploaded = await _uploadAssets();
+          if (!assetsUploaded) {
+            throw Exception('Unable to upload assets.');
           }
 
           final ownerId = ref.read(localStorageProvider).getInt('userId')!;

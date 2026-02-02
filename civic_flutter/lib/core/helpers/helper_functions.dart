@@ -539,7 +539,7 @@ class THelperFunctions {
     final difference = now.difference(dateTime);
 
     if (difference.inSeconds <= 0) {
-      return TTexts.justNow;
+      return '1s';
     } else if (difference.inSeconds < 60) {
       return '${difference.inSeconds}s';
     } else if (difference.inMinutes < 60) {

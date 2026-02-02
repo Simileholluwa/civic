@@ -2151,12 +2151,6 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: '\'\'::text',
         ),
         _i2.ColumnDefinition(
-          name: 'projectPDFAttachments',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'List<String>?',
-        ),
-        _i2.ColumnDefinition(
           name: 'physicalLocations',
           columnType: _i2.ColumnType.json,
           isNullable: true,

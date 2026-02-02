@@ -32,8 +32,7 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    this.projectImageAttachments,
-    this.projectPDFAttachments,
+    this.projectMediaAssets,
     this.physicalLocations,
     this.virtualLocations,
     DateTime? dateCreated,
@@ -89,8 +88,7 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -136,16 +134,10 @@ abstract class Project implements _i1.SerializableModel {
       fundingSubCategory: jsonSerialization['fundingSubCategory'] as String?,
       projectCost: (jsonSerialization['projectCost'] as num?)?.toDouble(),
       fundingNote: jsonSerialization['fundingNote'] as String?,
-      projectImageAttachments:
-          jsonSerialization['projectImageAttachments'] == null
+      projectMediaAssets: jsonSerialization['projectMediaAssets'] == null
           ? null
           : _i5.Protocol().deserialize<List<_i3.MediaAsset>>(
-              jsonSerialization['projectImageAttachments'],
-            ),
-      projectPDFAttachments: jsonSerialization['projectPDFAttachments'] == null
-          ? null
-          : _i5.Protocol().deserialize<List<String>>(
-              jsonSerialization['projectPDFAttachments'],
+              jsonSerialization['projectMediaAssets'],
             ),
       physicalLocations: jsonSerialization['physicalLocations'] == null
           ? null
@@ -224,9 +216,7 @@ abstract class Project implements _i1.SerializableModel {
 
   String? fundingNote;
 
-  List<_i3.MediaAsset>? projectImageAttachments;
-
-  List<String>? projectPDFAttachments;
+  List<_i3.MediaAsset>? projectMediaAssets;
 
   List<_i4.AWSPlaces>? physicalLocations;
 
@@ -284,8 +274,7 @@ abstract class Project implements _i1.SerializableModel {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -324,12 +313,10 @@ abstract class Project implements _i1.SerializableModel {
       if (fundingSubCategory != null) 'fundingSubCategory': fundingSubCategory,
       if (projectCost != null) 'projectCost': projectCost,
       if (fundingNote != null) 'fundingNote': fundingNote,
-      if (projectImageAttachments != null)
-        'projectImageAttachments': projectImageAttachments?.toJson(
+      if (projectMediaAssets != null)
+        'projectMediaAssets': projectMediaAssets?.toJson(
           valueToJson: (v) => v.toJson(),
         ),
-      if (projectPDFAttachments != null)
-        'projectPDFAttachments': projectPDFAttachments?.toJson(),
       if (physicalLocations != null)
         'physicalLocations': physicalLocations?.toJson(
           valueToJson: (v) => v.toJson(),
@@ -386,8 +373,7 @@ class _ProjectImpl extends Project {
     String? fundingSubCategory,
     double? projectCost,
     String? fundingNote,
-    List<_i3.MediaAsset>? projectImageAttachments,
-    List<String>? projectPDFAttachments,
+    List<_i3.MediaAsset>? projectMediaAssets,
     List<_i4.AWSPlaces>? physicalLocations,
     List<String>? virtualLocations,
     DateTime? dateCreated,
@@ -422,8 +408,7 @@ class _ProjectImpl extends Project {
          fundingSubCategory: fundingSubCategory,
          projectCost: projectCost,
          fundingNote: fundingNote,
-         projectImageAttachments: projectImageAttachments,
-         projectPDFAttachments: projectPDFAttachments,
+         projectMediaAssets: projectMediaAssets,
          physicalLocations: physicalLocations,
          virtualLocations: virtualLocations,
          dateCreated: dateCreated,
@@ -464,8 +449,7 @@ class _ProjectImpl extends Project {
     Object? fundingSubCategory = _Undefined,
     Object? projectCost = _Undefined,
     Object? fundingNote = _Undefined,
-    Object? projectImageAttachments = _Undefined,
-    Object? projectPDFAttachments = _Undefined,
+    Object? projectMediaAssets = _Undefined,
     Object? physicalLocations = _Undefined,
     Object? virtualLocations = _Undefined,
     Object? dateCreated = _Undefined,
@@ -509,12 +493,9 @@ class _ProjectImpl extends Project {
           : this.fundingSubCategory,
       projectCost: projectCost is double? ? projectCost : this.projectCost,
       fundingNote: fundingNote is String? ? fundingNote : this.fundingNote,
-      projectImageAttachments: projectImageAttachments is List<_i3.MediaAsset>?
-          ? projectImageAttachments
-          : this.projectImageAttachments?.map((e0) => e0.copyWith()).toList(),
-      projectPDFAttachments: projectPDFAttachments is List<String>?
-          ? projectPDFAttachments
-          : this.projectPDFAttachments?.map((e0) => e0).toList(),
+      projectMediaAssets: projectMediaAssets is List<_i3.MediaAsset>?
+          ? projectMediaAssets
+          : this.projectMediaAssets?.map((e0) => e0.copyWith()).toList(),
       physicalLocations: physicalLocations is List<_i4.AWSPlaces>?
           ? physicalLocations
           : this.physicalLocations?.map((e0) => e0.copyWith()).toList(),
