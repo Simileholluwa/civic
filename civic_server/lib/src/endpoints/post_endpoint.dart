@@ -381,17 +381,12 @@ class PostEndpoint extends Endpoint {
           owner: UserRecord.include(userInfo: UserInfo.include()),
           article: Article.include(),
           poll: Poll.include(options: PollOption.includeList()),
-          project: Project.include(
-            owner: UserRecord.include(userInfo: UserInfo.include()),
-          ),
         ),
         transaction: transaction,
       );
       if (original == null) {
         throw ServerSideException(message: 'Original post not found.');
       }
-
-      final root = await getRootPost(session, original);
 
       final sentPost = await Post.db.insertRow(
         session,
@@ -402,7 +397,7 @@ class PostEndpoint extends Endpoint {
       await PostQuotes.db.insertRow(
         session,
         PostQuotes(
-          postId: root.id!,
+          postId: original.id!,
           ownerId: user.id!,
           dateCreated: DateTime.now(),
         ),
@@ -415,8 +410,8 @@ class PostEndpoint extends Endpoint {
         sentPost.id!,
       );
 
-      final updatedOriginal = root.copyWith(
-        repostCount: (root.repostCount ?? 0) + 1,
+      final updatedOriginal = original.copyWith(
+        repostCount: (original.repostCount ?? 0) + 1,
       );
       await updatePost(session, updatedOriginal);
 
@@ -466,7 +461,7 @@ class PostEndpoint extends Endpoint {
             actionType: NotificationActionType.quote,
             targetType: targetType,
             targetId: sentPost.id!,
-            postId: root.id!,
+            postId: original.id!,
             senderAvatarUrl: user.userInfo!.imageUrl!,
             senderName: getFullName(
               user.firstName!,
@@ -1499,23 +1494,58 @@ class PostEndpoint extends Endpoint {
   /// Returns an enriched post by id, including owner, media, and related data.
   Future<PostWithUserState> getPost(Session session, int id) async {
     final user = await authUser(session);
-    final result = await Post.db.findById(
-      session,
-      id,
-      include: Post.include(
-        owner: UserRecord.include(userInfo: UserInfo.include()),
-        mediaAssets: MediaAsset.includeList(),
-        project: Project.include(
-          owner: UserRecord.include(userInfo: UserInfo.include()),
-        ),
-        parent: Post.include(
+    final cacheKey = 'post:$id';
+
+    // Try cache first for the raw post data
+    Post? result = await session.caches.global.get<Post>(cacheKey);
+
+    if (result == null) {
+      result = await Post.db.findById(
+        session,
+        id,
+        include: Post.include(
           owner: UserRecord.include(userInfo: UserInfo.include()),
           mediaAssets: MediaAsset.includeList(),
+          project: Project.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            projectMediaAssets: MediaAsset.includeList(),
+          ),
+          parent: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            mediaAssets: MediaAsset.includeList(),
+            project: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              projectMediaAssets: MediaAsset.includeList(),
+            ),
+            poll: Poll.include(options: PollOption.includeList()),
+            article: Article.include(),
+            parent: Post.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              mediaAssets: MediaAsset.includeList(),
+              project: Project.include(
+                owner: UserRecord.include(userInfo: UserInfo.include()),
+                projectMediaAssets: MediaAsset.includeList(),
+              ),
+              poll: Poll.include(options: PollOption.includeList()),
+              article: Article.include(),
+            ),
+          ),
+          poll: Poll.include(options: PollOption.includeList()),
+          article: Article.include(),
         ),
-        poll: Poll.include(options: PollOption.includeList()),
-        article: Article.include(),
-      ),
-    );
+      );
+
+      if (result != null) {
+        // Cache for 30 minutes
+        unawaited(
+          session.caches.global.put(
+            cacheKey,
+            result,
+            lifetime: const Duration(minutes: 30),
+          ),
+        );
+      }
+    }
 
     if (result == null) {
       throw ServerSideException(
@@ -1549,7 +1579,18 @@ class PostEndpoint extends Endpoint {
     if (limit <= 0 || page <= 0) {
       throw ServerSideException(message: 'Invalid pagination parameters');
     }
+
     final user = await authUser(session);
+    final cacheKey = 'feed:${user.id}:$contentType:$limit:$page';
+
+    // Try cache first (short TTL for feed freshness)
+    PostList? cachedResult = await session.caches.global.get<PostList>(
+      cacheKey,
+    );
+    if (cachedResult != null) {
+      return cachedResult;
+    }
+
     final ignored = await PostNotInterested.db.find(
       session,
       where: (t) => t.userId.equals(user.id!),
@@ -1598,6 +1639,7 @@ class PostEndpoint extends Endpoint {
           mediaAssets: MediaAsset.includeList(),
           project: Project.include(
             owner: UserRecord.include(userInfo: UserInfo.include()),
+            projectMediaAssets: MediaAsset.includeList(),
           ),
           poll: Poll.include(
             options: PollOption.includeList(
@@ -1606,6 +1648,16 @@ class PostEndpoint extends Endpoint {
             ),
           ),
           article: Article.include(),
+          parent: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            mediaAssets: MediaAsset.includeList(),
+            project: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              projectMediaAssets: MediaAsset.includeList(),
+            ),
+            poll: Poll.include(options: PollOption.includeList()),
+            article: Article.include(),
+          ),
         ),
         poll: Poll.include(
           options: PollOption.includeList(
@@ -1661,7 +1713,7 @@ class PostEndpoint extends Endpoint {
 
     final enriched = await _enrichPosts(session, user, results);
 
-    return PostList(
+    final postList = PostList(
       count: count,
       limit: limit,
       page: page,
@@ -1669,6 +1721,17 @@ class PostEndpoint extends Endpoint {
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
     );
+
+    // Cache for 2 minutes to balance freshness vs performance
+    unawaited(
+      session.caches.global.put(
+        cacheKey,
+        postList,
+        lifetime: const Duration(minutes: 2),
+      ),
+    );
+
+    return postList;
   }
 
   /// Logs a single feed-impression page event for the user.
@@ -1783,6 +1846,9 @@ class PostEndpoint extends Endpoint {
         where: (t) => t.ownerId.equals(user.id!),
         transaction: transaction,
       );
+
+      // Invalidate user's bookmarks cache
+      unawaited(_invalidateBookmarksCaches(session, user.id!));
     });
   }
 
@@ -1827,6 +1893,9 @@ class PostEndpoint extends Endpoint {
         engagementType = 'bookmark';
       }
       await updatePost(session, post);
+
+      // Invalidate user's bookmarks cache
+      unawaited(_invalidateBookmarksCaches(session, user.id!));
 
       unawaited(
         EngagementEvent.db.insertRow(
@@ -2045,15 +2114,26 @@ class PostEndpoint extends Endpoint {
   }) async {
     return await session.db.transaction((transaction) async {
       final user = await authUser(session);
+      final cacheKey = 'bookmarks:${user.id}:$limit:$page';
+
+      // Try cache first (medium TTL since bookmarks don't change frequently)
+      PostList? cachedResult = await session.caches.global.get<PostList>(
+        cacheKey,
+      );
+      if (cachedResult != null) {
+        return cachedResult;
+      }
 
       final count = await PostBookmarks.db.count(
         session,
-        where: (t) => t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
+        where: (t) =>
+            t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
       );
 
       final bookmarks = await PostBookmarks.db.find(
         session,
-        where: (t) => t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
+        where: (t) =>
+            t.ownerId.equals(user.id!) & t.post.isDeleted.equals(false),
         limit: limit,
         offset: (page - 1) * limit,
         orderBy: (t) => t.dateCreated,
@@ -2076,7 +2156,8 @@ class PostEndpoint extends Endpoint {
       );
       final results = bookmarks.map((e) => e.post!).toList();
       final enriched = await _enrichPosts(session, user, results);
-      return PostList(
+
+      final postList = PostList(
         count: count,
         limit: limit,
         page: page,
@@ -2084,6 +2165,17 @@ class PostEndpoint extends Endpoint {
         numPages: (count / limit).ceil(),
         canLoadMore: page * limit < count,
       );
+
+      // Cache for 15 minutes since bookmarks are relatively stable
+      unawaited(
+        session.caches.global.put(
+          cacheKey,
+          postList,
+          lifetime: const Duration(minutes: 15),
+        ),
+      );
+
+      return postList;
     });
   }
 
@@ -2269,7 +2361,7 @@ class PostEndpoint extends Endpoint {
   }
 
   /// Returns the authenticated `UserRecord` or throws if unauthenticated.
-  /// Uses a local priority cache to speed up repeated lookups.
+  /// Uses layered caching (local → Redis → database) for optimal performance.
   @doNotGenerate
   Future<UserRecord> authUser(Session session) async {
     final authInfo = session.authenticated;
@@ -2277,27 +2369,49 @@ class PostEndpoint extends Endpoint {
       throw ServerSideException(message: 'You must be logged in');
     }
 
-    var cacheKey = 'UserData-${authInfo.userId}';
-    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
+    final cacheKey = 'user:${authInfo.userId}';
 
-    if (userRecord == null) {
-      userRecord = await UserRecord.db.findFirstRow(
-        session,
-        where: (row) => row.userInfoId.equals(authInfo.userId),
-        include: UserRecord.include(userInfo: UserInfo.include()),
+    // Try local cache first (fastest)
+    var userRecord = await session.caches.localPrio.get<UserRecord>(cacheKey);
+    if (userRecord != null) return userRecord;
+
+    // Try distributed cache (Redis) second
+    userRecord = await session.caches.global.get<UserRecord>(cacheKey);
+    if (userRecord != null) {
+      // Populate local cache for next request
+      await session.caches.localPrio.put(
+        cacheKey,
+        userRecord,
+        lifetime: const Duration(minutes: 15),
       );
-      if (userRecord != null) {
-        await session.caches.localPrio.put(
-          cacheKey,
-          userRecord,
-          lifetime: Duration(days: 1),
-        );
-        return userRecord;
-      }
+      return userRecord;
     }
+
+    // Fallback to database
+    userRecord = await UserRecord.db.findFirstRow(
+      session,
+      where: (row) => row.userInfoId.equals(authInfo.userId),
+      include: UserRecord.include(userInfo: UserInfo.include()),
+    );
+
     if (userRecord == null) {
       throw ServerSideException(message: 'User not found');
     }
+
+    // Cache in both layers
+    await Future.wait([
+      session.caches.localPrio.put(
+        cacheKey,
+        userRecord,
+        lifetime: const Duration(minutes: 15),
+      ),
+      session.caches.global.put(
+        cacheKey,
+        userRecord,
+        lifetime: const Duration(hours: 1),
+      ),
+    ]);
+
     return userRecord;
   }
 
@@ -2358,6 +2472,7 @@ class PostEndpoint extends Endpoint {
   }
 
   /// Persists changes to a post and emits real-time count updates.
+  /// Also invalidates relevant caches.
   @doNotGenerate
   Future<void> updatePost(
     Session session,
@@ -2369,6 +2484,44 @@ class PostEndpoint extends Endpoint {
       'post_counts_${post.id}',
       _buildPostCounts(post),
     );
+
+    // Invalidate caches
+    await _invalidatePostCaches(session, post);
+  }
+
+  /// Invalidates all caches related to a post.
+  @doNotGenerate
+  Future<void> _invalidatePostCaches(Session session, Post post) async {
+    final futures = <Future<void>>[];
+
+    // Invalidate post cache
+    futures.add(session.caches.global.invalidateKey('post:${post.id}'));
+    futures.add(session.caches.localPrio.invalidateKey('post:${post.id}'));
+
+    // Invalidate user cache if owner data might have changed
+    futures.add(session.caches.global.invalidateKey('user:${post.ownerId}'));
+    futures.add(session.caches.localPrio.invalidateKey('user:${post.ownerId}'));
+
+    await Future.wait(futures);
+  }
+
+  /// Invalidates bookmarks-related caches for a user.
+  @doNotGenerate
+  Future<void> _invalidateBookmarksCaches(Session session, int userId) async {
+    // Invalidate common bookmark cache keys (pages 1-5, common limits)
+    final commonLimits = [10, 20, 50];
+    final commonPages = [1, 2, 3, 4, 5];
+    
+    final futures = <Future<void>>[];
+    for (final limit in commonLimits) {
+      for (final page in commonPages) {
+        futures.add(
+          session.caches.global.invalidateKey('bookmarks:$userId:$limit:$page'),
+        );
+      }
+    }
+    
+    await Future.wait(futures);
   }
 
   /// Persists changes to a poll and emits real-time count updates.

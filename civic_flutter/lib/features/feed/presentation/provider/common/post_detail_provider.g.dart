@@ -28,7 +28,7 @@ final class PostDetailProvider
   }) : super(
          retry: null,
          name: r'postDetailProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -66,7 +66,7 @@ final class PostDetailProvider
   }
 }
 
-String _$postDetailHash() => r'c46797e14cab797e64920306040f4957e727b38f';
+String _$postDetailHash() => r'8fbcc7e216967b38fdfec74a39683e3385d9a10e';
 
 final class PostDetailFamily extends $Family
     with
@@ -80,7 +80,7 @@ final class PostDetailFamily extends $Family
         name: r'postDetailProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   PostDetailProvider call(int id, Post? post, PostType postType) =>

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
@@ -67,7 +65,6 @@ class FeedScreen extends ConsumerWidget {
         body: AppInfiniteList<PostWithUserState>(
           pagingController: pagingState,
           itemBuilder: (context, postWithUserState, index) {
-            log(postWithUserState.repostedBy.toString());
             return AdaptivePostCard(
               postWithUserState: postWithUserState,
             );

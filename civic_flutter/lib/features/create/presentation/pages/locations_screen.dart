@@ -83,105 +83,121 @@ class LocationsScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: data.isLoading
-          ? const AppLoadingWidget()
-          : data.when(
-              data: (data) {
-                if (data == null || data.isEmpty) {
-                  return const CreateContentLocationError();
-                }
-                return ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      height: 0,
-                    );
-                  },
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final place = data[index];
-                    final selectedIndex = postState.locations.contains(place);
-                    return InkWell(
-                      onTap: () {
-                        if (!selectedIndex) {
-                          postNotifier.addLocation(
-                            [place],
-                          );
-                        } else {
-                          postNotifier.removeLocation(
-                            place,
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(
-                          TSizes.md + 2,
-                          TSizes.sm + 4,
-                          TSizes.md + 2,
-                          index == 0 ? TSizes.md : TSizes.sm + 4,
-                        ),
-                        color: selectedIndex
-                            ? TColors.primary.withAlpha(
-                                50,
-                              )
-                            : null,
-                        child: Text(
-                          place.place,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              error: (error, st) {
-                return const CreateContentLocationError();
-              },
-              loading: () {
-                return const AppLoadingWidget();
-              },
+      body: data.when(
+        data: (data) {
+          if (data == null || data.isEmpty) {
+            return const CreateContentLocationError();
+          }
+          return ListView.separated(
+            separatorBuilder: (context, index) {
+              return const Divider(
+                height: 0,
+              );
+            },
+            padding: const EdgeInsets.only(
+              bottom: 20,
             ),
-      bottomNavigationBar: postState.locations.isNotEmpty
-          ? SizedBox(
-              height: 50,
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TSizes.md,
+            itemCount: data.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final place = data[index];
+              final selectedIndex = postState.locations.contains(place);
+              return InkWell(
+                onTap: () {
+                  if (!selectedIndex) {
+                    postNotifier.addLocation(
+                      [place],
+                    );
+                  } else {
+                    postNotifier.removeLocation(
+                      place,
+                    );
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(
+                    TSizes.md + 2,
+                    TSizes.sm + 4,
+                    TSizes.md + 2,
+                    index == 0 ? TSizes.md : TSizes.sm + 4,
+                  ),
+                  color: selectedIndex
+                      ? TColors.primary.withAlpha(
+                          50,
+                        )
+                      : null,
+                  child: Text(
+                    place.place,
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  return Chip(
-                    label: Text(
-                      postState.locations[index].place,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    elevation: 0,
-                    surfaceTintColor: Colors.transparent,
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    deleteIcon: const Icon(
-                      Icons.clear,
-                      color: TColors.secondary,
-                    ),
-                    onDeleted: () => postNotifier.removeLocation(
-                      postState.locations[index],
-                    ),
-                  );
-                },
-                separatorBuilder: (_, _) {
-                  return const SizedBox(
-                    width: TSizes.sm,
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: postState.locations.length,
+              );
+            },
+          );
+        },
+        error: (error, st) {
+          return const CreateContentLocationError();
+        },
+        loading: () {
+          return const AppLoadingWidget();
+        },
+      ),
+      bottomNavigationBar: AnimatedCrossFade(
+        duration: const Duration(
+          milliseconds: 300,
+        ),
+        crossFadeState: postState.locations.isEmpty
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        firstChild: const SizedBox.shrink(),
+        secondChild: Container(
+          height: 80,
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Theme.of(context).dividerColor,
               ),
-            )
-          : const SizedBox.shrink(),
+            ),
+          ),
+          child: ListView.separated(
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(
+              15, 0, 15, 20
+            ),
+            itemBuilder: (context, index) {
+              return Chip(
+                label: Text(
+                  postState.locations[index].place,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    100,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                deleteIcon: const Icon(
+                  Icons.clear,
+                  color: TColors.secondary,
+                ),
+                onDeleted: () => postNotifier.removeLocation(
+                  postState.locations[index],
+                ),
+              );
+            },
+            separatorBuilder: (_, _) {
+              return const SizedBox(
+                width: TSizes.sm,
+              );
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: postState.locations.length,
+          ),
+        ),
+      ),
     );
   }
 }

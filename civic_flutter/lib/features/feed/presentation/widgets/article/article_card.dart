@@ -12,12 +12,20 @@ class ArticleCard extends StatelessWidget {
     required this.postWithUserState,
     super.key,
     this.onTap,
-    this.fromDetails = false,
+    this.showPadding = true,
+    this.canTap = true,
+    this.showCreatorInfo = true,
+    this.showInteractions = true,
+    this.maxLines = 3,
   });
 
   final PostWithUserState postWithUserState;
-  final bool fromDetails;
   final VoidCallback? onTap;
+  final bool showPadding;
+  final bool showCreatorInfo;
+  final bool showInteractions;
+  final bool canTap;
+  final int maxLines;
 
   static final Map<int, String> _plainTextCache = <int, String>{};
 
@@ -42,50 +50,51 @@ class ArticleCard extends StatelessWidget {
         _plainTextCache[postId] = articleContent;
       }
     }
-    final hasTags = post.tags != null && post.tags!.isNotEmpty;
-    final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
-      onTap: fromDetails
+      onTap: !canTap
           ? null
           : onTap ??
-              () async {
-                await context.push(
-                  '/feed/article/${post.id}',
-                  extra: post,
-                );
-              },
+                () async {
+                  await context.push(
+                    '/feed/article/${post.id}',
+                    extra: post,
+                  );
+                },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
-            child: ContentCreatorInfo(
-              creator: post.owner!,
-              timeAgo: THelperFunctions.humanizeDateTime(
-                post.dateCreated!,
+          if (showCreatorInfo)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+              child: ContentCreatorInfo(
+                creator: post.owner!,
+                timeAgo: THelperFunctions.humanizeDateTime(
+                  post.dateCreated!,
+                ),
+                onMoreTapped: () async {
+                  await showDialog<dynamic>(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        contentPadding: const EdgeInsets.only(
+                          bottom: 16,
+                        ),
+                        content: ShowPostActions(
+                          postWithUserState: postWithUserState,
+                          originalPostId: post.id!,
+                          isArticle: true,
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-              onMoreTapped: () async {
-                await showDialog<dynamic>(
-                  context: context,
-                  builder: (ctx) {
-                    return AlertDialog(
-                      contentPadding: const EdgeInsets.only(
-                        bottom: 16,
-                      ),
-                      content: ShowPostActions(
-                        postWithUserState: postWithUserState,
-                        originalPostId: post.id!,
-                        isArticle: true,
-                      ),
-                    );
-                  },
-                );
-              },
             ),
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: showPadding
+                ? const EdgeInsets.symmetric(horizontal: 15)
+                : EdgeInsets.zero,
             child: Row(
               spacing: 10,
               children: [
@@ -93,8 +102,8 @@ class ArticleCard extends StatelessWidget {
                   child: Text(
                     post.text!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.left,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -123,7 +132,7 @@ class ArticleCard extends StatelessWidget {
           RepaintBoundary(
             child: Container(
               width: double.maxFinite,
-              margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              margin: showPadding ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : EdgeInsets.zero,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                   TSizes.md,
@@ -148,24 +157,17 @@ class ArticleCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: showPadding ? const EdgeInsets.symmetric(horizontal: 15) : EdgeInsets.zero,
             child: RepaintBoundary(
               child: ContentExpandableText(
                 text: articleContent,
                 hasImage: true,
-                maxLines: 3,
+                maxLines: maxLines,
                 onToggleTextTap: () {},
               ),
             ),
           ),
-          if (hasTags || hasLocations)
-            ContentEngagementTagsAndLocations(
-              tags: post.taggedUsers ?? [],
-              locations: post.locations ?? [],
-              hasTags: hasTags,
-              hasLocations: hasLocations,
-            ),
-          if (!fromDetails)
+          if (showInteractions )
             PostInteractionButtons(
               postWithUserState: postWithUserState,
               onReply: () async {

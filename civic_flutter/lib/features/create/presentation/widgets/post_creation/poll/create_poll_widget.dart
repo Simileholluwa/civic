@@ -78,7 +78,7 @@ class CreatePollWidget extends ConsumerWidget {
                       hasTags: postState.taggedUsers.isNotEmpty,
                       hasLocations: postState.locations.isNotEmpty,
                       onTaggedUsersTap: () async {
-                        await CreateHelperFunctions.selectLocationBottomSheet(
+                        await CreateHelperFunctions.tagUsersBottomSheet(
                           context: context,
                           post: post,
                         );

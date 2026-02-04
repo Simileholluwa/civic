@@ -54,10 +54,10 @@ class CreateHelperFunctions {
     }
   }
 
-  static Future<bool?> tagUsersBottomSheet(
-    BuildContext context,
-    Post post,
-  ) {
+  static Future<bool?> tagUsersBottomSheet({
+    required BuildContext context,
+    required Post post,
+  }) {
     return showModalBottomSheet<bool>(
       context: context,
       constraints: BoxConstraints(

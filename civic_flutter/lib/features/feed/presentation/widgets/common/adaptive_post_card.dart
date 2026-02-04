@@ -34,6 +34,8 @@ class AdaptivePostCard extends StatelessWidget {
               postWithUserState: postWithUserState,
               showInteractions: showPollInteractions,
               canTap: true,
+              noMaxlines: false,
+              maxLines: 3,
             ),
           )
         : ImpressionVisibilityTracker(
@@ -45,7 +47,6 @@ class AdaptivePostCard extends StatelessWidget {
               onTap: () async {
                 await context.push(
                   '/feed/post/${post.id}',
-                  extra: post,
                 );
               },
             ),

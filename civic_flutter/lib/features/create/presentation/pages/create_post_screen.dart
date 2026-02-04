@@ -69,6 +69,7 @@ class CreatePostScreen extends ConsumerWidget {
     final isComment =
         rootPost != null &&
         (rootPost!.postType == PostType.article ||
+            rootPost!.postType == PostType.poll ||
             rootPost!.postType == PostType.regular ||
             rootPost!.postType == PostType.projectQuote ||
             rootPost!.postType == PostType.postQuote);

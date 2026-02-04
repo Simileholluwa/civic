@@ -8,12 +8,16 @@ class PostCardBuild extends StatelessWidget {
     required this.noMaxLines,
     required this.post,
     this.showPadding = true,
+    this.expandOnTextTap = true,
+    this.onToggleTextTap,
     super.key,
   });
 
   final bool noMaxLines;
   final Post post;
   final bool showPadding;
+  final bool expandOnTextTap;
+  final VoidCallback? onToggleTextTap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,26 +50,35 @@ class PostCardBuild extends StatelessWidget {
               hasImage: hasImage,
               hasVideo: hasVideo,
               noMaxLines: noMaxLines,
-              expandOnTextTap: true,
+              expandOnTextTap: expandOnTextTap,
+              onToggleTextTap: onToggleTextTap,
             ),
           ),
         if (hasImage)
           imageAssetUrls.length == 1
-              ? ContentSingleCachedImage(
-                  imageUrl: imageAssetUrls.first!,
-                  aspectRatio: post.mediaAssets!.first.aspectRatio ??
-                      THelperFunctions.calculateAspectRatio(
-                        width: post.mediaAssets!.first.width,
-                        height: post.mediaAssets!.first.height,
-                      ) ??
-                      1.0,
-                )
-              : ContentImageViewer(
-                  mediaAssets: post.mediaAssets ?? [],
-                ),
+              ?  Padding(
+                padding: showPadding ? const EdgeInsets.symmetric(horizontal: 15,) : EdgeInsets.zero,
+                child: ContentSingleCachedImage(
+                    imageUrl: imageAssetUrls.first!,
+                    aspectRatio: post.mediaAssets!.first.aspectRatio ??
+                        THelperFunctions.calculateAspectRatio(
+                          width: post.mediaAssets!.first.width,
+                          height: post.mediaAssets!.first.height,
+                        ) ??
+                        1.0,
+                  useMargin: false,
+                  ),
+              )
+              : Padding(
+                padding: showPadding ? const EdgeInsets.symmetric(horizontal: 15,) : EdgeInsets.zero,
+                child: ContentImageViewer(
+                    mediaAssets: post.mediaAssets ?? [],
+                    addPadding: false,
+                  ),
+              ),
         if (hasVideo)
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: showPadding ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : EdgeInsets.zero,
             child: VideoPost(
               videoUrl: videoAssetUrl,
             ),

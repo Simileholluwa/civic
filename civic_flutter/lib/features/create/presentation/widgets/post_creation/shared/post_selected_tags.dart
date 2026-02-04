@@ -27,8 +27,8 @@ class PostSelectedTags extends ConsumerWidget {
     return InkWell(
       onTap: showRemoveTags
           ? () => CreateHelperFunctions.tagUsersBottomSheet(
-                context,
-                post!,
+                context: context,
+                post: post!,
               )
           : null,
       child: Ink(

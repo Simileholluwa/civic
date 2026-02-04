@@ -143,13 +143,13 @@ class CreatePostWidget extends ConsumerWidget {
                               post: postToQuote!,
                             ),
                             showInteractions: false,
+                            noMaxlines: false,
                           )
                         : postToQuote!.postType == PostType.article
                         ? ArticleCard(
                             postWithUserState: PostWithUserState(
                               post: postToQuote!,
                             ),
-                            fromDetails: true,
                           )
                         : PostCardDetail(
                             postWithUserState: PostWithUserState(
@@ -170,7 +170,7 @@ class CreatePostWidget extends ConsumerWidget {
                       hasTags: taggedUsers.isNotEmpty,
                       hasLocations: locations.isNotEmpty,
                       onTaggedUsersTap: () async {
-                        await CreateHelperFunctions.selectLocationBottomSheet(
+                        await CreateHelperFunctions.tagUsersBottomSheet(
                           context: context,
                           post: post,
                         );

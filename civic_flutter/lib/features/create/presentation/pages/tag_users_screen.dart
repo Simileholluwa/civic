@@ -81,50 +81,65 @@ class TagUsersScreen extends ConsumerWidget {
             ),
           ),
         ),
-        bottomNavigationBar: SizedBox(
-          height: 50,
-          child: ListView.separated(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(
-              horizontal: TSizes.md,
+        bottomNavigationBar: AnimatedCrossFade(
+          duration: const Duration(
+            milliseconds: 300,
+          ),
+          crossFadeState: postState.taggedUsers.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: const SizedBox.shrink(),
+          secondChild: Container(
+            height: 80,
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
             ),
-            itemBuilder: (context, index) {
-              return Chip(
-                avatar: AppUserProfileImage(
-                  imageUrl: postState.taggedUsers[index].userInfo!.imageUrl!,
-                  radius: 13,
-                  iconSize: 23,
-                ),
-                label: Text(
-                  postState.taggedUsers[index].userInfo!.fullName ??
-                      postState.taggedUsers[index].userInfo!.userName!,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                elevation: 0,
-                surfaceTintColor: Colors.transparent,
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    100,
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+              itemBuilder: (context, index) {
+                return Chip(
+                  avatar: AppUserProfileImage(
+                    imageUrl: postState.taggedUsers[index].userInfo!.imageUrl!,
+                    radius: 13,
+                    iconSize: 23,
                   ),
-                ),
-                backgroundColor: Colors.transparent,
-                deleteIcon: const Icon(
-                  Icons.clear,
-                  color: TColors.secondary,
-                ),
-                onDeleted: () => postNotifier.removeUser(
-                  postState.taggedUsers[index],
-                ),
-              );
-            },
-            separatorBuilder: (_, _) {
-              return const SizedBox(
-                width: TSizes.sm,
-              );
-            },
-            scrollDirection: Axis.horizontal,
-            itemCount: postState.taggedUsers.length,
+                  label: Text(
+                    postState.taggedUsers[index].userInfo!.fullName ??
+                        postState.taggedUsers[index].userInfo!.userName!,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  elevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      100,
+                    ),
+                  ),
+                  backgroundColor: Colors.transparent,
+                  deleteIcon: const Icon(
+                    Icons.clear,
+                    color: TColors.secondary,
+                  ),
+                  onDeleted: () => postNotifier.removeUser(
+                    postState.taggedUsers[index],
+                  ),
+                );
+              },
+              separatorBuilder: (_, _) {
+                return const SizedBox(
+                  width: TSizes.sm,
+                );
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: postState.taggedUsers.length,
+            ),
           ),
         ),
         body: AppInfiniteList<UserRecord>(

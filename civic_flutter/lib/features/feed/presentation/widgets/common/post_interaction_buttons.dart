@@ -3,6 +3,7 @@ import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PostInteractionButtons extends ConsumerWidget {
@@ -113,23 +114,81 @@ class PostInteractionButtons extends ConsumerWidget {
                   : Iconsax.repeate_music,
               text: THelperFunctions.humanizeNumber(repostsCount),
               onTap: () async {
-                if (hasReposted) {
-                  if (!context.mounted) return;
-                  final res = await FeedHelperFunctions.undoRepost(context);
-                  if (res == null || !res) {
-                    return;
-                  } else {
-                    await postCardNotifier.repostPost(
-                      post.id!,
+                ref.read(bottomNavVisibilityProvider.notifier).hide();
+                final res = await showModalBottomSheet<String?>(
+                  context: context,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  builder: (ctx) {
+                    return SafeArea(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ListTile(
+                            title: Text(
+                              hasReposted ? 'Undo repost' : 'Repost',
+                              style: Theme.of(context).textTheme.titleLarge!
+                                  .copyWith(
+                                    fontSize: 18,
+                                  ),
+                            ),
+                            subtitle: Text(
+                              hasReposted
+                                  ? 'Remove this repost from your profile and feed.'
+                                  : 'Share this post with your followers.',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            onTap: () {
+                              context.pop(
+                                'repost',
+                              );
+                            },
+                          ),
+                          const Divider(
+                            height: 0,
+                            thickness: .5,
+                          ),
+                          ListTile(
+                            title: Text(
+                              'Quote',
+                              style: Theme.of(context).textTheme.titleLarge!
+                                  .copyWith(
+                                    fontSize: 18,
+                                  ),
+                            ),
+                            subtitle: Text(
+                              'Share this post with your own thoughts.',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            onTap: () {
+                              context.pop('quote');
+                            },
+                          ),
+                        ],
+                      ),
                     );
-                  }
+                  },
+                );
+                ref.read(bottomNavVisibilityProvider.notifier).show();
+                if (res == null) {
+                  return;
+                } else if (res == 'quote') {
+                  if (!context.mounted) return;
+                  await context.push(
+                    '/create/post/0',
+                    extra: {
+                      'postToQuote': post,
+                    },
+                  );
+                  return;
                 } else {
-                  final id = post.id;
-                  if (id == null) return;
                   await postCardNotifier.repostPost(
-                    id,
+                    post.id!,
                   );
                 }
+                
               },
               color: hasReposted
                   ? TColors.primary

@@ -42,8 +42,8 @@ class PostBottomOptions extends ConsumerWidget {
                 child: IconButton(
                   onPressed: () async {
                     await CreateHelperFunctions.tagUsersBottomSheet(
-                      context,
-                      post,
+                      context: context,
+                      post: post,
                     );
                   },
                   icon: const Icon(

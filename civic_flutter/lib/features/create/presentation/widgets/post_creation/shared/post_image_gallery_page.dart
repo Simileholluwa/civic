@@ -88,36 +88,33 @@ class PostImageGalleryPage extends StatelessWidget {
             child: InteractiveViewer(
               minScale: 1,
               maxScale: 4,
-              child: Hero(
-                tag: 'post-image-${url.hashCode}',
-                child: Image(
-                  image: _providerFor(url),
-                  loadingBuilder: (_, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
+              child: Image(
+                image: _providerFor(url),
+                loadingBuilder: (_, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
                           ),
-                          const Icon(
-                            Iconsax.gallery5,
-                            size: 70,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  fit: BoxFit.contain,
-                ),
+                        ),
+                        const Icon(
+                          Iconsax.gallery5,
+                          size: 70,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                fit: BoxFit.contain,
               ),
             ),
           );

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/create/create.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,10 +10,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ProjectQuoteCard extends StatelessWidget {
   const ProjectQuoteCard({
     required this.project,
+    this.useMargin = true,
     super.key,
   });
 
   final Project project;
+  final bool useMargin;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class ProjectQuoteCard extends StatelessWidget {
         .whereType<String>()
         .toList();
     return Container(
-      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      margin: useMargin ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : null,
       padding: const EdgeInsets.all(
         15,
       ),
@@ -38,19 +41,9 @@ class ProjectQuoteCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ContentCreatorInfo(
-            creator: project.owner!,
-            timeAgo: THelperFunctions.humanizeDateTime(
-              project.dateCreated!,
-            ),
-          ),
-
-          const SizedBox(
-            height: 10,
-          ),
-          ProjectQuickDetails(
-            project: project,
-            showPadding: false,
+          QuotedPostCreatorInfo(
+            owner: project.owner!,
+            dateCreated: project.dateCreated!,
           ),
           const SizedBox(
             height: 10,
@@ -65,6 +58,13 @@ class ProjectQuoteCard extends StatelessWidget {
           ),
           ProjectPlainTextDescription(
             project: project,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ProjectQuickDetails(
+            project: project,
+            showPadding: false,
           ),
           const SizedBox(
             height: 10,
@@ -139,11 +139,7 @@ class ProjectQuoteCard extends StatelessWidget {
                         await Navigator.of(context).push(
                           MaterialPageRoute<Widget>(
                             builder: (_) => PostImageGalleryPage(
-                              imageUrls: project.projectMediaAssets!
-                                  .where((e) => e.kind == MediaKind.image)
-                                  .map((e) => e.publicUrl)
-                                  .whereType<String>()
-                                  .toList(),
+                              imageUrls: images,
                             ),
                           ),
                         );
@@ -156,7 +152,9 @@ class ProjectQuoteCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
-                      child: const Text('View Photos'),
+                      child: Text(
+                        images.length > 1 ? 'View Photos' : 'View Photo',
+                      ),
                     );
                   },
                 ),

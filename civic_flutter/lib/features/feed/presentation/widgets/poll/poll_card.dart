@@ -10,16 +10,29 @@ import 'package:go_router/go_router.dart';
 class PollCard extends ConsumerWidget {
   const PollCard({
     required this.postWithUserState,
-    super.key,
+    required this.noMaxlines, super.key,
     this.onTap,
     this.canTap = false,
     this.showInteractions = true,
+    this.showPadding = true,
+    this.showCreatorInfo = true,
+    this.canVote = true,
+    this.expandOnTextTap = true,
+    this.maxLines,
+    this.onToggleTextTap,
   });
 
   final PostWithUserState postWithUserState;
   final bool canTap;
   final VoidCallback? onTap;
   final bool showInteractions;
+  final bool showPadding;
+  final bool showCreatorInfo;
+  final bool canVote;
+  final bool noMaxlines;
+  final bool expandOnTextTap;
+  final int? maxLines;
+  final VoidCallback? onToggleTextTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,73 +61,74 @@ class PollCard extends ConsumerWidget {
       feedProv.notifier,
     );
     final hasText = post.text != null && post.text!.isNotEmpty;
-    final hasTags = post.tags != null && post.tags!.isNotEmpty;
-    final hasLocations = post.locations != null && post.locations!.isNotEmpty;
     return InkWell(
       onTap: !canTap
           ? null
           : onTap ??
-              () async {
-                await context.push(
-                  '/feed/poll/${post.id}',
-                  extra: post,
-                );
-              },
+                () async {
+                  await context.push(
+                    '/feed/poll/${post.id}',
+                    extra: post,
+                  );
+                },
       child: Column(
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
-            child: ContentCreatorInfo(
-              creator: post.owner!,
-              timeAgo: THelperFunctions.humanizeDateTime(
-                post.dateCreated!,
+          if (showCreatorInfo)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+              child: ContentCreatorInfo(
+                creator: post.owner!,
+                timeAgo: THelperFunctions.humanizeDateTime(
+                  post.dateCreated!,
+                ),
+                onMoreTapped: () async {
+                  await showDialog<dynamic>(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        contentPadding: const EdgeInsets.only(
+                          bottom: 16,
+                        ),
+                        content: ShowPostActions(
+                          postWithUserState: postWithUserState,
+                          originalPostId: post.id!,
+                          isPoll: true,
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-              onMoreTapped: () async {
-                await showDialog<dynamic>(
-                  context: context,
-                  builder: (ctx) {
-                    return AlertDialog(
-                      contentPadding: const EdgeInsets.only(
-                        bottom: 16,
-                      ),
-                      content: ShowPostActions(
-                        postWithUserState: postWithUserState,
-                        originalPostId: post.id!,
-                        isPoll: true,
-                      ),
-                    );
-                  },
-                );
-              },
             ),
-          ),
           if (hasText)
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-              ),
+              padding: showPadding
+                  ? const EdgeInsets.symmetric(
+                      horizontal: 15,
+                    )
+                  : EdgeInsets.zero,
               child: ContentExpandableText(
                 text: post.text!,
-                expandOnTextTap: true,
+                expandOnTextTap: expandOnTextTap,
+                noMaxLines: noMaxlines,
+                maxLines: maxLines,
+                onToggleTextTap: onToggleTextTap,
               ),
             ),
           RepaintBoundary(
             child: PollOptionsCard(
               postWithUserState: postWithUserState,
+              showPadding: showPadding,
+              canVote: canVote,
             ),
           ),
-          if (hasTags || hasLocations)
-            ContentEngagementTagsAndLocations(
-              tags: post.taggedUsers ?? [],
-              locations: post.locations ?? [],
-              hasTags: hasTags,
-              hasLocations: hasLocations,
-            ),
           RepaintBoundary(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: showPadding
+                  ? const EdgeInsets.symmetric(horizontal: 15)
+                  : EdgeInsets.zero,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -124,19 +138,19 @@ class PollCard extends ConsumerWidget {
                         totalVotes == 0
                             ? 'No votes'
                             : '$totalVotes ${totalVotes == 1 ? 'vote' : 'votes'}',
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  color: Theme.of(context).hintColor,
-                                ),
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(
+                              color: Theme.of(context).hintColor,
+                            ),
                       ),
                       Text(
                         FeedHelperFunctions.formatTimeLeft(
-                          post.poll!.expiresAt ?? DateTime.now(),
+                          post.poll?.expiresAt ?? DateTime.now(),
                         ),
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  color: Theme.of(context).hintColor,
-                                ),
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(
+                              color: Theme.of(context).hintColor,
+                            ),
                       ),
                     ],
                   ),
@@ -151,10 +165,10 @@ class PollCard extends ConsumerWidget {
                       },
                       child: Text(
                         'Clear vote',
-                        style:
-                            Theme.of(context).textTheme.labelMedium!.copyWith(
-                                  color: TColors.primary,
-                                ),
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(
+                              color: TColors.primary,
+                             ),
                       ),
                     ),
                 ],

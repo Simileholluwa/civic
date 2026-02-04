@@ -7,10 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class PollOptionsCard extends ConsumerWidget {
   const PollOptionsCard({
     required this.postWithUserState,
+    this.showPadding = true,
+    this.canVote = true,
     super.key,
   });
 
   final PostWithUserState postWithUserState;
+  final bool showPadding;
+  final bool canVote;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,16 +51,25 @@ class PollOptionsCard extends ConsumerWidget {
     final postCardNotifier = ref.read(
       feedProv.notifier,
     );
-    final options = postWithUserState.post.poll!.options!;
+    final options =
+        List<PollOption>.from(
+          postWithUserState.post.poll!.options ?? [],
+        )..sort(
+          (a, b) => (a.option ?? '').compareTo(
+            b.option ?? '',
+          ),
+        );
     final votesMap = {
       for (final v in optionVoters) v.optionId: v.votesCount ?? 0,
     };
-    return ListView.separated(
+    final listView = ListView.separated(
       itemCount: options.length,
       shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
+      padding: showPadding
+          ? const EdgeInsets.symmetric(
+              horizontal: 15,
+            )
+          : EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
         return const SizedBox(
@@ -72,8 +85,8 @@ class PollOptionsCard extends ConsumerWidget {
             : votesMap.values.reduce(
                 (a, b) => a > b ? a : b,
               );
-        return GestureDetector(
-          onTap: pollEnded || isSendingPoll
+        final optionWidget = GestureDetector(
+          onTap: pollEnded || isSendingPoll || !canVote
               ? null
               : () async {
                   await postCardNotifier.castVote(
@@ -97,7 +110,7 @@ class PollOptionsCard extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 10,
               children: [
-                Expanded(
+                Flexible(
                   child: ListTile(
                     contentPadding: const EdgeInsets.only(
                       left: 15,
@@ -105,9 +118,10 @@ class PollOptionsCard extends ConsumerWidget {
                     title: Text(
                       option.option!,
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            fontWeight:
-                                userVote ? FontWeight.w600 : FontWeight.normal,
-                          ),
+                        fontWeight: userVote
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
                     ),
                     subtitle: Row(
                       spacing: 5,
@@ -118,31 +132,31 @@ class PollOptionsCard extends ConsumerWidget {
                                   2,
                                 )}%'
                               : '0.00%',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                    fontSize: 12,
-                                  ),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: Theme.of(context).hintColor,
+                                fontSize: 12,
+                              ),
                         ),
                         Text(
                           ' • ',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                    fontSize: 12,
-                                  ),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: Theme.of(context).hintColor,
+                                fontSize: 12,
+                              ),
                         ),
                         Text(
                           numberOfOptionVotes == 0
                               ? 'No votes yet'
                               : numberOfOptionVotes == 1
-                                  ? '1 vote'
-                                  : ' ${THelperFunctions.humanizeNumber(numberOfOptionVotes)} votes',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                    fontSize: 12,
-                                  ),
+                              ? '1 vote'
+                              : ' ${THelperFunctions.humanizeNumber(numberOfOptionVotes)} votes',
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: Theme.of(context).hintColor,
+                                fontSize: 12,
+                              ),
                         ),
                       ],
                     ),
@@ -158,7 +172,9 @@ class PollOptionsCard extends ConsumerWidget {
             ),
           ),
         );
+        return optionWidget;
       },
     );
+    return listView;
   }
 }

@@ -47,19 +47,15 @@ class ContentImageViewer extends ConsumerWidget {
     }
 
     Widget buildSingle(String image) {
-      final tag = 'post-image-${image.hashCode}';
       return GestureDetector(
         onTap: () => openGallery(image),
-        child: Hero(
-          tag: tag,
-          child: FadeInImage(
-            placeholderColor: Theme.of(context).cardColor,
-            image: regex.hasMatch(image)
-                ? CachedNetworkImageProvider(image)
-                : FileImage(File(image)) as ImageProvider,
-            placeholder: MemoryImage(kTransparentImage),
-            fit: BoxFit.cover,
-          ),
+        child: FadeInImage(
+          placeholderColor: Theme.of(context).cardColor,
+          image: regex.hasMatch(image)
+              ? CachedNetworkImageProvider(image)
+              : FileImage(File(image)) as ImageProvider,
+          placeholder: MemoryImage(kTransparentImage),
+          fit: BoxFit.cover,
         ),
       );
     }

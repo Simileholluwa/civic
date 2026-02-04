@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'post_detail_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<PostWithUserState> postDetail(
   Ref ref,
   int id,

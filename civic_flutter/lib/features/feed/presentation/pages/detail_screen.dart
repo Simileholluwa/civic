@@ -39,8 +39,8 @@ class DetailScreen extends ConsumerWidget {
           title: Text(
             'Details',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                  fontSize: 23,
-                ),
+              fontSize: 23,
+            ),
           ),
           centerTitle: false,
           titleSpacing: 0,
@@ -56,8 +56,7 @@ class DetailScreen extends ConsumerWidget {
             asyncPost.when(
               data: (value) {
                 final postData = value.post;
-                final userId =
-                    ref.read(localStorageProvider).getInt('userId');
+                final userId = ref.read(localStorageProvider).getInt('userId');
                 final isOwner = postData.ownerId == userId;
                 final isSubscribed = ref.watch(
                   feedButtonsProvider(PostWithUserStateKey(value)).select(
@@ -84,8 +83,8 @@ class DetailScreen extends ConsumerWidget {
                         color: isOwner
                             ? Theme.of(context).disabledColor
                             : isSubscribed
-                                ? TColors.primary
-                                : Theme.of(context).iconTheme.color,
+                            ? TColors.primary
+                            : Theme.of(context).iconTheme.color,
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -100,8 +99,9 @@ class DetailScreen extends ConsumerWidget {
         body: asyncPost.when(
           data: (value) {
             final likes = ref.watch(
-              feedButtonsProvider(PostWithUserStateKey(value))
-                  .select((s) => s.numberOfLikes),
+              feedButtonsProvider(
+                PostWithUserStateKey(value),
+              ).select((s) => s.numberOfLikes),
             );
             final formattedLikes = FeedHelperFunctions.humanizeNumber(
               likes,
@@ -158,7 +158,9 @@ class DetailScreen extends ConsumerWidget {
                   else
                     Column(
                       children: [
-                        if (postType == PostType.regular || postType == PostType.comment || postType == PostType.commentReply)
+                        if (postType == PostType.regular ||
+                            postType == PostType.comment ||
+                            postType == PostType.commentReply)
                           RepaintBoundary(
                             child: PostCardDetail(
                               postWithUserState: value,
@@ -175,6 +177,7 @@ class DetailScreen extends ConsumerWidget {
                                 PollCard(
                                   postWithUserState: value,
                                   showInteractions: false,
+                                  noMaxlines: true,
                                 ),
                                 const Divider(
                                   height: 0,
@@ -196,22 +199,23 @@ class DetailScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          DateFormat('hh:mm a • MMM d, y')
-                              .format(value.post.dateCreated!),
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                  ),
+                          DateFormat(
+                            'hh:mm a • MMM d, y',
+                          ).format(value.post.dateCreated!),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: Theme.of(context).hintColor,
+                              ),
                         ),
                         if (likes > 0)
                           Text(
                             likes == 1
                                 ? '$formattedLikes like'
                                 : '$formattedLikes likes',
-                            style:
-                                Theme.of(context).textTheme.labelMedium!.copyWith(
-                                      color: Theme.of(context).hintColor,
-                                    ),
+                            style: Theme.of(context).textTheme.labelMedium!
+                                .copyWith(
+                                  color: Theme.of(context).hintColor,
+                                ),
                           ),
                       ],
                     ),
