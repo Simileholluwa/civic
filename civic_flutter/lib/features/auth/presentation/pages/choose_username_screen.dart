@@ -25,6 +25,7 @@ class UsernameScreen extends StatelessWidget {
             top: TSizes.defaultSpace,
           ),
           child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthHeader(
                 authTitle: 'Confirm your details',

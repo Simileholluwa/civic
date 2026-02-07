@@ -8,7 +8,6 @@ import 'package:iconsax/iconsax.dart';
 Future<bool?> deleteProjectBottomSheet(
   BuildContext context,
   ProjectWithUserState projectWithUserState,
-  bool fromDetails,
 ) {
   return showModalBottomSheet(
     context: context,

@@ -40,20 +40,11 @@ class NetworkScreen extends ConsumerWidget {
                   width: 5,
                 ),
               ],
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'NETWORK',
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          fontSize: 25,
-                        ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 21, left: 1),
-                    child: AppDecorationDot(),
-                  ),
-                ],
+              title: Text(
+                'NETWORK',
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: 25,
+                    ),
               ),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50),

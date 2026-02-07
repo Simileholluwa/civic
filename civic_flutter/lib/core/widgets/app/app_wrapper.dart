@@ -20,8 +20,8 @@ class AppWrapper extends ConsumerWidget {
       '/notifications',
       '/create',
     ];
-    final location =
-        navigatorShell.shellRouteContext.routerState.uri.toString();
+    final location = navigatorShell.shellRouteContext.routerState.uri
+        .toString();
     final isMainTab = mainTabLocations.contains(location);
     final bottomNavVisible = ref.watch(bottomNavVisibilityProvider);
     final showBottomNav = isMainTab && bottomNavVisible;

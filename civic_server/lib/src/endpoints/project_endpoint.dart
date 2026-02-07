@@ -2476,7 +2476,7 @@ class ProjectEndpoint extends Endpoint {
     return text;
   }
 
-  /// Builds `PostCounts` from a `Post` row.
+  /// Builds `ProjectCounts` from a `Project` row.
   @doNotGenerate
   ProjectCounts _buildProjectCounts(Project project) {
     return ProjectCounts(

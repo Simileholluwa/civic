@@ -19,6 +19,7 @@ class PoliticalStatusScreen extends StatelessWidget {
             TSizes.defaultSpace,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthHeader(
                 authTitle: 'Political status',

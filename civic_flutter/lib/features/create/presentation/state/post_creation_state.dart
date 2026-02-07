@@ -88,6 +88,11 @@ class PostCreationState {
       focusNode: article == null ? null : FocusNode(),
       scrollController: article == null ? null : ScrollController(),
       articleController: QuillController(
+        config: const QuillControllerConfig(
+          clipboardConfig: QuillClipboardConfig(
+            enableExternalRichPaste: false,
+          ),
+        ),
         document: document,
         selection: const TextSelection.collapsed(offset: 0),
       ),

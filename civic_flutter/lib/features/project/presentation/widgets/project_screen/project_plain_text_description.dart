@@ -39,7 +39,7 @@ class ProjectPlainTextDescription extends StatelessWidget {
       text: description,
       onToggleTextTap: () {},
       hasImage: true,
-      maxLines: 2,
+      maxLines: 3,
     );
   }
 }

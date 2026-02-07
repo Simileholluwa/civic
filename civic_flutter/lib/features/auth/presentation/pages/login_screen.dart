@@ -27,6 +27,7 @@ class LoginScreen extends ConsumerWidget {
             top: TSizes.defaultSpace,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthHeader(
                 authTitle: authState.firstName == ''

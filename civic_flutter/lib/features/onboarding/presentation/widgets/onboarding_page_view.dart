@@ -1,5 +1,4 @@
 import 'package:civic_flutter/core/constants/sizes.dart';
-import 'package:civic_flutter/core/widgets/app/app_decoration_dot.dart';
 import 'package:civic_flutter/features/onboarding/domain/entities/onboarding_entity.dart';
 import 'package:civic_flutter/features/onboarding/presentation/widgets/vector_image_container.dart';
 import 'package:flutter/material.dart';
@@ -20,31 +19,15 @@ class OnBoardingPageView extends StatelessWidget {
         top: TSizes.defaultSpace + 30,
       ),
       child: Column(
+        spacing: 8,
         children: [
           VectorImageContainer(imagePath: onboardingEntity.image),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                onboardingEntity.title,
-                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 30,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                width: 3,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(
-                  top: TSizes.md + 10,
+          Text(
+            onboardingEntity.title,
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 30,
                 ),
-                child: AppDecorationDot(),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: TSizes.sm,
+            textAlign: TextAlign.center,
           ),
           Text(
             onboardingEntity.subTitle,

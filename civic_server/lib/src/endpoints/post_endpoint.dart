@@ -1486,7 +1486,25 @@ class PostEndpoint extends Endpoint {
 
         unawaited(notifyTaggedOrMentionedUsers(session, user, sentPost));
 
-        return sentPost.copyWith(owner: user, project: selectedProject);
+        final serverPost = await Post.db.findById(
+          session,
+          sentPost.id!,
+          include: Post.include(
+            owner: UserRecord.include(userInfo: UserInfo.include()),
+            project: Project.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+              projectMediaAssets: MediaAsset.includeList(),
+            ),
+          ),
+          transaction: transaction,
+        );
+
+        if (serverPost == null) {
+          throw ServerSideException(
+            message: 'Something went wrong while creating your quote post.',
+          );
+        }
+        return serverPost;
       }
     });
   }
@@ -2150,6 +2168,20 @@ class PostEndpoint extends Endpoint {
             parent: Post.include(
               owner: UserRecord.include(userInfo: UserInfo.include()),
               mediaAssets: MediaAsset.includeList(),
+              project: Project.include(
+                owner: UserRecord.include(userInfo: UserInfo.include()),
+              ),
+              poll: Poll.include(options: PollOption.includeList()),
+              article: Article.include(),
+              parent: Post.include(
+                owner: UserRecord.include(userInfo: UserInfo.include()),
+                mediaAssets: MediaAsset.includeList(),
+                project: Project.include(
+                  owner: UserRecord.include(userInfo: UserInfo.include()),
+                ),
+                poll: Poll.include(options: PollOption.includeList()),
+                article: Article.include(),
+              ),
             ),
           ),
         ),
@@ -2511,7 +2543,7 @@ class PostEndpoint extends Endpoint {
     // Invalidate common bookmark cache keys (pages 1-5, common limits)
     final commonLimits = [10, 20, 50];
     final commonPages = [1, 2, 3, 4, 5];
-    
+
     final futures = <Future<void>>[];
     for (final limit in commonLimits) {
       for (final page in commonPages) {
@@ -2520,7 +2552,7 @@ class PostEndpoint extends Endpoint {
         );
       }
     }
-    
+
     await Future.wait(futures);
   }
 

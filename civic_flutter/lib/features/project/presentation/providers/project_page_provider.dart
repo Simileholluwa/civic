@@ -91,6 +91,17 @@ class ProjectDetailsTabController extends _$ProjectDetailsTabController {
 }
 
 @riverpod
+class ProjectDetailsBackPageTabController extends _$ProjectDetailsBackPageTabController {
+  @override
+  Raw<TabController> build() {
+    return TabController(
+      length: 3,
+      vsync: ref.watch(vsyncProvider),
+    );
+  }
+}
+
+@riverpod
 class ProjectDetailCurrentPage extends _$ProjectDetailCurrentPage {
   @override
   int build() => 0;

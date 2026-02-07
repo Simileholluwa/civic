@@ -70,21 +70,12 @@ class PostBookmarksScreen extends ConsumerWidget {
                     width: 5,
                   ),
                 ],
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'BOOKMARKS',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 25,
-                              ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 22, left: 1),
-                      child: AppDecorationDot(),
-                    ),
-                  ],
+                title: Text(
+                  'BOOKMARKS',
+                  style:
+                      Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontSize: 25,
+                          ),
                 ),
               ),
             ];

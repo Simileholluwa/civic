@@ -22,6 +22,7 @@ class EmailScreen extends StatelessWidget {
             top: TSizes.defaultSpace,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthHeader(
                 authTitle: 'E-mail address',

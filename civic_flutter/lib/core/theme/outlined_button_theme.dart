@@ -1,6 +1,5 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TOutlinedButtonTheme {
   TOutlinedButtonTheme._();
@@ -10,10 +9,11 @@ class TOutlinedButtonTheme {
       elevation: 0,
       foregroundColor: TColors.dark,
       side: const BorderSide(color: TColors.borderPrimary),
-      textStyle: GoogleFonts.montserrat(
+      textStyle: const TextStyle(
         fontSize: 20,
-        color: TColors.black,
+        color: TColors.textWhite,
         fontWeight: FontWeight.w600,
+        fontFamily: 'Jakarta',
       ),
       padding: const EdgeInsets.symmetric(
         vertical: TSizes.buttonHeight,
@@ -31,10 +31,11 @@ class TOutlinedButtonTheme {
     style: OutlinedButton.styleFrom(
       foregroundColor: TColors.light,
       side: const BorderSide(color: TColors.borderPrimary),
-      textStyle: GoogleFonts.montserrat(
+      textStyle: const TextStyle(
         fontSize: 20,
         color: TColors.textWhite,
         fontWeight: FontWeight.w600,
+        fontFamily: 'Jakarta',
       ),
       padding: const EdgeInsets.symmetric(
         vertical: TSizes.buttonHeight,

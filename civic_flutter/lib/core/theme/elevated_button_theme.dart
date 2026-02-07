@@ -1,6 +1,5 @@
 import 'package:civic_flutter/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TElevatedButtonTheme {
   TElevatedButtonTheme._();
@@ -14,10 +13,11 @@ class TElevatedButtonTheme {
       disabledBackgroundColor: TColors.buttonDisabled,
       side: const BorderSide(color: TColors.primary),
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
-      textStyle: GoogleFonts.montserrat(
+      textStyle: const TextStyle(
         fontSize: 20,
         color: TColors.textWhite,
         fontWeight: FontWeight.w600,
+        fontFamily: 'Jakarta',
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
@@ -32,10 +32,11 @@ class TElevatedButtonTheme {
       elevation: 0,
       side: const BorderSide(color: TColors.primary),
       padding: const EdgeInsets.symmetric(vertical: TSizes.buttonHeight),
-      textStyle: GoogleFonts.montserrat(
+      textStyle: const TextStyle(
         fontSize: 20,
         color: TColors.textWhite,
         fontWeight: FontWeight.w600,
+        fontFamily: 'Jakarta',
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(

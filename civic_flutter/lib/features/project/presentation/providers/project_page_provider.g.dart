@@ -227,6 +227,68 @@ abstract class _$ProjectDetailsTabController
   }
 }
 
+@ProviderFor(ProjectDetailsBackPageTabController)
+const projectDetailsBackPageTabControllerProvider =
+    ProjectDetailsBackPageTabControllerProvider._();
+
+final class ProjectDetailsBackPageTabControllerProvider
+    extends
+        $NotifierProvider<
+          ProjectDetailsBackPageTabController,
+          Raw<TabController>
+        > {
+  const ProjectDetailsBackPageTabControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'projectDetailsBackPageTabControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$projectDetailsBackPageTabControllerHash();
+
+  @$internal
+  @override
+  ProjectDetailsBackPageTabController create() =>
+      ProjectDetailsBackPageTabController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Raw<TabController> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Raw<TabController>>(value),
+    );
+  }
+}
+
+String _$projectDetailsBackPageTabControllerHash() =>
+    r'b3ef710a6f4fd90661c613f2d9df8726591f3e21';
+
+abstract class _$ProjectDetailsBackPageTabController
+    extends $Notifier<Raw<TabController>> {
+  Raw<TabController> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Raw<TabController>, Raw<TabController>>,
+              Raw<TabController>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ProjectDetailCurrentPage)
 const projectDetailCurrentPageProvider = ProjectDetailCurrentPageProvider._();
 

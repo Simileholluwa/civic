@@ -76,21 +76,12 @@ class ProjectBookmarksScreen extends ConsumerWidget {
                     width: 5,
                   ),
                 ],
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'BOOKMARKS',
-                      style:
-                          Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                fontSize: 25,
-                              ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 22, left: 1),
-                      child: AppDecorationDot(),
-                    ),
-                  ],
+                title: Text(
+                  'BOOKMARKS',
+                  style:
+                      Theme.of(context).textTheme.headlineLarge!.copyWith(
+                            fontSize: 25,
+                          ),
                 ),
               ),
             ];
@@ -98,9 +89,16 @@ class ProjectBookmarksScreen extends ConsumerWidget {
           body: AppInfiniteList<ProjectWithUserState>(
             pagingController: pagingState,
             canCreate: false,
-            itemBuilder: (_, projectWithUserState, _) {
-              return ProjectCard(
-                projectWithUserState: projectWithUserState,
+            itemBuilder: (_, projectWithUserState, index) {
+              return InkWell(
+                onTap: () async {
+                  await context.push(
+                    '/project/${projectWithUserState.project.id}',
+                  );
+                },
+                child: ProjectCardFrontPage(
+                  projectWithUserState: projectWithUserState,
+                ),
               );
             },
             onRefresh: pagingState.refresh,

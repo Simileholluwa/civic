@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/project/project.dart';
@@ -55,20 +54,11 @@ class ProjectsScreen extends ConsumerWidget {
                   width: 5,
                 ),
               ],
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'PROJECTS',
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 25,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 21, left: 1),
-                    child: AppDecorationDot(),
-                  ),
-                ],
+              title: Text(
+                'PROJECTS',
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 25,
+                ),
               ),
               bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(1),
@@ -88,8 +78,9 @@ class ProjectsScreen extends ConsumerWidget {
               '/create/project/0',
             );
           },
+          showDivider: false,
           itemBuilder: (_, projectWithUserState, _) {
-            return ProjectCard(
+            return ProjectCardFrontPage(
               projectWithUserState: projectWithUserState,
             );
           },

@@ -21,7 +21,7 @@ class ShowProjectActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userNotifier = ref.watch(currentActiveUserProvider.notifier);
+    final userNotifier = ref.read(currentActiveUserProvider.notifier);
     final projectProv = projectCardWidgetProvider(
       ProjectWithUserStateKey(
         projectWithUserState,
@@ -163,7 +163,6 @@ class ShowProjectActions extends ConsumerWidget {
               final res = await deleteProjectBottomSheet(
                 context,
                 projectWithUserState,
-                fromDetails,
               );
               if (res ?? false) {
                 unawaited(

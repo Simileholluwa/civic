@@ -89,7 +89,7 @@ class PoliticalStatusOptions extends ConsumerWidget {
                             )
                           : BorderRadius.zero,
                   color: isSelected
-                      ? Theme.of(context).highlightColor
+                      ? Theme.of(context).cardColor
                       : Colors.transparent,
                 ),
                 child: ListTile(
@@ -102,6 +102,7 @@ class PoliticalStatusOptions extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
+                  selected: isSelected,
                   subtitle: Text(
                     status.subTitle,
                     style: Theme.of(context).textTheme.labelLarge,

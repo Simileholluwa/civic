@@ -25,6 +25,7 @@ class NewPasswordScreen extends StatelessWidget {
             top: TSizes.defaultSpace,
           ),
           child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthHeader(
                 authTitle: 'Create new password',

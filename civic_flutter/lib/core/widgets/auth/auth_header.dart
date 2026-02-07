@@ -15,23 +15,12 @@ class AuthHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              authTitle,
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 30,
-                  ),
-              textAlign: TextAlign.start,
-            ),
-            const SizedBox(width: 3),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: TSizes.md + 10,
+        Text(
+          authTitle,
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                fontSize: 30,
               ),
-              child: AppDecorationDot(),
-            ),
-          ],
+          textAlign: TextAlign.start,
         ),
         const SizedBox(
           height: TSizes.sm,

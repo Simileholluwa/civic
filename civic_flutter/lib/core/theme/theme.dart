@@ -49,10 +49,12 @@ class TAppTheme {
       bottomNavigationBarElevation: 8,
       bottomNavigationBarLabelTextStyle: TextStyle(
         fontSize: 12,
-        fontFamily: 'Montserrat',
+        fontFamily: 'Jakarta',
       ),
       bottomNavigationBarSelectedLabelSize: 12,
       bottomNavigationBarUnselectedLabelSize: 12,
+      bottomNavigationBarBackgroundSchemeColor: SchemeColor.transparent,
+      bottomNavigationBarOpacity: 0,
       bottomSheetRadius: 16,
       bottomSheetBackgroundColor: SchemeColor.white,
       bottomNavigationBarSelectedLabelSchemeColor: SchemeColor.black,
@@ -66,27 +68,27 @@ class TAppTheme {
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     swapLegacyOnMaterial3: true,
-    fontFamily: 'Satoshi',
+    fontFamily: 'Jakarta',
   );
 
   static ThemeData darkTheme = FlexThemeData.dark(
@@ -131,9 +133,11 @@ class TAppTheme {
       bottomNavigationBarMutedUnselectedIcon: true,
       bottomNavigationBarElevation: 8,
       bottomNavigationBarType: BottomNavigationBarType.fixed,
+      bottomNavigationBarBackgroundSchemeColor: SchemeColor.transparent,
+      bottomNavigationBarOpacity: 0,
       bottomNavigationBarLabelTextStyle: TextStyle(
         fontSize: 12,
-        fontFamily: 'Montserrat',
+        fontFamily: 'Jakarta',
       ),
       bottomNavigationBarSelectedLabelSize: 12,
       bottomNavigationBarUnselectedLabelSize: 12,
@@ -144,26 +148,26 @@ class TAppTheme {
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
       outlinedButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
       filledButtonTextStyle: WidgetStatePropertyAll(
         TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+          fontFamily: 'Jakarta',
         ),
       ),
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     swapLegacyOnMaterial3: true,
-    fontFamily: 'Satoshi',
+    fontFamily: 'Jakarta',
   );
 }

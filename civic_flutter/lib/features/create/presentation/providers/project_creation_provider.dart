@@ -35,6 +35,11 @@ class CreateProjectNotif extends _$CreateProjectNotif {
           ..scrollController = ScrollController()
           ..descriptionFocusNode = FocusNode()
           ..quillController = QuillController(
+            config: const QuillControllerConfig(
+              clipboardConfig: QuillClipboardConfig(
+                enableExternalRichPaste: false,
+              ),
+            ),
             document:
                 project?.description != null &&
                     project!.description!.trim().isNotEmpty

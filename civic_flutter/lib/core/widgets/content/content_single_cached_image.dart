@@ -47,7 +47,7 @@ class ContentSingleCachedImage extends ConsumerWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(TSizes.md),
           child: AspectRatio(
-            aspectRatio: aspectRatio > 1.0 ? aspectRatio : 0.75,
+            aspectRatio: aspectRatio > 1.0 ? aspectRatio : 1.0,
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               fit: BoxFit.cover,

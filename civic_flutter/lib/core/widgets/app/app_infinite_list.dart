@@ -176,12 +176,16 @@ class AppEmptyList extends StatelessWidget {
     required this.canCreate,
     required this.createText,
     this.onCreate,
+    this.emptyText = 'Nothing Here.',
+    this.emptySubText = "We've searched far and wide, but we couldn't find any results.",
     super.key,
   });
 
   final bool canCreate;
   final VoidCallback? onCreate;
   final String createText;
+  final String emptyText;
+  final String emptySubText;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +194,7 @@ class AppEmptyList extends StatelessWidget {
       spacing: 10,
       children: [
         Text(
-          'Nothing Here.',
+          emptyText,
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                 color: Theme.of(context).hintColor,
                 fontSize: 30,
@@ -198,8 +202,7 @@ class AppEmptyList extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         Text(
-          "We've searched far and wide, but we couldn't "
-          'find any results.',
+          emptySubText,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 color: Theme.of(context).hintColor,
               ),
