@@ -3,15 +3,15 @@ table: project_review
 fields:
     owner: UserRecord?, relation(onDelete=Cascade)
     project: Project?, relation(onDelete=Cascade)
-    review: String?
-    locationRating: double?
-    descriptionRating: double?
-    attachmentsRating: double?
-    categoryRating: double?
-    fundingRating: double?
-    datesRating: double?
-    overallRating: double?
+    review: String?, default=''
+    locationRating: double?, default=0.0
+    descriptionRating: double?, default=0.0
+    attachmentsRating: double?, default=0.0
+    categoryRating: double?, default=0.0
+    fundingRating: double?, default=0.0
+    datesRating: double?, default=0.0
+    overallRating: double?, default=0.0
     dateCreated: DateTime?, default=now
     updatedAt: DateTime?
-    likedBy: List<int>?
-    dislikedBy: List<int>?
+    likesCount: int?, default = 0
+    dislikesCount: int?, default = 0

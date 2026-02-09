@@ -1,0 +1,5 @@
+class: ProjectReviewCounts
+fields:
+    projectReviewId: int
+    likesCount: int?, default = 0
+    dislikesCount: int?, default = 0

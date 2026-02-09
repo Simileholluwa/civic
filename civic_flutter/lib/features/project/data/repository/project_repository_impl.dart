@@ -247,7 +247,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectReview>> reactToReview({
+  Future<Either<Failure, void>> reactToReview({
     required int reviewId,
     required bool isLike,
   }) async {
@@ -267,7 +267,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<Either<Failure, ProjectVetting>> reactToVetting({
+  Future<Either<Failure, void>> reactToVetting({
     required int vettingId,
     required bool isLike,
   }) async {

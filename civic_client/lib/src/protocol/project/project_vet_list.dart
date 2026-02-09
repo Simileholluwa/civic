@@ -11,7 +11,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import '../project/project_vetting.dart' as _i2;
+import '../project/project_vetting_with_user_state.dart' as _i2;
 import 'package:civic_client/src/protocol/protocol.dart' as _i3;
 
 abstract class ProjectVetList implements _i1.SerializableModel {
@@ -25,7 +25,7 @@ abstract class ProjectVetList implements _i1.SerializableModel {
   });
 
   factory ProjectVetList({
-    required List<_i2.ProjectVetting> results,
+    required List<_i2.ProjectVettingWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -35,9 +35,10 @@ abstract class ProjectVetList implements _i1.SerializableModel {
 
   factory ProjectVetList.fromJson(Map<String, dynamic> jsonSerialization) {
     return ProjectVetList(
-      results: _i3.Protocol().deserialize<List<_i2.ProjectVetting>>(
-        jsonSerialization['results'],
-      ),
+      results: _i3.Protocol()
+          .deserialize<List<_i2.ProjectVettingWithUserState>>(
+            jsonSerialization['results'],
+          ),
       count: jsonSerialization['count'] as int,
       page: jsonSerialization['page'] as int,
       numPages: jsonSerialization['numPages'] as int,
@@ -46,7 +47,7 @@ abstract class ProjectVetList implements _i1.SerializableModel {
     );
   }
 
-  List<_i2.ProjectVetting> results;
+  List<_i2.ProjectVettingWithUserState> results;
 
   int count;
 
@@ -62,7 +63,7 @@ abstract class ProjectVetList implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ProjectVetList copyWith({
-    List<_i2.ProjectVetting>? results,
+    List<_i2.ProjectVettingWithUserState>? results,
     int? count,
     int? page,
     int? numPages,
@@ -90,7 +91,7 @@ abstract class ProjectVetList implements _i1.SerializableModel {
 
 class _ProjectVetListImpl extends ProjectVetList {
   _ProjectVetListImpl({
-    required List<_i2.ProjectVetting> results,
+    required List<_i2.ProjectVettingWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -110,7 +111,7 @@ class _ProjectVetListImpl extends ProjectVetList {
   @_i1.useResult
   @override
   ProjectVetList copyWith({
-    List<_i2.ProjectVetting>? results,
+    List<_i2.ProjectVettingWithUserState>? results,
     int? count,
     int? page,
     int? numPages,

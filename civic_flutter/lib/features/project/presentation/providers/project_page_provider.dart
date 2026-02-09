@@ -83,10 +83,16 @@ class ProjectTabController extends _$ProjectTabController {
 class ProjectDetailsTabController extends _$ProjectDetailsTabController {
   @override
   Raw<TabController> build() {
-    return TabController(
+    final controller = TabController(
       length: 4,
       vsync: ref.watch(vsyncProvider),
     );
+    controller.addListener(() {
+      ref.watch(projectDetailCurrentPageProvider.notifier).setCurrentPage =
+          controller.index;
+    });
+    ref.onDispose(controller.dispose);
+    return controller;
   }
 }
 

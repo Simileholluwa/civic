@@ -61,7 +61,8 @@ class ProjectVet extends _$ProjectVet {
 
   void isValid() {
     state = state.copyWith(
-      isValid: state.comment.isNotEmpty &&
+      isValid:
+          state.comment.isNotEmpty &&
           state.status != null &&
           state.images.isNotEmpty,
     );
@@ -137,21 +138,26 @@ class ProjectVet extends _$ProjectVet {
     if (newUpload.isEmpty) {
       return true;
     }
-    final result = await ref.read(assetServiceProvider).uploadMediaAssets(
+    final result = await ref
+        .read(assetServiceProvider)
+        .uploadMediaAssets(
           newUpload,
           'public/vettings',
         );
 
-    return result.fold((error) async {
-      return false;
-    }, (imageUrls) {
-      state = state.copyWith(
-        images: [
-          ...(existingUpload + imageUrls),
-        ],
-      );
-      return true;
-    });
+    return result.fold(
+      (error) async {
+        return false;
+      },
+      (imageUrls) {
+        state = state.copyWith(
+          images: [
+            ...(existingUpload + imageUrls),
+          ],
+        );
+        return true;
+      },
+    );
   }
 
   Future<bool> sendVetting(
@@ -181,25 +187,33 @@ class ProjectVet extends _$ProjectVet {
         projectVetting,
       ),
     );
-    return result.fold((error) {
-      TToastMessages.errorToast(
-        error.message,
-      );
-      setIsSending(false);
-      return false;
-    }, (success) {
-      final vettingList = ref.read(
-        paginatedProjectVettingListProvider.notifier,
-      );
-      TToastMessages.successToast(
-        'Your vetting has been succesfully submitted.',
-      );
-      if (vettingId == null) {
-        vettingList.addVetting(success);
-      }
-      setIsSending(false);
-      return true;
-    });
+    return result.fold(
+      (error) {
+        TToastMessages.errorToast(
+          error.message,
+        );
+        setIsSending(false);
+        return false;
+      },
+      (success) {
+        TToastMessages.successToast(
+          'Your vetting has been succesfully submitted.',
+        );
+
+        ref
+            .read(
+              paginatedProjectVettingListProvider.notifier,
+            )
+            .addVetting(
+              ProjectVettingWithUserState(
+                vetting: success,
+              ),
+            );
+
+        setIsSending(false);
+        return true;
+      },
+    );
   }
 
   Future<bool> deleteVetting(int vettingId) async {

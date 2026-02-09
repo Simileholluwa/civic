@@ -39,10 +39,10 @@ class ProjectReviewScreen extends ConsumerWidget {
             child: AppBar(
               titleSpacing: 4,
               title: Text(
-                'Review Project',
+                'REVIEW PROJECT',
                 style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 23,
-                    ),
+                  fontSize: 23,
+                ),
               ),
               centerTitle: true,
               automaticallyImplyLeading: false,
@@ -93,7 +93,7 @@ class ProjectReviewScreen extends ConsumerWidget {
             final projectReviewState = ref.watch(
               projectReviewProviderProvider(review),
             );
-            final projectReviewNotifier = ref.watch(
+            final projectReviewNotifier = ref.read(
               projectReviewProviderProvider(review).notifier,
             );
             if (projectReviewState.isEditing) {
@@ -111,12 +111,18 @@ class ProjectReviewScreen extends ConsumerWidget {
                   secondButtonOnPressed: projectReviewState.isDeleting
                       ? null
                       : () async {
-                          await ProjectHelperFunctions.deleteProjectReviewDialog(
-                            context,
-                            projectReviewNotifier,
-                            projectId,
-                            review!.id!,
-                          );
+                          final res =
+                              await ProjectHelperFunctions.deleteProjectReviewDialog(
+                                context,
+                                projectId,
+                                review!.id!,
+                              );
+                          if (res ?? false) {
+                            await projectReviewNotifier.deleteReview(
+                              projectId,
+                              review.id!,
+                            );
+                          }
                         },
                   secondButtonColor: Colors.red,
                   secondButtonIcon: Iconsax.trash,

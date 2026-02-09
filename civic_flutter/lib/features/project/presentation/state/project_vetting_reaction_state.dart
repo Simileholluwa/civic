@@ -1,6 +1,4 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectVettingReactionState {
   ProjectVettingReactionState({
@@ -11,17 +9,22 @@ class ProjectVettingReactionState {
     required this.isDisliked,
   });
 
+  ProjectVettingReactionState.empty()
+      : likesCount = 0,
+        dislikesCount = 0,
+        isLiked = false,
+        isDeleted = false,
+        isDisliked = false;
+
   factory ProjectVettingReactionState.populate(
-    ProjectVetting projectVetting,
-    Ref ref,
+    ProjectVettingWithUserState projectVettingWithUserState,
   ) {
-    final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectVettingReactionState(
-      likesCount: projectVetting.likedBy?.length ?? 0,
-      dislikesCount: projectVetting.dislikedBy?.length ?? 0,
-      isLiked: projectVetting.likedBy?.contains(userId) ?? false,
-      isDisliked: projectVetting.dislikedBy?.contains(userId) ?? false,
-      isDeleted: false,
+      likesCount: projectVettingWithUserState.vetting.likesCount!,
+      dislikesCount: projectVettingWithUserState.vetting.dislikesCount!,
+      isLiked: projectVettingWithUserState.hasLiked!,
+      isDisliked: projectVettingWithUserState.hasDisliked!,
+      isDeleted: projectVettingWithUserState.hasDeleted!,
     );
   }
   final int likesCount;
@@ -45,4 +48,11 @@ class ProjectVettingReactionState {
       isDeleted: isDeleted ?? this.isDeleted,
     );
   }
+}
+
+extension ProjectVettingReactionStateCounts on ProjectVettingReactionState {
+  ProjectVettingReactionState applyCounts(ProjectVettingsCount counts) => copyWith(
+    likesCount: counts.likesCount,
+    dislikesCount: counts.dislikesCount,
+  );
 }

@@ -1,0 +1,6 @@
+class: ProjectVettingWithUserState
+fields:
+    vetting: ProjectVetting
+    hasLiked: bool?, default=false
+    hasDisliked: bool?, default=false
+    hasDeleted: bool?, default=false

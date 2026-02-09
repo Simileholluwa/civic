@@ -374,8 +374,8 @@ class ProjectEndpoint extends Endpoint {
           session,
           projectReview.projectId,
           transaction: transaction,
-          include: Project.include(owner: UserRecord.include()),
         );
+
         if (project == null) {
           throw ServerSideException(
             message:
@@ -403,6 +403,9 @@ class ProjectEndpoint extends Endpoint {
             session,
             projectReview.id!,
             transaction: transaction,
+            include: ProjectReview.include(
+              owner: UserRecord.include(userInfo: UserInfo.include()),
+            ),
           );
           if (existingReview == null) {
             throw ServerSideException(message: 'Review not found');
@@ -497,18 +500,36 @@ class ProjectEndpoint extends Endpoint {
               ),
             );
 
-            await updateProject(session, updatedProject);
+            await updateProject(
+              session,
+              updatedProject,
+              transaction: transaction,
+            );
+
+            // Send an update to all clients subscribed to this project
+            session.messages.postMessage(
+              'project_rating_counts_${project.id}',
+              _buildProjectRatingCount(updatedProject),
+            );
           }
 
           final updatedReview = projectReview.copyWith(
-            likedBy: existingReview.likedBy,
-            dislikedBy: existingReview.dislikedBy,
             dateCreated: existingReview.dateCreated,
             updatedAt: DateTime.now(),
+            owner: user,
           );
-          await updateProjectReview(session, updatedReview);
-          // Also consolidate ratings into ProjectRating rows
-          await _upsertRatingsFromReview(session, updatedReview);
+
+          await updateProjectReview(
+            session,
+            updatedReview,
+            transaction: transaction,
+          );
+
+          await _upsertRatingsFromReview(
+            session,
+            updatedReview,
+            transaction: transaction,
+          );
           return updatedReview;
         } else {
           final oldCount = project.reviewsCount!;
@@ -581,7 +602,17 @@ class ProjectEndpoint extends Endpoint {
             ),
           );
 
-          await updateProject(session, updatedProject);
+          await updateProject(
+            session,
+            updatedProject,
+            transaction: transaction,
+          );
+
+          // Send an update to all clients subscribed to this project
+          session.messages.postMessage(
+            'project_rating_counts_${project.id}',
+            _buildProjectRatingCount(updatedProject),
+          );
 
           final sentReview = await ProjectReview.db.insertRow(
             session,
@@ -589,14 +620,15 @@ class ProjectEndpoint extends Endpoint {
               ownerId: user.id,
               owner: user,
               dateCreated: DateTime.now(),
-              likedBy: [],
-              dislikedBy: [],
             ),
             transaction: transaction,
           );
 
-          // Consolidate ratings into ProjectRating rows for reporting/analytics
-          await _upsertRatingsFromReview(session, sentReview);
+          await _upsertRatingsFromReview(
+            session,
+            sentReview,
+            transaction: transaction,
+          );
 
           if (project.ownerId != user.id) {
             unawaited(
@@ -640,8 +672,6 @@ class ProjectEndpoint extends Endpoint {
 
           return sentReview;
         }
-      } on ServerSideException {
-        rethrow;
       } catch (e, stackTrace) {
         session.log(
           'Error in saveProjectReview: $e',
@@ -718,6 +748,12 @@ class ProjectEndpoint extends Endpoint {
             reviewsCount: 0,
           );
           await updateProject(session, updatedProject);
+          
+          // Send an update to all clients subscribed to this project
+          session.messages.postMessage(
+            'project_rating_counts_${project.id}',
+            _buildProjectRatingCount(updatedProject),
+          );
         } else {
           final newCount = currentCount - 1;
 
@@ -783,6 +819,12 @@ class ProjectEndpoint extends Endpoint {
           );
 
           await updateProject(session, updatedProject);
+
+          // Send an update to all clients subscribed to this project
+          session.messages.postMessage(
+            'project_rating_counts_${project.id}',
+            _buildProjectRatingCount(updatedProject),
+          );
         }
 
         // Delete consolidated rating rows linked to this review
@@ -1065,7 +1107,7 @@ class ProjectEndpoint extends Endpoint {
         (p.vettingsCount! * 4);
   }
 
-  /// Retrieves a paginated list of project reviews for a specific project.
+  /// Retrieves a paginated list of project reviews for a specific project, with sorting and ordering options.
   ///
   /// Parameters
   /// [projectId]: The ID of the project to fetch reviews for.
@@ -1073,6 +1115,8 @@ class ProjectEndpoint extends Endpoint {
   /// [page]: The page number to retrieve (default is 1).
   /// [rating]: An optional rating value to filter reviews by a specific rating category.
   /// [cardinal]: The rating category to filter by (e.g., 'Location', 'Description', etc.).
+  /// [sortBy]: The field to sort by: 'recent', 'liked', 'disliked'. Defaults to 'recent'.
+  /// [order]: 'asc' for ascending, 'desc' for descending. Defaults to 'desc'.
   ///
   /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
   ///
@@ -1086,6 +1130,8 @@ class ProjectEndpoint extends Endpoint {
     int page = 1,
     double? rating,
     String? cardinal,
+    String sortBy = 'recent',
+    String order = 'desc',
   }) async {
     try {
       if (limit <= 0 || page <= 0) {
@@ -1116,10 +1162,26 @@ class ProjectEndpoint extends Endpoint {
       // Construct final where clause
       whereClause(t) => filters.reduce((a, b) => a & b);
 
+      // Determine orderBy and orderDescending
+      Column Function(ProjectReviewTable t) orderByField;
+      bool orderDescending = order != 'asc';
+      switch (sortBy) {
+        case 'liked':
+          orderByField = (t) => t.likesCount;
+          break;
+        case 'disliked':
+          orderByField = (t) => t.dislikesCount;
+          break;
+        case 'recent':
+        default:
+          orderByField = (t) => t.dateCreated;
+      }
+
       // Get count with filters applied
       final count = await ProjectReview.db.count(session, where: whereClause);
 
       // Fetch results with filters
+      final user = await authUser(session);
       final results = await ProjectReview.db.find(
         session,
         limit: limit,
@@ -1128,15 +1190,71 @@ class ProjectEndpoint extends Endpoint {
           owner: UserRecord.include(userInfo: UserInfo.include()),
         ),
         where: whereClause,
-        orderBy: (t) => t.dateCreated,
-        orderDescending: true,
+        orderBy: (t) => orderByField(t),
+        orderDescending: orderDescending,
       );
+
+      // Bulk fetch user interactions for these reviews
+      final reviewIds = results.map((r) => r.id!).toSet();
+
+      Future<Set<int>> reviewIdsFor<T>(
+        Future<List<T>> future,
+        int Function(T) idGetter,
+      ) async {
+        final rows = await future;
+        return rows.map(idGetter).toSet();
+      }
+
+      final likedSet = await reviewIdsFor(
+        ProjectReviewReaction.db.find(
+          session,
+          where: (t) =>
+              t.reviewId.inSet(reviewIds) &
+              t.ownerId.equals(user.id) &
+              t.isLike.equals(true) &
+              t.isDeleted.equals(false),
+        ),
+        (r) => r.reviewId,
+      );
+      final dislikedSet = await reviewIdsFor(
+        ProjectReviewReaction.db.find(
+          session,
+          where: (t) =>
+              t.reviewId.inSet(reviewIds) &
+              t.ownerId.equals(user.id) &
+              t.isLike.equals(false) &
+              t.isDeleted.equals(false),
+        ),
+        (r) => r.reviewId,
+      );
+      final deletedSet = await reviewIdsFor(
+        ProjectReviewReaction.db.find(
+          session,
+          where: (t) =>
+              t.reviewId.inSet(reviewIds) &
+              t.ownerId.equals(user.id) &
+              t.isDeleted.equals(true),
+        ),
+        (r) => r.reviewId,
+      );
+
+      // Compose ProjectReviewWithUserState objects
+      final reviewStates = results
+          .map(
+            (review) => ProjectReviewWithUserState(
+              review: review,
+              hasLiked: likedSet.contains(review.id!),
+              hasDisliked: dislikedSet.contains(review.id!),
+              hasDeleted: deletedSet.contains(review.id!),
+            ),
+          )
+          .toList();
 
       return ProjectReviewList(
         count: count,
         limit: limit,
         page: page,
-        results: results,
+        results: reviewStates,
         numPages: (count / limit).ceil(),
         canLoadMore: page * limit < count,
       );
@@ -1202,19 +1320,12 @@ class ProjectEndpoint extends Endpoint {
   /// - [isLike]: `true` for a like, `false` for a dislike.
   ///
   /// Returns the updated [ProjectReview] object.
-  Future<ProjectReview> reactToReview(
-    Session session,
-    int reviewId,
-    bool isLike,
-  ) async {
-    ProjectReview? review;
-    ProjectReviewReaction? existingReaction;
-    ProjectReviewReaction? newReaction;
-    final user = await authUser(session);
+  Future<void> reactToReview(Session session, int reviewId, bool isLike) async {
     await session.db.transaction((transaction) async {
       try {
-        // Fetch the review
-        review = await ProjectReview.db.findById(
+        final user = await authUser(session, transaction: transaction);
+
+        final review = await ProjectReview.db.findById(
           session,
           reviewId,
           transaction: transaction,
@@ -1226,55 +1337,62 @@ class ProjectEndpoint extends Endpoint {
           );
         }
 
-        // Check for an existing reaction
-        existingReaction = await ProjectReviewReaction.db.findFirstRow(
+        final existingReaction = await ProjectReviewReaction.db.findFirstRow(
           session,
           where: (r) => r.reviewId.equals(reviewId) & r.ownerId.equals(user.id),
           transaction: transaction,
         );
-
         if (existingReaction != null) {
-          if (existingReaction!.isDeleted ?? false) {
-            // Reactivate a soft-deleted reaction
-            existingReaction!.isLike = isLike;
-            existingReaction!.isDeleted = false;
+          if (existingReaction.isDeleted ?? false) {
+            existingReaction.isLike = isLike;
+            existingReaction.isDeleted = false;
             await ProjectReviewReaction.db.updateRow(
               session,
-              existingReaction!,
-              transaction: transaction,
-            );
-            isLike
-                ? review!.likedBy?.add(user.id!)
-                : review!.dislikedBy?.add(user.id!);
-          } else if (existingReaction!.isLike == isLike) {
-            existingReaction!.isDeleted = true;
-            await ProjectReviewReaction.db.updateRow(
-              session,
-              existingReaction!,
-              transaction: transaction,
-            );
-            isLike
-                ? review!.likedBy?.remove(user.id!)
-                : review!.dislikedBy?.remove(user.id!);
-          } else {
-            // Switch between like and dislike
-            existingReaction!.isLike = isLike;
-            await ProjectReviewReaction.db.updateRow(
-              session,
-              existingReaction!,
+              existingReaction,
               transaction: transaction,
             );
             if (isLike) {
-              review!.likedBy?.add(user.id!);
-              review!.dislikedBy?.remove(user.id);
+              review.likesCount = (review.likesCount ?? 0) + 1;
             } else {
-              review!.likedBy?.remove(user.id);
-              review!.dislikedBy?.add(user.id!);
+              review.dislikesCount = (review.dislikesCount ?? 0) + 1;
             }
+          } else if (existingReaction.isLike == isLike) {
+            existingReaction.isDeleted = true;
+            await ProjectReviewReaction.db.updateRow(
+              session,
+              existingReaction,
+              transaction: transaction,
+            );
+            if (isLike) {
+              review.likesCount = ((review.likesCount ?? 0) > 0)
+                  ? (review.likesCount! - 1)
+                  : 0;
+            } else {
+              review.dislikesCount = ((review.dislikesCount ?? 0) > 0)
+                  ? (review.dislikesCount! - 1)
+                  : 0;
+            }
+          } else {
+            if (existingReaction.isLike == true && isLike == false) {
+              review.likesCount = ((review.likesCount ?? 0) > 0)
+                  ? (review.likesCount! - 1)
+                  : 0;
+              review.dislikesCount = (review.dislikesCount ?? 0) + 1;
+            } else if (existingReaction.isLike == false && isLike == true) {
+              review.dislikesCount = ((review.dislikesCount ?? 0) > 0)
+                  ? (review.dislikesCount! - 1)
+                  : 0;
+              review.likesCount = (review.likesCount ?? 0) + 1;
+            }
+            existingReaction.isLike = isLike;
+            await ProjectReviewReaction.db.updateRow(
+              session,
+              existingReaction,
+              transaction: transaction,
+            );
           }
         } else {
-          // Create a new reaction
-          newReaction = ProjectReviewReaction(
+          final newReaction = ProjectReviewReaction(
             ownerId: user.id!,
             reviewId: reviewId,
             isLike: isLike,
@@ -1282,37 +1400,37 @@ class ProjectEndpoint extends Endpoint {
           );
           await ProjectReviewReaction.db.insertRow(
             session,
-            newReaction!,
+            newReaction,
             transaction: transaction,
           );
-          isLike
-              ? review!.likedBy?.add(user.id!)
-              : review!.dislikedBy?.add(user.id!);
-
-          if (review!.ownerId != user.id) {
+          if (isLike) {
+            review.likesCount = (review.likesCount ?? 0) + 1;
+          } else {
+            review.dislikesCount = (review.dislikesCount ?? 0) + 1;
+          }
+          if (review.ownerId != user.id) {
             unawaited(
               NotificationEndpoint().sendNotification(
                 session,
-                receiverId: review!.ownerId,
+                receiverId: review.ownerId,
                 senderId: user.id!,
                 actionType: NotificationActionType.react,
                 targetType: NotificationTargetType.project,
                 senderAvatarUrl: user.userInfo!.imageUrl!,
-                targetId: review!.projectId,
+                targetId: review.projectId,
                 senderName: getFullName(
                   user.firstName!,
                   user.middleName,
                   user.lastName!,
                 ),
-                actionRoute: '/project/${review!.projectId}',
-                body: _getNotificationBody(review!.review ?? ''),
+                actionRoute: '/project/${review.projectId}',
+                body: _getNotificationBody(review.review ?? ''),
               ),
             );
           }
         }
 
-        // Update the like/dislike count on the review
-        await updateProjectReview(session, review!);
+        await updateProjectReview(session, review);
       } catch (e, stackTrace) {
         session.log(
           'Error in reactToReview: $e',
@@ -1323,7 +1441,6 @@ class ProjectEndpoint extends Endpoint {
         throw ServerSideException(message: e.toString());
       }
     });
-    return review!;
   }
 
   /// Handles user reactions (like or dislike) to a project vetting.
@@ -1344,19 +1461,16 @@ class ProjectEndpoint extends Endpoint {
   /// Parameters:
   /// - [vettingId]: The ID of the vetting to react to.
   /// - [isLike]: `true` for a like, `false` for a dislike.
-  Future<ProjectVetting> reactToVetting(
+  Future<void> reactToVetting(
     Session session,
     int vettingId,
     bool isLike,
   ) async {
-    ProjectVetting? vetting;
-    ProjectVettingReaction? existingReaction;
-    ProjectVettingReaction? newReaction;
-    final user = await authUser(session);
     await session.db.transaction((transaction) async {
       try {
+        final user = await authUser(session);
         // Fetch the review
-        vetting = await ProjectVetting.db.findById(
+        final vetting = await ProjectVetting.db.findById(
           session,
           vettingId,
           transaction: transaction,
@@ -1368,56 +1482,63 @@ class ProjectEndpoint extends Endpoint {
           );
         }
 
-        // Check for an existing reaction
-        existingReaction = await ProjectVettingReaction.db.findFirstRow(
+        final existingReaction = await ProjectVettingReaction.db.findFirstRow(
           session,
           where: (r) =>
               r.vettingId.equals(vettingId) & r.ownerId.equals(user.id),
           transaction: transaction,
         );
-
         if (existingReaction != null) {
-          if (existingReaction!.isDeleted ?? false) {
-            // Reactivate a soft-deleted reaction
-            existingReaction!.isLike = isLike;
-            existingReaction!.isDeleted = false;
+          if (existingReaction.isDeleted ?? false) {
+            existingReaction.isLike = isLike;
+            existingReaction.isDeleted = false;
             await ProjectVettingReaction.db.updateRow(
               session,
-              existingReaction!,
-              transaction: transaction,
-            );
-            isLike
-                ? vetting!.likedBy?.add(user.id!)
-                : vetting!.dislikedBy?.add(user.id!);
-          } else if (existingReaction!.isLike == isLike) {
-            existingReaction!.isDeleted = true;
-            await ProjectVettingReaction.db.updateRow(
-              session,
-              existingReaction!,
-              transaction: transaction,
-            );
-            isLike
-                ? vetting!.likedBy?.remove(user.id!)
-                : vetting!.dislikedBy?.remove(user.id!);
-          } else {
-            // Switch between like and dislike
-            existingReaction!.isLike = isLike;
-            await ProjectVettingReaction.db.updateRow(
-              session,
-              existingReaction!,
+              existingReaction,
               transaction: transaction,
             );
             if (isLike) {
-              vetting!.likedBy?.add(user.id!);
-              vetting!.dislikedBy?.remove(user.id);
+              vetting.likesCount = (vetting.likesCount ?? 0) + 1;
             } else {
-              vetting!.likedBy?.remove(user.id);
-              vetting!.dislikedBy?.add(user.id!);
+              vetting.dislikesCount = (vetting.dislikesCount ?? 0) + 1;
             }
+          } else if (existingReaction.isLike == isLike) {
+            existingReaction.isDeleted = true;
+            await ProjectVettingReaction.db.updateRow(
+              session,
+              existingReaction,
+              transaction: transaction,
+            );
+            if (isLike) {
+              vetting.likesCount = ((vetting.likesCount ?? 0) > 0)
+                  ? (vetting.likesCount! - 1)
+                  : 0;
+            } else {
+              vetting.dislikesCount = ((vetting.dislikesCount ?? 0) > 0)
+                  ? (vetting.dislikesCount! - 1)
+                  : 0;
+            }
+          } else {
+            if (existingReaction.isLike == true && isLike == false) {
+              vetting.likesCount = ((vetting.likesCount ?? 0) > 0)
+                  ? (vetting.likesCount! - 1)
+                  : 0;
+              vetting.dislikesCount = (vetting.dislikesCount ?? 0) + 1;
+            } else if (existingReaction.isLike == false && isLike == true) {
+              vetting.dislikesCount = ((vetting.dislikesCount ?? 0) > 0)
+                  ? (vetting.dislikesCount! - 1)
+                  : 0;
+              vetting.likesCount = (vetting.likesCount ?? 0) + 1;
+            }
+            existingReaction.isLike = isLike;
+            await ProjectVettingReaction.db.updateRow(
+              session,
+              existingReaction,
+              transaction: transaction,
+            );
           }
         } else {
-          // Create a new reaction
-          newReaction = ProjectVettingReaction(
+          final newReaction = ProjectVettingReaction(
             ownerId: user.id!,
             vettingId: vettingId,
             isLike: isLike,
@@ -1425,37 +1546,37 @@ class ProjectEndpoint extends Endpoint {
           );
           await ProjectVettingReaction.db.insertRow(
             session,
-            newReaction!,
+            newReaction,
             transaction: transaction,
           );
-          isLike
-              ? vetting!.likedBy?.add(user.id!)
-              : vetting!.dislikedBy?.add(user.id!);
-
-          if (vetting!.ownerId != user.id) {
+          if (isLike) {
+            vetting.likesCount = (vetting.likesCount ?? 0) + 1;
+          } else {
+            vetting.dislikesCount = (vetting.dislikesCount ?? 0) + 1;
+          }
+          if (vetting.ownerId != user.id) {
             unawaited(
               NotificationEndpoint().sendNotification(
                 session,
-                receiverId: vetting!.ownerId,
+                receiverId: vetting.ownerId,
                 senderId: user.id!,
                 actionType: NotificationActionType.react,
                 targetType: NotificationTargetType.project,
                 senderAvatarUrl: user.userInfo!.imageUrl!,
-                targetId: vetting!.id!,
+                targetId: vetting.id!,
                 senderName: getFullName(
                   user.firstName!,
                   user.middleName,
                   user.lastName!,
                 ),
-                actionRoute: '/project/${vetting!.projectId}',
-                body: _getNotificationBody(vetting!.comment ?? ''),
+                actionRoute: '/project/${vetting.projectId}',
+                body: _getNotificationBody(vetting.comment ?? ''),
               ),
             );
           }
         }
-
         // Update the like/dislike count on the vetting
-        await updateProjectVetting(session, vetting!);
+        await updateProjectVetting(session, vetting);
       } catch (e, stackTrace) {
         session.log(
           'Error in reactToReview: $e',
@@ -1466,7 +1587,6 @@ class ProjectEndpoint extends Endpoint {
         throw ServerSideException(message: e.toString());
       }
     });
-    return vetting!;
   }
 
   /// Deletes a project by marking it as deleted.
@@ -1755,7 +1875,7 @@ class ProjectEndpoint extends Endpoint {
           await updateProject(session, newProject);
           final newVetting = await ProjectVetting.db.insertRow(
             session,
-            projectVetting.copyWith(likedBy: [], dislikedBy: []),
+            projectVetting,
             transaction: transaction,
           );
 
@@ -1874,6 +1994,7 @@ class ProjectEndpoint extends Endpoint {
       throw ServerSideException(message: 'Invalid pagination parameters');
     }
 
+    final user = await authUser(session);
     final count = await ProjectVetting.db.count(session);
     final results = await ProjectVetting.db.find(
       session,
@@ -1886,11 +2007,67 @@ class ProjectEndpoint extends Endpoint {
       orderDescending: true,
     );
 
+    // Bulk fetch user interactions for these vettings
+    final vettingIds = results.map((v) => v.id!).toSet();
+
+    Future<Set<int>> vettingIdsFor<T>(
+      Future<List<T>> future,
+      int Function(T) idGetter,
+    ) async {
+      final rows = await future;
+      return rows.map(idGetter).toSet();
+    }
+
+    final likedSet = await vettingIdsFor(
+      ProjectVettingReaction.db.find(
+        session,
+        where: (t) =>
+            t.vettingId.inSet(vettingIds) &
+            t.ownerId.equals(user.id) &
+            t.isLike.equals(true) &
+            t.isDeleted.equals(false),
+      ),
+      (r) => r.vettingId,
+    );
+    final dislikedSet = await vettingIdsFor(
+      ProjectVettingReaction.db.find(
+        session,
+        where: (t) =>
+            t.vettingId.inSet(vettingIds) &
+            t.ownerId.equals(user.id) &
+            t.isLike.equals(false) &
+            t.isDeleted.equals(false),
+      ),
+      (r) => r.vettingId,
+    );
+    final deletedSet = await vettingIdsFor(
+      ProjectVettingReaction.db.find(
+        session,
+        where: (t) =>
+            t.vettingId.inSet(vettingIds) &
+            t.ownerId.equals(user.id) &
+            t.isDeleted.equals(true),
+      ),
+      (r) => r.vettingId,
+    );
+
+    // Compose ProjectVettingWithUserState objects
+    final vettingStates = results
+        .map(
+          (vetting) => ProjectVettingWithUserState(
+            vetting: vetting,
+            hasLiked: likedSet.contains(vetting.id),
+            hasDisliked: dislikedSet.contains(vetting.id),
+            hasDeleted: deletedSet.contains(vetting.id),
+          ),
+        )
+        .toList();
+
     return ProjectVetList(
       count: count,
       limit: limit,
       page: page,
-      results: results,
+      results: vettingStates,
       numPages: (count / limit).ceil(),
       canLoadMore: page * limit < count,
     );
@@ -1906,11 +2083,13 @@ class ProjectEndpoint extends Endpoint {
         final user = await authUser(session);
         final count = await ProjectBookmarks.db.count(
           session,
-          where: (t) => t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
+          where: (t) =>
+              t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
         );
         final bookmarks = await ProjectBookmarks.db.find(
           session,
-          where: (t) => t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
+          where: (t) =>
+              t.ownerId.equals(user.id!) & t.project.isDeleted.equals(false),
           limit: limit,
           offset: (page - 1) * limit,
           include: ProjectBookmarks.include(
@@ -2172,6 +2351,25 @@ class ProjectEndpoint extends Endpoint {
     }
   }
 
+  Stream<ProjectRatingCounts> projectRatingCountUpdates(
+    Session session,
+    int projectId,
+  ) async* {
+    // Create a message stream for this project
+    var updateStream = session.messages.createStream<ProjectRatingCounts>(
+      'project_rating_counts_$projectId',
+    );
+
+    // Yield the latest project details when the client subscribes
+    var project = await Project.db.findById(session, projectId);
+    if (project != null) yield _buildProjectRatingCount(project);
+
+    // Send updates when changes occur
+    await for (final counts in updateStream) {
+      yield counts;
+    }
+  }
+
   Future<void> subscribeToProject(Session session, int projectId) async {
     return await session.db.transaction((transaction) async {
       // Authenticate the user
@@ -2232,8 +2430,9 @@ class ProjectEndpoint extends Endpoint {
   @doNotGenerate
   Future<void> _upsertRatingsFromReview(
     Session session,
-    ProjectReview review,
-  ) async {
+    ProjectReview review, {
+    Transaction? transaction,
+  }) async {
     // helper to upsert one rating row
     Future<void> upsert({
       required RatingDimension dimension,
@@ -2247,6 +2446,7 @@ class ProjectEndpoint extends Endpoint {
             t.projectId.equals(review.projectId) &
             t.ownerId.equals(review.ownerId) &
             t.dimension.equals(dimension),
+        transaction: transaction,
       );
       if (existing != null) {
         await ProjectRating.db.updateRow(
@@ -2257,6 +2457,7 @@ class ProjectEndpoint extends Endpoint {
             updatedAt: DateTime.now(),
             isDeleted: false,
           ),
+          transaction: transaction,
         );
       } else {
         await ProjectRating.db.insertRow(
@@ -2270,6 +2471,7 @@ class ProjectEndpoint extends Endpoint {
             dateCreated: DateTime.now(),
             isDeleted: false,
           ),
+          transaction: transaction,
         );
       }
     }
@@ -2338,30 +2540,22 @@ class ProjectEndpoint extends Endpoint {
   /// Yields:
   ///   - The initial [ProjectReview] object (if found).
   ///   - Subsequent updates to the [ProjectReview] as they occur.
-  Stream<ProjectReview> projectReviewUpdates(
+  Stream<ProjectReviewCounts> projectReviewUpdates(
     Session session,
     int reviewId,
   ) async* {
     // Create a message stream for this project
-    var updateStream = session.messages.createStream<ProjectReview>(
-      'review_$reviewId',
+    var updateStream = session.messages.createStream<ProjectReviewCounts>(
+      'project_review_counts_$reviewId',
     );
 
     // Yield the latest project details when the client subscribes
-    var projectReview = await ProjectReview.db.findById(
-      session,
-      reviewId,
-      include: ProjectReview.include(
-        owner: UserRecord.include(userInfo: UserInfo.include()),
-      ),
-    );
-    if (projectReview != null) {
-      yield projectReview;
-    }
+    var review = await ProjectReview.db.findById(session, reviewId);
+    if (review != null) yield _buildProjectReviewCount(review);
 
     // Send updates when changes occur
-    await for (var projectReviewUpdate in updateStream) {
-      yield projectReviewUpdate.copyWith(owner: projectReview!.owner);
+    await for (final counts in updateStream) {
+      yield counts;
     }
   }
 
@@ -2378,12 +2572,20 @@ class ProjectEndpoint extends Endpoint {
   @doNotGenerate
   Future<void> updateProjectReview(
     Session session,
-    ProjectReview projectReview,
-  ) async {
-    await ProjectReview.db.updateRow(session, projectReview);
+    ProjectReview projectReview, {
+    Transaction? transaction,
+  }) async {
+    await ProjectReview.db.updateRow(
+      session,
+      projectReview,
+      transaction: transaction,
+    );
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage('review_${projectReview.id}', projectReview);
+    session.messages.postMessage(
+      'project_review_counts_${projectReview.id}',
+      _buildProjectReviewCount(projectReview),
+    );
   }
 
   /// Returns a stream of [ProjectVetting] updates for the specified [vettingId].
@@ -2398,30 +2600,22 @@ class ProjectEndpoint extends Endpoint {
   /// Yields:
   ///   - The initial [ProjectVetting] object if found.
   ///   - Any subsequent updates to the [ProjectVetting] object.
-  Stream<ProjectVetting> projectVettingUpdates(
+  Stream<ProjectVettingsCount> projectVettingUpdates(
     Session session,
     int vettingId,
   ) async* {
     // Create a message stream for this project
-    var updateStream = session.messages.createStream<ProjectVetting>(
-      'review_$vettingId',
+    var updateStream = session.messages.createStream<ProjectVettingsCount>(
+      'project_vetting_counts_$vettingId',
     );
 
     // Yield the latest project details when the client subscribes
-    var projectVetting = await ProjectVetting.db.findById(
-      session,
-      vettingId,
-      include: ProjectVetting.include(
-        owner: UserRecord.include(userInfo: UserInfo.include()),
-      ),
-    );
-    if (projectVetting != null) {
-      yield projectVetting;
-    }
+    var projectVetting = await ProjectVetting.db.findById(session, vettingId);
+    if (projectVetting != null) yield _buildProjectVettingCount(projectVetting);
 
     // Send updates when changes occur
-    await for (var projectVettingUpdate in updateStream) {
-      yield projectVettingUpdate.copyWith(owner: projectVetting!.owner);
+    await for (final counts in updateStream) {
+      yield counts;
     }
   }
 
@@ -2430,7 +2624,7 @@ class ProjectEndpoint extends Endpoint {
   ///
   /// This method performs the following actions:
   /// - Updates the [ProjectVetting] record in the database using the provided [session].
-  /// - Posts a message to all clients subscribed to the review channel for the specific project,
+  /// - Posts a message to all clients subscribed to the vetting channel for the specific project,
   ///   notifying them of the update.
   ///
   /// Parameters:
@@ -2444,7 +2638,10 @@ class ProjectEndpoint extends Endpoint {
     await ProjectVetting.db.updateRow(session, projectVetting);
 
     // Send an update to all clients subscribed to this project
-    session.messages.postMessage('review_${projectVetting.id}', projectVetting);
+    session.messages.postMessage(
+      'project_vetting_counts_${projectVetting.id}',
+      _buildProjectVettingCount(projectVetting),
+    );
   }
 
   @doNotGenerate
@@ -2488,6 +2685,41 @@ class ProjectEndpoint extends Endpoint {
       vettingsCount: project.vettingsCount ?? 0,
       impressionsCount: project.impressionsCount ?? 0,
       lastImpressionAt: project.lastImpressionAt,
+    );
+  }
+
+  @doNotGenerate
+  ProjectReviewCounts _buildProjectReviewCount(ProjectReview projectReview) {
+    return ProjectReviewCounts(
+      projectReviewId: projectReview.id!,
+      likesCount: projectReview.likesCount ?? 0,
+      dislikesCount: projectReview.dislikesCount ?? 0,
+    );
+  }
+
+  @doNotGenerate
+  ProjectVettingsCount _buildProjectVettingCount(
+    ProjectVetting projectVetting,
+  ) {
+    return ProjectVettingsCount(
+      projectVettingId: projectVetting.id!,
+      likesCount: projectVetting.likesCount ?? 0,
+      dislikesCount: projectVetting.dislikesCount ?? 0,
+    );
+  }
+
+  @doNotGenerate
+  ProjectRatingCounts _buildProjectRatingCount(Project project) {
+    return ProjectRatingCounts(
+      projectId: project.id!,
+      overallRating: project.overallRating,
+      overallLocationRating: project.overallLocationRating,
+      overallDescriptionRating: project.overallDescriptionRating,
+      overallAttachmentsRating: project.overallAttachmentsRating,
+      overallCategoryRating: project.overAllCategoryRating,
+      overallFundingRating: project.overallFundingRating,
+      overallDatesRating: project.overallDatesRating,
+      totalRating: project.reviewsCount,
     );
   }
 }

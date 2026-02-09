@@ -16,11 +16,11 @@ final class ReviewReactionProvider
     extends $NotifierProvider<ReviewReaction, ProjectReviewReactionState> {
   const ReviewReactionProvider._({
     required ReviewReactionFamily super.from,
-    required ProjectReview super.argument,
+    required ProjectReviewWithUserStateKey? super.argument,
   }) : super(
          retry: null,
          name: r'reviewReactionProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -58,7 +58,7 @@ final class ReviewReactionProvider
   }
 }
 
-String _$reviewReactionHash() => r'ce57572c0c8305dcd752b5a17ed4a45200a37ee9';
+String _$reviewReactionHash() => r'782f985b1f6285d202fec4745783b1fd7867fda7';
 
 final class ReviewReactionFamily extends $Family
     with
@@ -67,7 +67,7 @@ final class ReviewReactionFamily extends $Family
           ProjectReviewReactionState,
           ProjectReviewReactionState,
           ProjectReviewReactionState,
-          ProjectReview
+          ProjectReviewWithUserStateKey?
         > {
   const ReviewReactionFamily._()
     : super(
@@ -75,21 +75,21 @@ final class ReviewReactionFamily extends $Family
         name: r'reviewReactionProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
-  ReviewReactionProvider call(ProjectReview projectReview) =>
-      ReviewReactionProvider._(argument: projectReview, from: this);
+  ReviewReactionProvider call(ProjectReviewWithUserStateKey? key) =>
+      ReviewReactionProvider._(argument: key, from: this);
 
   @override
   String toString() => r'reviewReactionProvider';
 }
 
 abstract class _$ReviewReaction extends $Notifier<ProjectReviewReactionState> {
-  late final _$args = ref.$arg as ProjectReview;
-  ProjectReview get projectReview => _$args;
+  late final _$args = ref.$arg as ProjectReviewWithUserStateKey?;
+  ProjectReviewWithUserStateKey? get key => _$args;
 
-  ProjectReviewReactionState build(ProjectReview projectReview);
+  ProjectReviewReactionState build(ProjectReviewWithUserStateKey? key);
   @$mustCallSuper
   @override
   void runBuild() {

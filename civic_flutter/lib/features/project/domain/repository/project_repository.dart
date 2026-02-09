@@ -27,12 +27,12 @@ abstract class ProjectRepository {
     String? cardinal,
   });
 
-  Future<Either<Failure, ProjectReview>> reactToReview({
+  Future<Either<Failure, void>> reactToReview({
     required int reviewId,
     required bool isLike,
   });
 
-  Future<Either<Failure, ProjectVetting>> reactToVetting({
+  Future<Either<Failure, void>> reactToVetting({
     required int vettingId,
     required bool isLike,
   });

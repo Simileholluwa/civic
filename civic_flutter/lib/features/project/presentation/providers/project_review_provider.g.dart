@@ -59,7 +59,7 @@ final class ProjectReviewProviderProvider
 }
 
 String _$projectReviewProviderHash() =>
-    r'a53d8940fb63bdec8e7c5c63f94b2d164d45653b';
+    r'a04569f6b3c176cd451a60c77d48a0f2e6b414f2';
 
 final class ProjectReviewProviderFamily extends $Family
     with

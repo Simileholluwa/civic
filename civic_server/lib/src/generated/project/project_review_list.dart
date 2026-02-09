@@ -11,7 +11,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../project/project_review.dart' as _i2;
+import '../project/project_review_with_user_state.dart' as _i2;
 import 'package:civic_server/src/generated/protocol.dart' as _i3;
 
 abstract class ProjectReviewList
@@ -26,7 +26,7 @@ abstract class ProjectReviewList
   });
 
   factory ProjectReviewList({
-    required List<_i2.ProjectReview> results,
+    required List<_i2.ProjectReviewWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -36,7 +36,7 @@ abstract class ProjectReviewList
 
   factory ProjectReviewList.fromJson(Map<String, dynamic> jsonSerialization) {
     return ProjectReviewList(
-      results: _i3.Protocol().deserialize<List<_i2.ProjectReview>>(
+      results: _i3.Protocol().deserialize<List<_i2.ProjectReviewWithUserState>>(
         jsonSerialization['results'],
       ),
       count: jsonSerialization['count'] as int,
@@ -47,7 +47,7 @@ abstract class ProjectReviewList
     );
   }
 
-  List<_i2.ProjectReview> results;
+  List<_i2.ProjectReviewWithUserState> results;
 
   int count;
 
@@ -63,7 +63,7 @@ abstract class ProjectReviewList
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ProjectReviewList copyWith({
-    List<_i2.ProjectReview>? results,
+    List<_i2.ProjectReviewWithUserState>? results,
     int? count,
     int? page,
     int? numPages,
@@ -104,7 +104,7 @@ abstract class ProjectReviewList
 
 class _ProjectReviewListImpl extends ProjectReviewList {
   _ProjectReviewListImpl({
-    required List<_i2.ProjectReview> results,
+    required List<_i2.ProjectReviewWithUserState> results,
     required int count,
     required int page,
     required int numPages,
@@ -124,7 +124,7 @@ class _ProjectReviewListImpl extends ProjectReviewList {
   @_i1.useResult
   @override
   ProjectReviewList copyWith({
-    List<_i2.ProjectReview>? results,
+    List<_i2.ProjectReviewWithUserState>? results,
     int? count,
     int? page,
     int? numPages,

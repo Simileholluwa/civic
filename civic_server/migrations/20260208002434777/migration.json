@@ -1,0 +1,229 @@
+{
+  "__className__": "serverpod.DatabaseMigration",
+  "actions": [
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "project_review",
+        "schema": "public",
+        "addColumns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "likesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "dislikesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "likedBy",
+          "dislikedBy"
+        ],
+        "modifyColumns": [
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "review",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "''::text"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "locationRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "descriptionRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "attachmentsRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "categoryRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "fundingRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "datesRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          },
+          {
+            "__className__": "serverpod.ColumnMigration",
+            "columnName": "overallRating",
+            "addNullable": false,
+            "removeNullable": false,
+            "changeDefault": true,
+            "newDefault": "0.0"
+          }
+        ],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"project_review\" will be dropped.",
+            "table": "project_review",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"dislikedBy\" of table \"project_review\" will be dropped.",
+            "table": "project_review",
+            "columns": [
+              "dislikedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    },
+    {
+      "__className__": "serverpod.DatabaseMigrationAction",
+      "type": "alterTable",
+      "alterTable": {
+        "__className__": "serverpod.TableMigration",
+        "name": "project_vetting",
+        "schema": "public",
+        "addColumns": [
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "likesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          },
+          {
+            "__className__": "serverpod.ColumnDefinition",
+            "name": "dislikesCount",
+            "columnType": 6,
+            "isNullable": true,
+            "columnDefault": "0",
+            "dartType": "int?"
+          }
+        ],
+        "deleteColumns": [
+          "likedBy",
+          "dislikedBy"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"likedBy\" of table \"project_vetting\" will be dropped.",
+            "table": "project_vetting",
+            "columns": [
+              "likedBy"
+            ],
+            "destrucive": true
+          },
+          {
+            "__className__": "serverpod.DatabaseMigrationWarning",
+            "type": "columnDropped",
+            "message": "Column \"dislikedBy\" of table \"project_vetting\" will be dropped.",
+            "table": "project_vetting",
+            "columns": [
+              "dislikedBy"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"likedBy\" of table \"project_review\" will be dropped.",
+      "table": "project_review",
+      "columns": [
+        "likedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"dislikedBy\" of table \"project_review\" will be dropped.",
+      "table": "project_review",
+      "columns": [
+        "dislikedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"likedBy\" of table \"project_vetting\" will be dropped.",
+      "table": "project_vetting",
+      "columns": [
+        "likedBy"
+      ],
+      "destrucive": true
+    },
+    {
+      "__className__": "serverpod.DatabaseMigrationWarning",
+      "type": "columnDropped",
+      "message": "Column \"dislikedBy\" of table \"project_vetting\" will be dropped.",
+      "table": "project_vetting",
+      "columns": [
+        "dislikedBy"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

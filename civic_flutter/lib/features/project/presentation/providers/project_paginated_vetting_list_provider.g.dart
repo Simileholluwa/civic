@@ -17,7 +17,7 @@ final class PaginatedProjectVettingListProvider
     extends
         $NotifierProvider<
           PaginatedProjectVettingList,
-          Raw<PagingController<int, ProjectVetting>>
+          Raw<PagingController<int, ProjectVettingWithUserState>>
         > {
   const PaginatedProjectVettingListProvider._()
     : super(
@@ -38,21 +38,25 @@ final class PaginatedProjectVettingListProvider
   PaginatedProjectVettingList create() => PaginatedProjectVettingList();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Raw<PagingController<int, ProjectVetting>> value) {
+  Override overrideWithValue(
+    Raw<PagingController<int, ProjectVettingWithUserState>> value,
+  ) {
     return $ProviderOverride(
       origin: this,
       providerOverride:
-          $SyncValueProvider<Raw<PagingController<int, ProjectVetting>>>(value),
+          $SyncValueProvider<
+            Raw<PagingController<int, ProjectVettingWithUserState>>
+          >(value),
     );
   }
 }
 
 String _$paginatedProjectVettingListHash() =>
-    r'42c7cc03f88829b9d2c5bef3421b2bf468c375f2';
+    r'c2e28812116749deac8ec633ad34d2c498a0d5c3';
 
 abstract class _$PaginatedProjectVettingList
-    extends $Notifier<Raw<PagingController<int, ProjectVetting>>> {
-  Raw<PagingController<int, ProjectVetting>> build();
+    extends $Notifier<Raw<PagingController<int, ProjectVettingWithUserState>>> {
+  Raw<PagingController<int, ProjectVettingWithUserState>> build();
   @$mustCallSuper
   @override
   void runBuild() {
@@ -60,17 +64,17 @@ abstract class _$PaginatedProjectVettingList
     final ref =
         this.ref
             as $Ref<
-              Raw<PagingController<int, ProjectVetting>>,
-              Raw<PagingController<int, ProjectVetting>>
+              Raw<PagingController<int, ProjectVettingWithUserState>>,
+              Raw<PagingController<int, ProjectVettingWithUserState>>
             >;
     final element =
         ref.element
             as $ClassProviderElement<
               AnyNotifier<
-                Raw<PagingController<int, ProjectVetting>>,
-                Raw<PagingController<int, ProjectVetting>>
+                Raw<PagingController<int, ProjectVettingWithUserState>>,
+                Raw<PagingController<int, ProjectVettingWithUserState>>
               >,
-              Raw<PagingController<int, ProjectVetting>>,
+              Raw<PagingController<int, ProjectVettingWithUserState>>,
               Object?,
               Object?
             >;

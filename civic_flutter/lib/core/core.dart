@@ -20,7 +20,6 @@ export './providers/location_service_provider.dart';
 export './providers/media_provider.dart';
 export './providers/mention_hashtag_link_provider.dart';
 export './providers/scheduled_datetime_provider.dart';
-export './providers/stream_service_provider.dart';
 export './providers/tag_selections_provider.dart';
 export './providers/users_list_service_provider.dart';
 export './router/app_router.dart';

@@ -1,6 +1,6 @@
 class: ProjectReviewList
 fields:
-    results: List<ProjectReview>
+    results: List<ProjectReviewWithUserState>
     count: int
     page: int
     numPages: int

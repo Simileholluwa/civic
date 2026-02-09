@@ -8,6 +8,6 @@ fields:
     status: String?
     createdAt: DateTime?, default=now
     updatedAt: DateTime?
-    likedBy: List<int>?
-    dislikedBy: List<int>?
+    likesCount: int?, default = 0
+    dislikesCount: int?, default = 0
     

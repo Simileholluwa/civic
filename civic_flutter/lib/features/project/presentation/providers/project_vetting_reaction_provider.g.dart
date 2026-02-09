@@ -16,7 +16,7 @@ final class VettingReactionProvider
     extends $NotifierProvider<VettingReaction, ProjectVettingReactionState> {
   const VettingReactionProvider._({
     required VettingReactionFamily super.from,
-    required ProjectVetting super.argument,
+    required ProjectVettingWithUserStateKey? super.argument,
   }) : super(
          retry: null,
          name: r'vettingReactionProvider',
@@ -58,7 +58,7 @@ final class VettingReactionProvider
   }
 }
 
-String _$vettingReactionHash() => r'0266607cad0f8de742e6e540ce1a7e9159d3d571';
+String _$vettingReactionHash() => r'2958935057bfc4df6052f5ecdb9bad58bf8c0ce3';
 
 final class VettingReactionFamily extends $Family
     with
@@ -67,7 +67,7 @@ final class VettingReactionFamily extends $Family
           ProjectVettingReactionState,
           ProjectVettingReactionState,
           ProjectVettingReactionState,
-          ProjectVetting
+          ProjectVettingWithUserStateKey?
         > {
   const VettingReactionFamily._()
     : super(
@@ -78,8 +78,8 @@ final class VettingReactionFamily extends $Family
         isAutoDispose: true,
       );
 
-  VettingReactionProvider call(ProjectVetting projectVetting) =>
-      VettingReactionProvider._(argument: projectVetting, from: this);
+  VettingReactionProvider call(ProjectVettingWithUserStateKey? key) =>
+      VettingReactionProvider._(argument: key, from: this);
 
   @override
   String toString() => r'vettingReactionProvider';
@@ -87,10 +87,10 @@ final class VettingReactionFamily extends $Family
 
 abstract class _$VettingReaction
     extends $Notifier<ProjectVettingReactionState> {
-  late final _$args = ref.$arg as ProjectVetting;
-  ProjectVetting get projectVetting => _$args;
+  late final _$args = ref.$arg as ProjectVettingWithUserStateKey?;
+  ProjectVettingWithUserStateKey? get key => _$args;
 
-  ProjectVettingReactionState build(ProjectVetting projectVetting);
+  ProjectVettingReactionState build(ProjectVettingWithUserStateKey? key);
   @$mustCallSuper
   @override
   void runBuild() {

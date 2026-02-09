@@ -6,32 +6,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewCard extends ConsumerWidget {
   const ProjectReviewCard({
-    required this.projectReview,
+    required this.projectReviewWithUserState,
     required this.project,
     super.key,
   });
 
   final Project project;
-  final ProjectReview projectReview;
+  final ProjectReviewWithUserState projectReviewWithUserState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reactToReviewNotifier = ref.watch(
+    final reviewWithKey = ProjectReviewWithUserStateKey(
+      projectReviewWithUserState,
+    );
+    final reactToReviewNotifier = ref.read(
       reviewReactionProvider(
-        projectReview,
+        reviewWithKey,
       ).notifier,
     );
     final reactToReviewState = ref.watch(
       reviewReactionProvider(
-        projectReview,
+        reviewWithKey,
       ),
     );
-    final projectReviewNotiier = ref.watch(
-      projectReviewProviderProvider(
-        projectReview,
-      ).notifier,
-    );
-
+    final review = projectReviewWithUserState.review;
+    final projectReviewNotifier = ref.read(
+              projectReviewProviderProvider(review).notifier,
+            );
     final userId = ref
         .read(
           localStorageProvider,
@@ -43,7 +44,7 @@ class ProjectReviewCard extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 18,
+            horizontal: 15,
             vertical: 10,
           ),
           child: Column(
@@ -52,93 +53,101 @@ class ProjectReviewCard extends ConsumerWidget {
             children: [
               ContentCreatorInfo(
                 timeAgo: THelperFunctions.humanizeDateTime(
-                  projectReview.dateCreated ?? DateTime.now(),
+                  review.dateCreated ?? DateTime.now(),
                 ),
-                creator: projectReview.owner!,
+                creator: review.owner!,
+              ),
+              
+              ContentExpandableText(
+                text: review.review!,
+                expandOnTextTap: true,
+                maxLines: 4,
               ),
               SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   spacing: 10,
                   children: [
                     ProjectTitleAndRating(
-                      ratingNumber: projectReview.locationRating
+                      ratingNumber: review.locationRating
                           .toString()
                           .substring(0, 1),
-                      rating: projectReview.locationRating!,
+                      rating: review.locationRating!,
                       title: 'Location',
+                      showRatingCount: false,
                     ),
                     const SizedBox(
                       height: 35,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: projectReview.descriptionRating
+                      ratingNumber: review.descriptionRating
                           .toString()
                           .substring(0, 1),
-                      rating: projectReview.descriptionRating!,
+                      rating: review.descriptionRating!,
                       title: 'Description',
+                      showRatingCount: false,
                     ),
                     const SizedBox(
                       height: 35,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: projectReview.attachmentsRating
+                      ratingNumber: review.attachmentsRating
                           .toString()
                           .substring(0, 1),
-                      rating: projectReview.attachmentsRating!,
+                      rating: review.attachmentsRating!,
                       title: 'Attachments',
+                      showRatingCount: false,
                     ),
                     const SizedBox(
                       height: 35,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: projectReview.categoryRating
+                      ratingNumber: review.categoryRating
                           .toString()
                           .substring(0, 1),
-                      rating: projectReview.categoryRating!,
+                      rating: review.categoryRating!,
                       title: 'Category',
+                      showRatingCount: false,
                     ),
                     const SizedBox(
                       height: 35,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: projectReview.fundingRating
+                      ratingNumber: review.fundingRating
                           .toString()
                           .substring(0, 1),
-                      rating: projectReview.fundingRating!,
+                      rating: review.fundingRating!,
                       title: 'Funding',
+                      showRatingCount: false,
                     ),
                     const SizedBox(
                       height: 35,
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber:
-                          projectReview.datesRating.toString().substring(0, 1),
-                      rating: projectReview.datesRating!,
+                      ratingNumber: review.datesRating
+                          .toString()
+                          .substring(0, 1),
+                      rating: review.datesRating!,
                       title: 'Dates',
+                      showRatingCount: false,
                     ),
                   ],
                 ),
-              ),
-              ContentExpandableText(
-                text: projectReview.review!,
-                expandOnTextTap: true,
-                hasVideo: true,
               ),
               ReactToReviewOrVetting(
                 text: 'Was this review helpful?',
                 likesCount: reactToReviewState.likesCount,
                 likeTextColor:
                     reactToReviewState.isLiked && !reactToReviewState.isDeleted
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurface,
-                dislikeTextColor: reactToReviewState.isDisliked &&
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurface,
+                dislikeTextColor:
+                    reactToReviewState.isDisliked &&
                         !reactToReviewState.isDeleted
                     ? Theme.of(context).colorScheme.secondary
                     : Theme.of(context).colorScheme.onSurface,
@@ -148,15 +157,20 @@ class ProjectReviewCard extends ConsumerWidget {
                 dislikeTapped: () async {
                   await reactToReviewNotifier.reactToReview(false);
                 },
-                isOwner: projectReview.ownerId == userId,
+                isOwner: review.ownerId == userId,
                 onDelete: () async {
-                  await ProjectHelperFunctions.deleteProjectReviewDialog(
-                    context,
-                    projectReviewNotiier,
-                    project.id!,
-                    projectReview.id!,
-                    false,
-                  );
+                  final res =
+                      await ProjectHelperFunctions.deleteProjectReviewDialog(
+                        context,
+                        project.id!,
+                        review.id!,
+                      );
+                  if (res ?? false) {
+                    await projectReviewNotifier.deleteReview(
+                      project.id!,
+                      review.id!,
+                    );
+                  }
                 },
               ),
             ],

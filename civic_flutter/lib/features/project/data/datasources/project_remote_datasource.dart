@@ -42,12 +42,12 @@ abstract class ProjectRemoteDataSource {
 
   Future<void> deleteProjectVetting({required int vettingId});
 
-  Future<ProjectReview> reactToReview({
+  Future<void> reactToReview({
     required int reviewId,
     required bool isLike,
   });
 
-  Future<ProjectVetting> reactToVetting({
+  Future<void> reactToVetting({
     required int vettingId,
     required bool isLike,
   });
@@ -386,16 +386,15 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectReview> reactToReview({
+  Future<void> reactToReview({
     required int reviewId,
     required bool isLike,
   }) async {
     try {
-      final result = await _client.project.reactToReview(
+      await _client.project.reactToReview(
         reviewId,
         isLike,
       );
-      return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {
@@ -410,16 +409,15 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectVetting> reactToVetting({
+  Future<void> reactToVetting({
     required int vettingId,
     required bool isLike,
   }) async {
     try {
-      final result = await _client.project.reactToVetting(
+      await _client.project.reactToVetting(
         vettingId,
         isLike,
       );
-      return result;
     } on ServerSideException catch (e) {
       throw ServerException(message: e.message);
     } on SocketException catch (_) {

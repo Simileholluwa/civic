@@ -19,8 +19,15 @@ class ProjectDetailsBottomNavigationWidget extends StatelessWidget {
       project.startDate!,
       project.endDate!,
     );
-    return Padding(
+    return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+      ),
       child: Row(
         spacing: 10,
         children: [

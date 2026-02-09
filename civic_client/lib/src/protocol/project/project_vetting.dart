@@ -27,9 +27,11 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     this.status,
     DateTime? createdAt,
     this.updatedAt,
-    this.likedBy,
-    this.dislikedBy,
-  }) : createdAt = createdAt ?? DateTime.now();
+    int? likesCount,
+    int? dislikesCount,
+  }) : createdAt = createdAt ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       dislikesCount = dislikesCount ?? 0;
 
   factory ProjectVetting({
     int? id,
@@ -42,8 +44,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   }) = _ProjectVettingImpl;
 
   factory ProjectVetting.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -74,14 +76,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likedBy: jsonSerialization['likedBy'] == null
-          ? null
-          : _i4.Protocol().deserialize<List<int>>(jsonSerialization['likedBy']),
-      dislikedBy: jsonSerialization['dislikedBy'] == null
-          ? null
-          : _i4.Protocol().deserialize<List<int>>(
-              jsonSerialization['dislikedBy'],
-            ),
+      likesCount: jsonSerialization['likesCount'] as int?,
+      dislikesCount: jsonSerialization['dislikesCount'] as int?,
     );
   }
 
@@ -108,9 +104,9 @@ abstract class ProjectVetting implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  List<int>? likedBy;
+  int? likesCount;
 
-  List<int>? dislikedBy;
+  int? dislikesCount;
 
   /// Returns a shallow copy of this [ProjectVetting]
   /// with some or all fields replaced by the given arguments.
@@ -126,8 +122,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -143,8 +139,8 @@ abstract class ProjectVetting implements _i1.SerializableModel {
       if (status != null) 'status': status,
       if (createdAt != null) 'createdAt': createdAt?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
+      if (dislikesCount != null) 'dislikesCount': dislikesCount,
     };
   }
 
@@ -168,8 +164,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   }) : super._(
          id: id,
          projectId: projectId,
@@ -181,8 +177,8 @@ class _ProjectVettingImpl extends ProjectVetting {
          status: status,
          createdAt: createdAt,
          updatedAt: updatedAt,
-         likedBy: likedBy,
-         dislikedBy: dislikedBy,
+         likesCount: likesCount,
+         dislikesCount: dislikesCount,
        );
 
   /// Returns a shallow copy of this [ProjectVetting]
@@ -200,8 +196,8 @@ class _ProjectVettingImpl extends ProjectVetting {
     Object? status = _Undefined,
     Object? createdAt = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likedBy = _Undefined,
-    Object? dislikedBy = _Undefined,
+    Object? likesCount = _Undefined,
+    Object? dislikesCount = _Undefined,
   }) {
     return ProjectVetting(
       id: id is int? ? id : this.id,
@@ -216,12 +212,8 @@ class _ProjectVettingImpl extends ProjectVetting {
       status: status is String? ? status : this.status,
       createdAt: createdAt is DateTime? ? createdAt : this.createdAt,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likedBy: likedBy is List<int>?
-          ? likedBy
-          : this.likedBy?.map((e0) => e0).toList(),
-      dislikedBy: dislikedBy is List<int>?
-          ? dislikedBy
-          : this.dislikedBy?.map((e0) => e0).toList(),
+      likesCount: likesCount is int? ? likesCount : this.likesCount,
+      dislikesCount: dislikesCount is int? ? dislikesCount : this.dislikesCount,
     );
   }
 }

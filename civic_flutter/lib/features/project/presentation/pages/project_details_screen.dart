@@ -22,6 +22,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
       projectDetailProvider(projectId, project),
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
+    final currentPage = ref.watch(projectDetailCurrentPageProvider);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -72,7 +73,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               : Theme.of(context).iconTheme.color!,
                         ),
                       ),
-      
+
                       IconButton(
                         onPressed: () async {
                           await context.push(
@@ -89,7 +90,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               : Theme.of(context).iconTheme.color!,
                         ),
                       ),
-      
+
                       IconButton(
                         onPressed: isOwner
                             ? null
@@ -109,7 +110,48 @@ class ProjectDetailsScreen extends ConsumerWidget {
                               : Theme.of(context).iconTheme.color,
                         ),
                       ),
-      
+                      AnimatedCrossFade(
+                        duration: const Duration(
+                          milliseconds: 300,
+                        ),
+                        crossFadeState: currentPage != 2
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                        firstChild: const SizedBox.shrink(),
+                        secondChild: IconButton(
+                          onPressed: () async {
+                            final queryState = ref.read(projectReviewListQueryProvider);
+                            final query = {
+                              'sortBy': queryState.sortby,
+                              'sortDir': queryState.sortDir,
+                              'rating': queryState.rating,
+                              'cardinal': queryState.cardinal,
+                            };
+                            final res =
+                                await showModalBottomSheet<
+                                  Map<String, dynamic>
+                                >(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return ShowFilterReviews(
+                                      initialQuery: query,
+                                    );
+                                  },
+                                );
+                            if (res == null) return;
+                            if (res == query) return;
+                            ref
+                                .read(projectReviewListQueryProvider.notifier)
+                                .setQuery(
+                                  res,
+                                );
+                          },
+                          icon: const Icon(
+                            Iconsax.filter,
+                          ),
+                        ),
+                      ),
                       IconButton(
                         onPressed: () async {
                           await showDialog<dynamic>(

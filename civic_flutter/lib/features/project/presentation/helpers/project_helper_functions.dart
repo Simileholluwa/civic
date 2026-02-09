@@ -45,7 +45,8 @@ class ProjectHelperFunctions {
     return postDialog(
       context: context,
       title: 'Clear all bookmarks?',
-      description: 'Are you sure you want to clear all your bookmarks? '
+      description:
+          'Are you sure you want to clear all your bookmarks? '
           'This action cannot be undone.',
       onTapSkipButton: () {
         context.pop(false);
@@ -301,7 +302,8 @@ class ProjectHelperFunctions {
     final dLat = _degreesToRadians(lat2 - lat1);
     final dLon = _degreesToRadians(lon2 - lon1);
 
-    final a = sin(dLat / 2) * sin(dLat / 2) +
+    final a =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(_degreesToRadians(lat1)) *
             cos(_degreesToRadians(lat2)) *
             sin(dLon / 2) *
@@ -323,8 +325,9 @@ class ProjectHelperFunctions {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         if (activeIndicatorKey.currentContext != null) {
-          final renderBox = activeIndicatorKey.currentContext!
-              .findRenderObject()! as RenderBox;
+          final renderBox =
+              activeIndicatorKey.currentContext!.findRenderObject()!
+                  as RenderBox;
           final position = renderBox.localToGlobal(Offset.zero);
 
           final screenWidth = MediaQuery.sizeOf(context).width;
@@ -374,33 +377,21 @@ class ProjectHelperFunctions {
 
   static Future<bool?> deleteProjectReviewDialog(
     BuildContext context,
-    ProjectReviewProvider projectReviewNotifier,
     int projectId,
-    int reviewId, [
-    bool shouldPop = true,
-  ]) {
+    int reviewId,
+  ) {
     return postDialog(
       context: context,
       title: 'Delete review?',
-      description: 'Proceed with caution as this action is '
+      description:
+          'Proceed with caution as this action is '
           'irreversible.',
-      onTapSkipButton: context.pop,
+      onTapSkipButton: () => context.pop(false),
       activeButtonText: 'Delete',
       activeButtonLoading: false,
       skipButtonLoading: false,
       skipText: 'Cancel',
-      onTapActiveButton: () async {
-        context.pop();
-        final result = await projectReviewNotifier.deleteReview(
-          projectId,
-          reviewId,
-        );
-        if (shouldPop) {
-          if (result) {
-            if (context.mounted) context.pop();
-          }
-        }
-      },
+      onTapActiveButton: () => context.pop(true),
     );
   }
 
@@ -413,7 +404,8 @@ class ProjectHelperFunctions {
     return postDialog(
       context: context,
       title: 'Delete vetting?',
-      description: 'Proceed with caution as this action is '
+      description:
+          'Proceed with caution as this action is '
           'irreversible.',
       onTapSkipButton: context.pop,
       activeButtonText: 'Delete',

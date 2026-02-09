@@ -40,10 +40,16 @@ import 'package:civic_client/src/protocol/project/project_vetting.dart' as _i19;
 import 'package:civic_client/src/protocol/project/project_vet_list.dart'
     as _i20;
 import 'package:civic_client/src/protocol/project/project_counts.dart' as _i21;
-import 'package:civic_client/src/protocol/user/user_record.dart' as _i22;
-import 'package:civic_client/src/protocol/user/users_list.dart' as _i23;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i24;
-import 'protocol.dart' as _i25;
+import 'package:civic_client/src/protocol/project/project_rating_counts.dart'
+    as _i22;
+import 'package:civic_client/src/protocol/project/project_review_counts.dart'
+    as _i23;
+import 'package:civic_client/src/protocol/project/project_vettings_count.dart'
+    as _i24;
+import 'package:civic_client/src/protocol/user/user_record.dart' as _i25;
+import 'package:civic_client/src/protocol/user/users_list.dart' as _i26;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i27;
+import 'protocol.dart' as _i28;
 
 /// {@category Endpoint}
 class EndpointAssets extends _i1.EndpointRef {
@@ -854,10 +860,10 @@ class EndpointProject extends _i1.EndpointRef {
   /// - [isLike]: `true` for a like, `false` for a dislike.
   ///
   /// Returns the updated [ProjectReview] object.
-  _i2.Future<_i15.ProjectReview> reactToReview(
+  _i2.Future<void> reactToReview(
     int reviewId,
     bool isLike,
-  ) => caller.callServerEndpoint<_i15.ProjectReview>(
+  ) => caller.callServerEndpoint<void>(
     'project',
     'reactToReview',
     {
@@ -884,10 +890,10 @@ class EndpointProject extends _i1.EndpointRef {
   /// Parameters:
   /// - [vettingId]: The ID of the vetting to react to.
   /// - [isLike]: `true` for a like, `false` for a dislike.
-  _i2.Future<_i19.ProjectVetting> reactToVetting(
+  _i2.Future<void> reactToVetting(
     int vettingId,
     bool isLike,
-  ) => caller.callServerEndpoint<_i19.ProjectVetting>(
+  ) => caller.callServerEndpoint<void>(
     'project',
     'reactToVetting',
     {
@@ -1081,6 +1087,19 @@ class EndpointProject extends _i1.EndpointRef {
         {},
       );
 
+  _i2.Stream<_i22.ProjectRatingCounts> projectRatingCountUpdates(
+    int projectId,
+  ) =>
+      caller.callStreamingServerEndpoint<
+        _i2.Stream<_i22.ProjectRatingCounts>,
+        _i22.ProjectRatingCounts
+      >(
+        'project',
+        'projectRatingCountUpdates',
+        {'projectId': projectId},
+        {},
+      );
+
   _i2.Future<void> subscribeToProject(int projectId) =>
       caller.callServerEndpoint<void>(
         'project',
@@ -1101,10 +1120,10 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [ProjectReview] object (if found).
   ///   - Subsequent updates to the [ProjectReview] as they occur.
-  _i2.Stream<_i15.ProjectReview> projectReviewUpdates(int reviewId) =>
+  _i2.Stream<_i23.ProjectReviewCounts> projectReviewUpdates(int reviewId) =>
       caller.callStreamingServerEndpoint<
-        _i2.Stream<_i15.ProjectReview>,
-        _i15.ProjectReview
+        _i2.Stream<_i23.ProjectReviewCounts>,
+        _i23.ProjectReviewCounts
       >(
         'project',
         'projectReviewUpdates',
@@ -1124,10 +1143,10 @@ class EndpointProject extends _i1.EndpointRef {
   /// Yields:
   ///   - The initial [ProjectVetting] object if found.
   ///   - Any subsequent updates to the [ProjectVetting] object.
-  _i2.Stream<_i19.ProjectVetting> projectVettingUpdates(int vettingId) =>
+  _i2.Stream<_i24.ProjectVettingsCount> projectVettingUpdates(int vettingId) =>
       caller.callStreamingServerEndpoint<
-        _i2.Stream<_i19.ProjectVetting>,
-        _i19.ProjectVetting
+        _i2.Stream<_i24.ProjectVettingsCount>,
+        _i24.ProjectVettingsCount
       >(
         'project',
         'projectVettingUpdates',
@@ -1169,15 +1188,15 @@ class EndpointUserRecord extends _i1.EndpointRef {
   @override
   String get name => 'userRecord';
 
-  _i2.Future<_i22.UserRecord> saveUser(_i22.UserRecord userRecord) =>
-      caller.callServerEndpoint<_i22.UserRecord>(
+  _i2.Future<_i25.UserRecord> saveUser(_i25.UserRecord userRecord) =>
+      caller.callServerEndpoint<_i25.UserRecord>(
         'userRecord',
         'saveUser',
         {'userRecord': userRecord},
       );
 
-  _i2.Future<_i22.UserRecord?> getUser(String? userId) =>
-      caller.callServerEndpoint<_i22.UserRecord?>(
+  _i2.Future<_i25.UserRecord?> getUser(String? userId) =>
+      caller.callServerEndpoint<_i25.UserRecord?>(
         'userRecord',
         'getUser',
         {'userId': userId},
@@ -1190,11 +1209,11 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'email': email},
       );
 
-  _i2.Future<_i23.UsersList> getUsers({
+  _i2.Future<_i26.UsersList> getUsers({
     required String query,
     required int limit,
     required int page,
-  }) => caller.callServerEndpoint<_i23.UsersList>(
+  }) => caller.callServerEndpoint<_i26.UsersList>(
     'userRecord',
     'getUsers',
     {
@@ -1204,10 +1223,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
     },
   );
 
-  _i2.Future<List<_i22.UserRecord>> mentionUsers({
+  _i2.Future<List<_i25.UserRecord>> mentionUsers({
     required String query,
     required int limit,
-  }) => caller.callServerEndpoint<List<_i22.UserRecord>>(
+  }) => caller.callServerEndpoint<List<_i25.UserRecord>>(
     'userRecord',
     'mentionUsers',
     {
@@ -1223,17 +1242,17 @@ class EndpointUserRecord extends _i1.EndpointRef {
         {'userId': userId},
       );
 
-  _i2.Future<_i22.UserRecord?> getNinDetails(String ninNumber) =>
-      caller.callServerEndpoint<_i22.UserRecord?>(
+  _i2.Future<_i25.UserRecord?> getNinDetails(String ninNumber) =>
+      caller.callServerEndpoint<_i25.UserRecord?>(
         'userRecord',
         'getNinDetails',
         {'ninNumber': ninNumber},
       );
 
-  _i2.Stream<_i22.UserRecord> userUpdates(int userId) =>
+  _i2.Stream<_i25.UserRecord> userUpdates(int userId) =>
       caller.callStreamingServerEndpoint<
-        _i2.Stream<_i22.UserRecord>,
-        _i22.UserRecord
+        _i2.Stream<_i25.UserRecord>,
+        _i25.UserRecord
       >(
         'userRecord',
         'userUpdates',
@@ -1251,10 +1270,10 @@ class EndpointUserRecord extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i24.Caller(client);
+    auth = _i27.Caller(client);
   }
 
-  late final _i24.Caller auth;
+  late final _i27.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -1277,7 +1296,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i25.Protocol(),
+         _i28.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,

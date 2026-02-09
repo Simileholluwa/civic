@@ -11,8 +11,8 @@ Timer? _debounceTimer;
 @Riverpod(keepAlive: true)
 class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
   @override
-  Raw<PagingController<int, ProjectVetting>> build() {
-    final controller = PagingController<int, ProjectVetting>(
+  Raw<PagingController<int, ProjectVettingWithUserState>> build() {
+    final controller = PagingController<int, ProjectVettingWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -23,10 +23,10 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
     return controller;
   }
 
-  Future<List<ProjectVetting>> _fetchPage(int pageKey, {int limit = 50}) async {
+  Future<List<ProjectVettingWithUserState>> _fetchPage(int pageKey, {int limit = 50}) async {
     const debounceDuration = Duration(milliseconds: 300);
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    final completer = Completer<List<ProjectVetting>>();
+    final completer = Completer<List<ProjectVettingWithUserState>>();
     _debounceTimer = Timer(debounceDuration, () async {
       final usecase = ref.read(getVettedProjectsProvider);
 
@@ -49,22 +49,29 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
     return completer.future;
   }
 
-  void addVetting(ProjectVetting vetting) {
+  void addVetting(ProjectVettingWithUserState vettingWithUserState) {
     final current = state.value;
     final pages = current.pages;
     if (pages == null || pages.isEmpty) {
       state.value = current.copyWith(
         pages: [
-          [vetting],
+          [vettingWithUserState],
         ],
         keys: const [1],
         hasNextPage: current.hasNextPage,
       );
       return;
     }
-    // Prevent duplicate by id in first page.
-    if (pages.first.any((v) => v.id == vetting.id)) return;
-    final updatedFirst = [vetting, ...pages.first];
+
+    if (pages.first.any((v) => v.vetting.id == vettingWithUserState.vetting.id)){
+      state.value = current.mapItems(
+        (v) => v.vetting.id == vettingWithUserState.vetting.id
+            ? vettingWithUserState
+            : v,
+      );
+      return;
+    }
+    final updatedFirst = [vettingWithUserState, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
     if (updatedKeys.length < updatedPages.length) {
@@ -79,6 +86,6 @@ class PaginatedProjectVettingList extends _$PaginatedProjectVettingList {
 
   void deleteVetting(int vettingId) {
     final prev = state.value;
-    state.value = prev.filterItems((v) => v.id != vettingId);
+    state.value = prev.filterItems((v) => v.vetting.id != vettingId);
   }
 }

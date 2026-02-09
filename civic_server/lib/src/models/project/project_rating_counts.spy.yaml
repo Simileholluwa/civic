@@ -1,0 +1,11 @@
+class: ProjectRatingCounts
+fields:
+    projectId: int
+    overallRating: double?, default=0.0
+    overallLocationRating: double?, default=0.0
+    overallDescriptionRating: double?, default=0.0
+    overallAttachmentsRating: double?, default=0.0
+    overallCategoryRating: double?, default=0.0
+    overallFundingRating: double?, default=0.0
+    overallDatesRating: double?, default=0.0
+    totalRating: int, default=0

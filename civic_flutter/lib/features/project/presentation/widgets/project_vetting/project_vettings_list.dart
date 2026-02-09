@@ -14,18 +14,12 @@ class ProjectVettingsList extends ConsumerWidget {
     final pagingState = ref.watch(
       paginatedProjectVettingListProvider,
     );
-    return AppInfiniteList<ProjectVetting>(
+    return AppInfiniteList<ProjectVettingWithUserState>(
       pagingController: pagingState,
       canCreate: false,
       itemBuilder: (context, vetting, index) {
-        final liveProjectVetting = ref.watch(
-          projectVettingStreamProvider(
-            vetting.id!,
-            vetting,
-          ),
-        );
         return ProjectVettingCard(
-          projectVetting: liveProjectVetting.value ?? vetting,
+          projectVettingWithUserState: vetting,
         );
       },
       onRefresh: pagingState.refresh,

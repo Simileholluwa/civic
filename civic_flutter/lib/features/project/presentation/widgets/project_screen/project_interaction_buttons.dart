@@ -115,7 +115,7 @@ class ProjectInteractionButtons extends ConsumerWidget {
         ),
         if (!isOwner)
           ContentInteractionButton(
-            icon: hasReviewed ? Icons.star : Icons.star_border_outlined,
+            icon: hasReviewed ? Iconsax.magic_star5 : Iconsax.magic_star,
             iconSize: 22,
             text: '$numberOfReviews',
             onTap: () async {

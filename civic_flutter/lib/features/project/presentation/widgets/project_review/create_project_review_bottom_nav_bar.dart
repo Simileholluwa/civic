@@ -50,14 +50,13 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
+                  child: FilledButton(
                     onPressed: projectReviewState.isValid
                         ? () async {
                             final result =
                                 await projectReviewNotifier.sendReview(
                               projectId,
                               projectReview?.id,
-                              fromDetails,
                             );
                             if (result) {
                               if (context.mounted) {
@@ -71,11 +70,6 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
                       style: const TextStyle().copyWith(
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: TColors.textWhite,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
                   ).withLoading(
                     loading: projectReviewState.isLoading,

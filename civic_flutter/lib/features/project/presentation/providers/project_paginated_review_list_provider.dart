@@ -11,8 +11,8 @@ Timer? _debounceTimer;
 @Riverpod(keepAlive: true)
 class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
   @override
-  Raw<PagingController<int, ProjectReview>> build(int projectId) {
-    final controller = PagingController<int, ProjectReview>(
+  Raw<PagingController<int, ProjectReviewWithUserState>> build(int projectId) {
+    final controller = PagingController<int, ProjectReviewWithUserState>(
       getNextPageKey: (state) {
         if (state.lastPageIsEmpty) return null;
         return state.nextIntPageKey;
@@ -23,14 +23,14 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
     return controller;
   }
 
-  Future<List<ProjectReview>> _fetchPage(
+  Future<List<ProjectReviewWithUserState>> _fetchPage(
     int projectId,
     int pageKey, {
     int limit = 50,
   }) async {
     const debounceDuration = Duration(milliseconds: 300);
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    final completer = Completer<List<ProjectReview>>();
+    final completer = Completer<List<ProjectReviewWithUserState>>();
     _debounceTimer = Timer(debounceDuration, () async {
       final usecase = ref.read(getProjectReviewsProvider);
       final query = ref.watch(projectReviewListQueryProvider);
@@ -52,21 +52,28 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
     return completer.future;
   }
 
-  void addReview(ProjectReview review) {
+  void addReview(ProjectReviewWithUserState reviewWithUserState) {
     final current = state.value;
     final pages = current.pages;
     if (pages == null || pages.isEmpty) {
       state.value = current.copyWith(
         pages: [
-          [review],
+          [reviewWithUserState],
         ],
         keys: const [1],
         hasNextPage: current.hasNextPage,
       );
       return;
     }
-    if (pages.first.any((r) => r.id == review.id)) return;
-    final updatedFirst = [review, ...pages.first];
+    if (pages.first.any((r) => r.review.id == reviewWithUserState.review.id)) {
+      state.value = current.mapItems(
+        (r) => r.review.id == reviewWithUserState.review.id
+            ? reviewWithUserState
+            : r,
+      );
+      return;
+    }
+    final updatedFirst = [reviewWithUserState, ...pages.first];
     final updatedPages = [updatedFirst, ...pages.skip(1)];
     final updatedKeys = [...?current.keys];
     if (updatedKeys.length < updatedPages.length) {
@@ -81,30 +88,25 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
 
   void deleteReview(int reviewId) {
     final prev = state.value;
-    state.value = prev.filterItems((r) => r.id != reviewId);
+    state.value = prev.filterItems((r) => r.review.id != reviewId);
   }
 }
 
 @Riverpod(keepAlive: true)
 class ProjectReviewListQuery extends _$ProjectReviewListQuery {
   @override
-  ProjectReviewQueryState build() => ProjectReviewQueryState(
-        rating: null,
-        cardinal: null,
-      );
+  ProjectReviewQueryState build() => ProjectReviewQueryState();
 
-  void setRatingQuery(double? rating) {
-    state = state.copyWith(rating: rating);
-  }
-
-  void setCardinalQuery(String? cardinal) {
-    state = state.copyWith(cardinal: cardinal);
+  void setQuery(Map<String, dynamic> query) {
+    state = state.copyWith(
+      rating: query['rating'] as double?,
+      cardinal: query['cardinal'] as String?,
+      sortby: query['sortBy'] as String?,
+      sortDir: query['sortDir'] as String?
+    );
   }
 
   void clearQuery() {
-    state = ProjectReviewQueryState(
-      rating: null,
-      cardinal: null,
-    );
+    state = ProjectReviewQueryState();
   }
 }

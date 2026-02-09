@@ -1,6 +1,4 @@
 import 'package:civic_client/civic_client.dart';
-import 'package:civic_flutter/core/core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewReactionState {
   ProjectReviewReactionState({
@@ -12,17 +10,27 @@ class ProjectReviewReactionState {
   });
 
   factory ProjectReviewReactionState.populate(
-    ProjectReview projectReview,
-    Ref ref,
+    ProjectReviewWithUserState projectReviewWithUserState,
   ) {
-    final userId = ref.read(localStorageProvider).getInt('userId');
     return ProjectReviewReactionState(
-      likesCount: projectReview.likedBy?.length ?? 0,
-      dislikesCount: projectReview.dislikedBy?.length ?? 0,
-      isLiked: projectReview.likedBy?.contains(userId) ?? false,
-      isDisliked: projectReview.dislikedBy?.contains(userId) ?? false,
-      isDeleted: false,
+      likesCount: projectReviewWithUserState.review.likesCount!,
+      dislikesCount: projectReviewWithUserState.review.dislikesCount!,
+      isLiked: projectReviewWithUserState.hasLiked!,
+      isDisliked: projectReviewWithUserState.hasDisliked!,
+      isDeleted: projectReviewWithUserState.hasDeleted!,
     );
+  }
+
+  ProjectReviewReactionState.empty()
+      : likesCount = 0,
+        dislikesCount = 0,
+        isLiked = false,
+        isDeleted = false,
+        isDisliked = false;
+
+  @override
+  String toString() {
+    return 'ProjectReviewReactionState(likesCount: $likesCount, dislikesCount: $dislikesCount, isLiked: $isLiked, isDeleted: $isDeleted, isDisliked: $isDisliked)';
   }
   final int likesCount;
   final int dislikesCount;
@@ -45,4 +53,11 @@ class ProjectReviewReactionState {
       isDisliked: isDisliked ?? this.isDisliked,
     );
   }
+}
+
+extension ProjectReviewReactionStateCounts on ProjectReviewReactionState {
+  ProjectReviewReactionState applyCounts(ProjectReviewCounts counts) => copyWith(
+    likesCount: counts.likesCount,
+    dislikesCount: counts.dislikesCount,
+  );
 }

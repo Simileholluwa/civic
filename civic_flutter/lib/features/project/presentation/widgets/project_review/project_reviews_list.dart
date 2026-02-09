@@ -1,6 +1,5 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
-import 'package:civic_flutter/features/project/presentation/widgets/project_details/show_filter_reviews.dart';
 import 'package:civic_flutter/features/project/project.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,102 +21,126 @@ class ProjectReviewsList extends ConsumerWidget {
         project.id!,
       ),
     );
-    final projectReviewStateNotifier = ref.watch(
-      projectReviewListQueryProvider.notifier,
-    );
-    final projectReviewState = ref.watch(
-      projectReviewListQueryProvider,
+    final ratingState = ref.watch(
+      projectOverallRatingCountsProvider(
+        project,
+      ),
     );
     return Stack(
       children: [
-        if (project.overAllCategoryRating != null)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ProjectRatingSummary(
-                project: project,
-              ),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).dividerColor,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  spacing: 10,
                   children: [
-                    InkWell(
-                      onTap: projectReviewState.cardinal == null
-                          ? null
-                          : () {
-                              projectReviewStateNotifier.clearQuery();
-                              pagingState.refresh();
-                            },
-                      child: Ink(
-                        child: Text(
-                          'Clear filters',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: projectReviewState.cardinal == null
-                                    ? Theme.of(context).disabledColor
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                        ),
-                      ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllLocationRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllLocationRating,
+                      title: 'Location',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
                     ),
                     const SizedBox(
-                      height: 35,
+                      height: 65,
                       child: VerticalDivider(),
                     ),
-                    InkWell(
-                      onTap: () async {
-                        await showDialog<dynamic>(
-                          context: context,
-                          builder: (context) {
-                            return const AlertDialog(
-                              contentPadding: EdgeInsets.only(
-                                bottom: 16,
-                              ),
-                              content: ShowFilterReviews(),
-                            );
-                          },
-                        );
-                      },
-                      child: Ink(
-                        child: Text(
-                          'Filter reviews',
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllDescriptionRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllDescriptionRating,
+                      title: 'Description',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
+                    ),
+                    const SizedBox(
+                      height: 65,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllAttachmentsRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllAttachmentsRating,
+                      title: 'Attachments',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
+                    ),
+                    const SizedBox(
+                      height: 65,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllCategoryRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllCategoryRating,
+                      title: 'Category',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
+                    ),
+                    const SizedBox(
+                      height: 65,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllFundingRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllFundingRating,
+                      title: 'Funding',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
+                    ),
+                    const SizedBox(
+                      height: 65,
+                      child: VerticalDivider(),
+                    ),
+                    ProjectTitleAndRating(
+                      ratingNumber: ratingState.overAllDatesRating
+                          .toString()
+                          .substring(0, 3),
+                      rating: ratingState.overAllDatesRating,
+                      title: 'Dates',
+                      titleSize: 50,
+                      ratingSize: 18,
+                      titleSize2: 15,
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
         Padding(
-          padding: const EdgeInsets.only(top: 110),
-          child: AppInfiniteList<ProjectReview>(
+          padding: const EdgeInsets.only(top: 70),
+          child: AppInfiniteList<ProjectReviewWithUserState>(
             pagingController: pagingState,
             canCreate: false,
             itemBuilder: (context, review, index) {
-              final liveProjectReview = ref.watch(
-                projectReviewStreamProvider(
-                  review.id!,
-                  review,
-                ),
-              );
               return ProjectReviewCard(
-                projectReview: liveProjectReview.value ?? review,
+                projectReviewWithUserState: review,
                 project: project,
               );
             },

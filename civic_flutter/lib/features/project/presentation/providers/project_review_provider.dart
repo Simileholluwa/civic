@@ -71,7 +71,8 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
 
   void setOverallRating() {
     state = state.copyWith(
-      overallRating: (state.locationRating +
+      overallRating:
+          (state.locationRating +
               state.descriptionRating +
               state.attachmentsRating +
               state.categoryRating +
@@ -83,7 +84,8 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
 
   void isValid() {
     state = state.copyWith(
-      isValid: state.review.isNotEmpty &&
+      isValid:
+          state.review.isNotEmpty &&
           state.locationRating > 0 &&
           state.descriptionRating > 0 &&
           state.attachmentsRating > 0 &&
@@ -93,11 +95,7 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     );
   }
 
-  Future<bool> sendReview(
-    int projectId,
-    int? projectReviewId, [
-    bool addToList = true,
-  ]) async {
+  Future<bool> sendReview(int projectId, int? projectReviewId) async {
     state = state.copyWith(
       isLoading: true,
     );
@@ -136,13 +134,16 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
         TToastMessages.successToast(
           'Your review has been submitted successfully',
         );
-        if (addToList && projectReviewId == null) {
-          ref
-              .read(
-                paginatedProjectReviewListProvider(projectId).notifier,
-              )
-              .addReview(success);
-        }
+
+        ref
+            .read(
+              paginatedProjectReviewListProvider(projectId).notifier,
+            )
+            .addReview(
+              ProjectReviewWithUserState(
+                review: success,
+              ),
+            );
 
         return true;
       },

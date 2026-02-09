@@ -5,15 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectReviewState {
   ProjectReviewState({
-    required this.review,
-    required this.locationRating,
-    required this.descriptionRating,
-    required this.attachmentsRating,
-    required this.categoryRating,
-    required this.fundingRating,
-    required this.datesRating,
-    required this.overallRating,
-    required this.reviewController,
+    required this.reviewController, this.review = '',
+     this.locationRating = 0,
+    this.descriptionRating = 0,
+    this.attachmentsRating = 0,
+    this.categoryRating = 0,
+    this.fundingRating = 0,
+    this.datesRating = 0,
+    this.overallRating = 0,
     this.isValid = false,
     this.isLoading = false,
     this.isEditing = false,
@@ -24,14 +23,6 @@ class ProjectReviewState {
 
   factory ProjectReviewState.empty() {
     return ProjectReviewState(
-      review: '',
-      locationRating: 0,
-      descriptionRating: 0,
-      attachmentsRating: 0,
-      categoryRating: 0,
-      fundingRating: 0,
-      datesRating: 0,
-      overallRating: 0,
       reviewController: TextEditingController(),
     );
   }

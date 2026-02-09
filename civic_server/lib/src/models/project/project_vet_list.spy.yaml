@@ -1,6 +1,6 @@
 class: ProjectVetList
 fields:
-    results: List<ProjectVetting>
+    results: List<ProjectVettingWithUserState>
     count: int
     page: int
     numPages: int

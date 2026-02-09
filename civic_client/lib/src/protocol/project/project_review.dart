@@ -22,19 +22,29 @@ abstract class ProjectReview implements _i1.SerializableModel {
     this.owner,
     required this.projectId,
     this.project,
-    this.review,
-    this.locationRating,
-    this.descriptionRating,
-    this.attachmentsRating,
-    this.categoryRating,
-    this.fundingRating,
-    this.datesRating,
-    this.overallRating,
+    String? review,
+    double? locationRating,
+    double? descriptionRating,
+    double? attachmentsRating,
+    double? categoryRating,
+    double? fundingRating,
+    double? datesRating,
+    double? overallRating,
     DateTime? dateCreated,
     this.updatedAt,
-    this.likedBy,
-    this.dislikedBy,
-  }) : dateCreated = dateCreated ?? DateTime.now();
+    int? likesCount,
+    int? dislikesCount,
+  }) : review = review ?? '',
+       locationRating = locationRating ?? 0.0,
+       descriptionRating = descriptionRating ?? 0.0,
+       attachmentsRating = attachmentsRating ?? 0.0,
+       categoryRating = categoryRating ?? 0.0,
+       fundingRating = fundingRating ?? 0.0,
+       datesRating = datesRating ?? 0.0,
+       overallRating = overallRating ?? 0.0,
+       dateCreated = dateCreated ?? DateTime.now(),
+       likesCount = likesCount ?? 0,
+       dislikesCount = dislikesCount ?? 0;
 
   factory ProjectReview({
     int? id,
@@ -52,8 +62,8 @@ abstract class ProjectReview implements _i1.SerializableModel {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   }) = _ProjectReviewImpl;
 
   factory ProjectReview.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -89,14 +99,8 @@ abstract class ProjectReview implements _i1.SerializableModel {
       updatedAt: jsonSerialization['updatedAt'] == null
           ? null
           : _i1.DateTimeJsonExtension.fromJson(jsonSerialization['updatedAt']),
-      likedBy: jsonSerialization['likedBy'] == null
-          ? null
-          : _i4.Protocol().deserialize<List<int>>(jsonSerialization['likedBy']),
-      dislikedBy: jsonSerialization['dislikedBy'] == null
-          ? null
-          : _i4.Protocol().deserialize<List<int>>(
-              jsonSerialization['dislikedBy'],
-            ),
+      likesCount: jsonSerialization['likesCount'] as int?,
+      dislikesCount: jsonSerialization['dislikesCount'] as int?,
     );
   }
 
@@ -133,9 +137,9 @@ abstract class ProjectReview implements _i1.SerializableModel {
 
   DateTime? updatedAt;
 
-  List<int>? likedBy;
+  int? likesCount;
 
-  List<int>? dislikedBy;
+  int? dislikesCount;
 
   /// Returns a shallow copy of this [ProjectReview]
   /// with some or all fields replaced by the given arguments.
@@ -156,8 +160,8 @@ abstract class ProjectReview implements _i1.SerializableModel {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -178,8 +182,8 @@ abstract class ProjectReview implements _i1.SerializableModel {
       if (overallRating != null) 'overallRating': overallRating,
       if (dateCreated != null) 'dateCreated': dateCreated?.toJson(),
       if (updatedAt != null) 'updatedAt': updatedAt?.toJson(),
-      if (likedBy != null) 'likedBy': likedBy?.toJson(),
-      if (dislikedBy != null) 'dislikedBy': dislikedBy?.toJson(),
+      if (likesCount != null) 'likesCount': likesCount,
+      if (dislikesCount != null) 'dislikesCount': dislikesCount,
     };
   }
 
@@ -208,8 +212,8 @@ class _ProjectReviewImpl extends ProjectReview {
     double? overallRating,
     DateTime? dateCreated,
     DateTime? updatedAt,
-    List<int>? likedBy,
-    List<int>? dislikedBy,
+    int? likesCount,
+    int? dislikesCount,
   }) : super._(
          id: id,
          ownerId: ownerId,
@@ -226,8 +230,8 @@ class _ProjectReviewImpl extends ProjectReview {
          overallRating: overallRating,
          dateCreated: dateCreated,
          updatedAt: updatedAt,
-         likedBy: likedBy,
-         dislikedBy: dislikedBy,
+         likesCount: likesCount,
+         dislikesCount: dislikesCount,
        );
 
   /// Returns a shallow copy of this [ProjectReview]
@@ -250,8 +254,8 @@ class _ProjectReviewImpl extends ProjectReview {
     Object? overallRating = _Undefined,
     Object? dateCreated = _Undefined,
     Object? updatedAt = _Undefined,
-    Object? likedBy = _Undefined,
-    Object? dislikedBy = _Undefined,
+    Object? likesCount = _Undefined,
+    Object? dislikesCount = _Undefined,
   }) {
     return ProjectReview(
       id: id is int? ? id : this.id,
@@ -281,12 +285,8 @@ class _ProjectReviewImpl extends ProjectReview {
           : this.overallRating,
       dateCreated: dateCreated is DateTime? ? dateCreated : this.dateCreated,
       updatedAt: updatedAt is DateTime? ? updatedAt : this.updatedAt,
-      likedBy: likedBy is List<int>?
-          ? likedBy
-          : this.likedBy?.map((e0) => e0).toList(),
-      dislikedBy: dislikedBy is List<int>?
-          ? dislikedBy
-          : this.dislikedBy?.map((e0) => e0).toList(),
+      likesCount: likesCount is int? ? likesCount : this.likesCount,
+      dislikesCount: dislikesCount is int? ? dislikesCount : this.dislikesCount,
     );
   }
 }

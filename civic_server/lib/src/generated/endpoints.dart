@@ -1622,6 +1622,28 @@ class Endpoints extends _i1.EndpointDispatch {
                     params['projectId'],
                   ),
         ),
+        'projectRatingCountUpdates': _i1.MethodStreamConnector(
+          name: 'projectRatingCountUpdates',
+          params: {
+            'projectId': _i1.ParameterDescription(
+              name: 'projectId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['project'] as _i8.ProjectEndpoint)
+                  .projectRatingCountUpdates(
+                    session,
+                    params['projectId'],
+                  ),
+        ),
         'projectReviewUpdates': _i1.MethodStreamConnector(
           name: 'projectReviewUpdates',
           params: {

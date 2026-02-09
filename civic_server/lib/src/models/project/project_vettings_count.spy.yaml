@@ -1,0 +1,5 @@
+class: ProjectVettingsCount
+fields:
+    projectVettingId: int
+    likesCount: int?, default = 0
+    dislikesCount: int?, default = 0

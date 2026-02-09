@@ -6,25 +6,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProjectVettingCard extends ConsumerWidget {
   const ProjectVettingCard({
-    required this.projectVetting,
+    required this.projectVettingWithUserState,
     super.key,
   });
 
-  final ProjectVetting projectVetting;
+  final ProjectVettingWithUserState projectVettingWithUserState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reactToVettingNotifier = ref.watch(
+    final vettingWithKey = ProjectVettingWithUserStateKey(
+      projectVettingWithUserState,
+    );
+    final reactToVettingNotifier = ref.read(
       vettingReactionProvider(
-        projectVetting,
+        vettingWithKey,
       ).notifier,
     );
     final reactToVettingState = ref.watch(
       vettingReactionProvider(
-        projectVetting,
+        vettingWithKey,
       ),
     );
-    final projectVettingNotifier = ref.watch(
+    final projectVetting = projectVettingWithUserState.vetting;
+    final projectVettingNotifier = ref.read(
       projectVetProvider(projectVetting).notifier,
     );
     final userId = ref.read(localStorageProvider).getInt('userId');

@@ -6,6 +6,7 @@ class ProjectTitleAndRating extends StatelessWidget {
     required this.rating,
     required this.title,
     required this.ratingNumber,
+    this.showRatingCount = true,
     this.titleSize = 33,
     this.ratingSize = 10,
     this.titleSize2 = 12,
@@ -18,12 +19,14 @@ class ProjectTitleAndRating extends StatelessWidget {
   final String title;
   final double titleSize;
   final double titleSize2;
+  final bool showRatingCount;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       spacing: 3,
       children: [
+        if (showRatingCount)
         Text(
           ratingNumber,
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
