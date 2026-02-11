@@ -804,7 +804,7 @@ class EndpointProject extends _i1.EndpointRef {
     },
   );
 
-  /// Retrieves a paginated list of project reviews for a specific project.
+  /// Retrieves a paginated list of project reviews for a specific project, with sorting and ordering options.
   ///
   /// Parameters
   /// [projectId]: The ID of the project to fetch reviews for.
@@ -812,6 +812,8 @@ class EndpointProject extends _i1.EndpointRef {
   /// [page]: The page number to retrieve (default is 1).
   /// [rating]: An optional rating value to filter reviews by a specific rating category.
   /// [cardinal]: The rating category to filter by (e.g., 'Location', 'Description', etc.).
+  /// [sortBy]: The field to sort by: 'recent', 'liked', 'disliked'. Defaults to 'recent'.
+  /// [order]: 'asc' for ascending, 'desc' for descending. Defaults to 'desc'.
   ///
   /// Returns a [ProjectReviewList] containing the reviews, pagination info, and total count.
   ///
@@ -824,6 +826,8 @@ class EndpointProject extends _i1.EndpointRef {
     required int page,
     double? rating,
     String? cardinal,
+    required String sortBy,
+    required String order,
   }) => caller.callServerEndpoint<_i18.ProjectReviewList>(
     'project',
     'getProjectReviews',
@@ -833,6 +837,8 @@ class EndpointProject extends _i1.EndpointRef {
       'page': page,
       'rating': rating,
       'cardinal': cardinal,
+      'sortBy': sortBy,
+      'order': order,
     },
   );
 

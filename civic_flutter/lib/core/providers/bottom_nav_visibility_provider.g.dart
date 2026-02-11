@@ -10,11 +10,11 @@ part of 'bottom_nav_visibility_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(BottomNavVisibility)
-const bottomNavVisibilityProvider = BottomNavVisibilityProvider._();
+final bottomNavVisibilityProvider = BottomNavVisibilityProvider._();
 
 final class BottomNavVisibilityProvider
     extends $NotifierProvider<BottomNavVisibility, bool> {
-  const BottomNavVisibilityProvider._()
+  BottomNavVisibilityProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$BottomNavVisibility extends $Notifier<bool> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$BottomNavVisibility extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

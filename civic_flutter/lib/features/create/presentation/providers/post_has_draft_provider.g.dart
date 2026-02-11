@@ -10,12 +10,12 @@ part of 'post_has_draft_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(hasPostDraft)
-const hasPostDraftProvider = HasPostDraftFamily._();
+final hasPostDraftProvider = HasPostDraftFamily._();
 
 final class HasPostDraftProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
-  const HasPostDraftProvider._({
+  HasPostDraftProvider._({
     required HasPostDraftFamily super.from,
     required String super.argument,
   }) : super(
@@ -62,7 +62,7 @@ String _$hasPostDraftHash() => r'2f74d98484e0c5299edcae202ea87d24fe386b23';
 
 final class HasPostDraftFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<bool>, String> {
-  const HasPostDraftFamily._()
+  HasPostDraftFamily._()
     : super(
         retry: null,
         name: r'hasPostDraftProvider',

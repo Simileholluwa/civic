@@ -10,7 +10,7 @@ part of 'project_paginated_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedProjectList)
-const paginatedProjectListProvider = PaginatedProjectListFamily._();
+final paginatedProjectListProvider = PaginatedProjectListFamily._();
 
 final class PaginatedProjectListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedProjectListProvider
           PaginatedProjectList,
           Raw<PagingController<int, ProjectWithUserState>>
         > {
-  const PaginatedProjectListProvider._({
+  PaginatedProjectListProvider._({
     required PaginatedProjectListFamily super.from,
     required String super.argument,
   }) : super(
@@ -79,7 +79,7 @@ final class PaginatedProjectListFamily extends $Family
           Raw<PagingController<int, ProjectWithUserState>>,
           String
         > {
-  const PaginatedProjectListFamily._()
+  PaginatedProjectListFamily._()
     : super(
         retry: null,
         name: r'paginatedProjectListProvider',
@@ -104,7 +104,6 @@ abstract class _$PaginatedProjectList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -122,6 +121,6 @@ abstract class _$PaginatedProjectList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

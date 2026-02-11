@@ -10,11 +10,11 @@ part of 'notifications_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Notif)
-const notifProvider = NotifProvider._();
+final notifProvider = NotifProvider._();
 
 final class NotifProvider
     extends $NotifierProvider<Notif, NotificationCardState> {
-  const NotifProvider._()
+  NotifProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$Notif extends $Notifier<NotificationCardState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<NotificationCardState, NotificationCardState>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$Notif extends $Notifier<NotificationCardState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

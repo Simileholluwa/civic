@@ -7,8 +7,8 @@ class ProjectRepositoryImpl extends ProjectRepository {
   ProjectRepositoryImpl({
     required ProjectRemoteDataSource remoteDatasource,
     required ProjectLocalDataSource localDatasource,
-  })  : _localDatasource = localDatasource,
-        _remoteDatasource = remoteDatasource;
+  }) : _localDatasource = localDatasource,
+       _remoteDatasource = remoteDatasource;
 
   final ProjectRemoteDataSource _remoteDatasource;
   final ProjectLocalDataSource _localDatasource;
@@ -205,6 +205,8 @@ class ProjectRepositoryImpl extends ProjectRepository {
     required int projectId,
     required int page,
     required int limit,
+    String sortBy = 'recent',
+    String order = 'desc',
     double? rating,
     String? cardinal,
   }) async {
@@ -215,6 +217,8 @@ class ProjectRepositoryImpl extends ProjectRepository {
         limit: limit,
         rating: rating,
         cardinal: cardinal,
+        sortBy: sortBy,
+        order: order,
       );
 
       return Right(result);

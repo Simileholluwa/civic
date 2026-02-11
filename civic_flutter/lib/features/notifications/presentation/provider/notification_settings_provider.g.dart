@@ -10,7 +10,7 @@ part of 'notification_settings_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(NotificationSettingsNotifier)
-const notificationSettingsProvider = NotificationSettingsNotifierFamily._();
+final notificationSettingsProvider = NotificationSettingsNotifierFamily._();
 
 final class NotificationSettingsNotifierProvider
     extends
@@ -18,7 +18,7 @@ final class NotificationSettingsNotifierProvider
           NotificationSettingsNotifier,
           AppNotificationSettings
         > {
-  const NotificationSettingsNotifierProvider._({
+  NotificationSettingsNotifierProvider._({
     required NotificationSettingsNotifierFamily super.from,
     required UserNotificationSettings? super.argument,
   }) : super(
@@ -75,7 +75,7 @@ final class NotificationSettingsNotifierFamily extends $Family
           AppNotificationSettings,
           UserNotificationSettings?
         > {
-  const NotificationSettingsNotifierFamily._()
+  NotificationSettingsNotifierFamily._()
     : super(
         retry: null,
         name: r'notificationSettingsProvider',
@@ -101,7 +101,6 @@ abstract class _$NotificationSettingsNotifier
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref as $Ref<AppNotificationSettings, AppNotificationSettings>;
     final element =
@@ -112,6 +111,6 @@ abstract class _$NotificationSettingsNotifier
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

@@ -10,7 +10,7 @@ part of 'project_review_detail_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(projectReviewDetail)
-const projectReviewDetailProvider = ProjectReviewDetailFamily._();
+final projectReviewDetailProvider = ProjectReviewDetailFamily._();
 
 final class ProjectReviewDetailProvider
     extends
@@ -20,7 +20,7 @@ final class ProjectReviewDetailProvider
           FutureOr<ProjectReview?>
         >
     with $FutureModifier<ProjectReview?>, $FutureProvider<ProjectReview?> {
-  const ProjectReviewDetailProvider._({
+  ProjectReviewDetailProvider._({
     required ProjectReviewDetailFamily super.from,
     required int super.argument,
   }) : super(
@@ -69,7 +69,7 @@ String _$projectReviewDetailHash() =>
 
 final class ProjectReviewDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<ProjectReview?>, int> {
-  const ProjectReviewDetailFamily._()
+  ProjectReviewDetailFamily._()
     : super(
         retry: null,
         name: r'projectReviewDetailProvider',

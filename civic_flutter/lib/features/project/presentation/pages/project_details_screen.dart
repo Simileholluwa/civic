@@ -23,6 +23,13 @@ class ProjectDetailsScreen extends ConsumerWidget {
     );
     final tabController = ref.watch(projectDetailsTabControllerProvider);
     final currentPage = ref.watch(projectDetailCurrentPageProvider);
+    final ratingCount = ref.watch(
+      projectOverallRatingCountsProvider(
+        project,
+      ).select(
+        (s) => s.totalRating,
+      ),
+    );
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -114,16 +121,18 @@ class ProjectDetailsScreen extends ConsumerWidget {
                         duration: const Duration(
                           milliseconds: 300,
                         ),
-                        crossFadeState: currentPage != 2
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
+                        crossFadeState: currentPage == 2 && ratingCount > 2
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
                         firstChild: const SizedBox.shrink(),
                         secondChild: IconButton(
                           onPressed: () async {
-                            final queryState = ref.read(projectReviewListQueryProvider);
+                            final queryState = ref.read(
+                              projectReviewListQueryProvider,
+                            );
                             final query = {
                               'sortBy': queryState.sortby,
-                              'sortDir': queryState.sortDir,
+                              'order': queryState.order,
                               'rating': queryState.rating,
                               'cardinal': queryState.cardinal,
                             };
@@ -136,6 +145,7 @@ class ProjectDetailsScreen extends ConsumerWidget {
                                   builder: (context) {
                                     return ShowFilterReviews(
                                       initialQuery: query,
+                                      ratingCount: ratingCount,
                                     );
                                   },
                                 );

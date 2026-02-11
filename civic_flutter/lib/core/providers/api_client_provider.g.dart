@@ -10,11 +10,11 @@ part of 'api_client_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(client)
-const clientProvider = ClientProvider._();
+final clientProvider = ClientProvider._();
 
 final class ClientProvider extends $FunctionalProvider<Client, Client, Client>
     with $Provider<Client> {
-  const ClientProvider._()
+  ClientProvider._()
     : super(
         from: null,
         argument: null,
@@ -50,7 +50,7 @@ final class ClientProvider extends $FunctionalProvider<Client, Client, Client>
 String _$clientHash() => r'2198fef6fde7871d338afb7dfa73ec5cebb25d87';
 
 @ProviderFor(session)
-const sessionProvider = SessionProvider._();
+final sessionProvider = SessionProvider._();
 
 final class SessionProvider
     extends
@@ -60,7 +60,7 @@ final class SessionProvider
           Raw<SessionManager>
         >
     with $Provider<Raw<SessionManager>> {
-  const SessionProvider._()
+  SessionProvider._()
     : super(
         from: null,
         argument: null,
@@ -97,7 +97,7 @@ final class SessionProvider
 String _$sessionHash() => r'9b5a88b134b0d73282d813be5e40fbc068fff553';
 
 @ProviderFor(authEmail)
-const authEmailProvider = AuthEmailProvider._();
+final authEmailProvider = AuthEmailProvider._();
 
 final class AuthEmailProvider
     extends
@@ -107,7 +107,7 @@ final class AuthEmailProvider
           EmailAuthController
         >
     with $Provider<EmailAuthController> {
-  const AuthEmailProvider._()
+  AuthEmailProvider._()
     : super(
         from: null,
         argument: null,

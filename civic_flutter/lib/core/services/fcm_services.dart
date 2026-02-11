@@ -22,7 +22,7 @@ class FcmServiceImpl implements FcmServices {
   Future<void> init() async {
     _messaging.onTokenRefresh.listen(_sendTokenToServer);
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
+    FirebaseMessaging.onMessage.listen((message) {});
   }
 
   Future<void> _requestPermission(BuildContext context) async {

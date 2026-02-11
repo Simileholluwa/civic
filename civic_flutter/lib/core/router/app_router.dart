@@ -150,6 +150,7 @@ GoRouter router(Ref ref) {
         },
       ),
     ],
+    
     errorBuilder: (context, state) => const NotFoundScreen(),
   );
 }

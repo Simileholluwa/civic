@@ -10,12 +10,12 @@ part of 'assets_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(assetService)
-const assetServiceProvider = AssetServiceProvider._();
+final assetServiceProvider = AssetServiceProvider._();
 
 final class AssetServiceProvider
     extends $FunctionalProvider<AssetService, AssetService, AssetService>
     with $Provider<AssetService> {
-  const AssetServiceProvider._()
+  AssetServiceProvider._()
     : super(
         from: null,
         argument: null,

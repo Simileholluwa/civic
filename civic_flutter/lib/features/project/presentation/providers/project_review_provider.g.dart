@@ -10,17 +10,17 @@ part of 'project_review_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectReviewProvider)
-const projectReviewProviderProvider = ProjectReviewProviderFamily._();
+final projectReviewProviderProvider = ProjectReviewProviderFamily._();
 
 final class ProjectReviewProviderProvider
     extends $NotifierProvider<ProjectReviewProvider, ProjectReviewState> {
-  const ProjectReviewProviderProvider._({
+  ProjectReviewProviderProvider._({
     required ProjectReviewProviderFamily super.from,
     required ProjectReview? super.argument,
   }) : super(
          retry: null,
          name: r'projectReviewProviderProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -59,7 +59,7 @@ final class ProjectReviewProviderProvider
 }
 
 String _$projectReviewProviderHash() =>
-    r'a04569f6b3c176cd451a60c77d48a0f2e6b414f2';
+    r'4e432fa6712658a971948b64750ac1c2ffc230b1';
 
 final class ProjectReviewProviderFamily extends $Family
     with
@@ -70,13 +70,13 @@ final class ProjectReviewProviderFamily extends $Family
           ProjectReviewState,
           ProjectReview?
         > {
-  const ProjectReviewProviderFamily._()
+  ProjectReviewProviderFamily._()
     : super(
         retry: null,
         name: r'projectReviewProviderProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   ProjectReviewProviderProvider call(ProjectReview? projectReview) =>
@@ -94,7 +94,6 @@ abstract class _$ProjectReviewProvider extends $Notifier<ProjectReviewState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<ProjectReviewState, ProjectReviewState>;
     final element =
         ref.element
@@ -104,6 +103,6 @@ abstract class _$ProjectReviewProvider extends $Notifier<ProjectReviewState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

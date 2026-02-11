@@ -10,7 +10,7 @@ part of 'user_services_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(userRemoteDatasource)
-const userRemoteDatasourceProvider = UserRemoteDatasourceProvider._();
+final userRemoteDatasourceProvider = UserRemoteDatasourceProvider._();
 
 final class UserRemoteDatasourceProvider
     extends
@@ -20,7 +20,7 @@ final class UserRemoteDatasourceProvider
           UserRemoteDatasourceImpl
         >
     with $Provider<UserRemoteDatasourceImpl> {
-  const UserRemoteDatasourceProvider._()
+  UserRemoteDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,7 @@ String _$userRemoteDatasourceHash() =>
     r'd28c0f4412c6e46fb529c4faea9360b7383f41d6';
 
 @ProviderFor(userRepositoryImpl)
-const userRepositoryImplProvider = UserRepositoryImplProvider._();
+final userRepositoryImplProvider = UserRepositoryImplProvider._();
 
 final class UserRepositoryImplProvider
     extends
@@ -68,7 +68,7 @@ final class UserRepositoryImplProvider
           UserRepositoryImpl
         >
     with $Provider<UserRepositoryImpl> {
-  const UserRepositoryImplProvider._()
+  UserRepositoryImplProvider._()
     : super(
         from: null,
         argument: null,
@@ -106,7 +106,7 @@ String _$userRepositoryImplHash() =>
     r'cf9bfc43f7e25882a5bb5390fd8b022e99864b39';
 
 @ProviderFor(toggleFollow)
-const toggleFollowProvider = ToggleFollowProvider._();
+final toggleFollowProvider = ToggleFollowProvider._();
 
 final class ToggleFollowProvider
     extends
@@ -116,7 +116,7 @@ final class ToggleFollowProvider
           ToggleFollowUseCase
         >
     with $Provider<ToggleFollowUseCase> {
-  const ToggleFollowProvider._()
+  ToggleFollowProvider._()
     : super(
         from: null,
         argument: null,
@@ -153,12 +153,12 @@ final class ToggleFollowProvider
 String _$toggleFollowHash() => r'3d297be2f1e897d875b8e18ec73fcb94885f8d75';
 
 @ProviderFor(fetchUser)
-const fetchUserProvider = FetchUserProvider._();
+final fetchUserProvider = FetchUserProvider._();
 
 final class FetchUserProvider
     extends $FunctionalProvider<GetUserUseCase, GetUserUseCase, GetUserUseCase>
     with $Provider<GetUserUseCase> {
-  const FetchUserProvider._()
+  FetchUserProvider._()
     : super(
         from: null,
         argument: null,

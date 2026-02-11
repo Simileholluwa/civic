@@ -10,7 +10,7 @@ part of 'load_post_drafts_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(loaddraftPost)
-const loaddraftPostProvider = LoaddraftPostFamily._();
+final loaddraftPostProvider = LoaddraftPostFamily._();
 
 final class LoaddraftPostProvider
     extends
@@ -20,7 +20,7 @@ final class LoaddraftPostProvider
           FutureOr<List<Post>>
         >
     with $FutureModifier<List<Post>>, $FutureProvider<List<Post>> {
-  const LoaddraftPostProvider._({
+  LoaddraftPostProvider._({
     required LoaddraftPostFamily super.from,
     required String super.argument,
   }) : super(
@@ -67,7 +67,7 @@ String _$loaddraftPostHash() => r'61da5cf6ab0fb32e21750bd9289d08c79dec278d';
 
 final class LoaddraftPostFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Post>>, String> {
-  const LoaddraftPostFamily._()
+  LoaddraftPostFamily._()
     : super(
         retry: null,
         name: r'loaddraftPostProvider',

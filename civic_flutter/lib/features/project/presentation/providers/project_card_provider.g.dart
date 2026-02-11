@@ -10,11 +10,11 @@ part of 'project_card_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectCardWidget)
-const projectCardWidgetProvider = ProjectCardWidgetFamily._();
+final projectCardWidgetProvider = ProjectCardWidgetFamily._();
 
 final class ProjectCardWidgetProvider
     extends $NotifierProvider<ProjectCardWidget, ProjectCardState> {
-  const ProjectCardWidgetProvider._({
+  ProjectCardWidgetProvider._({
     required ProjectCardWidgetFamily super.from,
     required ProjectWithUserStateKey? super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class ProjectCardWidgetFamily extends $Family
           ProjectCardState,
           ProjectWithUserStateKey?
         > {
-  const ProjectCardWidgetFamily._()
+  ProjectCardWidgetFamily._()
     : super(
         retry: null,
         name: r'projectCardWidgetProvider',
@@ -93,7 +93,6 @@ abstract class _$ProjectCardWidget extends $Notifier<ProjectCardState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<ProjectCardState, ProjectCardState>;
     final element =
         ref.element
@@ -103,6 +102,6 @@ abstract class _$ProjectCardWidget extends $Notifier<ProjectCardState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

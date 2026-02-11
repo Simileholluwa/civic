@@ -10,7 +10,7 @@ part of 'paginated_notifications_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedNotificationsList)
-const paginatedNotificationsListProvider = PaginatedNotificationsListFamily._();
+final paginatedNotificationsListProvider = PaginatedNotificationsListFamily._();
 
 final class PaginatedNotificationsListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedNotificationsListProvider
           PaginatedNotificationsList,
           Raw<PagingController<int, AppNotification>>
         > {
-  const PaginatedNotificationsListProvider._({
+  PaginatedNotificationsListProvider._({
     required PaginatedNotificationsListFamily super.from,
     required (NotificationTargetType?, bool?) super.argument,
   }) : super(
@@ -80,7 +80,7 @@ final class PaginatedNotificationsListFamily extends $Family
           Raw<PagingController<int, AppNotification>>,
           (NotificationTargetType?, bool?)
         > {
-  const PaginatedNotificationsListFamily._()
+  PaginatedNotificationsListFamily._()
     : super(
         retry: null,
         name: r'paginatedNotificationsListProvider',
@@ -114,7 +114,6 @@ abstract class _$PaginatedNotificationsList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref =
         this.ref
             as $Ref<
@@ -132,6 +131,6 @@ abstract class _$PaginatedNotificationsList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }

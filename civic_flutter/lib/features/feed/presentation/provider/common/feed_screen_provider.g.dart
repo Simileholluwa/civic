@@ -10,12 +10,12 @@ part of 'feed_screen_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(feedVsync)
-const feedVsyncProvider = FeedVsyncProvider._();
+final feedVsyncProvider = FeedVsyncProvider._();
 
 final class FeedVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
-  const FeedVsyncProvider._()
+  FeedVsyncProvider._()
     : super(
         from: null,
         argument: null,
@@ -51,12 +51,12 @@ final class FeedVsyncProvider
 String _$feedVsyncHash() => r'44ce38303dc4f53d025de1dac046e269c8fcde60';
 
 @ProviderFor(feedFilterVsync)
-const feedFilterVsyncProvider = FeedFilterVsyncProvider._();
+final feedFilterVsyncProvider = FeedFilterVsyncProvider._();
 
 final class FeedFilterVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
-  const FeedFilterVsyncProvider._()
+  FeedFilterVsyncProvider._()
     : super(
         from: null,
         argument: null,
@@ -92,11 +92,11 @@ final class FeedFilterVsyncProvider
 String _$feedFilterVsyncHash() => r'03738f6fe4b1d20000391334f2b68fee877ed5e2';
 
 @ProviderFor(FeedScreenTabController)
-const feedScreenTabControllerProvider = FeedScreenTabControllerProvider._();
+final feedScreenTabControllerProvider = FeedScreenTabControllerProvider._();
 
 final class FeedScreenTabControllerProvider
     extends $NotifierProvider<FeedScreenTabController, Raw<TabController>> {
-  const FeedScreenTabControllerProvider._()
+  FeedScreenTabControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -131,7 +131,6 @@ abstract class _$FeedScreenTabController extends $Notifier<Raw<TabController>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
     final element =
         ref.element
@@ -141,16 +140,16 @@ abstract class _$FeedScreenTabController extends $Notifier<Raw<TabController>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(FeedCurrentPage)
-const feedCurrentPageProvider = FeedCurrentPageProvider._();
+final feedCurrentPageProvider = FeedCurrentPageProvider._();
 
 final class FeedCurrentPageProvider
     extends $NotifierProvider<FeedCurrentPage, int> {
-  const FeedCurrentPageProvider._()
+  FeedCurrentPageProvider._()
     : super(
         from: null,
         argument: null,
@@ -184,7 +183,6 @@ abstract class _$FeedCurrentPage extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -194,6 +192,6 @@ abstract class _$FeedCurrentPage extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

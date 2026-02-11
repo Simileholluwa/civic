@@ -10,7 +10,7 @@ part of 'onboarding_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(onboardingLocalDatabase)
-const onboardingLocalDatabaseProvider = OnboardingLocalDatabaseProvider._();
+final onboardingLocalDatabaseProvider = OnboardingLocalDatabaseProvider._();
 
 final class OnboardingLocalDatabaseProvider
     extends
@@ -20,7 +20,7 @@ final class OnboardingLocalDatabaseProvider
           OnboardingLocalDatabaseImpl
         >
     with $Provider<OnboardingLocalDatabaseImpl> {
-  const OnboardingLocalDatabaseProvider._()
+  OnboardingLocalDatabaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,7 @@ String _$onboardingLocalDatabaseHash() =>
     r'39edbcf22cef204e8b58801348bf0bab7cb5f2f6';
 
 @ProviderFor(onboardingRepository)
-const onboardingRepositoryProvider = OnboardingRepositoryProvider._();
+final onboardingRepositoryProvider = OnboardingRepositoryProvider._();
 
 final class OnboardingRepositoryProvider
     extends
@@ -68,7 +68,7 @@ final class OnboardingRepositoryProvider
           OnboardingRepositoryImpl
         >
     with $Provider<OnboardingRepositoryImpl> {
-  const OnboardingRepositoryProvider._()
+  OnboardingRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -106,7 +106,7 @@ String _$onboardingRepositoryHash() =>
     r'a9b9e23c7e4cbe82938a3072e9fb4ade20fd83ef';
 
 @ProviderFor(cacheFirstTimeUseCase)
-const cacheFirstTimeUseCaseProvider = CacheFirstTimeUseCaseProvider._();
+final cacheFirstTimeUseCaseProvider = CacheFirstTimeUseCaseProvider._();
 
 final class CacheFirstTimeUseCaseProvider
     extends
@@ -116,7 +116,7 @@ final class CacheFirstTimeUseCaseProvider
           CacheFirstTimerUseCase
         >
     with $Provider<CacheFirstTimerUseCase> {
-  const CacheFirstTimeUseCaseProvider._()
+  CacheFirstTimeUseCaseProvider._()
     : super(
         from: null,
         argument: null,

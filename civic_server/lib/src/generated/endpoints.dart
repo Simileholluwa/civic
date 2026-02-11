@@ -1342,6 +1342,16 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<String?>(),
               nullable: true,
             ),
+            'sortBy': _i1.ParameterDescription(
+              name: 'sortBy',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'order': _i1.ParameterDescription(
+              name: 'order',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
           },
           call:
               (
@@ -1355,6 +1365,8 @@ class Endpoints extends _i1.EndpointDispatch {
                     page: params['page'],
                     rating: params['rating'],
                     cardinal: params['cardinal'],
+                    sortBy: params['sortBy'],
+                    order: params['order'],
                   ),
         ),
         'clearBookmarks': _i1.MethodConnector(

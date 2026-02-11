@@ -23,6 +23,8 @@ abstract class ProjectRepository {
     required int projectId,
     required int page,
     required int limit,
+    String sortBy = 'recent',
+    String order = 'desc',
     double? rating,
     String? cardinal,
   });

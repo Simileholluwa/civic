@@ -10,12 +10,12 @@ part of 'network_tab_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(networkVsync)
-const networkVsyncProvider = NetworkVsyncProvider._();
+final networkVsyncProvider = NetworkVsyncProvider._();
 
 final class NetworkVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
-  const NetworkVsyncProvider._()
+  NetworkVsyncProvider._()
     : super(
         from: null,
         argument: null,
@@ -51,11 +51,11 @@ final class NetworkVsyncProvider
 String _$networkVsyncHash() => r'52b67dc0242240b30e7cf1939ef9fdfb8fdbab95';
 
 @ProviderFor(NetworkTabController)
-const networkTabControllerProvider = NetworkTabControllerProvider._();
+final networkTabControllerProvider = NetworkTabControllerProvider._();
 
 final class NetworkTabControllerProvider
     extends $NotifierProvider<NetworkTabController, Raw<TabController>> {
-  const NetworkTabControllerProvider._()
+  NetworkTabControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -90,7 +90,6 @@ abstract class _$NetworkTabController extends $Notifier<Raw<TabController>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
     final element =
         ref.element
@@ -100,16 +99,16 @@ abstract class _$NetworkTabController extends $Notifier<Raw<TabController>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(NetworkCurrentPage)
-const networkCurrentPageProvider = NetworkCurrentPageProvider._();
+final networkCurrentPageProvider = NetworkCurrentPageProvider._();
 
 final class NetworkCurrentPageProvider
     extends $NotifierProvider<NetworkCurrentPage, int> {
-  const NetworkCurrentPageProvider._()
+  NetworkCurrentPageProvider._()
     : super(
         from: null,
         argument: null,
@@ -144,7 +143,6 @@ abstract class _$NetworkCurrentPage extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -154,6 +152,6 @@ abstract class _$NetworkCurrentPage extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

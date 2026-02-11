@@ -276,11 +276,11 @@ class DetailScreen extends ConsumerWidget {
             );
           },
           error: (error, st) {
-            final err = error as Map<String, String>;
+            final err = error as Map<String, dynamic>;
             return Center(
               child: LoadingError(
                 retry: null,
-                errorMessage: err['message'],
+                errorMessage: err['message'] as String? ?? 'An error occurred',
                 mainAxisAlignment: MainAxisAlignment.center,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,

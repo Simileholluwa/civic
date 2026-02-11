@@ -10,7 +10,7 @@ part of 'paginated_comment_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedCommentList)
-const paginatedCommentListProvider = PaginatedCommentListFamily._();
+final paginatedCommentListProvider = PaginatedCommentListFamily._();
 
 final class PaginatedCommentListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedCommentListProvider
           PaginatedCommentList,
           Raw<PagingController<int, PostWithUserState>>
         > {
-  const PaginatedCommentListProvider._({
+  PaginatedCommentListProvider._({
     required PaginatedCommentListFamily super.from,
     required int super.argument,
   }) : super(
@@ -79,7 +79,7 @@ final class PaginatedCommentListFamily extends $Family
           Raw<PagingController<int, PostWithUserState>>,
           int
         > {
-  const PaginatedCommentListFamily._()
+  PaginatedCommentListFamily._()
     : super(
         retry: null,
         name: r'paginatedCommentListProvider',
@@ -104,7 +104,6 @@ abstract class _$PaginatedCommentList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -122,6 +121,6 @@ abstract class _$PaginatedCommentList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

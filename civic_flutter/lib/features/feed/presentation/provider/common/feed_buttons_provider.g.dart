@@ -10,11 +10,11 @@ part of 'feed_buttons_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(FeedButtons)
-const feedButtonsProvider = FeedButtonsFamily._();
+final feedButtonsProvider = FeedButtonsFamily._();
 
 final class FeedButtonsProvider
     extends $NotifierProvider<FeedButtons, FeedWidgetsState> {
-  const FeedButtonsProvider._({
+  FeedButtonsProvider._({
     required FeedButtonsFamily super.from,
     required PostWithUserStateKey? super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class FeedButtonsFamily extends $Family
           FeedWidgetsState,
           PostWithUserStateKey?
         > {
-  const FeedButtonsFamily._()
+  FeedButtonsFamily._()
     : super(
         retry: null,
         name: r'feedButtonsProvider',
@@ -93,7 +93,6 @@ abstract class _$FeedButtons extends $Notifier<FeedWidgetsState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<FeedWidgetsState, FeedWidgetsState>;
     final element =
         ref.element
@@ -103,6 +102,6 @@ abstract class _$FeedButtons extends $Notifier<FeedWidgetsState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

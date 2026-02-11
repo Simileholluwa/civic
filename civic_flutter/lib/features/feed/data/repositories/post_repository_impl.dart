@@ -101,6 +101,7 @@ class FeedRepositoryImpl implements FeedRepository {
       return Left(
         Failure(
           message: e.message,
+          type: e.type,
           action: e.action,
         ),
       );

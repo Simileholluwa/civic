@@ -10,11 +10,11 @@ part of 'post_video_player_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PostVideoPlayer)
-const postVideoPlayerProvider = PostVideoPlayerFamily._();
+final postVideoPlayerProvider = PostVideoPlayerFamily._();
 
 final class PostVideoPlayerProvider
     extends $NotifierProvider<PostVideoPlayer, Raw<VideoPlayerController?>?> {
-  const PostVideoPlayerProvider._({
+  PostVideoPlayerProvider._({
     required PostVideoPlayerFamily super.from,
     required String super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class PostVideoPlayerFamily extends $Family
           Raw<VideoPlayerController?>?,
           String
         > {
-  const PostVideoPlayerFamily._()
+  PostVideoPlayerFamily._()
     : super(
         retry: null,
         name: r'postVideoPlayerProvider',
@@ -94,7 +94,6 @@ abstract class _$PostVideoPlayer
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<Raw<VideoPlayerController?>?, Raw<VideoPlayerController?>?>;
@@ -109,6 +108,6 @@ abstract class _$PostVideoPlayer
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

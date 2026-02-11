@@ -10,7 +10,7 @@ part of 'project_paginated_vetting_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedProjectVettingList)
-const paginatedProjectVettingListProvider =
+final paginatedProjectVettingListProvider =
     PaginatedProjectVettingListProvider._();
 
 final class PaginatedProjectVettingListProvider
@@ -19,7 +19,7 @@ final class PaginatedProjectVettingListProvider
           PaginatedProjectVettingList,
           Raw<PagingController<int, ProjectVettingWithUserState>>
         > {
-  const PaginatedProjectVettingListProvider._()
+  PaginatedProjectVettingListProvider._()
     : super(
         from: null,
         argument: null,
@@ -60,7 +60,6 @@ abstract class _$PaginatedProjectVettingList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -78,6 +77,6 @@ abstract class _$PaginatedProjectVettingList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

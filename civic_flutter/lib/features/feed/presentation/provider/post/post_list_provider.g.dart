@@ -10,7 +10,7 @@ part of 'post_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedPostList)
-const paginatedPostListProvider = PaginatedPostListProvider._();
+final paginatedPostListProvider = PaginatedPostListProvider._();
 
 final class PaginatedPostListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedPostListProvider
           PaginatedPostList,
           Raw<PagingController<int, PostWithUserState>>
         > {
-  const PaginatedPostListProvider._()
+  PaginatedPostListProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,6 @@ abstract class _$PaginatedPostList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -76,6 +75,6 @@ abstract class _$PaginatedPostList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

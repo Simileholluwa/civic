@@ -45,9 +45,9 @@ Future<DateTime?> createContentPollDuration(BuildContext context) async {
       context: context,
       initialTime: TimeOfDay.now(),
       helpText: 'Select expiration time',
-      builder: (BuildContext? context, Widget? child) {
+      builder: (context, child) {
         return Theme(
-          data: Theme.of(context!).copyWith(
+          data: Theme.of(context).copyWith(
             timePickerTheme: TimePickerThemeData(
               dialBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
               elevation: 4,

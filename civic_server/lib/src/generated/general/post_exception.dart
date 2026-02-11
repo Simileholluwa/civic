@@ -20,17 +20,20 @@ abstract class ServerSideException
   ServerSideException._({
     required this.message,
     String? action,
+    this.type,
   }) : action = action ?? 'nothing';
 
   factory ServerSideException({
     required String message,
     String? action,
+    String? type,
   }) = _ServerSideExceptionImpl;
 
   factory ServerSideException.fromJson(Map<String, dynamic> jsonSerialization) {
     return ServerSideException(
       message: jsonSerialization['message'] as String,
       action: jsonSerialization['action'] as String?,
+      type: jsonSerialization['type'] as String?,
     );
   }
 
@@ -38,12 +41,15 @@ abstract class ServerSideException
 
   String? action;
 
+  String? type;
+
   /// Returns a shallow copy of this [ServerSideException]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   ServerSideException copyWith({
     String? message,
     String? action,
+    String? type,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -51,6 +57,7 @@ abstract class ServerSideException
       '__className__': 'ServerSideException',
       'message': message,
       if (action != null) 'action': action,
+      if (type != null) 'type': type,
     };
   }
 
@@ -60,12 +67,13 @@ abstract class ServerSideException
       '__className__': 'ServerSideException',
       'message': message,
       if (action != null) 'action': action,
+      if (type != null) 'type': type,
     };
   }
 
   @override
   String toString() {
-    return 'ServerSideException(message: $message, action: $action)';
+    return 'ServerSideException(message: $message, action: $action, type: $type)';
   }
 }
 
@@ -75,9 +83,11 @@ class _ServerSideExceptionImpl extends ServerSideException {
   _ServerSideExceptionImpl({
     required String message,
     String? action,
+    String? type,
   }) : super._(
          message: message,
          action: action,
+         type: type,
        );
 
   /// Returns a shallow copy of this [ServerSideException]
@@ -87,10 +97,12 @@ class _ServerSideExceptionImpl extends ServerSideException {
   ServerSideException copyWith({
     String? message,
     Object? action = _Undefined,
+    Object? type = _Undefined,
   }) {
     return ServerSideException(
       message: message ?? this.message,
       action: action is String? ? action : this.action,
+      type: type is String? ? type : this.type,
     );
   }
 }

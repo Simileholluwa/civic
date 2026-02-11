@@ -10,10 +10,10 @@ part of 'initial_dependencies_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(BootStrap)
-const bootStrapProvider = BootStrapProvider._();
+final bootStrapProvider = BootStrapProvider._();
 
 final class BootStrapProvider extends $AsyncNotifierProvider<BootStrap, void> {
-  const BootStrapProvider._()
+  BootStrapProvider._()
     : super(
         from: null,
         argument: null,
@@ -39,7 +39,6 @@ abstract class _$BootStrap extends $AsyncNotifier<void> {
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
     final ref = this.ref as $Ref<AsyncValue<void>, void>;
     final element =
         ref.element
@@ -49,6 +48,6 @@ abstract class _$BootStrap extends $AsyncNotifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleCreate(ref, build);
   }
 }

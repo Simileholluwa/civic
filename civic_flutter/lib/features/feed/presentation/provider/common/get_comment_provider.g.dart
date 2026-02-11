@@ -10,7 +10,7 @@ part of 'get_comment_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(getComment)
-const getCommentProvider = GetCommentFamily._();
+final getCommentProvider = GetCommentFamily._();
 
 final class GetCommentProvider
     extends
@@ -22,7 +22,7 @@ final class GetCommentProvider
     with
         $FutureModifier<PostWithUserState>,
         $FutureProvider<PostWithUserState> {
-  const GetCommentProvider._({
+  GetCommentProvider._({
     required GetCommentFamily super.from,
     required (int, bool) super.argument,
   }) : super(
@@ -70,7 +70,7 @@ String _$getCommentHash() => r'f47b28a49788fe5d62f5b2148d70fe7cc1ae30a6';
 
 final class GetCommentFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<PostWithUserState>, (int, bool)> {
-  const GetCommentFamily._()
+  GetCommentFamily._()
     : super(
         retry: null,
         name: r'getCommentProvider',

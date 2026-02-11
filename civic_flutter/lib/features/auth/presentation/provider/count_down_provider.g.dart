@@ -10,11 +10,11 @@ part of 'count_down_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(CountdownTimer)
-const countdownTimerProvider = CountdownTimerProvider._();
+final countdownTimerProvider = CountdownTimerProvider._();
 
 final class CountdownTimerProvider
     extends $NotifierProvider<CountdownTimer, CountdownTimerState> {
-  const CountdownTimerProvider._()
+  CountdownTimerProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$CountdownTimer extends $Notifier<CountdownTimerState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<CountdownTimerState, CountdownTimerState>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$CountdownTimer extends $Notifier<CountdownTimerState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

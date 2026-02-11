@@ -10,7 +10,7 @@ part of 'notification_services_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(notificationLocalDatasource)
-const notificationLocalDatasourceProvider =
+final notificationLocalDatasourceProvider =
     NotificationLocalDatasourceProvider._();
 
 final class NotificationLocalDatasourceProvider
@@ -21,7 +21,7 @@ final class NotificationLocalDatasourceProvider
           NotificationLocalDatasourceImpl
         >
     with $Provider<NotificationLocalDatasourceImpl> {
-  const NotificationLocalDatasourceProvider._()
+  NotificationLocalDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -61,7 +61,7 @@ String _$notificationLocalDatasourceHash() =>
     r'fda7c1d36e842bdb18301ccbe6cd376ae356b9a5';
 
 @ProviderFor(notificationRemoteDatasource)
-const notificationRemoteDatasourceProvider =
+final notificationRemoteDatasourceProvider =
     NotificationRemoteDatasourceProvider._();
 
 final class NotificationRemoteDatasourceProvider
@@ -72,7 +72,7 @@ final class NotificationRemoteDatasourceProvider
           NotificationRemoteDatasourceImpl
         >
     with $Provider<NotificationRemoteDatasourceImpl> {
-  const NotificationRemoteDatasourceProvider._()
+  NotificationRemoteDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -112,7 +112,7 @@ String _$notificationRemoteDatasourceHash() =>
     r'382c54f5dbb845e26ae9bfb21cf14da6a376f5cf';
 
 @ProviderFor(notificationRepositoryImpl)
-const notificationRepositoryImplProvider =
+final notificationRepositoryImplProvider =
     NotificationRepositoryImplProvider._();
 
 final class NotificationRepositoryImplProvider
@@ -123,7 +123,7 @@ final class NotificationRepositoryImplProvider
           NotificationRepositoryImpl
         >
     with $Provider<NotificationRepositoryImpl> {
-  const NotificationRepositoryImplProvider._()
+  NotificationRepositoryImplProvider._()
     : super(
         from: null,
         argument: null,
@@ -161,7 +161,7 @@ String _$notificationRepositoryImplHash() =>
     r'2ff9721dfb0fffe82b49936ef5ad557036352cca';
 
 @ProviderFor(getNotifications)
-const getNotificationsProvider = GetNotificationsProvider._();
+final getNotificationsProvider = GetNotificationsProvider._();
 
 final class GetNotificationsProvider
     extends
@@ -171,7 +171,7 @@ final class GetNotificationsProvider
           GetNotificationsUseCase
         >
     with $Provider<GetNotificationsUseCase> {
-  const GetNotificationsProvider._()
+  GetNotificationsProvider._()
     : super(
         from: null,
         argument: null,
@@ -208,7 +208,7 @@ final class GetNotificationsProvider
 String _$getNotificationsHash() => r'f789e9b2a96903caed8ecdb8ec31834556f6dcaa';
 
 @ProviderFor(getUserNotificationSettings)
-const getUserNotificationSettingsProvider =
+final getUserNotificationSettingsProvider =
     GetUserNotificationSettingsProvider._();
 
 final class GetUserNotificationSettingsProvider
@@ -219,7 +219,7 @@ final class GetUserNotificationSettingsProvider
           GetUserNotificationSettingsUseCase
         >
     with $Provider<GetUserNotificationSettingsUseCase> {
-  const GetUserNotificationSettingsProvider._()
+  GetUserNotificationSettingsProvider._()
     : super(
         from: null,
         argument: null,
@@ -259,7 +259,7 @@ String _$getUserNotificationSettingsHash() =>
     r'6c942449fdf2012d0cfaba36a483ab9849cfb693';
 
 @ProviderFor(updateUserNotificationSettings)
-const updateUserNotificationSettingsProvider =
+final updateUserNotificationSettingsProvider =
     UpdateUserNotificationSettingsProvider._();
 
 final class UpdateUserNotificationSettingsProvider
@@ -270,7 +270,7 @@ final class UpdateUserNotificationSettingsProvider
           UpdateUserNotificationSettingsUseCase
         >
     with $Provider<UpdateUserNotificationSettingsUseCase> {
-  const UpdateUserNotificationSettingsProvider._()
+  UpdateUserNotificationSettingsProvider._()
     : super(
         from: null,
         argument: null,
@@ -309,7 +309,7 @@ String _$updateUserNotificationSettingsHash() =>
     r'1c149565ac3f0f651a03c3aafdde64b291249b80';
 
 @ProviderFor(deleteAllNotifications)
-const deleteAllNotificationsProvider = DeleteAllNotificationsProvider._();
+final deleteAllNotificationsProvider = DeleteAllNotificationsProvider._();
 
 final class DeleteAllNotificationsProvider
     extends
@@ -319,7 +319,7 @@ final class DeleteAllNotificationsProvider
           DeleteAllNotificationsUseCase
         >
     with $Provider<DeleteAllNotificationsUseCase> {
-  const DeleteAllNotificationsProvider._()
+  DeleteAllNotificationsProvider._()
     : super(
         from: null,
         argument: null,
@@ -359,7 +359,7 @@ String _$deleteAllNotificationsHash() =>
     r'f4d890a760abeefa0ed89ba6e7e7df2876253efd';
 
 @ProviderFor(deleteNotification)
-const deleteNotificationProvider = DeleteNotificationProvider._();
+final deleteNotificationProvider = DeleteNotificationProvider._();
 
 final class DeleteNotificationProvider
     extends
@@ -369,7 +369,7 @@ final class DeleteNotificationProvider
           DeleteNotificationUseCase
         >
     with $Provider<DeleteNotificationUseCase> {
-  const DeleteNotificationProvider._()
+  DeleteNotificationProvider._()
     : super(
         from: null,
         argument: null,
@@ -407,7 +407,7 @@ String _$deleteNotificationHash() =>
     r'ccc9f98a1588d45c1070f4489da2a82ba1ace307';
 
 @ProviderFor(markNotificationAsRead)
-const markNotificationAsReadProvider = MarkNotificationAsReadProvider._();
+final markNotificationAsReadProvider = MarkNotificationAsReadProvider._();
 
 final class MarkNotificationAsReadProvider
     extends
@@ -417,7 +417,7 @@ final class MarkNotificationAsReadProvider
           MarkNotificationAsReadUseCase
         >
     with $Provider<MarkNotificationAsReadUseCase> {
-  const MarkNotificationAsReadProvider._()
+  MarkNotificationAsReadProvider._()
     : super(
         from: null,
         argument: null,
@@ -457,7 +457,7 @@ String _$markNotificationAsReadHash() =>
     r'3b9b203c2f90c8ba08caaf240d2bcc619407d979';
 
 @ProviderFor(markAllNotificationAsRead)
-const markAllNotificationAsReadProvider = MarkAllNotificationAsReadProvider._();
+final markAllNotificationAsReadProvider = MarkAllNotificationAsReadProvider._();
 
 final class MarkAllNotificationAsReadProvider
     extends
@@ -467,7 +467,7 @@ final class MarkAllNotificationAsReadProvider
           MarkAllNotificationsAsReadUseCase
         >
     with $Provider<MarkAllNotificationsAsReadUseCase> {
-  const MarkAllNotificationAsReadProvider._()
+  MarkAllNotificationAsReadProvider._()
     : super(
         from: null,
         argument: null,
@@ -507,7 +507,7 @@ String _$markAllNotificationAsReadHash() =>
     r'48455bc3d6cf47f25c3ea31d191df05b812e5295';
 
 @ProviderFor(getUnreadNotifications)
-const getUnreadNotificationsProvider = GetUnreadNotificationsProvider._();
+final getUnreadNotificationsProvider = GetUnreadNotificationsProvider._();
 
 final class GetUnreadNotificationsProvider
     extends
@@ -517,7 +517,7 @@ final class GetUnreadNotificationsProvider
           GetUnreadNotificationsUseCase
         >
     with $Provider<GetUnreadNotificationsUseCase> {
-  const GetUnreadNotificationsProvider._()
+  GetUnreadNotificationsProvider._()
     : super(
         from: null,
         argument: null,

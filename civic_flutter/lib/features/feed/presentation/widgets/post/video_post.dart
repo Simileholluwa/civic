@@ -65,7 +65,7 @@ class VideoPost extends ConsumerWidget {
                           aspectRatio: controller.value.aspectRatio,
                           child: GestureDetector(
                             onTap: controllerNotifier.pausePlay,
-                            onDoubleTapDown: (TapDownDetails details) {
+                            onDoubleTapDown: (details) {
                               final box =
                                   context.findRenderObject() as RenderBox?;
                               final width = box?.size.width ?? 0;

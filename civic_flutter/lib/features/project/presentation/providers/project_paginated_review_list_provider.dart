@@ -42,6 +42,8 @@ class PaginatedProjectReviewList extends _$PaginatedProjectReviewList {
           limit,
           query.rating,
           query.cardinal,
+          sortBy: query.sortby,
+          order: query.order,
         ),
       );
       result.fold(
@@ -102,7 +104,7 @@ class ProjectReviewListQuery extends _$ProjectReviewListQuery {
       rating: query['rating'] as double?,
       cardinal: query['cardinal'] as String?,
       sortby: query['sortBy'] as String?,
-      sortDir: query['sortDir'] as String?
+      order: query['order'] as String?
     );
   }
 

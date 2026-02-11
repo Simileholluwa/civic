@@ -20,6 +20,8 @@ class GetProjectReviewsUseCase
       limit: params.limit,
       rating: params.rating,
       cardinal: params.cardinal,
+      sortBy: params.sortBy,
+      order: params.order,
     );
     return result;
   }
@@ -31,11 +33,15 @@ class GetProjectReviewsParams {
     this.page,
     this.limit,
     this.rating,
-    this.cardinal,
-  );
+    this.cardinal, {
+    this.sortBy = 'recent',
+    this.order = 'desc',
+  });
   final int projectId;
   final int page;
   final int limit;
+  final String sortBy;
+  final String order;
   final double? rating;
   final String? cardinal;
 }

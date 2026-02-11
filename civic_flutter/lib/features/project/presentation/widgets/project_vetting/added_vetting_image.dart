@@ -65,7 +65,7 @@ class AddedVettingImage extends ConsumerWidget {
               ),
               items: vettedProjectState.images.map((image) {
                 return Builder(
-                  builder: (BuildContext context) {
+                  builder: (context) {
                     return Container(
                       width: double.maxFinite,
                       decoration: BoxDecoration(

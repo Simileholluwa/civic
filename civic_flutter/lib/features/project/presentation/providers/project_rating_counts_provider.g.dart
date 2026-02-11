@@ -10,7 +10,7 @@ part of 'project_rating_counts_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectOverallRatingCounts)
-const projectOverallRatingCountsProvider = ProjectOverallRatingCountsFamily._();
+final projectOverallRatingCountsProvider = ProjectOverallRatingCountsFamily._();
 
 final class ProjectOverallRatingCountsProvider
     extends
@@ -18,7 +18,7 @@ final class ProjectOverallRatingCountsProvider
           ProjectOverallRatingCounts,
           ProjectOverallRatingState
         > {
-  const ProjectOverallRatingCountsProvider._({
+  ProjectOverallRatingCountsProvider._({
     required ProjectOverallRatingCountsFamily super.from,
     required Project? super.argument,
   }) : super(
@@ -75,7 +75,7 @@ final class ProjectOverallRatingCountsFamily extends $Family
           ProjectOverallRatingState,
           Project?
         > {
-  const ProjectOverallRatingCountsFamily._()
+  ProjectOverallRatingCountsFamily._()
     : super(
         retry: null,
         name: r'projectOverallRatingCountsProvider',
@@ -100,7 +100,6 @@ abstract class _$ProjectOverallRatingCounts
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref as $Ref<ProjectOverallRatingState, ProjectOverallRatingState>;
     final element =
@@ -111,6 +110,6 @@ abstract class _$ProjectOverallRatingCounts
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

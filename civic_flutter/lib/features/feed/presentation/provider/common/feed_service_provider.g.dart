@@ -10,7 +10,7 @@ part of 'feed_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(feedLocalDatabase)
-const feedLocalDatabaseProvider = FeedLocalDatabaseProvider._();
+final feedLocalDatabaseProvider = FeedLocalDatabaseProvider._();
 
 final class FeedLocalDatabaseProvider
     extends
@@ -20,7 +20,7 @@ final class FeedLocalDatabaseProvider
           FeedLocalDatabaseImpl
         >
     with $Provider<FeedLocalDatabaseImpl> {
-  const FeedLocalDatabaseProvider._()
+  FeedLocalDatabaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -57,7 +57,7 @@ final class FeedLocalDatabaseProvider
 String _$feedLocalDatabaseHash() => r'3a4e9a761dd9064543e1277c6a5e33a39c4ec269';
 
 @ProviderFor(feedRemoteDatabase)
-const feedRemoteDatabaseProvider = FeedRemoteDatabaseProvider._();
+final feedRemoteDatabaseProvider = FeedRemoteDatabaseProvider._();
 
 final class FeedRemoteDatabaseProvider
     extends
@@ -67,7 +67,7 @@ final class FeedRemoteDatabaseProvider
           FeedRemoteDatabaseImpl
         >
     with $Provider<FeedRemoteDatabaseImpl> {
-  const FeedRemoteDatabaseProvider._()
+  FeedRemoteDatabaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -105,7 +105,7 @@ String _$feedRemoteDatabaseHash() =>
     r'2044c98cd420afb62bddd75cf629ad38daee8108';
 
 @ProviderFor(feedRepositoryImpl)
-const feedRepositoryImplProvider = FeedRepositoryImplProvider._();
+final feedRepositoryImplProvider = FeedRepositoryImplProvider._();
 
 final class FeedRepositoryImplProvider
     extends
@@ -115,7 +115,7 @@ final class FeedRepositoryImplProvider
           FeedRepositoryImpl
         >
     with $Provider<FeedRepositoryImpl> {
-  const FeedRepositoryImplProvider._()
+  FeedRepositoryImplProvider._()
     : super(
         from: null,
         argument: null,
@@ -153,13 +153,13 @@ String _$feedRepositoryImplHash() =>
     r'1a698b2979c71ab2a7910cf9439f3b26ff86318f';
 
 @ProviderFor(savePost)
-const savePostProvider = SavePostProvider._();
+final savePostProvider = SavePostProvider._();
 
 final class SavePostProvider
     extends
         $FunctionalProvider<SavePostUseCase, SavePostUseCase, SavePostUseCase>
     with $Provider<SavePostUseCase> {
-  const SavePostProvider._()
+  SavePostProvider._()
     : super(
         from: null,
         argument: null,
@@ -195,13 +195,13 @@ final class SavePostProvider
 String _$savePostHash() => r'40d473d438893063be0d35535006bd399ab71948';
 
 @ProviderFor(getPosts)
-const getPostsProvider = GetPostsProvider._();
+final getPostsProvider = GetPostsProvider._();
 
 final class GetPostsProvider
     extends
         $FunctionalProvider<GetPostsUseCase, GetPostsUseCase, GetPostsUseCase>
     with $Provider<GetPostsUseCase> {
-  const GetPostsProvider._()
+  GetPostsProvider._()
     : super(
         from: null,
         argument: null,
@@ -237,12 +237,12 @@ final class GetPostsProvider
 String _$getPostsHash() => r'4cdbfb27207cc0c5508625bff1423bc2cf7c59ec';
 
 @ProviderFor(getPost)
-const getPostProvider = GetPostProvider._();
+final getPostProvider = GetPostProvider._();
 
 final class GetPostProvider
     extends $FunctionalProvider<GetPostUseCase, GetPostUseCase, GetPostUseCase>
     with $Provider<GetPostUseCase> {
-  const GetPostProvider._()
+  GetPostProvider._()
     : super(
         from: null,
         argument: null,
@@ -278,7 +278,7 @@ final class GetPostProvider
 String _$getPostHash() => r'0d07205d6703097db52f9e084fdda86248c93036';
 
 @ProviderFor(getUserPostBookmarks)
-const getUserPostBookmarksProvider = GetUserPostBookmarksProvider._();
+final getUserPostBookmarksProvider = GetUserPostBookmarksProvider._();
 
 final class GetUserPostBookmarksProvider
     extends
@@ -288,7 +288,7 @@ final class GetUserPostBookmarksProvider
           GetUserBookmarksUseCase
         >
     with $Provider<GetUserBookmarksUseCase> {
-  const GetUserPostBookmarksProvider._()
+  GetUserPostBookmarksProvider._()
     : super(
         from: null,
         argument: null,
@@ -326,7 +326,7 @@ String _$getUserPostBookmarksHash() =>
     r'6be3f0b969c8bd636029985ddf9a7da6cb650b18';
 
 @ProviderFor(clearPostBookmarks)
-const clearPostBookmarksProvider = ClearPostBookmarksProvider._();
+final clearPostBookmarksProvider = ClearPostBookmarksProvider._();
 
 final class ClearPostBookmarksProvider
     extends
@@ -336,7 +336,7 @@ final class ClearPostBookmarksProvider
           ClearPostBookmarksUseCase
         >
     with $Provider<ClearPostBookmarksUseCase> {
-  const ClearPostBookmarksProvider._()
+  ClearPostBookmarksProvider._()
     : super(
         from: null,
         argument: null,
@@ -374,7 +374,7 @@ String _$clearPostBookmarksHash() =>
     r'6654bd7d044c7f6cf1e7f86b6e0eb8da8c1e9480';
 
 @ProviderFor(savePostDraft)
-const savePostDraftProvider = SavePostDraftProvider._();
+final savePostDraftProvider = SavePostDraftProvider._();
 
 final class SavePostDraftProvider
     extends
@@ -384,7 +384,7 @@ final class SavePostDraftProvider
           SaveOrUpdatePostDraftUseCase
         >
     with $Provider<SaveOrUpdatePostDraftUseCase> {
-  const SavePostDraftProvider._()
+  SavePostDraftProvider._()
     : super(
         from: null,
         argument: null,
@@ -421,7 +421,7 @@ final class SavePostDraftProvider
 String _$savePostDraftHash() => r'1331f63d0fdbbbbc337121888ca9f7fa2c01ee08';
 
 @ProviderFor(getPostDrafts)
-const getPostDraftsProvider = GetPostDraftsProvider._();
+final getPostDraftsProvider = GetPostDraftsProvider._();
 
 final class GetPostDraftsProvider
     extends
@@ -431,7 +431,7 @@ final class GetPostDraftsProvider
           GetPostDraftsUseCase
         >
     with $Provider<GetPostDraftsUseCase> {
-  const GetPostDraftsProvider._()
+  GetPostDraftsProvider._()
     : super(
         from: null,
         argument: null,
@@ -468,7 +468,7 @@ final class GetPostDraftsProvider
 String _$getPostDraftsHash() => r'3052c5991d4c8ce0eba7fabef8df797c4f86b1a3';
 
 @ProviderFor(deletePostDraft)
-const deletePostDraftProvider = DeletePostDraftProvider._();
+final deletePostDraftProvider = DeletePostDraftProvider._();
 
 final class DeletePostDraftProvider
     extends
@@ -478,7 +478,7 @@ final class DeletePostDraftProvider
           DeletePostDraftByIdUseCase
         >
     with $Provider<DeletePostDraftByIdUseCase> {
-  const DeletePostDraftProvider._()
+  DeletePostDraftProvider._()
     : super(
         from: null,
         argument: null,
@@ -515,7 +515,7 @@ final class DeletePostDraftProvider
 String _$deletePostDraftHash() => r'a19972a588e94c2231848c49f4d1900ab75af088';
 
 @ProviderFor(clearPostDrafts)
-const clearPostDraftsProvider = ClearPostDraftsProvider._();
+final clearPostDraftsProvider = ClearPostDraftsProvider._();
 
 final class ClearPostDraftsProvider
     extends
@@ -525,7 +525,7 @@ final class ClearPostDraftsProvider
           ClearPostDraftsUseCase
         >
     with $Provider<ClearPostDraftsUseCase> {
-  const ClearPostDraftsProvider._()
+  ClearPostDraftsProvider._()
     : super(
         from: null,
         argument: null,
@@ -562,7 +562,7 @@ final class ClearPostDraftsProvider
 String _$clearPostDraftsHash() => r'58502d2762808eb0577a267062e00d38508f9d1f';
 
 @ProviderFor(deletePost)
-const deletePostProvider = DeletePostProvider._();
+final deletePostProvider = DeletePostProvider._();
 
 final class DeletePostProvider
     extends
@@ -572,7 +572,7 @@ final class DeletePostProvider
           DeletePostUseCase
         >
     with $Provider<DeletePostUseCase> {
-  const DeletePostProvider._()
+  DeletePostProvider._()
     : super(
         from: null,
         argument: null,
@@ -609,7 +609,7 @@ final class DeletePostProvider
 String _$deletePostHash() => r'182fd4e3d3532a8268d0853b913eeda56ece0c04';
 
 @ProviderFor(subscribeToNotif)
-const subscribeToNotifProvider = SubscribeToNotifProvider._();
+final subscribeToNotifProvider = SubscribeToNotifProvider._();
 
 final class SubscribeToNotifProvider
     extends
@@ -619,7 +619,7 @@ final class SubscribeToNotifProvider
           SubscribeToNotifUseCase
         >
     with $Provider<SubscribeToNotifUseCase> {
-  const SubscribeToNotifProvider._()
+  SubscribeToNotifProvider._()
     : super(
         from: null,
         argument: null,
@@ -656,7 +656,7 @@ final class SubscribeToNotifProvider
 String _$subscribeToNotifHash() => r'86e000194bcb5bb390ae0a6002bf802a76fa3237';
 
 @ProviderFor(schedulePost)
-const schedulePostProvider = SchedulePostProvider._();
+final schedulePostProvider = SchedulePostProvider._();
 
 final class SchedulePostProvider
     extends
@@ -666,7 +666,7 @@ final class SchedulePostProvider
           SchedulePostUseCase
         >
     with $Provider<SchedulePostUseCase> {
-  const SchedulePostProvider._()
+  SchedulePostProvider._()
     : super(
         from: null,
         argument: null,
@@ -703,7 +703,7 @@ final class SchedulePostProvider
 String _$schedulePostHash() => r'8948010478ff7b49dd72477f1b5b3d0985918ab7';
 
 @ProviderFor(togglePostLike)
-const togglePostLikeProvider = TogglePostLikeProvider._();
+final togglePostLikeProvider = TogglePostLikeProvider._();
 
 final class TogglePostLikeProvider
     extends
@@ -713,7 +713,7 @@ final class TogglePostLikeProvider
           TogglePostLikeUseCase
         >
     with $Provider<TogglePostLikeUseCase> {
-  const TogglePostLikeProvider._()
+  TogglePostLikeProvider._()
     : super(
         from: null,
         argument: null,
@@ -750,7 +750,7 @@ final class TogglePostLikeProvider
 String _$togglePostLikeHash() => r'32d530992c88f5ff16c1034b99382eb74c2b17cd';
 
 @ProviderFor(quotePost)
-const quotePostProvider = QuotePostProvider._();
+final quotePostProvider = QuotePostProvider._();
 
 final class QuotePostProvider
     extends
@@ -760,7 +760,7 @@ final class QuotePostProvider
           QuotePostUseCase
         >
     with $Provider<QuotePostUseCase> {
-  const QuotePostProvider._()
+  QuotePostProvider._()
     : super(
         from: null,
         argument: null,
@@ -796,7 +796,7 @@ final class QuotePostProvider
 String _$quotePostHash() => r'423255e3e002a82b09748de1062cdbed8c126033';
 
 @ProviderFor(clearVote)
-const clearVoteProvider = ClearVoteProvider._();
+final clearVoteProvider = ClearVoteProvider._();
 
 final class ClearVoteProvider
     extends
@@ -806,7 +806,7 @@ final class ClearVoteProvider
           ClearVoteUseCase
         >
     with $Provider<ClearVoteUseCase> {
-  const ClearVoteProvider._()
+  ClearVoteProvider._()
     : super(
         from: null,
         argument: null,
@@ -842,7 +842,7 @@ final class ClearVoteProvider
 String _$clearVoteHash() => r'cfd22173b9f46766fcba0c76599ec43b92e84ab0';
 
 @ProviderFor(repostPost)
-const repostPostProvider = RepostPostProvider._();
+final repostPostProvider = RepostPostProvider._();
 
 final class RepostPostProvider
     extends
@@ -852,7 +852,7 @@ final class RepostPostProvider
           RepostPostUseCase
         >
     with $Provider<RepostPostUseCase> {
-  const RepostPostProvider._()
+  RepostPostProvider._()
     : super(
         from: null,
         argument: null,
@@ -889,7 +889,7 @@ final class RepostPostProvider
 String _$repostPostHash() => r'4dee7f31e6299fdf9f4607ecb1b33060b2809e5c';
 
 @ProviderFor(repostOrQuotePost)
-const repostOrQuotePostProvider = RepostOrQuotePostProvider._();
+final repostOrQuotePostProvider = RepostOrQuotePostProvider._();
 
 final class RepostOrQuotePostProvider
     extends
@@ -899,7 +899,7 @@ final class RepostOrQuotePostProvider
           RepostOrQuoteUseCase
         >
     with $Provider<RepostOrQuoteUseCase> {
-  const RepostOrQuotePostProvider._()
+  RepostOrQuotePostProvider._()
     : super(
         from: null,
         argument: null,
@@ -936,7 +936,7 @@ final class RepostOrQuotePostProvider
 String _$repostOrQuotePostHash() => r'657b6b9ba08984176a32079ae67c8bd8d94dc2ee';
 
 @ProviderFor(togglePostBookmark)
-const togglePostBookmarkProvider = TogglePostBookmarkProvider._();
+final togglePostBookmarkProvider = TogglePostBookmarkProvider._();
 
 final class TogglePostBookmarkProvider
     extends
@@ -946,7 +946,7 @@ final class TogglePostBookmarkProvider
           TogglePostBookmarkUseCase
         >
     with $Provider<TogglePostBookmarkUseCase> {
-  const TogglePostBookmarkProvider._()
+  TogglePostBookmarkProvider._()
     : super(
         from: null,
         argument: null,
@@ -984,7 +984,7 @@ String _$togglePostBookmarkHash() =>
     r'4c936a20434df8d885e373ac9c4baaffe2d09a48';
 
 @ProviderFor(markPostNotInterested)
-const markPostNotInterestedProvider = MarkPostNotInterestedProvider._();
+final markPostNotInterestedProvider = MarkPostNotInterestedProvider._();
 
 final class MarkPostNotInterestedProvider
     extends
@@ -994,7 +994,7 @@ final class MarkPostNotInterestedProvider
           MarkPostNotInterestedUseCase
         >
     with $Provider<MarkPostNotInterestedUseCase> {
-  const MarkPostNotInterestedProvider._()
+  MarkPostNotInterestedProvider._()
     : super(
         from: null,
         argument: null,
@@ -1032,7 +1032,7 @@ String _$markPostNotInterestedHash() =>
     r'029467d3e711db57831e492184974593522997db';
 
 @ProviderFor(savePostComment)
-const savePostCommentProvider = SavePostCommentProvider._();
+final savePostCommentProvider = SavePostCommentProvider._();
 
 final class SavePostCommentProvider
     extends
@@ -1042,7 +1042,7 @@ final class SavePostCommentProvider
           SavePostCommentUseCase
         >
     with $Provider<SavePostCommentUseCase> {
-  const SavePostCommentProvider._()
+  SavePostCommentProvider._()
     : super(
         from: null,
         argument: null,
@@ -1079,7 +1079,7 @@ final class SavePostCommentProvider
 String _$savePostCommentHash() => r'2fee4e8f9c70a3af59a9d7feb406b093a875a231';
 
 @ProviderFor(getPostComments)
-const getPostCommentsProvider = GetPostCommentsProvider._();
+final getPostCommentsProvider = GetPostCommentsProvider._();
 
 final class GetPostCommentsProvider
     extends
@@ -1089,7 +1089,7 @@ final class GetPostCommentsProvider
           GetPostCommentsUseCase
         >
     with $Provider<GetPostCommentsUseCase> {
-  const GetPostCommentsProvider._()
+  GetPostCommentsProvider._()
     : super(
         from: null,
         argument: null,
@@ -1126,7 +1126,7 @@ final class GetPostCommentsProvider
 String _$getPostCommentsHash() => r'9aad0697e93bfe227f2d565f9bd54930fa20db7f';
 
 @ProviderFor(getCommentDetail)
-const getCommentDetailProvider = GetCommentDetailProvider._();
+final getCommentDetailProvider = GetCommentDetailProvider._();
 
 final class GetCommentDetailProvider
     extends
@@ -1136,7 +1136,7 @@ final class GetCommentDetailProvider
           GetCommentUseCase
         >
     with $Provider<GetCommentUseCase> {
-  const GetCommentDetailProvider._()
+  GetCommentDetailProvider._()
     : super(
         from: null,
         argument: null,
@@ -1173,7 +1173,7 @@ final class GetCommentDetailProvider
 String _$getCommentDetailHash() => r'793ecbe9cf295f18b117ba94bdb1683432d2072d';
 
 @ProviderFor(getPostCommentReplies)
-const getPostCommentRepliesProvider = GetPostCommentRepliesProvider._();
+final getPostCommentRepliesProvider = GetPostCommentRepliesProvider._();
 
 final class GetPostCommentRepliesProvider
     extends
@@ -1183,7 +1183,7 @@ final class GetPostCommentRepliesProvider
           GetPostCommentRepliesUseCase
         >
     with $Provider<GetPostCommentRepliesUseCase> {
-  const GetPostCommentRepliesProvider._()
+  GetPostCommentRepliesProvider._()
     : super(
         from: null,
         argument: null,
@@ -1221,13 +1221,13 @@ String _$getPostCommentRepliesHash() =>
     r'90364fe00c474de94917c9c5c852c98c9700eed0';
 
 @ProviderFor(savePoll)
-const savePollProvider = SavePollProvider._();
+final savePollProvider = SavePollProvider._();
 
 final class SavePollProvider
     extends
         $FunctionalProvider<SavePollUseCase, SavePollUseCase, SavePollUseCase>
     with $Provider<SavePollUseCase> {
-  const SavePollProvider._()
+  SavePollProvider._()
     : super(
         from: null,
         argument: null,
@@ -1263,13 +1263,13 @@ final class SavePollProvider
 String _$savePollHash() => r'692b9d9a420e91437f1e514bc3ac4794b795c9b2';
 
 @ProviderFor(castVote)
-const castVoteProvider = CastVoteProvider._();
+final castVoteProvider = CastVoteProvider._();
 
 final class CastVoteProvider
     extends
         $FunctionalProvider<CastVoteUseCase, CastVoteUseCase, CastVoteUseCase>
     with $Provider<CastVoteUseCase> {
-  const CastVoteProvider._()
+  CastVoteProvider._()
     : super(
         from: null,
         argument: null,
@@ -1305,7 +1305,7 @@ final class CastVoteProvider
 String _$castVoteHash() => r'6aa14e73aa61064e97aa186840c48c8a1fb58063';
 
 @ProviderFor(saveArticle)
-const saveArticleProvider = SaveArticleProvider._();
+final saveArticleProvider = SaveArticleProvider._();
 
 final class SaveArticleProvider
     extends
@@ -1315,7 +1315,7 @@ final class SaveArticleProvider
           SaveArticleUseCase
         >
     with $Provider<SaveArticleUseCase> {
-  const SaveArticleProvider._()
+  SaveArticleProvider._()
     : super(
         from: null,
         argument: null,
@@ -1352,7 +1352,7 @@ final class SaveArticleProvider
 String _$saveArticleHash() => r'e23dda5fa1e9f638255ae1c06bd790814abf258f';
 
 @ProviderFor(recordPostImpression)
-const recordPostImpressionProvider = RecordPostImpressionProvider._();
+final recordPostImpressionProvider = RecordPostImpressionProvider._();
 
 final class RecordPostImpressionProvider
     extends
@@ -1362,7 +1362,7 @@ final class RecordPostImpressionProvider
           RecordPostImpressionUseCase
         >
     with $Provider<RecordPostImpressionUseCase> {
-  const RecordPostImpressionProvider._()
+  RecordPostImpressionProvider._()
     : super(
         from: null,
         argument: null,
@@ -1400,7 +1400,7 @@ String _$recordPostImpressionHash() =>
     r'324a313a4b1087e01e12c5cd2c5b45e1b07e65d2';
 
 @ProviderFor(flushPostImpressions)
-const flushPostImpressionsProvider = FlushPostImpressionsProvider._();
+final flushPostImpressionsProvider = FlushPostImpressionsProvider._();
 
 final class FlushPostImpressionsProvider
     extends
@@ -1410,7 +1410,7 @@ final class FlushPostImpressionsProvider
           FlushPostImpressionsUseCase
         >
     with $Provider<FlushPostImpressionsUseCase> {
-  const FlushPostImpressionsProvider._()
+  FlushPostImpressionsProvider._()
     : super(
         from: null,
         argument: null,

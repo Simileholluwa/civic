@@ -10,7 +10,7 @@ part of 'project_bookmarks_paginated_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedProjectBookmarksList)
-const paginatedProjectBookmarksListProvider =
+final paginatedProjectBookmarksListProvider =
     PaginatedProjectBookmarksListProvider._();
 
 final class PaginatedProjectBookmarksListProvider
@@ -19,7 +19,7 @@ final class PaginatedProjectBookmarksListProvider
           PaginatedProjectBookmarksList,
           Raw<PagingController<int, ProjectWithUserState>>
         > {
-  const PaginatedProjectBookmarksListProvider._()
+  PaginatedProjectBookmarksListProvider._()
     : super(
         from: null,
         argument: null,
@@ -60,7 +60,6 @@ abstract class _$PaginatedProjectBookmarksList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -78,6 +77,6 @@ abstract class _$PaginatedProjectBookmarksList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

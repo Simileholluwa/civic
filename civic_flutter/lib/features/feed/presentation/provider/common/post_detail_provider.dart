@@ -69,6 +69,7 @@ Future<PostWithUserState> postDetail(
         completer.completeError({
           'message': error.message,
           'action': error.action,
+          'type': error.type,
         });
         return completer.future;
       },

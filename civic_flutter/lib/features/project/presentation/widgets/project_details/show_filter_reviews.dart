@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ShowFilterReviews extends StatefulWidget {
-  const ShowFilterReviews({super.key, this.initialQuery});
+  const ShowFilterReviews({
+    required this.ratingCount,
+    super.key,
+    this.initialQuery,
+  });
 
   final Map<String, dynamic>? initialQuery;
+  final int ratingCount;
 
   @override
   State<ShowFilterReviews> createState() => _ShowFilterReviewsState();
@@ -21,7 +26,7 @@ class _ShowFilterReviewsState extends State<ShowFilterReviews> {
       'rating': widget.initialQuery?['rating'],
       'cardinal': widget.initialQuery?['cardinal'],
       'sortBy': widget.initialQuery?['sortBy'] ?? 'recent',
-      'sortDir': widget.initialQuery?['sortDir'] ?? 'desc',
+      'order': widget.initialQuery?['order'] ?? 'desc',
     };
   }
 
@@ -279,7 +284,7 @@ class _ShowFilterReviewsState extends State<ShowFilterReviews> {
                         ),
                         onTap: () {
                           setState(() {
-                            query['sortDir'] = 'asc';
+                            query['order'] = 'asc';
                           });
                         },
                         contentPadding: const EdgeInsets.fromLTRB(3, 0, 0, 0),
@@ -287,10 +292,10 @@ class _ShowFilterReviewsState extends State<ShowFilterReviews> {
                           width: 20,
                           height: 24,
                           child: RadioGroup<String>(
-                            groupValue: query['sortDir'] as String,
+                            groupValue: query['order'] as String,
                             onChanged: (value) {
                               setState(() {
-                                query['sortDir'] = value;
+                                query['order'] = value;
                               });
                             },
                             child: const Radio(
@@ -314,18 +319,18 @@ class _ShowFilterReviewsState extends State<ShowFilterReviews> {
                         ),
                         onTap: () {
                           setState(() {
-                            query['sortDir'] = 'desc';
+                            query['order'] = 'desc';
                           });
-                        }, 
+                        },
                         contentPadding: const EdgeInsets.fromLTRB(3, 0, 0, 0),
                         trailing: SizedBox(
                           width: 20,
                           height: 24,
                           child: RadioGroup<String>(
-                            groupValue: query['sortDir'] as String,
+                            groupValue: query['order'] as String,
                             onChanged: (value) {
                               setState(() {
-                                query['sortDir'] = value;
+                                query['order'] = value;
                               });
                             },
                             child: const Radio(
@@ -344,15 +349,17 @@ class _ShowFilterReviewsState extends State<ShowFilterReviews> {
                         'rating': null,
                         'cardinal': null,
                         'sortBy': 'recent',
-                        'sortDir': 'desc',
+                        'order': 'desc',
                       };
                     });
                     context.pop(query);
                   },
                   activeButtonText: 'Apply filter',
-                  onTapActiveButton: () {
-                    context.pop(query);
-                  },
+                  onTapActiveButton: widget.ratingCount < 2
+                      ? null
+                      : () {
+                          context.pop(query);
+                        },
                   activeButtonLoading: false,
                   skipButtonLoading: false,
                   skipText: 'Clear filter',

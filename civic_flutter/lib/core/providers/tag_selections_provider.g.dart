@@ -10,11 +10,11 @@ part of 'tag_selections_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(TagSelections)
-const tagSelectionsProvider = TagSelectionsProvider._();
+final tagSelectionsProvider = TagSelectionsProvider._();
 
 final class TagSelectionsProvider
     extends $NotifierProvider<TagSelections, List<UserRecord>> {
-  const TagSelectionsProvider._()
+  TagSelectionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$TagSelections extends $Notifier<List<UserRecord>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$TagSelections extends $Notifier<List<UserRecord>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

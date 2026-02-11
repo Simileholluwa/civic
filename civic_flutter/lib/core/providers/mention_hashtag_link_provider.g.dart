@@ -10,7 +10,7 @@ part of 'mention_hashtag_link_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(mentionServices)
-const mentionServicesProvider = MentionServicesProvider._();
+final mentionServicesProvider = MentionServicesProvider._();
 
 final class MentionServicesProvider
     extends
@@ -20,7 +20,7 @@ final class MentionServicesProvider
           MentionHashTagLinkServices
         >
     with $Provider<MentionHashTagLinkServices> {
-  const MentionServicesProvider._()
+  MentionServicesProvider._()
     : super(
         from: null,
         argument: null,
@@ -57,7 +57,7 @@ final class MentionServicesProvider
 String _$mentionServicesHash() => r'bd3b5edaf82eee204df7723d0b3bc049d1fcc6e5';
 
 @ProviderFor(recentMentionSuggestions)
-const recentMentionSuggestionsProvider = RecentMentionSuggestionsProvider._();
+final recentMentionSuggestionsProvider = RecentMentionSuggestionsProvider._();
 
 final class RecentMentionSuggestionsProvider
     extends
@@ -67,7 +67,7 @@ final class RecentMentionSuggestionsProvider
           List<UserRecord>
         >
     with $Provider<List<UserRecord>> {
-  const RecentMentionSuggestionsProvider._()
+  RecentMentionSuggestionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -104,7 +104,7 @@ String _$recentMentionSuggestionsHash() =>
     r'0e46389e09644f20c2b482d928e017a5e461add6';
 
 @ProviderFor(fetchUsersToMention)
-const fetchUsersToMentionProvider = FetchUsersToMentionFamily._();
+final fetchUsersToMentionProvider = FetchUsersToMentionFamily._();
 
 final class FetchUsersToMentionProvider
     extends
@@ -114,7 +114,7 @@ final class FetchUsersToMentionProvider
           FutureOr<List<UserRecord>>
         >
     with $FutureModifier<List<UserRecord>>, $FutureProvider<List<UserRecord>> {
-  const FetchUsersToMentionProvider._({
+  FetchUsersToMentionProvider._({
     required FetchUsersToMentionFamily super.from,
     required String super.argument,
   }) : super(
@@ -163,7 +163,7 @@ String _$fetchUsersToMentionHash() =>
 
 final class FetchUsersToMentionFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<UserRecord>>, String> {
-  const FetchUsersToMentionFamily._()
+  FetchUsersToMentionFamily._()
     : super(
         retry: null,
         name: r'fetchUsersToMentionProvider',
@@ -180,11 +180,11 @@ final class FetchUsersToMentionFamily extends $Family
 }
 
 @ProviderFor(MentionSuggestions)
-const mentionSuggestionsProvider = MentionSuggestionsProvider._();
+final mentionSuggestionsProvider = MentionSuggestionsProvider._();
 
 final class MentionSuggestionsProvider
     extends $NotifierProvider<MentionSuggestions, List<UserRecord>> {
-  const MentionSuggestionsProvider._()
+  MentionSuggestionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -219,7 +219,6 @@ abstract class _$MentionSuggestions extends $Notifier<List<UserRecord>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
     final element =
         ref.element
@@ -229,16 +228,16 @@ abstract class _$MentionSuggestions extends $Notifier<List<UserRecord>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(SelectedMentions)
-const selectedMentionsProvider = SelectedMentionsProvider._();
+final selectedMentionsProvider = SelectedMentionsProvider._();
 
 final class SelectedMentionsProvider
     extends $NotifierProvider<SelectedMentions, List<UserRecord>> {
-  const SelectedMentionsProvider._()
+  SelectedMentionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -272,7 +271,6 @@ abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<UserRecord>, List<UserRecord>>;
     final element =
         ref.element
@@ -282,16 +280,16 @@ abstract class _$SelectedMentions extends $Notifier<List<UserRecord>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ExtractedMentions)
-const extractedMentionsProvider = ExtractedMentionsFamily._();
+final extractedMentionsProvider = ExtractedMentionsFamily._();
 
 final class ExtractedMentionsProvider
     extends $NotifierProvider<ExtractedMentions, List<String>> {
-  const ExtractedMentionsProvider._({
+  ExtractedMentionsProvider._({
     required ExtractedMentionsFamily super.from,
     required String super.argument,
   }) : super(
@@ -346,7 +344,7 @@ final class ExtractedMentionsFamily extends $Family
           List<String>,
           String
         > {
-  const ExtractedMentionsFamily._()
+  ExtractedMentionsFamily._()
     : super(
         retry: null,
         name: r'extractedMentionsProvider',
@@ -370,7 +368,6 @@ abstract class _$ExtractedMentions extends $Notifier<List<String>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<List<String>, List<String>>;
     final element =
         ref.element
@@ -380,16 +377,16 @@ abstract class _$ExtractedMentions extends $Notifier<List<String>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(ValidMentions)
-const validMentionsProvider = ValidMentionsFamily._();
+final validMentionsProvider = ValidMentionsFamily._();
 
 final class ValidMentionsProvider
     extends $NotifierProvider<ValidMentions, bool> {
-  const ValidMentionsProvider._({
+  ValidMentionsProvider._({
     required ValidMentionsFamily super.from,
     required (String, String) super.argument,
   }) : super(
@@ -444,7 +441,7 @@ final class ValidMentionsFamily extends $Family
           bool,
           (String, String)
         > {
-  const ValidMentionsFamily._()
+  ValidMentionsFamily._()
     : super(
         retry: null,
         name: r'validMentionsProvider',
@@ -469,7 +466,6 @@ abstract class _$ValidMentions extends $Notifier<bool> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -479,15 +475,15 @@ abstract class _$ValidMentions extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args.$1, _$args.$2));
   }
 }
 
 @ProviderFor(Hashtags)
-const hashtagsProvider = HashtagsFamily._();
+final hashtagsProvider = HashtagsFamily._();
 
 final class HashtagsProvider extends $NotifierProvider<Hashtags, List<String>> {
-  const HashtagsProvider._({
+  HashtagsProvider._({
     required HashtagsFamily super.from,
     required String super.argument,
   }) : super(
@@ -542,7 +538,7 @@ final class HashtagsFamily extends $Family
           List<String>,
           String
         > {
-  const HashtagsFamily._()
+  HashtagsFamily._()
     : super(
         retry: null,
         name: r'hashtagsProvider',
@@ -566,7 +562,6 @@ abstract class _$Hashtags extends $Notifier<List<String>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<List<String>, List<String>>;
     final element =
         ref.element
@@ -576,12 +571,12 @@ abstract class _$Hashtags extends $Notifier<List<String>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(fetchHashtags)
-const fetchHashtagsProvider = FetchHashtagsFamily._();
+final fetchHashtagsProvider = FetchHashtagsFamily._();
 
 final class FetchHashtagsProvider
     extends
@@ -591,7 +586,7 @@ final class FetchHashtagsProvider
           FutureOr<List<String>>
         >
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
-  const FetchHashtagsProvider._({
+  FetchHashtagsProvider._({
     required FetchHashtagsFamily super.from,
     required String super.argument,
   }) : super(
@@ -639,7 +634,7 @@ String _$fetchHashtagsHash() => r'9e8aac021494bcc22b52460cf06e6ff20de64288';
 
 final class FetchHashtagsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
-  const FetchHashtagsFamily._()
+  FetchHashtagsFamily._()
     : super(
         retry: null,
         name: r'fetchHashtagsProvider',
@@ -656,11 +651,11 @@ final class FetchHashtagsFamily extends $Family
 }
 
 @ProviderFor(HashtagsSuggestions)
-const hashtagsSuggestionsProvider = HashtagsSuggestionsProvider._();
+final hashtagsSuggestionsProvider = HashtagsSuggestionsProvider._();
 
 final class HashtagsSuggestionsProvider
     extends $NotifierProvider<HashtagsSuggestions, List<String>> {
-  const HashtagsSuggestionsProvider._()
+  HashtagsSuggestionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -695,7 +690,6 @@ abstract class _$HashtagsSuggestions extends $Notifier<List<String>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<String>, List<String>>;
     final element =
         ref.element
@@ -705,16 +699,16 @@ abstract class _$HashtagsSuggestions extends $Notifier<List<String>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(RecentHashtags)
-const recentHashtagsProvider = RecentHashtagsProvider._();
+final recentHashtagsProvider = RecentHashtagsProvider._();
 
 final class RecentHashtagsProvider
     extends $NotifierProvider<RecentHashtags, List<String>> {
-  const RecentHashtagsProvider._()
+  RecentHashtagsProvider._()
     : super(
         from: null,
         argument: null,
@@ -748,7 +742,6 @@ abstract class _$RecentHashtags extends $Notifier<List<String>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<String>, List<String>>;
     final element =
         ref.element
@@ -758,12 +751,12 @@ abstract class _$RecentHashtags extends $Notifier<List<String>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(fetchLinkMetadata)
-const fetchLinkMetadataProvider = FetchLinkMetadataFamily._();
+final fetchLinkMetadataProvider = FetchLinkMetadataFamily._();
 
 final class FetchLinkMetadataProvider
     extends
@@ -773,7 +766,7 @@ final class FetchLinkMetadataProvider
           FutureOr<LinkMetadata?>
         >
     with $FutureModifier<LinkMetadata?>, $FutureProvider<LinkMetadata?> {
-  const FetchLinkMetadataProvider._({
+  FetchLinkMetadataProvider._({
     required FetchLinkMetadataFamily super.from,
     required String super.argument,
   }) : super(
@@ -821,7 +814,7 @@ String _$fetchLinkMetadataHash() => r'b0290afa80dd1b859732fa2b0a2bcdd26f7f846b';
 
 final class FetchLinkMetadataFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<LinkMetadata?>, String> {
-  const FetchLinkMetadataFamily._()
+  FetchLinkMetadataFamily._()
     : super(
         retry: null,
         name: r'fetchLinkMetadataProvider',
@@ -838,10 +831,10 @@ final class FetchLinkMetadataFamily extends $Family
 }
 
 @ProviderFor(ExtractLink)
-const extractLinkProvider = ExtractLinkFamily._();
+final extractLinkProvider = ExtractLinkFamily._();
 
 final class ExtractLinkProvider extends $NotifierProvider<ExtractLink, String> {
-  const ExtractLinkProvider._({
+  ExtractLinkProvider._({
     required ExtractLinkFamily super.from,
     required String super.argument,
   }) : super(
@@ -889,7 +882,7 @@ String _$extractLinkHash() => r'b04ec29c93e1c00eef28891b4cadf028ed19f101';
 
 final class ExtractLinkFamily extends $Family
     with $ClassFamilyOverride<ExtractLink, String, String, String, String> {
-  const ExtractLinkFamily._()
+  ExtractLinkFamily._()
     : super(
         retry: null,
         name: r'extractLinkProvider',
@@ -913,7 +906,6 @@ abstract class _$ExtractLink extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -923,6 +915,6 @@ abstract class _$ExtractLink extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

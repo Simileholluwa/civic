@@ -10,7 +10,7 @@ part of 'post_detail_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(postDetail)
-const postDetailProvider = PostDetailFamily._();
+final postDetailProvider = PostDetailFamily._();
 
 final class PostDetailProvider
     extends
@@ -22,7 +22,7 @@ final class PostDetailProvider
     with
         $FutureModifier<PostWithUserState>,
         $FutureProvider<PostWithUserState> {
-  const PostDetailProvider._({
+  PostDetailProvider._({
     required PostDetailFamily super.from,
     required (int, Post?, PostType) super.argument,
   }) : super(
@@ -66,7 +66,7 @@ final class PostDetailProvider
   }
 }
 
-String _$postDetailHash() => r'8fbcc7e216967b38fdfec74a39683e3385d9a10e';
+String _$postDetailHash() => r'bb6d21c12358c6efc6c84997888b5be1f3d95b1d';
 
 final class PostDetailFamily extends $Family
     with
@@ -74,7 +74,7 @@ final class PostDetailFamily extends $Family
           FutureOr<PostWithUserState>,
           (int, Post?, PostType)
         > {
-  const PostDetailFamily._()
+  PostDetailFamily._()
     : super(
         retry: null,
         name: r'postDetailProvider',

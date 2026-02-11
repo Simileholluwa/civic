@@ -10,10 +10,10 @@ part of 'integer_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PageChanged)
-const pageChangedProvider = PageChangedProvider._();
+final pageChangedProvider = PageChangedProvider._();
 
 final class PageChangedProvider extends $NotifierProvider<PageChanged, int> {
-  const PageChangedProvider._()
+  PageChangedProvider._()
     : super(
         from: null,
         argument: null,
@@ -47,7 +47,6 @@ abstract class _$PageChanged extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -57,16 +56,16 @@ abstract class _$PageChanged extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(VettingImagePageChanged)
-const vettingImagePageChangedProvider = VettingImagePageChangedProvider._();
+final vettingImagePageChangedProvider = VettingImagePageChangedProvider._();
 
 final class VettingImagePageChangedProvider
     extends $NotifierProvider<VettingImagePageChanged, int> {
-  const VettingImagePageChangedProvider._()
+  VettingImagePageChangedProvider._()
     : super(
         from: null,
         argument: null,
@@ -101,7 +100,6 @@ abstract class _$VettingImagePageChanged extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -111,17 +109,17 @@ abstract class _$VettingImagePageChanged extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectImageAttachmentPageChanged)
-const projectImageAttachmentPageChangedProvider =
+final projectImageAttachmentPageChangedProvider =
     ProjectImageAttachmentPageChangedProvider._();
 
 final class ProjectImageAttachmentPageChangedProvider
     extends $NotifierProvider<ProjectImageAttachmentPageChanged, int> {
-  const ProjectImageAttachmentPageChangedProvider._()
+  ProjectImageAttachmentPageChangedProvider._()
     : super(
         from: null,
         argument: null,
@@ -158,7 +156,6 @@ abstract class _$ProjectImageAttachmentPageChanged extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -168,17 +165,17 @@ abstract class _$ProjectImageAttachmentPageChanged extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(PostImageAttachmentPageChanged)
-const postImageAttachmentPageChangedProvider =
+final postImageAttachmentPageChangedProvider =
     PostImageAttachmentPageChangedProvider._();
 
 final class PostImageAttachmentPageChangedProvider
     extends $NotifierProvider<PostImageAttachmentPageChanged, int> {
-  const PostImageAttachmentPageChangedProvider._()
+  PostImageAttachmentPageChangedProvider._()
     : super(
         from: null,
         argument: null,
@@ -213,7 +210,6 @@ abstract class _$PostImageAttachmentPageChanged extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -223,17 +219,17 @@ abstract class _$PostImageAttachmentPageChanged extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectPDFAttachmentPageChanged)
-const projectPDFAttachmentPageChangedProvider =
+final projectPDFAttachmentPageChangedProvider =
     ProjectPDFAttachmentPageChangedProvider._();
 
 final class ProjectPDFAttachmentPageChangedProvider
     extends $NotifierProvider<ProjectPDFAttachmentPageChanged, int> {
-  const ProjectPDFAttachmentPageChangedProvider._()
+  ProjectPDFAttachmentPageChangedProvider._()
     : super(
         from: null,
         argument: null,
@@ -268,7 +264,6 @@ abstract class _$ProjectPDFAttachmentPageChanged extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -278,16 +273,16 @@ abstract class _$ProjectPDFAttachmentPageChanged extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(NotificationsCount)
-const notificationsCountProvider = NotificationsCountProvider._();
+final notificationsCountProvider = NotificationsCountProvider._();
 
 final class NotificationsCountProvider
     extends $NotifierProvider<NotificationsCount, int> {
-  const NotificationsCountProvider._()
+  NotificationsCountProvider._()
     : super(
         from: null,
         argument: null,
@@ -322,7 +317,6 @@ abstract class _$NotificationsCount extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -332,6 +326,6 @@ abstract class _$NotificationsCount extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

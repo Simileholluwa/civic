@@ -10,7 +10,7 @@ part of 'project_paginated_review_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedProjectReviewList)
-const paginatedProjectReviewListProvider = PaginatedProjectReviewListFamily._();
+final paginatedProjectReviewListProvider = PaginatedProjectReviewListFamily._();
 
 final class PaginatedProjectReviewListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedProjectReviewListProvider
           PaginatedProjectReviewList,
           Raw<PagingController<int, ProjectReviewWithUserState>>
         > {
-  const PaginatedProjectReviewListProvider._({
+  PaginatedProjectReviewListProvider._({
     required PaginatedProjectReviewListFamily super.from,
     required int super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class PaginatedProjectReviewListProvider
 }
 
 String _$paginatedProjectReviewListHash() =>
-    r'd6efd2594372bd340deda609264d5fd5e9817a35';
+    r'43f34dc03f022fc76ac3f3ca1d4bad151f8b1c5a';
 
 final class PaginatedProjectReviewListFamily extends $Family
     with
@@ -80,7 +80,7 @@ final class PaginatedProjectReviewListFamily extends $Family
           Raw<PagingController<int, ProjectReviewWithUserState>>,
           int
         > {
-  const PaginatedProjectReviewListFamily._()
+  PaginatedProjectReviewListFamily._()
     : super(
         retry: null,
         name: r'paginatedProjectReviewListProvider',
@@ -105,7 +105,6 @@ abstract class _$PaginatedProjectReviewList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -123,16 +122,16 @@ abstract class _$PaginatedProjectReviewList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(ProjectReviewListQuery)
-const projectReviewListQueryProvider = ProjectReviewListQueryProvider._();
+final projectReviewListQueryProvider = ProjectReviewListQueryProvider._();
 
 final class ProjectReviewListQueryProvider
     extends $NotifierProvider<ProjectReviewListQuery, ProjectReviewQueryState> {
-  const ProjectReviewListQueryProvider._()
+  ProjectReviewListQueryProvider._()
     : super(
         from: null,
         argument: null,
@@ -160,7 +159,7 @@ final class ProjectReviewListQueryProvider
 }
 
 String _$projectReviewListQueryHash() =>
-    r'b17ff51e7ba2cbdb105ac348f320e752575c938c';
+    r'4edccbda8093f407eb315a8221b2f6ec4a92e98e';
 
 abstract class _$ProjectReviewListQuery
     extends $Notifier<ProjectReviewQueryState> {
@@ -168,7 +167,6 @@ abstract class _$ProjectReviewListQuery
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref as $Ref<ProjectReviewQueryState, ProjectReviewQueryState>;
     final element =
@@ -179,6 +177,6 @@ abstract class _$ProjectReviewListQuery
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

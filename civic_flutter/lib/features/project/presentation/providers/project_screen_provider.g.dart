@@ -10,11 +10,11 @@ part of 'project_screen_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectScreenWidgets)
-const projectScreenWidgetsProvider = ProjectScreenWidgetsProvider._();
+final projectScreenWidgetsProvider = ProjectScreenWidgetsProvider._();
 
 final class ProjectScreenWidgetsProvider
     extends $NotifierProvider<ProjectScreenWidgets, ProjectScreenState> {
-  const ProjectScreenWidgetsProvider._()
+  ProjectScreenWidgetsProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$ProjectScreenWidgets extends $Notifier<ProjectScreenState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ProjectScreenState, ProjectScreenState>;
     final element =
         ref.element
@@ -59,17 +58,17 @@ abstract class _$ProjectScreenWidgets extends $Notifier<ProjectScreenState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(projectVsync)
-const projectVsyncProvider = ProjectVsyncProvider._();
+final projectVsyncProvider = ProjectVsyncProvider._();
 
 final class ProjectVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
-  const ProjectVsyncProvider._()
+  ProjectVsyncProvider._()
     : super(
         from: null,
         argument: null,
@@ -105,12 +104,12 @@ final class ProjectVsyncProvider
 String _$projectVsyncHash() => r'53dc07f00685291f9ff2218ba8a82e87c06a06be';
 
 @ProviderFor(projectCardVsync)
-const projectCardVsyncProvider = ProjectCardVsyncProvider._();
+final projectCardVsyncProvider = ProjectCardVsyncProvider._();
 
 final class ProjectCardVsyncProvider
     extends $FunctionalProvider<TickerProvider, TickerProvider, TickerProvider>
     with $Provider<TickerProvider> {
-  const ProjectCardVsyncProvider._()
+  ProjectCardVsyncProvider._()
     : super(
         from: null,
         argument: null,
@@ -146,7 +145,7 @@ final class ProjectCardVsyncProvider
 String _$projectCardVsyncHash() => r'97c42cc37d6e81e13ee416c489b1fa13aa1d6063';
 
 @ProviderFor(projectScreenTab)
-const projectScreenTabProvider = ProjectScreenTabProvider._();
+final projectScreenTabProvider = ProjectScreenTabProvider._();
 
 final class ProjectScreenTabProvider
     extends
@@ -156,7 +155,7 @@ final class ProjectScreenTabProvider
           Raw<TabController>
         >
     with $Provider<Raw<TabController>> {
-  const ProjectScreenTabProvider._()
+  ProjectScreenTabProvider._()
     : super(
         from: null,
         argument: null,

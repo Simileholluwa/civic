@@ -22,7 +22,7 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
     final projectReviewState = ref.watch(
       projectReviewProviderProvider(projectReview),
     );
-    final projectReviewNotifier = ref.watch(
+    final projectReviewNotifier = ref.read(
       projectReviewProviderProvider(projectReview).notifier,
     );
     return Container(
@@ -59,6 +59,7 @@ class CreateProjectReviewBottomNavBar extends ConsumerWidget {
                               projectReview?.id,
                             );
                             if (result) {
+                              projectReviewNotifier.resetState();
                               if (context.mounted) {
                                 context.pop();
                               }

@@ -10,7 +10,7 @@ part of 'project_services_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(projectRemoteDatasource)
-const projectRemoteDatasourceProvider = ProjectRemoteDatasourceProvider._();
+final projectRemoteDatasourceProvider = ProjectRemoteDatasourceProvider._();
 
 final class ProjectRemoteDatasourceProvider
     extends
@@ -20,7 +20,7 @@ final class ProjectRemoteDatasourceProvider
           ProjectRemoteDatasourceImpl
         >
     with $Provider<ProjectRemoteDatasourceImpl> {
-  const ProjectRemoteDatasourceProvider._()
+  ProjectRemoteDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,7 @@ String _$projectRemoteDatasourceHash() =>
     r'fc1ca9059415b14e6455b0c1ebc638ce01f7b4f9';
 
 @ProviderFor(projectLocalDatasource)
-const projectLocalDatasourceProvider = ProjectLocalDatasourceProvider._();
+final projectLocalDatasourceProvider = ProjectLocalDatasourceProvider._();
 
 final class ProjectLocalDatasourceProvider
     extends
@@ -68,7 +68,7 @@ final class ProjectLocalDatasourceProvider
           ProjectLocalDataSourceImpl
         >
     with $Provider<ProjectLocalDataSourceImpl> {
-  const ProjectLocalDatasourceProvider._()
+  ProjectLocalDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -106,7 +106,7 @@ String _$projectLocalDatasourceHash() =>
     r'9806cc200c6e52c6c553ca1fe33b0805a8b4baeb';
 
 @ProviderFor(projectRepositoryImpl)
-const projectRepositoryImplProvider = ProjectRepositoryImplProvider._();
+final projectRepositoryImplProvider = ProjectRepositoryImplProvider._();
 
 final class ProjectRepositoryImplProvider
     extends
@@ -116,7 +116,7 @@ final class ProjectRepositoryImplProvider
           ProjectRepositoryImpl
         >
     with $Provider<ProjectRepositoryImpl> {
-  const ProjectRepositoryImplProvider._()
+  ProjectRepositoryImplProvider._()
     : super(
         from: null,
         argument: null,
@@ -154,7 +154,7 @@ String _$projectRepositoryImplHash() =>
     r'193f8479e64433727d9aa4a154a29c51aa72a6b5';
 
 @ProviderFor(saveProject)
-const saveProjectProvider = SaveProjectProvider._();
+final saveProjectProvider = SaveProjectProvider._();
 
 final class SaveProjectProvider
     extends
@@ -164,7 +164,7 @@ final class SaveProjectProvider
           SaveProjectUseCase
         >
     with $Provider<SaveProjectUseCase> {
-  const SaveProjectProvider._()
+  SaveProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -201,7 +201,7 @@ final class SaveProjectProvider
 String _$saveProjectHash() => r'507675307fc80c41dab9e59306f49c034a5e2bb1';
 
 @ProviderFor(getProjects)
-const getProjectsProvider = GetProjectsProvider._();
+final getProjectsProvider = GetProjectsProvider._();
 
 final class GetProjectsProvider
     extends
@@ -211,7 +211,7 @@ final class GetProjectsProvider
           GetProjectsUseCase
         >
     with $Provider<GetProjectsUseCase> {
-  const GetProjectsProvider._()
+  GetProjectsProvider._()
     : super(
         from: null,
         argument: null,
@@ -248,7 +248,7 @@ final class GetProjectsProvider
 String _$getProjectsHash() => r'277a8073e4733318649ca55c4890d69ed21b77e4';
 
 @ProviderFor(getProject)
-const getProjectProvider = GetProjectProvider._();
+final getProjectProvider = GetProjectProvider._();
 
 final class GetProjectProvider
     extends
@@ -258,7 +258,7 @@ final class GetProjectProvider
           GetProjectUseCase
         >
     with $Provider<GetProjectUseCase> {
-  const GetProjectProvider._()
+  GetProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -295,7 +295,7 @@ final class GetProjectProvider
 String _$getProjectHash() => r'34fc69c563165bf3169974155598aae3dde66437';
 
 @ProviderFor(saveProjectReview)
-const saveProjectReviewProvider = SaveProjectReviewProvider._();
+final saveProjectReviewProvider = SaveProjectReviewProvider._();
 
 final class SaveProjectReviewProvider
     extends
@@ -305,7 +305,7 @@ final class SaveProjectReviewProvider
           SaveProjectReviewUseCase
         >
     with $Provider<SaveProjectReviewUseCase> {
-  const SaveProjectReviewProvider._()
+  SaveProjectReviewProvider._()
     : super(
         from: null,
         argument: null,
@@ -342,7 +342,7 @@ final class SaveProjectReviewProvider
 String _$saveProjectReviewHash() => r'92a7b5986f4adaead3c5e26540f84620072fc4e0';
 
 @ProviderFor(getProjectReviews)
-const getProjectReviewsProvider = GetProjectReviewsProvider._();
+final getProjectReviewsProvider = GetProjectReviewsProvider._();
 
 final class GetProjectReviewsProvider
     extends
@@ -352,7 +352,7 @@ final class GetProjectReviewsProvider
           GetProjectReviewsUseCase
         >
     with $Provider<GetProjectReviewsUseCase> {
-  const GetProjectReviewsProvider._()
+  GetProjectReviewsProvider._()
     : super(
         from: null,
         argument: null,
@@ -389,7 +389,7 @@ final class GetProjectReviewsProvider
 String _$getProjectReviewsHash() => r'36184da1c8a65301a2b59f327ba8c23aedc231ee';
 
 @ProviderFor(getProjectReview)
-const getProjectReviewProvider = GetProjectReviewProvider._();
+final getProjectReviewProvider = GetProjectReviewProvider._();
 
 final class GetProjectReviewProvider
     extends
@@ -399,7 +399,7 @@ final class GetProjectReviewProvider
           GetProjectReviewUseCase
         >
     with $Provider<GetProjectReviewUseCase> {
-  const GetProjectReviewProvider._()
+  GetProjectReviewProvider._()
     : super(
         from: null,
         argument: null,
@@ -436,7 +436,7 @@ final class GetProjectReviewProvider
 String _$getProjectReviewHash() => r'2f0aaa2efd3a5c28e84f8db96632efe52548811c';
 
 @ProviderFor(getPaginatedBookmarks)
-const getPaginatedBookmarksProvider = GetPaginatedBookmarksProvider._();
+final getPaginatedBookmarksProvider = GetPaginatedBookmarksProvider._();
 
 final class GetPaginatedBookmarksProvider
     extends
@@ -446,7 +446,7 @@ final class GetPaginatedBookmarksProvider
           GetUserProjectBookmarksUseCase
         >
     with $Provider<GetUserProjectBookmarksUseCase> {
-  const GetPaginatedBookmarksProvider._()
+  GetPaginatedBookmarksProvider._()
     : super(
         from: null,
         argument: null,
@@ -486,7 +486,7 @@ String _$getPaginatedBookmarksHash() =>
     r'4afd80e01131505697ac435afbf8fd385d90673d';
 
 @ProviderFor(subToProjectNotif)
-const subToProjectNotifProvider = SubToProjectNotifProvider._();
+final subToProjectNotifProvider = SubToProjectNotifProvider._();
 
 final class SubToProjectNotifProvider
     extends
@@ -496,7 +496,7 @@ final class SubToProjectNotifProvider
           SubToProjectNotifUseCase
         >
     with $Provider<SubToProjectNotifUseCase> {
-  const SubToProjectNotifProvider._()
+  SubToProjectNotifProvider._()
     : super(
         from: null,
         argument: null,
@@ -533,7 +533,7 @@ final class SubToProjectNotifProvider
 String _$subToProjectNotifHash() => r'b291a1dd992869a364084ead0c3b858ca39b6007';
 
 @ProviderFor(scheduleProject)
-const scheduleProjectProvider = ScheduleProjectProvider._();
+final scheduleProjectProvider = ScheduleProjectProvider._();
 
 final class ScheduleProjectProvider
     extends
@@ -543,7 +543,7 @@ final class ScheduleProjectProvider
           ScheduleProjectUseCase
         >
     with $Provider<ScheduleProjectUseCase> {
-  const ScheduleProjectProvider._()
+  ScheduleProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -580,7 +580,7 @@ final class ScheduleProjectProvider
 String _$scheduleProjectHash() => r'92b6eeb0dc4bb039e784f9b256f4e7d738da469d';
 
 @ProviderFor(toggleLike)
-const toggleLikeProvider = ToggleLikeProvider._();
+final toggleLikeProvider = ToggleLikeProvider._();
 
 final class ToggleLikeProvider
     extends
@@ -590,7 +590,7 @@ final class ToggleLikeProvider
           ToggleLikeUseCase
         >
     with $Provider<ToggleLikeUseCase> {
-  const ToggleLikeProvider._()
+  ToggleLikeProvider._()
     : super(
         from: null,
         argument: null,
@@ -627,7 +627,7 @@ final class ToggleLikeProvider
 String _$toggleLikeHash() => r'6610dd1971c4bc0f3245dfa3b80af78912f3420a';
 
 @ProviderFor(clearProjectBookmarks)
-const clearProjectBookmarksProvider = ClearProjectBookmarksProvider._();
+final clearProjectBookmarksProvider = ClearProjectBookmarksProvider._();
 
 final class ClearProjectBookmarksProvider
     extends
@@ -637,7 +637,7 @@ final class ClearProjectBookmarksProvider
           ClearProjectBookmarksUseCase
         >
     with $Provider<ClearProjectBookmarksUseCase> {
-  const ClearProjectBookmarksProvider._()
+  ClearProjectBookmarksProvider._()
     : super(
         from: null,
         argument: null,
@@ -675,7 +675,7 @@ String _$clearProjectBookmarksHash() =>
     r'a18ee814aa1f6ffd4a4793d40d35f1569c32a55d';
 
 @ProviderFor(reactToProjectReview)
-const reactToProjectReviewProvider = ReactToProjectReviewProvider._();
+final reactToProjectReviewProvider = ReactToProjectReviewProvider._();
 
 final class ReactToProjectReviewProvider
     extends
@@ -685,7 +685,7 @@ final class ReactToProjectReviewProvider
           ReactToProjectReviewUseCase
         >
     with $Provider<ReactToProjectReviewUseCase> {
-  const ReactToProjectReviewProvider._()
+  ReactToProjectReviewProvider._()
     : super(
         from: null,
         argument: null,
@@ -723,7 +723,7 @@ String _$reactToProjectReviewHash() =>
     r'd89d5f9dd4106b72aeea78d1b5f3aa5610379004';
 
 @ProviderFor(reactToProjectVetting)
-const reactToProjectVettingProvider = ReactToProjectVettingProvider._();
+final reactToProjectVettingProvider = ReactToProjectVettingProvider._();
 
 final class ReactToProjectVettingProvider
     extends
@@ -733,7 +733,7 @@ final class ReactToProjectVettingProvider
           ReactToProjectVettingUseCase
         >
     with $Provider<ReactToProjectVettingUseCase> {
-  const ReactToProjectVettingProvider._()
+  ReactToProjectVettingProvider._()
     : super(
         from: null,
         argument: null,
@@ -771,7 +771,7 @@ String _$reactToProjectVettingHash() =>
     r'9e8923807419de17779357b2e98713dca75c9a94';
 
 @ProviderFor(toggleBookmark)
-const toggleBookmarkProvider = ToggleBookmarkProvider._();
+final toggleBookmarkProvider = ToggleBookmarkProvider._();
 
 final class ToggleBookmarkProvider
     extends
@@ -781,7 +781,7 @@ final class ToggleBookmarkProvider
           ToggleBookmarkUseCase
         >
     with $Provider<ToggleBookmarkUseCase> {
-  const ToggleBookmarkProvider._()
+  ToggleBookmarkProvider._()
     : super(
         from: null,
         argument: null,
@@ -818,7 +818,7 @@ final class ToggleBookmarkProvider
 String _$toggleBookmarkHash() => r'fd9ae908bd8bf0829edc5f463e5ea18cd68a05e3';
 
 @ProviderFor(deleteProject)
-const deleteProjectProvider = DeleteProjectProvider._();
+final deleteProjectProvider = DeleteProjectProvider._();
 
 final class DeleteProjectProvider
     extends
@@ -828,7 +828,7 @@ final class DeleteProjectProvider
           DeleteProjectUseCase
         >
     with $Provider<DeleteProjectUseCase> {
-  const DeleteProjectProvider._()
+  DeleteProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -865,7 +865,7 @@ final class DeleteProjectProvider
 String _$deleteProjectHash() => r'b877c510c65d1a2eb25340af7864d168b1172672';
 
 @ProviderFor(notInterestedProject)
-const notInterestedProjectProvider = NotInterestedProjectProvider._();
+final notInterestedProjectProvider = NotInterestedProjectProvider._();
 
 final class NotInterestedProjectProvider
     extends
@@ -875,7 +875,7 @@ final class NotInterestedProjectProvider
           MarkNotInterestedUseCase
         >
     with $Provider<MarkNotInterestedUseCase> {
-  const NotInterestedProjectProvider._()
+  NotInterestedProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -913,7 +913,7 @@ String _$notInterestedProjectHash() =>
     r'92aea445fa33ab0605be36d8fbc78160e7822f61';
 
 @ProviderFor(deleteProjectReview)
-const deleteProjectReviewProvider = DeleteProjectReviewProvider._();
+final deleteProjectReviewProvider = DeleteProjectReviewProvider._();
 
 final class DeleteProjectReviewProvider
     extends
@@ -923,7 +923,7 @@ final class DeleteProjectReviewProvider
           DeleteProjectReviewUseCase
         >
     with $Provider<DeleteProjectReviewUseCase> {
-  const DeleteProjectReviewProvider._()
+  DeleteProjectReviewProvider._()
     : super(
         from: null,
         argument: null,
@@ -961,7 +961,7 @@ String _$deleteProjectReviewHash() =>
     r'f92fcf710e91a889cf0121808f37a00e373eb748';
 
 @ProviderFor(deleteProjectVetting)
-const deleteProjectVettingProvider = DeleteProjectVettingProvider._();
+final deleteProjectVettingProvider = DeleteProjectVettingProvider._();
 
 final class DeleteProjectVettingProvider
     extends
@@ -971,7 +971,7 @@ final class DeleteProjectVettingProvider
           DeleteProjectVettingUseCase
         >
     with $Provider<DeleteProjectVettingUseCase> {
-  const DeleteProjectVettingProvider._()
+  DeleteProjectVettingProvider._()
     : super(
         from: null,
         argument: null,
@@ -1009,7 +1009,7 @@ String _$deleteProjectVettingHash() =>
     r'31a81ff881a2909ab7943df3a8fe40b33f05dfa2';
 
 @ProviderFor(vetProject)
-const vetProjectProvider = VetProjectProvider._();
+final vetProjectProvider = VetProjectProvider._();
 
 final class VetProjectProvider
     extends
@@ -1019,7 +1019,7 @@ final class VetProjectProvider
           VetProjectUseCase
         >
     with $Provider<VetProjectUseCase> {
-  const VetProjectProvider._()
+  VetProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -1056,7 +1056,7 @@ final class VetProjectProvider
 String _$vetProjectHash() => r'2d819f29e6abd9622c251523f9b445a2cb85ed39';
 
 @ProviderFor(getVettedProject)
-const getVettedProjectProvider = GetVettedProjectProvider._();
+final getVettedProjectProvider = GetVettedProjectProvider._();
 
 final class GetVettedProjectProvider
     extends
@@ -1066,7 +1066,7 @@ final class GetVettedProjectProvider
           GetVettedProjectUseCase
         >
     with $Provider<GetVettedProjectUseCase> {
-  const GetVettedProjectProvider._()
+  GetVettedProjectProvider._()
     : super(
         from: null,
         argument: null,
@@ -1103,7 +1103,7 @@ final class GetVettedProjectProvider
 String _$getVettedProjectHash() => r'50a007e5e425e0c0e2b53c1dc643d69126170eed';
 
 @ProviderFor(getVettedProjects)
-const getVettedProjectsProvider = GetVettedProjectsProvider._();
+final getVettedProjectsProvider = GetVettedProjectsProvider._();
 
 final class GetVettedProjectsProvider
     extends
@@ -1113,7 +1113,7 @@ final class GetVettedProjectsProvider
           GetVettedProjectsUseCase
         >
     with $Provider<GetVettedProjectsUseCase> {
-  const GetVettedProjectsProvider._()
+  GetVettedProjectsProvider._()
     : super(
         from: null,
         argument: null,
@@ -1150,7 +1150,7 @@ final class GetVettedProjectsProvider
 String _$getVettedProjectsHash() => r'1b02c9a15613c3978265afe71745114ed76d20eb';
 
 @ProviderFor(getProjectDrafts)
-const getProjectDraftsProvider = GetProjectDraftsProvider._();
+final getProjectDraftsProvider = GetProjectDraftsProvider._();
 
 final class GetProjectDraftsProvider
     extends
@@ -1160,7 +1160,7 @@ final class GetProjectDraftsProvider
           GetProjectDraftsUseCase
         >
     with $Provider<GetProjectDraftsUseCase> {
-  const GetProjectDraftsProvider._()
+  GetProjectDraftsProvider._()
     : super(
         from: null,
         argument: null,
@@ -1197,7 +1197,7 @@ final class GetProjectDraftsProvider
 String _$getProjectDraftsHash() => r'498f739d874a9c50f10ab138af65fc86bcf6885f';
 
 @ProviderFor(saveProjectDraft)
-const saveProjectDraftProvider = SaveProjectDraftProvider._();
+final saveProjectDraftProvider = SaveProjectDraftProvider._();
 
 final class SaveProjectDraftProvider
     extends
@@ -1207,7 +1207,7 @@ final class SaveProjectDraftProvider
           SaveProjectDraftUseCase
         >
     with $Provider<SaveProjectDraftUseCase> {
-  const SaveProjectDraftProvider._()
+  SaveProjectDraftProvider._()
     : super(
         from: null,
         argument: null,
@@ -1244,7 +1244,7 @@ final class SaveProjectDraftProvider
 String _$saveProjectDraftHash() => r'7686d532f63383c0c09fa6242f7f124d1f37ab2d';
 
 @ProviderFor(deleteProjectDraft)
-const deleteProjectDraftProvider = DeleteProjectDraftProvider._();
+final deleteProjectDraftProvider = DeleteProjectDraftProvider._();
 
 final class DeleteProjectDraftProvider
     extends
@@ -1254,7 +1254,7 @@ final class DeleteProjectDraftProvider
           DeleteProjectDraftUseCase
         >
     with $Provider<DeleteProjectDraftUseCase> {
-  const DeleteProjectDraftProvider._()
+  DeleteProjectDraftProvider._()
     : super(
         from: null,
         argument: null,
@@ -1292,7 +1292,7 @@ String _$deleteProjectDraftHash() =>
     r'0f24e9c7305d30d7d8d64a0795c66562a338b43e';
 
 @ProviderFor(deleteAllProjectDrafts)
-const deleteAllProjectDraftsProvider = DeleteAllProjectDraftsProvider._();
+final deleteAllProjectDraftsProvider = DeleteAllProjectDraftsProvider._();
 
 final class DeleteAllProjectDraftsProvider
     extends
@@ -1302,7 +1302,7 @@ final class DeleteAllProjectDraftsProvider
           DeleteAllProjectDraftsUseCase
         >
     with $Provider<DeleteAllProjectDraftsUseCase> {
-  const DeleteAllProjectDraftsProvider._()
+  DeleteAllProjectDraftsProvider._()
     : super(
         from: null,
         argument: null,

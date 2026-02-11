@@ -114,14 +114,13 @@ class ProjectReviewScreen extends ConsumerWidget {
                           final res =
                               await ProjectHelperFunctions.deleteProjectReviewDialog(
                                 context,
-                                projectId,
-                                review!.id!,
                               );
                           if (res ?? false) {
                             await projectReviewNotifier.deleteReview(
                               projectId,
-                              review.id!,
+                              review!.id!,
                             );
+                            if (context.mounted) context.pop();
                           }
                         },
                   secondButtonColor: Colors.red,

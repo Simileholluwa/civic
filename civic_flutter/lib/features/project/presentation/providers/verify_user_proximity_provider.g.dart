@@ -10,12 +10,12 @@ part of 'verify_user_proximity_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(verifyUserProximity)
-const verifyUserProximityProvider = VerifyUserProximityFamily._();
+final verifyUserProximityProvider = VerifyUserProximityFamily._();
 
 final class VerifyUserProximityProvider
     extends $FunctionalProvider<AsyncValue<double>, double, FutureOr<double>>
     with $FutureModifier<double>, $FutureProvider<double> {
-  const VerifyUserProximityProvider._({
+  VerifyUserProximityProvider._({
     required VerifyUserProximityFamily super.from,
     required (List<AWSPlaces>?, int?) super.argument,
   }) : super(
@@ -63,7 +63,7 @@ String _$verifyUserProximityHash() =>
 
 final class VerifyUserProximityFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<double>, (List<AWSPlaces>?, int?)> {
-  const VerifyUserProximityFamily._()
+  VerifyUserProximityFamily._()
     : super(
         retry: null,
         name: r'verifyUserProximityProvider',

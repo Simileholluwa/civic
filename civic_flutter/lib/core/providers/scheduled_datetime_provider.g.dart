@@ -10,11 +10,11 @@ part of 'scheduled_datetime_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PostScheduledDateTime)
-const postScheduledDateTimeProvider = PostScheduledDateTimeProvider._();
+final postScheduledDateTimeProvider = PostScheduledDateTimeProvider._();
 
 final class PostScheduledDateTimeProvider
     extends $NotifierProvider<PostScheduledDateTime, DateTime?> {
-  const PostScheduledDateTimeProvider._()
+  PostScheduledDateTimeProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$PostScheduledDateTime extends $Notifier<DateTime?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<DateTime?, DateTime?>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$PostScheduledDateTime extends $Notifier<DateTime?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

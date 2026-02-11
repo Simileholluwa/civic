@@ -1578,6 +1578,7 @@ class PostEndpoint extends Endpoint {
             : result.postType == PostType.commentReply
             ? 'This reply has been deleted.'
             : 'This post has been deleted.',
+        type: 'deleted',
       );
     }
 

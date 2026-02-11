@@ -30,6 +30,8 @@ abstract class ProjectRemoteDataSource {
     required int projectId,
     required int limit,
     required int page,
+    String sortBy = 'recent',
+    String order = 'desc',
     double? rating,
     String? cardinal,
   });
@@ -338,6 +340,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
     required int projectId,
     required int limit,
     required int page,
+    String sortBy = 'recent',
+    String order = 'desc',
     double? rating,
     String? cardinal,
   }) async {
@@ -348,6 +352,8 @@ class ProjectRemoteDatasourceImpl extends ProjectRemoteDataSource {
         page: page,
         rating: rating,
         cardinal: cardinal,
+        sortBy: sortBy,
+        order: order,
       );
       return result;
     } on ServerSideException catch (e) {

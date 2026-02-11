@@ -10,11 +10,11 @@ part of 'auth_user_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(AuthUser)
-const authUserProvider = AuthUserProvider._();
+final authUserProvider = AuthUserProvider._();
 
 final class AuthUserProvider
     extends $NotifierProvider<AuthUser, AuthUserState> {
-  const AuthUserProvider._()
+  AuthUserProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$AuthUser extends $Notifier<AuthUserState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AuthUserState, AuthUserState>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$AuthUser extends $Notifier<AuthUserState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

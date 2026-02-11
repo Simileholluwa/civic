@@ -10,7 +10,7 @@ part of 'paginated_replies_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedRepliesList)
-const paginatedRepliesListProvider = PaginatedRepliesListFamily._();
+final paginatedRepliesListProvider = PaginatedRepliesListFamily._();
 
 final class PaginatedRepliesListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedRepliesListProvider
           PaginatedRepliesList,
           Raw<PagingController<int, PostWithUserState>>
         > {
-  const PaginatedRepliesListProvider._({
+  PaginatedRepliesListProvider._({
     required PaginatedRepliesListFamily super.from,
     required int super.argument,
   }) : super(
@@ -79,7 +79,7 @@ final class PaginatedRepliesListFamily extends $Family
           Raw<PagingController<int, PostWithUserState>>,
           int
         > {
-  const PaginatedRepliesListFamily._()
+  PaginatedRepliesListFamily._()
     : super(
         retry: null,
         name: r'paginatedRepliesListProvider',
@@ -104,7 +104,6 @@ abstract class _$PaginatedRepliesList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -122,6 +121,6 @@ abstract class _$PaginatedRepliesList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

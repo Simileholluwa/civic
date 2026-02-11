@@ -4,7 +4,7 @@ import 'package:civic_flutter/features/project/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'project_review_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ProjectReviewProvider extends _$ProjectReviewProvider {
   @override
   ProjectReviewState build(ProjectReview? projectReview) {
@@ -18,6 +18,10 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
         ref,
       );
     }
+  }
+
+  void resetState() {
+    state = ProjectReviewState.empty();
   }
 
   void setLocationRating(double rating) {
@@ -154,8 +158,8 @@ class ProjectReviewProvider extends _$ProjectReviewProvider {
     state = state.copyWith(
       isDeleting: true,
     );
-    final deleteReview = ref.read(deleteProjectReviewProvider);
-    final result = await deleteReview(
+    final delete = ref.read(deleteProjectReviewProvider);
+    final result = await delete(
       DeleteProjectReviewParams(
         reviewId,
       ),

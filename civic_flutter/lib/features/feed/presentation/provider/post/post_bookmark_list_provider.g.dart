@@ -10,7 +10,7 @@ part of 'post_bookmark_list_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PaginatedPostBookmarkList)
-const paginatedPostBookmarkListProvider = PaginatedPostBookmarkListProvider._();
+final paginatedPostBookmarkListProvider = PaginatedPostBookmarkListProvider._();
 
 final class PaginatedPostBookmarkListProvider
     extends
@@ -18,7 +18,7 @@ final class PaginatedPostBookmarkListProvider
           PaginatedPostBookmarkList,
           Raw<PagingController<int, PostWithUserState>>
         > {
-  const PaginatedPostBookmarkListProvider._()
+  PaginatedPostBookmarkListProvider._()
     : super(
         from: null,
         argument: null,
@@ -59,7 +59,6 @@ abstract class _$PaginatedPostBookmarkList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref =
         this.ref
             as $Ref<
@@ -77,6 +76,6 @@ abstract class _$PaginatedPostBookmarkList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

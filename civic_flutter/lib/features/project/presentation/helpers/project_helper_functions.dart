@@ -377,8 +377,6 @@ class ProjectHelperFunctions {
 
   static Future<bool?> deleteProjectReviewDialog(
     BuildContext context,
-    int projectId,
-    int reviewId,
   ) {
     return postDialog(
       context: context,

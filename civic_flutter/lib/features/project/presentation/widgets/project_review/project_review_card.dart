@@ -30,9 +30,6 @@ class ProjectReviewCard extends ConsumerWidget {
       ),
     );
     final review = projectReviewWithUserState.review;
-    final projectReviewNotifier = ref.read(
-              projectReviewProviderProvider(review).notifier,
-            );
     final userId = ref
         .read(
           localStorageProvider,
@@ -57,7 +54,7 @@ class ProjectReviewCard extends ConsumerWidget {
                 ),
                 creator: review.owner!,
               ),
-              
+
               ContentExpandableText(
                 text: review.review!,
                 expandOnTextTap: true,
@@ -69,9 +66,10 @@ class ProjectReviewCard extends ConsumerWidget {
                   spacing: 10,
                   children: [
                     ProjectTitleAndRating(
-                      ratingNumber: review.locationRating
-                          .toString()
-                          .substring(0, 1),
+                      ratingNumber: review.locationRating.toString().substring(
+                        0,
+                        1,
+                      ),
                       rating: review.locationRating!,
                       title: 'Location',
                       showRatingCount: false,
@@ -105,9 +103,10 @@ class ProjectReviewCard extends ConsumerWidget {
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: review.categoryRating
-                          .toString()
-                          .substring(0, 1),
+                      ratingNumber: review.categoryRating.toString().substring(
+                        0,
+                        1,
+                      ),
                       rating: review.categoryRating!,
                       title: 'Category',
                       showRatingCount: false,
@@ -117,9 +116,10 @@ class ProjectReviewCard extends ConsumerWidget {
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: review.fundingRating
-                          .toString()
-                          .substring(0, 1),
+                      ratingNumber: review.fundingRating.toString().substring(
+                        0,
+                        1,
+                      ),
                       rating: review.fundingRating!,
                       title: 'Funding',
                       showRatingCount: false,
@@ -129,9 +129,10 @@ class ProjectReviewCard extends ConsumerWidget {
                       child: VerticalDivider(),
                     ),
                     ProjectTitleAndRating(
-                      ratingNumber: review.datesRating
-                          .toString()
-                          .substring(0, 1),
+                      ratingNumber: review.datesRating.toString().substring(
+                        0,
+                        1,
+                      ),
                       rating: review.datesRating!,
                       title: 'Dates',
                       showRatingCount: false,
@@ -162,10 +163,11 @@ class ProjectReviewCard extends ConsumerWidget {
                   final res =
                       await ProjectHelperFunctions.deleteProjectReviewDialog(
                         context,
-                        project.id!,
-                        review.id!,
                       );
                   if (res ?? false) {
+                    final projectReviewNotifier = ref.read(
+                      projectReviewProviderProvider(review).notifier,
+                    );
                     await projectReviewNotifier.deleteReview(
                       project.id!,
                       review.id!,

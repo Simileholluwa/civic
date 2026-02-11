@@ -10,7 +10,7 @@ part of 'auth_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(authLocalDatasource)
-const authLocalDatasourceProvider = AuthLocalDatasourceProvider._();
+final authLocalDatasourceProvider = AuthLocalDatasourceProvider._();
 
 final class AuthLocalDatasourceProvider
     extends
@@ -20,7 +20,7 @@ final class AuthLocalDatasourceProvider
           AuthLocalDatasourceImpl
         >
     with $Provider<AuthLocalDatasourceImpl> {
-  const AuthLocalDatasourceProvider._()
+  AuthLocalDatasourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,7 @@ String _$authLocalDatasourceHash() =>
     r'2f607a386fc73fbff44bbe21b775a23c6bfd8809';
 
 @ProviderFor(authRemoteDatabase)
-const authRemoteDatabaseProvider = AuthRemoteDatabaseProvider._();
+final authRemoteDatabaseProvider = AuthRemoteDatabaseProvider._();
 
 final class AuthRemoteDatabaseProvider
     extends
@@ -68,7 +68,7 @@ final class AuthRemoteDatabaseProvider
           AuthRemoteDatabaseImpl
         >
     with $Provider<AuthRemoteDatabaseImpl> {
-  const AuthRemoteDatabaseProvider._()
+  AuthRemoteDatabaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -106,7 +106,7 @@ String _$authRemoteDatabaseHash() =>
     r'710caa8ddefd406e4f0c893307f64296c0772d4c';
 
 @ProviderFor(authRepository)
-const authRepositoryProvider = AuthRepositoryProvider._();
+final authRepositoryProvider = AuthRepositoryProvider._();
 
 final class AuthRepositoryProvider
     extends
@@ -116,7 +116,7 @@ final class AuthRepositoryProvider
           AuthRepositoryImpl
         >
     with $Provider<AuthRepositoryImpl> {
-  const AuthRepositoryProvider._()
+  AuthRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -153,7 +153,7 @@ final class AuthRepositoryProvider
 String _$authRepositoryHash() => r'a8ccccfb7339ced909584054d0666dd5ccceaa71';
 
 @ProviderFor(createAccountRequest)
-const createAccountRequestProvider = CreateAccountRequestProvider._();
+final createAccountRequestProvider = CreateAccountRequestProvider._();
 
 final class CreateAccountRequestProvider
     extends
@@ -163,7 +163,7 @@ final class CreateAccountRequestProvider
           CreateAccountRequestUseCase
         >
     with $Provider<CreateAccountRequestUseCase> {
-  const CreateAccountRequestProvider._()
+  CreateAccountRequestProvider._()
     : super(
         from: null,
         argument: null,
@@ -201,7 +201,7 @@ String _$createAccountRequestHash() =>
     r'b653f1f620cde6ffc3a99bae8ffcdd32534c8323';
 
 @ProviderFor(userSignIn)
-const userSignInProvider = UserSignInProvider._();
+final userSignInProvider = UserSignInProvider._();
 
 final class UserSignInProvider
     extends
@@ -211,7 +211,7 @@ final class UserSignInProvider
           UserSignInUseCase
         >
     with $Provider<UserSignInUseCase> {
-  const UserSignInProvider._()
+  UserSignInProvider._()
     : super(
         from: null,
         argument: null,
@@ -248,7 +248,7 @@ final class UserSignInProvider
 String _$userSignInHash() => r'2adacc5f69874ed818ff3878e1a329a0d7d6d097';
 
 @ProviderFor(initiatePasswordReset)
-const initiatePasswordResetProvider = InitiatePasswordResetProvider._();
+final initiatePasswordResetProvider = InitiatePasswordResetProvider._();
 
 final class InitiatePasswordResetProvider
     extends
@@ -258,7 +258,7 @@ final class InitiatePasswordResetProvider
           InitiatePasswordResetUseCase
         >
     with $Provider<InitiatePasswordResetUseCase> {
-  const InitiatePasswordResetProvider._()
+  InitiatePasswordResetProvider._()
     : super(
         from: null,
         argument: null,
@@ -296,7 +296,7 @@ String _$initiatePasswordResetHash() =>
     r'6ec5d95bbb598d2e05c1fc8b5022f0c457dd223b';
 
 @ProviderFor(checkIfNewUser)
-const checkIfNewUserProvider = CheckIfNewUserProvider._();
+final checkIfNewUserProvider = CheckIfNewUserProvider._();
 
 final class CheckIfNewUserProvider
     extends
@@ -306,7 +306,7 @@ final class CheckIfNewUserProvider
           CheckIfNewUserUseCase
         >
     with $Provider<CheckIfNewUserUseCase> {
-  const CheckIfNewUserProvider._()
+  CheckIfNewUserProvider._()
     : super(
         from: null,
         argument: null,
@@ -343,12 +343,12 @@ final class CheckIfNewUserProvider
 String _$checkIfNewUserHash() => r'dc9f8adbbe994c9c4bff9fc09234cf060ad6f9c9';
 
 @ProviderFor(logOut)
-const logOutProvider = LogOutProvider._();
+final logOutProvider = LogOutProvider._();
 
 final class LogOutProvider
     extends $FunctionalProvider<LogoutUseCase, LogoutUseCase, LogoutUseCase>
     with $Provider<LogoutUseCase> {
-  const LogOutProvider._()
+  LogOutProvider._()
     : super(
         from: null,
         argument: null,
@@ -384,7 +384,7 @@ final class LogOutProvider
 String _$logOutHash() => r'40db795015672880a5d6e20dda78d2373d1dd3c7';
 
 @ProviderFor(validateCreateAccount)
-const validateCreateAccountProvider = ValidateCreateAccountProvider._();
+final validateCreateAccountProvider = ValidateCreateAccountProvider._();
 
 final class ValidateCreateAccountProvider
     extends
@@ -394,7 +394,7 @@ final class ValidateCreateAccountProvider
           ValidateCreateAccountUseCase
         >
     with $Provider<ValidateCreateAccountUseCase> {
-  const ValidateCreateAccountProvider._()
+  ValidateCreateAccountProvider._()
     : super(
         from: null,
         argument: null,
@@ -432,7 +432,7 @@ String _$validateCreateAccountHash() =>
     r'33a4d8366c25528612361c575441864125ab8107';
 
 @ProviderFor(searchUserNin)
-const searchUserNinProvider = SearchUserNinProvider._();
+final searchUserNinProvider = SearchUserNinProvider._();
 
 final class SearchUserNinProvider
     extends
@@ -442,7 +442,7 @@ final class SearchUserNinProvider
           SearchUserNinUseCase
         >
     with $Provider<SearchUserNinUseCase> {
-  const SearchUserNinProvider._()
+  SearchUserNinProvider._()
     : super(
         from: null,
         argument: null,
@@ -479,7 +479,7 @@ final class SearchUserNinProvider
 String _$searchUserNinHash() => r'ed11554b209d5982c8764ee68516b4575cb5533f';
 
 @ProviderFor(uploadProfileImage)
-const uploadProfileImageProvider = UploadProfileImageProvider._();
+final uploadProfileImageProvider = UploadProfileImageProvider._();
 
 final class UploadProfileImageProvider
     extends
@@ -489,7 +489,7 @@ final class UploadProfileImageProvider
           UploadProfileImageUseCase
         >
     with $Provider<UploadProfileImageUseCase> {
-  const UploadProfileImageProvider._()
+  UploadProfileImageProvider._()
     : super(
         from: null,
         argument: null,
@@ -527,7 +527,7 @@ String _$uploadProfileImageHash() =>
     r'ca5bf8b6f7e98b567ffd163d25c5f19a8b1ac2be';
 
 @ProviderFor(resetUserPassword)
-const resetUserPasswordProvider = ResetUserPasswordProvider._();
+final resetUserPasswordProvider = ResetUserPasswordProvider._();
 
 final class ResetUserPasswordProvider
     extends
@@ -537,7 +537,7 @@ final class ResetUserPasswordProvider
           ResetUserPasswordUseCase
         >
     with $Provider<ResetUserPasswordUseCase> {
-  const ResetUserPasswordProvider._()
+  ResetUserPasswordProvider._()
     : super(
         from: null,
         argument: null,

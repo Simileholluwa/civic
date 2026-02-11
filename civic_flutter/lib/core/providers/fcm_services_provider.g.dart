@@ -10,12 +10,12 @@ part of 'fcm_services_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(fcmServiceImpl)
-const fcmServiceImplProvider = FcmServiceImplProvider._();
+final fcmServiceImplProvider = FcmServiceImplProvider._();
 
 final class FcmServiceImplProvider
     extends $FunctionalProvider<FcmServiceImpl, FcmServiceImpl, FcmServiceImpl>
     with $Provider<FcmServiceImpl> {
-  const FcmServiceImplProvider._()
+  FcmServiceImplProvider._()
     : super(
         from: null,
         argument: null,

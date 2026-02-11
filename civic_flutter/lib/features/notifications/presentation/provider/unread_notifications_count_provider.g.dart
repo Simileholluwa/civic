@@ -10,11 +10,11 @@ part of 'unread_notifications_count_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(UnreadNotificationsCount)
-const unreadNotificationsCountProvider = UnreadNotificationsCountProvider._();
+final unreadNotificationsCountProvider = UnreadNotificationsCountProvider._();
 
 final class UnreadNotificationsCountProvider
     extends $NotifierProvider<UnreadNotificationsCount, int> {
-  const UnreadNotificationsCountProvider._()
+  UnreadNotificationsCountProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$UnreadNotificationsCount extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$UnreadNotificationsCount extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

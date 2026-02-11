@@ -29,20 +29,23 @@ class ProjectReviewState {
 
   factory ProjectReviewState.populate(ProjectReview projectReview, Ref ref) {
     final userId = ref.read(localStorageProvider).getInt('userId');
+    final project = projectReview.project;
+    final isDeletedProject = project?.isDeleted ?? false;
+    final isProjectOwner = project?.ownerId == userId;
     return ProjectReviewState(
-      review: projectReview.review!,
-      locationRating: projectReview.locationRating!,
-      descriptionRating: projectReview.descriptionRating!,
-      attachmentsRating: projectReview.attachmentsRating!,
-      categoryRating: projectReview.categoryRating!,
-      fundingRating: projectReview.fundingRating!,
-      datesRating: projectReview.datesRating!,
-      overallRating: projectReview.overallRating!,
-      isEditing: !projectReview.project!.isDeleted! &&
-          !(projectReview.project!.ownerId == userId),
-      isDeletedProject: projectReview.project!.isDeleted!,
-      isProjectOwner: projectReview.project!.ownerId == userId,
-      reviewController: TextEditingController(text: projectReview.review),
+      review: projectReview.review ?? '',
+      locationRating: projectReview.locationRating ?? 0,
+      descriptionRating: projectReview.descriptionRating ?? 0,
+      attachmentsRating: projectReview.attachmentsRating ?? 0,
+      categoryRating: projectReview.categoryRating ?? 0,
+      fundingRating: projectReview.fundingRating ?? 0,
+      datesRating: projectReview.datesRating ?? 0,
+      overallRating: projectReview.overallRating ?? 0,
+      isEditing: !isDeletedProject && !isProjectOwner,
+      isDeletedProject: isDeletedProject,
+      isProjectOwner: isProjectOwner,
+      reviewController:
+          TextEditingController(text: projectReview.review ?? ''),
     );
   }
   final String review;

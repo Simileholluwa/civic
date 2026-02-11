@@ -10,11 +10,11 @@ part of 'vet_project_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectVet)
-const projectVetProvider = ProjectVetFamily._();
+final projectVetProvider = ProjectVetFamily._();
 
 final class ProjectVetProvider
     extends $NotifierProvider<ProjectVet, VetProjectState> {
-  const ProjectVetProvider._({
+  ProjectVetProvider._({
     required ProjectVetFamily super.from,
     required ProjectVetting? super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class ProjectVetFamily extends $Family
           VetProjectState,
           ProjectVetting?
         > {
-  const ProjectVetFamily._()
+  ProjectVetFamily._()
     : super(
         retry: null,
         name: r'projectVetProvider',
@@ -93,7 +93,6 @@ abstract class _$ProjectVet extends $Notifier<VetProjectState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<VetProjectState, VetProjectState>;
     final element =
         ref.element
@@ -103,6 +102,6 @@ abstract class _$ProjectVet extends $Notifier<VetProjectState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

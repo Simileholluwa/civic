@@ -132,7 +132,7 @@ class CreatePostScreen extends ConsumerWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) async {
+      onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
         await handlePopAttempt();
       },

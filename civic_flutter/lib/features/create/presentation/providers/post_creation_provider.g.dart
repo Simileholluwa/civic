@@ -10,11 +10,11 @@ part of 'post_creation_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(PostCreation)
-const postCreationProvider = PostCreationFamily._();
+final postCreationProvider = PostCreationFamily._();
 
 final class PostCreationProvider
     extends $NotifierProvider<PostCreation, PostCreationState> {
-  const PostCreationProvider._({
+  PostCreationProvider._({
     required PostCreationFamily super.from,
     required Post? super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class PostCreationFamily extends $Family
           PostCreationState,
           Post?
         > {
-  const PostCreationFamily._()
+  PostCreationFamily._()
     : super(
         retry: null,
         name: r'postCreationProvider',
@@ -93,7 +93,6 @@ abstract class _$PostCreation extends $Notifier<PostCreationState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<PostCreationState, PostCreationState>;
     final element =
         ref.element
@@ -103,6 +102,6 @@ abstract class _$PostCreation extends $Notifier<PostCreationState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

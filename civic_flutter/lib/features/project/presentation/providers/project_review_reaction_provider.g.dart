@@ -10,11 +10,11 @@ part of 'project_review_reaction_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ReviewReaction)
-const reviewReactionProvider = ReviewReactionFamily._();
+final reviewReactionProvider = ReviewReactionFamily._();
 
 final class ReviewReactionProvider
     extends $NotifierProvider<ReviewReaction, ProjectReviewReactionState> {
-  const ReviewReactionProvider._({
+  ReviewReactionProvider._({
     required ReviewReactionFamily super.from,
     required ProjectReviewWithUserStateKey? super.argument,
   }) : super(
@@ -58,7 +58,7 @@ final class ReviewReactionProvider
   }
 }
 
-String _$reviewReactionHash() => r'782f985b1f6285d202fec4745783b1fd7867fda7';
+String _$reviewReactionHash() => r'ab94af9a35d879860b6c23f869c174c111a002e1';
 
 final class ReviewReactionFamily extends $Family
     with
@@ -69,7 +69,7 @@ final class ReviewReactionFamily extends $Family
           ProjectReviewReactionState,
           ProjectReviewWithUserStateKey?
         > {
-  const ReviewReactionFamily._()
+  ReviewReactionFamily._()
     : super(
         retry: null,
         name: r'reviewReactionProvider',
@@ -93,7 +93,6 @@ abstract class _$ReviewReaction extends $Notifier<ProjectReviewReactionState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<ProjectReviewReactionState, ProjectReviewReactionState>;
@@ -108,6 +107,6 @@ abstract class _$ReviewReaction extends $Notifier<ProjectReviewReactionState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

@@ -10,7 +10,7 @@ part of 'load_project_drafts_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(loaddraftProjects)
-const loaddraftProjectsProvider = LoaddraftProjectsProvider._();
+final loaddraftProjectsProvider = LoaddraftProjectsProvider._();
 
 final class LoaddraftProjectsProvider
     extends
@@ -20,7 +20,7 @@ final class LoaddraftProjectsProvider
           FutureOr<List<Project>>
         >
     with $FutureModifier<List<Project>>, $FutureProvider<List<Project>> {
-  const LoaddraftProjectsProvider._()
+  LoaddraftProjectsProvider._()
     : super(
         from: null,
         argument: null,

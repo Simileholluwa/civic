@@ -39,22 +39,28 @@ class PollQuoteCard extends StatelessWidget {
                   onToggleTextTap: () {},
                 );
               },
-              error: (_, _) {
-                return PollCard(
-                  postWithUserState: PostWithUserState(
-                    post: post.parent!,
+              error: (e, _) {
+                final error = e as Map<String, dynamic>;
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
                   ),
-                  showInteractions: false,
-                  canVote: false,
-                  showPadding: false,
-                  showCreatorInfo: false,
-                  canTap: true,
-                  noMaxlines: false,
-                  maxLines: 3,
-                  expandOnTextTap: false,
-                  onToggleTextTap: () {},
+                  margin: const EdgeInsets.only(
+                    top: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  width: double.maxFinite,
+                  child: Text(
+                    error['message'] as String? ?? 'Error loading post',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 );
               },
+
               loading: () {
                 return LoadingAnimationWidget.progressiveDots(
                   color: Theme.of(context).primaryColor,

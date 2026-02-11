@@ -10,11 +10,11 @@ part of 'project_page_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProjectCurrentPage)
-const projectCurrentPageProvider = ProjectCurrentPageProvider._();
+final projectCurrentPageProvider = ProjectCurrentPageProvider._();
 
 final class ProjectCurrentPageProvider
     extends $NotifierProvider<ProjectCurrentPage, int> {
-  const ProjectCurrentPageProvider._()
+  ProjectCurrentPageProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$ProjectCurrentPage extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -59,16 +58,16 @@ abstract class _$ProjectCurrentPage extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectPageController)
-const projectPageControllerProvider = ProjectPageControllerProvider._();
+final projectPageControllerProvider = ProjectPageControllerProvider._();
 
 final class ProjectPageControllerProvider
     extends $NotifierProvider<ProjectPageController, Raw<PageController>> {
-  const ProjectPageControllerProvider._()
+  ProjectPageControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -103,7 +102,6 @@ abstract class _$ProjectPageController extends $Notifier<Raw<PageController>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<PageController>, Raw<PageController>>;
     final element =
         ref.element
@@ -113,16 +111,16 @@ abstract class _$ProjectPageController extends $Notifier<Raw<PageController>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectTabController)
-const projectTabControllerProvider = ProjectTabControllerProvider._();
+final projectTabControllerProvider = ProjectTabControllerProvider._();
 
 final class ProjectTabControllerProvider
     extends $NotifierProvider<ProjectTabController, Raw<TabController>> {
-  const ProjectTabControllerProvider._()
+  ProjectTabControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -157,7 +155,6 @@ abstract class _$ProjectTabController extends $Notifier<Raw<TabController>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
     final element =
         ref.element
@@ -167,17 +164,17 @@ abstract class _$ProjectTabController extends $Notifier<Raw<TabController>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectDetailsTabController)
-const projectDetailsTabControllerProvider =
+final projectDetailsTabControllerProvider =
     ProjectDetailsTabControllerProvider._();
 
 final class ProjectDetailsTabControllerProvider
     extends $NotifierProvider<ProjectDetailsTabController, Raw<TabController>> {
-  const ProjectDetailsTabControllerProvider._()
+  ProjectDetailsTabControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -213,7 +210,6 @@ abstract class _$ProjectDetailsTabController
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
     final element =
         ref.element
@@ -223,12 +219,12 @@ abstract class _$ProjectDetailsTabController
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectDetailsBackPageTabController)
-const projectDetailsBackPageTabControllerProvider =
+final projectDetailsBackPageTabControllerProvider =
     ProjectDetailsBackPageTabControllerProvider._();
 
 final class ProjectDetailsBackPageTabControllerProvider
@@ -237,7 +233,7 @@ final class ProjectDetailsBackPageTabControllerProvider
           ProjectDetailsBackPageTabController,
           Raw<TabController>
         > {
-  const ProjectDetailsBackPageTabControllerProvider._()
+  ProjectDetailsBackPageTabControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -275,7 +271,6 @@ abstract class _$ProjectDetailsBackPageTabController
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<Raw<TabController>, Raw<TabController>>;
     final element =
         ref.element
@@ -285,16 +280,16 @@ abstract class _$ProjectDetailsBackPageTabController
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProjectDetailCurrentPage)
-const projectDetailCurrentPageProvider = ProjectDetailCurrentPageProvider._();
+final projectDetailCurrentPageProvider = ProjectDetailCurrentPageProvider._();
 
 final class ProjectDetailCurrentPageProvider
     extends $NotifierProvider<ProjectDetailCurrentPage, int> {
-  const ProjectDetailCurrentPageProvider._()
+  ProjectDetailCurrentPageProvider._()
     : super(
         from: null,
         argument: null,
@@ -329,7 +324,6 @@ abstract class _$ProjectDetailCurrentPage extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -339,6 +333,6 @@ abstract class _$ProjectDetailCurrentPage extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

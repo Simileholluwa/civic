@@ -261,6 +261,7 @@ class FeedRemoteDatabaseImpl implements FeedRemoteDatabase {
     } on ServerSideException catch (e) {
       throw ServerException(
         message: e.message,
+        type: e.type,
       );
     } on Exception catch (e) {
       throw ServerException(

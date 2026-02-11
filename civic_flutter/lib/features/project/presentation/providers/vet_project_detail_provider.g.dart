@@ -10,7 +10,7 @@ part of 'vet_project_detail_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(getVettedProjectDetail)
-const getVettedProjectDetailProvider = GetVettedProjectDetailFamily._();
+final getVettedProjectDetailProvider = GetVettedProjectDetailFamily._();
 
 final class GetVettedProjectDetailProvider
     extends
@@ -20,7 +20,7 @@ final class GetVettedProjectDetailProvider
           FutureOr<ProjectVetting?>
         >
     with $FutureModifier<ProjectVetting?>, $FutureProvider<ProjectVetting?> {
-  const GetVettedProjectDetailProvider._({
+  GetVettedProjectDetailProvider._({
     required GetVettedProjectDetailFamily super.from,
     required int super.argument,
   }) : super(
@@ -70,7 +70,7 @@ String _$getVettedProjectDetailHash() =>
 
 final class GetVettedProjectDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<ProjectVetting?>, int> {
-  const GetVettedProjectDetailFamily._()
+  GetVettedProjectDetailFamily._()
     : super(
         retry: null,
         name: r'getVettedProjectDetailProvider',

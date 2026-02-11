@@ -10,11 +10,11 @@ part of 'impressions_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(FeedImpressions)
-const feedImpressionsProvider = FeedImpressionsProvider._();
+final feedImpressionsProvider = FeedImpressionsProvider._();
 
 final class FeedImpressionsProvider
     extends $NotifierProvider<FeedImpressions, int> {
-  const FeedImpressionsProvider._()
+  FeedImpressionsProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$FeedImpressions extends $Notifier<int> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$FeedImpressions extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

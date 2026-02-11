@@ -10,7 +10,7 @@ part of 'users_list_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(usersListService)
-const usersListServiceProvider = UsersListServiceProvider._();
+final usersListServiceProvider = UsersListServiceProvider._();
 
 final class UsersListServiceProvider
     extends
@@ -20,7 +20,7 @@ final class UsersListServiceProvider
           UsersListService
         >
     with $Provider<UsersListService> {
-  const UsersListServiceProvider._()
+  UsersListServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -56,7 +56,7 @@ final class UsersListServiceProvider
 String _$usersListServiceHash() => r'125d68440db5707cc3888b53e653b0f45b09bef7';
 
 @ProviderFor(PaginatedUsersList)
-const paginatedUsersListProvider = PaginatedUsersListFamily._();
+final paginatedUsersListProvider = PaginatedUsersListFamily._();
 
 final class PaginatedUsersListProvider
     extends
@@ -64,7 +64,7 @@ final class PaginatedUsersListProvider
           PaginatedUsersList,
           Raw<PagingController<int, UserRecord>>
         > {
-  const PaginatedUsersListProvider._({
+  PaginatedUsersListProvider._({
     required PaginatedUsersListFamily super.from,
     required String super.argument,
   }) : super(
@@ -121,7 +121,7 @@ final class PaginatedUsersListFamily extends $Family
           Raw<PagingController<int, UserRecord>>,
           String
         > {
-  const PaginatedUsersListFamily._()
+  PaginatedUsersListFamily._()
     : super(
         retry: null,
         name: r'paginatedUsersListProvider',
@@ -146,7 +146,6 @@ abstract class _$PaginatedUsersList
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<
@@ -164,16 +163,16 @@ abstract class _$PaginatedUsersList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(SearchUsersListQuery)
-const searchUsersListQueryProvider = SearchUsersListQueryProvider._();
+final searchUsersListQueryProvider = SearchUsersListQueryProvider._();
 
 final class SearchUsersListQueryProvider
     extends $NotifierProvider<SearchUsersListQuery, String> {
-  const SearchUsersListQueryProvider._()
+  SearchUsersListQueryProvider._()
     : super(
         from: null,
         argument: null,
@@ -208,7 +207,6 @@ abstract class _$SearchUsersListQuery extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -218,6 +216,6 @@ abstract class _$SearchUsersListQuery extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

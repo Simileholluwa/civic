@@ -10,7 +10,7 @@ part of 'get_user_notifications_settings_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(getUserNotifSettings)
-const getUserNotifSettingsProvider = GetUserNotifSettingsProvider._();
+final getUserNotifSettingsProvider = GetUserNotifSettingsProvider._();
 
 final class GetUserNotifSettingsProvider
     extends
@@ -22,7 +22,7 @@ final class GetUserNotifSettingsProvider
     with
         $FutureModifier<UserNotificationSettings>,
         $FutureProvider<UserNotificationSettings> {
-  const GetUserNotifSettingsProvider._()
+  GetUserNotifSettingsProvider._()
     : super(
         from: null,
         argument: null,

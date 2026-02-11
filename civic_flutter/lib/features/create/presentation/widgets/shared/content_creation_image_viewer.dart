@@ -125,7 +125,7 @@ class ContentCreationImageViewer extends StatelessWidget {
                     ),
                     items: imageUrls.map((image) {
                       return Builder(
-                        builder: (BuildContext context) {
+                        builder: (context) {
                           return Container(
                             width: double.maxFinite,
                             decoration: BoxDecoration(

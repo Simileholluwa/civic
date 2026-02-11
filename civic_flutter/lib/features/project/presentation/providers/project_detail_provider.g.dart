@@ -10,7 +10,7 @@ part of 'project_detail_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(projectDetail)
-const projectDetailProvider = ProjectDetailFamily._();
+final projectDetailProvider = ProjectDetailFamily._();
 
 final class ProjectDetailProvider
     extends
@@ -22,7 +22,7 @@ final class ProjectDetailProvider
     with
         $FutureModifier<ProjectWithUserState>,
         $FutureProvider<ProjectWithUserState> {
-  const ProjectDetailProvider._({
+  ProjectDetailProvider._({
     required ProjectDetailFamily super.from,
     required (int, Project?) super.argument,
   }) : super(
@@ -74,7 +74,7 @@ final class ProjectDetailFamily extends $Family
           FutureOr<ProjectWithUserState>,
           (int, Project?)
         > {
-  const ProjectDetailFamily._()
+  ProjectDetailFamily._()
     : super(
         retry: null,
         name: r'projectDetailProvider',

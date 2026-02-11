@@ -10,11 +10,11 @@ part of 'project_creation_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(CreateProjectNotif)
-const createProjectNotifProvider = CreateProjectNotifFamily._();
+final createProjectNotifProvider = CreateProjectNotifFamily._();
 
 final class CreateProjectNotifProvider
     extends $NotifierProvider<CreateProjectNotif, ProjectCreationState> {
-  const CreateProjectNotifProvider._({
+  CreateProjectNotifProvider._({
     required CreateProjectNotifFamily super.from,
     required Project? super.argument,
   }) : super(
@@ -70,7 +70,7 @@ final class CreateProjectNotifFamily extends $Family
           ProjectCreationState,
           Project?
         > {
-  const CreateProjectNotifFamily._()
+  CreateProjectNotifFamily._()
     : super(
         retry: null,
         name: r'createProjectNotifProvider',
@@ -94,7 +94,6 @@ abstract class _$CreateProjectNotif extends $Notifier<ProjectCreationState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<ProjectCreationState, ProjectCreationState>;
     final element =
         ref.element
@@ -104,6 +103,6 @@ abstract class _$CreateProjectNotif extends $Notifier<ProjectCreationState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

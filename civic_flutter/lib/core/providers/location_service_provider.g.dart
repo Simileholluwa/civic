@@ -10,7 +10,7 @@ part of 'location_service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(locationService)
-const locationServiceProvider = LocationServiceProvider._();
+final locationServiceProvider = LocationServiceProvider._();
 
 final class LocationServiceProvider
     extends
@@ -20,7 +20,7 @@ final class LocationServiceProvider
           LocationServices
         >
     with $Provider<LocationServices> {
-  const LocationServiceProvider._()
+  LocationServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -56,11 +56,11 @@ final class LocationServiceProvider
 String _$locationServiceHash() => r'707a437f2650a099ab5bfad3d55a13b4e126f743';
 
 @ProviderFor(CurrentLocationData)
-const currentLocationDataProvider = CurrentLocationDataProvider._();
+final currentLocationDataProvider = CurrentLocationDataProvider._();
 
 final class CurrentLocationDataProvider
     extends $AsyncNotifierProvider<CurrentLocationData, List<double>> {
-  const CurrentLocationDataProvider._()
+  CurrentLocationDataProvider._()
     : super(
         from: null,
         argument: null,
@@ -87,7 +87,6 @@ abstract class _$CurrentLocationData extends $AsyncNotifier<List<double>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<List<double>>, List<double>>;
     final element =
         ref.element
@@ -97,12 +96,12 @@ abstract class _$CurrentLocationData extends $AsyncNotifier<List<double>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(searchNearbyPlaces)
-const searchNearbyPlacesProvider = SearchNearbyPlacesProvider._();
+final searchNearbyPlacesProvider = SearchNearbyPlacesProvider._();
 
 final class SearchNearbyPlacesProvider
     extends
@@ -112,7 +111,7 @@ final class SearchNearbyPlacesProvider
           FutureOr<List<AWSPlaces>?>
         >
     with $FutureModifier<List<AWSPlaces>?>, $FutureProvider<List<AWSPlaces>?> {
-  const SearchNearbyPlacesProvider._()
+  SearchNearbyPlacesProvider._()
     : super(
         from: null,
         argument: null,
@@ -142,7 +141,7 @@ String _$searchNearbyPlacesHash() =>
     r'8e8a47bdeeef2aae5d8c338125eaca9a1b6c6675';
 
 @ProviderFor(searchPlaces)
-const searchPlacesProvider = SearchPlacesProvider._();
+final searchPlacesProvider = SearchPlacesProvider._();
 
 final class SearchPlacesProvider
     extends
@@ -152,7 +151,7 @@ final class SearchPlacesProvider
           FutureOr<List<AWSPlaces>?>
         >
     with $FutureModifier<List<AWSPlaces>?>, $FutureProvider<List<AWSPlaces>?> {
-  const SearchPlacesProvider._()
+  SearchPlacesProvider._()
     : super(
         from: null,
         argument: null,
@@ -181,11 +180,11 @@ final class SearchPlacesProvider
 String _$searchPlacesHash() => r'dd1728856180890eab5bb85ae6c2e3ed09e14051';
 
 @ProviderFor(LocationSearchQuery)
-const locationSearchQueryProvider = LocationSearchQueryProvider._();
+final locationSearchQueryProvider = LocationSearchQueryProvider._();
 
 final class LocationSearchQueryProvider
     extends $NotifierProvider<LocationSearchQuery, String> {
-  const LocationSearchQueryProvider._()
+  LocationSearchQueryProvider._()
     : super(
         from: null,
         argument: null,
@@ -220,7 +219,6 @@ abstract class _$LocationSearchQuery extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
@@ -230,16 +228,16 @@ abstract class _$LocationSearchQuery extends $Notifier<String> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(SelectLocations)
-const selectLocationsProvider = SelectLocationsProvider._();
+final selectLocationsProvider = SelectLocationsProvider._();
 
 final class SelectLocationsProvider
     extends $NotifierProvider<SelectLocations, List<AWSPlaces>> {
-  const SelectLocationsProvider._()
+  SelectLocationsProvider._()
     : super(
         from: null,
         argument: null,
@@ -273,7 +271,6 @@ abstract class _$SelectLocations extends $Notifier<List<AWSPlaces>> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<List<AWSPlaces>, List<AWSPlaces>>;
     final element =
         ref.element
@@ -283,6 +280,6 @@ abstract class _$SelectLocations extends $Notifier<List<AWSPlaces>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

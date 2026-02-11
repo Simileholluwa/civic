@@ -10,11 +10,11 @@ part of 'project_vetting_reaction_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(VettingReaction)
-const vettingReactionProvider = VettingReactionFamily._();
+final vettingReactionProvider = VettingReactionFamily._();
 
 final class VettingReactionProvider
     extends $NotifierProvider<VettingReaction, ProjectVettingReactionState> {
-  const VettingReactionProvider._({
+  VettingReactionProvider._({
     required VettingReactionFamily super.from,
     required ProjectVettingWithUserStateKey? super.argument,
   }) : super(
@@ -69,7 +69,7 @@ final class VettingReactionFamily extends $Family
           ProjectVettingReactionState,
           ProjectVettingWithUserStateKey?
         > {
-  const VettingReactionFamily._()
+  VettingReactionFamily._()
     : super(
         retry: null,
         name: r'vettingReactionProvider',
@@ -94,7 +94,6 @@ abstract class _$VettingReaction
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref =
         this.ref
             as $Ref<ProjectVettingReactionState, ProjectVettingReactionState>;
@@ -109,6 +108,6 @@ abstract class _$VettingReaction
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

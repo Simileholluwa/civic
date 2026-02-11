@@ -10,7 +10,7 @@ part of 'app_router.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(rootNavigator)
-const rootNavigatorProvider = RootNavigatorProvider._();
+final rootNavigatorProvider = RootNavigatorProvider._();
 
 final class RootNavigatorProvider
     extends
@@ -20,7 +20,7 @@ final class RootNavigatorProvider
           GlobalKey<NavigatorState>
         >
     with $Provider<GlobalKey<NavigatorState>> {
-  const RootNavigatorProvider._()
+  RootNavigatorProvider._()
     : super(
         from: null,
         argument: null,
@@ -57,12 +57,12 @@ final class RootNavigatorProvider
 String _$rootNavigatorHash() => r'5826530c1c2be1045b4461da728ea488b0cf108a';
 
 @ProviderFor(router)
-const routerProvider = RouterProvider._();
+final routerProvider = RouterProvider._();
 
 final class RouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
-  const RouterProvider._()
+  RouterProvider._()
     : super(
         from: null,
         argument: null,
