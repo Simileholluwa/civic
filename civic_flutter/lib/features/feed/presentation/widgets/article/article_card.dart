@@ -91,73 +91,15 @@ class ArticleCard extends StatelessWidget {
                 },
               ),
             ),
+
+          ArticleImageHeader(
+            post: post,
+            showPadding: showPadding,
+          ),
           Padding(
             padding: showPadding
                 ? const EdgeInsets.symmetric(horizontal: 15)
                 : EdgeInsets.zero,
-            child: Row(
-              spacing: 10,
-              children: [
-                Expanded(
-                  child: Text(
-                    post.text!,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.left,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      10,
-                    ),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  child: const Text(
-                    'Article',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          RepaintBoundary(
-            child: Container(
-              width: double.maxFinite,
-              margin: showPadding ? const EdgeInsets.fromLTRB(15, 0, 15, 0) : EdgeInsets.zero,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
-                color: Theme.of(context).cardColor,
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  TSizes.md,
-                ),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: ContentCachedImage(
-                    url: post.mediaAssets!.first.publicUrl!,
-                    height: post.mediaAssets!.first.height!.toDouble(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: showPadding ? const EdgeInsets.symmetric(horizontal: 15) : EdgeInsets.zero,
             child: RepaintBoundary(
               child: ContentExpandableText(
                 text: articleContent,
@@ -167,7 +109,7 @@ class ArticleCard extends StatelessWidget {
               ),
             ),
           ),
-          if (showInteractions )
+          if (showInteractions)
             PostInteractionButtons(
               postWithUserState: postWithUserState,
               onReply: () async {

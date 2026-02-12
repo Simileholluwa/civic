@@ -76,28 +76,9 @@ class ArticleDetailCard extends StatelessWidget {
               );
             },
           ),
-          Text(
-            post.text!,
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                ),
-            textAlign: TextAlign.left,
-          ),
-          RepaintBoundary(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                TSizes.md,
-              ),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: ContentSingleCachedImage(
-                  useMargin: false,
-                  imageUrl: post.mediaAssets!.first.publicUrl!,
-                  aspectRatio: 16 / 9,
-                ),
-              ),
-            ),
+          ArticleImageHeader(
+            post: post,
+            showPadding: false,
           ),
           RepaintBoundary(
             child: QuillEditor(

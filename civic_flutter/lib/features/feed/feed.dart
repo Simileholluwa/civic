@@ -53,6 +53,7 @@ export 'presentation/routes/feed_routes.dart';
 export 'presentation/state/feed_widgets_state.dart';
 export 'presentation/widgets/article/article_card.dart';
 export 'presentation/widgets/article/article_detail_card.dart';
+export 'presentation/widgets/article/article_image_header.dart';
 export 'presentation/widgets/common/adaptive_post_card.dart';
 export 'presentation/widgets/common/comment_replies_page_error.dart';
 export 'presentation/widgets/common/content_no_items_found.dart';

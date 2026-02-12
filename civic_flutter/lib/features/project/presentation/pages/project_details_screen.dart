@@ -30,7 +30,10 @@ class ProjectDetailsScreen extends ConsumerWidget {
         (s) => s.totalRating,
       ),
     );
+    final userId = ref.read(localStorageProvider).getInt('userId');
+    final isOwner = project?.ownerId == userId;
     return SafeArea(
+      bottom: isOwner,
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -43,8 +46,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
                 );
                 final projectNotif = ref.read(projectProv.notifier);
                 final project = value.project;
-                final userId = ref.read(localStorageProvider).getInt('userId');
-                final isOwner = project.ownerId == userId;
                 final hasLiked = ref.watch(
                   projectProv.select(
                     (s) => s.hasLiked,
