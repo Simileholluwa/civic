@@ -109,7 +109,7 @@ class TTexts {
   static const String enablePermissionsLater =
       'You can enable notification permissions later in settings.';
   static const String permissionsDenied =
-      'Notification permissions denied. You can enable them in settings.';
+      'Notification permissions denied. You can enable them in settings later.';
 
   // -- Device
   static const String unableToLaunchUrl = 'Unable to launch url';

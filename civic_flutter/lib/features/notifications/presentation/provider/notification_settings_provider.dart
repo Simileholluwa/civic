@@ -11,32 +11,9 @@ part 'notification_settings_provider.g.dart';
 class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
   @override
   AppNotificationSettings build(UserNotificationSettings? settings) {
-    final initialSettings =
-        settings == null ? AppNotificationSettings() : _mapToState(settings);
-
-    final allowedNotification =
-        ref.read(localStorageProvider).getBool('allowedNotification') ?? false;
-    if (!allowedNotification) {
-      return initialSettings.copyWith(pushNotifications: false);
-    }
-
-    final hasUpdatedOnce =
-        ref.read(localStorageProvider).getBool('hasUpdatedOnce') ?? false;
-    if (!hasUpdatedOnce) {
-      unawaited(
-        updateSetting(
-          initialSettings,
-          NotificationSettingsUpdate(
-            settingType: NotificationSettingType.push,
-            enabled: true,
-          ),
-        ),
-      );
-      unawaited(
-        ref.read(localStorageProvider).setBool('hasUpdatedOnce', true),
-      );
-      return initialSettings.copyWith(pushNotifications: true);
-    }
+    final initialSettings = settings == null
+        ? AppNotificationSettings()
+        : _mapToState(settings);
 
     return initialSettings;
   }
@@ -66,24 +43,28 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
           ),
         );
 
-    result.fold((l) {
-      TToastMessages.errorToast(l.message);
-      state = _mapToState(
-        settings ??
-            UserNotificationSettings(
-              userId: userId,
-            ),
-      );
-    }, (r) {
-      state = _mapToState(r);
-      TToastMessages.infoToast(
-        'Your settings have been updated.',
-      );
-    });
+    result.fold(
+      (l) {
+        TToastMessages.errorToast(l.message);
+        state = _mapToState(
+          settings ??
+              UserNotificationSettings(
+                userId: userId,
+              ),
+        );
+      },
+      (r) {
+        state = _mapToState(r);
+        TToastMessages.infoToast(
+          'Your settings have been updated.',
+        );
+      },
+    );
   }
 
   Future<void> togglePushNotifications() async {
-    final allowedNotification = ref
+    final allowedNotification =
+        ref
             .read(
               localStorageProvider,
             )
@@ -92,7 +73,7 @@ class NotificationSettingsNotifier extends _$NotificationSettingsNotifier {
     if (!allowedNotification) {
       final fcm = ref.read(fcmServiceImplProvider);
       final res = await fcm.directPermissionRequest();
-      if (res ?? false) {
+      if (!res) {
         await updateSetting(
           state,
           NotificationSettingsUpdate(

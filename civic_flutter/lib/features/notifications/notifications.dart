@@ -15,7 +15,6 @@ export './presentation/pages/notifications_screen.dart';
 export './presentation/pages/notifications_settings_screen.dart';
 export './presentation/provider/get_user_notifications_settings_provider.dart';
 export './presentation/provider/notification_services_provider.dart';
-export './presentation/provider/notifications_provider.dart';
 export './presentation/provider/paginated_notifications_list_provider.dart';
 export './presentation/routes/notifications_routes.dart';
 export './presentation/static/notification_tile_data.dart';

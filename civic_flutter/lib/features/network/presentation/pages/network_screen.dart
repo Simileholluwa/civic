@@ -1,4 +1,5 @@
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/auth/auth.dart';
 import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/network/network.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
@@ -80,6 +81,7 @@ class NetworkScreen extends ConsumerWidget {
           child: TextButton(
             onPressed: () async {
               final res = await ref.read(sessionProvider).signOutDevice();
+              await ref.read(authLocalDatasourceProvider).removeUserRecord();
               if (res && context.mounted) {
                 context.go(AppRoutes.auth);
                 WidgetsBinding.instance.addPostFrameCallback(

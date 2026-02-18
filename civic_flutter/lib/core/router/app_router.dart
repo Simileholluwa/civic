@@ -61,6 +61,14 @@ GoRouter router(Ref ref) {
             isPolitical: data ?? true,
           );
         },
+        routes: [
+          GoRoute(
+            path: AppRoutes.allowNotifications,
+            builder: (context, state) {
+              return const AllowNotificationsScreen();
+            },
+          ),
+        ],
       ),
 
       // Authentication

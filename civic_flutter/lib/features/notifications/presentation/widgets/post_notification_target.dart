@@ -28,33 +28,38 @@ class PostNotificationTarget extends StatelessWidget {
     }
     final hasVideo = videoAssetUrl != null && videoAssetUrl.isNotEmpty;
     final hasImage = imageAssetUrls.isNotEmpty;
-    return Column(
-      spacing: 10,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (post!.text?.isNotEmpty ?? false)
-          ContentExpandableText(
-            text: post.text!,
-            hasImage: hasImage,
-            hasVideo: hasVideo,
-            onToggleTextTap: () {},
-            textStyle: DefaultTextStyle.of(context).style.copyWith(
-                  color: Theme.of(context).hintColor,
-                ),
-          ),
-        if (hasImage)
-          ContentImageViewer(
-            mediaAssets: post.mediaAssets ?? [],
-            addPadding: false,
-          ),
-        if (hasVideo)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: VideoPost(
-              videoUrl: videoAssetUrl,
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+        ),
+      ),
+      child: Column(
+        spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (post!.text?.isNotEmpty ?? false)
+            ContentExpandableText(
+              text: post.text!,
+              maxLines: 3,
+              onToggleTextTap: () {},
             ),
-          ),
-      ],
+          if (hasImage)
+            ContentImageViewer(
+              mediaAssets: post.mediaAssets ?? [],
+              addPadding: false,
+            ),
+          if (hasVideo)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: VideoPost(
+                videoUrl: videoAssetUrl,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

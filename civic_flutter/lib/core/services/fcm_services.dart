@@ -56,18 +56,24 @@ class FcmServiceImpl implements FcmServices {
     await directPermissionRequest();
   }
 
-  Future<bool?> directPermissionRequest() async {
+  Future<bool> directPermissionRequest() async {
     final notificationSettings = await _messaging.getNotificationSettings();
     if (notificationSettings.authorizationStatus !=
         AuthorizationStatus.authorized) {
       final status = await _messaging.requestPermission();
       if (status.authorizationStatus == AuthorizationStatus.authorized) {
-        await _getTokenAndSend();
-        await _ref.read(localStorageProvider).setBool(
-              'allowedNotification',
-              true,
-            );
-        return true;
+        try {
+          await _getTokenAndSend();
+          await _ref
+              .read(localStorageProvider)
+              .setBool(
+                'allowedNotification',
+                true,
+              );
+          return true;
+        } on Exception catch (_) {
+          return false;
+        }
       } else {
         TToastMessages.infoToast(
           TTexts.permissionsDenied,
@@ -75,7 +81,7 @@ class FcmServiceImpl implements FcmServices {
         return false;
       }
     }
-    return null;
+    return false;
   }
 
   Future<void> _getTokenAndSend() async {
@@ -97,7 +103,10 @@ class FcmServiceImpl implements FcmServices {
     const maxRetries = 3;
     for (var i = 0; i < maxRetries; i++) {
       try {
-        await _ref.read(clientProvider).userRecord.registerDeviceToken(
+        await _ref
+            .read(clientProvider)
+            .userRecord
+            .registerDeviceToken(
               token,
             );
         return;
@@ -132,7 +141,9 @@ class FcmServiceImpl implements FcmServices {
         _ref.read(localStorageProvider).getBool('hasAskedPermissions') ?? false;
     if (!hasAsked) {
       await _requestPermission(context);
-      await _ref.read(localStorageProvider).setBool(
+      await _ref
+          .read(localStorageProvider)
+          .setBool(
             'hasAskedPermissions',
             true,
           );

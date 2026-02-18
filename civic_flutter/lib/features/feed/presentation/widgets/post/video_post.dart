@@ -56,7 +56,7 @@ class VideoPost extends ConsumerWidget {
         children: [
           RepaintBoundary(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 500),
+              constraints: const BoxConstraints(maxHeight: 400),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: isInitialized && controller != null

@@ -11,11 +11,13 @@ class ProjectQuoteCard extends StatelessWidget {
   const ProjectQuoteCard({
     required this.project,
     this.useMargin = true,
+    this.showProjectOwner = true,
     super.key,
   });
 
   final Project project;
   final bool useMargin;
+  final bool showProjectOwner;
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +42,13 @@ class ProjectQuoteCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 10,
         children: [
-          QuotedPostCreatorInfo(
-            owner: project.owner!,
-            dateCreated: project.dateCreated!,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          if (showProjectOwner)
+            QuotedPostCreatorInfo(
+              owner: project.owner!,
+              dateCreated: project.dateCreated!,
+            ),
           Text(
             project.title!,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -59,15 +60,9 @@ class ProjectQuoteCard extends StatelessWidget {
           ProjectPlainTextDescription(
             project: project,
           ),
-          const SizedBox(
-            height: 10,
-          ),
           ProjectQuickDetails(
             project: project,
             showPadding: false,
-          ),
-          const SizedBox(
-            height: 10,
           ),
           SizedBox(
             height: 40,

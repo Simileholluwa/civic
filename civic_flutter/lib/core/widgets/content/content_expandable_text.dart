@@ -12,6 +12,7 @@ class ContentExpandableText extends StatelessWidget {
     this.noMaxLines = false,
     this.textStyle,
     this.maxLines,
+    this.showSeeMore = true,
     this.expandOnTextTap = false,
     this.fontSize = 18,
   });
@@ -25,6 +26,7 @@ class ContentExpandableText extends StatelessWidget {
   final VoidCallback? onToggleTextTap;
   final double fontSize;
   final bool expandOnTextTap;
+  final bool showSeeMore;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class ContentExpandableText extends StatelessWidget {
     return ExpandableRichText(
       text,
       onToggleTextTap: onToggleTextTap,
-      expandText: noMaxLines ? '' : 'see more',
+      expandText: noMaxLines ? '' : showSeeMore ? 'see more' : '',
       mentionStyle: defaultTextStyle.copyWith(
         color: TColors.primary,
         fontWeight: FontWeight.w600,

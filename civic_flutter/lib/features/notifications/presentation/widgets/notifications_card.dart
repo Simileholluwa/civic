@@ -1,5 +1,6 @@
 import 'package:civic_client/civic_client.dart';
 import 'package:civic_flutter/core/core.dart';
+import 'package:civic_flutter/features/feed/feed.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -16,13 +17,16 @@ class NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPostNotif =
+    final isPostNotification =
         notification.targetType == NotificationTargetType.post ||
-            notification.targetType == NotificationTargetType.comment ||
-            notification.targetType == NotificationTargetType.reply;
-    final isPollNotif = notification.targetType == NotificationTargetType.poll;
-    final isArticleNotif =
+        notification.targetType == NotificationTargetType.comment ||
+        notification.targetType == NotificationTargetType.reply;
+    final isPollNotification =
+        notification.targetType == NotificationTargetType.poll;
+    final isArticleNotification =
         notification.targetType == NotificationTargetType.article;
+    final isProjectNotification =
+        notification.targetType == NotificationTargetType.project;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -92,52 +96,32 @@ class NotificationsCard extends StatelessWidget {
                             notification.createdAt,
                             locale: 'en_short',
                           ),
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                  ),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: Theme.of(context).hintColor,
+                              ),
                         ),
                       ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: 12,
+                  if (isPostNotification)
+                    PostNotificationTarget(
+                      notification: notification,
                     ),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                          width: 4,
-                        ),
-                      ),
+                  if (isPollNotification)
+                    PollNotificationTarget(
+                      notification: notification,
                     ),
-                    child: isPostNotif
-                        ? PostNotificationTarget(
-                            notification: notification,
-                          )
-                        : isPollNotif
-                            ? PollNotificationTarget(
-                                notification: notification,
-                              )
-                            : isArticleNotif
-                                ? ArticleNotificationTarget(
-                                    notification: notification,
-                                  )
-                                : notification.targetType ==
-                                        NotificationTargetType.user
-                                    ? Text(
-                                        notification.body!,
-                                        style: DefaultTextStyle.of(context)
-                                            .style
-                                            .copyWith(
-                                              color:
-                                                  Theme.of(context).hintColor,
-                                            ),
-                                      )
-                                    : const SizedBox.shrink(),
-                  ),
+                  if (isArticleNotification)
+                    ArticleNotificationTarget(
+                      notification: notification,
+                    ),
+                  if (isProjectNotification)
+                    ProjectQuoteCard(
+                      project: notification.project!,
+                      showProjectOwner: false,
+                      useMargin: false,
+                    ),
                 ],
               ),
             ),

@@ -19,7 +19,7 @@ class OnBoardingPageView extends StatelessWidget {
         top: TSizes.defaultSpace + 30,
       ),
       child: Column(
-        spacing: 8,
+        spacing: 10,
         children: [
           VectorImageContainer(imagePath: onboardingEntity.image),
           Text(

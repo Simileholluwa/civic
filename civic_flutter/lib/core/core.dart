@@ -25,7 +25,6 @@ export './providers/users_list_service_provider.dart';
 export './router/app_router.dart';
 export './router/route_names.dart';
 export './screens/home.dart';
-export './services/article_text_controller.dart';
 export './services/asset_services.dart';
 export './services/fcm_services.dart';
 export './services/local_storage.dart';

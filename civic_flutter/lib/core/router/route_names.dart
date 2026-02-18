@@ -2,6 +2,7 @@ class AppRoutes {
   // Onboarding
   static const initial = '/';
   static const onboarding = '/onboarding';
+  static const allowNotifications = 'allowNotifications';
 
   // Authentication
   static const auth = '/auth';

@@ -118,6 +118,8 @@ class NotificationEndpoint extends Endpoint {
         usernames: updatedGroupedNames,
         actionType: actionType,
         targetType: targetType,
+        isOwner: true,
+        isForSubscriber: false
       );
 
       final updatedNotification = existing.copyWith(
@@ -162,6 +164,8 @@ class NotificationEndpoint extends Endpoint {
         usernames: [senderName],
         actionType: actionType,
         targetType: targetType,
+        isOwner: true,
+        isForSubscriber: false
       );
 
       final notification = AppNotification(
@@ -280,6 +284,8 @@ class NotificationEndpoint extends Endpoint {
           usernames: updatedGroupedNames,
           actionType: actionType,
           targetType: targetType,
+          isForSubscriber: true,
+          isOwner: false,
         );
 
         final updatedNotification = existing.copyWith(
@@ -309,6 +315,8 @@ class NotificationEndpoint extends Endpoint {
           usernames: [senderName],
           actionType: actionType,
           targetType: targetType,
+          isForSubscriber: true,
+          isOwner: false,
         );
 
         final newNotification = AppNotification(
@@ -431,9 +439,11 @@ class NotificationEndpoint extends Endpoint {
         }.toList();
 
         final title = _generateNotificationTitle(
-          usernames: [senderName],
+          usernames: updatedGroupedNames,
           actionType: actionType,
           targetType: targetType,
+          isForSubscriber: true,
+          isOwner: false,
         );
 
         final updatedNotification = existing.copyWith(
@@ -458,6 +468,8 @@ class NotificationEndpoint extends Endpoint {
           usernames: [senderName],
           actionType: actionType,
           targetType: targetType,
+          isForSubscriber: true,
+          isOwner: false,
         );
 
         final newNotification = AppNotification(
@@ -645,7 +657,7 @@ class NotificationEndpoint extends Endpoint {
       offset: (page * limit) - limit,
       orderBy: (t) => t.createdAt,
       orderDescending: true,
-      include: AppNotification.include(
+    include: AppNotification.include(
         post: Post.include(
           article: Article.include(),
           poll: Poll.include(
@@ -654,17 +666,11 @@ class NotificationEndpoint extends Endpoint {
               orderDescending: false,
             ),
           ),
-          parent: Post.include(
-            article: Article.include(),
-            poll: Poll.include(
-              options: PollOption.includeList(
-                orderBy: (p0) => p0.id,
-                orderDescending: false,
-              ),
-            ),
-          ),
+          mediaAssets: MediaAsset.includeList(),
         ),
-        project: Project.include(),
+        project: Project.include(
+          projectMediaAssets: MediaAsset.includeList(),
+        ),
       ),
     );
 
@@ -1065,6 +1071,8 @@ class NotificationEndpoint extends Endpoint {
     required List<String> usernames,
     required NotificationActionType actionType,
     required NotificationTargetType targetType,
+    required bool isOwner,
+    required bool isForSubscriber,
   }) {
     final count = usernames.length;
     if (count == 0) return 'New notification';
@@ -1087,7 +1095,25 @@ class NotificationEndpoint extends Endpoint {
       return '$userText $actionText you';
     }
 
-    return '$userText $actionText your $targetText';
+    final isMentionOrTag = actionType == NotificationActionType.mention ||
+        actionType == NotificationActionType.tag;
+
+    if (isForSubscriber) {
+      if (isMentionOrTag) {
+        return '$userText $actionText $targetText you follow';
+      }
+      return '$userText $actionText a $targetText you follow';
+    }
+
+    if (isOwner) {
+      if (isMentionOrTag) {
+        final baseActionText = actionText.replaceAll(' in a', '');
+        return '$userText $baseActionText in their $targetText';
+      }
+      return '$userText $actionText your $targetText';
+    }
+
+    return '$userText $actionText a $targetText';
   }
 
   @doNotGenerate

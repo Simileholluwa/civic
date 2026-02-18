@@ -3,6 +3,7 @@ export 'data/repositories/onboarding_repository_impl.dart';
 export 'domain/entities/onboarding_entity.dart';
 export 'domain/repositories/onboarding_repository.dart';
 export 'domain/usecases/cache_first_timer_usecase.dart';
+export 'presentation/pages/allow_notifications_screen.dart';
 export 'presentation/pages/initial_on_boarding.dart';
 export 'presentation/pages/onboarding_screen.dart';
 export 'presentation/providers/onboarding_provider.dart';

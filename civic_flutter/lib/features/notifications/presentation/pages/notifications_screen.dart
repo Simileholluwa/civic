@@ -13,18 +13,11 @@ class NotificationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifState = ref.watch(notifProvider);
     final pagingState = ref.watch(
-      paginatedNotificationsListProvider(
-        notifState.targetType,
-        notifState.unread,
-      ),
+      paginatedNotificationsListProvider(null, null),
     );
     final pagingNotifier = ref.read(
-      paginatedNotificationsListProvider(
-        notifState.targetType,
-        notifState.unread,
-      ).notifier,
+      paginatedNotificationsListProvider(null, null).notifier,
     );
     return Scaffold(
       body: NestedScrollView(
@@ -38,11 +31,14 @@ class NotificationsScreen extends ConsumerWidget {
                   valueListenable: pagingState,
                   builder: (context, value, child) {
                     final isEmpty = value.pages?.first.isEmpty ?? true;
+                    final allRead =
+                        value.pages?.first.every((notif) => notif.isRead) ??
+                        true;
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          onPressed: isEmpty
+                          onPressed: isEmpty || allRead
                               ? null
                               : () {
                                   unawaited(
@@ -51,13 +47,6 @@ class NotificationsScreen extends ConsumerWidget {
                                 },
                           icon: const Icon(
                             Iconsax.card_tick_1,
-                            size: 26,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: isEmpty ? null : () {},
-                          icon: const Icon(
-                            Iconsax.setting_3,
                             size: 26,
                           ),
                         ),
@@ -83,8 +72,8 @@ class NotificationsScreen extends ConsumerWidget {
               title: Text(
                 'NOTIFICATIONS',
                 style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 25,
-                    ),
+                  fontSize: 25,
+                ),
               ),
               bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(5),

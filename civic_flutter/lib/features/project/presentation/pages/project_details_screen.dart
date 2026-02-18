@@ -33,7 +33,6 @@ class ProjectDetailsScreen extends ConsumerWidget {
     final userId = ref.read(localStorageProvider).getInt('userId');
     final isOwner = project?.ownerId == userId;
     return SafeArea(
-      bottom: isOwner,
       child: Scaffold(
         appBar: AppBar(
           actions: [

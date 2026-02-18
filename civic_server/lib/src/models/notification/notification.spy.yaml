@@ -2,7 +2,7 @@ class: AppNotification
 table: app_notification
 fields:
   receiver: UserRecord?, relation(onDelete=Cascade)
-  sender: UserRecord?, relation(onDelete=setNull)
+  sender: UserRecord?, relation(onDelete=Cascade)
   senderName: String?
   groupedSenderNames: List<String>?
   title: String
@@ -16,8 +16,8 @@ fields:
   isRead: bool, default=false
   createdAt: DateTime, default=now
   updatedAt: DateTime?
-  post: Post?, relation(optional, onDelete=SetNull)
-  project: Project?, relation(optional, onDelete=SetNull)
+  post: Post?, relation(optional, onDelete=Cascade)
+  project: Project?, relation(optional, onDelete=Cascade)
 
 indexes:
   notification_receiver_isread_idx:

@@ -324,6 +324,10 @@ class AuthRemoteDatabaseImpl implements AuthRemoteDatabase {
       throw const ServerException(
         message: TTexts.failedToConnectToServer,
       );
+    } on CacheException catch (e) {
+      throw ServerException(
+        message: e.message,
+      );
     } on ServerException {
       rethrow;
     } on Exception catch (e) {

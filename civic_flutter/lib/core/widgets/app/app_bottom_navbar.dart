@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:ui';
-
 import 'package:civic_flutter/core/core.dart';
 import 'package:civic_flutter/features/notifications/notifications.dart';
 import 'package:flutter/material.dart';
@@ -46,14 +44,6 @@ class AppBottomNavbar extends ConsumerWidget {
               unselectedItemColor: Theme.of(context).hintColor,
               selectedFontSize: 12,
               onTap: (index) {
-                if (index == 3) {
-                  unawaited(
-                    ref
-                        .read(fcmServiceImplProvider)
-                        .promptForPermissions(context),
-                  );
-                }
-
                 navigatorShell.goBranch(
                   index,
                   initialLocation: index == navigatorShell.currentIndex,

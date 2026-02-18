@@ -14,17 +14,12 @@ class NotificationsHelper {
   ) {
     final style = DefaultTextStyle.of(context).style;
     final boldStyle = style.copyWith(fontWeight: FontWeight.w600);
-
-    // Parse occurrences of <b>...</b> (case-insensitive) and build spans for
-    // the text outside and inside those tags. This avoids relying on split
-    // with capturing groups which can be error-prone for variations.
     final spans = <InlineSpan>[];
     final boldRegExp =
         RegExp('<b>(.*?)</b>', caseSensitive: false, dotAll: true);
     var lastEnd = 0;
 
     for (final match in boldRegExp.allMatches(content)) {
-      // Add text before the <b> match
       if (match.start > lastEnd) {
         final before = content.substring(lastEnd, match.start);
         if (before.isNotEmpty) {
@@ -41,7 +36,6 @@ class NotificationsHelper {
       lastEnd = match.end;
     }
 
-    // Add any trailing text after the last match
     if (lastEnd < content.length) {
       final tail = content.substring(lastEnd);
       if (tail.isNotEmpty) {

@@ -48,7 +48,15 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
   }
 
   @override
-  Future<void> removeUserRecord() {
-    return _prefs.remove('userRecord');
+  Future<void> removeUserRecord() async {
+    try {
+      await _prefs.remove('userId');
+      await _prefs.remove('userRecord');
+      await _prefs.remove('notification_settings');
+    } catch (e) {
+      throw CacheException(
+        message: 'Failed to clear user record: $e',
+      );
+    }
   }
 }

@@ -21,7 +21,6 @@ class ShowProjectActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userNotifier = ref.read(currentActiveUserProvider.notifier);
     final projectProv = projectCardWidgetProvider(
       ProjectWithUserStateKey(
         projectWithUserState,
@@ -134,9 +133,11 @@ class ShowProjectActions extends ConsumerWidget {
               if (context.mounted) {
                 context.pop();
               }
-              final result = await userNotifier.toggleFollow(
-                project.ownerId,
-              );
+              final result = await ref
+                  .read(currentActiveUserProvider.notifier)
+                  .toggleFollow(
+                    project.ownerId,
+                  );
 
               if (result) {
                 projectCardNotifier.setIsFollower();
